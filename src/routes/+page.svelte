@@ -1,2 +1,19 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { getUser, signOut } from "@lucia-auth/sveltekit/client";
+	import { invalidateAll } from "$app/navigation";
+
+	const user = getUser();
+</script>
+
+<h1>Profile</h1>
+<div>
+	<p>User id: {$user?.userId}</p>
+	<p>Username: {$user?.username}</p>
+</div>
+
+<button
+	on:click={async () => {
+		await signOut();
+		invalidateAll();
+	}}>Sign out</button
+>
