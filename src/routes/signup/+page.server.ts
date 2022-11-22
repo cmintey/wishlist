@@ -14,7 +14,6 @@ export const actions: Actions = {
 		const form = await request.formData();
 		const username = form.get("username");
 		const password = form.get("password");
-		console.log(username, password);
 
 		// check for empty values
 		if (!username || !password || typeof username !== "string" || typeof password !== "string") {
