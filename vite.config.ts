@@ -5,6 +5,12 @@ const config: UserConfig = {
 	plugins: [sveltekit()],
 	ssr: {
 		noExternal: ["@lucia-auth/sveltekit"]
+	},
+	server: {
+		fs: {
+			// Allow serving files from one level up to the project root
+			allow: ["./static/img"]
+		}
 	}
 };
 

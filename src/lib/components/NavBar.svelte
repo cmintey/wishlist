@@ -3,19 +3,34 @@
 	import { AppBar, Avatar, menu } from "@brainandbones/skeleton";
 	import { signOut } from "@lucia-auth/sveltekit/client";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client/user";
+	import type { Writable } from "svelte/store";
+
+	type NavItem = {
+		label: string;
+		href: string;
+	};
 
 	export let user: ClientUser;
+	export let navItems: NavItem[];
+	export let drawer: Writable<boolean>;
 </script>
 
 <AppBar>
 	<svelte:fragment slot="lead">
-		<h2><a href="/">Wishlist</a></h2>
+		<div class="flex space-x-4 items-center content-center">
+			<button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawer.update((val) => !val)}>
+				<iconify-icon icon="ri:menu-fill" width="20" height="20" />
+			</button>
+
+			<h2><a href="/">Wishlist</a></h2>
+		</div>
 	</svelte:fragment>
 
 	{#if user}
-		<div class="flex flex-row space-x-4 items-center pt-0.5 pl-4">
-			<a href="/wishlists/{user?.username}" class="self-center"><b>My List</b></a>
-			<a href="/pledges" class="self-center"><b>My Pledges</b></a>
+		<div class="flex flex-row space-x-4 items-center pt-0.5 pl-4 hidden md:block">
+			{#each navItems as navItem}
+				<a href={navItem.href} class="self-center hover:underline"><b>{navItem.label}</b></a>
+			{/each}
 		</div>
 	{/if}
 
@@ -29,7 +44,7 @@
 					<ul>
 						<li>
 							<button
-								class="btn"
+								class="btn btn-sm"
 								on:click={async () => {
 									await signOut();
 									invalidateAll();

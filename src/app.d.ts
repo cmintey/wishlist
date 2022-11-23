@@ -17,3 +17,20 @@ declare namespace App {
 		setSession: import("@lucia-auth/sveltekit").SetSession;
 	}
 }
+
+type ProductData = {
+	brand: string | null;
+	name: string | null;
+	url: string | null;
+	image: string | null;
+	currency: string | null;
+	condition: string | null;
+	sku: string | null;
+	mpn: string | null;
+	availability: string | null;
+	price: number | null;
+	asin: string | null;
+	hostname: string | null;
+	retailer: string | null;
+	title: string | null;
+};

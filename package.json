@@ -41,6 +41,12 @@
 		"@lucia-auth/adapter-prisma": "^0.1.3",
 		"@lucia-auth/sveltekit": "^0.3.0",
 		"@prisma/client": "^4.6.1",
-		"lucia-auth": "^0.2.0"
+		"@samirrayani/metascraper-shopping": "^1.4.22",
+		"lucia-auth": "^0.2.0",
+		"metascraper": "^5.32.1",
+		"metascraper-amazon": "^5.32.1",
+		"metascraper-image": "^5.32.1",
+		"metascraper-title": "^5.32.1",
+		"metascraper-url": "^5.32.1"
 	}
 }

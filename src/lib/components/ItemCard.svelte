@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto, invalidateAll } from "$app/navigation";
+	import { base } from "$app/paths";
 	import { page } from "$app/stores";
-	import { modalStore, toastStore, type ModalSettings } from "@brainandbones/skeleton";
+	import { modalStore, toastStore, tooltip, type ModalSettings } from "@brainandbones/skeleton";
 	import type { Item } from "@prisma/client";
 
 	export let item: Item & {
@@ -91,26 +92,22 @@
 </script>
 
 <div class="card">
-	<div class="flex flex-row">
-		<header class="card-header">
-			<img
-				src={item.image_url
-					? item.image_url
-					: "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg"}
-				alt="product"
-				class="w-24 md:w-32 pb-4"
-			/>
-		</header>
-		<div class="card-body px-0 md:px-1">
-			<h2>
-				<b>
-					{#if item.url}
-						<a href={item.url} class="unstyled">{item.name}</a>
-					{:else}
-						{item.name}
-					{/if}
-				</b>
-			</h2>
+	<div class="card-body flex flex-row space-x-4">
+		<img
+			src={item.image_url
+				? `${item.image_url}`
+				: "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg"}
+			alt="product"
+			class="w-24 md:w-32"
+		/>
+		<div class="px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
+			<h3 class="truncate font-bold">
+				{#if item.url}
+					<a href={item.url} class="unstyled no-underline hover:underline">{item.name}</a>
+				{:else}
+					{item.name}
+				{/if}
+			</h3>
 			<h4>{item.price ? `$${item.price}` : "$19.99"}</h4>
 			<h5>
 				Added by: {item.addedBy?.username}

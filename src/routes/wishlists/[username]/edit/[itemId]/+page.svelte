@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import ItemForm from "$lib/components/ItemForm.svelte";
 	import { toastStore } from "@brainandbones/skeleton";
-	import type { PageServerData } from "./$types";
+	import type { PageServerData, ActionData } from "./$types";
 
 	export let data: PageServerData;
-
-	let loading = false;
+	export let form: ActionData;
 </script>
 
 {#if data?.item}
 	<form
 		method="POST"
 		use:enhance={() => {
-			loading = true;
+			// loading = true;
 			return async ({ update }) => {
 				const t = {
 					message: "Item updated successfully",
@@ -24,7 +24,8 @@
 			};
 		}}
 	>
-		<div class="grid gap-4 grid-cols-1 md:grid-cols-3">
+		<ItemForm {form} data={data?.item} buttonText="Save" />
+		<!-- <div class="grid gap-4 grid-cols-1 md:grid-cols-3">
 			<label for="url" class="col-span-1 md:col-span-3">
 				<span>Item URL</span>
 				<input
@@ -65,6 +66,6 @@
 			</label>
 
 			<button type="submit" class="btn bg-primary-500 w-min" disabled={loading}>Update</button>
-		</div>
+		</div> -->
 	</form>
 {/if}
