@@ -34,7 +34,7 @@ export const actions: Actions = {
 
 			let ab = await image.arrayBuffer();
 
-			writeFileSync(`static/img/${filename}`, Buffer.from(ab));
+			writeFileSync(`uploads/${filename}`, Buffer.from(ab));
 		}
 
 		if (price.indexOf("$") !== -1) {
@@ -52,7 +52,7 @@ export const actions: Actions = {
 						price,
 						url,
 						note,
-						image_url: create_image ? `/img/${filename}` : image_url,
+						image_url: create_image ? filename : image_url,
 						addedById: me?.userId
 					}
 				}

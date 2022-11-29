@@ -95,7 +95,7 @@
 	<div class="card-body flex flex-row space-x-4">
 		<img
 			src={item.image_url
-				? `${item.image_url}`
+				? `/api/assets/${item.image_url}`
 				: "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg"}
 			alt="product"
 			class="w-24 md:w-32"
