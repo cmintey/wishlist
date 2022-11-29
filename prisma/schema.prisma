@@ -1,11 +1,12 @@
 datasource db {
     provider = "sqlite"
-    url      = "file:./dev.db"
+    url      = env("DATABASE_URL")
 }
 
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["filteredRelationCount"]
+    binaryTargets   = ["native", "debian-openssl-1.1.x"]
 }
 
 model User {

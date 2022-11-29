@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  app:
+    container_name: wishlist-app
+    image: cmintey/wishlist
+    build: .
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+      - ./data:/usr/src/app/data
+    environment:
+      - DATABASE_URL=file:/usr/src/app/data/prod.db
+
+  proxy:
+    container_name: wishlist-proxy
+    build:
+      context: ./nginx
+    ports:
+      - '3280:8080'
+    restart: unless-stopped

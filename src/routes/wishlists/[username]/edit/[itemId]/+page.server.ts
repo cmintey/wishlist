@@ -63,7 +63,7 @@ export const actions: Actions = {
 
 			let ab = await image.arrayBuffer();
 
-			writeFileSync(`static/img/${filename}`, Buffer.from(ab));
+			writeFileSync(`static/img/uploads/${filename}`, Buffer.from(ab));
 		}
 
 		await client.item.update({
@@ -74,7 +74,7 @@ export const actions: Actions = {
 				name,
 				price,
 				url,
-				image_url: create_image ? `/img/${filename}` : image_url,
+				image_url: create_image ? `/img/uploads/${filename}` : image_url,
 				note
 			}
 		});
