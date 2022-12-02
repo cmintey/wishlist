@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import { Avatar } from "@brainandbones/skeleton";
+	import { Avatar } from "@skeletonlabs/skeleton";
 
 	export let data: PageData;
 </script>

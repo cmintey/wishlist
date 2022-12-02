@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import ItemForm from "$lib/components/ItemForm.svelte";
-	import { toastStore } from "@brainandbones/skeleton";
+	import { toastStore } from "@skeletonlabs/skeleton";
 	import type { PageServerData, ActionData } from "./$types";
 
 	export let data: PageServerData;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ProgressRadial } from "@brainandbones/skeleton";
+	import { ProgressRadial } from "@skeletonlabs/skeleton";
 
 	export let text: string;
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
-	import { AppBar, Avatar, menu } from "@brainandbones/skeleton";
+	import { AppBar, Avatar, menu } from "@skeletonlabs/skeleton";
 	import { signOut } from "@lucia-auth/sveltekit/client";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client/user";
 	import type { Writable } from "svelte/store";

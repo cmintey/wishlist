@@ -13,7 +13,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@brainandbones/skeleton": "^0.76.0",
+		"@skeletonlabs/skeleton": "^0.76.3",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-node": "^1.0.0-next.101",
 		"@sveltejs/kit": "next",

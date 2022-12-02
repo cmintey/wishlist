@@ -2,7 +2,7 @@
 	import { goto, invalidateAll } from "$app/navigation";
 	import { base } from "$app/paths";
 	import { page } from "$app/stores";
-	import { modalStore, toastStore, tooltip, type ModalSettings } from "@brainandbones/skeleton";
+	import { modalStore, toastStore, tooltip, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { Item } from "@prisma/client";
 
 	export let item: Item & {

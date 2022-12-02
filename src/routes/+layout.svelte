@@ -1,12 +1,12 @@
 <script lang="ts">
-	import "@brainandbones/skeleton/themes/theme-modern.css";
-	import "@brainandbones/skeleton/styles/all.css";
+	import "@skeletonlabs/skeleton/themes/theme-modern.css";
+	import "@skeletonlabs/skeleton/styles/all.css";
 	import "../app.postcss";
 
 	import { writable, type Writable } from "svelte/store";
 	import { page } from "$app/stores";
 	import { handleSession, getUser } from "@lucia-auth/sveltekit/client";
-	import { AppShell, Drawer, Modal, Toast } from "@brainandbones/skeleton";
+	import { AppShell, Drawer, Modal, Toast } from "@skeletonlabs/skeleton";
 	import NavBar from "$lib/components/NavBar.svelte";
 
 	handleSession(page);
