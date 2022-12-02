@@ -3,9 +3,12 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, request }) => {
 	const { session, user } = await locals.getSessionUser();
-	if (!session) throw redirect(302, "/login");
+	if (!session) {
+		const path = new URL(request.url).pathname;
+		throw redirect(302, `/login?ref=${path}`);
+	}
 
 	if (isNaN(parseInt(params.itemId))) {
 		throw error(400, "item id must be a number");
