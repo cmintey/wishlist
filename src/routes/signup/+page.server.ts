@@ -1,6 +1,7 @@
 import { invalid, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
+import { signupSchema } from "$lib/validations/signup";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals }) => {
@@ -11,29 +12,37 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
-		const form = await request.formData();
-		const username = form.get("username");
-		const password = form.get("password");
+		const formData = Object.fromEntries(await request.formData());
+		const signupData = signupSchema.safeParse(formData);
 
 		// check for empty values
-		if (!username || !password || typeof username !== "string" || typeof password !== "string") {
-			return invalid(400);
+		if (!signupData.success) {
+			const errors = signupData.error.errors.map((error) => {
+				return {
+					field: error.path[0],
+					message: error.message
+				};
+			});
+			return invalid(400, { error: true, errors });
 		}
 
 		try {
-			const user = await auth.createUser("username", username, {
-				password,
+			const user = await auth.createUser("username", signupData.data.username, {
+				password: signupData.data.password,
 				attributes: {
-					username
+					username: signupData.data.username,
+					firstname: signupData.data.firstname,
+					lastname: signupData.data.lastname
 				}
 			});
 			console.log(user);
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
 		} catch (e) {
-			// username already in use
-			console.log(e);
-			return invalid(400);
+			return invalid(400, {
+				error: true,
+				errors: [{ field: "username", message: "User with username already exists" }]
+			});
 		}
 	}
 };

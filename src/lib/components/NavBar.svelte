@@ -38,7 +38,7 @@
 		{#if user}
 			<span class="relative">
 				<button use:menu={{ menu: "user" }}>
-					<Avatar initials={user.username.at(0)} />
+					<Avatar initials={`${user.firstname.at(0)}${user.lastname.at(0)}`} />
 				</button>
 				<nav class="list-nav card p-4 w-fit shadow-xl" data-menu="user">
 					<ul>

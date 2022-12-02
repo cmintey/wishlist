@@ -1,6 +1,8 @@
 import { invalid, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
+import { z } from "zod";
 import type { PageServerLoad, Actions } from "./$types";
+import { loginSchema } from "$lib/validations/login";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals }) => {
@@ -10,19 +12,30 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
-		const form = await request.formData();
-		const username = form.get("username");
-		const password = form.get("password");
+		const formData = Object.fromEntries(await request.formData());
+		const loginData = loginSchema.safeParse(formData);
 		// check for empty values
-		if (!username || !password || typeof username !== "string" || typeof password !== "string")
-			return invalid(400);
+		if (!loginData.success) {
+			const errors = loginData.error.errors.map((error) => {
+				return {
+					field: error.path[0],
+					message: error.message
+				};
+			});
+			return invalid(400, { error: true, errors });
+		}
+
 		try {
-			const user = await auth.authenticateUser("username", username, password);
+			const user = await auth.authenticateUser(
+				"username",
+				loginData.data.username,
+				loginData.data.password
+			);
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
 		} catch {
 			// invalid credentials
-			return invalid(400);
+			return invalid(400, { username: loginData.data.username, password: "", incorrect: true });
 		}
 	}
 };
