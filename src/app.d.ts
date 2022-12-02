@@ -8,6 +8,7 @@ declare namespace Lucia {
 		username: string;
 		firstname: string;
 		lastname: string;
+		roleId: number;
 	};
 }
 

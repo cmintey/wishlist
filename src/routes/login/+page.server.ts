@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 	const session = await locals.getSession();
 	if (session) {
 		const ref = new URL(request.url).searchParams.get("ref");
-		throw redirect(302, `${ref}`);
+		throw redirect(302, ref || "/");
 	}
 };
 

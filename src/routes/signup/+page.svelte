@@ -64,8 +64,9 @@
 				</ul>
 			{/if}
 
-			<div class="flex justify-center">
+			<div class="flex space-x-4 justify-center items-center">
 				<button class="btn bg-primary-500 w-min">Sign Up</button>
+				<a href="/login">Sign in</a>
 			</div>
 		</div>
 	</form>

@@ -18,9 +18,14 @@
 <AppBar>
 	<svelte:fragment slot="lead">
 		<div class="flex space-x-4 items-center content-center">
-			<button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawer.update((val) => !val)}>
-				<iconify-icon icon="ri:menu-fill" width="20" height="20" />
-			</button>
+			{#if user}
+				<button
+					class="btn btn-sm p-0 pt-0.5 md:hidden"
+					on:click={() => drawer.update((val) => !val)}
+				>
+					<iconify-icon icon="ri:menu-fill" width="20" height="20" />
+				</button>
+			{/if}
 
 			<h2><a href="/">Wishlist</a></h2>
 		</div>
@@ -43,13 +48,14 @@
 				<nav class="list-nav card p-4 w-fit shadow-xl" data-menu="user">
 					<ul>
 						<li>
-							<button
-								class="btn btn-sm"
+							<a
+								href="/login"
 								on:click={async () => {
 									await signOut();
 									invalidateAll();
-								}}>Sign Out</button
+								}}>Sign Out</a
 							>
+							<a href="/account"> Account </a>
 						</li>
 					</ul>
 				</nav>

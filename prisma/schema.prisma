@@ -20,6 +20,8 @@ model User {
     myItems         Item[]    @relation("MyItems")
     addedItems      Item[]    @relation("AddedItems")
     plegedItems     Item[]    @relation("PledgedItems")
+    role            Role      @relation(fields: [roleId], references: [id])
+    roleId          Int       @default(1)
 
     @@map("user")
 }
@@ -33,6 +35,12 @@ model Session {
 
     @@index([user_id])
     @@map("session")
+}
+
+model Role {
+    id   Int    @id @unique @default(autoincrement())
+    name String
+    User User[]
 }
 
 model Item {
