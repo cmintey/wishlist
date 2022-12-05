@@ -2,11 +2,10 @@ import { client } from "$lib/server/prisma";
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals, request }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.getSessionUser();
 	if (!session) {
-		const path = new URL(request.url).pathname;
-		throw redirect(302, `/login?ref=${path}`);
+		throw redirect(302, `/login?ref=/account`);
 	}
 
 	const users = await client.user.findMany({

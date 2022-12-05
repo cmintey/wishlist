@@ -3,11 +3,10 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 
-export const load: PageServerLoad = async ({ locals, request }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
 	const session = await locals.getSession();
 	if (!session) {
-		const path = new URL(request.url).pathname;
-		throw redirect(302, `/login?ref=${path}`);
+		throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
 	}
 };
 

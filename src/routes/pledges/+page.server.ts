@@ -6,8 +6,7 @@ import { client } from "$lib/server/prisma";
 export const load: PageServerLoad = async ({ locals, request }) => {
 	const { session, user } = await locals.getSessionUser();
 	if (!session) {
-		const path = new URL(request.url).pathname;
-		throw redirect(302, `/login?ref=${path}`);
+		throw redirect(302, `/login?ref=/pledges`);
 	}
 
 	const wishlistItems = await client.item.findMany({

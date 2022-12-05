@@ -3,11 +3,10 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 
-export const load: PageServerLoad = async ({ locals, params, request }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.getSessionUser();
 	if (!session) {
-		const path = new URL(request.url).pathname;
-		throw redirect(302, `/login?ref=${path}`);
+		throw redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
 	}
 
 	if (isNaN(parseInt(params.itemId))) {

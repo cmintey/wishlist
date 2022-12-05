@@ -3,11 +3,10 @@ import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 
-export const load: PageServerLoad = async ({ locals, params, request }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.getSessionUser();
 	if (!session) {
-		const path = new URL(request.url).pathname;
-		throw redirect(302, `/login?ref=${path}`);
+		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
 	}
 
 	const search = {
@@ -52,7 +51,7 @@ export const load: PageServerLoad = async ({ locals, params, request }) => {
 		user,
 		listOwner: {
 			me: params.username === user.username,
-			name: listOwner.name
+			name: listOwner?.name
 		},
 		items: wishlistItems
 	};
