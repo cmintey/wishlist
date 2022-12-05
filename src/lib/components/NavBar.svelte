@@ -34,7 +34,9 @@
 	{#if user}
 		<div class="flex flex-row space-x-4 items-center pt-0.5 pl-4 hidden md:block">
 			{#each navItems as navItem}
-				<a href={navItem.href} class="self-center hover:underline"><b>{navItem.label}</b></a>
+				<a href={navItem.href} class="self-center hover:underline" data-sveltekit-preload-data
+					><b>{navItem.label}</b></a
+				>
 			{/each}
 		</div>
 	{/if}
@@ -43,17 +45,17 @@
 		{#if user}
 			<span class="relative">
 				<button use:menu={{ menu: "user" }}>
-					<Avatar initials={`${user.firstname.at(0)}${user.lastname.at(0)}`} />
+					<Avatar initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")} />
 				</button>
 				<nav class="list-nav card p-4 w-fit shadow-xl" data-menu="user">
 					<ul>
 						<li>
-							<a
-								href="/login"
+							<button
+								class="unstyled option"
 								on:click={async () => {
 									await signOut();
 									invalidateAll();
-								}}>Sign Out</a
+								}}>Sign Out</button
 							>
 							<a href="/account"> Account </a>
 						</li>

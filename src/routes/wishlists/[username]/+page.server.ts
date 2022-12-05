@@ -39,8 +39,21 @@ export const load: PageServerLoad = async ({ locals, params, request }) => {
 		}
 	});
 
+	const listOwner = await client.user.findUnique({
+		where: {
+			username: params.username
+		},
+		select: {
+			name: true
+		}
+	});
+
 	return {
 		user,
+		listOwner: {
+			me: params.username === user.username,
+			name: listOwner.name
+		},
 		items: wishlistItems
 	};
 };

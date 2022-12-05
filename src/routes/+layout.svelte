@@ -36,6 +36,7 @@
 			<a
 				class="btn bg-primary-500"
 				href={navItem.href}
+				data-sveltekit-preload-data
 				on:click={() => drawer.update((val) => !val)}><b>{navItem.label}</b></a
 			>
 		{/each}

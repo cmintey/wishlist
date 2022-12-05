@@ -11,12 +11,12 @@
 		<div class="card">
 			<div class="card-header">
 				<div class="flex flex-row space-x-4 items-center">
-					<Avatar initials={`${user.firstname.at(0)}${user.lastname.at(0)}`} />
+					<Avatar initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")} />
 					<h3>
 						<a
 							href="/wishlists/{user.username}"
 							class="unstyled no-underline"
-							data-sveltekit-prefetch>{user.firstname} {user.lastname}</a
+							data-sveltekit-preload-data>{user.name}</a
 						>
 					</h3>
 				</div>

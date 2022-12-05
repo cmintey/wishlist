@@ -23,7 +23,7 @@
 		<div class="flex flex-col space-y-4">
 			<label for="username" class="w-fit">
 				<span>Username</span>
-				<input type="text" id="username" name="username" required />
+				<input type="text" id="username" name="username" autocomplete="username" required />
 			</label>
 
 			<label for="password" class="w-fit">

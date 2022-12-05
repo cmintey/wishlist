@@ -3,7 +3,6 @@
 	import type { PageServerData } from "./$types";
 
 	export let data: PageServerData;
-	$: name = `${data.user.firstname} ${data.user.lastname}`;
 	$: console.log(data);
 </script>
 
@@ -17,11 +16,11 @@
 	<div class="flex space-x-8">
 		<Avatar
 			class="w-20 md:w-32"
-			initials={`${data.user.firstname.at(0)}${data.user.lastname.at(0)}`}
+			initials={data.user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
 		/>
 		<div class="flex flex-col">
 			<div class="flex items-start md:space-x-1">
-				<span class="text-2xl md:text-4xl font-bold">{name}</span>
+				<span class="text-2xl md:text-4xl font-bold">{data.user.name}</span>
 				<!-- <button class="btn-icon -mt-1 pl-2 md:mt-0 text-lg md:text-2xl">
 					<iconify-icon icon="ri:pencil-fill" />
 				</button> -->

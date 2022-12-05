@@ -4,8 +4,9 @@ CREATE TABLE "user" (
     "provider_id" TEXT NOT NULL,
     "hashed_password" TEXT,
     "username" TEXT NOT NULL,
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL
+    "name" TEXT NOT NULL,
+    "roleId" INTEGER NOT NULL DEFAULT 1,
+    CONSTRAINT "user_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -15,6 +16,12 @@ CREATE TABLE "session" (
     "expires" BIGINT NOT NULL,
     "idle_expires" BIGINT NOT NULL,
     CONSTRAINT "session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Role" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -47,6 +54,9 @@ CREATE UNIQUE INDEX "session_id_key" ON "session"("id");
 
 -- CreateIndex
 CREATE INDEX "session_user_id_idx" ON "session"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Role_id_key" ON "Role"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "items_id_key" ON "items"("id");

@@ -15,8 +15,7 @@ model User {
     hashed_password String?
     session         Session[]
     username        String    @unique
-    firstname       String
-    lastname        String
+    name            String
     myItems         Item[]    @relation("MyItems")
     addedItems      Item[]    @relation("AddedItems")
     plegedItems     Item[]    @relation("PledgedItems")

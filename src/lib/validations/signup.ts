@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const signupSchema = z.object({
-	firstname: z.string().trim().min(1, "First Name must not be blank"),
-	lastname: z.string().trim().min(1, "Last Name must not be blank"),
+	name: z.string().trim().min(1, "Name must not be blank"),
 	username: z.string().trim().min(1, "Username must not be blank"),
 	password: z.string().regex(
 		/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,

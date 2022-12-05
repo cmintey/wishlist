@@ -15,31 +15,19 @@
 
 	<form method="POST" use:enhance>
 		<div class="flex flex-col space-y-4">
-			<label for="firstname">
-				<span>First Name</span>
-				<input type="text" id="firstname" name="firstname" required />
-			</label>
-
-			<label for="lastname">
-				<span>Last Name</span>
-				<input type="text" id="lastname" name="lastname" required />
+			<label for="name">
+				<span>Name</span>
+				<input type="text" id="name" name="name" autocomplete="name" required />
 			</label>
 
 			<label for="username">
 				<span>Username</span>
-				<input type="text" id="username" name="username" required />
+				<input type="text" id="username" name="username" autocomplete="username" required />
 			</label>
 
 			<label for="password">
 				<span>Password</span>
 				<div class="relative">
-					<button
-						class="btn flex absolute inset-y-0 right-0 items-center pr-4 z-10"
-						on:click|preventDefault={handleClick}
-					>
-						<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" />
-					</button>
-
 					<input
 						type={pwdVisible ? "text" : "password"}
 						id="password"
@@ -47,6 +35,15 @@
 						class="pr-8"
 						required
 					/>
+					<button
+						class="btn-icon-sm flex absolute inset-y-0 right-0 items-center mt-1.5 pr-4 z-10"
+						type="button"
+						id="showpassword"
+						on:click|preventDefault={handleClick}
+						on:keypress|preventDefault={() => {}}
+					>
+						<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" />
+					</button>
 				</div>
 			</label>
 
@@ -65,7 +62,7 @@
 			{/if}
 
 			<div class="flex space-x-4 justify-center items-center">
-				<button class="btn bg-primary-500 w-min">Sign Up</button>
+				<button class="btn bg-primary-500 w-min" type="submit">Sign Up</button>
 				<a href="/login">Sign in</a>
 			</div>
 		</div>

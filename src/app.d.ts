@@ -6,8 +6,7 @@ declare namespace Lucia {
 	type Auth = import("$lib/server/auth").Auth;
 	type UserAttributes = {
 		username: string;
-		firstname: string;
-		lastname: string;
+		name: string;
 		roleId: number;
 	};
 }

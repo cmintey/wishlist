@@ -2,6 +2,7 @@ import { invalid, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { signupSchema } from "$lib/validations/signup";
+import { client } from "$lib/server/prisma";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals }) => {
@@ -26,13 +27,15 @@ export const actions: Actions = {
 			return invalid(400, { error: true, errors });
 		}
 
+		const userCount = await client.user.count();
+
 		try {
 			const user = await auth.createUser("username", signupData.data.username, {
 				password: signupData.data.password,
 				attributes: {
 					username: signupData.data.username,
-					firstname: signupData.data.firstname,
-					lastname: signupData.data.lastname
+					name: signupData.data.name,
+					roleId: userCount > 0 ? 1 : 2
 				}
 			});
 			console.log(user);

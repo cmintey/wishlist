@@ -12,8 +12,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 	const users = await client.user.findMany({
 		select: {
 			username: true,
-			firstname: true,
-			lastname: true,
+			name: true,
 			myItems: true,
 			_count: {
 				select: {
