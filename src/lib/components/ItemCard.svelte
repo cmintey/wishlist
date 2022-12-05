@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { goto, invalidateAll } from "$app/navigation";
-	import { base } from "$app/paths";
 	import { page } from "$app/stores";
-	import { modalStore, toastStore, tooltip, type ModalSettings } from "@skeletonlabs/skeleton";
+	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { Item } from "@prisma/client";
 
 	export let item: Item & {
@@ -21,6 +20,21 @@
 		username: string;
 		userId: string;
 	};
+
+	let image_url: string;
+
+	$: {
+		if (item.image_url) {
+			try {
+				new URL(item.image_url);
+				image_url = item.image_url;
+			} catch {
+				image_url = `/api/assets/${item.image_url}`;
+			}
+		} else {
+			image_url = "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg";
+		}
+	}
 
 	const handleDelete = async (itemId: number, itemName: string) => {
 		const confirm: ModalSettings = {
@@ -93,13 +107,7 @@
 
 <div class="card">
 	<div class="card-body flex flex-row space-x-4">
-		<img
-			src={item.image_url
-				? `/api/assets/${item.image_url}`
-				: "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg"}
-			alt="product"
-			class="w-24 md:w-32"
-		/>
+		<img src={image_url} alt="product" class="w-24 md:w-32" />
 		<div class="px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
 			<h3 class="truncate font-bold">
 				{#if item.url}
@@ -108,7 +116,11 @@
 					{item.name}
 				{/if}
 			</h3>
-			<h4>{item.price ? `$${item.price}` : "$19.99"}</h4>
+
+			{#if item.price}
+				<h4>{item.price}</h4>
+			{/if}
+
 			<h5>
 				Added by: {item.addedBy?.username}
 				{item.user?.username ? `for ${item.user?.username}` : ""}
