@@ -38,7 +38,6 @@ export const actions: Actions = {
 					roleId: userCount > 0 ? 1 : 2
 				}
 			});
-			console.log(user);
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
 		} catch (e) {
