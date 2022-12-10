@@ -1,4 +1,4 @@
-import { invalid, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { signupSchema } from "$lib/validations/signup";
@@ -24,7 +24,7 @@ export const actions: Actions = {
 					message: error.message
 				};
 			});
-			return invalid(400, { error: true, errors });
+			return fail(400, { error: true, errors });
 		}
 
 		const userCount = await client.user.count();
@@ -41,7 +41,7 @@ export const actions: Actions = {
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
 		} catch (e) {
-			return invalid(400, {
+			return fail(400, {
 				error: true,
 				errors: [{ field: "username", message: "User with username already exists" }]
 			});

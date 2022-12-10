@@ -1,4 +1,4 @@
-import { invalid, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
@@ -23,7 +23,7 @@ export const actions: Actions = {
 
 		// check for empty values
 		if (!name) {
-			return invalid(400, { name, missing: true });
+			return fail(400, { name, missing: true });
 		}
 
 		let filename = "";

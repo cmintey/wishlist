@@ -1,4 +1,4 @@
-import { invalid, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/validations/login";
@@ -24,7 +24,7 @@ export const actions: Actions = {
 					message: error.message
 				};
 			});
-			return invalid(400, { error: true, errors });
+			return fail(400, { error: true, errors });
 		}
 
 		try {
@@ -37,7 +37,7 @@ export const actions: Actions = {
 			locals.setSession(session);
 		} catch {
 			// invalid credentials
-			return invalid(400, { username: loginData.data.username, password: "", incorrect: true });
+			return fail(400, { username: loginData.data.username, password: "", incorrect: true });
 		}
 	}
 };
