@@ -8,8 +8,6 @@ services:
     volumes:
       - ./uploads:/usr/src/app/uploads
       - ./data:/usr/src/app/data
-    environment:
-      - DATABASE_URL=file:/usr/src/app/data/prod.db
 
   proxy:
     container_name: wishlist-proxy
