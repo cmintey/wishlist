@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { focusTrap } from "@skeletonlabs/skeleton";
 	import type { ActionData } from "./$types";
 
 	export let form: ActionData;
@@ -20,10 +21,17 @@
 			};
 		}}
 	>
-		<div class="flex flex-col space-y-4">
+		<div class="flex flex-col space-y-4" use:focusTrap={true}>
 			<label for="username" class="w-fit">
 				<span>Username</span>
-				<input type="text" id="username" name="username" autocomplete="username" required />
+				<input
+					type="text"
+					id="username"
+					name="username"
+					autocomplete="username"
+					autocapitalize="off"
+					required
+				/>
 			</label>
 
 			<div class="flex flex-col space-y-4 relative">
