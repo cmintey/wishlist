@@ -5,7 +5,7 @@ import { loginSchema } from "$lib/validations/login";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals, request }) => {
-	const session = await locals.getSession();
+	const session = await locals.validate();
 	if (session) {
 		const ref = new URL(request.url).searchParams.get("ref");
 		throw redirect(302, ref || "/");

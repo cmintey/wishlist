@@ -6,7 +6,7 @@ import { client } from "$lib/server/prisma";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.getSession();
+	const session = await locals.validate();
 	if (session) throw redirect(302, "/");
 	return {};
 };

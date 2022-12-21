@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
-	import { AppBar, Avatar, menu } from "@skeletonlabs/skeleton";
+	import { AppBar, Avatar, menu, drawerStore } from "@skeletonlabs/skeleton";
 	import { signOut } from "@lucia-auth/sveltekit/client";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client/user";
-	import type { Writable } from "svelte/store";
 
 	type NavItem = {
 		label: string;
@@ -12,17 +11,13 @@
 
 	export let user: ClientUser;
 	export let navItems: NavItem[];
-	export let drawer: Writable<boolean>;
 </script>
 
 <AppBar>
 	<svelte:fragment slot="lead">
 		<div class="flex space-x-4 items-center content-center">
 			{#if user}
-				<button
-					class="btn btn-sm p-0 pt-0.5 md:hidden"
-					on:click={() => drawer.update((val) => !val)}
-				>
+				<button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawerStore.open({})}>
 					<iconify-icon icon="ri:menu-fill" width="20" height="20" />
 				</button>
 			{/if}
@@ -32,7 +27,7 @@
 	</svelte:fragment>
 
 	{#if user}
-		<div class="flex flex-row space-x-4 items-center pt-0.5 pl-4 hidden md:block">
+		<div class="flex-row space-x-4 items-center pt-0.5 pl-4 hidden md:block">
 			{#each navItems as navItem}
 				<a href={navItem.href} class="self-center hover:underline" data-sveltekit-preload-data
 					><b>{navItem.label}</b></a

@@ -6,7 +6,7 @@ import { z } from "zod";
 import type { PageServerLoad, Actions } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { session, user } = await locals.getSessionUser();
+	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/account`);
 	}
@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	namechange: async ({ request, locals }) => {
-		const { user } = await locals.getSessionUser();
+		const { user } = await locals.validateUser();
 		const formData = Object.fromEntries(await request.formData());
 		const schema = z.object({
 			name: z.string().trim().min(1, "Name must not be blank")
@@ -70,7 +70,7 @@ export const actions: Actions = {
 	},
 
 	passwordchange: async ({ request, locals }) => {
-		const { user } = await locals.getSessionUser();
+		const { user } = await locals.validateUser();
 		const formData = Object.fromEntries(await request.formData());
 		const schema = z.object({
 			oldPassword: z.string().min(1),

@@ -26,7 +26,7 @@
 		</div>
 	</div>
 
-	<div class="card-body">
+	<div class="p-4">
 		Items: {user._count ? `${user._count.myItems}/` : ""}{user.myItems.length}
 	</div>
 </div>

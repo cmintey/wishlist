@@ -2,7 +2,7 @@ import { error, type RequestHandler } from "@sveltejs/kit";
 import { readFileSync } from "fs";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
-	const { session } = await locals.getSessionUser();
+	const { session } = await locals.validateUser();
 
 	if (!session) {
 		throw error(401, "unauthorized");

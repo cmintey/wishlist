@@ -7,12 +7,15 @@
 	export let item: Item & {
 		addedBy: {
 			username: string;
+			name: string;
 		} | null;
 		pledgedBy: {
 			username: string;
+			name: string;
 		} | null;
 		user?: {
 			username: string;
+			name: string;
 		} | null;
 	};
 
@@ -106,7 +109,7 @@
 </script>
 
 <div class="card">
-	<div class="card-body flex flex-row space-x-4">
+	<div class="p-4 flex flex-row space-x-4">
 		<img src={image_url} alt="product" class="w-24 md:w-32" />
 		<div class="px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
 			<h3 class="truncate font-bold">
@@ -122,8 +125,8 @@
 			{/if}
 
 			<h5>
-				Added by: {item.addedBy?.username}
-				{item.user?.username ? `for ${item.user?.username}` : ""}
+				Added by {item.addedBy?.name}
+				{item.user?.name ? `for ${item.user?.name}` : ""}
 			</h5>
 			<span>{item.note}</span>
 		</div>
@@ -140,7 +143,7 @@
 						on:click={() => handlePledge(item.id, true)}>Unpledge</button
 					>
 				{:else}
-					<span>Pledged by: {item.pledgedBy?.username}</span>
+					<span>Pledged by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
 				<button

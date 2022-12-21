@@ -31,7 +31,7 @@ const validateItem = async (itemId: string | undefined, session: Session | null)
 };
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
-	const { session, user } = await locals.getSessionUser();
+	const { session, user } = await locals.validateUser();
 
 	const foundItem = await validateItem(params?.itemId, session);
 
@@ -60,7 +60,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 };
 
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
-	const { session } = await locals.getSessionUser();
+	const { session } = await locals.validateUser();
 
 	await validateItem(params?.itemId, session);
 

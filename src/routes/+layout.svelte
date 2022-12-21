@@ -3,16 +3,25 @@
 	import "@skeletonlabs/skeleton/styles/all.css";
 	import "../app.postcss";
 
-	import { writable, type Writable } from "svelte/store";
 	import { page } from "$app/stores";
+	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { handleSession, getUser } from "@lucia-auth/sveltekit/client";
-	import { AppShell, Drawer, Modal, Toast } from "@skeletonlabs/skeleton";
+	import { AppShell, Drawer, Modal, Toast, drawerStore } from "@skeletonlabs/skeleton";
+
 	import NavBar from "$lib/components/NavBar.svelte";
+	import NavigationLoadingBar from "$lib/components/NavigationLoadingBar.svelte";
 
 	handleSession(page);
 	const user = getUser();
+	let showNavigationLoadingBar = false;
 
-	const drawer: Writable<boolean> = writable(false);
+	beforeNavigate(() => {
+		showNavigationLoadingBar = true;
+	});
+
+	afterNavigate(() => {
+		showNavigationLoadingBar = false;
+	});
 
 	$: navItems = [
 		{
@@ -30,14 +39,14 @@
 	];
 </script>
 
-<Drawer open={drawer} position="left">
+<Drawer position="left">
 	<div class="flex flex-col space-y-4 mx-4 mt-4">
 		{#each navItems as navItem}
 			<a
 				class="btn bg-primary-500"
 				href={navItem.href}
 				data-sveltekit-preload-data
-				on:click={() => drawer.update((val) => !val)}><b>{navItem.label}</b></a
+				on:click={() => drawerStore.close()}><b>{navItem.label}</b></a
 			>
 		{/each}
 	</div>
@@ -45,7 +54,10 @@
 
 <AppShell>
 	<svelte:fragment slot="header">
-		<NavBar user={$user} {navItems} {drawer} />
+		{#if showNavigationLoadingBar}
+			<NavigationLoadingBar />
+		{/if}
+		<NavBar user={$user} {navItems} />
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<div class="px-4 md:px-8 py-4">

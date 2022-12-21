@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	const { session, user } = await locals.getSessionUser();
+	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
 	}
@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
 	default: async ({ locals, request, params }) => {
-		const { user: me } = await locals.getSessionUser();
+		const { user: me } = await locals.validateUser();
 		const form = await request.formData();
 		const url = form.get("url") as string;
 		const image_url = form.get("image_url") as string;
