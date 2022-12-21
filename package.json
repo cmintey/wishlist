@@ -54,6 +54,7 @@
 		"metascraper-title": "^5.32.3",
 		"metascraper-url": "^5.32.3",
 		"prisma": "^4.8.0",
+		"winston": "^3.8.2",
 		"zod": "^3.20.2"
 	}
 }
