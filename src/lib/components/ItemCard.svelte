@@ -111,24 +111,26 @@
 <div class="card">
 	<div class="p-4 flex flex-row space-x-4">
 		<img src={image_url} alt="product" class="w-24 md:w-32" />
-		<div class="px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
-			<h3 class="truncate font-bold">
+		<div class="flex flex-col px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
+			<span class="truncate font-bold text-2xl">
 				{#if item.url}
 					<a href={item.url} class="unstyled no-underline hover:underline">{item.name}</a>
 				{:else}
 					{item.name}
 				{/if}
-			</h3>
+			</span>
 
 			{#if item.price}
-				<h4>{item.price}</h4>
+				<span class="text-lg font-semibold">${item.price}</span>
 			{/if}
 
-			<h5>
-				Added by {item.addedBy?.name}
-				{item.user?.name ? `for ${item.user?.name}` : ""}
-			</h5>
-			<span>{item.note}</span>
+			<span class="text-lg">
+				Added by <span class="text-primary-700-200-token font-bold">{item.addedBy?.name}</span>
+				{#if item.user?.name}
+					for <span class="text-primary-700-200-token font-bold">{item.user.name}</span>
+				{/if}
+			</span>
+			<p>{item.note}</p>
 		</div>
 	</div>
 
@@ -139,27 +141,26 @@
 			{:else if item.pledgedBy}
 				{#if item.pledgedBy.username === user.username}
 					<button
-						class="btn btn-filled-primary btn-sm md:btn text-white"
+						class="btn btn-filled-primary btn-sm md:btn"
 						on:click={() => handlePledge(item.id, true)}>Unpledge</button
 					>
 				{:else}
 					<span>Pledged by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
-				<button
-					class="btn btn-filled-primary btn-sm md:btn text-white"
-					on:click={() => handlePledge(item.id)}>Pledge</button
+				<button class="btn btn-filled-primary btn-sm md:btn" on:click={() => handlePledge(item.id)}
+					>Pledge</button
 				>
 			{/if}
 
 			{#if user.username === item.addedBy?.username}
 				<div class="flex flex-row space-x-4">
 					<button
-						class="btn btn-filled-accent btn-sm md:btn text-white"
+						class="btn btn-filled-secondary btn-sm md:btn "
 						on:click={() => goto(`${$page.url}/edit/${item.id}`)}>Edit</button
 					>
 					<button
-						class="btn btn-filled-warning btn-sm md:btn text-white"
+						class="btn btn-filled-warning btn-sm md:btn "
 						on:click={() => handleDelete(item.id, item.name)}>Delete</button
 					>
 				</div>

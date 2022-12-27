@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import type { ActionData } from "../$types";
+	import type { ActionData } from "./$types";
 
 	export let form: ActionData;
 
@@ -62,7 +62,7 @@
 			{/if}
 
 			<div class="flex space-x-4 justify-center items-center">
-				<button class="btn bg-primary-500 w-min" type="submit">Sign Up</button>
+				<button class="btn btn-filled-primary w-min" type="submit">Sign Up</button>
 				<a href="/login">Sign in</a>
 			</div>
 		</div>

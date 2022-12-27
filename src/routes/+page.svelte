@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex flex-col space-y-4">
-	<h2>Lists</h2>
+	<h1>Lists</h1>
 	<UserCard user={data.me} />
 
 	{#each data.users as user}

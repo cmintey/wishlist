@@ -2,7 +2,6 @@ import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/validations/login";
-import * as logger from "winston";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals, request }) => {
@@ -37,7 +36,6 @@ export const actions: Actions = {
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
 		} catch (e) {
-			logger.error("Error logging in", e);
 			// invalid credentials
 			return fail(400, { username: loginData.data.username, password: "", incorrect: true });
 		}

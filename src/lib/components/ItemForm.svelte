@@ -86,7 +86,8 @@
 		/>
 	</label>
 
-	<button type="submit" class="btn bg-primary-500 w-min" disabled={loading}>{buttonText}</button>
+	<button type="submit" class="btn btn-filled-primary w-min" disabled={loading}>{buttonText}</button
+	>
 </div>
 
 {#if loading}
