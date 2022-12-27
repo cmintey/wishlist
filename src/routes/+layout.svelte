@@ -73,9 +73,3 @@
 
 <Toast />
 <Modal />
-
-<style lang="postcss">
-	.btn {
-		@apply text-white;
-	}
-</style>

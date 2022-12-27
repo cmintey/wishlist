@@ -51,7 +51,7 @@
 				{/if}
 
 				<div class="flex space-x-4 justify-center items-center">
-					<button class="btn bg-primary-500 w-min">Log In</button>
+					<button class="btn btn-filled-primary w-min">Log In</button>
 					<a href="/signup">Create an account</a>
 				</div>
 

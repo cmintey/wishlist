@@ -3,7 +3,6 @@ import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { signupSchema } from "$lib/validations/signup";
 import { client } from "$lib/server/prisma";
-import * as logger from "winston";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals }) => {
@@ -42,7 +41,6 @@ export const actions: Actions = {
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
 		} catch (e) {
-			logger.error("Error creating new user", e);
 			return fail(400, {
 				error: true,
 				errors: [{ field: "username", message: "User with username already exists" }]

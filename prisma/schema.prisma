@@ -37,7 +37,7 @@ model Session {
 }
 
 model Role {
-    id   Int    @id @unique @default(autoincrement())
+    id   Int    @id @unique
     name String
     User User[]
 }

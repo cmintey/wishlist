@@ -8,9 +8,12 @@ services:
     volumes:
       - ./uploads:/usr/src/app/uploads
       - ./data:/usr/src/app/data
+    environment:
+      - ORIGIN=
 
   proxy:
     container_name: wishlist-proxy
+    image: cmintey/wishlist-proxy
     build:
       context: ./nginx
     ports:

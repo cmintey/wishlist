@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, `/login`);
 	}
 
-	const me = await client.user.findUnique({
+	const me = await client.user.findUniqueOrThrow({
 		select: {
 			name: true,
 			username: true,
