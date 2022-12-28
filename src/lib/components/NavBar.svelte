@@ -53,6 +53,9 @@
 								}}>Sign Out</button
 							>
 							<a href="/account"> Account </a>
+							{#if user.roleId == 2}
+								<a href="/admin">Admin</a>
+							{/if}
 						</li>
 					</ul>
 				</nav>

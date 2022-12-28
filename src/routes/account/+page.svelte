@@ -1,12 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import {
-		AccordionGroup,
-		AccordionItem,
-		Avatar,
-		Divider,
-		toastStore
-	} from "@skeletonlabs/skeleton";
+	import { Avatar, Divider, toastStore } from "@skeletonlabs/skeleton";
 	import type { ActionData, PageServerData } from "./$types";
 
 	export let data: PageServerData;
@@ -144,48 +138,10 @@
 			<button
 				type="submit"
 				formaction="?/passwordchange"
-				class="btn bg-primary-500 w-fit"
+				class="btn btn-filled-primary w-fit"
 				disabled={currentPassword === "" || newPassword === "" || newPassword !== confirmPassword}
 				>Update Password</button
 			>
 		</div>
 	</form>
 </div>
-
-{#if data.user.role?.name === "ADMIN"}
-	<div class="flex flex-col space-y-4">
-		<h2>Admin</h2>
-
-		<AccordionGroup collapse={false} padding="px-0" hover="">
-			<AccordionItem>
-				<svelte:fragment slot="summary"><h3>Users</h3></svelte:fragment>
-				<svelte:fragment slot="content">
-					<ul>
-						{#each data.users as user}
-							<li>
-								<a href="/account/{user.username}"
-									>{user.username}
-									{#if user.role.name === "ADMIN"}
-										<span class="text-xs italic">(admin)</span>
-									{/if}
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</svelte:fragment>
-			</AccordionItem>
-		</AccordionGroup>
-
-		<h3>Actions</h3>
-		<div class="flex space-x-2">
-			<button class="btn bg-primary-500 w-fit" disabled>Invite User</button>
-			<button class="btn bg-primary-500 w-fit" disabled>Clear Lists</button>
-		</div>
-	</div>
-{/if}
-
-<style lang="postcss">
-	.btn {
-		@apply text-white;
-	}
-</style>

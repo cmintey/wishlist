@@ -16,6 +16,7 @@ model User {
     session         Session[]
     username        String    @unique
     name            String
+    email           String?   @unique
     myItems         Item[]    @relation("MyItems")
     addedItems      Item[]    @relation("AddedItems")
     plegedItems     Item[]    @relation("PledgedItems")
@@ -58,4 +59,15 @@ model Item {
 
     @@index([userId])
     @@map("items")
+}
+
+model PasswordReset {
+    id          Int      @id @unique @default(autoincrement())
+    createdAt   DateTime @default(now())
+    expiresIn   Int
+    userId      String
+    hashedToken String
+    redeemed    Boolean  @default(false)
+
+    @@map("password_resets")
 }

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   app:
@@ -17,5 +17,5 @@ services:
     build:
       context: ./nginx
     ports:
-      - '3280:8080'
+      - "3280:8080"
     restart: unless-stopped

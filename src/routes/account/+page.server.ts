@@ -1,6 +1,6 @@
-import { invalidateAll } from "$app/navigation";
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
+import { resetPasswordSchema } from "$lib/validations/resetPassword";
 import { fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import type { PageServerLoad, Actions } from "./$types";
@@ -11,32 +11,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, `/login?ref=/account`);
 	}
 
-	const users = await client.user.findMany({
-		select: {
-			username: true,
-			role: {
-				select: {
-					name: true
-				}
-			}
-		}
-	});
-
-	const role = await client.role.findUnique({
-		where: {
-			id: user.roleId
-		},
-		select: {
-			name: true
-		}
-	});
-
 	return {
-		user: {
-			...user,
-			role
-		},
-		users
+		user
 	};
 };
 
@@ -72,20 +48,7 @@ export const actions: Actions = {
 	passwordchange: async ({ request, locals }) => {
 		const { user } = await locals.validateUser();
 		const formData = Object.fromEntries(await request.formData());
-		const schema = z.object({
-			oldPassword: z.string().min(1),
-			newPassword: z.string().regex(
-				/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-				`Password must satisfy the following requirements:
-            - At least 8 characters
-            - 1 uppercase
-            - 1 lowercase
-            - 1 number
-            - 1 special character (#?!@$%^&*-)
-            `
-			)
-		});
-		const pwdData = schema.safeParse(formData);
+		const pwdData = resetPasswordSchema.safeParse(formData);
 
 		if (!pwdData.success) {
 			const errors = pwdData.error.errors.map((error) => {
