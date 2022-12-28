@@ -22,12 +22,14 @@
 		"@sveltejs/kit": "^1.0.1",
 		"@tailwindcss/forms": "^0.5.3",
 		"@types/node": "^18.11.18",
+		"@types/nodemailer": "^6.4.7",
 		"@typescript-eslint/eslint-plugin": "^5.47.1",
 		"@typescript-eslint/parser": "^5.47.1",
 		"autoprefixer": "^10.4.13",
 		"eslint": "^8.30.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"fuzzysort": "^2.0.4",
 		"postcss": "^8.4.20",
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.1",
@@ -53,6 +55,7 @@
 		"metascraper-image": "^5.32.3",
 		"metascraper-title": "^5.32.3",
 		"metascraper-url": "^5.32.3",
+		"nodemailer": "^6.8.0",
 		"prisma": "^4.8.0",
 		"zod": "^3.20.2"
 	}

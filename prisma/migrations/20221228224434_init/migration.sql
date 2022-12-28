@@ -5,6 +5,7 @@ CREATE TABLE "user" (
     "hashed_password" TEXT,
     "username" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "email" TEXT,
     "roleId" INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT "user_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -40,6 +41,16 @@ CREATE TABLE "items" (
     CONSTRAINT "items_pledgedById_fkey" FOREIGN KEY ("pledgedById") REFERENCES "user" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "password_resets" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "expiresIn" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "hashedToken" TEXT NOT NULL,
+    "redeemed" BOOLEAN NOT NULL DEFAULT false
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_id_key" ON "user"("id");
 
@@ -48,6 +59,9 @@ CREATE UNIQUE INDEX "user_provider_id_key" ON "user"("provider_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "session_id_key" ON "session"("id");
@@ -63,3 +77,6 @@ CREATE UNIQUE INDEX "items_id_key" ON "items"("id");
 
 -- CreateIndex
 CREATE INDEX "items_userId_idx" ON "items"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "password_resets_id_key" ON "password_resets"("id");

@@ -43,7 +43,7 @@
 	<div class="flex flex-col space-y-4 mx-4 mt-4">
 		{#each navItems as navItem}
 			<a
-				class="btn bg-primary-500"
+				class="btn btn-filled-primary"
 				href={navItem.href}
 				data-sveltekit-preload-data
 				on:click={() => drawerStore.close()}><b>{navItem.label}</b></a
