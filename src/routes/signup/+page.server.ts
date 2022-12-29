@@ -1,14 +1,42 @@
-import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
-import type { PageServerLoad, Actions } from "./$types";
-import { signupSchema } from "$lib/validations/signup";
 import { client } from "$lib/server/prisma";
+import { signupSchema } from "$lib/validations/signup";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { env } from "$env/dynamic/private";
+import type { Actions, PageServerLoad } from "./$types";
+import { hashToken } from "$lib/server/token";
 
-// If the user exists, redirect authenticated users to the profile page.
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, request }) => {
+	// If the user session exists, redirect authenticated users to the profile page.
 	const session = await locals.validate();
 	if (session) throw redirect(302, "/");
-	return {};
+
+	const token = new URL(request.url).searchParams.get("token");
+	if (env.ENABLE_SIGNUP && env.ENABLE_SIGNUP !== "true") {
+		if (token) {
+			const signup = await client.signupToken.findFirst({
+				where: {
+					hashedToken: hashToken(token),
+					redeemed: false
+				},
+				select: {
+					id: true,
+					createdAt: true,
+					expiresIn: true
+				}
+			});
+
+			if (!signup) throw error(400, "reset token not found");
+
+			const createdAt = signup.createdAt;
+			const expiry = createdAt.getTime() + signup.expiresIn;
+			if (expiry - Date.now() > 0) {
+				return { valid: true, id: signup.id };
+			}
+			throw error(400, "Invite code is either invalid or already been used");
+		}
+		throw error(404, "This instance is invite only");
+	}
 };
 
 export const actions: Actions = {
@@ -34,6 +62,7 @@ export const actions: Actions = {
 				password: signupData.data.password,
 				attributes: {
 					username: signupData.data.username,
+					email: signupData.data.email,
 					name: signupData.data.name,
 					roleId: userCount > 0 ? 1 : 2
 				}
@@ -43,7 +72,7 @@ export const actions: Actions = {
 		} catch (e) {
 			return fail(400, {
 				error: true,
-				errors: [{ field: "username", message: "User with username already exists" }]
+				errors: [{ field: "username", message: "User with username or email already exists" }]
 			});
 		}
 	}

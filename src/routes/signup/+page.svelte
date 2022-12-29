@@ -1,13 +1,19 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import type { ActionData } from "./$types";
+	import { onMount } from "svelte";
+	import type { ActionData, PageData } from "./$types";
 
+	export let data: PageData;
 	export let form: ActionData;
 
 	let pwdVisible = false;
 	const handleClick = () => {
 		pwdVisible = !pwdVisible;
 	};
+
+	onMount(() => {
+		if (data.valid) window.history.replaceState({}, "", "/signup");
+	});
 </script>
 
 <div class="flex flex-col space-y-4 items-center">
@@ -20,10 +26,16 @@
 				<input type="text" id="name" name="name" autocomplete="name" required />
 			</label>
 
-			<label for="username">
-				<span>Username</span>
-				<input type="text" id="username" name="username" autocomplete="username" required />
-			</label>
+			<div class="flex flex-row space-x-2">
+				<label for="username">
+					<span>Username</span>
+					<input type="text" id="username" name="username" autocomplete="username" required />
+				</label>
+				<label for="email">
+					<span>Email</span>
+					<input type="email" id="email" name="email" autocomplete="email" required />
+				</label>
+			</div>
 
 			<label for="password">
 				<span>Password</span>

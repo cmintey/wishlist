@@ -3,6 +3,7 @@ import { env } from "$env/dynamic/private";
 
 import type { Transporter } from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
+import type Mail from "nodemailer/lib/mailer";
 
 export const SMTP_ENABLED =
 	env?.SMTP_HOST != "" &&
@@ -24,19 +25,32 @@ if (SMTP_ENABLED) {
 	});
 }
 
-export const sendPasswordReset = async (to: string, token: string) => {
+const sendEmail = async (options: Mail.Options) => {
 	if (!transport) {
 		console.log("SMTP not set up properly, check your settings");
 		return false;
 	}
 
-	const msgInfo = await transport.sendMail({
-		from: env.SMTP_FROM,
-		to,
-		subject: "Password Reset",
-		text: `token ${token}`
-	});
+	const msgInfo = await transport.sendMail(options);
 
 	console.log(msgInfo);
 	return msgInfo.accepted.length > 0;
+};
+
+export const sendSignupLink = async (to: string, url: string) => {
+	return await sendEmail({
+		from: env.SMTP_FROM,
+		to,
+		subject: "Wishlist Invite",
+		html: `Somebody has invited you to join their Wishlist! Follow the link to signup: <a href=${url}>${url}</a>`
+	});
+};
+
+export const sendPasswordReset = async (to: string, url: string) => {
+	return await sendEmail({
+		from: env.SMTP_FROM,
+		to,
+		subject: "Password Reset",
+		html: `Follow the link to reset your password <a href=${url}>${url}</a>`
+	});
 };

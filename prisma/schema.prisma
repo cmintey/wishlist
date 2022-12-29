@@ -16,7 +16,7 @@ model User {
     session         Session[]
     username        String    @unique
     name            String
-    email           String?   @unique
+    email           String    @unique @default("changeme@email.com")
     myItems         Item[]    @relation("MyItems")
     addedItems      Item[]    @relation("AddedItems")
     plegedItems     Item[]    @relation("PledgedItems")
@@ -69,5 +69,17 @@ model PasswordReset {
     hashedToken String
     redeemed    Boolean  @default(false)
 
+    @@index([hashedToken])
     @@map("password_resets")
+}
+
+model SignupToken {
+    id          Int      @id @unique @default(autoincrement())
+    createdAt   DateTime @default(now())
+    expiresIn   Int
+    hashedToken String
+    redeemed    Boolean  @default(false)
+
+    @@index([hashedToken])
+    @@map("signup_tokens")
 }

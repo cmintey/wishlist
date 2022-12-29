@@ -1,14 +1,31 @@
 <script lang="ts">
-	import { Alert } from "@skeletonlabs/skeleton";
+	import { enhance } from "$app/forms";
+	import TokenCopy from "$lib/components/TokenCopy.svelte";
+	import { Alert, ProgressRadial, toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
 	import fuzzysort from "fuzzysort";
-	import type { PageData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
-	let users = data.users.slice();
+	export let form: ActionData;
+
+	const triggerToast = () => {
+		const toastConfig: ToastSettings = {
+			message: "Invite sent!",
+			preset: "success",
+			autohide: true,
+			timeout: 3000
+		};
+		toastStore.trigger(toastConfig);
+	};
+
+	let inviteUser = false;
+	let sending = false;
 
 	let userSearch = "";
-	$: console.log(userSearch);
-	$: usersFiltered = fuzzysort.go(userSearch, users, { keys: ["username", "name"], all: true });
+	$: usersFiltered = fuzzysort.go(userSearch, data.users, {
+		keys: ["username", "name"],
+		all: true
+	});
 </script>
 
 <div class="flex flex-col space-y-4 w-3/4">
@@ -27,10 +44,76 @@
 	</Alert>
 
 	<h3>Actions</h3>
-	<div class="flex space-x-2">
-		<button class="btn btn-filled-primary w-fit" disabled>Invite User</button>
-		<button class="btn btn-filled-primary w-fit" disabled>Clear Lists</button>
-	</div>
+	<form
+		method="POST"
+		use:enhance={({ action }) => {
+			if (action.search === "?/invite-user") {
+				sending = true;
+				return async ({ result, update }) => {
+					if (result.type === "success") {
+						triggerToast();
+					}
+					update();
+					sending = false;
+				};
+			}
+		}}
+	>
+		<div class="flex space-x-2">
+			{#if data.smtpEnabled}
+				<button
+					class="btn btn-filled-primary w-fit"
+					type="button"
+					disabled={inviteUser}
+					on:click={() => (inviteUser = true)}>Invite User</button
+				>
+			{:else}
+				<button
+					class="btn btn-filled-primary w-fit"
+					formaction="?/invite-user"
+					on:click={() => (inviteUser = true)}>Invite User</button
+				>
+			{/if}
+
+			<button class="btn btn-filled-primary w-fit" disabled>Clear Lists</button>
+		</div>
+
+		{#if data.smtpEnabled}
+			{#if inviteUser}
+				<div class="flex space-x-4 mt-2 items-end">
+					<label for="invite-email">
+						<span>Email</span>
+						<input type="email" name="invite-email" id="invite-email" autocomplete="off" required />
+					</label>
+					<button
+						class="btn btn-filled-primary w-fit h-min mb-1"
+						formaction="?/invite-user"
+						disabled={sending}
+					>
+						{#if sending}
+							<span class="h-6 w-6">
+								<ProgressRadial stroke={64} />
+							</span>
+						{:else}
+							Invite
+						{/if}
+					</button>
+				</div>
+				{#if form?.error}
+					<ul>
+						{#each form.errors as error}
+							<li class="text-xs text-red-500">{error.message}</li>
+						{/each}
+					</ul>
+				{/if}
+			{/if}
+		{:else if form?.success && form?.url}
+			<div>
+				<TokenCopy url={form.url}>Invite link</TokenCopy>
+				<span class="italic text-sm">This invite link is only valid for one signup</span>
+			</div>
+		{/if}
+	</form>
 
 	<h3>Users</h3>
 	<label class="w-fit">
@@ -42,6 +125,7 @@
 			</div>
 		</div>
 	</label>
+	<span class="text-sm">*denotes admin</span>
 	<ul>
 		{#each usersFiltered as user}
 			<li>
@@ -49,9 +133,11 @@
 					href={user.obj.username === data.user.username
 						? "/account"
 						: `/admin/user/${user.obj.username}`}
-					>{user.obj.username}
+				>
+					{user.obj.name}
+					<span class="italic text-sm">({user.obj.username})</span>
 					{#if user.obj.role.name === "ADMIN"}
-						<span class="text-xs italic">(admin)</span>
+						<span>*</span>
 					{/if}
 				</a>
 			</li>

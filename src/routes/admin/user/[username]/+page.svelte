@@ -1,15 +1,9 @@
 <script lang="ts">
-	import { fade } from "svelte/transition";
 	import { enhance } from "$app/forms";
-	import {
-		clipboard,
-		modalStore,
-		toastStore,
-		tooltip,
-		type ModalSettings
-	} from "@skeletonlabs/skeleton";
-	import type { ActionData, PageData } from "./$types";
 	import { goto, invalidateAll } from "$app/navigation";
+	import TokenCopy from "$lib/components/TokenCopy.svelte";
+	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -52,8 +46,6 @@
 		};
 		modalStore.trigger(settings);
 	};
-
-	let copiedVisible = false;
 </script>
 
 <div class="flex flex-col space-y-2">
@@ -84,26 +76,5 @@
 </form>
 
 {#if form?.success && form?.url}
-	<div class="flex flex-row items-center w-100">
-		<span class="text-ellipsis">
-			<a href={form.url}>Password reset link</a>
-			<span hidden data-clipboard="resetUrl">{form.url}</span>
-		</span>
-		<div class="flex flex-row items-center">
-			<button
-				class="btn btn-icon"
-				use:clipboard={{ element: "resetUrl" }}
-				use:tooltip={{ content: "Copy to clipboard" }}
-				on:click={() => {
-					copiedVisible = true;
-					setTimeout(() => (copiedVisible = false), 1000);
-				}}
-			>
-				<iconify-icon icon="ri:clipboard-line" />
-			</button>
-			{#if copiedVisible}
-				<span out:fade>Copied!</span>
-			{/if}
-		</div>
-	</div>
+	<TokenCopy url={form.url}>Password reset link</TokenCopy>
 {/if}

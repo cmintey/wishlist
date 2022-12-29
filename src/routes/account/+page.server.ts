@@ -1,9 +1,10 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { resetPasswordSchema } from "$lib/validations/resetPassword";
+import type { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
-import type { PageServerLoad, Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
@@ -17,13 +18,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	namechange: async ({ request, locals }) => {
+	profile: async ({ request, locals }) => {
 		const { user, session } = await locals.validateUser();
 		if (!session) throw redirect(302, "/login?ref=/account");
 
 		const formData = Object.fromEntries(await request.formData());
 		const schema = z.object({
-			name: z.string().trim().min(1, "Name must not be blank")
+			name: z.string().trim().min(1, "Name must not be blank"),
+			username: z.string().trim().min(1, "Username must not be blank"),
+			email: z.string().email()
 		});
 		const nameData = schema.safeParse(formData);
 		// check for empty values
@@ -37,14 +40,26 @@ export const actions: Actions = {
 			return fail(400, { error: true, errors });
 		}
 
-		await client.user.update({
-			data: {
-				name: nameData.data.name
-			},
-			where: {
-				username: user.username
-			}
-		});
+		try {
+			await client.user.update({
+				data: {
+					name: nameData.data.name,
+					username: nameData.data.username,
+					email: nameData.data.email
+				},
+				where: {
+					username: user.username
+				}
+			});
+		} catch (e) {
+			const err = e as PrismaClientKnownRequestError;
+			console.log(e);
+			const targets = err.meta?.target as string[];
+			return fail(400, {
+				error: true,
+				errors: [{ field: targets[0], message: `${targets[0]} already in use` }]
+			});
+		}
 	},
 
 	passwordchange: async ({ request, locals }) => {
