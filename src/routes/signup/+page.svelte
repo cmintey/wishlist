@@ -40,7 +40,7 @@
 						type="button"
 						id="showpassword"
 						on:click|preventDefault={handleClick}
-						on:keypress|preventDefault={() => {}}
+						on:keypress|preventDefault
 					>
 						<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" />
 					</button>

@@ -6,7 +6,7 @@
 	export let data: PageData;
 	let users = data.users.slice();
 
-	let userSearch: string = "";
+	let userSearch = "";
 	$: console.log(userSearch);
 	$: usersFiltered = fuzzysort.go(userSearch, users, { keys: ["username", "name"], all: true });
 </script>

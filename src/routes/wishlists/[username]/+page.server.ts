@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	};
 
 	if (params.username === user.username) {
-		// @ts-ignore
+		// @ts-expect-error this is an experimental feature in prisma
 		search.addedBy = {
 			username: user.username
 		};

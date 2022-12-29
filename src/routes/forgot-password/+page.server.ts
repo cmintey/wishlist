@@ -38,7 +38,7 @@ export const actions: Actions = {
 			}
 		});
 
-		var token = null;
+		let token = null;
 
 		if (user) {
 			token = await generateToken();

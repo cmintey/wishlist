@@ -18,7 +18,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	namechange: async ({ request, locals }) => {
-		const { user } = await locals.validateUser();
+		const { user, session } = await locals.validateUser();
+		if (!session) throw redirect(302, "/login?ref=/account");
+
 		const formData = Object.fromEntries(await request.formData());
 		const schema = z.object({
 			name: z.string().trim().min(1, "Name must not be blank")
@@ -40,13 +42,15 @@ export const actions: Actions = {
 				name: nameData.data.name
 			},
 			where: {
-				username: user?.username
+				username: user.username
 			}
 		});
 	},
 
 	passwordchange: async ({ request, locals }) => {
-		const { user } = await locals.validateUser();
+		const { user, session } = await locals.validateUser();
+		if (!session) throw redirect(302, "/login?ref=/account");
+
 		const formData = Object.fromEntries(await request.formData());
 		const pwdData = resetPasswordSchema.safeParse(formData);
 
@@ -61,7 +65,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.authenticateUser("username", user?.username!, pwdData.data.oldPassword);
+			await auth.authenticateUser("username", user.username, pwdData.data.oldPassword);
 		} catch {
 			return fail(400, {
 				error: true,
@@ -69,8 +73,8 @@ export const actions: Actions = {
 			});
 		}
 
-		const u = await auth.updateUserPassword(user?.userId!, pwdData.data.newPassword);
-		const session = await auth.createSession(u.userId);
-		locals.setSession(session);
+		const u = await auth.updateUserPassword(user.userId, pwdData.data.newPassword);
+		const newSession = await auth.createSession(u.userId);
+		locals.setSession(newSession);
 	}
 };

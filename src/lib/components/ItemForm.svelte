@@ -1,11 +1,10 @@
 <script lang="ts">
+	import type { Item } from "@prisma/client";
 	import Backdrop from "./Backdrop.svelte";
 
-	export let data: any;
-	export let form: any;
+	export let data: Item;
+	export let form: { name: string; missing: boolean } | null;
 	export let buttonText: string;
-
-	$: image = data.image || data.image_url;
 
 	let loading = false;
 	let urlChanged = false;
@@ -15,8 +14,9 @@
 			loading = true;
 			const res = await fetch(`/api/product?url=${data.url}`);
 			if (res.ok) {
-				data = await res.json();
-				data.name = data.name ? data.name : data.title || "";
+				let productData: ProductData = await res.json();
+				data.name = productData.name ? productData.name : productData.title || "";
+				data.image_url = productData.image;
 			} else {
 				console.log("invalid url");
 				console.log(await res.json());
@@ -72,7 +72,7 @@
 
 	<label for="image_url" class="col-span-1 md:col-span-5">
 		<span>Image URL</span>
-		<input type="url" id="image_url" name="image_url" bind:value={image} />
+		<input type="url" id="image_url" name="image_url" bind:value={data.image_url} />
 	</label>
 
 	<label for="note" class="col-span-1 md:col-span-6">
