@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 					myItems: {
 						where: {
 							pledgedBy: {
-								isNot: null
+								isNot: undefined
 							},
 							addedBy: {
 								username: user.username

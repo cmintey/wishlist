@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { focusTrap } from "@skeletonlabs/skeleton";
-	import type { ActionData } from "./$types";
+	import type { ActionData, PageServerData } from "./$types";
 
+	export let data: PageServerData;
 	export let form: ActionData;
 	let password = "";
 </script>
@@ -52,7 +53,9 @@
 
 				<div class="flex space-x-4 justify-center items-center">
 					<button class="btn btn-filled-primary w-min">Log In</button>
-					<a href="/signup">Create an account</a>
+					{#if data.enableSignup}
+						<a href="/signup">Create an account</a>
+					{/if}
 				</div>
 
 				<div>

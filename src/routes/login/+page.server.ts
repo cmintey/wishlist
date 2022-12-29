@@ -2,6 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/validations/login";
+import { env } from "$env/dynamic/private";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals, request }) => {
@@ -10,6 +11,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 		const ref = new URL(request.url).searchParams.get("ref");
 		throw redirect(302, ref || "/");
 	}
+	return { enableSignup: env.ENABLE_SIGNUP && env.ENABLE_SIGNUP === "true" };
 };
 
 export const actions: Actions = {
