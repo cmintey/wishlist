@@ -20,6 +20,10 @@ declare namespace App {
 	}
 }
 
+declare module "@samirrayani/metascraper-shopping" {
+	export default function rules(): import("metascraper").Rule;
+}
+
 type ProductData = {
 	brand: string | null;
 	name: string | null;
