@@ -15,7 +15,7 @@ let transport: Transporter<SMTPTransport.SentMessageInfo> | null = null;
 
 if (SMTP_ENABLED) {
 	transport = nodemailer.createTransport({
-		port: Number.parseInt(env.SMTP_PORT!),
+		port: Number.parseInt(env.SMTP_PORT),
 		host: env.SMTP_HOST,
 		auth: {
 			user: env.SMTP_USER,
@@ -30,7 +30,7 @@ export const sendPasswordReset = async (to: string, token: string) => {
 		return false;
 	}
 
-	let msgInfo = await transport.sendMail({
+	const msgInfo = await transport.sendMail({
 		from: env.SMTP_FROM,
 		to,
 		subject: "Password Reset",

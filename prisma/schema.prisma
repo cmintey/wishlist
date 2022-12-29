@@ -50,10 +50,10 @@ model Item {
     url         String?
     note        String?
     image_url   String?
-    user        User?   @relation(name: "MyItems", fields: [userId], references: [id])
-    userId      String?
-    addedBy     User?   @relation(name: "AddedItems", fields: [addedById], references: [id])
-    addedById   String?
+    user        User    @relation(name: "MyItems", fields: [userId], references: [id])
+    userId      String
+    addedBy     User    @relation(name: "AddedItems", fields: [addedById], references: [id])
+    addedById   String
     pledgedBy   User?   @relation(name: "PledgedItems", fields: [pledgedById], references: [id])
     pledgedById String?
 

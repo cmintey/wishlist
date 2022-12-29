@@ -28,13 +28,13 @@ export const actions: Actions = {
 
 		let filename = "";
 
-		let create_image = image.size > 0 && image.size <= 5000000;
+		const create_image = image.size > 0 && image.size <= 5000000;
 
 		if (create_image) {
 			const ext = image.name.split(".").pop();
-			filename = me!.username + "-" + Date.now().toString() + "." + ext;
+			filename = me?.username + "-" + Date.now().toString() + "." + ext;
 
-			let ab = await image.arrayBuffer();
+			const ab = await image.arrayBuffer();
 
 			writeFileSync(`uploads/${filename}`, Buffer.from(ab));
 		}

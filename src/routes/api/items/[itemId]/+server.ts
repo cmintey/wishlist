@@ -42,7 +42,8 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	try {
 		const item = await client.item.delete({
 			where: {
-				id: parseInt(params.itemId!)
+				// @ts-expect-error params.itemId is checked in a previous function
+				id: parseInt(params.itemId)
 			},
 			select: {
 				addedBy: {
@@ -84,7 +85,8 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 	try {
 		const item = await client.item.update({
 			where: {
-				id: parseInt(params.itemId!)
+				// @ts-expect-error params.itemId is checked in a previous function
+				id: parseInt(params.itemId)
 			},
 			data
 		});

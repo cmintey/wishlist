@@ -47,7 +47,7 @@ export const actions: Actions = {
 		const image_url = form.get("image_url") as string;
 		const image = form.get("image") as File;
 		const name = form.get("name") as string;
-		let price = form.get("price") as string;
+		const price = form.get("price") as string;
 		const note = form.get("note") as string;
 
 		// check for empty values
@@ -57,13 +57,13 @@ export const actions: Actions = {
 
 		let filename = "";
 
-		let create_image = image.size > 0 && image.size <= 5000000;
+		const create_image = image.size > 0 && image.size <= 5000000;
 
 		if (create_image) {
 			const ext = image.name.split(".").pop();
-			filename = me!.username + "-" + Date.now().toString() + "." + ext;
+			filename = me?.username + "-" + Date.now().toString() + "." + ext;
 
-			let ab = await image.arrayBuffer();
+			const ab = await image.arrayBuffer();
 
 			writeFileSync(`static/img/uploads/${filename}`, Buffer.from(ab));
 		}
