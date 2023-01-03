@@ -1,0 +1,20 @@
+<mjml>
+	<mj-body>
+		<mj-section>
+			<mj-column>
+				<mj-text align="center" font-size="36px" font-family="helvetica">Wishlist</mj-text>
+
+				<mj-divider></mj-divider>
+
+				<mj-text align="center" font-size="28px" font-family="helvetica">Join Wishlist</mj-text>
+
+				<mj-text
+					>You've been invited to join Wishlist! To accept the invitation, click on the link below.
+					If you do not wish to join, then you can ignore this email.</mj-text
+				>
+
+				<mj-button href="{{url}}" rel="notrack">Join Wishlist</mj-button>
+			</mj-column>
+		</mj-section>
+	</mj-body>
+</mjml>

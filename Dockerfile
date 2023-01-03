@@ -23,6 +23,7 @@ RUN apk add openssl caddy
 COPY --from=build /usr/src/app/build ./build/
 COPY --from=build /usr/src/app/node_modules ./node_modules/
 COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
+COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
 RUN npm i -g pnpm

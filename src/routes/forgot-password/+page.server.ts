@@ -10,7 +10,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, url }) => {
 		const formData = Object.fromEntries(await request.formData());
 		const emailSchema = z.object({
 			email: z.string().email()
@@ -42,6 +42,7 @@ export const actions: Actions = {
 
 		if (user) {
 			token = await generateToken();
+			const tokenUrl = new URL(`/reset-password?token=${token}`, url);
 
 			await client.passwordReset.create({
 				data: {
@@ -52,7 +53,7 @@ export const actions: Actions = {
 			});
 
 			if (SMTP_ENABLED && user.email) {
-				const sent = await sendPasswordReset(user.email, token);
+				const sent = await sendPasswordReset(user.email, tokenUrl.href);
 				console.log(`email sent: ${sent}`);
 			}
 		}

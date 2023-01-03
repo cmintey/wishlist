@@ -1,4 +1,6 @@
 import nodemailer from "nodemailer";
+import Handlebars from "handlebars";
+import { readFile } from "fs";
 import { env } from "$env/dynamic/private";
 
 import type { Transporter } from "nodemailer";
@@ -10,9 +12,28 @@ export const SMTP_ENABLED =
 	env?.SMTP_PORT != "" &&
 	env?.SMTP_USER != "" &&
 	env?.SMTP_PASS != "" &&
-	env?.SMTP_FROM != "";
+	env?.SMTP_FROM != "" &&
+	env?.SMTP_FROM_NAME != "";
 
 let transport: Transporter<SMTPTransport.SentMessageInfo> | null = null;
+let passResetTempl: HandlebarsTemplateDelegate<any>;
+let inviteTempl: HandlebarsTemplateDelegate<any>;
+
+readFile("templates/password-reset.html", "utf-8", (err, data) => {
+	if (err) {
+		console.log("error reading password reset template");
+	} else {
+		passResetTempl = Handlebars.compile(data);
+	}
+});
+
+readFile("templates/invite.html", "utf-8", (err, data) => {
+	if (err) {
+		console.log("error reading invite template");
+	} else {
+		inviteTempl = Handlebars.compile(data);
+	}
+});
 
 if (SMTP_ENABLED) {
 	transport = nodemailer.createTransport({
@@ -38,19 +59,29 @@ const sendEmail = async (options: Mail.Options) => {
 };
 
 export const sendSignupLink = async (to: string, url: string) => {
+	const html = inviteTempl({ url });
 	return await sendEmail({
-		from: env.SMTP_FROM,
+		from: {
+			name: env.SMTP_FROM_NAME,
+			address: env.SMTP_FROM
+		},
 		to,
 		subject: "Wishlist Invite",
-		html: `Somebody has invited you to join their Wishlist! Follow the link to signup: <a href=${url}>${url}</a>`
+		html,
+		text: `Somebody has invited you to join their Wishlist! Follow the link to signup: ${url}`
 	});
 };
 
 export const sendPasswordReset = async (to: string, url: string) => {
+	const html = passResetTempl({ url });
 	return await sendEmail({
-		from: env.SMTP_FROM,
+		from: {
+			name: env.SMTP_FROM_NAME,
+			address: env.SMTP_FROM
+		},
 		to,
 		subject: "Password Reset",
-		html: `Follow the link to reset your password <a href=${url}>${url}</a>`
+		html,
+		text: `Follow the link to reset your password ${url}`
 	});
 };
