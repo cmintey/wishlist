@@ -51,6 +51,7 @@
 			required
 			bind:value={data.name}
 			class={form?.missing ? "input-invalid" : ""}
+			autocomplete="off"
 		/>
 		{#if form?.missing}
 			<p class="unstyled pt-2 text-xs text-warning-500">Item name required</p>
@@ -61,7 +62,14 @@
 		<span>Price</span>
 		<div class="relative">
 			<h4 class="flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none z-10">$</h4>
-			<input type="text" id="price" name="price" class="pl-8" bind:value={data.price} />
+			<input
+				type="text"
+				id="price"
+				name="price"
+				class="pl-8"
+				bind:value={data.price}
+				autocomplete="off"
+			/>
 		</div>
 	</label>
 
@@ -72,7 +80,13 @@
 
 	<label for="image_url" class="col-span-1 md:col-span-5">
 		<span>Image URL</span>
-		<input type="url" id="image_url" name="image_url" bind:value={data.image_url} />
+		<input
+			type="text"
+			id="image_url"
+			name="image_url"
+			bind:value={data.image_url}
+			autocomplete="off"
+		/>
 	</label>
 
 	<label for="note" class="col-span-1 md:col-span-6">

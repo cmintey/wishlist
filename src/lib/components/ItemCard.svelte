@@ -156,11 +156,11 @@
 			{#if user.username === item.addedBy?.username}
 				<div class="flex flex-row space-x-4">
 					<button
-						class="btn btn-filled-secondary btn-sm md:btn "
+						class="btn btn-ghost-primary btn-sm md:btn "
 						on:click={() => goto(`${$page.url}/edit/${item.id}`)}>Edit</button
 					>
 					<button
-						class="btn btn-filled-warning btn-sm md:btn "
+						class="btn btn-filled-error btn-sm md:btn "
 						on:click={() => handleDelete(item.id, item.name)}>Delete</button
 					>
 				</div>

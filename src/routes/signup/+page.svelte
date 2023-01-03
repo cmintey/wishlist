@@ -20,13 +20,15 @@
 	<h1>Create an account</h1>
 
 	<form method="POST" use:enhance>
-		<div class="flex flex-col space-y-4">
+		<div
+			class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+		>
 			<label for="name">
 				<span>Name</span>
 				<input type="text" id="name" name="name" autocomplete="name" required />
 			</label>
 
-			<div class="flex flex-row space-x-2">
+			<div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
 				<label for="username">
 					<span>Username</span>
 					<input type="text" id="username" name="username" autocomplete="username" required />

@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
-	import { Alert, ProgressRadial, toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
+	import {
+		Alert,
+		Divider,
+		ProgressRadial,
+		toastStore,
+		type ToastSettings
+	} from "@skeletonlabs/skeleton";
 	import fuzzysort from "fuzzysort";
 	import type { ActionData, PageData } from "./$types";
 
@@ -28,9 +34,12 @@
 	});
 </script>
 
-<div class="flex flex-col space-y-4 w-3/4">
-	<h2>Admin Settings</h2>
+<div class="mb-2">
+	<h1 class="mb-2">Admin Settings</h1>
+	<Divider />
+</div>
 
+<div class="flex flex-col space-y-4 w-3/4">
 	<Alert visible={!data.smtpEnabled || false}>
 		<svelte:fragment slot="lead"><span class="text-4xl">⚠️</span></svelte:fragment>
 		<svelte:fragment slot="title">SMTP is not enabled</svelte:fragment>
@@ -43,7 +52,7 @@
 		</svelte:fragment>
 	</Alert>
 
-	<h3>Actions</h3>
+	<h2>Actions</h2>
 	<form
 		method="POST"
 		use:enhance={({ action }) => {
@@ -115,7 +124,7 @@
 		{/if}
 	</form>
 
-	<h3>Users</h3>
+	<h2>Users</h2>
 	<label class="w-fit">
 		<span>Search</span>
 		<div class="relative">

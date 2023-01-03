@@ -13,8 +13,8 @@
 		url: null,
 		note: null,
 		image_url: null,
-		userId: null,
-		addedById: null,
+		userId: "",
+		addedById: "",
 		pledgedById: null
 	};
 </script>

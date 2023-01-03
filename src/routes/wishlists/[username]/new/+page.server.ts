@@ -1,4 +1,4 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
@@ -12,7 +12,9 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
 	default: async ({ request, locals, params }) => {
-		const { user: me } = await locals.validateUser();
+		const { user: me, session } = await locals.validateUser();
+		if (!session) throw error(401);
+
 		const form = await request.formData();
 		const url = form.get("url") as string;
 		const image_url = form.get("image_url") as string;
@@ -55,7 +57,7 @@ export const actions: Actions = {
 						url,
 						note,
 						image_url: create_image ? filename : image_url,
-						addedById: me?.userId
+						addedById: me.userId
 					}
 				}
 			}

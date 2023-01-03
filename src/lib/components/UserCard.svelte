@@ -19,7 +19,7 @@
 			<h3>
 				<a
 					href="/wishlists/{user.username}"
-					class="unstyled no-underline"
+					class="unstyled no-underline text-primary-900-50-token font-bold"
 					data-sveltekit-preload-data>{user.name}</a
 				>
 			</h3>

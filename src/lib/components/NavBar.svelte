@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
-	import { AppBar, Avatar, menu, drawerStore } from "@skeletonlabs/skeleton";
+	import { AppBar, Avatar, menu, drawerStore, LightSwitch } from "@skeletonlabs/skeleton";
 	import { signOut } from "@lucia-auth/sveltekit/client";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client/user";
 
@@ -13,7 +13,7 @@
 	export let navItems: NavItem[];
 </script>
 
-<AppBar>
+<AppBar background="bg-surface-200-700-token">
 	<svelte:fragment slot="lead">
 		<div class="flex space-x-4 items-center content-center">
 			{#if user}
@@ -22,21 +22,24 @@
 				</button>
 			{/if}
 
-			<h2><a href="/">Wishlist</a></h2>
+			<span class="text-4xl font-bold text-primary-900-50-token"><a href="/">Wishlist</a></span>
 		</div>
 	</svelte:fragment>
 
 	{#if user}
-		<div class="flex-row space-x-4 items-center pt-0.5 pl-4 hidden md:block">
+		<div class="flex-row items-center pt-0.5 pl-4 hidden md:flex">
 			{#each navItems as navItem}
-				<a href={navItem.href} class="self-center hover:underline" data-sveltekit-preload-data
-					><b>{navItem.label}</b></a
+				<a
+					href={navItem.href}
+					class="unstyled hover:bg-primary-hover-token rounded-token px-4 py-2"
+					data-sveltekit-preload-data><b>{navItem.label}</b></a
 				>
 			{/each}
 		</div>
 	{/if}
 
 	<svelte:fragment slot="trail">
+		<LightSwitch />
 		{#if user}
 			<span class="relative">
 				<button use:menu={{ menu: "user" }}>
@@ -45,6 +48,10 @@
 				<nav class="list-nav card p-4 w-fit shadow-xl" data-menu="user">
 					<ul>
 						<li>
+							<a href="/account"> Account </a>
+							{#if user.roleId == 2}
+								<a href="/admin">Admin</a>
+							{/if}
 							<button
 								class="unstyled option"
 								on:click={async () => {
@@ -52,10 +59,6 @@
 									invalidateAll();
 								}}>Sign Out</button
 							>
-							<a href="/account"> Account </a>
-							{#if user.roleId == 2}
-								<a href="/admin">Admin</a>
-							{/if}
 						</li>
 					</ul>
 				</nav>

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import "@skeletonlabs/skeleton/themes/theme-modern.css";
+	import "@skeletonlabs/skeleton/themes/theme-seasonal.css";
 	import "@skeletonlabs/skeleton/styles/all.css";
+	// import "../theme.postcss";
 	import "../app.postcss";
 
 	import { page } from "$app/stores";
