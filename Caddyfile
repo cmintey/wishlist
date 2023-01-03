@@ -1,0 +1,27 @@
+{
+    auto_https off
+    admin off
+}
+
+:3280 {
+    log {
+        format console
+    }
+
+    @static {
+		file
+		path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
+	}
+
+    # Handles User Images
+	handle_path /api/assets/* {
+		header @static Cache-Control max-age=31536000
+		root * /usr/src/app/uploads/
+		file_server
+	}
+
+    encode gzip
+    reverse_proxy :3000
+}
+
+
