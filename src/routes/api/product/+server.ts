@@ -5,9 +5,11 @@ import metascraper from "metascraper";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
+import metascraperAmazon from "metascraper-amazon";
 import metascraperShopping from "@samirrayani/metascraper-shopping";
 
 const scraper = metascraper([
+	metascraperAmazon(),
 	metascraperShopping(),
 	metascraperTitle(),
 	metascraperImage(),
