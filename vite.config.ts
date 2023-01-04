@@ -30,6 +30,9 @@ const config: UserConfig = {
 						purpose: "any maskable"
 					}
 				]
+			},
+			devOptions: {
+				enabled: true
 			}
 		})
 	],

@@ -43,7 +43,10 @@
 		{#if user}
 			<span class="relative">
 				<button use:menu={{ menu: "user" }}>
-					<Avatar initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")} />
+					<Avatar
+						initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
+						background="bg-primary-400-500-token"
+					/>
 				</button>
 				<nav class="list-nav card p-4 w-fit shadow-xl" data-menu="user">
 					<ul>

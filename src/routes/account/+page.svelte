@@ -27,6 +27,7 @@
 			<Avatar
 				width="w-24 md:w-32"
 				initials={data.user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
+				background="bg-primary-400-500-token"
 			/>
 		</div>
 
