@@ -1,10 +1,44 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 	import ItemCard from "$lib/components/ItemCard.svelte";
-	import { goto } from "$app/navigation";
+	import { goto, invalidate } from "$app/navigation";
 	import { page } from "$app/stores";
+	import { idle, listen } from "$lib/stores/idle";
+	import { onDestroy, onMount } from "svelte";
 
 	export let data: PageData;
+
+	// Poll for updates
+	listen({
+		timer: 5 * 60 * 1000 // 5 minutes
+	});
+
+	let polling = true;
+	let pollTimeout: NodeJS.Timeout;
+
+	const pollUpdate = () => {
+		if ($idle) {
+			console.log("idle");
+			polling = false;
+			return;
+		}
+
+		console.log("invalidate");
+
+		pollTimeout = setTimeout(async () => {
+			await invalidate("list:poll");
+			pollUpdate();
+			console.log("polling");
+		}, 5000);
+	};
+
+	onMount(pollUpdate);
+	onDestroy(() => clearTimeout(pollTimeout));
+
+	$: if (!$idle && !polling) {
+		polling = true;
+		pollUpdate();
+	}
 </script>
 
 <h1 class="pb-4">
