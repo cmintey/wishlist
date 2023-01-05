@@ -3,11 +3,13 @@ import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, depends }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
 	}
+
+	depends("list:poll");
 
 	const search = {
 		user: {
