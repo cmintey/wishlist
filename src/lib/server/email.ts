@@ -41,7 +41,7 @@ readFile("templates/invite.html", "utf-8", (err, data) => {
 
 if (SMTP_ENABLED) {
 	transport = nodemailer.createTransport({
-		port: Number.parseInt(env.SMTP_PORT),
+		port: Number.parseInt(env.SMTP_PORT || "0"),
 		host: env.SMTP_HOST,
 		auth: {
 			user: env.SMTP_USER,
@@ -66,8 +66,8 @@ export const sendSignupLink = async (to: string, url: string) => {
 	const html = inviteTempl({ url });
 	return await sendEmail({
 		from: {
-			name: env.SMTP_FROM_NAME,
-			address: env.SMTP_FROM
+			name: env.SMTP_FROM_NAME || "Wishlist",
+			address: env.SMTP_FROM || "wishlist@example.com"
 		},
 		to,
 		subject: "Wishlist Invite",
@@ -80,8 +80,8 @@ export const sendPasswordReset = async (to: string, url: string) => {
 	const html = passResetTempl({ url });
 	return await sendEmail({
 		from: {
-			name: env.SMTP_FROM_NAME,
-			address: env.SMTP_FROM
+			name: env.SMTP_FROM_NAME || "Wishlist",
+			address: env.SMTP_FROM || "wishlist@example.com"
 		},
 		to,
 		subject: "Password Reset",
