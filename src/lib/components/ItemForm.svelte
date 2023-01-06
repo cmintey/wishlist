@@ -14,6 +14,7 @@
 			loading = true;
 			const res = await fetch(`/api/product?url=${data.url}`);
 			if (res.ok) {
+				// eslint-disable-next-line no-undef
 				let productData: ProductData = await res.json();
 				data.name = productData.name ? productData.name : productData.title || "";
 				data.image_url = productData.image;
