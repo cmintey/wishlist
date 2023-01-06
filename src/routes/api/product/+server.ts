@@ -7,10 +7,12 @@ import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
 import metascraperAmazon from "metascraper-amazon";
 import metascraperShopping from "@samirrayani/metascraper-shopping";
+import shopping from "$lib/server/shopping";
 
 const scraper = metascraper([
 	metascraperAmazon(),
 	metascraperShopping(),
+	shopping(),
 	metascraperTitle(),
 	metascraperImage(),
 	metascraperUrl()
