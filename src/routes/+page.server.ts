@@ -40,11 +40,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 				select: {
 					myItems: {
 						where: {
-							pledgedBy: {
-								isNot: undefined
-							},
-							addedBy: {
-								username: user.username
+							pledgedById: {
+								not: null
 							}
 						}
 					}
