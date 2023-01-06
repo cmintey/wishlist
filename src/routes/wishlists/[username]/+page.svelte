@@ -14,7 +14,7 @@
 	});
 
 	let polling = true;
-	let pollTimeout: NodeJS.Timeout;
+	let pollTimeout: number;
 
 	const pollUpdate = () => {
 		if ($idle) {
@@ -25,6 +25,7 @@
 
 		console.log("invalidate");
 
+		//@ts-expect-error setTimeout returns number in web
 		pollTimeout = setTimeout(async () => {
 			await invalidate("list:poll");
 			pollUpdate();

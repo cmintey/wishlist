@@ -6,7 +6,7 @@ import type { Subscriber } from "svelte/store";
 /**
  * Public stuff
  */
-export let idle = readable(false, (set) => (update_store = set) && (() => set(false)));
+export const idle = readable(false, (set) => (update_store = set) && (() => set(false)));
 
 export type SvelteIdleListenConfig = {
 	timer?: number;
@@ -22,7 +22,7 @@ export function listen(opts: SvelteIdleListenConfig = {}) {
 	onMount(watch);
 }
 
-export function onIdle(cb: () => any) {
+export function onIdle(cb: () => unknown) {
 	if (!IS_BROWSER) return;
 
 	if (!idle_callbacks.has(cb)) idle_callbacks.add(cb);
@@ -32,13 +32,13 @@ export function onIdle(cb: () => any) {
 /**
  * Private stuff
  */
-const idle_callbacks: Set<() => any> = new Set();
+const idle_callbacks: Set<() => unknown> = new Set();
 
 let watchers = 0;
 let is_throttling = false;
 let update_store: Subscriber<boolean>;
 let is_idle = false;
-let idle_countdown: /* Timeout */ any;
+let idle_countdown: /* Timeout */ NodeJS.Timeout;
 let idle_timeout_ms = 1_000 * 60 * 10; // Default is 10 minutes
 let throttle_timeout_ms = 200;
 
