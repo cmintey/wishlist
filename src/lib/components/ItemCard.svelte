@@ -34,8 +34,6 @@
 			} catch {
 				image_url = `/api/assets/${item.image_url}`;
 			}
-		} else {
-			image_url = "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg";
 		}
 	}
 
@@ -110,11 +108,14 @@
 
 <div class="card">
 	<div class="p-4 flex flex-row space-x-4">
-		<img src={image_url} alt="product" class="w-24 md:w-32" />
+		{#if image_url}
+			<img src={image_url} alt="product" class="w-24 md:w-32" />
+		{/if}
+
 		<div class="flex flex-col px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
 			<span class="truncate font-bold text-2xl">
 				{#if item.url}
-					<a href={item.url} class="unstyled no-underline hover:underline">{item.name}</a>
+					<a class="dark:!text-primary-200" href={item.url}>{item.name}</a>
 				{:else}
 					{item.name}
 				{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import type { Item } from "@prisma/client";
 	import { Avatar } from "@skeletonlabs/skeleton";
 
@@ -12,24 +13,26 @@
 	};
 </script>
 
-<div class="card">
-	<div class="card-header">
-		<div class="flex flex-row space-x-4 items-center">
-			<Avatar
-				initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-				background="bg-primary-400-500-token"
-			/>
-			<h3>
-				<a
-					href="/wishlists/{user.username}"
-					class="unstyled no-underline text-primary-900-50-token font-bold"
-					data-sveltekit-preload-data>{user.name}</a
-				>
-			</h3>
+<a href="/wishlists/{user.username}" class="unstyled" data-sveltekit-preload-data>
+	<div class="card">
+		<div class="card-header">
+			<div class="flex flex-row space-x-4 items-center">
+				<Avatar
+					initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
+					background="bg-primary-400-500-token"
+				/>
+				<span class="font-bold text-3xl">
+					<a
+						href="/wishlists/{user.username}"
+						class="unstyled no-underline text-primary-700-200-token"
+						data-sveltekit-preload-data>{user.name}</a
+					>
+				</span>
+			</div>
+		</div>
+
+		<div class="p-4">
+			Items: {user._count ? `${user._count.myItems}/` : ""}{user.myItems.length}
 		</div>
 	</div>
-
-	<div class="p-4">
-		Items: {user._count ? `${user._count.myItems}/` : ""}{user.myItems.length}
-	</div>
-</div>
+</a>
