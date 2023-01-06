@@ -22,13 +22,16 @@
 
 		<form
 			method="POST"
+			class="w-80"
 			use:enhance={({ data: formData }) => {
 				formData.append("userId", data.userId || "");
 				formData.append("id", `${data.id}` || "0");
 				console.log(formData);
 			}}
 		>
-			<div class="flex flex-col items-start space-y-4">
+			<div
+				class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+			>
 				<label>
 					<span>New Password</span>
 					<input

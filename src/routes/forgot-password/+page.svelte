@@ -24,6 +24,7 @@
 			</p>
 			<form
 				method="POST"
+				class="w-80"
 				use:enhance={() => {
 					loading = true;
 					return async ({ update }) => {
@@ -32,7 +33,9 @@
 					};
 				}}
 			>
-				<div class="flex flex-col space-y-4 w-80">
+				<div
+					class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+				>
 					<label for="email" class="w-full">
 						<span>Email</span>
 						<input

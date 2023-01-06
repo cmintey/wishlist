@@ -19,7 +19,7 @@
 <div class="flex flex-col space-y-4 items-center">
 	<h1>Create an account</h1>
 
-	<form method="POST" use:enhance>
+	<form class="w-80" method="POST" use:enhance>
 		<div
 			class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
 		>
@@ -31,7 +31,14 @@
 			<div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
 				<label for="username">
 					<span>Username</span>
-					<input type="text" id="username" name="username" autocomplete="username" required />
+					<input
+						type="text"
+						id="username"
+						name="username"
+						autocomplete="username"
+						autocapitalize="off"
+						required
+					/>
 				</label>
 				<label for="email">
 					<span>Email</span>
