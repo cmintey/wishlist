@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { invalidateAll } from "$app/navigation";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
 	import {
 		Alert,
 		Divider,
+		modalStore,
 		ProgressRadial,
 		toastStore,
+		type ModalSettings,
 		type ToastSettings
 	} from "@skeletonlabs/skeleton";
 	import fuzzysort from "fuzzysort";
@@ -32,6 +35,44 @@
 		keys: ["username", "name"],
 		all: true
 	});
+
+	const handleDelete = async () => {
+		const settings: ModalSettings = {
+			type: "confirm",
+			title: "Please Confirm",
+			body: `Are you sure you wish to clear all wishlists? <b>This action is irreversible!</b>`,
+			// confirm = TRUE | cancel = FALSE
+			response: async (r: boolean) => {
+				if (r) {
+					const resp = await fetch(`/api/items`, {
+						method: "DELETE",
+						headers: {
+							"content-type": "application/json",
+							accept: "application/json"
+						}
+					});
+
+					if (resp.ok) {
+						invalidateAll();
+
+						toastStore.trigger({
+							message: "All wishlists cleared.",
+							autohide: true,
+							timeout: 5000
+						});
+					} else {
+						toastStore.trigger({
+							message: `Oops! Something went wrong.`,
+							classes: "bg-warning-500",
+							autohide: true,
+							timeout: 5000
+						});
+					}
+				}
+			}
+		};
+		modalStore.trigger(settings);
+	};
 </script>
 
 <div class="mb-2">
@@ -84,7 +125,9 @@
 				>
 			{/if}
 
-			<button class="btn btn-filled-primary w-fit" disabled>Clear Lists</button>
+			<button class="btn btn-ghost-error w-fit" type="button" on:click={handleDelete}
+				>Clear Lists</button
+			>
 		</div>
 
 		{#if data.smtpEnabled}
