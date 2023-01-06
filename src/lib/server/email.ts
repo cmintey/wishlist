@@ -7,6 +7,10 @@ import type { Transporter } from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type Mail from "nodemailer/lib/mailer";
 
+type TemplateData = {
+	url: string;
+};
+
 export const SMTP_ENABLED =
 	env?.SMTP_HOST != "" &&
 	env?.SMTP_PORT != "" &&
@@ -16,8 +20,8 @@ export const SMTP_ENABLED =
 	env?.SMTP_FROM_NAME != "";
 
 let transport: Transporter<SMTPTransport.SentMessageInfo> | null = null;
-let passResetTempl: HandlebarsTemplateDelegate<any>;
-let inviteTempl: HandlebarsTemplateDelegate<any>;
+let passResetTempl: HandlebarsTemplateDelegate<TemplateData>;
+let inviteTempl: HandlebarsTemplateDelegate<TemplateData>;
 
 readFile("templates/password-reset.html", "utf-8", (err, data) => {
 	if (err) {
