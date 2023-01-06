@@ -19,7 +19,7 @@
 <div class="flex flex-col space-y-4 items-center">
 	<h1>Create an account</h1>
 
-	<form class="w-80" method="POST" use:enhance>
+	<form class="w-80 md:w-1/3" method="POST" use:enhance>
 		<div
 			class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
 		>
@@ -82,7 +82,7 @@
 				</ul>
 			{/if}
 
-			<div class="flex space-x-4 justify-center items-center">
+			<div class="flex space-x-4 pb-2 justify-center items-center">
 				<button class="btn btn-filled-primary w-min" type="submit">Sign Up</button>
 				<a href="/login">Sign in</a>
 			</div>
