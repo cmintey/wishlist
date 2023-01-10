@@ -34,8 +34,6 @@
 			} catch {
 				image_url = `/api/assets/${item.image_url}`;
 			}
-		} else {
-			image_url = "https://www.rosssolar.com/wp-content/uploads/2017/08/image-placeholder.jpg";
 		}
 	}
 
@@ -110,11 +108,14 @@
 
 <div class="card">
 	<div class="p-4 flex flex-row space-x-4">
-		<img src={image_url} alt="product" class="w-24 md:w-32" />
+		{#if image_url}
+			<img src={image_url} alt="product" class="w-24 md:w-32" />
+		{/if}
+
 		<div class="flex flex-col px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
 			<span class="truncate font-bold text-2xl">
 				{#if item.url}
-					<a href={item.url} class="unstyled no-underline hover:underline">{item.name}</a>
+					<a class="dark:!text-primary-200" href={item.url}>{item.name}</a>
 				{:else}
 					{item.name}
 				{/if}
@@ -127,7 +128,7 @@
 			<span class="text-lg">
 				Added by <span class="text-primary-700-200-token font-bold">{item.addedBy?.name}</span>
 				{#if item.user?.name}
-					for <span class="text-primary-700-200-token font-bold">{item.user.name}</span>
+					for <span class="text-secondary-700-200-token font-bold">{item.user.name}</span>
 				{/if}
 			</span>
 			<p>{item.note}</p>
@@ -141,15 +142,16 @@
 			{:else if item.pledgedBy}
 				{#if item.pledgedBy.username === user.username}
 					<button
-						class="btn btn-filled-primary btn-sm md:btn"
+						class="btn btn-ghost-secondary btn-sm md:btn"
 						on:click={() => handlePledge(item.id, true)}>Unpledge</button
 					>
 				{:else}
 					<span>Pledged by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
-				<button class="btn btn-filled-primary btn-sm md:btn" on:click={() => handlePledge(item.id)}
-					>Pledge</button
+				<button
+					class="btn btn-filled-secondary btn-sm md:btn"
+					on:click={() => handlePledge(item.id)}>Pledge</button
 				>
 			{/if}
 

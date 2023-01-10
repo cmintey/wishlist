@@ -68,7 +68,7 @@
 			<button class="btn btn-ghost-secondary w-fit" formaction="?/make-admin"> Make Admin </button>
 		{/if}
 		<button
-			class="btn btn-filled-warning w-fit"
+			class="btn btn-ghost-error w-fit"
 			type="button"
 			on:click={() => handleDelete(data.editingUser.username, data.editingUser.id)}
 			>Delete User</button

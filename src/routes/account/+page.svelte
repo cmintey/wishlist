@@ -51,6 +51,7 @@
 								name="name"
 								autocomplete="name"
 								placeholder={data.user.name}
+								bind:value={data.user.name}
 							/>
 						</label>
 
@@ -62,6 +63,7 @@
 								name="username"
 								autocomplete="username"
 								placeholder={data.user.username}
+								bind:value={data.user.username}
 							/>
 						</label>
 
@@ -73,6 +75,7 @@
 								name="email"
 								autocomplete="email"
 								placeholder={data.user.email}
+								bind:value={data.user.email}
 							/>
 						</label>
 

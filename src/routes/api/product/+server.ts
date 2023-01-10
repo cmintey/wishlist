@@ -1,25 +1,27 @@
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
+import { gotScraping } from "got-scraping";
 import metascraper from "metascraper";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
 import metascraperAmazon from "metascraper-amazon";
 import metascraperShopping from "@samirrayani/metascraper-shopping";
+import shopping from "$lib/server/shopping";
 
 const scraper = metascraper([
 	metascraperAmazon(),
 	metascraperShopping(),
+	shopping(),
 	metascraperTitle(),
 	metascraperImage(),
 	metascraperUrl()
 ]);
 
 const goShopping = async (targetUrl: string) => {
-	const res = await fetch(targetUrl);
-	const html = await res.text();
-	const metadata = await scraper({ html, url: res.url });
+	const { body: html, url } = await gotScraping(targetUrl);
+	const metadata = await scraper({ html, url });
 	return metadata;
 };
 
