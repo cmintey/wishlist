@@ -53,6 +53,7 @@
 		"@lucia-auth/sveltekit": "^0.5.2",
 		"@prisma/client": "^4.8.0",
 		"@samirrayani/metascraper-shopping": "^1.4.22",
+		"got-scraping": "^3.2.12",
 		"handlebars": "^4.7.7",
 		"lucia-auth": "^0.4.2",
 		"metascraper": "^5.33.3",
