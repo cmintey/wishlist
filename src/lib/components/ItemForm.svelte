@@ -19,7 +19,7 @@
 				data.name = productData.name ? productData.name : productData.title || "";
 				data.image_url = productData.image;
 				data.price = productData.price?.toString() || null;
-				data.url = productData.url;
+				// data.url = productData.url;
 			} else {
 				console.log("invalid url");
 				console.log(await res.json());

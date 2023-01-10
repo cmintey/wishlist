@@ -22,11 +22,7 @@
 					background="bg-primary-400-500-token"
 				/>
 				<span class="font-bold text-3xl">
-					<a
-						href="/wishlists/{user.username}"
-						class="unstyled no-underline text-primary-700-200-token"
-						data-sveltekit-preload-data>{user.name}</a
-					>
+					<span class="unstyled no-underline text-primary-700-200-token">{user.name}</span>
 				</span>
 			</div>
 		</div>
