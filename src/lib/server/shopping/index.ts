@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-ts-comment: 0 */
 //@ts-nocheck
 import type { Rule } from "metascraper";
 import { toPriceFormat } from "./helpers";

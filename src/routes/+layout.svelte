@@ -8,11 +8,9 @@
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { handleSession, getUser } from "@lucia-auth/sveltekit/client";
 	import { AppShell, Drawer, Modal, Toast, drawerStore } from "@skeletonlabs/skeleton";
-	import PullToRefresh from "pulltorefreshjs";
 
 	import NavBar from "$lib/components/NavBar.svelte";
 	import NavigationLoadingBar from "$lib/components/NavigationLoadingBar.svelte";
-	import { onDestroy, onMount } from "svelte";
 
 	handleSession(page);
 	const user = getUser();
