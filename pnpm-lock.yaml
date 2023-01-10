@@ -35,7 +35,6 @@ specifiers:
   prettier: ^2.8.1
   prettier-plugin-svelte: ^2.9.0
   prisma: ^4.8.0
-  pulltorefreshjs: ^0.1.22
   svelte: ^3.55.0
   svelte-check: ^3.0.1
   svelte-preprocess: ^5.0.0
@@ -85,7 +84,6 @@ devDependencies:
   postcss-load-config: 4.0.1_ra2vnoek4vhbzktaezawwqbin4
   prettier: 2.8.1
   prettier-plugin-svelte: 2.9.0_ajxj753sv7dbwexjherrch25ta
-  pulltorefreshjs: 0.1.22
   svelte: 3.55.0
   svelte-check: 3.0.1_7tgmgw23w4ankk7vtabgm5xtbu
   svelte-preprocess: 5.0.0_4pbnl6cqae4gmabfifuvcfaifu
@@ -4788,10 +4786,6 @@ packages:
   /psl/1.9.0:
     resolution: {integrity: sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==}
     dev: false
-
-  /pulltorefreshjs/0.1.22:
-    resolution: {integrity: sha512-haxNVEHnS4NCQA7NeG7TSV69z4uqy/N7nfPRuc4dPWe8H6ygUrMjdNeohE+6v0lVVX/ukSjbLYwPUGUYtFKfvQ==}
-    dev: true
 
   /pump/3.0.0:
     resolution: {integrity: sha512-LwZy+p3SFs1Pytd/jYct4wpv49HiYCqd9Rlc5ZVdk0V+8Yzv6jR5Blk3TRmPL1ft69TxP0IMZGJ+WPFU2BFhww==}
