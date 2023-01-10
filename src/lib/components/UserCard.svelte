@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import type { Item } from "@prisma/client";
 	import { Avatar } from "@skeletonlabs/skeleton";
 
