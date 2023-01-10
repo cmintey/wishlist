@@ -1,6 +1,7 @@
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
+import { gotScraping } from "got-scraping";
 import metascraper from "metascraper";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
@@ -19,9 +20,8 @@ const scraper = metascraper([
 ]);
 
 const goShopping = async (targetUrl: string) => {
-	const res = await fetch(targetUrl);
-	const html = await res.text();
-	const metadata = await scraper({ html, url: res.url });
+	const { body: html, url } = await gotScraping(targetUrl);
+	const metadata = await scraper({ html, url });
 	return metadata;
 };
 
