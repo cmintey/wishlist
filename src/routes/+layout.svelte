@@ -40,20 +40,6 @@
 			href: "/pledges"
 		}
 	];
-
-	let ptr: PullToRefresh.PullToRefreshInstance;
-	onMount(() => {
-		ptr = PullToRefresh.init({
-			mainElement: "body",
-			onRefresh() {
-				window.location.reload();
-			}
-		});
-	});
-
-	onDestroy(() => {
-		if (ptr) ptr.destroy();
-	});
 </script>
 
 <Drawer position="left">
