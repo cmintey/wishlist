@@ -128,7 +128,7 @@
 			<span class="text-lg">
 				Added by <span class="text-primary-700-200-token font-bold">{item.addedBy?.name}</span>
 				{#if item.user?.name}
-					for <span class="text-primary-700-200-token font-bold">{item.user.name}</span>
+					for <span class="text-secondary-700-200-token font-bold">{item.user.name}</span>
 				{/if}
 			</span>
 			<p>{item.note}</p>
@@ -142,15 +142,16 @@
 			{:else if item.pledgedBy}
 				{#if item.pledgedBy.username === user.username}
 					<button
-						class="btn btn-filled-primary btn-sm md:btn"
+						class="btn btn-ghost-secondary btn-sm md:btn"
 						on:click={() => handlePledge(item.id, true)}>Unpledge</button
 					>
 				{:else}
 					<span>Pledged by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
-				<button class="btn btn-filled-primary btn-sm md:btn" on:click={() => handlePledge(item.id)}
-					>Pledge</button
+				<button
+					class="btn btn-filled-secondary btn-sm md:btn"
+					on:click={() => handlePledge(item.id)}>Pledge</button
 				>
 			{/if}
 
