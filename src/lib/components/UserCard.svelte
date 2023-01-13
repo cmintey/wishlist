@@ -5,7 +5,7 @@
 	export let user: {
 		name: string;
 		username: string;
-		myItems: Item[];
+		myItems: { id: number }[];
 		_count?: {
 			myItems: number;
 		};
