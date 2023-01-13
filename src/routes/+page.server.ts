@@ -14,6 +14,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 			name: true,
 			username: true,
 			myItems: {
+				select: {
+					id: true
+				},
 				where: {
 					addedBy: {
 						username: user.username
@@ -35,7 +38,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 		select: {
 			username: true,
 			name: true,
-			myItems: true,
+			myItems: {
+				select: {
+					id: true
+				}
+			},
 			_count: {
 				select: {
 					myItems: {
