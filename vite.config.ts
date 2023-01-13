@@ -32,7 +32,9 @@ const config: UserConfig = {
 				]
 			},
 			devOptions: {
-				enabled: true
+				enabled: true,
+				type: "module",
+				navigateFallback: "/"
 			}
 		})
 	],
