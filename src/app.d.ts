@@ -41,3 +41,5 @@ type ProductData = {
 	retailer: string | null;
 	title: string | null;
 };
+
+type SuggestionMethod = "surprise" | "auto-approval" | "approval";

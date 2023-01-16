@@ -2,11 +2,12 @@
 	import { enhance } from "$app/forms";
 	import ItemForm from "$lib/components/ItemForm.svelte";
 	import type { Item } from "@prisma/client";
-	import type { ActionData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 
+	export let data: PageData;
 	export let form: ActionData;
 
-	let data: Item = {
+	let itemData: Item = {
 		id: 0,
 		name: "",
 		price: null,
@@ -15,10 +16,33 @@
 		image_url: null,
 		userId: "",
 		addedById: "",
-		pledgedById: null
+		pledgedById: null,
+		approved: true
 	};
+
+	let warningHidden = false;
 </script>
 
+{#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
+	<div class="pb-4">
+		<aside class="alert">
+			<iconify-icon icon="ri:alert-fill" class="text-5xl hidden md:block" />
+			<div class="alert-message">
+				<span class="text-2xl font-bold">Heads up!</span>
+				<p>
+					You are making a suggestion to {data.owner.name}. {data.owner.name} will need to approve your
+					suggestion before it is added to their list.
+				</p>
+			</div>
+			<div class="alert-actions">
+				<button class="btn btn-ghost-warning" on:click={() => (warningHidden = true)}>
+					Acknowledge
+				</button>
+			</div>
+		</aside>
+	</div>
+{/if}
+
 <form method="POST" use:enhance>
-	<ItemForm {form} {data} buttonText="Add Item" />
+	<ItemForm {form} data={itemData} buttonText="Add Item" />
 </form>

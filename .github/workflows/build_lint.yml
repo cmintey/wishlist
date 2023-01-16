@@ -39,11 +39,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Lint
-        run: pnpm run lint
+      - name: Prisma Client Generate
+        run: pnpm prisma generate
 
       - name: Svelte Check
         run: pnpm run check
+
+      - name: Lint
+        run: pnpm run lint
 
       - name: Build
         run: pnpm run build

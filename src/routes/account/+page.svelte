@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { Avatar, Divider, toastStore } from "@skeletonlabs/skeleton";
+	import { Avatar, toastStore } from "@skeletonlabs/skeleton";
 	import type { ActionData, PageServerData } from "./$types";
 
 	export let data: PageServerData;
@@ -17,7 +17,7 @@
 
 <div class="mb-2">
 	<h1 class="mb-2">Account</h1>
-	<Divider />
+	<hr />
 </div>
 
 <div class="flex flex-col space-y-4 mb-4">

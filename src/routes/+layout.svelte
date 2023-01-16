@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import "@skeletonlabs/skeleton/themes/theme-seasonal.css";
 	import "@skeletonlabs/skeleton/styles/all.css";
 	import "../theme.postcss";
 	import "../app.postcss";
@@ -41,16 +40,6 @@
 </script>
 
 <Drawer position="left">
-	<!-- <div class="flex flex-col space-y-4 mx-4 mt-4">
-		{#each navItems as navItem}
-			<a
-				class="btn btn-filled-primary"
-				href={navItem.href}
-				data-sveltekit-preload-data
-				on:click={() => drawerStore.close()}><b>{navItem.label}</b></a
-			>
-		{/each}
-	</div> -->
 	<div class="flex flex-row place-content-between mt-4 px-4 items-center">
 		<span class="text-4xl">Wishlist</span>
 		<button class="btn-icon" on:click={() => drawerStore.close()}>
@@ -61,9 +50,14 @@
 		<ul>
 			{#each navItems as navItem}
 				<li>
-					<a href={navItem.href} data-sveltekit-preload-data on:click={() => drawerStore.close()}
-						><b>{navItem.label}</b></a
+					<a
+						href={navItem.href}
+						data-sveltekit-preload-data
+						on:click={() => drawerStore.close()}
+						class="option font-bold"
 					>
+						{navItem.label}
+					</a>
 				</li>
 			{/each}
 		</ul>
