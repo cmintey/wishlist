@@ -2,6 +2,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
+import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -13,8 +14,9 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(400, "item id must be a number");
 	}
 
+	let item;
 	try {
-		const item = await client.item.findUniqueOrThrow({
+		item = await client.item.findUniqueOrThrow({
 			where: {
 				id: parseInt(params.itemId)
 			},
@@ -23,20 +25,31 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 					select: {
 						username: true
 					}
+				},
+				user: {
+					select: {
+						username: true
+					}
 				}
 			}
 		});
-
-		if (user.username !== item?.addedBy?.username) {
-			throw error(401, "cannot edit item that you did not create");
-		}
-
-		return {
-			item
-		};
 	} catch {
 		throw error(404, "item not found");
 	}
+
+	const suggestionMethod = env.SUGGESTION_METHOD as SuggestionMethod;
+
+	if (suggestionMethod === "surprise" && user.username !== item.addedBy?.username) {
+		throw error(401, "cannot edit item that you did not create");
+	}
+
+	if (params.username !== item.user.username) {
+		throw error(400, `Item does not belong to ${params.username}`);
+	}
+
+	return {
+		item
+	};
 };
 
 export const actions: Actions = {

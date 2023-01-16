@@ -42,6 +42,16 @@
 	{data.listOwner.me ? "My" : `${data.listOwner.name}'s`} List
 </h1>
 
+{#if data.approvals.length > 0}
+	<h2 class="pb-2">Approvals</h2>
+	<div class="flex flex-col space-y-4 pb-2">
+		{#each data.approvals as item}
+			<ItemCard {item} user={data.user} />
+		{/each}
+	</div>
+	<hr class="pb-2" />
+{/if}
+
 {#if data.items.length === 0}
 	<div>
 		<p>No items yet</p>
@@ -54,9 +64,11 @@
 	</div>
 {/if}
 
-<button
-	class="btn btn-filled w-16 h-16 rounded-full fixed z-90 bottom-10 right-8"
-	on:click={() => goto(`${$page.url}/new`)}
->
-	<iconify-icon icon="ri:add-fill" width="32" height="32" />
-</button>
+{#if data.listOwner.me || data.suggestionsEnabled}
+	<button
+		class="btn btn-filled w-16 h-16 rounded-full fixed z-90 bottom-10 right-8"
+		on:click={() => goto(`${$page.url}/new`)}
+	>
+		<iconify-icon icon="ri:add-fill" width="32" height="32" />
+	</button>
+{/if}

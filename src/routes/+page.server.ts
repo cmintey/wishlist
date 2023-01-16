@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		select: {
 			name: true,
 			username: true,
-			myItems: {
+			items: {
 				select: {
 					id: true
 				},
@@ -38,14 +38,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 		select: {
 			username: true,
 			name: true,
-			myItems: {
+			items: {
 				select: {
 					id: true
 				}
 			},
 			_count: {
 				select: {
-					myItems: {
+					items: {
 						where: {
 							pledgedById: {
 								not: null

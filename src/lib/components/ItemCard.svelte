@@ -13,7 +13,7 @@
 			username: string;
 			name: string;
 		} | null;
-		user?: {
+		user: {
 			username: string;
 			name: string;
 		} | null;
@@ -104,9 +104,68 @@
 			});
 		}
 	};
+
+	const handleApproval = async (
+		itemId: number,
+		itemName: string,
+		addedBy: string | undefined,
+		approve = true
+	) => {
+		const confirm: ModalSettings = {
+			type: "confirm",
+			title: "Please Confirm",
+			body: `Are you sure you wish to <b>${
+				approve ? "approve" : "deny"
+			}</b> suggestion ${itemName} from ${addedBy}?`,
+			// confirm = TRUE | cancel = FALSE
+			response: async (r: boolean) => {
+				if (r) {
+					let resp;
+					if (approve) {
+						resp = await fetch(`/api/items/${itemId}`, {
+							method: "PATCH",
+							headers: {
+								"content-type": "application/json",
+								accept: "application/json"
+							},
+							body: JSON.stringify({
+								approved: approve
+							})
+						});
+					} else {
+						resp = await fetch(`/api/items/${itemId}`, {
+							method: "DELETE",
+							headers: {
+								"content-type": "application/json",
+								accept: "application/json"
+							}
+						});
+					}
+
+					if (resp.ok) {
+						invalidateAll();
+
+						toastStore.trigger({
+							message: `${itemName} was ${approve ? "approved" : "denied"}`,
+							autohide: true,
+							timeout: 5000
+						});
+					} else {
+						toastStore.trigger({
+							message: `Oops! Something went wrong.`,
+							classes: "bg-warning-500",
+							autohide: true,
+							timeout: 5000
+						});
+					}
+				}
+			}
+		};
+		modalStore.trigger(confirm);
+	};
 </script>
 
-<div class="card">
+<div class="card" class:card-glass-warning={!item.approved}>
 	<div class="p-4 flex flex-row space-x-4">
 		{#if image_url}
 			<img src={image_url} alt="product" class="w-24 md:w-32" />
@@ -155,7 +214,7 @@
 				>
 			{/if}
 
-			{#if user.username === item.addedBy?.username}
+			{#if user.username === item.user?.username || user.username === item.addedBy?.username}
 				<div class="flex flex-row space-x-4">
 					<button
 						class="btn btn-ghost-primary btn-sm md:btn "
@@ -164,6 +223,20 @@
 					<button
 						class="btn btn-filled-error btn-sm md:btn "
 						on:click={() => handleDelete(item.id, item.name)}>Delete</button
+					>
+				</div>
+			{/if}
+
+			{#if !item.approved}
+				<div class="flex flex-row space-x-4">
+					<button
+						class="btn btn-filled-success btn-sm md:btn "
+						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name)}>Approve</button
+					>
+					<button
+						class="btn btn-filled-error btn-sm md:btn "
+						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name, false)}
+						>Deny</button
 					>
 				</div>
 			{/if}

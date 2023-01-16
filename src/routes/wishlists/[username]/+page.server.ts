@@ -2,6 +2,8 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
+import { env } from "$env/dynamic/private";
+import type { Prisma } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ locals, params, depends }) => {
 	const { session, user } = await locals.validateUser();
@@ -11,14 +13,19 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 
 	depends("list:poll");
 
-	const search = {
+	const suggestionMethod = env.SUGGESTION_METHOD as SuggestionMethod;
+
+	const search: Prisma.ItemWhereInput = {
 		user: {
 			username: params.username
 		}
 	};
 
-	if (params.username === user.username) {
-		// @ts-expect-error this is an experimental feature in prisma
+	if (suggestionMethod === "approval" && params.username !== user.username) {
+		search.approved = true;
+	}
+
+	if (suggestionMethod === "surprise") {
 		search.addedBy = {
 			username: user.username
 		};
@@ -34,6 +41,12 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 				}
 			},
 			pledgedBy: {
+				select: {
+					username: true,
+					name: true
+				}
+			},
+			user: {
 				select: {
 					username: true,
 					name: true
@@ -57,6 +70,8 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 			me: params.username === user.username,
 			name: listOwner?.name
 		},
-		items: wishlistItems
+		items: wishlistItems.filter((item) => item.approved),
+		approvals: wishlistItems.filter((item) => !item.approved),
+		suggestionsEnabled: env.ALLOW_SUGGESTIONS === "true"
 	};
 };

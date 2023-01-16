@@ -19,7 +19,6 @@
 				data.name = productData.name ? productData.name : productData.title || "";
 				data.image_url = productData.image;
 				data.price = productData.price?.toString() || null;
-				// data.url = productData.url;
 			} else {
 				console.log("invalid url");
 				console.log(await res.json());
@@ -76,12 +75,12 @@
 		</div>
 	</label>
 
-	<label for="image" class="col-span-1">
+	<label for="image" class="col-span-1 md:col-span-2 2xl:col-span-1">
 		<span>Upload Image</span>
 		<input type="file" accept="image/*" id="image" name="image" />
 	</label>
 
-	<label for="image_url" class="col-span-1 md:col-span-5">
+	<label for="image_url" class="col-span-1 md:col-span-4 2xl:col-span-5">
 		<span>Image URL</span>
 		<input
 			type="text"
@@ -103,8 +102,14 @@
 		/>
 	</label>
 
-	<button type="submit" class="btn btn-filled-primary w-min" disabled={loading}>{buttonText}</button
-	>
+	<div class="flex flex-row space-x-4">
+		<button type="submit" class="btn btn-filled-primary w-min" disabled={loading}>
+			{buttonText}
+		</button>
+		<button type="button" class="btn btn-ghost-secondary w-min" on:click={() => history.back()}>
+			Cancel
+		</button>
+	</div>
 </div>
 
 {#if loading}
