@@ -5,8 +5,10 @@
 	import { page } from "$app/stores";
 	import { idle, listen } from "$lib/stores/idle";
 	import { onDestroy, onMount } from "svelte";
+	import { menu } from "@skeletonlabs/skeleton";
 
 	export let data: PageData;
+	let items = data.items;
 
 	// Poll for updates
 	listen({
@@ -36,6 +38,24 @@
 		polling = true;
 		pollUpdate();
 	}
+
+	let menuView: boolean = false;
+	const stateHandler = (response: { menu: string; state: boolean }): void => {
+		if (response.menu === "view") menuView = response.state;
+	};
+
+	type ViewOption = "All" | "Pledged" | "Unpledged";
+	let viewOption: ViewOption = "All";
+	const setView = (option: ViewOption): void => {
+		viewOption = option;
+		if (option === "Pledged") {
+			items = data.items.filter((item) => item.pledgedBy !== null);
+		} else if (option === "Unpledged") {
+			items = data.items.filter((item) => item.pledgedBy === null);
+		} else {
+			items = data.items;
+		}
+	};
 </script>
 
 <h1 class="pb-4">
@@ -47,8 +67,34 @@
 		<p>No items yet</p>
 	</div>
 {:else}
+	<!-- filter chips -->
+	<div class="flex flex-row space-x-4 pb-4">
+		<span class="relative">
+			<button
+				class="chip chip-primary"
+				class:chip-primary-active={viewOption !== "All"}
+				use:menu={{ menu: "view", state: stateHandler }}
+			>
+				<span>{viewOption}</span>
+				<iconify-icon icon="ri:arrow-down-s-fill" class:rotate-180={menuView} />
+			</button>
+			<nav class="list-nav card p-4 shadow-xl" data-menu="view">
+				<ul>
+					<li>
+						<button class="option w-full" on:click={() => setView("All")}>All</button>
+					</li>
+					<li>
+						<button class="option w-full" on:click={() => setView("Unpledged")}>Unpledged</button>
+					</li>
+					<li>
+						<button class="option w-full" on:click={() => setView("Pledged")}>Pledged</button>
+					</li>
+				</ul>
+			</nav>
+		</span>
+	</div>
 	<div class="flex flex-col space-y-4">
-		{#each data.items as item}
+		{#each items as item}
 			<ItemCard {item} user={data.user} />
 		{/each}
 	</div>
