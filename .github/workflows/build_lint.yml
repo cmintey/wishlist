@@ -42,11 +42,11 @@ jobs:
       - name: Prisma Client Generate
         run: pnpm prisma generate
 
-      - name: Lint
-        run: pnpm run lint
-
       - name: Svelte Check
         run: pnpm run check
+
+      - name: Lint
+        run: pnpm run lint
 
       - name: Build
         run: pnpm run build
