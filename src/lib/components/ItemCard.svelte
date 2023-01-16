@@ -168,11 +168,16 @@
 <div class="card" class:card-glass-warning={!item.approved}>
 	<div class="p-4 flex flex-row space-x-4">
 		{#if image_url}
-			<img src={image_url} alt="product" class="w-24 md:w-32" />
+			<div>
+				<img src={image_url} alt="product" class="w-24 md:w-32" />
+			</div>
 		{/if}
-
-		<div class="flex flex-col px-0 md:px-1 w-[calc(100%-7rem)] md:w-[calc(100%-9rem)]">
-			<span class="truncate font-bold text-2xl">
+		<div
+			class="flex flex-col px-0 md:px-1 w-full"
+			class:w-[calc(100%-7rem)]={image_url}
+			class:md:w-[calc(100%-8rem)]={image_url}
+		>
+			<span class="truncate hover:whitespace-normal font-bold text-2xl">
 				{#if item.url}
 					<a class="dark:!text-primary-200" href={item.url}>{item.name}</a>
 				{:else}
