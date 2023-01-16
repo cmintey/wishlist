@@ -3,8 +3,6 @@
 	import { invalidateAll } from "$app/navigation";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
 	import {
-		Alert,
-		Divider,
 		modalStore,
 		ProgressRadial,
 		toastStore,
@@ -16,6 +14,8 @@
 
 	export let data: PageData;
 	export let form: ActionData;
+
+	let warningHidden = false;
 
 	const triggerToast = () => {
 		const toastConfig: ToastSettings = {
@@ -77,21 +77,30 @@
 
 <div class="mb-2">
 	<h1 class="mb-2">Admin Settings</h1>
-	<Divider />
+	<hr />
 </div>
 
-<div class="flex flex-col space-y-4 w-3/4">
-	<Alert visible={!data.smtpEnabled || false}>
-		<svelte:fragment slot="lead"><span class="text-4xl">⚠️</span></svelte:fragment>
-		<svelte:fragment slot="title">SMTP is not enabled</svelte:fragment>
-		<span
-			>While email setup is not a requirement, users will not be able to reset their passwords via
-			self-service and you will have to manually send out links to reset passwords.</span
-		>
-		<svelte:fragment slot="trail">
-			<a class="btn btn-filled-warning" href="/admin" target="_blank">View docs</a>
-		</svelte:fragment>
-	</Alert>
+<div class="flex flex-col space-y-4 md:w-3/4">
+	{#if !data.smtpEnabled && !warningHidden}
+		<aside class="alert">
+			<div>
+				<span class="text-4xl">⚠️</span>
+			</div>
+			<div class="alert-message">
+				<span class="text-2xl font-bold">SMTP is not enabled</span>
+				<p>
+					While email setup is not a requirement, users will not be able to reset their passwords
+					via self-service and you will have to manually send out links to reset passwords.
+				</p>
+			</div>
+			<div class="alert-actions">
+				<a class="btn btn-filled-warning" href="/admin" target="_blank">View docs</a>
+				<button class="btn-icon btn-ghost-primary" on:click={() => (warningHidden = true)}>
+					<iconify-icon icon="ri:close-fill" />
+				</button>
+			</div>
+		</aside>
+	{/if}
 
 	<h2>Actions</h2>
 	<form

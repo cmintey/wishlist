@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { goto, invalidateAll } from "$app/navigation";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
-	import { Divider, modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
@@ -50,7 +50,7 @@
 
 <div class="flex flex-col space-y-2">
 	<h1 class="mb-2">{data.editingUser.name}'s Settings</h1>
-	<Divider />
+	<hr />
 	<h2>Username: {data.editingUser.username}</h2>
 	<h3>Id: {data.editingUser.id}</h3>
 </div>
