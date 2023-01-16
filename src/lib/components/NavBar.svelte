@@ -18,11 +18,11 @@
 		<div class="flex space-x-4 items-center content-center">
 			{#if user}
 				<button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawerStore.open({})}>
-					<iconify-icon icon="ri:menu-fill" width="20" height="20" />
+					<iconify-icon icon="ri:menu-fill" class="text-xl" />
 				</button>
 			{/if}
 
-			<span class="text-4xl font-bold text-primary-900-50-token"><a href="/">Wishlist</a></span>
+			<a class="text-4xl font-bold text-primary-900-50-token" href="/">Wishlist</a>
 		</div>
 	</svelte:fragment>
 
@@ -31,9 +31,11 @@
 			{#each navItems as navItem}
 				<a
 					href={navItem.href}
-					class="unstyled hover:bg-primary-hover-token rounded-token px-4 py-2"
-					data-sveltekit-preload-data><b>{navItem.label}</b></a
+					class="unstyled hover:bg-primary-hover-token rounded-token px-4 py-2 font-bold"
+					data-sveltekit-preload-data
 				>
+					{navItem.label}
+				</a>
 			{/each}
 		</div>
 	{/if}
@@ -53,15 +55,17 @@
 						<li>
 							<a href="/account"> Account </a>
 							{#if user.roleId == 2}
-								<a href="/admin">Admin</a>
+								<a href="/admin"> Admin </a>
 							{/if}
 							<button
 								class="unstyled option"
 								on:click={async () => {
 									await signOut();
 									invalidateAll();
-								}}>Sign Out</button
+								}}
 							>
+								Sign Out
+							</button>
 						</li>
 					</ul>
 				</nav>
