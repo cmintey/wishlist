@@ -39,7 +39,7 @@
 		pollUpdate();
 	}
 
-	let menuView: boolean = false;
+	let menuView = false;
 	const stateHandler = (response: { menu: string; state: boolean }): void => {
 		if (response.menu === "view") menuView = response.state;
 	};
