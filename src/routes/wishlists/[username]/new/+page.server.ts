@@ -2,14 +2,14 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
-import { env } from "$env/dynamic/private";
+import config from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
 	}
-	if (env.ALLOW_SUGGESTIONS !== "true" && user.username !== params.username) {
+	if (!config.suggestions.enable && user.username !== params.username) {
 		throw error(401, "Suggestions are disabled");
 	}
 
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	return {
 		owner: listOwner,
 		suggestion: user.username !== params.username,
-		suggestionMethod: env.SUGGESTION_METHOD as SuggestionMethod
+		suggestionMethod: config.suggestions.method
 	};
 };
 
@@ -65,8 +65,6 @@ export const actions: Actions = {
 			price = price.slice(price.indexOf("$") + 1);
 		}
 
-		const suggestionMethod = env.SUGGESTION_METHOD as SuggestionMethod;
-
 		await client.user.update({
 			where: {
 				username: params.username
@@ -80,7 +78,7 @@ export const actions: Actions = {
 						note,
 						image_url: create_image ? filename : image_url,
 						addedById: me.userId,
-						approved: suggestionMethod !== "approval"
+						approved: config.suggestions.method !== "approval"
 					}
 				}
 			}

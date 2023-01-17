@@ -80,8 +80,10 @@
 	<hr />
 </div>
 
+<pre>{JSON.stringify(data.config)}</pre>
+
 <div class="flex flex-col space-y-4 md:w-3/4">
-	{#if !data.smtpEnabled && !warningHidden}
+	{#if !data.config.smtp.enable && !warningHidden}
 		<aside class="alert variant-ghost-warning">
 			<div>
 				<span class="text-4xl">⚠️</span>
@@ -119,7 +121,7 @@
 		}}
 	>
 		<div class="flex space-x-2">
-			{#if data.smtpEnabled}
+			{#if data.config.smtp.enable}
 				<button
 					class="btn variant-filled-primary w-fit"
 					type="button"
@@ -139,7 +141,7 @@
 			>
 		</div>
 
-		{#if data.smtpEnabled}
+		{#if data.config.smtp.enable}
 			{#if inviteUser}
 				<div class="flex space-x-4 mt-2 items-end">
 					<label for="invite-email">

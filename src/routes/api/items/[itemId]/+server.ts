@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/private";
+import config from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import type { Session } from "lucia-auth";
@@ -42,7 +42,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	const foundItem = await validateItem(params?.itemId, session);
 
 	let suggestionDenied = false;
-	const suggestionMethod = env.SUGGESTION_METHOD as SuggestionMethod;
+	const suggestionMethod = config.suggestions.method;
 	if (foundItem.user.username === user?.username && suggestionMethod === "approval") {
 		suggestionDenied = true;
 	}

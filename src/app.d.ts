@@ -43,3 +43,32 @@ type ProductData = {
 };
 
 type SuggestionMethod = "surprise" | "auto-approval" | "approval";
+
+type SMTPConfig =
+	| {
+			enable: false;
+			host?: string;
+			port?: number;
+			user?: string;
+			pass?: string;
+			from?: string;
+			fromName?: string;
+	  }
+	| {
+			enable: true;
+			host: string;
+			port: number;
+			user: string;
+			pass: string;
+			from: string;
+			fromName: string;
+	  };
+
+type Config = {
+	enableSignup: boolean;
+	suggestions: {
+		enable: boolean;
+		method: SuggestionMethod;
+	};
+	smtp: SMTPConfig;
+};

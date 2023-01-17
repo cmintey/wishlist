@@ -1,4 +1,5 @@
-import { sendPasswordReset, SMTP_ENABLED } from "$lib/server/email";
+import config from "$lib/server/config";
+import { sendPasswordReset } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
 import { fail } from "@sveltejs/kit";
@@ -6,7 +7,7 @@ import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
-	return { smtpEnabled: SMTP_ENABLED };
+	return { smtpEnabled: config.smtp.enable };
 };
 
 export const actions: Actions = {
@@ -52,7 +53,7 @@ export const actions: Actions = {
 				}
 			});
 
-			if (SMTP_ENABLED && user.email) {
+			if (config.smtp.enable && user.email) {
 				const sent = await sendPasswordReset(user.email, tokenUrl.href);
 				console.log(`email sent: ${sent}`);
 			}
