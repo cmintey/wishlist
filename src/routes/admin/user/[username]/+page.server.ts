@@ -6,7 +6,7 @@ import type { Actions, PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
-		throw redirect(302, `/login?ref=/admin`);
+		throw redirect(302, `/login?ref=/admin/user/${params.username}`);
 	}
 	if (user.roleId != 2) {
 		throw error(401, "Not authorized to view admin panel");
@@ -57,7 +57,7 @@ export const actions: Actions = {
 				}
 			});
 
-			const tokenUrl = new URL(`/reset-password?=${token}`, url);
+			const tokenUrl = new URL(`/reset-password?token=${token}`, url);
 			return { success: true, url: tokenUrl.href };
 		} else {
 			throw error(400, "unable to find user");
