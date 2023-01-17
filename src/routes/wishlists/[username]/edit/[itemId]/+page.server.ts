@@ -2,7 +2,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
-import { env } from "$env/dynamic/private";
+import config from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -37,9 +37,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(404, "item not found");
 	}
 
-	const suggestionMethod = env.SUGGESTION_METHOD as SuggestionMethod;
-
-	if (suggestionMethod === "surprise" && user.username !== item.addedBy?.username) {
+	if (config.suggestions.method === "surprise" && user.username !== item.addedBy?.username) {
 		throw error(401, "cannot edit item that you did not create");
 	}
 

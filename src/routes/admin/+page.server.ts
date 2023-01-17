@@ -1,4 +1,5 @@
-import { sendSignupLink, SMTP_ENABLED } from "$lib/server/email";
+import config from "$lib/server/config";
+import { sendSignupLink } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -26,7 +27,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	});
 
-	return { user, users, smtpEnabled: SMTP_ENABLED };
+	return { user, users, config };
 };
 
 export const actions: Actions = {
@@ -34,7 +35,7 @@ export const actions: Actions = {
 		const token = await generateToken();
 		const tokenUrl = new URL(`/signup?token=${token}`, url);
 
-		if (!SMTP_ENABLED) {
+		if (!config.smtp.enable) {
 			await client.signupToken.create({
 				data: {
 					hashedToken: hashToken(token),

@@ -2,8 +2,8 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
-import { env } from "$env/dynamic/private";
 import type { Prisma } from "@prisma/client";
+import config from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, params, depends }) => {
 	const { session, user } = await locals.validateUser();
@@ -13,19 +13,17 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 
 	depends("list:poll");
 
-	const suggestionMethod = env.SUGGESTION_METHOD as SuggestionMethod;
-
 	const search: Prisma.ItemWhereInput = {
 		user: {
 			username: params.username
 		}
 	};
 
-	if (suggestionMethod === "approval" && params.username !== user.username) {
+	if (config.suggestions.method === "approval" && params.username !== user.username) {
 		search.approved = true;
 	}
 
-	if (suggestionMethod === "surprise") {
+	if (config.suggestions.method === "surprise") {
 		search.addedBy = {
 			username: user.username
 		};
@@ -72,6 +70,6 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 		},
 		items: wishlistItems.filter((item) => item.approved),
 		approvals: wishlistItems.filter((item) => !item.approved),
-		suggestionsEnabled: env.ALLOW_SUGGESTIONS === "true"
+		suggestionsEnabled: config.suggestions.enable
 	};
 };
