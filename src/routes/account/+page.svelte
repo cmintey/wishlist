@@ -88,12 +88,12 @@
 						{/if}
 
 						<div class="flex flex-row justify-between">
-							<button type="submit" formaction="?/profile" class="btn btn-ghost-primary">
+							<button type="submit" formaction="?/profile" class="btn variant-ghost-primary">
 								Save
 							</button>
 							<button
 								type="button"
-								class="btn btn-ghost-secondary"
+								class="btn variant-ghost-secondary"
 								on:click={async () => (editing = false)}
 							>
 								Cancel
@@ -105,8 +105,10 @@
 				<span class="text-2xl md:text-4xl font-bold">{data.user.name}</span>
 				<span>{data.user.username}</span>
 				<span>{data.user.email}</span>
-				<button class="btn btn-ghost-primary mt-1" type="button" on:click={() => (editing = true)}
-					>Edit Profile</button
+				<button
+					class="btn variant-ghost-primary mt-1"
+					type="button"
+					on:click={() => (editing = true)}>Edit Profile</button
 				>
 			{/if}
 		</div>
@@ -185,7 +187,7 @@
 			<button
 				type="submit"
 				formaction="?/passwordchange"
-				class="btn btn-filled-primary w-fit"
+				class="btn variant-filled-primary w-fit"
 				disabled={passwordReset.current === "" ||
 					passwordReset.new === "" ||
 					passwordReset.new !== passwordReset.confirm}>Update Password</button

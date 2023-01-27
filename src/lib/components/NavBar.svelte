@@ -58,7 +58,7 @@
 								<a href="/admin"> Admin </a>
 							{/if}
 							<button
-								class="unstyled option"
+								class="unstyled list-option"
 								on:click={async () => {
 									await signOut();
 									invalidateAll();

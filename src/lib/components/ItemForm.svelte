@@ -103,10 +103,10 @@
 	</label>
 
 	<div class="flex flex-row space-x-4">
-		<button type="submit" class="btn btn-filled-primary w-min" disabled={loading}>
+		<button type="submit" class="btn variant-filled-primary w-min" disabled={loading}>
 			{buttonText}
 		</button>
-		<button type="button" class="btn btn-ghost-secondary w-min" on:click={() => history.back()}>
+		<button type="button" class="btn variant-ghost-secondary w-min" on:click={() => history.back()}>
 			Cancel
 		</button>
 	</div>

@@ -81,8 +81,8 @@
 	<div class="flex flex-row space-x-4 pb-4">
 		<span class="relative">
 			<button
-				class="chip chip-primary"
-				class:chip-primary-active={viewOption !== "All"}
+				class="chip variant-ringed-primary"
+				class:variant-ghost-primary={viewOption !== "All"}
 				use:menu={{ menu: "view", state: stateHandler }}
 			>
 				<span>{viewOption}</span>
@@ -91,13 +91,15 @@
 			<nav class="list-nav card p-4 shadow-xl" data-menu="view">
 				<ul>
 					<li>
-						<button class="option w-full" on:click={() => setView("All")}>All</button>
+						<button class="list-option w-full" on:click={() => setView("All")}>All</button>
 					</li>
 					<li>
-						<button class="option w-full" on:click={() => setView("Unpledged")}>Unpledged</button>
+						<button class="list-option w-full" on:click={() => setView("Unpledged")}
+							>Unpledged</button
+						>
 					</li>
 					<li>
-						<button class="option w-full" on:click={() => setView("Pledged")}>Pledged</button>
+						<button class="list-option w-full" on:click={() => setView("Pledged")}>Pledged</button>
 					</li>
 				</ul>
 			</nav>
@@ -112,7 +114,7 @@
 
 {#if data.listOwner.me || data.suggestionsEnabled}
 	<button
-		class="btn btn-filled w-16 h-16 rounded-full fixed z-90 bottom-10 right-8"
+		class="btn variant-filled w-16 h-16 rounded-full fixed z-90 bottom-10 right-8"
 		on:click={() => goto(`${$page.url}/new`)}
 	>
 		<iconify-icon icon="ri:add-fill" width="32" height="32" />
