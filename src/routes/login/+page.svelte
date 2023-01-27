@@ -51,6 +51,7 @@
 							name="password"
 							class="pr-8"
 							required
+							class:input-error={form?.incorrect || form?.error}
 						/>
 						<button
 							class="btn-icon-sm flex absolute inset-y-0 right-0 items-center mt-1.5 pr-4 z-10"
@@ -75,7 +76,7 @@
 				{/if}
 
 				<div class="flex space-x-4 justify-center items-center">
-					<button class="btn btn-filled-primary w-min">Log In</button>
+					<button class="btn variant-filled-primary w-min">Log In</button>
 					{#if data.enableSignup}
 						<a href="/signup">Create an account</a>
 					{/if}

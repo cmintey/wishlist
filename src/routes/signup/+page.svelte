@@ -83,7 +83,7 @@
 			{/if}
 
 			<div class="flex space-x-4 pb-2 justify-center items-center">
-				<button class="btn btn-filled-primary w-min" type="submit">Sign Up</button>
+				<button class="btn variant-filled-primary w-min" type="submit">Sign Up</button>
 				<a href="/login">Sign in</a>
 			</div>
 		</div>

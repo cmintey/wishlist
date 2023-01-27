@@ -54,7 +54,7 @@
 						href={navItem.href}
 						data-sveltekit-preload-data
 						on:click={() => drawerStore.close()}
-						class="option font-bold"
+						class="list-option font-bold"
 					>
 						{navItem.label}
 					</a>

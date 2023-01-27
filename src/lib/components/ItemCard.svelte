@@ -165,7 +165,7 @@
 	};
 </script>
 
-<div class="card" class:card-glass-warning={!item.approved}>
+<div class="card" class:variant-ghost-warning={!item.approved}>
 	<div class="p-4 flex flex-row space-x-4">
 		{#if image_url}
 			<div>
@@ -206,7 +206,7 @@
 			{:else if item.pledgedBy}
 				{#if item.pledgedBy.username === user.username}
 					<button
-						class="btn btn-ghost-secondary btn-sm md:btn"
+						class="btn variant-ghost-secondary btn-sm md:btn"
 						on:click={() => handlePledge(item.id, true)}>Unpledge</button
 					>
 				{:else}
@@ -214,34 +214,32 @@
 				{/if}
 			{:else}
 				<button
-					class="btn btn-filled-secondary btn-sm md:btn"
+					class="btn variant-filled-secondary btn-sm md:btn"
 					on:click={() => handlePledge(item.id)}>Pledge</button
 				>
-			{/if}
-
-			{#if user.username === item.user?.username || user.username === item.addedBy?.username}
-				<div class="flex flex-row space-x-4">
-					<button
-						class="btn btn-ghost-primary btn-sm md:btn "
-						on:click={() => goto(`${$page.url}/edit/${item.id}`)}>Edit</button
-					>
-					<button
-						class="btn btn-filled-error btn-sm md:btn "
-						on:click={() => handleDelete(item.id, item.name)}>Delete</button
-					>
-				</div>
 			{/if}
 
 			{#if !item.approved}
 				<div class="flex flex-row space-x-4">
 					<button
-						class="btn btn-filled-success btn-sm md:btn "
+						class="btn variant-filled-success btn-sm md:btn "
 						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name)}>Approve</button
 					>
 					<button
-						class="btn btn-filled-error btn-sm md:btn "
+						class="btn variant-filled-error btn-sm md:btn "
 						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name, false)}
 						>Deny</button
+					>
+				</div>
+			{:else if user.username === item.user?.username || user.username === item.addedBy?.username}
+				<div class="flex flex-row space-x-4">
+					<button
+						class="btn variant-ghost-primary btn-sm md:btn "
+						on:click={() => goto(`${$page.url}/edit/${item.id}`)}>Edit</button
+					>
+					<button
+						class="btn variant-filled-error btn-sm md:btn "
+						on:click={() => handleDelete(item.id, item.name)}>Delete</button
 					>
 				</div>
 			{/if}
