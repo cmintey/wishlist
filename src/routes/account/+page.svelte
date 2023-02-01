@@ -6,6 +6,9 @@
 	export let data: PageServerData;
 	export let form: ActionData;
 
+	let name: string = data.user.name;
+	let initials = name.split(" ").reduce((x, y) => x + y.at(0), "");
+
 	let editing = false;
 
 	let passwordReset = {
@@ -24,11 +27,7 @@
 	<h2>Profile</h2>
 	<div class="flex space-x-8 items-center">
 		<div>
-			<Avatar
-				width="w-24 md:w-32"
-				initials={data.user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-				background="bg-primary-400-500-token"
-			/>
+			<Avatar width="w-24 md:w-32" {initials} background="bg-primary-400-500-token" />
 		</div>
 
 		<div class="flex flex-col">

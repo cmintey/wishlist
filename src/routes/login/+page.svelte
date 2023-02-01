@@ -38,6 +38,7 @@
 					autocomplete="username"
 					autocapitalize="off"
 					required
+					class:input-error={form?.incorrect || form?.error}
 				/>
 			</label>
 
