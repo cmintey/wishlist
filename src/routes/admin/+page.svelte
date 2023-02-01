@@ -179,11 +179,11 @@
 	<h2>Users</h2>
 	<label class="w-fit">
 		<span>Search</span>
-		<div class="relative">
-			<input type="search" bind:value={userSearch} class="pl-8" />
-			<div class="flex absolute left-4 inset-y-0 items-center pointer-events-none z-10">
-				<iconify-icon icon="ri:search-line" />
+		<div class="input-group grid-cols-[auto_1fr_auto]">
+			<div class="input-group-shim ">
+				<iconify-icon icon="ri:search-line" width="20px" class="-mb-1" />
 			</div>
+			<input type="search" bind:value={userSearch} />
 		</div>
 	</label>
 	<span class="text-sm">*denotes admin</span>
