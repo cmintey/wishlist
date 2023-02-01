@@ -48,7 +48,7 @@
 
 			<label for="password">
 				<span>Password</span>
-				<div class="relative">
+				<div class="input-group grid-cols-[1fr_auto]">
 					<input
 						type={pwdVisible ? "text" : "password"}
 						id="password"
@@ -57,13 +57,12 @@
 						required
 					/>
 					<button
-						class="btn-icon-sm flex absolute inset-y-0 right-0 items-center mt-1.5 pr-4 z-10"
 						type="button"
 						id="showpassword"
 						on:click|preventDefault={handleClick}
 						on:keypress|preventDefault
 					>
-						<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" />
+						<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" class="-mb-0.5" />
 					</button>
 				</div>
 			</label>
