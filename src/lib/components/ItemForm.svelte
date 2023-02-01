@@ -62,16 +62,9 @@
 
 	<label for="price" class="col-span-1 md:col-span-2 row-start-3 md:row-start-2">
 		<span>Price</span>
-		<div class="relative">
-			<h4 class="flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none z-10">$</h4>
-			<input
-				type="text"
-				id="price"
-				name="price"
-				class="pl-8"
-				bind:value={data.price}
-				autocomplete="off"
-			/>
+		<div class="input-group grid-cols-[auto_1fr]">
+			<div class="input-group-shim">$</div>
+			<input type="text" id="price" name="price" bind:value={data.price} autocomplete="off" />
 		</div>
 	</label>
 
@@ -103,10 +96,10 @@
 	</label>
 
 	<div class="flex flex-row space-x-4">
-		<button type="submit" class="btn btn-filled-primary w-min" disabled={loading}>
+		<button type="submit" class="btn variant-filled-primary w-min" disabled={loading}>
 			{buttonText}
 		</button>
-		<button type="button" class="btn btn-ghost-secondary w-min" on:click={() => history.back()}>
+		<button type="button" class="btn variant-ghost-secondary w-min" on:click={() => history.back()}>
 			Cancel
 		</button>
 	</div>

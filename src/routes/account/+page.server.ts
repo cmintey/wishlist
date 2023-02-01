@@ -80,7 +80,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.authenticateUser("username", user.username, pwdData.data.oldPassword);
+			await auth.validateKeyPassword("username", user.username, pwdData.data.oldPassword);
 		} catch {
 			return fail(400, {
 				error: true,
@@ -88,8 +88,13 @@ export const actions: Actions = {
 			});
 		}
 
-		const u = await auth.updateUserPassword(user.userId, pwdData.data.newPassword);
-		const newSession = await auth.createSession(u.userId);
-		locals.setSession(newSession);
+		try {
+			await auth.updateKeyPassword("username", user.username, pwdData.data.newPassword);
+		} catch {
+			return fail(400, {
+				error: true,
+				errors: [{ field: "newPassword", message: "Unable to update password" }]
+			});
+		}
 	}
 };

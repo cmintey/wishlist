@@ -57,18 +57,20 @@
 
 <form method="POST" use:enhance>
 	<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 mt-4">
-		<button class="btn btn-filled-primary w-fit" formaction="?/reset-password">
+		<button class="btn variant-filled-primary w-fit" formaction="?/reset-password">
 			Generate Reset Password Link
 		</button>
 		{#if data.editingUser.role.name == "ADMIN"}
-			<button class="btn btn-ghost-secondary w-fit" formaction="?/remove-admin">
+			<button class="btn variant-ghost-secondary w-fit" formaction="?/remove-admin">
 				Remove Admin
 			</button>
 		{:else}
-			<button class="btn btn-ghost-secondary w-fit" formaction="?/make-admin"> Make Admin </button>
+			<button class="btn variant-ghost-secondary w-fit" formaction="?/make-admin">
+				Make Admin
+			</button>
 		{/if}
 		<button
-			class="btn btn-ghost-error w-fit"
+			class="btn variant-ghost-error w-fit"
 			type="button"
 			on:click={() => handleDelete(data.editingUser.username, data.editingUser.id)}
 			>Delete User</button

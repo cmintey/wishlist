@@ -69,7 +69,7 @@
 				{/if}
 				<button
 					type="submit"
-					class="btn btn-filled-primary w-fit"
+					class="btn variant-filled-primary w-fit"
 					disabled={newPassword === "" || newPassword !== confirmPassword}>Update Password</button
 				>
 			</div>

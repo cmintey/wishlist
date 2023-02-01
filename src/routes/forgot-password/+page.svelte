@@ -54,7 +54,7 @@
 					{/if}
 
 					<div>
-						<button type="submit" class="btn btn-filled-primary">Submit</button>
+						<button type="submit" class="btn variant-filled-primary">Submit</button>
 					</div>
 				</div>
 			</form>

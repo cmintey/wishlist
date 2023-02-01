@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
 	import { AppBar, Avatar, menu, drawerStore, LightSwitch } from "@skeletonlabs/skeleton";
-	import { signOut } from "@lucia-auth/sveltekit/client";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client/user";
 
 	type NavItem = {
@@ -58,9 +57,9 @@
 								<a href="/admin"> Admin </a>
 							{/if}
 							<button
-								class="unstyled option"
+								class="unstyled list-option"
 								on:click={async () => {
-									await signOut();
+									await fetch("/logout", { method: "POST" });
 									invalidateAll();
 								}}
 							>

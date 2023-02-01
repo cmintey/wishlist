@@ -6,6 +6,9 @@
 	export let data: PageServerData;
 	export let form: ActionData;
 
+	let name: string = data.user.name;
+	let initials = name.split(" ").reduce((x, y) => x + y.at(0), "");
+
 	let editing = false;
 
 	let passwordReset = {
@@ -24,11 +27,7 @@
 	<h2>Profile</h2>
 	<div class="flex space-x-8 items-center">
 		<div>
-			<Avatar
-				width="w-24 md:w-32"
-				initials={data.user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-				background="bg-primary-400-500-token"
-			/>
+			<Avatar width="w-24 md:w-32" {initials} background="bg-primary-400-500-token" />
 		</div>
 
 		<div class="flex flex-col">
@@ -88,12 +87,12 @@
 						{/if}
 
 						<div class="flex flex-row justify-between">
-							<button type="submit" formaction="?/profile" class="btn btn-ghost-primary">
+							<button type="submit" formaction="?/profile" class="btn variant-ghost-primary">
 								Save
 							</button>
 							<button
 								type="button"
-								class="btn btn-ghost-secondary"
+								class="btn variant-ghost-secondary"
 								on:click={async () => (editing = false)}
 							>
 								Cancel
@@ -105,8 +104,10 @@
 				<span class="text-2xl md:text-4xl font-bold">{data.user.name}</span>
 				<span>{data.user.username}</span>
 				<span>{data.user.email}</span>
-				<button class="btn btn-ghost-primary mt-1" type="button" on:click={() => (editing = true)}
-					>Edit Profile</button
+				<button
+					class="btn variant-ghost-primary mt-1"
+					type="button"
+					on:click={() => (editing = true)}>Edit Profile</button
 				>
 			{/if}
 		</div>
@@ -185,7 +186,7 @@
 			<button
 				type="submit"
 				formaction="?/passwordchange"
-				class="btn btn-filled-primary w-fit"
+				class="btn variant-filled-primary w-fit"
 				disabled={passwordReset.current === "" ||
 					passwordReset.new === "" ||
 					passwordReset.new !== passwordReset.confirm}>Update Password</button

@@ -62,13 +62,14 @@ export const actions: Actions = {
 				id: pwdData.data.userId
 			},
 			select: {
-				id: true
+				id: true,
+				username: true
 			}
 		});
 
 		if (user) {
-			const u = await auth.updateUserPassword(user.id, pwdData.data.newPassword);
-			if (u) {
+			try {
+				await auth.updateKeyPassword("username", user.username, pwdData.data.newPassword);
 				await client.passwordReset.update({
 					where: {
 						id: pwdData.data.id
@@ -78,6 +79,11 @@ export const actions: Actions = {
 					}
 				});
 				return { success: true };
+			} catch {
+				return fail(400, {
+					error: true,
+					errors: [{ field: "newPassword", message: "Unable to update password" }]
+				});
 			}
 		}
 

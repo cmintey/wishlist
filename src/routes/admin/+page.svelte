@@ -82,7 +82,7 @@
 
 <div class="flex flex-col space-y-4 md:w-3/4">
 	{#if !data.smtpEnabled && !warningHidden}
-		<aside class="alert">
+		<aside class="alert variant-ghost-warning">
 			<div>
 				<span class="text-4xl">⚠️</span>
 			</div>
@@ -94,8 +94,8 @@
 				</p>
 			</div>
 			<div class="alert-actions">
-				<a class="btn btn-filled-warning" href="/admin" target="_blank">View docs</a>
-				<button class="btn-icon btn-ghost-primary" on:click={() => (warningHidden = true)}>
+				<a class="btn variant-filled-warning" href="/admin" target="_blank">View docs</a>
+				<button class="btn-icon variant-ghost-error" on:click={() => (warningHidden = true)}>
 					<iconify-icon icon="ri:close-fill" />
 				</button>
 			</div>
@@ -121,20 +121,20 @@
 		<div class="flex space-x-2">
 			{#if data.smtpEnabled}
 				<button
-					class="btn btn-filled-primary w-fit"
+					class="btn variant-filled-primary w-fit"
 					type="button"
 					disabled={inviteUser}
 					on:click={() => (inviteUser = true)}>Invite User</button
 				>
 			{:else}
 				<button
-					class="btn btn-filled-primary w-fit"
+					class="btn variant-filled-primary w-fit"
 					formaction="?/invite-user"
 					on:click={() => (inviteUser = true)}>Invite User</button
 				>
 			{/if}
 
-			<button class="btn btn-ghost-error w-fit" type="button" on:click={handleDelete}
+			<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}
 				>Clear Lists</button
 			>
 		</div>
@@ -147,7 +147,7 @@
 						<input type="email" name="invite-email" id="invite-email" autocomplete="off" required />
 					</label>
 					<button
-						class="btn btn-filled-primary w-fit h-min mb-1"
+						class="btn variant-filled-primary w-fit h-min mb-1"
 						formaction="?/invite-user"
 						disabled={sending}
 					>
@@ -179,11 +179,11 @@
 	<h2>Users</h2>
 	<label class="w-fit">
 		<span>Search</span>
-		<div class="relative">
-			<input type="search" bind:value={userSearch} class="pl-8" />
-			<div class="flex absolute left-4 inset-y-0 items-center pointer-events-none z-10">
-				<iconify-icon icon="ri:search-line" />
+		<div class="input-group grid-cols-[auto_1fr_auto]">
+			<div class="input-group-shim ">
+				<iconify-icon icon="ri:search-line" width="20px" class="-mb-1" />
 			</div>
+			<input type="search" bind:value={userSearch} />
 		</div>
 	</label>
 	<span class="text-sm">*denotes admin</span>
