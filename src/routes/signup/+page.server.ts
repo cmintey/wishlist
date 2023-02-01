@@ -58,8 +58,12 @@ export const actions: Actions = {
 		const userCount = await client.user.count();
 
 		try {
-			const user = await auth.createUser("username", signupData.data.username, {
-				password: signupData.data.password,
+			const user = await auth.createUser({
+				key: {
+					providerId: "username",
+					providerUserId: signupData.data.username,
+					password: signupData.data.password
+				},
 				attributes: {
 					username: signupData.data.username,
 					email: signupData.data.email,
