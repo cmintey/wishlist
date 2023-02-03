@@ -2,17 +2,18 @@ import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { signupSchema } from "$lib/validations/signup";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { env } from "$env/dynamic/private";
 import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
+import { getConfig } from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
 	// If the user session exists, redirect authenticated users to the profile page.
 	const session = await locals.validate();
 	if (session) throw redirect(302, "/");
 
-	const token = new URL(request.url).searchParams.get("token");
-	if (env.ENABLE_SIGNUP && env.ENABLE_SIGNUP !== "true") {
+	const config = await getConfig();
+	if (!config.enableSignup) {
+		const token = new URL(request.url).searchParams.get("token");
 		if (token) {
 			const signup = await client.signupToken.findFirst({
 				where: {

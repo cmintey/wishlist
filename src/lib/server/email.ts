@@ -1,25 +1,13 @@
 import nodemailer from "nodemailer";
 import Handlebars from "handlebars";
 import { readFile } from "fs";
-import { env } from "$env/dynamic/private";
-
-import type { Transporter } from "nodemailer";
-import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type Mail from "nodemailer/lib/mailer";
+import { getConfig } from "$lib/server/config";
 
 type TemplateData = {
 	url: string;
 };
 
-export const SMTP_ENABLED =
-	env?.SMTP_HOST != "" &&
-	env?.SMTP_PORT != "" &&
-	env?.SMTP_USER != "" &&
-	env?.SMTP_PASS != "" &&
-	env?.SMTP_FROM != "" &&
-	env?.SMTP_FROM_NAME != "";
-
-let transport: Transporter<SMTPTransport.SentMessageInfo> | null = null;
 let passResetTempl: HandlebarsTemplateDelegate<TemplateData>;
 let inviteTempl: HandlebarsTemplateDelegate<TemplateData>;
 
@@ -39,24 +27,38 @@ readFile("templates/invite.html", "utf-8", (err, data) => {
 	}
 });
 
-if (SMTP_ENABLED) {
-	transport = nodemailer.createTransport({
-		port: Number.parseInt(env.SMTP_PORT || "0"),
-		host: env.SMTP_HOST,
-		auth: {
-			user: env.SMTP_USER,
-			pass: env.SMTP_PASS
-		}
-	});
-}
-
 const sendEmail = async (options: Mail.Options) => {
-	if (!transport) {
+	const config = await getConfig();
+
+	if (
+		!config.smtp.enable ||
+		(config.smtp.enable &&
+			!config.smtp.host &&
+			!config.smtp.port &&
+			!config.smtp.user &&
+			!config.smtp.pass &&
+			!config.smtp.from &&
+			!config.smtp.fromName)
+	) {
 		console.log("SMTP not set up properly, check your settings");
 		return false;
 	}
 
-	const msgInfo = await transport.sendMail(options);
+	const transport = nodemailer.createTransport({
+		port: config.smtp.port,
+		host: config.smtp.host,
+		auth: {
+			user: config.smtp.user,
+			pass: config.smtp.pass
+		}
+	});
+	const msgInfo = await transport.sendMail({
+		from: {
+			name: config.smtp.fromName,
+			address: config.smtp.from
+		},
+		...options
+	});
 
 	console.log(msgInfo);
 	return msgInfo.accepted.length > 0;
@@ -65,10 +67,6 @@ const sendEmail = async (options: Mail.Options) => {
 export const sendSignupLink = async (to: string, url: string) => {
 	const html = inviteTempl({ url });
 	return await sendEmail({
-		from: {
-			name: env.SMTP_FROM_NAME || "Wishlist",
-			address: env.SMTP_FROM || "wishlist@example.com"
-		},
 		to,
 		subject: "Wishlist Invite",
 		html,
@@ -79,13 +77,17 @@ export const sendSignupLink = async (to: string, url: string) => {
 export const sendPasswordReset = async (to: string, url: string) => {
 	const html = passResetTempl({ url });
 	return await sendEmail({
-		from: {
-			name: env.SMTP_FROM_NAME || "Wishlist",
-			address: env.SMTP_FROM || "wishlist@example.com"
-		},
 		to,
 		subject: "Password Reset",
 		html,
 		text: `Follow the link to reset your password ${url}`
+	});
+};
+
+export const sendTest = async (to: string) => {
+	return await sendEmail({
+		to,
+		subject: "Test from Wishlist",
+		text: "If you're reading this, then congratulations! Email configuration seems to have been set up properly!"
 	});
 };

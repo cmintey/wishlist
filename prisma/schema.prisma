@@ -94,3 +94,10 @@ model SignupToken {
     @@index([hashedToken])
     @@map("signup_tokens")
 }
+
+model SystemConfig {
+    key   String  @id @unique
+    value String?
+
+    @@map("system_config")
+}
