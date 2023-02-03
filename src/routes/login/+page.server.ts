@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/validations/login";
-import config from "$lib/server/config";
+import { getConfig } from "$lib/server/config";
 
 // If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals, request }) => {
@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 		const ref = new URL(request.url).searchParams.get("ref");
 		throw redirect(302, ref || "/");
 	}
+	const config = await getConfig();
 	return { enableSignup: config.enableSignup };
 };
 

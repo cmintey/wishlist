@@ -2,7 +2,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
-import config from "$lib/server/config";
+import { getConfig } from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -13,6 +13,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	if (isNaN(parseInt(params.itemId))) {
 		throw error(400, "item id must be a number");
 	}
+
+	const config = await getConfig();
 
 	let item;
 	try {

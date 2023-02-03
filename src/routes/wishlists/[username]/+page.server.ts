@@ -3,13 +3,14 @@ import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 import type { Prisma } from "@prisma/client";
-import config from "$lib/server/config";
+import { getConfig } from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, params, depends }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
 	}
+	const config = await getConfig();
 
 	depends("list:poll");
 
@@ -23,7 +24,7 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 		search.approved = true;
 	}
 
-	if (config.suggestions.method === "surprise") {
+	if (config.suggestions.method === "surprise" && params.username === user.username) {
 		search.addedBy = {
 			username: user.username
 		};

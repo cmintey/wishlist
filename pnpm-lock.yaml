@@ -2,13 +2,13 @@ lockfileVersion: 5.4
 
 specifiers:
   '@lucia-auth/adapter-prisma': ^0.4.0
-  '@lucia-auth/sveltekit': ^0.6.1
+  '@lucia-auth/sveltekit': ^0.6.2
   '@prisma/client': ^4.9.0
   '@samirrayani/metascraper-shopping': ^1.4.22
   '@skeletonlabs/skeleton': ^0.99.5
   '@sveltejs/adapter-auto': ^1.0.2
-  '@sveltejs/adapter-node': ^1.1.4
-  '@sveltejs/kit': ^1.3.9
+  '@sveltejs/adapter-node': ^1.1.6
+  '@sveltejs/kit': ^1.3.10
   '@tailwindcss/forms': ^0.5.3
   '@types/node': ^18.11.18
   '@types/nodemailer': ^6.4.7
@@ -42,13 +42,13 @@ specifiers:
   ts-node: ^10.9.1
   tslib: ^2.5.0
   typescript: ^4.9.5
-  vite: ^4.0.4
+  vite: ^4.1.1
   vite-plugin-pwa: ^0.14.1
   zod: ^3.20.2
 
 dependencies:
   '@lucia-auth/adapter-prisma': 0.4.0_lucia-auth@0.6.0
-  '@lucia-auth/sveltekit': 0.6.1_iyasqsbplmktfcni36hpxhd3zi
+  '@lucia-auth/sveltekit': 0.6.2_iyasqsbplmktfcni36hpxhd3zi
   '@prisma/client': 4.9.0_prisma@4.9.0
   '@samirrayani/metascraper-shopping': 1.4.22
   got-scraping: 3.2.12
@@ -65,16 +65,16 @@ dependencies:
 
 devDependencies:
   '@skeletonlabs/skeleton': 0.99.5
-  '@sveltejs/adapter-auto': 1.0.2_@sveltejs+kit@1.3.9
-  '@sveltejs/adapter-node': 1.1.4_@sveltejs+kit@1.3.9
-  '@sveltejs/kit': 1.3.9_svelte@3.55.1+vite@4.0.4
+  '@sveltejs/adapter-auto': 1.0.2_@sveltejs+kit@1.3.10
+  '@sveltejs/adapter-node': 1.1.6_@sveltejs+kit@1.3.10
+  '@sveltejs/kit': 1.3.10_svelte@3.55.1+vite@4.1.1
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
   '@types/node': 18.11.18
   '@types/nodemailer': 6.4.7
   '@types/pulltorefreshjs': 0.1.5
   '@typescript-eslint/eslint-plugin': 5.50.0_go4drrxstycfikanvu45pi4vgq
   '@typescript-eslint/parser': 5.50.0_4vsywjlpuriuw3tl5oq6zy5a64
-  '@vite-pwa/sveltekit': 0.1.2_wwtfovhgjo3sas7uzsm6cbeu4y
+  '@vite-pwa/sveltekit': 0.1.2_kqoczczow2oc46r57dr7wwhos4
   autoprefixer: 10.4.13_postcss@8.4.21
   eslint: 8.33.0
   eslint-config-prettier: 8.6.0_eslint@8.33.0
@@ -91,8 +91,8 @@ devDependencies:
   ts-node: 10.9.1_bdgp3l2zgaopogaavxusmetvge
   tslib: 2.5.0
   typescript: 4.9.5
-  vite: 4.0.4_@types+node@18.11.18
-  vite-plugin-pwa: 0.14.1_vite@4.0.4
+  vite: 4.1.1_@types+node@18.11.18
+  vite-plugin-pwa: 0.14.1_vite@4.1.1
 
 packages:
 
@@ -138,7 +138,7 @@ packages:
       '@babel/helper-compilation-targets': 7.20.7_@babel+core@7.20.12
       '@babel/helper-module-transforms': 7.20.11
       '@babel/helpers': 7.20.13
-      '@babel/parser': 7.20.13
+      '@babel/parser': 7.20.15
       '@babel/template': 7.20.7
       '@babel/traverse': 7.20.13
       '@babel/types': 7.20.7
@@ -401,8 +401,8 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@babel/parser/7.20.13:
-    resolution: {integrity: sha512-gFDLKMfpiXCsjt4za2JA9oTMn70CeseCehb11kRZgvd7+F67Hih3OHOK24cRrWECJ/ljfPGac6ygXAs/C8kIvw==}
+  /@babel/parser/7.20.15:
+    resolution: {integrity: sha512-DI4a1oZuf8wC+oAJA9RW6ga3Zbe8RZFt7kD9i4qAspz3I/yHet1VvC3DiSy/fsUvv5pvJuNPh0LPOdCcqinDPg==}
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
@@ -788,8 +788,8 @@ packages:
       '@babel/helper-plugin-utils': 7.20.2
     dev: true
 
-  /@babel/plugin-transform-block-scoping/7.20.14_@babel+core@7.20.12:
-    resolution: {integrity: sha512-sMPepQtsOs5fM1bwNvuJJHvaCfOEQfmc01FGw0ELlTpTJj5Ql/zuNRRldYhAPys4ghXdBIQJbRVYi44/7QflQQ==}
+  /@babel/plugin-transform-block-scoping/7.20.15_@babel+core@7.20.12:
+    resolution: {integrity: sha512-Vv4DMZ6MiNOhu/LdaZsT/bsLRxgL94d269Mv4R/9sp6+Mp++X/JqypZYypJXLlM4mlL352/Egzbzr98iABH1CA==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -1161,7 +1161,7 @@ packages:
       '@babel/plugin-transform-arrow-functions': 7.20.7_@babel+core@7.20.12
       '@babel/plugin-transform-async-to-generator': 7.20.7_@babel+core@7.20.12
       '@babel/plugin-transform-block-scoped-functions': 7.18.6_@babel+core@7.20.12
-      '@babel/plugin-transform-block-scoping': 7.20.14_@babel+core@7.20.12
+      '@babel/plugin-transform-block-scoping': 7.20.15_@babel+core@7.20.12
       '@babel/plugin-transform-classes': 7.20.7_@babel+core@7.20.12
       '@babel/plugin-transform-computed-properties': 7.20.7_@babel+core@7.20.12
       '@babel/plugin-transform-destructuring': 7.20.7_@babel+core@7.20.12
@@ -1226,7 +1226,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.18.6
-      '@babel/parser': 7.20.13
+      '@babel/parser': 7.20.15
       '@babel/types': 7.20.7
     dev: true
 
@@ -1240,7 +1240,7 @@ packages:
       '@babel/helper-function-name': 7.19.0
       '@babel/helper-hoist-variables': 7.18.6
       '@babel/helper-split-export-declaration': 7.18.6
-      '@babel/parser': 7.20.13
+      '@babel/parser': 7.20.15
       '@babel/types': 7.20.7
       debug: 4.3.4
       globals: 11.12.0
@@ -1563,13 +1563,13 @@ packages:
       lucia-auth: 0.6.0
     dev: false
 
-  /@lucia-auth/sveltekit/0.6.1_iyasqsbplmktfcni36hpxhd3zi:
-    resolution: {integrity: sha512-uKMeM0IbdviGJo1zT/LvW+SBKhLY6dsQ7R7xmvw52p1Y0EGnsYpAANDs3CIm3nr4B2Kr0VGT+tYxJ5ZxzWxe3w==}
+  /@lucia-auth/sveltekit/0.6.2_iyasqsbplmktfcni36hpxhd3zi:
+    resolution: {integrity: sha512-+lOhgctcdVkPRYtJegTaEZYLFhPJOHFjdAm9cBFFjpkV6cNGuHSTxobfOn7yRy3pGVhzGFM91uOfYrJxmECOBA==}
     peerDependencies:
       lucia-auth: 0.5.x - 0.6.x
       svelte: 3.x
     dependencies:
-      '@noble/hashes': 1.1.5
+      '@noble/hashes': 1.2.0
       lucia-auth: 0.6.0
       svelte: 3.55.1
     dev: false
@@ -1597,7 +1597,7 @@ packages:
       normalize-url: 6.1.0
       re2: 1.18.0
       smartquotes: 2.3.2
-      tldts: 5.7.104
+      tldts: 5.7.105
       url-regex-safe: 3.0.0_re2@1.18.0
       video-extensions: 1.2.0
     transitivePeerDependencies:
@@ -1608,8 +1608,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@noble/hashes/1.1.5:
-    resolution: {integrity: sha512-LTMZiiLc+V4v1Yi16TD6aX2gmtKszNye0pQgbaLqkvhIqP7nVsSaJsWloGQjJfJ8offaoP5GtX3yY5swbcJxxQ==}
+  /@noble/hashes/1.2.0:
+    resolution: {integrity: sha512-FZfhjEDbT5GRswV3C6uvLPHMiVD6lQBmpoX5+eSiPaMTXte/IKqI5dykDxzZB/WBeK/CDuQRBWarPdi3FNY2zQ==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -1839,29 +1839,29 @@ packages:
       string.prototype.matchall: 4.0.8
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.2_@sveltejs+kit@1.3.9:
+  /@sveltejs/adapter-auto/1.0.2_@sveltejs+kit@1.3.10:
     resolution: {integrity: sha512-UXpEO/gutERZnD+Z5Vi4J/ifD3WSRuCI7xwtLJTcKNQvJ6t5Xsj1X3Mw2F8Vv/XTUuxf7xPLYUgThU331r0Y9w==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
     dependencies:
-      '@sveltejs/kit': 1.3.9_svelte@3.55.1+vite@4.0.4
+      '@sveltejs/kit': 1.3.10_svelte@3.55.1+vite@4.1.1
       import-meta-resolve: 2.2.1
     dev: true
 
-  /@sveltejs/adapter-node/1.1.4_@sveltejs+kit@1.3.9:
-    resolution: {integrity: sha512-3iEBqi1fXLXP9YIbVuz2LXajoebRJCmAFEQbN40DlxAnA7G+InxUgnqFun3q9gBMz2Qvd99K51g/HxWetXRe8Q==}
+  /@sveltejs/adapter-node/1.1.6_@sveltejs+kit@1.3.10:
+    resolution: {integrity: sha512-LlBk41YuShk+1kLYNzkDfoQJ8/qVRflxWxM1o4HNCVQ/ycHO6sT0t+/cq8PMBuXyesdOx8jE7xEmS4i1Xj56qw==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
     dependencies:
       '@rollup/plugin-commonjs': 24.0.1_rollup@3.12.1
       '@rollup/plugin-json': 6.0.0_rollup@3.12.1
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.12.1
-      '@sveltejs/kit': 1.3.9_svelte@3.55.1+vite@4.0.4
+      '@sveltejs/kit': 1.3.10_svelte@3.55.1+vite@4.1.1
       rollup: 3.12.1
     dev: true
 
-  /@sveltejs/kit/1.3.9_svelte@3.55.1+vite@4.0.4:
-    resolution: {integrity: sha512-yHJV95SZ5uj4GIyi3UoMYbxy0NUXhqdhXHstQzKKEYcPAPcrzotiNgQLKGgeKmji2aK01joCnwiIHholmtLspw==}
+  /@sveltejs/kit/1.3.10_svelte@3.55.1+vite@4.1.1:
+    resolution: {integrity: sha512-I3DgWCwTYbTz4ZPCJIRkSDrKkMu0bsdk6ghqsOBVNqesf1wBdTdfkXhag3ESWgIEjUV3VUIWPQF7fnt7328mhQ==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     requiresBuild: true
@@ -1869,7 +1869,7 @@ packages:
       svelte: ^3.54.0
       vite: ^4.0.0
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 2.0.2_svelte@3.55.1+vite@4.0.4
+      '@sveltejs/vite-plugin-svelte': 2.0.2_svelte@3.55.1+vite@4.1.1
       '@types/cookie': 0.5.1
       cookie: 0.5.0
       devalue: 4.2.3
@@ -1883,12 +1883,12 @@ packages:
       svelte: 3.55.1
       tiny-glob: 0.2.9
       undici: 5.16.0
-      vite: 4.0.4_@types+node@18.11.18
+      vite: 4.1.1_@types+node@18.11.18
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@sveltejs/vite-plugin-svelte/2.0.2_svelte@3.55.1+vite@4.0.4:
+  /@sveltejs/vite-plugin-svelte/2.0.2_svelte@3.55.1+vite@4.1.1:
     resolution: {integrity: sha512-xCEan0/NNpQuL0l5aS42FjwQ6wwskdxC3pW1OeFtEKNZwRg7Evro9lac9HesGP6TdFsTv2xMes5ASQVKbCacxg==}
     engines: {node: ^14.18.0 || >= 16}
     peerDependencies:
@@ -1901,8 +1901,8 @@ packages:
       magic-string: 0.27.0
       svelte: 3.55.1
       svelte-hmr: 0.15.1_svelte@3.55.1
-      vite: 4.0.4_@types+node@18.11.18
-      vitefu: 0.2.4_vite@4.0.4
+      vite: 4.1.1_@types+node@18.11.18
+      vitefu: 0.2.4_vite@4.1.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2137,15 +2137,15 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vite-pwa/sveltekit/0.1.2_wwtfovhgjo3sas7uzsm6cbeu4y:
+  /@vite-pwa/sveltekit/0.1.2_kqoczczow2oc46r57dr7wwhos4:
     resolution: {integrity: sha512-zO6nZA+Z8F707VAaw7+bkAI2cYLnLb+/szNmU54L+Qtitq19RaStOytSpgp6lny/V76F9ckn6iN5QUumG5cWlQ==}
     engines: {node: '>=16.14'}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
       vite-plugin-pwa: ^0.14.0
     dependencies:
-      '@sveltejs/kit': 1.3.9_svelte@3.55.1+vite@4.0.4
-      vite-plugin-pwa: 0.14.1_vite@4.0.4
+      '@sveltejs/kit': 1.3.10_svelte@3.55.1+vite@4.1.1
+      vite-plugin-pwa: 0.14.1_vite@4.1.1
     dev: true
 
   /abab/2.0.6:
@@ -4151,7 +4151,7 @@ packages:
   /lucia-auth/0.6.0:
     resolution: {integrity: sha512-8j5nPl3RbbqGoZWULER4q+2PP7i8F3Eq3OeN7EnL+bxi4YAn5I+5FcNq/ikUCj8neOxGZyzJiRzFJq+t3r28+g==}
     dependencies:
-      '@noble/hashes': 1.1.5
+      '@noble/hashes': 1.2.0
       nanoid: 4.0.0
     dev: false
 
@@ -5522,15 +5522,15 @@ packages:
     hasBin: true
     dev: false
 
-  /tldts-core/5.7.104:
-    resolution: {integrity: sha512-8vhSgc2nzPNT0J7XyCqcOtQ6+ySBn+gsPmj5h95YytIZ7L2Xl40paUmj0T6Uko42HegHGQxXieunHIQuABWSmQ==}
+  /tldts-core/5.7.105:
+    resolution: {integrity: sha512-YcUuyM4LWdG/Ai3L53MZkajkZ0NlL3LmvOtN2eUnMsYlPXcIqzSFhUG43IM7fj062djVy2tdJFN+Ls52hsp+Bg==}
     dev: false
 
-  /tldts/5.7.104:
-    resolution: {integrity: sha512-PlziEIVPH/ogbqOhS35K6MOeD09rd9U5g2NHO5n9NZeMC1PGpXgsjQpoJ1KiRnjhZsWDkzN8EoX3xQZuz5ZyFQ==}
+  /tldts/5.7.105:
+    resolution: {integrity: sha512-wWtgT+NT+o8LLN7DflfWGJM2/wJ8haPg0maLYseYVy+evWuuBQAThNnVen9GFEaUGMUp8EHFONEx6kHCsSiveA==}
     hasBin: true
     dependencies:
-      tldts-core: 5.7.104
+      tldts-core: 5.7.105
     dev: false
 
   /to-fast-properties/2.0.0:
@@ -5796,7 +5796,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /vite-plugin-pwa/0.14.1_vite@4.0.4:
+  /vite-plugin-pwa/0.14.1_vite@4.1.1:
     resolution: {integrity: sha512-5zx7yhQ8RTLwV71+GA9YsQQ63ALKG8XXIMqRJDdZkR8ZYftFcRgnzM7wOWmQZ/DATspyhPih5wCdcZnAIsM+mA==}
     peerDependencies:
       vite: ^3.1.0 || ^4.0.0
@@ -5806,7 +5806,7 @@ packages:
       fast-glob: 3.2.12
       pretty-bytes: 6.0.0
       rollup: 3.12.1
-      vite: 4.0.4_@types+node@18.11.18
+      vite: 4.1.1_@types+node@18.11.18
       workbox-build: 6.5.4
       workbox-window: 6.5.4
     transitivePeerDependencies:
@@ -5814,8 +5814,8 @@ packages:
       - supports-color
     dev: true
 
-  /vite/4.0.4_@types+node@18.11.18:
-    resolution: {integrity: sha512-xevPU7M8FU0i/80DMR+YhgrzR5KS2ORy1B4xcX/cXLsvnUWvfHuqMmVU6N0YiJ4JWGRJJsLCgjEzKjG9/GKoSw==}
+  /vite/4.1.1_@types+node@18.11.18:
+    resolution: {integrity: sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -5848,7 +5848,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitefu/0.2.4_vite@4.0.4:
+  /vitefu/0.2.4_vite@4.1.1:
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0
@@ -5856,7 +5856,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.0.4_@types+node@18.11.18
+      vite: 4.1.1_@types+node@18.11.18
     dev: true
 
   /w3c-xmlserializer/4.0.0:

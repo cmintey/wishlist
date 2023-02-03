@@ -1,43 +1,104 @@
-import { env } from "$env/dynamic/private";
-import { readFileSync, writeFileSync } from "fs";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { client } from "./prisma";
 
-const configFile = "config/config.json";
+export enum ConfigKey {
+	SIGNUP_ENABLE = "enableSignup",
+	SUGGESTIONS_ENABLE = "suggestions.enable",
+	SUGGESTIONS_METHOD = "suggestions.method",
+	SMTP_ENABLE = "smtp.enable",
+	SMTP_HOST = "smtp.host",
+	SMTP_PORT = "smtp.port",
+	SMTP_USER = "smtp.user",
+	SMTP_PASS = "smtp.pass",
+	SMTP_FROM = "smtp.from",
+	SMTP_FROM_NAME = "smtp.fromName"
+}
 
-const getConfig = (): Config => {
-	console.log("loading config");
-	let config;
-	try {
-		config = JSON.parse(readFileSync(configFile, { encoding: "utf-8" }));
-	} catch {
-		config = createDefaultConfig();
+export const getConfig = async (): Promise<Config> => {
+	let configItems = await client.systemConfig.findMany();
+	if (configItems.length == 0) {
+		await createDefaultConfig();
+		configItems = await client.systemConfig.findMany();
 	}
 
-	return config;
+	const configMap: Record<string, string | null | undefined> = {};
+	for (const { key, value } of configItems) {
+		configMap[key] = value;
+	}
+
+	const smtpConfig: SMTPConfig =
+		configMap[ConfigKey.SMTP_ENABLE] === "true"
+			? {
+					enable: true,
+					host: configMap[ConfigKey.SMTP_HOST]!,
+					port: Number(configMap[ConfigKey.SMTP_PORT])!,
+					user: configMap[ConfigKey.SMTP_USER]!,
+					pass: configMap[ConfigKey.SMTP_PASS]!,
+					from: configMap[ConfigKey.SMTP_FROM]!,
+					fromName: configMap[ConfigKey.SMTP_FROM_NAME]!
+			  }
+			: {
+					enable: false,
+					host: configMap[ConfigKey.SMTP_HOST],
+					port: Number(configMap[ConfigKey.SMTP_PORT]),
+					user: configMap[ConfigKey.SMTP_USER],
+					pass: configMap[ConfigKey.SMTP_PASS],
+					from: configMap[ConfigKey.SMTP_FROM],
+					fromName: configMap[ConfigKey.SMTP_FROM_NAME]
+			  };
+
+	const config: Config = {
+		enableSignup: configMap[ConfigKey.SIGNUP_ENABLE] === "true",
+		suggestions: {
+			enable: configMap[ConfigKey.SUGGESTIONS_ENABLE] === "true",
+			method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval"
+		},
+		smtp: smtpConfig
+	};
+
+	return config as Config;
 };
 
-const createDefaultConfig = (): Config => {
-	console.log("No config file found, creating default");
-	const config: Config = {
-		enableSignup: Boolean(env.ENABLE_SIGNUP),
+const createDefaultConfig = async (): Promise<void> => {
+	const defaultConfig: Config = {
+		enableSignup: true,
 		suggestions: {
-			enable: Boolean(env.ALLOW_SUGGESTIONS),
-			method: (env.SUGGESTION_METHOD as SuggestionMethod) || "approval"
+			enable: true,
+			method: "approval"
 		},
 		smtp: {
-			enable: false,
-			host: env.SMTP_HOST,
-			port: Number.parseInt(env.SMTP_PORT),
-			user: env.SMTP_USER,
-			pass: env.SMTP_PASS,
-			from: env.SMTP_FROM,
-			fromName: env.SMTP_FROM_NAME
+			enable: false
 		}
 	};
 
-	writeFileSync(configFile, JSON.stringify(config), { encoding: "utf-8" });
-
-	return config;
+	await writeConfig(defaultConfig);
 };
 
-export const config = getConfig();
-export default config;
+export const writeConfig = async (config: Config) => {
+	const configMap: Record<string, string | null | undefined> = {};
+	configMap[ConfigKey.SIGNUP_ENABLE] = config.enableSignup.toString();
+	configMap[ConfigKey.SUGGESTIONS_ENABLE] = config.suggestions.enable.toString();
+	configMap[ConfigKey.SUGGESTIONS_METHOD] = config.suggestions.method;
+	configMap[ConfigKey.SMTP_ENABLE] = config.smtp.enable.toString();
+	configMap[ConfigKey.SMTP_HOST] = config.smtp.host;
+	configMap[ConfigKey.SMTP_PORT] = config.smtp.port?.toString();
+	configMap[ConfigKey.SMTP_USER] = config.smtp.user;
+	configMap[ConfigKey.SMTP_PASS] = config.smtp.pass;
+	configMap[ConfigKey.SMTP_FROM] = config.smtp.from;
+	configMap[ConfigKey.SMTP_FROM_NAME] = config.smtp.fromName;
+
+	for (const [key, value] of Object.entries(configMap)) {
+		await client.systemConfig.upsert({
+			where: {
+				key
+			},
+			create: {
+				key,
+				value
+			},
+			update: {
+				value
+			}
+		});
+	}
+};
