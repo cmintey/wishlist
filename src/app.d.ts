@@ -47,12 +47,12 @@ type SuggestionMethod = "surprise" | "auto-approval" | "approval";
 type SMTPConfig =
 	| {
 			enable: false;
-			host?: string;
-			port?: number;
-			user?: string;
-			pass?: string;
-			from?: string;
-			fromName?: string;
+			host?: string | null;
+			port?: number | null;
+			user?: string | null;
+			pass?: string | null;
+			from?: string | null;
+			fromName?: string | null;
 	  }
 	| {
 			enable: true;

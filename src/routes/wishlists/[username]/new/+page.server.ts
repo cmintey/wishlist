@@ -2,13 +2,15 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
-import config from "$lib/server/config";
+import { getConfig } from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
 	}
+	const config = await getConfig();
+
 	if (!config.suggestions.enable && user.username !== params.username) {
 		throw error(401, "Suggestions are disabled");
 	}
@@ -34,6 +36,7 @@ export const actions: Actions = {
 	default: async ({ request, locals, params }) => {
 		const { user: me, session } = await locals.validateUser();
 		if (!session) throw error(401);
+		const config = await getConfig();
 
 		const form = await request.formData();
 		const url = form.get("url") as string;

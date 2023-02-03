@@ -1,4 +1,4 @@
-import config from "$lib/server/config";
+import { getConfig } from "$lib/server/config";
 import { sendPasswordReset } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
@@ -7,11 +7,13 @@ import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
+	const config = await getConfig();
 	return { smtpEnabled: config.smtp.enable };
 };
 
 export const actions: Actions = {
 	default: async ({ request, url }) => {
+		const config = await getConfig();
 		const formData = Object.fromEntries(await request.formData());
 		const emailSchema = z.object({
 			email: z.string().email()

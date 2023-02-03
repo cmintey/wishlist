@@ -1,17 +1,13 @@
 import nodemailer from "nodemailer";
 import Handlebars from "handlebars";
 import { readFile } from "fs";
-
-import type { Transporter } from "nodemailer";
-import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type Mail from "nodemailer/lib/mailer";
-import config from "$lib/server/config";
+import { getConfig } from "$lib/server/config";
 
 type TemplateData = {
 	url: string;
 };
 
-let transport: Transporter<SMTPTransport.SentMessageInfo> | null = null;
 let passResetTempl: HandlebarsTemplateDelegate<TemplateData>;
 let inviteTempl: HandlebarsTemplateDelegate<TemplateData>;
 
@@ -31,8 +27,24 @@ readFile("templates/invite.html", "utf-8", (err, data) => {
 	}
 });
 
-if (config.smtp.enable) {
-	transport = nodemailer.createTransport({
+const sendEmail = async (options: Mail.Options) => {
+	const config = await getConfig();
+
+	if (
+		!config.smtp.enable ||
+		(config.smtp.enable &&
+			!config.smtp.host &&
+			!config.smtp.port &&
+			!config.smtp.user &&
+			!config.smtp.pass &&
+			!config.smtp.from &&
+			!config.smtp.fromName)
+	) {
+		console.log("SMTP not set up properly, check your settings");
+		return false;
+	}
+
+	const transport = nodemailer.createTransport({
 		port: config.smtp.port,
 		host: config.smtp.host,
 		auth: {
@@ -40,15 +52,13 @@ if (config.smtp.enable) {
 			pass: config.smtp.pass
 		}
 	});
-}
-
-const sendEmail = async (options: Mail.Options) => {
-	if (!config.smtp.enable || !transport) {
-		console.log("SMTP not set up properly, check your settings");
-		return false;
-	}
-
-	const msgInfo = await transport.sendMail(options);
+	const msgInfo = await transport.sendMail({
+		from: {
+			name: config.smtp.fromName,
+			address: config.smtp.from
+		},
+		...options
+	});
 
 	console.log(msgInfo);
 	return msgInfo.accepted.length > 0;
@@ -57,12 +67,6 @@ const sendEmail = async (options: Mail.Options) => {
 export const sendSignupLink = async (to: string, url: string) => {
 	const html = inviteTempl({ url });
 	return await sendEmail({
-		from: {
-			//@ts-expect-error checked in sendEmail function
-			name: config.smtp.fromName,
-			//@ts-expect-error checked in sendEmail function
-			address: config.smtp.from
-		},
 		to,
 		subject: "Wishlist Invite",
 		html,
@@ -73,15 +77,17 @@ export const sendSignupLink = async (to: string, url: string) => {
 export const sendPasswordReset = async (to: string, url: string) => {
 	const html = passResetTempl({ url });
 	return await sendEmail({
-		from: {
-			//@ts-expect-error checked in sendEmail function
-			name: config.smtp.fromName,
-			//@ts-expect-error checked in sendEmail function
-			address: config.smtp.from
-		},
 		to,
 		subject: "Password Reset",
 		html,
 		text: `Follow the link to reset your password ${url}`
+	});
+};
+
+export const sendTest = async (to: string) => {
+	return await sendEmail({
+		to,
+		subject: "Test from Wishlist",
+		text: "If you're reading this, then congratulations! Email configuration seems to have been set up properly!"
 	});
 };
