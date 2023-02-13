@@ -136,6 +136,6 @@ export const actions: Actions = {
 		const newConfig = generateConfig(configData.data);
 		await writeConfig(newConfig);
 
-		return { action: "settings", success: true, url: null };
+		return { action: "settings", success: true };
 	}
 };

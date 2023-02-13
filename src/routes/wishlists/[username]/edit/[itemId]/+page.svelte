@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import ItemForm from "$lib/components/ItemForm.svelte";
+	import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
 	import { toastStore } from "@skeletonlabs/skeleton";
-	import type { PageServerData, ActionData } from "./$types";
+	import type { PageServerData } from "./$types";
 
 	export let data: PageServerData;
-	export let form: ActionData;
 </script>
 
 {#if data?.item}
@@ -24,6 +23,6 @@
 			};
 		}}
 	>
-		<ItemForm {form} data={data?.item} buttonText="Save" />
+		<ItemForm data={data?.item} buttonText="Save" />
 	</form>
 {/if}

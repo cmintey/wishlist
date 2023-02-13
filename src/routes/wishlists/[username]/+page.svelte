@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import ItemCard from "$lib/components/ItemCard.svelte";
+	import ItemCard from "$lib/components/wishlists/ItemCard.svelte";
+	import FilterChip from "$lib/components/wishlists/FilterChip.svelte";
 	import { goto, invalidate } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { idle, listen } from "$lib/stores/idle";
 	import { onDestroy, onMount } from "svelte";
-	import { menu } from "@skeletonlabs/skeleton";
 	import { viewOption } from "$lib/stores/view";
 
 	export let data: PageData;
@@ -48,15 +48,10 @@
 		polling = true;
 		pollUpdate();
 	}
-
-	let menuView = false;
-	const stateHandler = (response: { menu: string; state: boolean }): void => {
-		if (response.menu === "view") menuView = response.state;
-	};
 </script>
 
 <h1 class="pb-4">
-	{data.listOwner.me ? "My" : `${data.listOwner.name}'s`} List
+	{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} List
 </h1>
 
 {#if data.approvals.length > 0}
@@ -74,36 +69,10 @@
 		<p>No items yet</p>
 	</div>
 {:else}
-	<!-- filter chips -->
-	<div class="flex flex-row space-x-4 pb-4">
-		<span class="relative">
-			<button
-				class="chip variant-ringed-primary"
-				class:variant-ghost-primary={$viewOption !== "All"}
-				use:menu={{ menu: "view", state: stateHandler }}
-			>
-				<span>{$viewOption}</span>
-				<iconify-icon icon="ri:arrow-down-s-fill" class:rotate-180={menuView} />
-			</button>
-			<nav class="list-nav card p-4 shadow-xl" data-menu="view">
-				<ul>
-					<li>
-						<button class="list-option w-full" on:click={() => ($viewOption = "All")}>All</button>
-					</li>
-					<li>
-						<button class="list-option w-full" on:click={() => ($viewOption = "Unpledged")}
-							>Unpledged</button
-						>
-					</li>
-					<li>
-						<button class="list-option w-full" on:click={() => ($viewOption = "Pledged")}
-							>Pledged</button
-						>
-					</li>
-				</ul>
-			</nav>
-		</span>
-	</div>
+	{#if !data.listOwner.isMe}
+		<FilterChip />
+	{/if}
+
 	<div class="flex flex-col space-y-4">
 		{#each items as item}
 			<ItemCard {item} user={data.user} />
@@ -111,7 +80,8 @@
 	</div>
 {/if}
 
-{#if data.listOwner.me || data.suggestionsEnabled}
+<!-- Add Item button -->
+{#if data.listOwner.isMe || data.suggestionsEnabled}
 	<button
 		class="btn variant-filled w-16 h-16 rounded-full fixed z-90 bottom-10 right-8"
 		on:click={() => goto(`${$page.url}/new`)}

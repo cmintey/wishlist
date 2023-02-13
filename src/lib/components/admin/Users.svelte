@@ -24,7 +24,7 @@
 		<div class="input-group-shim ">
 			<iconify-icon icon="ri:search-line" width="20px" class="-mb-1" />
 		</div>
-		<input type="search" bind:value={userSearch} />
+		<input class="input" type="search" bind:value={userSearch} />
 	</div>
 </label>
 <span class="text-sm">*denotes admin</span>

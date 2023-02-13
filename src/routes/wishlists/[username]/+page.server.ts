@@ -66,7 +66,7 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 	return {
 		user,
 		listOwner: {
-			me: params.username === user.username,
+			isMe: params.username === user.username,
 			name: listOwner?.name
 		},
 		items: wishlistItems.filter((item) => item.approved),

@@ -39,12 +39,12 @@
 					<label for="email" class="w-full">
 						<span>Email</span>
 						<input
+							class="input"
 							type="email"
 							name="email"
 							id="email"
 							required
 							class:input-invalid={form?.error}
-							class="peer"
 						/>
 					</label>
 					{#if form?.error}

@@ -9,11 +9,12 @@
 		type ToastSettings
 	} from "@skeletonlabs/skeleton";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
+	import { page } from "$app/stores";
 
-	export let errors: { message: string }[] | null;
-	export let url: string | null;
 	// eslint-disable-next-line no-undef
-	export let config: Config;
+	export let smtpEnable: boolean;
+
+	let form = $page.form;
 
 	const triggerToast = () => {
 		const toastConfig: ToastSettings = {
@@ -69,46 +70,55 @@
 
 <form
 	method="POST"
-	use:enhance={({ action }) => {
-		if (action.search === "?/invite-user") {
-			sending = true;
-			return async ({ result, update }) => {
-				if (result.type === "success") {
-					triggerToast();
-				}
-				update();
-				sending = false;
-			};
-		}
+	use:enhance={() => {
+		sending = true;
+		return async ({ result, update }) => {
+			if (result.type === "success" && smtpEnable) {
+				triggerToast();
+			}
+			update();
+			sending = false;
+		};
 	}}
 >
 	<div class="flex space-x-2">
-		{#if config.smtp.enable}
+		{#if smtpEnable}
 			<button
 				class="btn variant-filled-primary w-fit"
 				type="button"
 				disabled={inviteUser}
-				on:click={() => (inviteUser = true)}>Invite User</button
+				on:click={() => (inviteUser = true)}
 			>
+				Invite User
+			</button>
 		{:else}
 			<button
 				class="btn variant-filled-primary w-fit"
 				formaction="?/invite-user"
-				on:click={() => (inviteUser = true)}>Invite User</button
+				on:click={() => (inviteUser = true)}
 			>
+				Invite User
+			</button>
 		{/if}
 
-		<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}
-			>Clear Lists</button
-		>
+		<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}>
+			Clear Lists
+		</button>
 	</div>
 
-	{#if config.smtp.enable}
+	{#if smtpEnable}
 		{#if inviteUser}
 			<div class="flex space-x-4 mt-2 items-end">
 				<label for="invite-email">
 					<span>Email</span>
-					<input type="email" name="invite-email" id="invite-email" autocomplete="off" required />
+					<input
+						class="input"
+						type="email"
+						name="invite-email"
+						id="invite-email"
+						autocomplete="off"
+						required
+					/>
 				</label>
 				<button
 					class="btn variant-filled-primary w-fit h-min"
@@ -126,20 +136,22 @@
 				<button
 					class="btn variant-ghost-secondary w-fit h-min"
 					type="button"
-					on:click={() => (inviteUser = false)}>Cancel</button
+					on:click={() => (inviteUser = false)}
 				>
+					Cancel
+				</button>
 			</div>
-			{#if errors}
+			{#if form?.error && form?.errors}
 				<ul>
-					{#each errors as error}
+					{#each form.errors as error}
 						<li class="text-xs text-red-500">{error.message}</li>
 					{/each}
 				</ul>
 			{/if}
 		{/if}
-	{:else if url}
+	{:else if form?.url}
 		<div>
-			<TokenCopy {url}>Invite link</TokenCopy>
+			<TokenCopy url={form.url}>Invite link</TokenCopy>
 			<span class="italic text-sm">This invite link is only valid for one signup</span>
 		</div>
 	{/if}

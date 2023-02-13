@@ -69,7 +69,7 @@
 		{#if showNavigationLoadingBar}
 			<NavigationLoadingBar />
 		{/if}
-		<NavBar user={$user} {navItems} />
+		<NavBar {navItems} />
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<div class="px-4 md:px-8 py-4">
