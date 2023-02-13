@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import type { Item } from "@prisma/client";
-	import Backdrop from "./Backdrop.svelte";
+	import Backdrop from "$lib/components/Backdrop.svelte";
 
 	export let data: Item;
-	export let form: { name: string; missing: boolean } | null;
 	export let buttonText: string;
 
+	let form = $page.form;
 	let loading = false;
 	let urlChanged = false;
 
@@ -33,6 +34,7 @@
 	<label for="url" class="col-span-1 md:col-span-6">
 		<span>Item URL</span>
 		<input
+			class="input"
 			type="url"
 			id="url"
 			name="url"
@@ -46,13 +48,14 @@
 	<label for="name" class="col-span-1 md:col-span-4 row-start-2">
 		<span>Item Name*</span>
 		<input
+			class="input"
 			type="text"
 			id="name"
 			name="name"
 			placeholder="Really cool gift"
 			required
 			bind:value={data.name}
-			class={form?.missing ? "input-invalid" : ""}
+			class:input-invalid={form?.missing}
 			autocomplete="off"
 		/>
 		{#if form?.missing}
@@ -64,18 +67,26 @@
 		<span>Price</span>
 		<div class="input-group grid-cols-[auto_1fr]">
 			<div class="input-group-shim">$</div>
-			<input type="text" id="price" name="price" bind:value={data.price} autocomplete="off" />
+			<input
+				class="input"
+				type="text"
+				id="price"
+				name="price"
+				bind:value={data.price}
+				autocomplete="off"
+			/>
 		</div>
 	</label>
 
 	<label for="image" class="col-span-1 md:col-span-2 2xl:col-span-1">
 		<span>Upload Image</span>
-		<input type="file" accept="image/*" id="image" name="image" />
+		<input class="input" type="file" accept="image/*" id="image" name="image" />
 	</label>
 
 	<label for="image_url" class="col-span-1 md:col-span-4 2xl:col-span-5">
 		<span>Image URL</span>
 		<input
+			class="input"
 			type="text"
 			id="image_url"
 			name="image_url"
@@ -87,6 +98,7 @@
 	<label for="note" class="col-span-1 md:col-span-6">
 		<span>Notes</span>
 		<textarea
+			class="textarea"
 			name="note"
 			id="note"
 			rows="4"

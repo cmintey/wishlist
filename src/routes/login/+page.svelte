@@ -1,14 +1,10 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import PasswordInput from "$lib/components/PasswordInput.svelte";
 	import type { ActionData, PageServerData } from "./$types";
 
 	export let data: PageServerData;
 	export let form: ActionData;
-
-	let pwdVisible = false;
-	const handleClick = () => {
-		pwdVisible = !pwdVisible;
-	};
 </script>
 
 <div class="flex flex-col space-y-4 items-center">
@@ -32,6 +28,7 @@
 			<label for="username">
 				<span>Username</span>
 				<input
+					class="input"
 					type="text"
 					id="username"
 					name="username"
@@ -43,26 +40,13 @@
 			</label>
 
 			<div class="flex flex-col space-y-4 relative">
-				<label for="password">
-					<span>Password</span>
-					<div class="input-group grid-cols-[1fr_auto]">
-						<input
-							type={pwdVisible ? "text" : "password"}
-							id="password"
-							name="password"
-							required
-							class:input-error={form?.incorrect || form?.error}
-						/>
-						<button
-							type="button"
-							id="showpassword"
-							on:click|preventDefault={handleClick}
-							on:keypress|preventDefault
-						>
-							<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" class="-mb-0.5" />
-						</button>
-					</div>
-				</label>
+				<PasswordInput
+					id="password"
+					name="password"
+					label="Password"
+					required
+					error={form?.incorrect || form?.error}
+				/>
 
 				{#if form?.incorrect}<span class="unstyled text-xs text-red-500">Invalid credentials!</span
 					>{/if}

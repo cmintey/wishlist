@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
+	import PasswordInput from "$lib/components/PasswordInput.svelte";
 	import { onMount } from "svelte";
 	import type { ActionData, PageData } from "./$types";
 
@@ -32,28 +33,26 @@
 			<div
 				class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
 			>
-				<label>
-					<span>New Password</span>
-					<input
-						type="password"
-						id="newpassword"
-						autocomplete="new-password"
-						bind:value={newPassword}
-					/>
-				</label>
-				<label>
-					<span>Confirm Password</span>
-					<input
-						type="password"
-						id="confirmpassword"
-						name="newPassword"
-						autocomplete="new-password"
-						bind:value={confirmPassword}
-					/>
-				</label>
-				{#if newPassword !== confirmPassword}<span class="unstyled text-xs text-red-500"
-						>Passwords must match</span
-					>{/if}
+				<PasswordInput
+					label="New Password"
+					id="password"
+					name="password"
+					autocomplete="new-password"
+					required
+					bind:value={newPassword}
+				/>
+				<PasswordInput
+					label="Confirm Password"
+					id="confirmpassword"
+					autocomplete="new-password"
+					required
+					bind:value={confirmPassword}
+				/>
+
+				{#if newPassword !== confirmPassword}
+					<span class="unstyled text-xs text-red-500"> Passwords must match </span>
+				{/if}
+
 				{#if form?.error}
 					<ul>
 						{#each form.errors as error}

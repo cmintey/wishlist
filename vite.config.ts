@@ -11,7 +11,7 @@ const config: UserConfig = {
 				name: "Wishlist",
 				short_name: "Wishlist",
 				description: "Christmas wishlist you can share with the whole family.",
-				theme_color: "#fff",
+				theme_color: "#423654",
 				icons: [
 					{
 						src: "pwa-192x192.png",

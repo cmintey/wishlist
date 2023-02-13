@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import ItemCard from "$lib/components/ItemCard.svelte";
+	import ItemCard from "$lib/components/wishlists/ItemCard.svelte";
 
 	export let data: PageData;
 </script>

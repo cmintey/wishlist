@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import PasswordInput from "$lib/components/PasswordInput.svelte";
 	import { onMount } from "svelte";
 	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
 	export let form: ActionData;
 
-	let pwdVisible = false;
-	const handleClick = () => {
-		pwdVisible = !pwdVisible;
-	};
+	let password = "";
+	let passwordConfirm = "";
 
 	onMount(() => {
 		if (data.valid) window.history.replaceState({}, "", "/signup");
@@ -25,13 +24,14 @@
 		>
 			<label for="name">
 				<span>Name</span>
-				<input type="text" id="name" name="name" autocomplete="name" required />
+				<input class="input" type="text" id="name" name="name" autocomplete="name" required />
 			</label>
 
 			<div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
 				<label for="username">
 					<span>Username</span>
 					<input
+						class="input"
 						type="text"
 						id="username"
 						name="username"
@@ -42,30 +42,27 @@
 				</label>
 				<label for="email">
 					<span>Email</span>
-					<input type="email" id="email" name="email" autocomplete="email" required />
+					<input class="input" type="email" id="email" name="email" autocomplete="email" required />
 				</label>
 			</div>
 
-			<label for="password">
-				<span>Password</span>
-				<div class="input-group grid-cols-[1fr_auto]">
-					<input
-						type={pwdVisible ? "text" : "password"}
-						id="password"
-						name="password"
-						class="pr-8"
-						required
-					/>
-					<button
-						type="button"
-						id="showpassword"
-						on:click|preventDefault={handleClick}
-						on:keypress|preventDefault
-					>
-						<iconify-icon icon="ri:{pwdVisible ? 'eye-off-fill' : 'eye-fill'}" class="-mb-0.5" />
-					</button>
-				</div>
-			</label>
+			<PasswordInput
+				label="Password"
+				id="password"
+				name="password"
+				required
+				bind:value={password}
+			/>
+			<PasswordInput
+				label="Confirm Password"
+				id="confirmpassword"
+				required
+				bind:value={passwordConfirm}
+			/>
+
+			{#if password !== passwordConfirm}
+				<span class="unstyled text-xs text-red-500"> Passwords must match </span>
+			{/if}
 
 			{#if form?.error}
 				<ul>
@@ -82,7 +79,11 @@
 			{/if}
 
 			<div class="flex space-x-4 pb-2 justify-center items-center">
-				<button class="btn variant-filled-primary w-min" type="submit">Sign Up</button>
+				<button
+					class="btn variant-filled-primary w-min"
+					type="submit"
+					disabled={password !== passwordConfirm}>Sign Up</button
+				>
 				<a href="/login">Sign in</a>
 			</div>
 		</div>

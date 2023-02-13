@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
+	import { getUser } from "@lucia-auth/sveltekit/client";
 	import { AppBar, Avatar, menu, drawerStore, LightSwitch } from "@skeletonlabs/skeleton";
-	import type { ClientUser } from "@lucia-auth/sveltekit/client/user";
 
 	type NavItem = {
 		label: string;
 		href: string;
 	};
 
-	export let user: ClientUser;
 	export let navItems: NavItem[];
+
+	const user = getUser();
 </script>
 
 <AppBar background="bg-surface-200-700-token">
@@ -25,7 +26,7 @@
 		</div>
 	</svelte:fragment>
 
-	{#if user}
+	{#if $user}
 		<div class="flex-row items-center pt-0.5 pl-4 hidden md:flex">
 			{#each navItems as navItem}
 				<a
@@ -41,11 +42,11 @@
 
 	<svelte:fragment slot="trail">
 		<LightSwitch />
-		{#if user}
+		{#if $user}
 			<span class="relative">
 				<button use:menu={{ menu: "user" }}>
 					<Avatar
-						initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
+						initials={$user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
 						background="bg-primary-400-500-token"
 					/>
 				</button>
@@ -53,7 +54,7 @@
 					<ul>
 						<li>
 							<a href="/account"> Account </a>
-							{#if user.roleId == 2}
+							{#if $user.roleId == 2}
 								<a href="/admin"> Admin </a>
 							{/if}
 							<button

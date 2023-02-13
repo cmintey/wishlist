@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import ItemForm from "$lib/components/ItemForm.svelte";
+	import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
 	import type { Item } from "@prisma/client";
-	import type { ActionData, PageData } from "./$types";
+	import type { PageData } from "./$types";
 
 	export let data: PageData;
-	export let form: ActionData;
 
 	let itemData: Item = {
 		id: 0,
@@ -44,5 +43,5 @@
 {/if}
 
 <form method="POST" use:enhance>
-	<ItemForm {form} data={itemData} buttonText="Add Item" />
+	<ItemForm data={itemData} buttonText="Add Item" />
 </form>
