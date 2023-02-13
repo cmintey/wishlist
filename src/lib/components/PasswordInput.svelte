@@ -5,7 +5,7 @@
 	export let required = false;
 	export let autocomplete: string | null | undefined = undefined;
 	export let error = false;
-	export let value: string | null | undefined = undefined;
+	export let value: string | null | undefined = "";
 
 	let visible = false;
 

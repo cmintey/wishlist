@@ -18,11 +18,11 @@
 			name: string;
 		} | null;
 	};
-
 	export let user: {
 		username: string;
 		userId: string;
 	};
+	export let showFor = false;
 
 	let image_url: string;
 
@@ -166,36 +166,37 @@
 </script>
 
 <div class="card" class:variant-ghost-warning={!item.approved}>
-	<div class="p-4 flex flex-row space-x-4">
-		{#if image_url}
-			<div>
-				<img src={image_url} alt="product" class="w-24 md:w-32" />
-			</div>
-		{/if}
-		<div
-			class="flex flex-col px-0 md:px-1 w-full"
-			class:w-[calc(100%-7rem)]={image_url}
-			class:md:w-[calc(100%-8rem)]={image_url}
-		>
-			<span class="truncate hover:whitespace-normal font-bold text-2xl">
+	<div class="flex flex-col space-y-2 p-4">
+		<div class="flex w-full">
+			<span class="truncate font-bold text-2xl">
 				{#if item.url}
 					<a class="dark:!text-primary-200" href={item.url}>{item.name}</a>
 				{:else}
 					{item.name}
 				{/if}
 			</span>
+		</div>
 
-			{#if item.price}
-				<span class="text-lg font-semibold">${item.price}</span>
+		<div class="flex flex-row space-x-2">
+			{#if image_url}
+				<img src={image_url} alt="product" class="w-36" />
 			{/if}
 
-			<span class="text-lg">
-				Added by <span class="text-primary-700-200-token font-bold">{item.addedBy?.name}</span>
-				{#if item.user?.name}
-					for <span class="text-secondary-700-200-token font-bold">{item.user.name}</span>
+			<div class="flex flex-col">
+				{#if item.price}
+					<span class="text-lg font-semibold">${item.price}</span>
 				{/if}
-			</span>
-			<p>{item.note}</p>
+
+				<span class="text-lg">
+					{#if showFor}
+						For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
+					{:else}
+						Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span
+						>
+					{/if}
+				</span>
+				<p>{item.note}</p>
+			</div>
 		</div>
 	</div>
 

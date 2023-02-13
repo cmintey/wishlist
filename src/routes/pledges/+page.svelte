@@ -14,7 +14,7 @@
 {:else}
 	<div class="flex flex-col space-y-4">
 		{#each data.items as item}
-			<ItemCard {item} user={data.user} />
+			<ItemCard {item} user={data.user} showFor />
 		{/each}
 	</div>
 {/if}
