@@ -29,12 +29,12 @@
 			href: "/"
 		},
 		{
-			label: "My List",
+			label: "My Wishes",
 			href: `/wishlists/${$user?.username}`
 		},
 		{
-			label: "My Pledges",
-			href: "/pledges"
+			label: "My Gifts",
+			href: "/gifts"
 		}
 	];
 </script>
@@ -72,7 +72,7 @@
 		<NavBar {navItems} />
 	</svelte:fragment>
 	<!-- Router Slot -->
-	<div class="px-4 md:px-8 py-4">
+	<div class="px-4 md:px-56 py-4">
 		<slot />
 	</div>
 </AppShell>

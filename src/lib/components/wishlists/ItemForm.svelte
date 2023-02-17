@@ -38,7 +38,7 @@
 			type="url"
 			id="url"
 			name="url"
-			placeholder="https://www.amazon.com/Litfun-Womens-Memory-Slippers-Outdoor/dp/B09JVQ84VG"
+			placeholder="Enter a URL to fetch the item data"
 			bind:value={data.url}
 			on:focusout={() => getInfo()}
 			on:change={() => (urlChanged = true)}
@@ -52,7 +52,6 @@
 			type="text"
 			id="name"
 			name="name"
-			placeholder="Really cool gift"
 			required
 			bind:value={data.name}
 			class:input-invalid={form?.missing}
@@ -78,12 +77,12 @@
 		</div>
 	</label>
 
-	<label for="image" class="col-span-1 md:col-span-2 2xl:col-span-1">
+	<label for="image" class="col-span-1 md:col-span-2">
 		<span>Upload Image</span>
 		<input class="input" type="file" accept="image/*" id="image" name="image" />
 	</label>
 
-	<label for="image_url" class="col-span-1 md:col-span-4 2xl:col-span-5">
+	<label for="image_url" class="col-span-1 md:col-span-4">
 		<span>Image URL</span>
 		<input
 			class="input"

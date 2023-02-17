@@ -208,15 +208,15 @@
 				{#if item.pledgedBy.username === user.username}
 					<button
 						class="btn variant-ghost-secondary btn-sm md:btn"
-						on:click={() => handlePledge(item.id, true)}>Unpledge</button
+						on:click={() => handlePledge(item.id, true)}>Ungift</button
 					>
 				{:else}
-					<span>Pledged by {item.pledgedBy?.name}</span>
+					<span>Gifted by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
 				<button
 					class="btn variant-filled-secondary btn-sm md:btn"
-					on:click={() => handlePledge(item.id)}>Pledge</button
+					on:click={() => handlePledge(item.id)}>Gift</button
 				>
 			{/if}
 

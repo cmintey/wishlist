@@ -11,9 +11,9 @@
 	export let data: PageData;
 	let items = data.items;
 	$: {
-		if ($viewOption === "Pledged") {
+		if ($viewOption === "Gifted") {
 			items = data.items.filter((item) => item.pledgedBy !== null);
-		} else if ($viewOption === "Unpledged") {
+		} else if ($viewOption === "Ungifted") {
 			items = data.items.filter((item) => item.pledgedBy === null);
 		} else {
 			items = data.items;
@@ -51,7 +51,7 @@
 </script>
 
 <h1 class="pb-4">
-	{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} List
+	{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} Wishes
 </h1>
 
 {#if data.approvals.length > 0}

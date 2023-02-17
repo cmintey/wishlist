@@ -5,7 +5,7 @@
 	export let data: PageData;
 </script>
 
-<h1 class="pb-4">My Pledges</h1>
+<h1 class="pb-4">My Gifts</h1>
 
 {#if data.items.length === 0}
 	<div>

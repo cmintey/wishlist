@@ -24,13 +24,13 @@
 					<button class="list-option w-full" on:click={() => ($viewOption = "All")}>All</button>
 				</li>
 				<li>
-					<button class="list-option w-full" on:click={() => ($viewOption = "Unpledged")}
-						>Unpledged</button
+					<button class="list-option w-full" on:click={() => ($viewOption = "Ungifted")}
+						>Ungifted</button
 					>
 				</li>
 				<li>
-					<button class="list-option w-full" on:click={() => ($viewOption = "Pledged")}
-						>Pledged</button
+					<button class="list-option w-full" on:click={() => ($viewOption = "Gifted")}
+						>Gifted</button
 					>
 				</li>
 			</ul>

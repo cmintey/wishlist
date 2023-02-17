@@ -24,7 +24,10 @@
 		</div>
 	</div>
 
-	<div class="p-4">
-		Items: {user._count ? `${user._count.items}/` : ""}{user.items.length}
+	<div class="flex flex-row space-x-2 p-4 items-center">
+		<iconify-icon icon="ri:gift-2-fill" />
+		<span>
+			{user._count ? `${user._count.items}/` : ""}{user.items.length}
+		</span>
 	</div>
 </a>
