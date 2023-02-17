@@ -6,7 +6,6 @@
 	import Suggestions from "./Suggestions.svelte";
 	import Smtp from "./SMTP.svelte";
 
-	// eslint-disable-next-line no-undef
 	export let config: Config;
 	const form = $page.form;
 

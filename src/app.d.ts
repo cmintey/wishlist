@@ -1,74 +1,74 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-// and what to do when importing types
-/// <reference types="lucia-auth" />
-declare namespace Lucia {
-	type Auth = import("$lib/server/auth").Auth;
-	type UserAttributes = {
-		username: string;
-		email: string;
-		name: string;
-		roleId: number;
-	};
-}
-
-/// <reference types="@sveltejs/kit" />
-declare namespace App {
-	interface Locals {
-		validate: import("@lucia-auth/sveltekit").Validate;
-		validateUser: import("@lucia-auth/sveltekit").ValidateUser;
-		setSession: import("@lucia-auth/sveltekit").SetSession;
+declare global {
+	/// <reference types="lucia-auth" />
+	declare namespace Lucia {
+		type Auth = import("$lib/server/auth").Auth;
+		type UserAttributes = {
+			username: string;
+			name: string;
+			email: string;
+			roleId: number;
+		};
 	}
-}
 
-declare module "@samirrayani/metascraper-shopping" {
-	export default function rules(): import("metascraper").Rule;
-}
+	// See https://kit.svelte.dev/docs/types#app
+	// for information about these interfaces
+	// and what to do when importing types
+	/// <reference types="@sveltejs/kit" />
+	declare namespace App {
+		interface Locals {
+			validate: import("@lucia-auth/sveltekit").Validate;
+			validateUser: import("@lucia-auth/sveltekit").ValidateUser;
+			setSession: import("@lucia-auth/sveltekit").SetSession;
+		}
+	}
 
-type ProductData = {
-	brand: string | null;
-	name: string | null;
-	url: string | null;
-	image: string | null;
-	currency: string | null;
-	condition: string | null;
-	sku: string | null;
-	mpn: string | null;
-	availability: string | null;
-	price: number | null;
-	asin: string | null;
-	hostname: string | null;
-	retailer: string | null;
-	title: string | null;
-};
-
-type SuggestionMethod = "surprise" | "auto-approval" | "approval";
-
-type SMTPConfig =
-	| {
-			enable: false;
-			host?: string | null;
-			port?: number | null;
-			user?: string | null;
-			pass?: string | null;
-			from?: string | null;
-			fromName?: string | null;
-	  }
-	| {
-			enable: true;
-			host: string;
-			port: number;
-			user: string;
-			pass: string;
-			from: string;
-			fromName: string;
-	  };
-
-type Config = {
-	enableSignup: boolean;
-	suggestions: {
-		enable: boolean;
-		method: SuggestionMethod;
+	type ProductData = {
+		brand: string | null;
+		name: string | null;
+		url: string | null;
+		image: string | null;
+		currency: string | null;
+		condition: string | null;
+		sku: string | null;
+		mpn: string | null;
+		availability: string | null;
+		price: number | null;
+		asin: string | null;
+		hostname: string | null;
+		retailer: string | null;
+		title: string | null;
 	};
-	smtp: SMTPConfig;
-};
+
+	type SuggestionMethod = "surprise" | "auto-approval" | "approval";
+
+	type SMTPConfig =
+		| {
+				enable: false;
+				host?: string | null;
+				port?: number | null;
+				user?: string | null;
+				pass?: string | null;
+				from?: string | null;
+				fromName?: string | null;
+		  }
+		| {
+				enable: true;
+				host: string;
+				port: number;
+				user: string;
+				pass: string;
+				from: string;
+				fromName: string;
+		  };
+
+	type Config = {
+		enableSignup: boolean;
+		suggestions: {
+			enable: boolean;
+			method: SuggestionMethod;
+		};
+		smtp: SMTPConfig;
+	};
+}
+
+export {};

@@ -3,7 +3,7 @@ import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load = (async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login`);
@@ -60,4 +60,4 @@ export const load: PageServerLoad = async ({ locals }) => {
 		me,
 		users
 	};
-};
+}) satisfies PageServerLoad;

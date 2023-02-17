@@ -1,6 +1,5 @@
 <script lang="ts">
 	export let enabled: boolean;
-	// eslint-disable-next-line no-undef
 	export let method: SuggestionMethod;
 </script>
 
