@@ -2,6 +2,7 @@
 	import { page } from "$app/stores";
 	import type { Item } from "@prisma/client";
 	import Backdrop from "$lib/components/Backdrop.svelte";
+	import type { ProductData } from "$lib/types";
 
 	export let data: Item;
 	export let buttonText: string;
@@ -15,7 +16,6 @@
 			loading = true;
 			const res = await fetch(`/api/product?url=${data.url}`);
 			if (res.ok) {
-				// eslint-disable-next-line no-undef
 				let productData: ProductData = await res.json();
 				data.name = productData.name ? productData.name : productData.title || "";
 				data.image_url = productData.image;

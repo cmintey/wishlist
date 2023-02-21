@@ -11,7 +11,6 @@
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
 	import { page } from "$app/stores";
 
-	// eslint-disable-next-line no-undef
 	export let smtpEnable: boolean;
 
 	let form = $page.form;

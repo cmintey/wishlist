@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import type { Config, SMTPConfig, SuggestionMethod } from "$lib/types";
 import { client } from "./prisma";
 
 export enum ConfigKey {

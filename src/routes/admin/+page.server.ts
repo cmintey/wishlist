@@ -3,6 +3,7 @@ import { writeConfig, getConfig } from "$lib/server/config";
 import { sendSignupLink, sendTest } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
+import type { Config, SMTPConfig } from "$lib/types";
 import { settingSchema } from "$lib/validations/settings";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";

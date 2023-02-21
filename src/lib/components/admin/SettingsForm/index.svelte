@@ -5,8 +5,8 @@
 	import PublicSignup from "./PublicSignup.svelte";
 	import Suggestions from "./Suggestions.svelte";
 	import Smtp from "./SMTP.svelte";
+	import type { Config } from "$lib/types";
 
-	// eslint-disable-next-line no-undef
 	export let config: Config;
 	const form = $page.form;
 
