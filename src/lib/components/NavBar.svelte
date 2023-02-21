@@ -2,6 +2,7 @@
 	import { invalidateAll } from "$app/navigation";
 	import { getUser } from "@lucia-auth/sveltekit/client";
 	import { AppBar, Avatar, menu, drawerStore, LightSwitch } from "@skeletonlabs/skeleton";
+	import logo from "$lib/assets/logo.png";
 
 	type NavItem = {
 		label: string;
@@ -22,7 +23,10 @@
 				</button>
 			{/if}
 
-			<a class="text-4xl font-bold text-primary-900-50-token" href="/">Wishlist</a>
+			<a class="flex flex-row space-x-2 items-center" href="/">
+				<img src={logo} alt="Wishlist Logo" class="h-14" />
+				<span class="text-4xl font-bold text-primary-900-50-token"> Wishlist </span>
+			</a>
 		</div>
 	</svelte:fragment>
 
