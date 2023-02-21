@@ -2,6 +2,7 @@
 	import { page } from "$app/stores";
 	import type { Item } from "@prisma/client";
 	import Backdrop from "$lib/components/Backdrop.svelte";
+	import type { ProductData } from "$lib/types";
 
 	export let data: Item;
 	export let buttonText: string;
