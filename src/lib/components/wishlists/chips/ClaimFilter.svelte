@@ -16,7 +16,7 @@
 			use:menu={{ menu: "view", state: stateHandler }}
 		>
 			<span>{$claimOption}</span>
-			<iconify-icon icon="ri:arrow-down-s-fill" class:rotate-180={menuView} />
+			<iconify-icon icon="ion:caret-down" class="text-xs" class:rotate-180={menuView} />
 		</button>
 		<nav class="list-nav card p-4 shadow-xl" data-menu="view">
 			<ul>

@@ -117,6 +117,6 @@
 		class="btn variant-ghost-surface w-16 h-16 rounded-full fixed z-90 bottom-4 right-4 md:bottom-10 md:right-10"
 		on:click={() => goto(`${$page.url}/new`)}
 	>
-		<iconify-icon icon="ri:add-fill" width="32" height="32" />
+		<iconify-icon icon="ion:add" width="32" height="32" />
 	</button>
 {/if}

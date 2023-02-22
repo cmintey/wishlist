@@ -26,7 +26,7 @@
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
 	<div class="pb-4">
 		<aside class="alert variant-ghost-warning">
-			<iconify-icon icon="ri:alert-fill" class="text-5xl hidden md:block" />
+			<span class="text-4xl">⚠️</span>
 			<div class="alert-message">
 				<span class="text-2xl font-bold">Heads up!</span>
 				<p>

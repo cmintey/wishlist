@@ -19,7 +19,7 @@
 		<div class="flex space-x-4 items-center content-center">
 			{#if user}
 				<button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawerStore.open({})}>
-					<iconify-icon icon="ri:menu-fill" class="text-xl" />
+					<iconify-icon icon="ion:menu" class="text-2xl" />
 				</button>
 			{/if}
 

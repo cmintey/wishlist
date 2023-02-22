@@ -43,7 +43,7 @@
 	<div class="flex flex-row place-content-between mt-4 px-4 items-center">
 		<span class="text-4xl">Wishlist</span>
 		<button class="btn-icon" on:click={() => drawerStore.close()}>
-			<iconify-icon icon="ri:close-fill" width="32" />
+			<iconify-icon icon="ion:close" width="32" />
 		</button>
 	</div>
 	<nav class="list-nav p-4">

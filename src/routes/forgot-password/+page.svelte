@@ -14,7 +14,7 @@
 		<h1>Reset Password</h1>
 		{#if form?.success}
 			<div class="flex flex-col space-y-1 items-center text-center w-80 md:w-full">
-				<iconify-icon icon="ri:checkbox-circle-line" width="100" />
+				<iconify-icon icon="ion:checkmark-circle-outline" width="100" />
 				<span class="text-xl font-bold">Success!</span>
 				<p>Check your email and follow the link to reset your password.</p>
 			</div>

@@ -26,7 +26,7 @@
 				setTimeout(() => (copiedVisible = false), 1000);
 			}}
 		>
-			<iconify-icon icon="ri:clipboard-line" />
+			<iconify-icon icon="ion:copy" />
 		</button>
 		{#if copiedVisible}
 			<span out:fade>Copied!</span>

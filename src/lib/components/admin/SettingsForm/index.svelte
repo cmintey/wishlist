@@ -59,7 +59,7 @@
 	<div class="flex space-x-4 mt-2 items-end">
 		<button class="btn variant-filled-primary mt-2" type="submit">
 			{#if saved}
-				<iconify-icon icon="ri:check-line" />
+				<iconify-icon icon="ion:checkmark" />
 				<p>Saved</p>
 			{:else}
 				Save
@@ -77,7 +77,7 @@
 						<ProgressRadial stroke={64} />
 					</span>
 				{:else if sent}
-					<iconify-icon icon="ri:check-line" />
+					<iconify-icon icon="ion:checkmark" />
 					<p>Sent</p>
 				{:else}
 					Test Email
