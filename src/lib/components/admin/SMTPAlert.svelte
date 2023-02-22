@@ -18,7 +18,7 @@
 		<div class="alert-actions">
 			<a class="btn variant-filled-warning" href="/admin" target="_blank">View docs</a>
 			<button class="btn-icon variant-ghost-error" on:click={() => ($smtpAcknowledged = true)}>
-				<iconify-icon icon="ri:close-fill" />
+				<iconify-icon icon="ion:close" />
 			</button>
 		</div>
 	</aside>

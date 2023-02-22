@@ -35,7 +35,7 @@
 			on:click|preventDefault={handleClick}
 			on:keypress|preventDefault
 		>
-			<iconify-icon icon="ri:{visible ? 'eye-off-fill' : 'eye-fill'}" class="-mb-0.5" />
+			<iconify-icon icon="ion:{visible ? 'eye-off' : 'eye'}" class="-mb-0.5" />
 		</button>
 	</div>
 </label>

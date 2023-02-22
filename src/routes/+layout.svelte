@@ -6,7 +6,8 @@
 	import { page } from "$app/stores";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { handleSession, getUser } from "@lucia-auth/sveltekit/client";
-	import { AppShell, Drawer, Modal, Toast, drawerStore } from "@skeletonlabs/skeleton";
+	import { AppShell, Drawer, Modal, Toast, drawerStore, storePopup } from "@skeletonlabs/skeleton";
+	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
 	import NavBar from "$lib/components/NavBar.svelte";
 	import NavigationLoadingBar from "$lib/components/NavigationLoadingBar.svelte";
@@ -37,13 +38,15 @@
 			href: "/claims"
 		}
 	];
+
+	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
 <Drawer position="left">
 	<div class="flex flex-row place-content-between mt-4 px-4 items-center">
 		<span class="text-4xl">Wishlist</span>
 		<button class="btn-icon" on:click={() => drawerStore.close()}>
-			<iconify-icon icon="ri:close-fill" width="32" />
+			<iconify-icon icon="ion:close" width="32" />
 		</button>
 	</div>
 	<nav class="list-nav p-4">

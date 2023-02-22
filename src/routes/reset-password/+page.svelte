@@ -78,7 +78,7 @@
 {#if form?.success}
 	<div class="flex flex-col space-y-4 items-center">
 		<div class="flex flex-col space-y-1 items-center text-center w-80 md:w-full">
-			<iconify-icon icon="ri:checkbox-circle-line" width="100" />
+			<iconify-icon icon="ion:checkmark-circle-outline" width="100" />
 			<span class="text-xl font-bold">Success!</span>
 			<p>Your password was reset. <a href="/login">Click here</a> to login.</p>
 		</div>
