@@ -13,12 +13,12 @@
 
 	export let smtpEnable: boolean;
 
-	let form = $page.form;
+	$: form = $page.form;
 
 	const triggerToast = () => {
 		const toastConfig: ToastSettings = {
 			message: "Invite sent!",
-			preset: "success",
+			background: "variant-filled-success",
 			autohide: true,
 			timeout: 3000
 		};
@@ -55,7 +55,7 @@
 					} else {
 						toastStore.trigger({
 							message: `Oops! Something went wrong.`,
-							classes: "bg-warning-500",
+							background: "variant-filled-warning",
 							autohide: true,
 							timeout: 5000
 						});

@@ -7,7 +7,7 @@
 	export let data: Item;
 	export let buttonText: string;
 
-	let form = $page.form;
+	$: form = $page.form;
 	let loading = false;
 	let urlChanged = false;
 

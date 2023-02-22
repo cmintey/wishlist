@@ -8,7 +8,7 @@
 	import type { Config } from "$lib/types";
 
 	export let config: Config;
-	const form = $page.form;
+	$: form = $page.form;
 
 	$: saved = config ? false : false;
 	let sending = false;

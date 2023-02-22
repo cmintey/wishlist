@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { claimOption, CLAIM_OPTIONS } from "$lib/stores/filters";
-	import { menu } from "@skeletonlabs/skeleton";
+	import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+	import { flip } from "svelte/animate";
 
-	let menuView = false;
-	const stateHandler = (response: { menu: string; state: boolean }): void => {
-		if (response.menu === "view") menuView = response.state;
+	let menuOpen = false;
+	const menuSettings: PopupSettings = {
+		event: "click",
+		target: "view",
+		state: ({ state }) => (menuOpen = state)
 	};
 </script>
 
@@ -13,12 +16,16 @@
 		<button
 			class="chip variant-ringed-primary"
 			class:variant-ghost-primary={$claimOption !== "All"}
-			use:menu={{ menu: "view", state: stateHandler }}
+			use:popup={menuSettings}
 		>
 			<span>{$claimOption}</span>
-			<iconify-icon icon="ion:caret-down" class="text-xs" class:rotate-180={menuView} />
+			<iconify-icon
+				icon="ion:caret-down"
+				class="text-xs arrow ease-out duration-300"
+				class:rotate-180={menuOpen}
+			/>
 		</button>
-		<nav class="list-nav card p-4 shadow-xl" data-menu="view">
+		<nav class="list-nav card p-4 shadow-xl" data-popup="view">
 			<ul>
 				{#each CLAIM_OPTIONS as OPTION}
 					<li>

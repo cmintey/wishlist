@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
 	import { getUser } from "@lucia-auth/sveltekit/client";
-	import { AppBar, Avatar, menu, drawerStore, LightSwitch } from "@skeletonlabs/skeleton";
+	import {
+		AppBar,
+		Avatar,
+		drawerStore,
+		LightSwitch,
+		popup,
+		type PopupSettings
+	} from "@skeletonlabs/skeleton";
 	import logo from "$lib/assets/logo.png";
 
 	type NavItem = {
@@ -12,6 +19,11 @@
 	export let navItems: NavItem[];
 
 	const user = getUser();
+
+	const menuSettings: PopupSettings = {
+		event: "click",
+		target: "user"
+	};
 </script>
 
 <AppBar background="bg-surface-200-700-token">
@@ -45,35 +57,47 @@
 	{/if}
 
 	<svelte:fragment slot="trail">
-		<LightSwitch />
-		{#if $user}
-			<span class="relative">
-				<button use:menu={{ menu: "user" }}>
-					<Avatar
-						initials={$user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-						background="bg-primary-400-500-token"
-					/>
-				</button>
-				<nav class="list-nav card p-4 w-fit shadow-xl" data-menu="user">
-					<ul>
-						<li>
-							<a href="/account"> Account </a>
+		<div class="flex flex-row space-x-2 items-center">
+			{#if $user}
+				<span class="relative">
+					<button use:popup={menuSettings}>
+						<Avatar
+							initials={$user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
+							background="bg-primary-400-500-token"
+						/>
+					</button>
+					<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="user">
+						<ul>
+							<li>
+								<a href="/account"> Account </a>
+							</li>
 							{#if $user.roleId == 2}
-								<a href="/admin"> Admin </a>
+								<li>
+									<a href="/admin"> Admin </a>
+								</li>
 							{/if}
-							<button
-								class="unstyled list-option"
-								on:click={async () => {
-									await fetch("/logout", { method: "POST" });
-									invalidateAll();
-								}}
-							>
-								Sign Out
-							</button>
-						</li>
-					</ul>
-				</nav>
-			</span>
-		{/if}
+							<li>
+								<button
+									class="unstyled list-option"
+									on:click={async () => {
+										await fetch("/logout", { method: "POST" });
+										invalidateAll();
+									}}
+								>
+									Sign Out
+								</button>
+							</li>
+							<li>
+								<div class="flex justify-center">
+									<LightSwitch height="h-6" width="w-12" />
+								</div>
+							</li>
+						</ul>
+					</nav>
+				</span>
+			{:else}
+				<LightSwitch height="h-6" width="w-12" />
+			{/if}
+		</div>
 	</svelte:fragment>
 </AppBar>

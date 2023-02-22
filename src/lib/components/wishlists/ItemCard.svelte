@@ -64,7 +64,7 @@
 					} else {
 						toastStore.trigger({
 							message: `Oops! Something went wrong.`,
-							classes: "bg-warning-500",
+							background: "variant-filled-warning",
 							autohide: true,
 							timeout: 5000
 						});
@@ -98,7 +98,7 @@
 		} else {
 			toastStore.trigger({
 				message: `Oops! Something went wrong.`,
-				classes: "bg-warning-500",
+				background: "variant-filled-warning",
 				autohide: true,
 				timeout: 5000
 			});
@@ -153,7 +153,7 @@
 					} else {
 						toastStore.trigger({
 							message: `Oops! Something went wrong.`,
-							classes: "bg-warning-500",
+							background: "variant-filled-warning",
 							autohide: true,
 							timeout: 5000
 						});
