@@ -2,6 +2,7 @@ name: Build and Lint
 
 on:
   pull_request:
+  push:
 
 jobs:
   build_lint:
