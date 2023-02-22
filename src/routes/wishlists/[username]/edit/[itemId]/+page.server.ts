@@ -94,6 +94,7 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/wishlists/${params.username}`);
+		const ref = new URL(request.url).searchParams.get("ref");
+		throw redirect(302, ref ?? `/wishlists/${params.username}`);
 	}
 };

@@ -67,6 +67,7 @@ model Item {
     pledgedBy   User?   @relation(name: "PledgedItems", fields: [pledgedById], references: [id])
     pledgedById String?
     approved    Boolean @default(true)
+    purchased   Boolean @default(false)
 
     @@index([userId])
     @@map("items")
