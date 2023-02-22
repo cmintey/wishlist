@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { viewOption } from "$lib/stores/view";
+	import { claimOption, CLAIM_OPTIONS } from "$lib/stores/filters";
 	import { menu } from "@skeletonlabs/skeleton";
 
 	let menuView = false;
@@ -12,27 +12,21 @@
 	<span class="relative">
 		<button
 			class="chip variant-ringed-primary"
-			class:variant-ghost-primary={$viewOption !== "All"}
+			class:variant-ghost-primary={$claimOption !== "All"}
 			use:menu={{ menu: "view", state: stateHandler }}
 		>
-			<span>{$viewOption}</span>
+			<span>{$claimOption}</span>
 			<iconify-icon icon="ri:arrow-down-s-fill" class:rotate-180={menuView} />
 		</button>
 		<nav class="list-nav card p-4 shadow-xl" data-menu="view">
 			<ul>
-				<li>
-					<button class="list-option w-full" on:click={() => ($viewOption = "All")}>All</button>
-				</li>
-				<li>
-					<button class="list-option w-full" on:click={() => ($viewOption = "Ungifted")}
-						>Ungifted</button
-					>
-				</li>
-				<li>
-					<button class="list-option w-full" on:click={() => ($viewOption = "Gifted")}
-						>Gifted</button
-					>
-				</li>
+				{#each CLAIM_OPTIONS as OPTION}
+					<li>
+						<button class="list-option w-full" on:click={() => ($claimOption = OPTION)}>
+							{OPTION}
+						</button>
+					</li>
+				{/each}
 			</ul>
 		</nav>
 	</span>

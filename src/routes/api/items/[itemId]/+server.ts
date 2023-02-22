@@ -78,7 +78,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 
 	await validateItem(params?.itemId, session);
 
-	const body = await request.json();
+	const body = (await request.json()) as Record<string, unknown>;
 	const data: {
 		name?: string;
 		price?: string;
@@ -87,15 +87,20 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 		image_url?: string;
 		pledgedById?: string;
 		approved?: boolean;
+		purchased?: boolean;
 	} = {};
 
-	if (body.name) data.name = body.name;
-	if (body.price) data.price = body.price;
-	if (body.url) data.url = body.url;
-	if (body.note) data.note = body.note;
-	if (body.image_url) data.image_url = body.image_url;
-	if (body.pledgedById) data.pledgedById = body.pledgedById === "0" ? null : body.pledgedById;
-	if (body.approved) data.approved = body.approved;
+	if (body.name && typeof body.name === "string") data.name = body.name;
+	if (body.price && typeof body.price === "string") data.price = body.price;
+	if (body.url && typeof body.url === "string") data.url = body.url;
+	if (body.note && typeof body.note === "string") data.note = body.note;
+	if (body.image_url && typeof body.image_url === "string") data.image_url = body.image_url;
+	if (body.pledgedById && typeof body.pledgedById === "string")
+		data.pledgedById = body.pledgedById === "0" ? undefined : body.pledgedById;
+	if (Object.keys(body).includes("approved") && typeof body.approved === "boolean")
+		data.approved = body.approved;
+	if (Object.keys(body).includes("purchased") && typeof body.purchased === "boolean")
+		data.purchased = body.purchased;
 
 	try {
 		const item = await client.item.update({

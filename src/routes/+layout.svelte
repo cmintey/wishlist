@@ -33,8 +33,8 @@
 			href: `/wishlists/${$user?.username}`
 		},
 		{
-			label: "My Gifts",
-			href: "/gifts"
+			label: "My Claims",
+			href: "/claims"
 		}
 	];
 </script>
@@ -72,7 +72,7 @@
 		<NavBar {navItems} />
 	</svelte:fragment>
 	<!-- Router Slot -->
-	<div class="px-4 md:px-56 py-4">
+	<div class="px-4 md:px-12 lg:px-32 xl:px-56 py-4">
 		<slot />
 	</div>
 </AppShell>

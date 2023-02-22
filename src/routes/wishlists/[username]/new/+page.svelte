@@ -16,7 +16,8 @@
 		userId: "",
 		addedById: "",
 		pledgedById: null,
-		approved: true
+		approved: true,
+		purchased: false
 	};
 
 	let warningHidden = false;

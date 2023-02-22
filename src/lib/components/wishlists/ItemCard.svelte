@@ -163,12 +163,29 @@
 		};
 		modalStore.trigger(confirm);
 	};
+
+	const handlePurchased = async (itemId: number, value: boolean) => {
+		const resp = await fetch(`/api/items/${itemId}`, {
+			method: "PATCH",
+			headers: {
+				"content-type": "application/json",
+				accept: "application/json"
+			},
+			body: JSON.stringify({
+				purchased: value
+			})
+		});
+
+		if (resp.ok) {
+			invalidateAll();
+		}
+	};
 </script>
 
 <div class="card" class:variant-ghost-warning={!item.approved}>
 	<div class="flex flex-col space-y-2 p-4">
 		<div class="flex w-full">
-			<span class="truncate font-bold text-2xl">
+			<span class="truncate font-bold text-xl md:text-2xl">
 				{#if item.url}
 					<a class="dark:!text-primary-200" href={item.url}>{item.name}</a>
 				{:else}
@@ -187,7 +204,7 @@
 					<span class="text-lg font-semibold">${item.price}</span>
 				{/if}
 
-				<span class="text-lg">
+				<span class="text-base md:text-lg">
 					{#if showFor}
 						For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
 					{:else}
@@ -206,22 +223,35 @@
 				<div />
 			{:else if item.pledgedBy}
 				{#if item.pledgedBy.username === user.username}
-					<button
-						class="btn variant-ghost-secondary btn-sm md:btn"
-						on:click={() => handlePledge(item.id, true)}>Ungift</button
-					>
+					<div class="flex flex-row space-x-2 md:space-x-4">
+						<button
+							class="btn variant-ghost-secondary btn-sm md:btn"
+							on:click={() => handlePledge(item.id, true)}
+						>
+							Unclaim
+						</button>
+						<label class="unstyled flex space-x-2 items-center text-sm md:text-base">
+							<input
+								class="checkbox"
+								type="checkbox"
+								bind:checked={item.purchased}
+								on:change={(event) => handlePurchased(item.id, event.currentTarget?.checked)}
+							/>
+							<span>Purchased</span>
+						</label>
+					</div>
 				{:else}
-					<span>Gifted by {item.pledgedBy?.name}</span>
+					<span>Claimed by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
 				<button
 					class="btn variant-filled-secondary btn-sm md:btn"
-					on:click={() => handlePledge(item.id)}>Gift</button
+					on:click={() => handlePledge(item.id)}>Claim</button
 				>
 			{/if}
 
 			{#if !item.approved}
-				<div class="flex flex-row space-x-4">
+				<div class="flex flex-row space-x-2 md:space-x-4">
 					<button
 						class="btn variant-filled-success btn-sm md:btn "
 						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name)}>Approve</button
@@ -233,10 +263,12 @@
 					>
 				</div>
 			{:else if user.username === item.user?.username || user.username === item.addedBy?.username}
-				<div class="flex flex-row space-x-4">
+				<div class="flex flex-row space-x-2 md:space-x-4">
 					<button
 						class="btn variant-ghost-primary btn-sm md:btn "
-						on:click={() => goto(`${$page.url}/edit/${item.id}`)}>Edit</button
+						on:click={() =>
+							goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`)}
+						>Edit</button
 					>
 					<button
 						class="btn variant-filled-error btn-sm md:btn "

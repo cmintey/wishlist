@@ -27,7 +27,6 @@
 			use:enhance={({ data: formData }) => {
 				formData.append("userId", data.userId || "");
 				formData.append("id", `${data.id}` || "0");
-				console.log(formData);
 			}}
 		>
 			<div

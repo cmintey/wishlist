@@ -22,7 +22,6 @@
 				data.price = productData.price?.toString() || null;
 			} else {
 				console.log("invalid url");
-				console.log(await res.json());
 			}
 			loading = false;
 			urlChanged = false;
