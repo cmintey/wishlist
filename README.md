@@ -12,8 +12,10 @@ Wishlist is a self-hosted wishlist application that you can share with your frie
 
 - [x] Claim items on a wishlist
 - [x] Check off claimed items as purchased
+- [x] Automatically fetch product data from URL
 - [x] Invite users via email (SMTP configuration required)
 - [x] Options for [suggestions](#suggestions)
+- [x] PWA Support
 - [ ] Draw names for a "secret santa" experience
 - [ ] Group support
 
@@ -47,3 +49,32 @@ You can now connect to your application at `http://<host>:3280`.
 >
 > Set the `ORIGIN` environment variable to the url you will be connecting to, otherwise you will experience issues
 
+## Configuration
+
+There are several configuration options in the admin panel.
+
+### Public Signup
+
+By default, anyone with the url can signup for an account. You can turn this off and have it be invite only.
+
+If you have [SMTP enabled](#smtp), then you can enter a user's email and an invite link will be sent there. Otherwise, an invite link will be generated for you to copy and send to the user manually.
+
+### Suggestions
+
+Suggestions are enabled by default. With suggestions enabled, you will be able to add items to another person's wishlist. There are a few different suggestion methods.
+
+#### Approval Required
+
+In this mode, the suggested item will need to be approved by the suggestee in order for it to show up on their wishlist. If the item is approved, it can be edited and deleted by the suggestee at any time.
+
+#### Auto Approval
+
+In this mode, the suggested item will be automatically approved and added to the wishlist. Similar to the previous method, the item can be edited and delted by the suggestee at any time.
+
+#### Suprise Me
+
+In this mode, the suggested item is automatically approved and added to the wishlist. **However**, the item only shows for everyone except for the suggestee. The suggestee cannot see and therefore cannot edit or delete the item once it has been added.
+
+### SMTP
+
+SMTP does not need to be configured for the app to function. SMTP enables inviting users via email and the forgot password flow. Without SMTP, you can still manually generate invite links and forgot password links.
