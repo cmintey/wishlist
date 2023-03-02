@@ -1,6 +1,6 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { resetPasswordSchema } from "$lib/validations/resetPassword";
+import { resetPasswordSchema } from "$lib/validations/schemas";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";

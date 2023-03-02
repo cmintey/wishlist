@@ -1,7 +1,7 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { hashToken } from "$lib/server/token";
-import { resetPasswordSchema } from "$lib/validations/resetPassword";
+import { resetPasswordSchema } from "$lib/validations/schemas";
 import { error, fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";

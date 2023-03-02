@@ -2,6 +2,7 @@
 	import { enhance } from "$app/forms";
 	import PasswordInput from "$lib/components/PasswordInput.svelte";
 	import { onMount } from "svelte";
+
 	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
@@ -53,6 +54,7 @@
 				name="password"
 				required
 				bind:value={password}
+				strengthMeter
 			/>
 			<PasswordInput
 				label="Confirm Password"

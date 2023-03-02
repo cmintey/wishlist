@@ -40,12 +40,16 @@
 			autocomplete="current-password"
 			bind:value={passwordReset.current}
 		/>
-		<PasswordInput
-			label="New Password"
-			id="newpassword"
-			autocomplete="new-password"
-			bind:value={passwordReset.new}
-		/>
+		<div>
+			<PasswordInput
+				label="New Password"
+				id="newpassword"
+				autocomplete="new-password"
+				bind:value={passwordReset.new}
+				strengthMeter
+			/>
+		</div>
+
 		<PasswordInput
 			label="Confirm Password"
 			id="confirmpassword"

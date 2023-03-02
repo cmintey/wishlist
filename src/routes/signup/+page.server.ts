@@ -1,6 +1,6 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { signupSchema } from "$lib/validations/signup";
+import { signupSchema } from "$lib/validations/schemas";
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
