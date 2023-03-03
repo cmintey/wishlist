@@ -6,7 +6,6 @@
 	import { page } from "$app/stores";
 	import { listen, idle } from "$lib/stores/idle";
 	import { onDestroy, onMount } from "svelte";
-	import { claimOption } from "$lib/stores/filters";
 	import { flip } from "svelte/animate";
 	import { quintOut } from "svelte/easing";
 	import { crossfade } from "svelte/transition";
@@ -30,17 +29,6 @@
 			};
 		}
 	});
-
-	let items = data.items;
-	$: {
-		if ($claimOption === "Claimed") {
-			items = data.items.filter((item) => item.pledgedBy !== null);
-		} else if ($claimOption === "Unclaimed") {
-			items = data.items.filter((item) => item.pledgedBy === null);
-		} else {
-			items = data.items;
-		}
-	}
 
 	// Poll for updates
 	listen({
@@ -79,8 +67,14 @@
 {#if data.approvals.length > 0}
 	<h2 class="pb-2">Approvals</h2>
 	<div class="flex flex-col space-y-4 pb-2">
-		{#each data.approvals as item}
-			<ItemCard {item} user={data.user} />
+		{#each data.approvals as item (item.id)}
+			<div
+				in:receive={{ key: item.id }}
+				out:send|local={{ key: item.id }}
+				animate:flip={{ duration: 200 }}
+			>
+				<ItemCard {item} user={data.user} />
+			</div>
 		{/each}
 	</div>
 	<hr class="pb-2" />
@@ -96,7 +90,7 @@
 	{/if}
 
 	<div class="flex flex-col space-y-4">
-		{#each items as item (item.id)}
+		{#each data.items as item (item.id)}
 			<div
 				in:receive={{ key: item.id }}
 				out:send|local={{ key: item.id }}
