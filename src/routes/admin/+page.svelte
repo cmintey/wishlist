@@ -25,3 +25,7 @@
 	<h2>Users</h2>
 	<Users users={data.users} currentUser={data.user} />
 </div>
+
+<svelte:head>
+	<title>Admin Settings</title>
+</svelte:head>

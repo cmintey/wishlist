@@ -56,3 +56,7 @@
 		{/each}
 	</div>
 {/if}
+
+<svelte:head>
+	<title>My Claims</title>
+</svelte:head>

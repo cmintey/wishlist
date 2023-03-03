@@ -84,3 +84,7 @@
 		</div>
 	</div>
 {/if}
+
+<svelte:head>
+	<title>Reset Password</title>
+</svelte:head>

@@ -25,3 +25,7 @@
 		{/if}
 	</svelte:fragment>
 </TabGroup>
+
+<svelte:head>
+	<title>Account</title>
+</svelte:head>

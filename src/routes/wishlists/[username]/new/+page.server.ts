@@ -26,7 +26,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	});
 
 	return {
-		owner: listOwner,
+		owner: {
+			name: listOwner.name,
+			isMe: params.username === listOwner.username
+		},
 		suggestion: user.username !== params.username,
 		suggestionMethod: config.suggestions.method
 	};

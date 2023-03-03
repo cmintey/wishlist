@@ -26,3 +26,7 @@
 		<ItemForm data={data?.item} buttonText="Save" />
 	</form>
 {/if}
+
+<svelte:head>
+	<title>Edit Wish</title>
+</svelte:head>
