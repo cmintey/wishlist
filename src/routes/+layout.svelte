@@ -6,11 +6,12 @@
 	import { page } from "$app/stores";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { handleSession, getUser } from "@lucia-auth/sveltekit/client";
-	import { AppShell, Drawer, Modal, Toast, drawerStore, storePopup } from "@skeletonlabs/skeleton";
+	import { AppShell, Modal, Toast, storePopup } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
 	import NavBar from "$lib/components/NavBar.svelte";
 	import NavigationLoadingBar from "$lib/components/NavigationLoadingBar.svelte";
+	import NavigationDrawer from "$lib/components/NavigationDrawer.svelte";
 
 	handleSession(page);
 	const user = getUser();
@@ -27,45 +28,25 @@
 	$: navItems = [
 		{
 			label: "Home",
-			href: "/"
+			href: "/",
+			icon: "ion:home"
 		},
 		{
 			label: "My Wishes",
-			href: `/wishlists/${$user?.username}`
+			href: `/wishlists/${$user?.username}`,
+			icon: "ion:gift"
 		},
 		{
 			label: "My Claims",
-			href: "/claims"
+			href: "/claims",
+			icon: "ion:albums"
 		}
-	];
+	] satisfies NavItem[];
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
-<Drawer position="left">
-	<div class="flex flex-row place-content-between mt-4 px-4 items-center">
-		<span class="text-4xl">Wishlist</span>
-		<button class="btn-icon" on:click={() => drawerStore.close()}>
-			<iconify-icon icon="ion:close" width="32" />
-		</button>
-	</div>
-	<nav class="list-nav p-4">
-		<ul>
-			{#each navItems as navItem}
-				<li>
-					<a
-						href={navItem.href}
-						data-sveltekit-preload-data
-						on:click={() => drawerStore.close()}
-						class="list-option font-bold"
-					>
-						{navItem.label}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
-</Drawer>
+<NavigationDrawer {navItems} />
 
 <AppShell>
 	<svelte:fragment slot="header">

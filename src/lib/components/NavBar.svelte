@@ -10,11 +10,7 @@
 		type PopupSettings
 	} from "@skeletonlabs/skeleton";
 	import logo from "$lib/assets/logo.png";
-
-	type NavItem = {
-		label: string;
-		href: string;
-	};
+	import { page } from "$app/stores";
 
 	export let navItems: NavItem[];
 
@@ -30,7 +26,13 @@
 	<svelte:fragment slot="lead">
 		<div class="flex space-x-4 items-center content-center">
 			{#if user}
-				<button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawerStore.open({})}>
+				<button
+					class="btn btn-sm p-0 pt-0.5 md:hidden"
+					on:click={() =>
+						drawerStore.open({
+							width: "w-[280px] md:w-[480px]"
+						})}
+				>
 					<iconify-icon icon="ion:menu" class="text-2xl" />
 				</button>
 			{/if}
@@ -47,8 +49,9 @@
 			{#each navItems as navItem}
 				<a
 					href={navItem.href}
-					class="unstyled hover:bg-primary-hover-token rounded-token px-4 py-2 font-bold"
+					class="list-option px-4 py-2 font-bold"
 					data-sveltekit-preload-data
+					class:variant-filled-primary={$page.url.pathname === navItem.href}
 				>
 					{navItem.label}
 				</a>
