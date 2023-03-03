@@ -85,7 +85,10 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 		url?: string;
 		note?: string;
 		image_url?: string;
-		pledgedById?: string;
+		pledgedBy?: {
+			connect?: { id: string };
+			disconnect?: boolean;
+		};
 		approved?: boolean;
 		purchased?: boolean;
 	} = {};
@@ -95,8 +98,19 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 	if (body.url && typeof body.url === "string") data.url = body.url;
 	if (body.note && typeof body.note === "string") data.note = body.note;
 	if (body.image_url && typeof body.image_url === "string") data.image_url = body.image_url;
-	if (body.pledgedById && typeof body.pledgedById === "string")
-		data.pledgedById = body.pledgedById === "0" ? undefined : body.pledgedById;
+	if (body.pledgedById && typeof body.pledgedById === "string") {
+		if (body.pledgedById === "0") {
+			data.pledgedBy = {
+				disconnect: true
+			};
+		} else {
+			data.pledgedBy = {
+				connect: {
+					id: body.pledgedById
+				}
+			};
+		}
+	}
 	if (Object.keys(body).includes("approved") && typeof body.approved === "boolean")
 		data.approved = body.approved;
 	if (Object.keys(body).includes("purchased") && typeof body.purchased === "boolean")
