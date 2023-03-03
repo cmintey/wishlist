@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { SuggestionMethod } from "$lib/types";
 	export let enabled: boolean;
 	export let method: SuggestionMethod;
 </script>
