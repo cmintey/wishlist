@@ -5,7 +5,7 @@ import { client } from "$lib/server/prisma";
 import type { Prisma } from "@prisma/client";
 import { getConfig } from "$lib/server/config";
 
-export const load: PageServerLoad = async ({ locals, params, depends }) => {
+export const load: PageServerLoad = async ({ locals, params, depends, url }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
@@ -27,6 +27,15 @@ export const load: PageServerLoad = async ({ locals, params, depends }) => {
 	if (config.suggestions.method === "surprise" && params.username === user.username) {
 		search.addedBy = {
 			username: user.username
+		};
+	}
+
+	const filter = url.searchParams.get("filter");
+	if (filter === "unclaimed") {
+		search.pledgedById = null;
+	} else if (filter === "claimed") {
+		search.pledgedById = {
+			not: null
 		};
 	}
 

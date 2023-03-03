@@ -3,178 +3,112 @@
 	import { page } from "$app/stores";
 	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { Item } from "@prisma/client";
+	import { ItemAPI } from "$lib/api/items";
+
+	type PartialUser = {
+		username: string;
+		name: string;
+	};
 
 	export let item: Item & {
-		addedBy: {
-			username: string;
-			name: string;
-		} | null;
-		pledgedBy: {
-			username: string;
-			name: string;
-		} | null;
-		user: {
-			username: string;
-			name: string;
-		} | null;
+		addedBy: PartialUser | null;
+		pledgedBy: PartialUser | null;
+		user: PartialUser | null;
 	};
-	export let user: {
-		username: string;
-		userId: string;
-	};
+	export let user: PartialUser & { userId: string };
 	export let showFor = false;
 
 	let image_url: string;
+	const itemAPI = new ItemAPI(item.id);
 
-	$: {
-		if (item.image_url) {
-			try {
-				new URL(item.image_url);
-				image_url = item.image_url;
-			} catch {
-				image_url = `/api/assets/${item.image_url}`;
-			}
+	$: if (item.image_url) {
+		try {
+			new URL(item.image_url);
+			image_url = item.image_url;
+		} catch {
+			image_url = `/api/assets/${item.image_url}`;
 		}
 	}
 
-	const handleDelete = async (itemId: number, itemName: string) => {
-		const confirm: ModalSettings = {
-			type: "confirm",
-			title: "Please Confirm",
-			body: `Are you sure you wish to delete ${itemName}?`,
-			// confirm = TRUE | cancel = FALSE
-			response: async (r: boolean) => {
-				if (r) {
-					const resp = await fetch(`/api/items/${itemId}`, {
-						method: "DELETE",
-						headers: {
-							"content-type": "application/json",
-							accept: "application/json"
-						}
-					});
-
-					if (resp.ok) {
-						invalidateAll();
-
-						toastStore.trigger({
-							message: `${itemName} was deleted`,
-							autohide: true,
-							timeout: 5000
-						});
-					} else {
-						toastStore.trigger({
-							message: `Oops! Something went wrong.`,
-							background: "variant-filled-warning",
-							autohide: true,
-							timeout: 5000
-						});
-					}
-				}
-			}
-		};
-		modalStore.trigger(confirm);
+	const triggerErrorToast = () => {
+		toastStore.trigger({
+			message: `Oops! Something went wrong.`,
+			background: "variant-filled-warning",
+			autohide: true,
+			timeout: 5000
+		});
 	};
 
-	const handlePledge = async (itemId: number, unpledge = false) => {
-		const resp = await fetch(`/api/items/${itemId}`, {
-			method: "PATCH",
-			headers: {
-				"content-type": "application/json",
-				accept: "application/json"
-			},
-			body: JSON.stringify({
-				pledgedById: unpledge ? "0" : user?.userId
-			})
-		});
+	const confirmDeleteModal: ModalSettings = {
+		type: "confirm",
+		title: "Please Confirm",
+		body: `Are you sure you wish to delete ${item.name}?`,
+		// confirm = TRUE | cancel = FALSE
+		response: async (r: boolean) => {
+			if (r) {
+				const resp = await itemAPI.delete();
+
+				if (resp.ok) {
+					invalidateAll();
+
+					toastStore.trigger({
+						message: `${item.name} was deleted`,
+						autohide: true,
+						timeout: 5000
+					});
+				} else {
+					triggerErrorToast();
+				}
+			}
+		}
+	};
+
+	const approvalModal = (approve: boolean): ModalSettings => ({
+		type: "confirm",
+		title: "Please Confirm",
+		body: `Are you sure you wish to <b>${approve ? "approve" : "deny"}</b> suggestion ${
+			item.name
+		} from ${item.addedBy?.name}?`,
+		response: async (r: boolean) => {
+			if (r) {
+				const resp = await (approve ? itemAPI.approve() : itemAPI.deny());
+
+				if (resp.ok) {
+					invalidateAll();
+
+					toastStore.trigger({
+						message: `${item.name} was ${approve ? "approved" : "denied"}`,
+						autohide: true,
+						timeout: 5000
+					});
+				} else {
+					triggerErrorToast();
+				}
+			}
+		}
+	});
+
+	const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
+	const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
+
+	const handleClaim = async (unclaim = false) => {
+		const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user.userId));
 
 		if (resp.ok) {
 			invalidateAll();
 
 			toastStore.trigger({
-				message: `${unpledge ? "Unpledged" : "Pledged"} item`,
+				message: `${unclaim ? "Unclaimed" : "Claimed"} item`,
 				autohide: true,
 				timeout: 5000
 			});
 		} else {
-			toastStore.trigger({
-				message: `Oops! Something went wrong.`,
-				background: "variant-filled-warning",
-				autohide: true,
-				timeout: 5000
-			});
+			triggerErrorToast();
 		}
 	};
 
-	const handleApproval = async (
-		itemId: number,
-		itemName: string,
-		addedBy: string | undefined,
-		approve = true
-	) => {
-		const confirm: ModalSettings = {
-			type: "confirm",
-			title: "Please Confirm",
-			body: `Are you sure you wish to <b>${
-				approve ? "approve" : "deny"
-			}</b> suggestion ${itemName} from ${addedBy}?`,
-			// confirm = TRUE | cancel = FALSE
-			response: async (r: boolean) => {
-				if (r) {
-					let resp;
-					if (approve) {
-						resp = await fetch(`/api/items/${itemId}`, {
-							method: "PATCH",
-							headers: {
-								"content-type": "application/json",
-								accept: "application/json"
-							},
-							body: JSON.stringify({
-								approved: approve
-							})
-						});
-					} else {
-						resp = await fetch(`/api/items/${itemId}`, {
-							method: "DELETE",
-							headers: {
-								"content-type": "application/json",
-								accept: "application/json"
-							}
-						});
-					}
-
-					if (resp.ok) {
-						invalidateAll();
-
-						toastStore.trigger({
-							message: `${itemName} was ${approve ? "approved" : "denied"}`,
-							autohide: true,
-							timeout: 5000
-						});
-					} else {
-						toastStore.trigger({
-							message: `Oops! Something went wrong.`,
-							background: "variant-filled-warning",
-							autohide: true,
-							timeout: 5000
-						});
-					}
-				}
-			}
-		};
-		modalStore.trigger(confirm);
-	};
-
-	const handlePurchased = async (itemId: number, value: boolean) => {
-		const resp = await fetch(`/api/items/${itemId}`, {
-			method: "PATCH",
-			headers: {
-				"content-type": "application/json",
-				accept: "application/json"
-			},
-			body: JSON.stringify({
-				purchased: value
-			})
-		});
+	const handlePurchased = async (purchased: boolean) => {
+		const resp = await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
 
 		if (resp.ok) {
 			invalidateAll();
@@ -183,7 +117,7 @@
 </script>
 
 <div class="card" class:variant-ghost-warning={!item.approved}>
-	<div class="flex flex-col space-y-2 p-4">
+	<header class="card-header">
 		<div class="flex w-full">
 			<span class="truncate font-bold text-xl md:text-2xl">
 				{#if item.url}
@@ -193,27 +127,26 @@
 				{/if}
 			</span>
 		</div>
+	</header>
 
-		<div class="flex flex-row space-x-2">
-			{#if image_url}
-				<img src={image_url} alt="product" class="w-36" />
+	<div class="flex flex-row space-x-2 p-4">
+		{#if image_url}
+			<img src={image_url} alt="product" class="w-36" />
+		{/if}
+
+		<div class="flex flex-col">
+			{#if item.price}
+				<span class="text-lg font-semibold">${item.price}</span>
 			{/if}
 
-			<div class="flex flex-col">
-				{#if item.price}
-					<span class="text-lg font-semibold">${item.price}</span>
+			<span class="text-base md:text-lg">
+				{#if showFor}
+					For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
+				{:else}
+					Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
 				{/if}
-
-				<span class="text-base md:text-lg">
-					{#if showFor}
-						For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
-					{:else}
-						Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span
-						>
-					{/if}
-				</span>
-				<p>{item.note}</p>
-			</div>
+			</span>
+			<p>{item.note}</p>
 		</div>
 	</div>
 
@@ -226,7 +159,7 @@
 					<div class="flex flex-row space-x-2 md:space-x-4">
 						<button
 							class="btn variant-ghost-secondary btn-sm md:btn"
-							on:click={() => handlePledge(item.id, true)}
+							on:click={() => handleClaim(true)}
 						>
 							Unclaim
 						</button>
@@ -235,7 +168,7 @@
 								class="checkbox"
 								type="checkbox"
 								bind:checked={item.purchased}
-								on:change={(event) => handlePurchased(item.id, event.currentTarget?.checked)}
+								on:change={(event) => handlePurchased(event.currentTarget?.checked)}
 							/>
 							<span>Purchased</span>
 						</label>
@@ -244,38 +177,38 @@
 					<span>Claimed by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
-				<button
-					class="btn variant-filled-secondary btn-sm md:btn"
-					on:click={() => handlePledge(item.id)}>Claim</button
-				>
+				<button class="btn variant-filled-secondary btn-sm md:btn" on:click={() => handleClaim()}>
+					Claim
+				</button>
 			{/if}
 
-			{#if !item.approved}
-				<div class="flex flex-row space-x-2 md:space-x-4">
+			<div class="flex flex-row space-x-2 md:space-x-4">
+				{#if !item.approved}
 					<button
 						class="btn variant-filled-success btn-sm md:btn "
-						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name)}>Approve</button
+						on:click={() => handleApproval(true)}
 					>
+						Approve
+					</button>
 					<button
 						class="btn variant-filled-error btn-sm md:btn "
-						on:click={() => handleApproval(item.id, item.name, item.addedBy?.name, false)}
-						>Deny</button
+						on:click={() => handleApproval(false)}
 					>
-				</div>
-			{:else if user.username === item.user?.username || user.username === item.addedBy?.username}
-				<div class="flex flex-row space-x-2 md:space-x-4">
+						Deny
+					</button>
+				{:else if user.username === item.user?.username || user.username === item.addedBy?.username}
 					<button
 						class="btn variant-ghost-primary btn-sm md:btn "
 						on:click={() =>
 							goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`)}
-						>Edit</button
 					>
-					<button
-						class="btn variant-filled-error btn-sm md:btn "
-						on:click={() => handleDelete(item.id, item.name)}>Delete</button
-					>
-				</div>
-			{/if}
+						Edit
+					</button>
+					<button class="btn variant-filled-error btn-sm md:btn " on:click={handleDelete}>
+						Delete
+					</button>
+				{/if}
+			</div>
 		</div>
 	</footer>
 </div>
