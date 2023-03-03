@@ -4,7 +4,7 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-	<h3>Suggestions</h3>
+	<h2>Suggestions</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
 			class="checkbox"

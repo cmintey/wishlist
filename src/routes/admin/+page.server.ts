@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin`);
 	}
-	if (user.roleId != 2) {
+	if (user.roleId !== 2) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
@@ -21,9 +21,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 		select: {
 			username: true,
 			name: true,
+			email: true,
 			role: {
 				select: {
-					name: true
+					id: true
 				}
 			}
 		}
@@ -31,7 +32,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const config = await getConfig();
 
-	return { user, users, config };
+	return {
+		user: {
+			isAdmin: true,
+			...user
+		},
+		users: users.map((user) => ({
+			isAdmin: user.role.id === 2,
+			...user
+		})),
+		config
+	};
 };
 
 const generateConfig = (configData: z.infer<typeof settingSchema>) => {

@@ -11,7 +11,7 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-	<h3>SMTP</h3>
+	<h2>SMTP</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
 			class="checkbox"
@@ -23,8 +23,8 @@
 		<span>Enable</span>
 	</label>
 	{#if enabled}
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 w-fit">
-			<label class="w-fit">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+			<label for="smtpHost">
 				<span>Host</span>
 				<input
 					class="input"
@@ -36,7 +36,7 @@
 					bind:value={host}
 				/>
 			</label>
-			<label class="w-fit">
+			<label for="smtpPort">
 				<span>Port</span>
 				<input
 					class="input"
@@ -48,7 +48,7 @@
 					bind:value={port}
 				/>
 			</label>
-			<label class="w-fit">
+			<label for="smtpUser">
 				<span>User</span>
 				<input
 					class="input"
@@ -61,7 +61,7 @@
 				/>
 			</label>
 			<PasswordInput label="Password" name="smtpPass" id="smtpPass" required bind:value={pass} />
-			<label class="w-fit">
+			<label for="smtpFrom">
 				<span>From Email</span>
 				<input
 					class="input"
@@ -73,7 +73,7 @@
 					bind:value={from}
 				/>
 			</label>
-			<label class="w-fit">
+			<label for="smtpFromName">
 				<span>From Name</span>
 				<input
 					class="input"

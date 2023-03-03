@@ -81,25 +81,6 @@
 	}}
 >
 	<div class="flex space-x-2">
-		{#if smtpEnable}
-			<button
-				class="btn variant-filled-primary w-fit"
-				type="button"
-				disabled={inviteUser}
-				on:click={() => (inviteUser = true)}
-			>
-				Invite User
-			</button>
-		{:else}
-			<button
-				class="btn variant-filled-primary w-fit"
-				formaction="?/invite-user"
-				on:click={() => (inviteUser = true)}
-			>
-				Invite User
-			</button>
-		{/if}
-
 		<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}>
 			Clear Lists
 		</button>
