@@ -23,7 +23,7 @@
 			<SmtpAlert smtpEnable={data.config.smtp.enable} />
 			<SettingsForm config={data.config} />
 		{:else if tabSet === 2}
-			<!-- <ActionForm smtpEnable={data.config.smtp.enable} /> -->
+			<ActionForm />
 		{/if}
 	</svelte:fragment>
 </TabGroup>

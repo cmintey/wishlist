@@ -1,32 +1,6 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
-	import {
-		modalStore,
-		ProgressRadial,
-		toastStore,
-		type ModalSettings,
-		type ToastSettings
-	} from "@skeletonlabs/skeleton";
-	import TokenCopy from "$lib/components/TokenCopy.svelte";
-	import { page } from "$app/stores";
-
-	export let smtpEnable: boolean;
-
-	$: form = $page.form;
-
-	const triggerToast = () => {
-		const toastConfig: ToastSettings = {
-			message: "Invite sent!",
-			background: "variant-filled-success",
-			autohide: true,
-			timeout: 3000
-		};
-		toastStore.trigger(toastConfig);
-	};
-
-	let inviteUser = false;
-	let sending = false;
+	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
 	const handleDelete = async () => {
 		const settings: ModalSettings = {
@@ -67,72 +41,8 @@
 	};
 </script>
 
-<form
-	method="POST"
-	use:enhance={() => {
-		sending = true;
-		return async ({ result, update }) => {
-			if (result.type === "success" && smtpEnable) {
-				triggerToast();
-			}
-			update();
-			sending = false;
-		};
-	}}
->
-	<div class="flex space-x-2">
-		<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}>
-			Clear Lists
-		</button>
-	</div>
-
-	{#if smtpEnable}
-		{#if inviteUser}
-			<div class="flex space-x-4 mt-2 items-end">
-				<label for="invite-email">
-					<span>Email</span>
-					<input
-						class="input"
-						type="email"
-						name="invite-email"
-						id="invite-email"
-						autocomplete="off"
-						required
-					/>
-				</label>
-				<button
-					class="btn variant-filled-primary w-fit h-min"
-					formaction="?/invite-user"
-					disabled={sending}
-				>
-					{#if sending}
-						<span class="h-6 w-6">
-							<ProgressRadial stroke={64} />
-						</span>
-					{:else}
-						Invite
-					{/if}
-				</button>
-				<button
-					class="btn variant-ghost-secondary w-fit h-min"
-					type="button"
-					on:click={() => (inviteUser = false)}
-				>
-					Cancel
-				</button>
-			</div>
-			{#if form?.error && form?.errors}
-				<ul>
-					{#each form.errors as error}
-						<li class="text-xs text-red-500">{error.message}</li>
-					{/each}
-				</ul>
-			{/if}
-		{/if}
-	{:else if form?.url}
-		<div>
-			<TokenCopy url={form.url}>Invite link</TokenCopy>
-			<span class="italic text-sm">This invite link is only valid for one signup</span>
-		</div>
-	{/if}
-</form>
+<div class="flex space-x-2">
+	<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}>
+		Clear Lists
+	</button>
+</div>
