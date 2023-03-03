@@ -1,38 +1,80 @@
-# create-svelte
+<div align="center">
+<img src="./src/lib/assets/logo.png" width="200" />
+<h3>Wishlist</h3>
+<p> A sharable wishlist for your friends and family </p>
+</div>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## About
 
-## Creating a project
+Wishlist is a self-hosted wishlist application that you can share with your friends and family. You no longer have to wonder what to get your parents for the holidays, simply check their wishlist and claim any available item. With a simple user interface, even the grandparents can get involved!
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+- [x] Claim items on a wishlist
+- [x] Check off claimed items as purchased
+- [x] Automatically fetch product data from URL
+- [x] Invite users via email (SMTP configuration required)
+- [x] Options for [suggestions](#suggestions)
+- [x] PWA Support
+- [ ] Draw names for a "secret santa" experience
+- [ ] Group support
 
-# create a new project in my-app
-npm create svelte@latest my-app
+## Getting Started
+
+Getting started is simple with Docker Compose
+
+Create a `docker-compose.yaml` file:
+
+```compose.yml
+version: "3"
+
+services:
+  wishlist:
+    container_name: wishlist-app
+    image: cmintey/wishlist:latest
+    ports:
+      - 3280:3280
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+      - ./data:/usr/src/app/data
+    environment:
+      ORIGIN: https://wishlist.example.com
 ```
 
-## Developing
+Then simply run `docker compose up -d`.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+You can now connect to your application at `http://<host>:3280`.
 
-```bash
-npm run dev
+> **Note**
+>
+> Set the `ORIGIN` environment variable to the url you will be connecting to, otherwise you will experience issues
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Configuration
 
-## Building
+There are several configuration options in the admin panel.
 
-To create a production version of your app:
+### Public Signup
 
-```bash
-npm run build
-```
+By default, anyone with the url can signup for an account. You can turn this off and have it be invite only.
 
-You can preview the production build with `npm run preview`.
+If you have [SMTP enabled](#smtp), then you can enter a user's email and an invite link will be sent there. Otherwise, an invite link will be generated for you to copy and send to the user manually.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+### Suggestions
+
+Suggestions are enabled by default. With suggestions enabled, you will be able to add items to another person's wishlist. There are a few different suggestion methods.
+
+#### Approval Required
+
+In this mode, the suggested item will need to be approved by the suggestee in order for it to show up on their wishlist. If the item is approved, it can be edited and deleted by the suggestee at any time.
+
+#### Auto Approval
+
+In this mode, the suggested item will be automatically approved and added to the wishlist. Similar to the previous method, the item can be edited and delted by the suggestee at any time.
+
+#### Suprise Me
+
+In this mode, the suggested item is automatically approved and added to the wishlist. **However**, the item only shows for everyone except for the suggestee. The suggestee cannot see and therefore cannot edit or delete the item once it has been added.
+
+### SMTP
+
+SMTP does not need to be configured for the app to function. SMTP enables inviting users via email and the forgot password flow. Without SMTP, you can still manually generate invite links and forgot password links.
