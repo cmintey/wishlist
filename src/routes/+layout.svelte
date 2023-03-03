@@ -9,9 +9,9 @@
 	import { AppShell, Modal, Toast, storePopup } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
-	import NavBar from "$lib/components/NavBar.svelte";
-	import NavigationLoadingBar from "$lib/components/NavigationLoadingBar.svelte";
-	import NavigationDrawer from "$lib/components/NavigationDrawer.svelte";
+	import NavBar from "$lib/components/navigation/NavBar.svelte";
+	import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
+	import NavigationDrawer from "$lib/components/navigation/NavigationDrawer.svelte";
 
 	handleSession(page);
 	const user = getUser();
