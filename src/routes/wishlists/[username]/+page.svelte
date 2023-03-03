@@ -120,3 +120,7 @@
 		<iconify-icon icon="ion:add" width="32" height="32" />
 	</button>
 {/if}
+
+<svelte:head>
+	<title>{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} Wishes</title>
+</svelte:head>

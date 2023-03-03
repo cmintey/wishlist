@@ -14,3 +14,7 @@
 		<UserCard {user} />
 	{/each}
 </div>
+
+<svelte:head>
+	<title>Wishlist</title>
+</svelte:head>

@@ -46,3 +46,7 @@
 <form method="POST" use:enhance>
 	<ItemForm data={itemData} buttonText="Add Item" />
 </form>
+
+<svelte:head>
+	<title>New Wish | {data.owner.isMe ? "My" : `${data.owner.name}'s`} Wishes</title>
+</svelte:head>

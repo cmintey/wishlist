@@ -89,3 +89,7 @@
 		</div>
 	</form>
 </div>
+
+<svelte:head>
+	<title>Signup</title>
+</svelte:head>

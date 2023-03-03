@@ -1,11 +1,10 @@
 <script lang="ts">
-	import type { SuggestionMethod } from "$lib/types";
 	export let enabled: boolean;
 	export let method: SuggestionMethod;
 </script>
 
 <div class="flex flex-col space-y-2">
-	<h3>Suggestions</h3>
+	<h2>Suggestions</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
 			class="checkbox"

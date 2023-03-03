@@ -5,7 +5,6 @@
 	import PublicSignup from "./PublicSignup.svelte";
 	import Suggestions from "./Suggestions.svelte";
 	import Smtp from "./SMTP.svelte";
-	import type { Config } from "$lib/types";
 
 	export let config: Config;
 	$: form = $page.form;
@@ -34,7 +33,30 @@
 		};
 	}}
 >
-	<div class="flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0">
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<div class="col-span-1">
+			<PublicSignup bind:enabled={config.enableSignup} />
+		</div>
+		<div class="col-span-1">
+			<Suggestions
+				bind:enabled={config.suggestions.enable}
+				bind:method={config.suggestions.method}
+			/>
+		</div>
+
+		<div class="col-span-1 md:col-span-2">
+			<Smtp
+				bind:enabled={config.smtp.enable}
+				bind:host={config.smtp.host}
+				bind:port={config.smtp.port}
+				bind:user={config.smtp.user}
+				bind:pass={config.smtp.pass}
+				bind:from={config.smtp.from}
+				bind:fromName={config.smtp.fromName}
+			/>
+		</div>
+	</div>
+	<!-- <div class="flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0">
 		<PublicSignup bind:enabled={config.enableSignup} />
 		<Suggestions bind:enabled={config.suggestions.enable} bind:method={config.suggestions.method} />
 	</div>
@@ -46,7 +68,7 @@
 		bind:pass={config.smtp.pass}
 		bind:from={config.smtp.from}
 		bind:fromName={config.smtp.fromName}
-	/>
+	/> -->
 
 	{#if form?.error && form?.errors}
 		<ul>

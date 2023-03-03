@@ -3,7 +3,7 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-	<h3>Public Signup</h3>
+	<h2>Public Signup</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
 			class="checkbox"

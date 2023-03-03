@@ -3,7 +3,6 @@ import { writeConfig, getConfig } from "$lib/server/config";
 import { sendSignupLink, sendTest } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
-import type { Config, SMTPConfig } from "$lib/types";
 import { settingSchema } from "$lib/validations/settings";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
@@ -14,7 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin`);
 	}
-	if (user.roleId != 2) {
+	if (user.roleId !== 2) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
@@ -22,9 +21,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 		select: {
 			username: true,
 			name: true,
+			email: true,
 			role: {
 				select: {
-					name: true
+					id: true
 				}
 			}
 		}
@@ -32,7 +32,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const config = await getConfig();
 
-	return { user, users, config };
+	return {
+		user: {
+			isAdmin: true,
+			...user
+		},
+		users: users.map((user) => ({
+			isAdmin: user.role.id === 2,
+			...user
+		})),
+		config
+	};
 };
 
 const generateConfig = (configData: z.infer<typeof settingSchema>) => {

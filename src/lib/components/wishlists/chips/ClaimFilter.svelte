@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { claimOption, CLAIM_OPTIONS } from "$lib/stores/filters";
 	import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
-	import { flip } from "svelte/animate";
 
 	let menuOpen = false;
 	const menuSettings: PopupSettings = {

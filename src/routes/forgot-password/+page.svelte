@@ -71,3 +71,7 @@
 {#if loading}
 	<Backdrop text="Processing..." />
 {/if}
+
+<svelte:head>
+	<title>Forgot Password</title>
+</svelte:head>

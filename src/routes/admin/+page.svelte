@@ -3,25 +3,31 @@
 	import SettingsForm from "$lib/components/admin/SettingsForm/index.svelte";
 	import SmtpAlert from "$lib/components/admin/SMTPAlert.svelte";
 	import Users from "$lib/components/admin/Users.svelte";
+	import { Tab, TabGroup } from "@skeletonlabs/skeleton";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
+
+	let tabSet = 0;
 </script>
 
-<div class="mb-2">
-	<h1 class="mb-2">Admin Settings</h1>
-	<hr />
-</div>
+<TabGroup>
+	<Tab bind:group={tabSet} name="Users" value={0}>Users</Tab>
+	<Tab bind:group={tabSet} name="Settings" value={1}>Settings</Tab>
+	<Tab bind:group={tabSet} name="Actions" value={2}>Actions</Tab>
 
-<SmtpAlert smtpEnable={data.config.smtp.enable} />
+	<svelte:fragment slot="panel">
+		{#if tabSet === 0}
+			<Users users={data.users} currentUser={data.user} config={data.config} />
+		{:else if tabSet === 1}
+			<SmtpAlert smtpEnable={data.config.smtp.enable} />
+			<SettingsForm config={data.config} />
+		{:else if tabSet === 2}
+			<ActionForm />
+		{/if}
+	</svelte:fragment>
+</TabGroup>
 
-<div class="flex flex-col space-y-4">
-	<h2>Actions</h2>
-	<ActionForm smtpEnable={data.config.smtp.enable} />
-
-	<h2>Settings</h2>
-	<SettingsForm config={data.config} />
-
-	<h2>Users</h2>
-	<Users users={data.users} currentUser={data.user} />
-</div>
+<svelte:head>
+	<title>Admin Settings</title>
+</svelte:head>

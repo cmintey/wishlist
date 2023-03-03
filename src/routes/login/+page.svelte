@@ -72,3 +72,7 @@
 		</div>
 	</form>
 </div>
+
+<svelte:head>
+	<title>Login</title>
+</svelte:head>
