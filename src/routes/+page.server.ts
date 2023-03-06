@@ -22,6 +22,15 @@ export const load = (async ({ locals }) => {
 						username: user.username
 					}
 				}
+			},
+			_count: {
+				select: {
+					items: {
+						where: {
+							approved: false
+						}
+					}
+				}
 			}
 		},
 		where: {

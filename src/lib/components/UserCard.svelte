@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Avatar } from "@skeletonlabs/skeleton";
 
+	export let hideCount = false;
 	export let user: {
 		name: string;
 		username: string;
@@ -27,7 +28,7 @@
 	<div class="flex flex-row space-x-2 p-4 items-center">
 		<iconify-icon icon="ion:gift" />
 		<span>
-			{user._count ? `${user._count.items}/` : ""}{user.items.length}
+			{!hideCount && user._count ? `${user._count.items}/` : ""}{user.items.length}
 		</span>
 	</div>
 </a>
