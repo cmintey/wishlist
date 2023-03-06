@@ -7,6 +7,7 @@ declare global {
 			name: string;
 			email: string;
 			roleId: number;
+			picture?: string | null;
 		};
 	}
 

@@ -13,6 +13,7 @@ export const load = (async ({ locals }) => {
 		select: {
 			name: true,
 			username: true,
+			picture: true,
 			items: {
 				select: {
 					id: true
@@ -38,6 +39,7 @@ export const load = (async ({ locals }) => {
 		select: {
 			username: true,
 			name: true,
+			picture: true,
 			items: {
 				select: {
 					id: true

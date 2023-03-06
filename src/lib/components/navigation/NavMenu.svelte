@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client";
-	import { Avatar, LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+	import { LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
 	import type { Readable } from "svelte/store";
+	import Avatar from "../Avatar.svelte";
 
 	export let user: Readable<ClientUser>;
 
@@ -16,10 +17,7 @@
 	<div class="flex flex-row space-x-2 items-center">
 		<span class="relative">
 			<button use:popup={menuSettings}>
-				<Avatar
-					initials={$user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-					background="bg-primary-400-500-token"
-				/>
+				<Avatar user={$user} />
 			</button>
 			<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="user">
 				<ul>

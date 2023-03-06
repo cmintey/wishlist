@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Avatar } from "@skeletonlabs/skeleton";
+	import Avatar from "./Avatar.svelte";
 
 	export let user: {
 		name: string;
@@ -14,10 +14,7 @@
 <a class="card" href="/wishlists/{user.username}" data-sveltekit-preload-data>
 	<div class="card-header">
 		<div class="flex flex-row space-x-4 items-center">
-			<Avatar
-				initials={user.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-				background="bg-primary-400-500-token"
-			/>
+			<Avatar {user} />
 			<span class="font-bold text-3xl">
 				<span class="unstyled no-underline text-primary-700-200-token">{user.name}</span>
 			</span>

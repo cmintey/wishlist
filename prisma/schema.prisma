@@ -15,6 +15,7 @@ model User {
     username    String    @unique
     name        String
     email       String    @unique @default("changeme@email.com")
+    picture     String?
     items       Item[]    @relation("MyItems")
     addedItems  Item[]    @relation("AddedItems")
     plegedItems Item[]    @relation("PledgedItems")

@@ -3,6 +3,7 @@ import { client } from "$lib/server/prisma";
 import { resetPasswordSchema } from "$lib/validations/resetPassword";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { fail, redirect } from "@sveltejs/kit";
+import { writeFileSync } from "fs";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 
@@ -58,6 +59,39 @@ export const actions: Actions = {
 			return fail(400, {
 				error: true,
 				errors: [{ field: targets[0], message: `${targets[0]} already in use` }]
+			});
+		}
+	},
+
+	profilePicture: async ({ request, locals }) => {
+		const { user, session } = await locals.validateUser();
+		if (!session) throw redirect(302, "/login?ref=/account");
+
+		const form = await request.formData();
+		const image = form.get("profilePic") as File;
+
+		let filename = null;
+
+		const create_image = image.size > 0 && image.size <= 5000000;
+
+		if (create_image) {
+			const ext = image.name.split(".").pop();
+			filename = user?.username + "-" + Date.now().toString() + "." + ext;
+
+			const ab = await image.arrayBuffer();
+
+			writeFileSync(`uploads/${filename}`, Buffer.from(ab));
+			console.log("wrote image");
+		}
+
+		if (filename) {
+			await client.user.update({
+				where: {
+					id: user.userId
+				},
+				data: {
+					picture: filename
+				}
 			});
 		}
 	},
