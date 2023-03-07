@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Role } from "$lib/schema";
 import { writeConfig, getConfig } from "$lib/server/config";
 import { sendSignupLink, sendTest } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
@@ -13,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin`);
 	}
-	if (user.roleId !== 2) {
+	if (user.roleId !== Role.ADMIN) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
@@ -38,7 +39,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			...user
 		},
 		users: users.map((user) => ({
-			isAdmin: user.role.id === 2,
+			isAdmin: user.role.id === Role.ADMIN,
 			...user
 		})),
 		config

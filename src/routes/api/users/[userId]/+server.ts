@@ -1,3 +1,4 @@
+import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
@@ -5,7 +6,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	const { session, user: sessionUser } = await locals.validateUser();
 
 	if (!session) throw error(401, "user is not authenticated");
-	if (!(sessionUser.roleId === 2)) throw error(401, "must be admin to delete a user");
+	if (!(sessionUser.roleId === Role.ADMIN)) throw error(401, "must be admin to delete a user");
 
 	if (!params.userId) {
 		throw error(400, "must specify an item to delete");

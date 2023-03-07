@@ -1,3 +1,4 @@
+import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
 import { redirect, error } from "@sveltejs/kit";
@@ -8,7 +9,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin/user/${params.username}`);
 	}
-	if (user.roleId != 2) {
+	if (user.roleId != Role.ADMIN) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 	if (user.username === params.username) {
@@ -69,7 +70,7 @@ export const actions: Actions = {
 				username: params.username
 			},
 			data: {
-				roleId: 2
+				roleId: Role.ADMIN
 			}
 		});
 
@@ -81,7 +82,7 @@ export const actions: Actions = {
 				username: params.username
 			},
 			data: {
-				roleId: 1
+				roleId: Role.USER
 			}
 		});
 

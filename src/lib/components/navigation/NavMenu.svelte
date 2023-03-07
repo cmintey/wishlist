@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
+	import { Role } from "$lib/schema";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client";
 	import { LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
 	import type { Readable } from "svelte/store";
@@ -27,7 +28,7 @@
 							<p>Account</p>
 						</a>
 					</li>
-					{#if $user.roleId == 2}
+					{#if $user.roleId == Role.ADMIN}
 						<li>
 							<a href="/admin">
 								<iconify-icon icon="ion:settings" />

@@ -1,3 +1,4 @@
+import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 
@@ -6,7 +7,7 @@ export const DELETE: RequestHandler = async ({ locals }) => {
 	if (!session) {
 		throw error(401, "Must authenticate first");
 	}
-	if (user.roleId != 2) {
+	if (user.roleId !== Role.ADMIN) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 

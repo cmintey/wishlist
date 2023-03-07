@@ -5,6 +5,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
 import { getConfig } from "$lib/server/config";
+import { Role } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
 	// If the user session exists, redirect authenticated users to the profile page.
@@ -69,7 +70,7 @@ export const actions: Actions = {
 					username: signupData.data.username,
 					email: signupData.data.email,
 					name: signupData.data.name,
-					roleId: userCount > 0 ? 1 : 2
+					roleId: userCount > 0 ? Role.USER : Role.ADMIN
 				}
 			});
 			const session = await auth.createSession(user.userId);
