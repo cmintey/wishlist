@@ -3,6 +3,8 @@ name: Build and Lint
 on:
   pull_request:
   push:
+    branches:
+      - main
 
 jobs:
   build_lint:
