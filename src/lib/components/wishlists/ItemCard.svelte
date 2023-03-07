@@ -121,7 +121,9 @@
 		<div class="flex w-full">
 			<span class="truncate font-bold text-xl md:text-2xl">
 				{#if item.url}
-					<a class="dark:!text-primary-200" href={item.url}>{item.name}</a>
+					<a class="dark:!text-primary-200" href={item.url} target="_blank" rel="noreferrer">
+						{item.name}
+					</a>
 				{:else}
 					{item.name}
 				{/if}
@@ -131,7 +133,7 @@
 
 	<div class="flex flex-row space-x-2 p-4">
 		{#if image_url}
-			<img src={image_url} alt="product" class="w-36" />
+			<img src={image_url} alt="product" class="w-36 h-36 object-contain" />
 		{/if}
 
 		<div class="flex flex-col">
