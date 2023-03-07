@@ -5,7 +5,7 @@
 
 	import { page } from "$app/stores";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
-	import { handleSession, getUser } from "@lucia-auth/sveltekit/client";
+	import { handleSession } from "@lucia-auth/sveltekit/client";
 	import { AppShell, Modal, Toast, storePopup } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
@@ -14,7 +14,6 @@
 	import NavigationDrawer from "$lib/components/navigation/NavigationDrawer.svelte";
 
 	handleSession(page);
-	const user = getUser();
 	let showNavigationLoadingBar = false;
 
 	beforeNavigate(() => {
@@ -33,7 +32,7 @@
 		},
 		{
 			label: "My Wishes",
-			href: `/wishlists/${$user?.username}`,
+			href: "/wishlists/me",
 			icon: "ion:gift"
 		},
 		{
