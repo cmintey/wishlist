@@ -15,15 +15,31 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(401, "Suggestions are disabled");
 	}
 
-	const listOwner = await client.user.findUniqueOrThrow({
+	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
 		where: {
-			username: params.username
+			userId: user.userId,
+			active: true
+		}
+	});
+
+	const listOwner = await client.user.findFirst({
+		where: {
+			username: params.username,
+			UserGroupMembership: {
+				some: {
+					group: {
+						id: activeMembership.groupId
+					}
+				}
+			}
 		},
 		select: {
 			username: true,
 			name: true
 		}
 	});
+
+	if (!listOwner) throw error(404, "user is not part of group");
 
 	return {
 		owner: {
@@ -71,6 +87,13 @@ export const actions: Actions = {
 			price = price.slice(price.indexOf("$") + 1);
 		}
 
+		const activeMembership = await client.userGroupMembership.findFirstOrThrow({
+			where: {
+				userId: me.userId,
+				active: true
+			}
+		});
+
 		await client.user.update({
 			where: {
 				username: params.username
@@ -84,7 +107,8 @@ export const actions: Actions = {
 						note,
 						image_url: create_image ? filename : image_url,
 						addedById: me.userId,
-						approved: config.suggestions.method !== "approval"
+						approved: params.username === me.username || config.suggestions.method !== "approval",
+						groupId: activeMembership.groupId
 					}
 				}
 			}

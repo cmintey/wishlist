@@ -9,11 +9,19 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, `/login?ref=/claims`);
 	}
 
+	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
+		where: {
+			userId: user.userId,
+			active: true
+		}
+	});
+
 	const wishlistItems = await client.item.findMany({
 		where: {
 			pledgedBy: {
 				username: user.username
-			}
+			},
+			groupId: activeMembership.groupId
 		},
 		include: {
 			addedBy: {

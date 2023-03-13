@@ -16,7 +16,7 @@
 		isAdmin: boolean;
 	};
 
-	export let users: User[];
+	export let users: (User & { groups?: string[] })[];
 	export let currentUser: User;
 	export let config: Config;
 
@@ -31,8 +31,8 @@
 	let userData: TableSource;
 	$: if (usersFiltered) {
 		userData = {
-			head: ["Name", "Username", "Email", "Admin"],
-			body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin"]),
+			head: ["Name", "Username", "Email", "Admin", "Groups"],
+			body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
 			meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin"])
 		};
 	}

@@ -10,18 +10,19 @@ generator client {
 }
 
 model User {
-    id          String    @id @unique @default(cuid())
-    session     Session[]
-    username    String    @unique
-    name        String
-    email       String    @unique @default("changeme@email.com")
-    picture     String?
-    items       Item[]    @relation("MyItems")
-    addedItems  Item[]    @relation("AddedItems")
-    plegedItems Item[]    @relation("PledgedItems")
-    role        Role      @relation(fields: [roleId], references: [id])
-    roleId      Int       @default(1)
-    Key         Key[]
+    id                  String                @id @unique @default(cuid())
+    session             Session[]
+    username            String                @unique
+    name                String
+    email               String                @unique @default("changeme@email.com")
+    picture             String?
+    items               Item[]                @relation("MyItems")
+    addedItems          Item[]                @relation("AddedItems")
+    plegedItems         Item[]                @relation("PledgedItems")
+    role                Role                  @relation(fields: [roleId], references: [id])
+    roleId              Int                   @default(1)
+    Key                 Key[]
+    UserGroupMembership UserGroupMembership[]
 
     @@map("user")
 }
@@ -55,6 +56,26 @@ model Role {
     User User[]
 }
 
+model Group {
+    id                  String                @id @unique @default(uuid())
+    name                String                @unique
+    UserGroupMembership UserGroupMembership[]
+    Item                Item[]
+
+    @@map("group")
+}
+
+model UserGroupMembership {
+    id      String  @id @unique @default(uuid())
+    active  Boolean @default(false)
+    user    User    @relation(fields: [userId], references: [id])
+    group   Group   @relation(fields: [groupId], references: [id])
+    userId  String
+    groupId String
+
+    @@map("user_group_membership")
+}
+
 model Item {
     id          Int     @id @unique @default(autoincrement())
     name        String
@@ -70,6 +91,8 @@ model Item {
     pledgedById String?
     approved    Boolean @default(true)
     purchased   Boolean @default(false)
+    group       Group?  @relation(fields: [groupId], references: [id])
+    groupId     String?
 
     @@index([userId])
     @@map("items")

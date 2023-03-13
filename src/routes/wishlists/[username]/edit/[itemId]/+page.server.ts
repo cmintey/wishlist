@@ -16,11 +16,19 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	const config = await getConfig();
 
+	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
+		where: {
+			userId: user.userId,
+			active: true
+		}
+	});
+
 	let item;
 	try {
-		item = await client.item.findUniqueOrThrow({
+		item = await client.item.findFirstOrThrow({
 			where: {
-				id: parseInt(params.itemId)
+				id: parseInt(params.itemId),
+				groupId: activeMembership.groupId
 			},
 			include: {
 				addedBy: {

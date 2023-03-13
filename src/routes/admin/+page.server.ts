@@ -27,11 +27,36 @@ export const load: PageServerLoad = async ({ locals }) => {
 				select: {
 					id: true
 				}
+			},
+			UserGroupMembership: {
+				select: {
+					group: {
+						select: {
+							name: true
+						}
+					}
+				}
 			}
 		}
 	});
 
-	const config = await getConfig();
+	const groups = client.group
+		.findMany({
+			select: {
+				id: true,
+				name: true,
+				_count: {
+					select: {
+						UserGroupMembership: true
+					}
+				}
+			}
+		})
+		.then((groups) =>
+			groups.map((group) => ({ userCount: group._count.UserGroupMembership, ...group }))
+		);
+
+	const config = getConfig();
 
 	return {
 		user: {
@@ -40,9 +65,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 		},
 		users: users.map((user) => ({
 			isAdmin: user.role.id === Role.ADMIN,
+			groups: user.UserGroupMembership.map(({ group }) => group.name),
 			...user
 		})),
-		config
+		config,
+		groups
 	};
 };
 

@@ -9,6 +9,13 @@ export const load = (async ({ locals }) => {
 		throw redirect(302, `/login`);
 	}
 
+	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
+		where: {
+			userId: user.userId,
+			active: true
+		}
+	});
+
 	const me = await client.user.findUniqueOrThrow({
 		select: {
 			name: true,
@@ -21,14 +28,16 @@ export const load = (async ({ locals }) => {
 				where: {
 					addedBy: {
 						username: user.username
-					}
+					},
+					groupId: activeMembership.groupId
 				}
 			},
 			_count: {
 				select: {
 					items: {
 						where: {
-							approved: false
+							approved: false,
+							groupId: activeMembership.groupId
 						}
 					}
 				}
@@ -43,6 +52,13 @@ export const load = (async ({ locals }) => {
 		where: {
 			username: {
 				not: user.username
+			},
+			UserGroupMembership: {
+				some: {
+					group: {
+						id: activeMembership.groupId
+					}
+				}
 			}
 		},
 		select: {
@@ -52,6 +68,9 @@ export const load = (async ({ locals }) => {
 			items: {
 				select: {
 					id: true
+				},
+				where: {
+					groupId: activeMembership.groupId
 				}
 			},
 			_count: {
@@ -60,7 +79,9 @@ export const load = (async ({ locals }) => {
 						where: {
 							pledgedById: {
 								not: null
-							}
+							},
+							approved: true,
+							groupId: activeMembership.groupId
 						}
 					}
 				}
