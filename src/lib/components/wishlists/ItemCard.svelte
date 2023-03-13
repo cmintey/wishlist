@@ -119,7 +119,7 @@
 <div class="card" class:variant-ghost-warning={!item.approved}>
 	<header class="card-header">
 		<div class="flex w-full">
-			<span class="truncate font-bold text-xl md:text-2xl">
+			<span class="truncate text-xl font-bold md:text-2xl">
 				{#if item.url}
 					<a class="dark:!text-primary-200" href={item.url} target="_blank" rel="noreferrer">
 						{item.name}
@@ -133,7 +133,7 @@
 
 	<div class="flex flex-row space-x-2 p-4">
 		{#if image_url}
-			<img src={image_url} alt="product" class="w-36 h-36 object-contain" />
+			<img src={image_url} alt="product" class="h-36 w-36 object-contain" />
 		{/if}
 
 		<div class="flex flex-col">
@@ -143,9 +143,9 @@
 
 			<span class="text-base md:text-lg">
 				{#if showFor}
-					For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
+					For <span class="font-bold text-secondary-700-200-token">{item.user?.name}</span>
 				{:else}
-					Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
+					Added by <span class="font-bold text-secondary-700-200-token">{item.addedBy?.name}</span>
 				{/if}
 			</span>
 			<p>{item.note}</p>
@@ -160,12 +160,12 @@
 				{#if item.pledgedBy.username === user.username}
 					<div class="flex flex-row space-x-2 md:space-x-4">
 						<button
-							class="btn variant-ghost-secondary btn-sm md:btn"
+							class="btn btn-sm variant-ghost-secondary md:btn"
 							on:click={() => handleClaim(true)}
 						>
 							Unclaim
 						</button>
-						<label class="unstyled flex space-x-2 items-center text-sm md:text-base">
+						<label class="unstyled flex items-center space-x-2 text-sm md:text-base">
 							<input
 								class="checkbox"
 								type="checkbox"
@@ -179,7 +179,7 @@
 					<span>Claimed by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
-				<button class="btn variant-filled-secondary btn-sm md:btn" on:click={() => handleClaim()}>
+				<button class="btn btn-sm variant-filled-secondary md:btn" on:click={() => handleClaim()}>
 					Claim
 				</button>
 			{/if}

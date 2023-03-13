@@ -18,12 +18,12 @@
 	<Tab bind:group={tabSet} name="Security" value={1}>Security</Tab>
 	<svelte:fragment slot="panel">
 		{#if tabSet === 0}
-			<div class="flex flex-col w-fit items-center">
-				<div class="relative w-full h-full m-auto max-w-[150px]">
+			<div class="flex w-fit flex-col items-center">
+				<div class="relative m-auto h-full w-full max-w-[150px]">
 					<Avatar user={data.user} width="w-32" />
 					<form
 						method="POST"
-						class="absolute w-12 h-12 bottom-0 right-0"
+						class="absolute bottom-0 right-0 h-12 w-12"
 						action="?/profilePicture"
 						use:enhance
 					>

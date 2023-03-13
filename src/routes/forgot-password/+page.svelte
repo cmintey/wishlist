@@ -10,10 +10,10 @@
 </script>
 
 {#if data.smtpEnabled}
-	<div class="flex flex-col space-y-4 items-center">
+	<div class="flex flex-col items-center space-y-4">
 		<h1>Reset Password</h1>
 		{#if form?.success}
-			<div class="flex flex-col space-y-1 items-center text-center w-80 md:w-full">
+			<div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
 				<iconify-icon icon="ion:checkmark-circle-outline" width="100" />
 				<span class="text-xl font-bold">Success!</span>
 				<p>Check your email and follow the link to reset your password.</p>
@@ -34,7 +34,7 @@
 				}}
 			>
 				<div
-					class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+					class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 				>
 					<label for="email" class="w-full">
 						<span>Email</span>
@@ -48,9 +48,9 @@
 						/>
 					</label>
 					{#if form?.error}
-						<span class="text-xs text-error-700-200-token"
-							>Please provide a valid email address.</span
-						>
+						<span class="text-xs text-error-700-200-token">
+							Please provide a valid email address.
+						</span>
 					{/if}
 
 					<div>
@@ -61,7 +61,7 @@
 		{/if}
 	</div>
 {:else}
-	<div class="flex flex-col space-y-4 items-center">
+	<div class="flex flex-col items-center space-y-4">
 		<h1>Self-service password reset unavailable.</h1>
 		<span class="text-xl">Please contact the site administrator to reset your password.</span>
 		<a href="/login">Return to login</a>

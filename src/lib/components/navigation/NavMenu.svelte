@@ -72,7 +72,7 @@
 			<button use:popup={menuSettings}>
 				<Avatar {user} width="h-10 md:h-12" />
 			</button>
-			<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="user">
+			<nav class="card list-nav w-fit p-4 shadow-xl" data-popup="user">
 				<ul>
 					<li>
 						<a href="/account">

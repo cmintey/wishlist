@@ -54,7 +54,7 @@
 			bind:value={passwordReset.confirm}
 		/>
 		{#if passwordReset.new !== passwordReset.confirm}
-			<span class="unstyled text-xs text-red-500"> Passwords must match </span>
+			<span class="unstyled text-xs text-red-500">Passwords must match</span>
 		{/if}
 		{#if $page.form?.error && $page.form?.errors}
 			<ul>

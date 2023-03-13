@@ -33,7 +33,7 @@
 		};
 	}}
 >
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 		<div class="col-span-1">
 			<PublicSignup bind:enabled={config.enableSignup} />
 		</div>
@@ -78,7 +78,7 @@
 		</ul>
 	{/if}
 
-	<div class="flex space-x-4 mt-2 items-end">
+	<div class="mt-2 flex items-end space-x-4">
 		<button class="btn variant-filled-primary mt-2" type="submit">
 			{#if saved}
 				<iconify-icon icon="ion:checkmark" />
@@ -89,7 +89,7 @@
 		</button>
 		{#if saved && config.smtp.enable}
 			<button
-				class="btn variant-ghost-primary mt-2 w-fit h-min"
+				class="btn variant-ghost-primary mt-2 h-min w-fit"
 				type="submit"
 				formaction="?/send-test"
 				disabled={sending || sent}

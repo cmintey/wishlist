@@ -6,7 +6,7 @@
 </script>
 
 <Drawer position="left">
-	<div class="flex flex-row place-content-between mt-4 px-4 items-center">
+	<div class="mt-4 flex flex-row place-content-between items-center px-4">
 		<span class="text-4xl">Wishlist</span>
 		<button class="btn-icon" on:click={() => drawerStore.close()}>
 			<iconify-icon icon="ion:close" width="32" />
@@ -20,7 +20,7 @@
 						href={navItem.href}
 						data-sveltekit-preload-data
 						on:click={() => drawerStore.close()}
-						class="list-option font-bold space-x-1"
+						class="list-option space-x-1 font-bold"
 						class:variant-filled-primary={$page.url.pathname === navItem.href}
 					>
 						<iconify-icon icon={navItem.icon} class="text-xl" />
