@@ -2,25 +2,40 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const roles = async () => {
-	const roleCount = await prisma.role.count();
-	if (roleCount === 0) {
-		const userRole = await prisma.role.create({
-			data: {
-				id: 1,
-				name: "USER"
-			}
-		});
-		const adminRole = await prisma.role.create({
-			data: {
-				id: 2,
-				name: "ADMIN"
-			}
-		});
-		console.log("roles added");
-		console.log({ userRole, adminRole });
-	} else {
-		console.log("roles already added");
-	}
+	await prisma.role.upsert({
+		where: {
+			id: 1
+		},
+		create: {
+			id: 1,
+			name: "USER"
+		},
+		update: {}
+	});
+
+	await prisma.role.upsert({
+		where: {
+			id: 2
+		},
+		create: {
+			id: 2,
+			name: "ADMIN"
+		},
+		update: {}
+	});
+
+	await prisma.role.upsert({
+		where: {
+			id: 3
+		},
+		create: {
+			id: 3,
+			name: "GROUP_MANAGER"
+		},
+		update: {}
+	});
+
+	console.log("roles are synced");
 };
 
 const groups = async () => {

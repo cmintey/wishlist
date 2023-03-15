@@ -38,3 +38,24 @@ export class UserAPI {
 			.then(({ membership }) => membership);
 	};
 }
+
+export class UsersAPI {
+	_makeRequest = async (method: string, query = "") => {
+		const options: RequestInit = {
+			method,
+			headers: {
+				accept: "application/json"
+			}
+		};
+
+		return await fetch(`/api/users${query}`, options);
+	};
+
+	all = async () => {
+		return await this._makeRequest("GET");
+	};
+
+	search = async (search: string) => {
+		return await this._makeRequest("GET", `?name=${search}`);
+	};
+}

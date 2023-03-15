@@ -6,12 +6,14 @@
 	import { page } from "$app/stores";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { handleSession } from "@lucia-auth/sveltekit/client";
-	import { AppShell, Modal, Toast, storePopup } from "@skeletonlabs/skeleton";
+	import { AppShell, Modal, Toast, storePopup, type ModalComponent } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
 	import NavBar from "$lib/components/navigation/NavBar.svelte";
 	import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
 	import NavigationDrawer from "$lib/components/navigation/NavigationDrawer.svelte";
+	import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
+	import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
 
 	handleSession(page);
 	let showNavigationLoadingBar = false;
@@ -43,6 +45,15 @@
 	] satisfies NavItem[];
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	const modalComponentRegistry: Record<string, ModalComponent> = {
+		addUser: {
+			ref: AddUserModal
+		},
+		groupSelect: {
+			ref: GroupSelectModal
+		}
+	};
 </script>
 
 <NavigationDrawer {navItems} />
@@ -61,4 +72,4 @@
 </AppShell>
 
 <Toast />
-<Modal />
+<Modal components={modalComponentRegistry} />

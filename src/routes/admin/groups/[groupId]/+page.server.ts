@@ -9,7 +9,18 @@ export const load = (async ({ locals, params }) => {
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin/groups/${params.groupId}`);
 	}
-	if (user.roleId != Role.ADMIN) {
+
+	const userGroupRoleId = await client.userGroupMembership.findFirst({
+		where: {
+			userId: user.userId,
+			groupId: params.groupId
+		},
+		select: {
+			roleId: true
+		}
+	});
+
+	if (!(user.roleId === Role.ADMIN || userGroupRoleId?.roleId === Role.GROUP_MANAGER)) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
@@ -35,7 +46,8 @@ export const load = (async ({ locals, params }) => {
 									}
 								}
 							}
-						}
+						},
+						roleId: true
 					}
 				}
 			}
@@ -45,7 +57,7 @@ export const load = (async ({ locals, params }) => {
 			name: group?.name,
 			users: group?.UserGroupMembership.map((membership) => ({
 				...membership.user,
-				isAdmin: membership.user.role.id === Role.ADMIN
+				isGroupManager: membership.roleId === Role.GROUP_MANAGER
 			}))
 		}));
 

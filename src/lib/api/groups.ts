@@ -20,8 +20,26 @@ export class GroupAPI {
 		return await fetch(`/api/groups/${this.groupId}${path}`, options);
 	};
 
-	addMember = async (userId: string): Promise<UserGroupMembership> => {
-		return await this._makeRequest("PUT", "/users", { userId }).then((resp) => resp.json());
+	addMember = async (userId: string, manager = false): Promise<UserGroupMembership> => {
+		return await this._makeRequest("PUT", `/users/${userId}`, { manager }).then((resp) =>
+			resp.json()
+		);
+	};
+
+	removeMember = async (userId: string): Promise<UserGroupMembership> => {
+		return await this._makeRequest("DELETE", `/users/${userId}`).then((resp) => resp.json());
+	};
+
+	makeManager = async (userId: string): Promise<UserGroupMembership> => {
+		return await this._makeRequest("PATCH", `/users/${userId}`, { manager: true }).then((resp) =>
+			resp.json()
+		);
+	};
+
+	removeManager = async (userId: string): Promise<UserGroupMembership> => {
+		return await this._makeRequest("PATCH", `/users/${userId}`, { manager: false }).then((resp) =>
+			resp.json()
+		);
 	};
 }
 

@@ -4,6 +4,7 @@
 	import { UserAPI } from "$lib/api/users";
 	import { Role } from "$lib/schema";
 	import type { ClientUser } from "@lucia-auth/sveltekit/client";
+	import type { Group } from "@prisma/client";
 	import {
 		LightSwitch,
 		modalStore,
@@ -18,14 +19,7 @@
 
 	const menuSettings: PopupSettings = {
 		event: "click",
-		target: "user",
-		closeQuery: "a[href], button:not(#change-group)"
-	};
-
-	const changeGroupMenuSettings: PopupSettings = {
-		event: "click",
-		target: "change-group-menu",
-		placement: "left"
+		target: "user"
 	};
 
 	const createGroup = () => {
@@ -42,7 +36,7 @@
 					const groupAPI = new GroupAPI(group.id);
 					await groupAPI.addMember($user?.userId);
 				}
-				invalidateAll();
+				await invalidateAll();
 			},
 			// Optionally override the button text
 			buttonTextCancel: "Cancel",
@@ -53,7 +47,24 @@
 	};
 
 	let userAPI: UserAPI;
-	if ($user) userAPI = new UserAPI($user?.userId);
+	$: if ($user) userAPI = new UserAPI($user?.userId);
+
+	const changeGroup = (groups: Group[]) => {
+		const settings: ModalSettings = {
+			type: "component",
+			component: "groupSelect",
+			meta: {
+				groups
+			},
+			async response(groupId: string) {
+				if (groupId) {
+					await userAPI.setActiveGroup(groupId);
+					await invalidateAll();
+				}
+			}
+		};
+		modalStore.trigger(settings);
+	};
 </script>
 
 {#if $user}
@@ -63,13 +74,6 @@
 				<Avatar user={$user} />
 			</button>
 			<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="user">
-				<div class="p-2 flex flex-col">
-					<span class="font-bold text-xl">{$user.name}</span>
-					{#await userAPI.activeGroup() then group}
-						<span>{group.name}</span>
-					{/await}
-				</div>
-				<hr />
 				<ul>
 					<li>
 						<a href="/account">
@@ -85,32 +89,22 @@
 							</a>
 						</li>
 					{/if}
+					<hr />
+					{#await userAPI.activeGroup() then group}
+						<div class="px-4 py-2 flex flex-row items-center space-x-4">
+							<iconify-icon icon="ion:people" />
+							<span>{group.name} Group</span>
+						</div>
+					{/await}
+
 					{#await userAPI.groups() then groups}
 						{#if groups.length > 1}
 							<li>
-								<button id="change-group" use:popup={changeGroupMenuSettings}>
+								<button on:click={() => changeGroup(groups)}>
 									<iconify-icon icon="ion:swap-horizontal" />
 									<p>Change Group</p>
 								</button>
 							</li>
-							<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="change-group-menu">
-								<ul>
-									{#each groups as group}
-										<li>
-											<button
-												on:click={async () => {
-													console.log("clicked");
-													await userAPI.setActiveGroup(group.id);
-													window.location.reload();
-												}}
-											>
-												{group.name}
-											</button>
-										</li>
-									{/each}
-								</ul>
-								<div class="arrow bg-surface-100-800-token" />
-							</nav>
 						{/if}
 					{/await}
 
@@ -120,6 +114,7 @@
 							<p>Create Group</p>
 						</button>
 					</li>
+					<hr />
 
 					<li>
 						<button

@@ -1,23 +1,117 @@
 <script lang="ts">
-	import { Table, tableMapperValues, tableSourceMapper } from "@skeletonlabs/skeleton";
+	import { invalidateAll } from "$app/navigation";
+	import { page } from "$app/stores";
+	import { GroupAPI } from "$lib/api/groups";
+	import { modalStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
-	const groupData = {
-		head: ["Name", "Username", "Email", "Admin"],
-		body: tableMapperValues(data.group.users, ["name", "username", "email", "isAdmin"]),
-		meta: tableSourceMapper(data.group.users, ["id"])
+	type UserData = (typeof data.group.users)[number];
+
+	const groupAPI = new GroupAPI($page.params.groupId);
+	const head = ["Name", "Username", "Email"];
+	const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
+
+	const addUserModalSettings: ModalSettings = {
+		type: "component",
+		component: "addUser",
+		response: async (userId: string) => {
+			await groupAPI.addMember(userId);
+			invalidateAll();
+		}
 	};
 
-	const selectionHandler = (meta: CustomEvent<{ id: string }>) => {
-		const user = meta.detail;
-		console.log(user);
+	const memberSelectModal: ModalSettings = {
+		type: "component",
+		component: "groupMemberActions"
+	};
+
+	const toggleManager = async (userId: string, manager: boolean) => {
+		modalStore.trigger({
+			type: "confirm",
+			title: "Please Confirm",
+			body: `Are you sure you want to ${manager ? "add" : "remove"} this user as group manager?`,
+			async response(r) {
+				if (!r) return;
+
+				if (manager) await groupAPI.makeManager(userId);
+				else await groupAPI.removeManager(userId);
+
+				await invalidateAll();
+			}
+		});
+	};
+
+	const removeMember = (userId: string) => {
+		modalStore.trigger({
+			type: "confirm",
+			title: "Please Confirm",
+			body: "Are you sure you want to remove this user from the group?",
+			async response(r) {
+				if (!r) return;
+
+				await groupAPI.removeMember(userId);
+				await invalidateAll();
+			}
+		});
 	};
 </script>
 
-<h1>{data.group.name}</h1>
-<!-- TODO: Add Member -->
+<h1>{data.group.name} Group</h1>
+
+<div class="flex py-4">
+	<button
+		class="btn variant-filled-primary"
+		type="button"
+		on:click={() => modalStore.trigger(addUserModalSettings)}
+	>
+		<iconify-icon icon="ion:person-add" />
+		<span>Add Member</span>
+	</button>
+</div>
+
 <!-- TODO: Add Remove Member -->
 
-<Table source={groupData} interactive on:selected={selectionHandler} />
+<div class="flex flex-col space-y-2">
+	<h2>Members</h2>
+	<div class="table-container">
+		<table class="table table-interactive" role="grid">
+			<thead class="table-head">
+				<tr>
+					{#each head as label}
+						<th>
+							{label}
+						</th>
+					{/each}
+					<th> Manager </th>
+					<th> Remove </th>
+				</tr>
+			</thead>
+			<tbody class="table-body">
+				{#each data.group.users as user, row}
+					<tr aria-rowindex={row}>
+						{#each dataKeys as key, col}
+							<td role="gridcell" aria-colindex={col} tabindex={col === 0 ? 0 : -1}>
+								{user[key]}
+							</td>
+						{/each}
+						<td>
+							<button
+								class="btn-icon"
+								on:click={() => toggleManager(user.id, !user.isGroupManager)}
+							>
+								<iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}" />
+							</button>
+						</td>
+						<td role="gridcell" aria-colindex={dataKeys.length} tabindex={-1}>
+							<button class="btn-icon" on:click={() => removeMember(user.id)}>
+								<iconify-icon icon="ion:trash-bin" />
+							</button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+</div>

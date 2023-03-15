@@ -51,9 +51,10 @@ model Key {
 }
 
 model Role {
-    id   Int    @id @unique
-    name String
-    User User[]
+    id                  Int                   @id @unique
+    name                String
+    User                User[]
+    UserGroupMembership UserGroupMembership[]
 }
 
 model Group {
@@ -70,8 +71,10 @@ model UserGroupMembership {
     active  Boolean @default(false)
     user    User    @relation(fields: [userId], references: [id])
     group   Group   @relation(fields: [groupId], references: [id])
+    role    Role    @relation(fields: [roleId], references: [id])
     userId  String
     groupId String
+    roleId  Int     @default(1)
 
     @@map("user_group_membership")
 }

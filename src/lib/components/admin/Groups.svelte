@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { Table, tableMapperValues, tableSourceMapper } from "@skeletonlabs/skeleton";
+	import {
+		Table,
+		tableMapperValues,
+		tableSourceMapper,
+		type TableSource
+	} from "@skeletonlabs/skeleton";
+	import Search from "../Search.svelte";
 
 	type Group = {
 		id: string;
@@ -10,11 +16,16 @@
 
 	export let groups: Group[];
 
-	const groupData = {
-		head: ["Name", "User Count"],
-		body: tableMapperValues(groups, ["name", "userCount"]),
-		meta: tableSourceMapper(groups, ["name", "id"])
-	};
+	let groupsFiltered: Group[];
+
+	let groupData: TableSource;
+	$: if (groupsFiltered) {
+		groupData = {
+			head: ["Name", "User Count"],
+			body: tableMapperValues(groupsFiltered, ["name", "userCount"]),
+			meta: tableSourceMapper(groupsFiltered, ["name", "id"])
+		};
+	}
 
 	const selectionHandler = (meta: CustomEvent<Group>) => {
 		const group = meta.detail;
@@ -22,4 +33,10 @@
 	};
 </script>
 
-<Table source={groupData} interactive on:selected={selectionHandler} />
+<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:items-end mb-4">
+	<Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
+</div>
+
+{#if groupData}
+	<Table source={groupData} interactive on:selected={selectionHandler} />
+{/if}
