@@ -70,8 +70,6 @@
 	};
 </script>
 
-<h1>{data.group.name} Group</h1>
-
 <div class="flex py-4 space-x-4">
 	<button
 		class="btn variant-filled-primary"
@@ -85,7 +83,6 @@
 </div>
 
 <div class="flex flex-col space-y-2">
-	<h2>Members</h2>
 	<div class="table-container">
 		<table class="table table-interactive" role="grid">
 			<thead class="table-head">

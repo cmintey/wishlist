@@ -11,11 +11,11 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
 	}
-	const config = await getConfig();
 
 	depends("list:poll");
 
 	const activeMembership = await getActiveMembership(user);
+	const config = await getConfig(activeMembership.groupId);
 
 	try {
 		await client.userGroupMembership.findFirstOrThrow({

@@ -125,8 +125,10 @@ model SignupToken {
 }
 
 model SystemConfig {
-    key   String  @id @unique
-    value String?
+    key     String
+    value   String?
+    groupId String
 
+    @@id([key, groupId])
     @@map("system_config")
 }

@@ -15,9 +15,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(400, "item id must be a number");
 	}
 
-	const config = await getConfig();
-
 	const activeMembership = await getActiveMembership(user);
+	const config = await getConfig(activeMembership.groupId);
 
 	let item;
 	try {

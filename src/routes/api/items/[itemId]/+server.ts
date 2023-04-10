@@ -1,4 +1,5 @@
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import type { Session } from "lucia-auth";
@@ -40,7 +41,10 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	const { session, user } = await locals.validateUser();
 
 	const foundItem = await validateItem(params?.itemId, session);
-	const config = await getConfig();
+
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const activeMembership = await getActiveMembership(user!);
+	const config = await getConfig(activeMembership.groupId);
 
 	let suggestionDenied = false;
 	const suggestionMethod = config.suggestions.method;

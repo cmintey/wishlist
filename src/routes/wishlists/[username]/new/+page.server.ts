@@ -10,13 +10,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
 	}
-	const config = await getConfig();
+	const activeMembership = await getActiveMembership(user);
+	const config = await getConfig(activeMembership.groupId);
 
 	if (!config.suggestions.enable && user.username !== params.username) {
 		throw error(401, "Suggestions are disabled");
 	}
-
-	const activeMembership = await getActiveMembership(user);
 
 	const listOwner = await client.user.findFirst({
 		where: {
@@ -51,7 +50,9 @@ export const actions: Actions = {
 	default: async ({ request, locals, params }) => {
 		const { user: me, session } = await locals.validateUser();
 		if (!session) throw error(401);
-		const config = await getConfig();
+
+		const activeMembership = await getActiveMembership(me);
+		const config = await getConfig(activeMembership.groupId);
 
 		const form = await request.formData();
 		const url = form.get("url") as string;
@@ -82,8 +83,6 @@ export const actions: Actions = {
 		if (price.indexOf("$") !== -1) {
 			price = price.slice(price.indexOf("$") + 1);
 		}
-
-		const activeMembership = await getActiveMembership(me);
 
 		await client.user.update({
 			where: {
