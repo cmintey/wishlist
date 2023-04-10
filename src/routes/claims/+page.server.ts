@@ -2,6 +2,7 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
@@ -9,12 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, `/login?ref=/claims`);
 	}
 
-	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
-		where: {
-			userId: user.userId,
-			active: true
-		}
-	});
+	const activeMembership = await getActiveMembership(user);
 
 	const wishlistItems = await client.item.findMany({
 		where: {

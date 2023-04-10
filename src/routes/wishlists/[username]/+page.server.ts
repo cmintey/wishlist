@@ -4,6 +4,7 @@ import type { PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import type { Prisma } from "@prisma/client";
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params, depends, url }) => {
 	const { session, user } = await locals.validateUser();
@@ -14,12 +15,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 
 	depends("list:poll");
 
-	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
-		where: {
-			userId: user.userId,
-			active: true
-		}
-	});
+	const activeMembership = await getActiveMembership(user);
 
 	try {
 		await client.userGroupMembership.findFirstOrThrow({

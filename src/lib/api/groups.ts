@@ -1,3 +1,4 @@
+import { Role } from "$lib/schema";
 import type { Group, UserGroupMembership } from "@prisma/client";
 
 export class GroupAPI {
@@ -40,6 +41,21 @@ export class GroupAPI {
 		return await this._makeRequest("PATCH", `/users/${userId}`, { manager: false }).then((resp) =>
 			resp.json()
 		);
+	};
+
+	isManager = async (userId: string): Promise<boolean> => {
+		return await this._makeRequest("GET", `/users/${userId}`)
+			.then(async (resp) => {
+				const content = await resp.json();
+				return content.membership as UserGroupMembership;
+			})
+			.then(
+				(membership) => membership.roleId === Role.GROUP_MANAGER || membership.roleId === Role.ADMIN
+			);
+	};
+
+	delete = async (): Promise<Group> => {
+		return await this._makeRequest("DELETE").then((resp) => resp.json());
 	};
 }
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
 	import { GroupAPI, GroupsAPI } from "$lib/api/groups";
 	import { UserAPI } from "$lib/api/users";
 	import { Role } from "$lib/schema";
@@ -89,18 +89,33 @@
 							</a>
 						</li>
 					{/if}
+
 					<hr />
+
 					{#await userAPI.activeGroup() then group}
 						<div class="px-4 py-2 flex flex-row items-center space-x-4">
 							<iconify-icon icon="ion:people" />
 							<span>{group.name} Group</span>
 						</div>
+						{#await new GroupAPI(group.id).isManager($user.userId) then manager}
+							{#if manager}
+								<li>
+									<button
+										class="list-option w-full"
+										on:click={() => goto(`/admin/groups/${group.id}`)}
+									>
+										<iconify-icon icon="ion:settings" />
+										<p>Manage Group</p>
+									</button>
+								</li>
+							{/if}
+						{/await}
 					{/await}
 
 					{#await userAPI.groups() then groups}
 						{#if groups.length > 1}
 							<li>
-								<button on:click={() => changeGroup(groups)}>
+								<button class="list-option w-full" on:click={() => changeGroup(groups)}>
 									<iconify-icon icon="ion:swap-horizontal" />
 									<p>Change Group</p>
 								</button>
@@ -109,7 +124,7 @@
 					{/await}
 
 					<li>
-						<button class="unstyled list-option" on:click={createGroup}>
+						<button class="list-option w-full" on:click={createGroup}>
 							<iconify-icon icon="ion:add" />
 							<p>Create Group</p>
 						</button>
@@ -118,7 +133,7 @@
 
 					<li>
 						<button
-							class="unstyled list-option"
+							class="list-option w-full"
 							on:click={async () => {
 								await fetch("/logout", { method: "POST" });
 								invalidateAll();

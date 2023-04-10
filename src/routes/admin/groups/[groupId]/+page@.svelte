@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { GroupAPI } from "$lib/api/groups";
 	import { modalStore, type ModalSettings } from "@skeletonlabs/skeleton";
@@ -22,15 +22,10 @@
 		}
 	};
 
-	const memberSelectModal: ModalSettings = {
-		type: "component",
-		component: "groupMemberActions"
-	};
-
 	const toggleManager = async (userId: string, manager: boolean) => {
 		modalStore.trigger({
 			type: "confirm",
-			title: "Please Confirm",
+			title: `${manager ? "Add" : "Remove"} Manager`,
 			body: `Are you sure you want to ${manager ? "add" : "remove"} this user as group manager?`,
 			async response(r) {
 				if (!r) return;
@@ -46,7 +41,7 @@
 	const removeMember = (userId: string) => {
 		modalStore.trigger({
 			type: "confirm",
-			title: "Please Confirm",
+			title: "Remove Member",
 			body: "Are you sure you want to remove this user from the group?",
 			async response(r) {
 				if (!r) return;
@@ -56,11 +51,28 @@
 			}
 		});
 	};
+
+	const deleteGroup = () => {
+		modalStore.trigger({
+			type: "confirm",
+			title: "Delete Group",
+			body: "Are you sure you want to delete this group? This action is <b>irreversible</b>!",
+			async response(r) {
+				if (!r) return;
+
+				const group = await groupAPI.delete();
+				if (group) {
+					await invalidateAll();
+					goto("/");
+				}
+			}
+		});
+	};
 </script>
 
 <h1>{data.group.name} Group</h1>
 
-<div class="flex py-4">
+<div class="flex py-4 space-x-4">
 	<button
 		class="btn variant-filled-primary"
 		type="button"
@@ -69,9 +81,8 @@
 		<iconify-icon icon="ion:person-add" />
 		<span>Add Member</span>
 	</button>
+	<button class="btn variant-filled-error" on:click={deleteGroup}> Delete Group </button>
 </div>
-
-<!-- TODO: Add Remove Member -->
 
 <div class="flex flex-col space-y-2">
 	<h2>Members</h2>

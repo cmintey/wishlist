@@ -3,6 +3,7 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -15,12 +16,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(401, "Suggestions are disabled");
 	}
 
-	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
-		where: {
-			userId: user.userId,
-			active: true
-		}
-	});
+	const activeMembership = await getActiveMembership(user);
 
 	const listOwner = await client.user.findFirst({
 		where: {
@@ -87,12 +83,7 @@ export const actions: Actions = {
 			price = price.slice(price.indexOf("$") + 1);
 		}
 
-		const activeMembership = await client.userGroupMembership.findFirstOrThrow({
-			where: {
-				userId: me.userId,
-				active: true
-			}
-		});
+		const activeMembership = await getActiveMembership(me);
 
 		await client.user.update({
 			where: {

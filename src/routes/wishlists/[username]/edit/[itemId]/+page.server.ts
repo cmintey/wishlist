@@ -3,6 +3,7 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -16,12 +17,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	const config = await getConfig();
 
-	const activeMembership = await client.userGroupMembership.findFirstOrThrow({
-		where: {
-			userId: user.userId,
-			active: true
-		}
-	});
+	const activeMembership = await getActiveMembership(user);
 
 	let item;
 	try {
