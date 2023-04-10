@@ -7,24 +7,36 @@
 	import SmtpAlert from "$lib/components/admin/SMTPAlert.svelte";
 	import Users from "$lib/components/admin/Users.svelte";
 	import { Tab, TabGroup } from "@skeletonlabs/skeleton";
-	import type { PageData } from "./$types";
+	import type { PageData, Snapshot } from "./$types";
+	import { writable } from "svelte/store";
 
-	export let data: PageData;
-	const tabs = ["Users", "Groups", "Settings", "Actions"];
+	const tabs = [
+		{ href: "/users", label: "Users" },
+		{ href: "/groups", label: "Groups" },
+		{ href: "/settings", label: "Settings" },
+		{ href: "/actions", label: "Actions" }
+	];
 
-	let tabSet = $page.url.searchParams.has("tab")
-		? Number.parseInt($page.url.searchParams.get("tab") || "")
-		: 0;
+	let selectedTab = 0;
 
-	const handleTabSelect = (tab: number) => goto(`?tab=${tab}`, { replaceState: true });
+	export const snapshot: Snapshot = {
+		capture: () => selectedTab,
+		restore: (value) => (selectedTab = value)
+	};
 </script>
 
 <TabGroup>
-	{#each tabs as name, value}
-		<Tab bind:group={tabSet} {name} {value} on:change={() => handleTabSelect(value)}>{name}</Tab>
+	{#each tabs as { label, href }, value}
+		<Tab bind:group={selectedTab} name={label} {value} on:change={() => goto(`/admin${href}`)}>
+			{label}
+		</Tab>
 	{/each}
 
 	<svelte:fragment slot="panel">
+		<slot />
+	</svelte:fragment>
+
+	<!-- <svelte:fragment slot="panel">
 		{#if tabSet === 0}
 			<Users users={data.users} currentUser={data.user} config={data.config} />
 		{:else if tabSet === 1}
@@ -35,7 +47,7 @@
 		{:else if tabSet === 3}
 			<ActionForm />
 		{/if}
-	</svelte:fragment>
+	</svelte:fragment> -->
 </TabGroup>
 
 <svelte:head>

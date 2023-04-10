@@ -6,7 +6,6 @@
 		tableSourceMapper,
 		type TableSource
 	} from "@skeletonlabs/skeleton";
-	import fuzzysort from "fuzzysort";
 	import Search from "../Search.svelte";
 	import InviteUser from "./InviteUser.svelte";
 
@@ -34,7 +33,7 @@
 
 	const selectionHandler = (meta: CustomEvent<User>) => {
 		const user = meta.detail;
-		goto(user.username === currentUser.username ? "/account" : `/admin/user/${user.username}`);
+		goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.username}`);
 	};
 </script>
 

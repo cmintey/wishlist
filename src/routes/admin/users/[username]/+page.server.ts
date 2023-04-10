@@ -7,7 +7,7 @@ import type { Actions, PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
-		throw redirect(302, `/login?ref=/admin/user/${params.username}`);
+		throw redirect(302, `/login?ref=/admin/users/${params.username}`);
 	}
 	if (user.roleId != Role.ADMIN) {
 		throw error(401, "Not authorized to view admin panel");
