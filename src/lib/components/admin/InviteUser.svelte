@@ -47,11 +47,7 @@
 			<p>Invite User</p>
 		</button>
 	{:else}
-		<button
-			class="btn variant-filled-primary w-fit"
-			formaction="?/invite-user"
-			on:click={() => (inviteUser = true)}
-		>
+		<button class="btn variant-filled-primary w-fit" on:click={() => (inviteUser = true)}>
 			<iconify-icon icon="ion:person-add" />
 			<p>Invite User</p>
 		</button>
@@ -72,11 +68,7 @@
 					/>
 				</label>
 				<div class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-					<button
-						class="btn variant-filled-primary w-fit h-min"
-						formaction="?/invite-user"
-						disabled={sending}
-					>
+					<button class="btn variant-filled-primary w-fit h-min" disabled={sending}>
 						{#if sending}
 							<span class="h-6 w-6">
 								<ProgressRadial stroke={64} />
