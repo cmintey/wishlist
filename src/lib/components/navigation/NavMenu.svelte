@@ -70,7 +70,7 @@
 	<div class="flex flex-row space-x-2 items-center">
 		<span class="relative">
 			<button use:popup={menuSettings}>
-				<Avatar {user} />
+				<Avatar {user} width="w-14" />
 			</button>
 			<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="user">
 				<ul>
