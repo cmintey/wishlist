@@ -25,7 +25,7 @@
 					});
 
 					if (resp.ok) {
-						await goto("/admin");
+						await goto("/admin/users");
 						invalidateAll();
 
 						toastStore.trigger({

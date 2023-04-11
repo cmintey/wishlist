@@ -119,6 +119,7 @@ model SignupToken {
     expiresIn   Int
     hashedToken String
     redeemed    Boolean  @default(false)
+    groupId     String   @default("global")
 
     @@index([hashedToken])
     @@map("signup_tokens")

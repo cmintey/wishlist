@@ -14,6 +14,7 @@
 	import NavigationDrawer from "$lib/components/navigation/NavigationDrawer.svelte";
 	import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
 	import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
+	import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
 
 	handleSession(page);
 	let showNavigationLoadingBar = false;
@@ -52,6 +53,9 @@
 		},
 		groupSelect: {
 			ref: GroupSelectModal
+		},
+		inviteUser: {
+			ref: InviteUserModal
 		}
 	};
 </script>

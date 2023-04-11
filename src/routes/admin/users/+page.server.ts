@@ -38,6 +38,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	});
 
+	const groups = client.group.findMany();
+
 	const config = getConfig();
 
 	return {
@@ -50,7 +52,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 			groups: user.UserGroupMembership.map(({ group }) => group.name),
 			...user
 		})),
-		config
+		config,
+		groups
 	};
 };
 
@@ -74,7 +77,8 @@ export const actions: Actions = {
 
 		const formData = Object.fromEntries(await request.formData());
 		const schema = z.object({
-			"invite-email": z.string().email()
+			"invite-email": z.string().email(),
+			"invite-group": z.string().nonempty()
 		});
 
 		const emailData = schema.safeParse(formData);
@@ -92,7 +96,8 @@ export const actions: Actions = {
 		await client.signupToken.create({
 			data: {
 				hashedToken: hashToken(token),
-				expiresIn: 21600000 // 6 hours in milliseconds
+				expiresIn: 21600000, // 6 hours in milliseconds
+				groupId: emailData.data["invite-group"]
 			}
 		});
 

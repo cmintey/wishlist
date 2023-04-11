@@ -30,6 +30,11 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	}
 
 	try {
+		await client.userGroupMembership.deleteMany({
+			where: {
+				userId: user.id
+			}
+		});
 		const deletedUser = await client.user.delete({
 			where: {
 				id: user.id

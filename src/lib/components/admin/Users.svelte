@@ -8,6 +8,7 @@
 	} from "@skeletonlabs/skeleton";
 	import Search from "../Search.svelte";
 	import InviteUser from "./InviteUser.svelte";
+	import type { Group } from "@prisma/client";
 
 	type User = {
 		username: string;
@@ -19,6 +20,7 @@
 	export let users: (User & { groups?: string[] })[];
 	export let currentUser: User;
 	export let config: Config;
+	export let groups: Group[];
 
 	let usersFiltered: (User & { groups?: string[] })[];
 
@@ -39,7 +41,7 @@
 
 <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:items-end mb-4">
 	<Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
-	<InviteUser {config} />
+	<InviteUser {config} {groups} />
 </div>
 
 {#if userData}
