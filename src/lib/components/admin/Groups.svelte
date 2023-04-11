@@ -7,11 +7,10 @@
 		type TableSource,
 		modalStore,
 		type ModalSettings,
-		type ToastSettings,
 		toastStore
 	} from "@skeletonlabs/skeleton";
 	import Search from "../Search.svelte";
-	import { GroupsAPI, GroupAPI } from "$lib/api/groups";
+	import { GroupsAPI } from "$lib/api/groups";
 
 	type Group = {
 		id: string;
