@@ -42,7 +42,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await client.user.update({
+			await client.authUser.update({
 				data: {
 					name: nameData.data.name,
 					username: nameData.data.username,
@@ -85,7 +85,7 @@ export const actions: Actions = {
 		}
 
 		if (filename) {
-			await client.user.update({
+			await client.authUser.update({
 				where: {
 					id: user.userId
 				},
@@ -114,7 +114,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.validateKeyPassword("username", user.username, pwdData.data.oldPassword);
+			await auth.useKey("username", user.username, pwdData.data.oldPassword);
 		} catch {
 			return fail(400, {
 				error: true,

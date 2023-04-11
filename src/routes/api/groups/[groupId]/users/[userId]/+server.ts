@@ -9,7 +9,7 @@ export const _authCheck = async (validateUser: App.Locals["validateUser"], group
 		throw error(401, "Must authenticate first");
 	}
 
-	const user = await client.user.findFirstOrThrow({
+	const user = await client.authUser.findFirstOrThrow({
 		where: {
 			id: sessionUser.userId
 		},

@@ -3,7 +3,6 @@
 	import { GroupAPI, GroupsAPI } from "$lib/api/groups";
 	import { UserAPI } from "$lib/api/users";
 	import { Role } from "$lib/schema";
-	import type { ClientUser } from "@lucia-auth/sveltekit/client";
 	import type { Group } from "@prisma/client";
 	import {
 		LightSwitch,
@@ -12,10 +11,10 @@
 		type ModalSettings,
 		type PopupSettings
 	} from "@skeletonlabs/skeleton";
-	import type { Readable } from "svelte/store";
 	import Avatar from "../Avatar.svelte";
+	import type { User } from "lucia-auth";
 
-	export let user: Readable<ClientUser>;
+	export let user: User | null;
 
 	const menuSettings: PopupSettings = {
 		event: "click",
@@ -32,9 +31,9 @@
 			response: async (name: string) => {
 				const groupsAPI = new GroupsAPI();
 				const group = await groupsAPI.create(name);
-				if ($user) {
+				if (user) {
 					const groupAPI = new GroupAPI(group.id);
-					await groupAPI.addMember($user?.userId);
+					await groupAPI.addMember(user.userId);
 				}
 				await invalidateAll();
 			},
@@ -47,7 +46,7 @@
 	};
 
 	let userAPI: UserAPI;
-	$: if ($user) userAPI = new UserAPI($user?.userId);
+	$: if (user) userAPI = new UserAPI(user.userId);
 
 	const changeGroup = (groups: Group[]) => {
 		const settings: ModalSettings = {
@@ -67,11 +66,11 @@
 	};
 </script>
 
-{#if $user}
+{#if user}
 	<div class="flex flex-row space-x-2 items-center">
 		<span class="relative">
 			<button use:popup={menuSettings}>
-				<Avatar user={$user} />
+				<Avatar {user} />
 			</button>
 			<nav class="list-nav card p-4 w-fit shadow-xl" data-popup="user">
 				<ul>
@@ -81,7 +80,7 @@
 							<p>Account</p>
 						</a>
 					</li>
-					{#if $user.roleId == Role.ADMIN}
+					{#if user.roleId == Role.ADMIN}
 						<li>
 							<a href="/admin">
 								<iconify-icon icon="ion:settings" />
@@ -97,7 +96,7 @@
 							<iconify-icon icon="ion:people" />
 							<span>{group.name} Group</span>
 						</div>
-						{#await new GroupAPI(group.id).isManager($user.userId) then manager}
+						{#await new GroupAPI(group.id).isManager(user.userId) then manager}
 							{#if manager}
 								<li>
 									<button

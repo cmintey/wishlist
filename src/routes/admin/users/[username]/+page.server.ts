@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw redirect(303, "/account");
 	}
 
-	const editingUser = await client.user.findUnique({
+	const editingUser = await client.authUser.findUnique({
 		where: {
 			username: params.username
 		},
@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
 	"reset-password": async ({ params, url }) => {
-		const user = await client.user.findUnique({
+		const user = await client.authUser.findUnique({
 			where: {
 				username: params.username
 			},
@@ -65,7 +65,7 @@ export const actions: Actions = {
 		}
 	},
 	"make-admin": async ({ params }) => {
-		await client.user.update({
+		await client.authUser.update({
 			where: {
 				username: params.username
 			},
@@ -77,7 +77,7 @@ export const actions: Actions = {
 		return { success: true, url: null };
 	},
 	"remove-admin": async ({ params }) => {
-		await client.user.update({
+		await client.authUser.update({
 			where: {
 				username: params.username
 			},

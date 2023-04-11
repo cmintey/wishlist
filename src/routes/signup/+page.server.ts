@@ -58,7 +58,7 @@ export const actions: Actions = {
 			return fail(400, { error: true, errors });
 		}
 
-		const userCount = await client.user.count();
+		const userCount = await client.authUser.count();
 		let groupId: string | undefined;
 		if (signupData.data.tokenId && Number.isSafeInteger(signupData.data.tokenId)) {
 			groupId = await client.signupToken
@@ -75,7 +75,7 @@ export const actions: Actions = {
 
 		try {
 			const user = await auth.createUser({
-				key: {
+				primaryKey: {
 					providerId: "username",
 					providerUserId: signupData.data.username,
 					password: signupData.data.password

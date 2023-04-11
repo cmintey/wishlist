@@ -82,7 +82,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 		}
 	});
 
-	const listOwner = await client.user.findUnique({
+	const listOwner = await client.authUser.findUnique({
 		where: {
 			username: params.username
 		},

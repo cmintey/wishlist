@@ -12,7 +12,7 @@ export const load = (async ({ locals }) => {
 
 	const activeMembership = await getActiveMembership(user);
 
-	const me = await client.user.findUniqueOrThrow({
+	const me = await client.authUser.findUniqueOrThrow({
 		select: {
 			name: true,
 			username: true,
@@ -44,7 +44,7 @@ export const load = (async ({ locals }) => {
 		}
 	});
 
-	const users = await client.user.findMany({
+	const users = await client.authUser.findMany({
 		where: {
 			username: {
 				not: user.username
@@ -86,6 +86,7 @@ export const load = (async ({ locals }) => {
 	});
 	return {
 		me,
-		users
+		users,
+		luciaUser: user
 	};
 }) satisfies PageServerLoad;
