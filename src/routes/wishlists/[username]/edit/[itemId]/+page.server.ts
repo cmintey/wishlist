@@ -3,6 +3,7 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -14,13 +15,15 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(400, "item id must be a number");
 	}
 
-	const config = await getConfig();
+	const activeMembership = await getActiveMembership(user);
+	const config = await getConfig(activeMembership.groupId);
 
 	let item;
 	try {
-		item = await client.item.findUniqueOrThrow({
+		item = await client.item.findFirstOrThrow({
 			where: {
-				id: parseInt(params.itemId)
+				id: parseInt(params.itemId),
+				groupId: activeMembership.groupId
 			},
 			include: {
 				addedBy: {

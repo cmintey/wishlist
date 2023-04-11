@@ -2,12 +2,15 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load = (async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login`);
 	}
+
+	const activeMembership = await getActiveMembership(user);
 
 	const me = await client.user.findUniqueOrThrow({
 		select: {
@@ -21,14 +24,16 @@ export const load = (async ({ locals }) => {
 				where: {
 					addedBy: {
 						username: user.username
-					}
+					},
+					groupId: activeMembership.groupId
 				}
 			},
 			_count: {
 				select: {
 					items: {
 						where: {
-							approved: false
+							approved: false,
+							groupId: activeMembership.groupId
 						}
 					}
 				}
@@ -43,6 +48,13 @@ export const load = (async ({ locals }) => {
 		where: {
 			username: {
 				not: user.username
+			},
+			UserGroupMembership: {
+				some: {
+					group: {
+						id: activeMembership.groupId
+					}
+				}
 			}
 		},
 		select: {
@@ -52,6 +64,9 @@ export const load = (async ({ locals }) => {
 			items: {
 				select: {
 					id: true
+				},
+				where: {
+					groupId: activeMembership.groupId
 				}
 			},
 			_count: {
@@ -60,7 +75,9 @@ export const load = (async ({ locals }) => {
 						where: {
 							pledgedById: {
 								not: null
-							}
+							},
+							approved: true,
+							groupId: activeMembership.groupId
 						}
 					}
 				}

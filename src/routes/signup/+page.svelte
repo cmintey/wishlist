@@ -22,6 +22,7 @@
 		<div
 			class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
 		>
+			<input class="hidden" id="tokenId" name="tokenId" value={data.id} />
 			<label for="name">
 				<span>Name</span>
 				<input class="input" type="text" id="name" name="name" autocomplete="name" required />

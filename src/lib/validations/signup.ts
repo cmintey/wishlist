@@ -13,5 +13,6 @@ export const signupSchema = z.object({
             - 1 number
             - 1 special character (#?!@$%^&*-)
             `
-	)
+	),
+	tokenId: z.string().optional()
 });

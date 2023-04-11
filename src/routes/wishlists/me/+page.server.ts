@@ -1,7 +1,7 @@
 import { redirect } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
+import type { PageServerLoad } from "./$types";
 
-export const GET: RequestHandler = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
 
 	if (!session) {

@@ -3,27 +3,38 @@ import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
 	}
-	const config = await getConfig();
+	const activeMembership = await getActiveMembership(user);
+	const config = await getConfig(activeMembership.groupId);
 
 	if (!config.suggestions.enable && user.username !== params.username) {
 		throw error(401, "Suggestions are disabled");
 	}
 
-	const listOwner = await client.user.findUniqueOrThrow({
+	const listOwner = await client.user.findFirst({
 		where: {
-			username: params.username
+			username: params.username,
+			UserGroupMembership: {
+				some: {
+					group: {
+						id: activeMembership.groupId
+					}
+				}
+			}
 		},
 		select: {
 			username: true,
 			name: true
 		}
 	});
+
+	if (!listOwner) throw error(404, "user is not part of group");
 
 	return {
 		owner: {
@@ -39,7 +50,9 @@ export const actions: Actions = {
 	default: async ({ request, locals, params }) => {
 		const { user: me, session } = await locals.validateUser();
 		if (!session) throw error(401);
-		const config = await getConfig();
+
+		const activeMembership = await getActiveMembership(me);
+		const config = await getConfig(activeMembership.groupId);
 
 		const form = await request.formData();
 		const url = form.get("url") as string;
@@ -84,7 +97,8 @@ export const actions: Actions = {
 						note,
 						image_url: create_image ? filename : image_url,
 						addedById: me.userId,
-						approved: config.suggestions.method !== "approval"
+						approved: params.username === me.username || config.suggestions.method !== "approval",
+						groupId: activeMembership.groupId
 					}
 				}
 			}

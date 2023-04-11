@@ -6,8 +6,9 @@
 		tableSourceMapper,
 		type TableSource
 	} from "@skeletonlabs/skeleton";
-	import fuzzysort from "fuzzysort";
+	import Search from "../Search.svelte";
 	import InviteUser from "./InviteUser.svelte";
+	import type { Group } from "@prisma/client";
 
 	type User = {
 		username: string;
@@ -16,45 +17,31 @@
 		isAdmin: boolean;
 	};
 
-	export let users: User[];
+	export let users: (User & { groups?: string[] })[];
 	export let currentUser: User;
 	export let config: Config;
+	export let groups: Group[];
 
-	let userSearch = "";
-	$: usersFiltered = fuzzysort
-		.go(userSearch, users, {
-			keys: ["username", "name"],
-			all: true
-		})
-		.map((result) => result.obj);
+	let usersFiltered: (User & { groups?: string[] })[];
 
 	let userData: TableSource;
 	$: if (usersFiltered) {
 		userData = {
-			head: ["Name", "Username", "Email", "Admin"],
-			body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin"]),
+			head: ["Name", "Username", "Email", "Admin", "Groups"],
+			body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
 			meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin"])
 		};
 	}
 
 	const selectionHandler = (meta: CustomEvent<User>) => {
 		const user = meta.detail;
-		goto(user.username === currentUser.username ? "/account" : `/admin/user/${user.username}`);
+		goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.username}`);
 	};
 </script>
 
 <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:items-end mb-4">
-	<label class="w-fit">
-		<span>Search</span>
-		<div class="input-group grid-cols-[auto_1fr_auto]">
-			<div class="input-group-shim ">
-				<iconify-icon icon="ion:search" class="text-lg" />
-			</div>
-			<input class="input" type="search" bind:value={userSearch} />
-		</div>
-	</label>
-
-	<InviteUser {config} />
+	<Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
+	<InviteUser {config} {groups} />
 </div>
 
 {#if userData}

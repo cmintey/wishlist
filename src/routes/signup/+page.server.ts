@@ -5,6 +5,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
 import { getConfig } from "$lib/server/config";
+import { Role } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
 	// If the user session exists, redirect authenticated users to the profile page.
@@ -12,30 +13,31 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 	if (session) throw redirect(302, "/");
 
 	const config = await getConfig();
-	if (!config.enableSignup) {
-		const token = new URL(request.url).searchParams.get("token");
-		if (token) {
-			const signup = await client.signupToken.findFirst({
-				where: {
-					hashedToken: hashToken(token),
-					redeemed: false
-				},
-				select: {
-					id: true,
-					createdAt: true,
-					expiresIn: true
-				}
-			});
 
-			if (!signup) throw error(400, "reset token not found");
-
-			const createdAt = signup.createdAt;
-			const expiry = createdAt.getTime() + signup.expiresIn;
-			if (expiry - Date.now() > 0) {
-				return { valid: true, id: signup.id };
+	const token = new URL(request.url).searchParams.get("token");
+	if (token) {
+		const signup = await client.signupToken.findFirst({
+			where: {
+				hashedToken: hashToken(token),
+				redeemed: false
+			},
+			select: {
+				id: true,
+				createdAt: true,
+				expiresIn: true
 			}
-			throw error(400, "Invite code is either invalid or already been used");
+		});
+
+		if (!signup) throw error(400, "reset token not found");
+
+		const createdAt = signup.createdAt;
+		const expiry = createdAt.getTime() + signup.expiresIn;
+		if (expiry - Date.now() > 0) {
+			return { valid: true, id: signup.id };
 		}
+		throw error(400, "Invite code is either invalid or already been used");
+	}
+	if (!config.enableSignup) {
 		throw error(404, "This instance is invite only");
 	}
 };
@@ -57,6 +59,19 @@ export const actions: Actions = {
 		}
 
 		const userCount = await client.user.count();
+		let groupId: string | undefined;
+		if (signupData.data.tokenId && Number.isSafeInteger(signupData.data.tokenId)) {
+			groupId = await client.signupToken
+				.findUnique({
+					where: {
+						id: Number.parseInt(signupData.data.tokenId)
+					},
+					select: {
+						groupId: true
+					}
+				})
+				.then((data) => data?.groupId);
+		}
 
 		try {
 			const user = await auth.createUser({
@@ -69,11 +84,32 @@ export const actions: Actions = {
 					username: signupData.data.username,
 					email: signupData.data.email,
 					name: signupData.data.name,
-					roleId: userCount > 0 ? 1 : 2
+					roleId: userCount > 0 ? Role.USER : Role.ADMIN
 				}
 			});
 			const session = await auth.createSession(user.userId);
 			locals.setSession(session);
+
+			if (groupId) {
+				await client.userGroupMembership.create({
+					data: {
+						groupId: groupId,
+						userId: user.userId,
+						active: true
+					}
+				});
+			}
+
+			if (signupData.data.tokenId && Number.isSafeInteger(signupData.data.tokenId)) {
+				await client.signupToken.update({
+					where: {
+						id: Number.parseInt(signupData.data.tokenId)
+					},
+					data: {
+						redeemed: true
+					}
+				});
+			}
 		} catch (e) {
 			return fail(400, {
 				error: true,

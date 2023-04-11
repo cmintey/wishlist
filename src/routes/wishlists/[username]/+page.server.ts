@@ -1,22 +1,41 @@
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 import type { Prisma } from "@prisma/client";
 import { getConfig } from "$lib/server/config";
+import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params, depends, url }) => {
 	const { session, user } = await locals.validateUser();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
 	}
-	const config = await getConfig();
 
 	depends("list:poll");
+
+	const activeMembership = await getActiveMembership(user);
+	const config = await getConfig(activeMembership.groupId);
+
+	try {
+		await client.userGroupMembership.findFirstOrThrow({
+			where: {
+				user: {
+					username: params.username
+				},
+				groupId: activeMembership.groupId
+			}
+		});
+	} catch {
+		throw error(404, "user is not part of the group");
+	}
 
 	const search: Prisma.ItemWhereInput = {
 		user: {
 			username: params.username
+		},
+		group: {
+			id: activeMembership.groupId
 		}
 	};
 

@@ -10,18 +10,19 @@ generator client {
 }
 
 model User {
-    id          String    @id @unique @default(cuid())
-    session     Session[]
-    username    String    @unique
-    name        String
-    email       String    @unique @default("changeme@email.com")
-    picture     String?
-    items       Item[]    @relation("MyItems")
-    addedItems  Item[]    @relation("AddedItems")
-    plegedItems Item[]    @relation("PledgedItems")
-    role        Role      @relation(fields: [roleId], references: [id])
-    roleId      Int       @default(1)
-    Key         Key[]
+    id                  String                @id @unique @default(cuid())
+    session             Session[]
+    username            String                @unique
+    name                String
+    email               String                @unique @default("changeme@email.com")
+    picture             String?
+    items               Item[]                @relation("MyItems")
+    addedItems          Item[]                @relation("AddedItems")
+    plegedItems         Item[]                @relation("PledgedItems")
+    role                Role                  @relation(fields: [roleId], references: [id])
+    roleId              Int                   @default(1)
+    Key                 Key[]
+    UserGroupMembership UserGroupMembership[]
 
     @@map("user")
 }
@@ -50,9 +51,32 @@ model Key {
 }
 
 model Role {
-    id   Int    @id @unique
-    name String
-    User User[]
+    id                  Int                   @id @unique
+    name                String
+    User                User[]
+    UserGroupMembership UserGroupMembership[]
+}
+
+model Group {
+    id                  String                @id @unique @default(uuid())
+    name                String                @unique
+    UserGroupMembership UserGroupMembership[]
+    Item                Item[]
+
+    @@map("group")
+}
+
+model UserGroupMembership {
+    id      String  @id @unique @default(uuid())
+    active  Boolean @default(false)
+    user    User    @relation(fields: [userId], references: [id])
+    group   Group   @relation(fields: [groupId], references: [id])
+    role    Role    @relation(fields: [roleId], references: [id])
+    userId  String
+    groupId String
+    roleId  Int     @default(1)
+
+    @@map("user_group_membership")
 }
 
 model Item {
@@ -70,6 +94,8 @@ model Item {
     pledgedById String?
     approved    Boolean @default(true)
     purchased   Boolean @default(false)
+    group       Group?  @relation(fields: [groupId], references: [id])
+    groupId     String?
 
     @@index([userId])
     @@map("items")
@@ -93,14 +119,17 @@ model SignupToken {
     expiresIn   Int
     hashedToken String
     redeemed    Boolean  @default(false)
+    groupId     String   @default("global")
 
     @@index([hashedToken])
     @@map("signup_tokens")
 }
 
 model SystemConfig {
-    key   String  @id @unique
-    value String?
+    key     String
+    value   String?
+    groupId String
 
+    @@id([key, groupId])
     @@map("system_config")
 }

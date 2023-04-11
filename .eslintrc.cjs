@@ -9,7 +9,8 @@ module.exports = {
 		{
 			files: ["*.ts", "*.mts", "*.cts", "*.tsx", "*.svelte"],
 			rules: {
-				"no-undef": "off"
+				"no-undef": "off",
+				"@typescript-eslint/no-explicit-any": "off"
 			}
 		}
 	],
