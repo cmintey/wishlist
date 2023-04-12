@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
-	const users = await client.user.findMany({
+	const users = await client.authUser.findMany({
 		select: {
 			username: true,
 			name: true,

@@ -17,7 +17,7 @@
 <label class="w-fit">
 	<span>Search</span>
 	<div class="input-group grid-cols-[auto_1fr_auto]">
-		<div class="input-group-shim ">
+		<div class="input-group-shim">
 			<iconify-icon icon="ion:search" class="text-lg" />
 		</div>
 		<input class="input" type="search" bind:value={search} />

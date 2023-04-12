@@ -1,5 +1,5 @@
 import { client } from "$lib/server/prisma";
-import type { User } from "@prisma/client";
+import type { AuthUser } from "@prisma/client";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ locals, url }) => {
@@ -7,9 +7,9 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 
 	if (!session) throw error(401, "user is not authenticated");
 
-	let users: User[] = [];
+	let users: AuthUser[] = [];
 
-	users = await client.user.findMany({
+	users = await client.authUser.findMany({
 		where: {
 			name: {
 				contains: url.searchParams.get("name") || undefined

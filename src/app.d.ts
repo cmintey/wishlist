@@ -16,11 +16,10 @@ declare global {
 	// and what to do when importing types
 	/// <reference types="@sveltejs/kit" />
 	declare namespace App {
-		interface Locals {
-			validate: import("@lucia-auth/sveltekit").Validate;
-			validateUser: import("@lucia-auth/sveltekit").ValidateUser;
-			setSession: import("@lucia-auth/sveltekit").SetSession;
-		}
+		type AuthRequest = import("lucia-auth").AuthRequest;
+		// Locals must be an interface and not a type
+		// eslint-disable-next-line @typescript-eslint/no-empty-interface
+		interface Locals extends AuthRequest {}
 	}
 }
 

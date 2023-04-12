@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { getUser } from "@lucia-auth/sveltekit/client";
 	import { AppBar, drawerStore } from "@skeletonlabs/skeleton";
 	import logo from "$lib/assets/logo.png";
 	import { page } from "$app/stores";
 	import NavMenu from "./NavMenu.svelte";
+	import type { User } from "lucia-auth";
 
 	export let navItems: NavItem[];
-
-	const user = getUser();
+	export let user: User | null;
 </script>
 
 <AppBar background="bg-surface-200-700-token">
@@ -32,7 +31,7 @@
 		</div>
 	</svelte:fragment>
 
-	{#if $user}
+	{#if user}
 		<div class="flex-row items-center pt-0.5 pl-4 hidden md:flex">
 			{#each navItems as navItem}
 				<a

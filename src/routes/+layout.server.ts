@@ -1,4 +1,6 @@
-import { handleServerSession } from "@lucia-auth/sveltekit";
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = handleServerSession();
+export const load = (async ({ locals }) => {
+	const { user } = await locals.validateUser();
+	return { user };
+}) satisfies LayoutServerLoad;

@@ -3,9 +3,8 @@
 	import "../theme.postcss";
 	import "../app.postcss";
 
-	import { page } from "$app/stores";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
-	import { handleSession } from "@lucia-auth/sveltekit/client";
+	import { page } from "$app/stores";
 	import { AppShell, Modal, Toast, storePopup, type ModalComponent } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
@@ -15,8 +14,10 @@
 	import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
 	import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
 	import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
+	import type { LayoutData } from "./$types";
 
-	handleSession(page);
+	export let data: LayoutData;
+
 	let showNavigationLoadingBar = false;
 
 	beforeNavigate(() => {
@@ -67,7 +68,7 @@
 		{#if showNavigationLoadingBar}
 			<NavigationLoadingBar />
 		{/if}
-		<NavBar {navItems} />
+		<NavBar {navItems} user={data.user} />
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<div class="px-4 md:px-12 lg:px-32 xl:px-56 py-4">

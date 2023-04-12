@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(401, "Suggestions are disabled");
 	}
 
-	const listOwner = await client.user.findFirst({
+	const listOwner = await client.authUser.findFirst({
 		where: {
 			username: params.username,
 			UserGroupMembership: {
@@ -84,7 +84,7 @@ export const actions: Actions = {
 			price = price.slice(price.indexOf("$") + 1);
 		}
 
-		await client.user.update({
+		await client.authUser.update({
 			where: {
 				username: params.username
 			},

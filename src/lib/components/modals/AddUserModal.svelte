@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { UsersAPI } from "$lib/api/users";
-	import type { User } from "@prisma/client";
+	import type { AuthUser } from "@prisma/client";
 	import { ListBox, ListBoxItem, modalStore } from "@skeletonlabs/skeleton";
 
 	export let parent: any;
@@ -15,7 +15,7 @@
 
 	const usersAPI = new UsersAPI();
 
-	let users: User[] = [];
+	let users: AuthUser[] = [];
 	const doSearch = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
 		const resp = await usersAPI.search(e.currentTarget.value);
 		users = await resp.json();
@@ -28,7 +28,7 @@
 	<label class="w-fit">
 		<span>Search</span>
 		<div class="input-group grid-cols-[auto_1fr_auto]">
-			<div class="input-group-shim ">
+			<div class="input-group-shim">
 				<iconify-icon icon="ion:search" class="text-lg" />
 			</div>
 			<input class="input" type="search" on:input={doSearch} />

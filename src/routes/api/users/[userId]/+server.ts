@@ -12,7 +12,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		throw error(400, "must specify an item to delete");
 	}
 
-	const user = await client.user.findUnique({
+	const user = await client.authUser.findUnique({
 		where: {
 			id: params.userId
 		},
@@ -35,7 +35,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 				userId: user.id
 			}
 		});
-		const deletedUser = await client.user.delete({
+		const deletedUser = await client.authUser.delete({
 			where: {
 				id: user.id
 			}
