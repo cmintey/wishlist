@@ -14,9 +14,9 @@
 
 <a class="card" href="/wishlists/{user.username}" data-sveltekit-preload-data>
 	<div class="card-header">
-		<div class="flex flex-row space-x-4 items-center">
+		<div class="flex flex-row items-center space-x-4">
 			<Avatar {user} width="w-14" />
-			<span class="font-bold text-3xl">
+			<span class="text-3xl font-bold">
 				<span class="unstyled no-underline text-primary-700-200-token">{user.name}</span>
 			</span>
 		</div>

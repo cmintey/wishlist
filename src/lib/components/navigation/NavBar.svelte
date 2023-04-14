@@ -15,7 +15,7 @@
 
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
 	<svelte:fragment slot="lead">
-		<div class="flex space-x-4 items-center content-center">
+		<div class="flex content-center items-center space-x-4">
 			{#if user && !$isInstalled}
 				<button
 					class="btn btn-sm p-0 pt-0.5 md:hidden"
@@ -28,15 +28,15 @@
 				</button>
 			{/if}
 
-			<a class="flex flex-row space-x-2 items-center" href="/">
+			<a class="flex flex-row items-center space-x-2" href="/">
 				<img src={logo} alt="Wishlist Logo" class="h-10 md:h-12" />
-				<span class="text-2xl md:text-3xl font-bold text-primary-900-50-token"> Wishlist </span>
+				<span class="text-2xl font-bold text-primary-900-50-token md:text-3xl">Wishlist</span>
 			</a>
 		</div>
 	</svelte:fragment>
 
 	{#if user}
-		<div class="flex-row items-center pt-0.5 pl-4 hidden md:flex">
+		<div class="hidden flex-row items-center pl-4 pt-0.5 md:flex">
 			{#each navItems as navItem}
 				<a
 					href={navItem.href}

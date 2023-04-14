@@ -68,7 +68,7 @@
 	{/if}
 
 	{#if form?.url}
-		<div class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0 md:items-center">
+		<div class="flex flex-col space-y-2 md:flex-row md:items-center md:space-x-2 md:space-y-0">
 			<TokenCopy url={form.url}>Invite link</TokenCopy>
 			<span class="text-sm italic">This invite link is only valid for one signup</span>
 		</div>

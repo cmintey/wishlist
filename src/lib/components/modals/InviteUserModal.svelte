@@ -21,7 +21,7 @@
 	}
 </script>
 
-<div class="card p-4 w-modal shadow-xl space-y-4">
+<div class="card w-modal space-y-4 p-4 shadow-xl">
 	<header class="text-2xl font-bold">Invite User</header>
 
 	{#if smtpEnabled}

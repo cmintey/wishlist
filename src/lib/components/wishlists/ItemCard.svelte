@@ -187,26 +187,26 @@
 			<div class="flex flex-row space-x-2 md:space-x-4">
 				{#if !item.approved}
 					<button
-						class="btn variant-filled-success btn-sm md:btn"
+						class="btn btn-sm variant-filled-success md:btn"
 						on:click={() => handleApproval(true)}
 					>
 						Approve
 					</button>
 					<button
-						class="btn variant-filled-error btn-sm md:btn"
+						class="btn btn-sm variant-filled-error md:btn"
 						on:click={() => handleApproval(false)}
 					>
 						Deny
 					</button>
 				{:else if user.username === item.user?.username || user.username === item.addedBy?.username}
 					<button
-						class="btn variant-ghost-primary btn-sm md:btn"
+						class="btn btn-sm variant-ghost-primary md:btn"
 						on:click={() =>
 							goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`)}
 					>
 						Edit
 					</button>
-					<button class="btn variant-filled-error btn-sm md:btn" on:click={handleDelete}>
+					<button class="btn btn-sm variant-filled-error md:btn" on:click={handleDelete}>
 						Delete
 					</button>
 				{/if}

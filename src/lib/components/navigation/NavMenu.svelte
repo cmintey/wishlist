@@ -67,7 +67,7 @@
 </script>
 
 {#if user}
-	<div class="flex flex-row space-x-2 items-center">
+	<div class="flex flex-row items-center space-x-2">
 		<span class="relative">
 			<button use:popup={menuSettings}>
 				<Avatar {user} width="h-10 md:h-12" />
@@ -92,7 +92,7 @@
 					<hr />
 
 					{#await userAPI.activeGroup() then group}
-						<div class="px-4 py-2 flex flex-row items-center space-x-4">
+						<div class="flex flex-row items-center space-x-4 px-4 py-2">
 							<iconify-icon icon="ion:people" />
 							<span>{group.name} Group</span>
 						</div>

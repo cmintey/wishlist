@@ -66,7 +66,7 @@
 	};
 </script>
 
-<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:items-end mb-4">
+<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0">
 	<Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
 	<button class="btn variant-filled-primary" on:click={createGroup}>
 		<iconify-icon icon="ion:add" />

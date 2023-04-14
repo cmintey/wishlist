@@ -67,7 +67,7 @@
 				</div>
 
 				<div>
-					<a href="/forgot-password" class="absolute top-0 right-0 text-sm">Forgot password?</a>
+					<a href="/forgot-password" class="absolute right-0 top-0 text-sm">Forgot password?</a>
 				</div>
 			</div>
 		</div>
