@@ -108,7 +108,7 @@
 <!-- Add Item button -->
 {#if data.listOwner.isMe || data.suggestionsEnabled}
 	<button
-		class="btn variant-ghost-surface w-16 h-16 rounded-full fixed z-90 bottom-4 right-4 md:bottom-10 md:right-10"
+		class="btn variant-ghost-surface w-16 h-16 rounded-full fixed z-90 bottom-16 right-4 md:bottom-10 md:right-10"
 		on:click={() => goto(`${$page.url}/new`)}
 	>
 		<iconify-icon icon="ion:add" width="32" height="32" />

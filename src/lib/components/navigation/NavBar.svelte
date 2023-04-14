@@ -4,15 +4,19 @@
 	import { page } from "$app/stores";
 	import NavMenu from "./NavMenu.svelte";
 	import type { User } from "lucia-auth";
+	import { getContext } from "svelte";
+	import type { Writable } from "svelte/store";
 
 	export let navItems: NavItem[];
 	export let user: User | null;
+
+	let isInstalled = getContext<Writable<boolean>>("nav");
 </script>
 
-<AppBar background="bg-surface-200-700-token">
+<AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
 	<svelte:fragment slot="lead">
 		<div class="flex space-x-4 items-center content-center">
-			{#if user}
+			{#if user && !$isInstalled}
 				<button
 					class="btn btn-sm p-0 pt-0.5 md:hidden"
 					on:click={() =>
@@ -25,8 +29,8 @@
 			{/if}
 
 			<a class="flex flex-row space-x-2 items-center" href="/">
-				<img src={logo} alt="Wishlist Logo" class="h-14" />
-				<span class="text-4xl font-bold text-primary-900-50-token"> Wishlist </span>
+				<img src={logo} alt="Wishlist Logo" class="h-10 md:h-12" />
+				<span class="text-2xl md:text-3xl font-bold text-primary-900-50-token"> Wishlist </span>
 			</a>
 		</div>
 	</svelte:fragment>
@@ -36,7 +40,7 @@
 			{#each navItems as navItem}
 				<a
 					href={navItem.href}
-					class="list-option px-4 py-2 font-bold"
+					class="list-option font-bold"
 					data-sveltekit-preload-data
 					class:variant-filled-primary={$page.url.pathname === navItem.href}
 				>
