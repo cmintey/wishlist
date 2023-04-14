@@ -7,7 +7,7 @@
 	export let form: ActionData;
 </script>
 
-<div class="flex flex-col space-y-4 items-center">
+<div class="flex flex-col items-center space-y-4">
 	<h1>Sign in</h1>
 
 	<form
@@ -23,7 +23,7 @@
 		}}
 	>
 		<div
-			class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+			class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 		>
 			<label for="username">
 				<span>Username</span>
@@ -39,7 +39,7 @@
 				/>
 			</label>
 
-			<div class="flex flex-col space-y-4 relative">
+			<div class="relative flex flex-col space-y-4">
 				<PasswordInput
 					id="password"
 					name="password"
@@ -48,8 +48,9 @@
 					error={form?.incorrect || form?.error}
 				/>
 
-				{#if form?.incorrect}<span class="unstyled text-xs text-red-500">Invalid credentials!</span
-					>{/if}
+				{#if form?.incorrect}<span class="unstyled text-xs text-red-500">
+						Invalid credentials!
+					</span>{/if}
 				{#if form?.error}
 					<ul>
 						{#each form.errors as error}
@@ -58,7 +59,7 @@
 					</ul>
 				{/if}
 
-				<div class="flex space-x-4 justify-center items-center">
+				<div class="flex items-center justify-center space-x-4">
 					<button class="btn variant-filled-primary w-min">Log In</button>
 					{#if data.enableSignup}
 						<a href="/signup">Create an account</a>
@@ -66,7 +67,7 @@
 				</div>
 
 				<div>
-					<a href="/forgot-password" class="text-sm absolute top-0 right-0">Forgot password?</a>
+					<a href="/forgot-password" class="absolute right-0 top-0 text-sm">Forgot password?</a>
 				</div>
 			</div>
 		</div>

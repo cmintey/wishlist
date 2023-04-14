@@ -48,11 +48,11 @@
 			<span>{CLAIM_OPTIONS[claimOption]}</span>
 			<iconify-icon
 				icon="ion:caret-down"
-				class="text-xs arrow ease-out duration-300"
+				class="arrow text-xs duration-300 ease-out"
 				class:rotate-180={menuOpen}
 			/>
 		</button>
-		<nav class="list-nav card p-4 shadow-xl" data-popup="view">
+		<nav class="card list-nav p-4 shadow-xl" data-popup="view">
 			<ul>
 				{#each Object.entries(CLAIM_OPTIONS) as [optionKey, optionValue]}
 					<li>

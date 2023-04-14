@@ -23,7 +23,7 @@
 		<span>Enable</span>
 	</label>
 	{#if enabled}
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+		<div class="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
 			<label for="smtpHost">
 				<span>Host</span>
 				<input

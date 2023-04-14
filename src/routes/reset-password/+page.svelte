@@ -18,7 +18,7 @@
 </script>
 
 {#if data.valid}
-	<div class="flex flex-col space-y-4 items-center">
+	<div class="flex flex-col items-center space-y-4">
 		<h1>Reset Password</h1>
 
 		<form
@@ -30,7 +30,7 @@
 			}}
 		>
 			<div
-				class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+				class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 			>
 				<PasswordInput
 					label="New Password"
@@ -49,7 +49,7 @@
 				/>
 
 				{#if newPassword !== confirmPassword}
-					<span class="unstyled text-xs text-red-500"> Passwords must match </span>
+					<span class="unstyled text-xs text-red-500">Passwords must match</span>
 				{/if}
 
 				{#if form?.error}
@@ -68,19 +68,24 @@
 				<button
 					type="submit"
 					class="btn variant-filled-primary w-fit"
-					disabled={newPassword === "" || newPassword !== confirmPassword}>Update Password</button
+					disabled={newPassword === "" || newPassword !== confirmPassword}
 				>
+					Update Password
+				</button>
 			</div>
 		</form>
 	</div>
 {/if}
 
 {#if form?.success}
-	<div class="flex flex-col space-y-4 items-center">
-		<div class="flex flex-col space-y-1 items-center text-center w-80 md:w-full">
+	<div class="flex flex-col items-center space-y-4">
+		<div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
 			<iconify-icon icon="ion:checkmark-circle-outline" width="100" />
 			<span class="text-xl font-bold">Success!</span>
-			<p>Your password was reset. <a href="/login">Click here</a> to login.</p>
+			<p>
+				Your password was reset. <a href="/login">Click here</a>
+				to login.
+			</p>
 		</div>
 	</div>
 {/if}

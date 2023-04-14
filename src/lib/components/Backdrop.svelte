@@ -5,10 +5,10 @@
 </script>
 
 <div
-	class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center"
+	class="fixed bottom-0 left-0 right-0 top-0 z-50 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-gray-700 opacity-75"
 >
-	<div class="h-12 w-12 m-4">
+	<div class="m-4 h-12 w-12">
 		<ProgressRadial stroke={32} />
 	</div>
-	<span class="text-white text-center">{text}</span>
+	<span class="text-center text-white">{text}</span>
 </div>

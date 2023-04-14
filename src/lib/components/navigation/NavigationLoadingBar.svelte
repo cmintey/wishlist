@@ -11,6 +11,6 @@
 	});
 </script>
 
-<div class="absolute top-0 left-0 w-screen h-[3px] bg-white z-[999999999]">
-	<span class="absolute bg-surface-backdrop-token h-[3px]" style:width={`${$progress}%`} />
+<div class="absolute left-0 top-0 z-[999999999] h-[3px] w-screen bg-white">
+	<span class="absolute h-[3px] bg-surface-backdrop-token" style:width={`${$progress}%`} />
 </div>

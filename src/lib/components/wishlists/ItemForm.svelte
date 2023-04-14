@@ -28,7 +28,7 @@
 	};
 </script>
 
-<div class="grid gap-4 grid-cols-1 md:grid-cols-6">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-6">
 	<label for="url" class="col-span-1 md:col-span-6">
 		<span>Item URL</span>
 		<input
@@ -43,7 +43,7 @@
 		/>
 	</label>
 
-	<label for="name" class="col-span-1 md:col-span-4 row-start-2">
+	<label for="name" class="col-span-1 row-start-2 md:col-span-4">
 		<span>Item Name*</span>
 		<input
 			class="input"
@@ -60,7 +60,7 @@
 		{/if}
 	</label>
 
-	<label for="price" class="col-span-1 md:col-span-2 row-start-3 md:row-start-2">
+	<label for="price" class="col-span-1 row-start-3 md:col-span-2 md:row-start-2">
 		<span>Price</span>
 		<div class="input-group grid-cols-[auto_1fr]">
 			<div class="input-group-shim">$</div>

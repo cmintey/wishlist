@@ -81,7 +81,7 @@
 		<NavBar {navItems} user={data.user} />
 	</svelte:fragment>
 	<!-- Router Slot -->
-	<div class="px-4 md:px-12 lg:px-32 xl:px-56 py-4">
+	<div class="px-4 py-4 md:px-12 lg:px-32 xl:px-56">
 		<slot />
 	</div>
 

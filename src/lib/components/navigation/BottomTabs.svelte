@@ -20,7 +20,7 @@
 		hover="hover:variant-soft-primary"
 		rounded="rounded-full"
 		border=""
-		class="bg-surface-200-700-token w-full py-4 md:hidden"
+		class="w-full py-4 bg-surface-200-700-token md:hidden"
 		padding="px-6 py-2"
 	>
 		{#each navItems as navItem, value}

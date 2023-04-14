@@ -12,7 +12,7 @@
 	};
 </script>
 
-<div class="flex flex-row items-center w-100">
+<div class="w-100 flex flex-row items-center">
 	<span class="text-ellipsis">
 		<a href={url}>
 			<slot />

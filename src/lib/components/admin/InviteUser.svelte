@@ -55,7 +55,7 @@
 			update();
 		};
 	}}
-	class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:items-end"
+	class="flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0"
 >
 	<button class="btn variant-filled-primary w-fit" type="button" on:click={triggerInviteModal}>
 		<iconify-icon icon="ion:person-add" />
@@ -68,9 +68,9 @@
 	{/if}
 
 	{#if form?.url}
-		<div class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0 md:items-center">
+		<div class="flex flex-col space-y-2 md:flex-row md:items-center md:space-x-2 md:space-y-0">
 			<TokenCopy url={form.url}>Invite link</TokenCopy>
-			<span class="italic text-sm">This invite link is only valid for one signup</span>
+			<span class="text-sm italic">This invite link is only valid for one signup</span>
 		</div>
 	{/if}
 

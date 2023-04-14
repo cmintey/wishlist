@@ -70,7 +70,7 @@
 	};
 </script>
 
-<div class="flex py-4 space-x-4">
+<div class="flex space-x-4 py-4">
 	<button
 		class="btn variant-filled-primary"
 		type="button"
@@ -79,12 +79,12 @@
 		<iconify-icon icon="ion:person-add" />
 		<span>Add Member</span>
 	</button>
-	<button class="btn variant-filled-error" on:click={deleteGroup}> Delete Group </button>
+	<button class="btn variant-filled-error" on:click={deleteGroup}>Delete Group</button>
 </div>
 
 <div class="flex flex-col space-y-2">
 	<div class="table-container">
-		<table class="table table-interactive" role="grid">
+		<table class="table-interactive table" role="grid">
 			<thead class="table-head">
 				<tr>
 					{#each head as label}
@@ -92,8 +92,8 @@
 							{label}
 						</th>
 					{/each}
-					<th> Manager </th>
-					<th> Remove </th>
+					<th>Manager</th>
+					<th>Remove</th>
 				</tr>
 			</thead>
 			<tbody class="table-body">

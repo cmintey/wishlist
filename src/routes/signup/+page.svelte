@@ -15,12 +15,12 @@
 	});
 </script>
 
-<div class="flex flex-col space-y-4 items-center">
+<div class="flex flex-col items-center space-y-4">
 	<h1>Create an account</h1>
 
 	<form class="w-80 md:w-1/3" method="POST" use:enhance>
 		<div
-			class="flex flex-col space-y-4 p-4 rounded-container-token bg-surface-100-800-token ring-outline-token"
+			class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 		>
 			<input class="hidden" id="tokenId" name="tokenId" value={data.id} />
 			<label for="name">
@@ -62,7 +62,7 @@
 			/>
 
 			{#if password !== passwordConfirm}
-				<span class="unstyled text-xs text-red-500"> Passwords must match </span>
+				<span class="unstyled text-xs text-red-500">Passwords must match</span>
 			{/if}
 
 			{#if form?.error}
@@ -79,12 +79,14 @@
 				</ul>
 			{/if}
 
-			<div class="flex space-x-4 pb-2 justify-center items-center">
+			<div class="flex items-center justify-center space-x-4 pb-2">
 				<button
 					class="btn variant-filled-primary w-min"
 					type="submit"
-					disabled={password !== passwordConfirm}>Sign Up</button
+					disabled={password !== passwordConfirm}
 				>
+					Sign Up
+				</button>
 				<a href="/login">Sign in</a>
 			</div>
 		</div>

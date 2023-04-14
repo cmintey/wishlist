@@ -56,7 +56,7 @@
 </div>
 
 <form method="POST" use:enhance>
-	<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 mt-4">
+	<div class="mt-4 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
 		<button class="btn variant-filled-primary w-fit" formaction="?/reset-password">
 			Generate Reset Password Link
 		</button>
@@ -73,8 +73,9 @@
 			class="btn variant-ghost-error w-fit"
 			type="button"
 			on:click={() => handleDelete(data.editingUser.username, data.editingUser.id)}
-			>Delete User</button
 		>
+			Delete User
+		</button>
 	</div>
 </form>
 
