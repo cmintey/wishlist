@@ -1,7 +1,10 @@
 import { z } from "zod";
-import { zxcvbn } from "$lib/validations/zxcvbn";
+import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
+import { loadOptions } from "$lib/validations/zxcvbn";
 
-const passwordZxcvbn = z.string().refine((pass) => zxcvbn(pass).score > 3, {
+await loadOptions().then((options) => zxcvbnOptions.setOptions(options));
+
+const passwordZxcvbn = z.string().refine((pass) => zxcvbn(pass).score > 2, {
 	message: "Password must be at least 'moderate'"
 });
 

@@ -1,14 +1,13 @@
-import { zxcvbn, zxcvbnAsync, zxcvbnOptions } from "@zxcvbn-ts/core";
-import zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
-import zxcvbnEnPackage from "@zxcvbn-ts/language-en";
+export const loadOptions = async () => {
+	const zxcvbnCommonPackage = await import("@zxcvbn-ts/language-common");
+	const zxcvbnEnPackage = await import("@zxcvbn-ts/language-en");
 
-zxcvbnOptions.setOptions({
-	translations: zxcvbnEnPackage.translations,
-	graphs: zxcvbnCommonPackage.adjacencyGraphs,
-	dictionary: {
-		...zxcvbnCommonPackage.dictionary,
-		...zxcvbnEnPackage.dictionary
-	}
-});
-
-export { zxcvbnAsync, zxcvbn };
+	return {
+		dictionary: {
+			...zxcvbnCommonPackage.default.dictionary,
+			...zxcvbnEnPackage.default.dictionary
+		},
+		graphs: zxcvbnCommonPackage.default.adjacencyGraphs,
+		translations: zxcvbnEnPackage.default.translations
+	};
+};
