@@ -71,37 +71,35 @@
 	</div>
 </label>
 
-{#if strengthMeter}
-	{#if value !== "" && strength}
-		<div class="flex flex-row space-x-1 items-center">
-			<ProgressBar
-				label="Password Strength"
-				value={strength.score + 1}
-				max={5}
-				bind:meter={meterLookup[strength.score.valueOf()]}
-			/>
-			<div
-				class="flex items-center"
-				class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
-				use:popup={popupSettings}
-			>
-				<iconify-icon icon="ion:information-circle-outline" />
-			</div>
+{#if strengthMeter && value !== "" && strength}
+	<div class="flex flex-row space-x-1 items-center">
+		<ProgressBar
+			label="Password Strength"
+			value={strength.score + 1}
+			max={5}
+			bind:meter={meterLookup[strength.score.valueOf()]}
+		/>
+		<div
+			class="flex items-center"
+			class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
+			use:popup={popupSettings}
+		>
+			<iconify-icon icon="ion:information-circle-outline" />
 		</div>
+	</div>
 
-		<div class="card variant-filled p-4" data-popup="suggestions">
-			{#each strength.feedback.suggestions as suggestion}
-				<p>{suggestion}</p>
-			{/each}
-			<p>{strength.feedback.warning}</p>
-		</div>
+	<div class="card variant-filled p-4" data-popup="suggestions">
+		{#each strength.feedback.suggestions as suggestion}
+			<p>{suggestion}</p>
+		{/each}
+		<p>{strength.feedback.warning}</p>
+	</div>
 
-		{#if strength.score < 3}
-			<p>Weak</p>
-		{:else if strength.score < 4}
-			<p>Moderate</p>
-		{:else}
-			<p>Strong</p>
-		{/if}
+	{#if strength.score < 3}
+		<p>Weak</p>
+	{:else if strength.score < 4}
+		<p>Moderate</p>
+	{:else}
+		<p>Strong</p>
 	{/if}
 {/if}
