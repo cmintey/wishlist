@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { zxcvbn, zxcvbnOptions, type ZxcvbnResult } from "@zxcvbn-ts/core";
-	import { loadOptions } from "$lib/validations/zxcvbn";
+	import { loadOptions } from "$lib/zxcvbn";
 	import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
 

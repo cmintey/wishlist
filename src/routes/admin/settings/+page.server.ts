@@ -4,7 +4,7 @@ import { getConfig, writeConfig } from "$lib/server/config";
 import { redirect, error, fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
-import { settingSchema } from "$lib/validations/settings";
+import { settingSchema } from "$lib/validations";
 import type { z } from "zod";
 
 export const load: PageServerLoad = async ({ locals }) => {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
-import { loadOptions } from "$lib/validations/zxcvbn";
+import { loadOptions } from "$lib/zxcvbn";
 
 await loadOptions().then((options) => zxcvbnOptions.setOptions(options));
 
@@ -12,7 +12,8 @@ export const signupSchema = z.object({
 	name: z.string().trim().min(1, "Name must not be blank"),
 	username: z.string().trim().min(1, "Username must not be blank"),
 	email: z.string().email(),
-	password: passwordZxcvbn
+	password: passwordZxcvbn,
+	tokenId: z.string().optional()
 });
 
 export const loginSchema = z.object({

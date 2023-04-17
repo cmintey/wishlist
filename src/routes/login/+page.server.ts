@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
-import { loginSchema } from "$lib/validations/schemas";
+import { loginSchema } from "$lib/validations";
 import { getConfig } from "$lib/server/config";
 
 // If the user exists, redirect authenticated users to the profile page.
