@@ -72,7 +72,7 @@
 </label>
 
 {#if strengthMeter && value !== "" && strength}
-	<div class="flex flex-row space-x-1 items-center">
+	<div class="flex flex-row items-center space-x-1">
 		<ProgressBar
 			label="Password Strength"
 			value={strength.score + 1}
