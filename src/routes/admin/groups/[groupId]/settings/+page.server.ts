@@ -3,7 +3,7 @@ import { getConfig, writeConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { redirect, error, fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { settingSchema } from "$lib/validations/settings";
+import { settingSchema } from "$lib/validations";
 
 export const load = (async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();

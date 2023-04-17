@@ -10,6 +10,15 @@ dependencies:
   '@samirrayani/metascraper-shopping':
     specifier: ^1.4.22
     version: 1.4.22
+  '@zxcvbn-ts/core':
+    specifier: ^2.2.1
+    version: 2.2.1
+  '@zxcvbn-ts/language-common':
+    specifier: ^2.0.1
+    version: 2.0.1
+  '@zxcvbn-ts/language-en':
+    specifier: ^2.1.0
+    version: 2.1.0
   got-scraping:
     specifier: ^3.2.13
     version: 3.2.13
@@ -2202,6 +2211,20 @@ packages:
       vite-plugin-pwa: 0.14.7(vite@4.2.1)(workbox-build@6.5.4)(workbox-window@6.5.4)
     dev: true
 
+  /@zxcvbn-ts/core@2.2.1:
+    resolution: {integrity: sha512-Cg1JyRpCDIF+Dh3nauqygmmCYxogNVZDxSn+9PgkPD1HZ2QiJe4elruVJrGmYRS7muGmZ1hNJq8ySQdPv6GHaw==}
+    dependencies:
+      fastest-levenshtein: 1.0.16
+    dev: false
+
+  /@zxcvbn-ts/language-common@2.0.1:
+    resolution: {integrity: sha512-P+v5MA/UNc9nb3FEOEoDgTyIGQc2vLc6m04pdf5YyuNOzrL0iNANhECk2TUp62JbrjouJVodqhMH0j1a8/24Bg==}
+    dev: false
+
+  /@zxcvbn-ts/language-en@2.1.0:
+    resolution: {integrity: sha512-I3n4AAbArjPAZtwCrk9MQnSrcj5+9rq8sic2rUU44fP5QaR17Vk8zDt61+R9dnP9ZRsj09aAUYML4Ash05qZjQ==}
+    dev: false
+
   /abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
     dev: false
@@ -3231,6 +3254,11 @@ packages:
 
   /fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
+
+  /fastest-levenshtein@1.0.16:
+    resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
+    engines: {node: '>= 4.9.1'}
+    dev: false
 
   /fastq@1.15.0:
     resolution: {integrity: sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==}
