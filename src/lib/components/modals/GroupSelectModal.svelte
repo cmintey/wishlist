@@ -17,7 +17,7 @@
 	<header class="text-2xl font-bold">Select Group</header>
 	<ListBox class="border border-surface-500 p-4 rounded-container-token">
 		{#each groups as group}
-			<ListBoxItem bind:group={selectedGroup} name={group.name} value={group.id}>
+			<ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
 				{group.name}
 			</ListBoxItem>
 		{/each}

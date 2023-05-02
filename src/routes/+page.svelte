@@ -7,10 +7,10 @@
 	export let data: PageData;
 </script>
 
-<div in:fade class="flex flex-col space-y-4">
+<div class="flex flex-col space-y-4" in:fade>
 	<h1>Lists</h1>
 	<ApprovalAlert approvalCount={data.me._count.items} />
-	<UserCard user={data.me} hideCount />
+	<UserCard hideCount user={data.me} />
 
 	{#each data.users as user}
 		<UserCard {user} />

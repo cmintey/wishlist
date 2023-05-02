@@ -16,8 +16,8 @@
 
 <!-- TODO: Add tooltips explaining the various settings -->
 <form
-	method="POST"
 	action="?/settings"
+	method="POST"
 	use:enhance={({ action }) => {
 		if (action.search === "?/send-test") {
 			sending = true;
@@ -90,9 +90,9 @@
 		{#if saved && config.smtp.enable}
 			<button
 				class="btn variant-ghost-primary mt-2 h-min w-fit"
-				type="submit"
-				formaction="?/send-test"
 				disabled={sending || sent}
+				formaction="?/send-test"
+				type="submit"
 			>
 				{#if sending}
 					<span class="h-6 w-6">

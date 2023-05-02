@@ -14,29 +14,29 @@
 </script>
 
 <TabGroup>
-	<Tab bind:group={tabSet} name="Profile" value={0}>Profile</Tab>
-	<Tab bind:group={tabSet} name="Security" value={1}>Security</Tab>
+	<Tab name="Profile" value={0} bind:group={tabSet}>Profile</Tab>
+	<Tab name="Security" value={1} bind:group={tabSet}>Security</Tab>
 	<svelte:fragment slot="panel">
 		{#if tabSet === 0}
 			<div class="flex w-fit flex-col items-center">
 				<div class="relative m-auto h-full w-full max-w-[150px]">
 					<Avatar user={data.user} width="w-32" />
 					<form
-						method="POST"
 						class="absolute bottom-0 right-0 h-12 w-12"
 						action="?/profilePicture"
+						method="POST"
 						use:enhance
 					>
 						<FileButton
-							name="profilePic"
 							id="profilePic"
+							name="profilePic"
 							accept="image/*"
 							button="btn-icon btn-icon-sm variant-glass-secondary"
 							on:change={() => submitButton.click()}
 						>
-							<iconify-icon icon="ion:camera" class="text-2xl" />
+							<iconify-icon class="text-2xl" icon="ion:camera" />
 						</FileButton>
-						<button type="submit" bind:this={submitButton} />
+						<button bind:this={submitButton} type="submit" />
 					</form>
 				</div>
 

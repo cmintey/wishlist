@@ -11,12 +11,12 @@
 		<label for="name">
 			<span>Name</span>
 			<input
-				class="input"
-				type="text"
 				id="name"
 				name="name"
+				class="input"
 				autocomplete="name"
 				placeholder={user.name}
+				type="text"
 				bind:value={user.name}
 			/>
 		</label>
@@ -24,12 +24,12 @@
 		<label for="username">
 			<span>Username</span>
 			<input
-				class="input"
-				type="text"
 				id="username"
 				name="username"
+				class="input"
 				autocomplete="username"
 				placeholder={user.username}
+				type="text"
 				bind:value={user.username}
 			/>
 		</label>
@@ -37,12 +37,12 @@
 		<label for="email">
 			<span>Email</span>
 			<input
-				class="input"
-				type="email"
 				id="email"
 				name="email"
+				class="input"
 				autocomplete="email"
 				placeholder={user.email}
+				type="email"
 				bind:value={user.email}
 			/>
 		</label>
@@ -55,7 +55,7 @@
 			</ul>
 		{/if}
 
-		<button type="submit" formaction="?/profile" class="btn variant-filled-primary w-fit">
+		<button class="btn variant-filled-primary w-fit" formaction="?/profile" type="submit">
 			Update
 		</button>
 	</div>

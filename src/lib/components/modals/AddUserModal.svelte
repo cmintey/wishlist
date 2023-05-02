@@ -29,7 +29,7 @@
 		<span>Search</span>
 		<div class="input-group grid-cols-[auto_1fr_auto]">
 			<div class="input-group-shim">
-				<iconify-icon icon="ion:search" class="text-lg" />
+				<iconify-icon class="text-lg" icon="ion:search" />
 			</div>
 			<input class="input" type="search" on:input={doSearch} />
 		</div>
@@ -38,7 +38,7 @@
 	{#if users.length > 0}
 		<ListBox class="border border-surface-500 p-4 rounded-container-token">
 			{#each users as user}
-				<ListBoxItem bind:group={selectedUser} name={user.name} value={user.id}>
+				<ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
 					{user.name}
 				</ListBoxItem>
 			{/each}

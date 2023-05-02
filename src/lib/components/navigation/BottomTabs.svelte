@@ -15,22 +15,22 @@
 
 {#if $isInstalled}
 	<TabGroup
-		justify="justify-around"
-		active="variant-glass-primary"
-		hover="hover:variant-soft-primary"
-		rounded="rounded-full"
-		border=""
 		class="w-full py-4 bg-surface-200-700-token md:hidden"
+		active="variant-glass-primary"
+		border=""
+		hover="hover:variant-soft-primary"
+		justify="justify-around"
 		padding="px-6 py-2"
+		rounded="rounded-full"
 	>
 		{#each navItems as navItem, value}
 			<Tab
-				bind:group={tabsBottomNav}
 				name={navItem.label}
 				{value}
+				bind:group={tabsBottomNav}
 				on:click={() => goto(`${navItem.href}`)}
 			>
-				<iconify-icon icon={navItem.icon} class="text-xl" />
+				<iconify-icon class="text-xl" icon={navItem.icon} />
 			</Tab>
 		{/each}
 	</TabGroup>

@@ -42,7 +42,7 @@
 				out:send|local={{ key: item.id }}
 				animate:flip={{ duration: 200 }}
 			>
-				<ItemCard {item} user={data.user} showFor />
+				<ItemCard {item} showFor user={data.user} />
 			</div>
 		{/each}
 		{#each items.filter((item) => item.purchased) as item (item.id)}
@@ -51,7 +51,7 @@
 				out:send|local={{ key: item.id }}
 				animate:flip={{ duration: 200 }}
 			>
-				<ItemCard {item} user={data.user} showFor />
+				<ItemCard {item} showFor user={data.user} />
 			</div>
 		{/each}
 	</div>

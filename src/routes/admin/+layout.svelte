@@ -20,7 +20,7 @@
 
 <TabGroup>
 	{#each tabs as { label, href }, value}
-		<Tab bind:group={selectedTab} name={label} {value} on:change={() => goto(`/admin${href}`)}>
+		<Tab name={label} {value} bind:group={selectedTab} on:change={() => goto(`/admin${href}`)}>
 			{label}
 		</Tab>
 	{/each}

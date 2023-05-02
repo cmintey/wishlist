@@ -24,12 +24,12 @@
 							width: "w-[280px] md:w-[480px]"
 						})}
 				>
-					<iconify-icon icon="ion:menu" class="text-2xl" />
+					<iconify-icon class="text-2xl" icon="ion:menu" />
 				</button>
 			{/if}
 
 			<a class="flex flex-row items-center space-x-2" href="/">
-				<img src={logo} alt="Wishlist Logo" class="h-10 md:h-12" />
+				<img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
 				<span class="text-2xl font-bold text-primary-900-50-token md:text-3xl">Wishlist</span>
 			</a>
 		</div>
@@ -39,10 +39,10 @@
 		<div class="hidden flex-row items-center pl-4 pt-0.5 md:flex">
 			{#each navItems as navItem}
 				<a
-					href={navItem.href}
 					class="list-option font-bold"
-					data-sveltekit-preload-data
 					class:variant-filled-primary={$page.url.pathname === navItem.href}
+					data-sveltekit-preload-data
+					href={navItem.href}
 				>
 					{navItem.label}
 				</a>

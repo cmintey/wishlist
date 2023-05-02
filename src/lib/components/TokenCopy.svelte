@@ -17,18 +17,18 @@
 		<a href={url}>
 			<slot />
 		</a>
-		<span hidden data-clipboard="tokenUrl">{url}</span>
+		<span data-clipboard="tokenUrl" hidden>{url}</span>
 	</span>
 	<div class="flex flex-row items-center">
 		<button
 			class="btn btn-icon"
 			type="button"
-			use:clipboard={{ element: "tokenUrl" }}
-			use:popup={tooltipSettings}
 			on:click={() => {
 				copiedVisible = true;
 				setTimeout(() => (copiedVisible = false), 1000);
 			}}
+			use:clipboard={{ element: "tokenUrl" }}
+			use:popup={tooltipSettings}
 		>
 			<iconify-icon icon="ion:copy" />
 		</button>

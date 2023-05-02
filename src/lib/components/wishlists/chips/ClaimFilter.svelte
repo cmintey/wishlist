@@ -47,9 +47,9 @@
 		>
 			<span>{CLAIM_OPTIONS[claimOption]}</span>
 			<iconify-icon
-				icon="ion:caret-down"
 				class="arrow text-xs duration-300 ease-out"
 				class:rotate-180={menuOpen}
+				icon="ion:caret-down"
 			/>
 		</button>
 		<nav class="card list-nav p-4 shadow-xl" data-popup="view">

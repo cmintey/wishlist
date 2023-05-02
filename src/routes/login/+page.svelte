@@ -28,14 +28,14 @@
 			<label for="username">
 				<span>Username</span>
 				<input
-					class="input"
-					type="text"
 					id="username"
 					name="username"
-					autocomplete="username"
-					autocapitalize="off"
-					required
+					class="input"
 					class:input-error={form?.incorrect || form?.error}
+					autocapitalize="off"
+					autocomplete="username"
+					required
+					type="text"
 				/>
 			</label>
 
@@ -43,9 +43,9 @@
 				<PasswordInput
 					id="password"
 					name="password"
+					error={form?.incorrect || form?.error}
 					label="Password"
 					required
-					error={form?.incorrect || form?.error}
 				/>
 
 				{#if form?.incorrect}<span class="unstyled text-xs text-red-500">
@@ -67,7 +67,7 @@
 				</div>
 
 				<div>
-					<a href="/forgot-password" class="absolute right-0 top-0 text-sm">Forgot password?</a>
+					<a class="absolute right-0 top-0 text-sm" href="/forgot-password">Forgot password?</a>
 				</div>
 			</div>
 		</div>

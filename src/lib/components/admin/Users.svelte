@@ -45,5 +45,5 @@
 </div>
 
 {#if userData}
-	<Table source={userData} interactive on:selected={selectionHandler} />
+	<Table interactive source={userData} on:selected={selectionHandler} />
 {/if}

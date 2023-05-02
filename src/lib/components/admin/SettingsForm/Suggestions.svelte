@@ -7,10 +7,10 @@
 	<h2>Suggestions</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
+			id="enableSuggestions"
+			name="enableSuggestions"
 			class="checkbox"
 			type="checkbox"
-			name="enableSuggestions"
-			id="enableSuggestions"
 			bind:checked={enabled}
 		/>
 		<span>Enable</span>
@@ -18,7 +18,7 @@
 	{#if enabled}
 		<label class="w-fit">
 			<span>Method</span>
-			<select class="select" name="suggestionMethod" id="suggestionMethod" bind:value={method}>
+			<select id="suggestionMethod" name="suggestionMethod" class="select" bind:value={method}>
 				<option value="surprise">Surprise Me</option>
 				<option value="auto-approval">Auto-Approve</option>
 				<option value="approval">Approval Required</option>

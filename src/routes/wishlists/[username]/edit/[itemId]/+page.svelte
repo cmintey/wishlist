@@ -23,7 +23,7 @@
 			};
 		}}
 	>
-		<ItemForm data={data?.item} buttonText="Save" />
+		<ItemForm buttonText="Save" data={data?.item} />
 	</form>
 {/if}
 

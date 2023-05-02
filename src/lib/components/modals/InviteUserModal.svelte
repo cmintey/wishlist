@@ -31,15 +31,15 @@
 	{/if}
 
 	{#if smtpEnabled}
-		<label for="invite-email" class="w-fit">
+		<label class="w-fit" for="invite-email">
 			<span>Email</span>
 			<input
-				class="input"
-				type="email"
-				name="invite-email"
 				id="invite-email"
+				name="invite-email"
+				class="input"
 				autocomplete="off"
 				required
+				type="email"
 				bind:value={userEmail}
 			/>
 		</label>
@@ -48,7 +48,7 @@
 	<label for="group">Group</label>
 	<ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
 		{#each groups as group}
-			<ListBoxItem bind:group={selectedGroup} name={group.name} value={group.id}>
+			<ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
 				{group.name}
 			</ListBoxItem>
 		{/each}
