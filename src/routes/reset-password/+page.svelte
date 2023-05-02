@@ -22,8 +22,8 @@
 		<h1>Reset Password</h1>
 
 		<form
-			method="POST"
 			class="w-80"
+			method="POST"
 			use:enhance={({ data: formData }) => {
 				formData.append("userId", data.userId || "");
 				formData.append("id", `${data.id}` || "0");
@@ -33,17 +33,17 @@
 				class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 			>
 				<PasswordInput
-					label="New Password"
 					id="password"
 					name="password"
 					autocomplete="new-password"
+					label="New Password"
 					required
 					bind:value={newPassword}
 				/>
 				<PasswordInput
-					label="Confirm Password"
 					id="confirmpassword"
 					autocomplete="new-password"
+					label="Confirm Password"
 					required
 					bind:value={confirmPassword}
 				/>
@@ -66,9 +66,9 @@
 					</ul>
 				{/if}
 				<button
-					type="submit"
 					class="btn variant-filled-primary w-fit"
 					disabled={newPassword === "" || newPassword !== confirmPassword}
+					type="submit"
 				>
 					Update Password
 				</button>

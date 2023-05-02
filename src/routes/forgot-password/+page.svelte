@@ -23,8 +23,8 @@
 				Enter your email address and we'll send you a password reset link.
 			</p>
 			<form
-				method="POST"
 				class="w-80"
+				method="POST"
 				use:enhance={() => {
 					loading = true;
 					return async ({ update }) => {
@@ -36,15 +36,15 @@
 				<div
 					class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 				>
-					<label for="email" class="w-full">
+					<label class="w-full" for="email">
 						<span>Email</span>
 						<input
-							class="input"
-							type="email"
-							name="email"
 							id="email"
-							required
+							name="email"
+							class="input"
 							class:input-invalid={form?.error}
+							required
+							type="email"
 						/>
 					</label>
 					{#if form?.error}
@@ -54,7 +54,7 @@
 					{/if}
 
 					<div>
-						<button type="submit" class="btn variant-filled-primary">Submit</button>
+						<button class="btn variant-filled-primary" type="submit">Submit</button>
 					</div>
 				</div>
 			</form>

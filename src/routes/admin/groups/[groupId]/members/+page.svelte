@@ -100,7 +100,7 @@
 				{#each data.group.users as user, row}
 					<tr aria-rowindex={row}>
 						{#each dataKeys as key, col}
-							<td role="gridcell" aria-colindex={col} tabindex={col === 0 ? 0 : -1}>
+							<td aria-colindex={col} role="gridcell" tabindex={col === 0 ? 0 : -1}>
 								{user[key]}
 							</td>
 						{/each}
@@ -112,7 +112,7 @@
 								<iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}" />
 							</button>
 						</td>
-						<td role="gridcell" aria-colindex={dataKeys.length} tabindex={-1}>
+						<td aria-colindex={dataKeys.length} role="gridcell" tabindex={-1}>
 							<button class="btn-icon" on:click={() => removeMember(user.id)}>
 								<iconify-icon icon="ion:trash-bin" />
 							</button>

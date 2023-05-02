@@ -29,86 +29,86 @@
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-6">
-	<label for="url" class="col-span-1 md:col-span-6">
+	<label class="col-span-1 md:col-span-6" for="url">
 		<span>Item URL</span>
 		<input
-			class="input"
-			type="url"
 			id="url"
 			name="url"
+			class="input"
 			placeholder="Enter a URL to fetch the item data"
+			type="url"
 			bind:value={data.url}
 			on:focusout={() => getInfo()}
 			on:change={() => (urlChanged = true)}
 		/>
 	</label>
 
-	<label for="name" class="col-span-1 row-start-2 md:col-span-4">
+	<label class="col-span-1 row-start-2 md:col-span-4" for="name">
 		<span>Item Name*</span>
 		<input
-			class="input"
-			type="text"
 			id="name"
 			name="name"
-			required
-			bind:value={data.name}
+			class="input"
 			class:input-invalid={form?.missing}
 			autocomplete="off"
+			required
+			type="text"
+			bind:value={data.name}
 		/>
 		{#if form?.missing}
 			<p class="unstyled pt-2 text-xs text-warning-500">Item name required</p>
 		{/if}
 	</label>
 
-	<label for="price" class="col-span-1 row-start-3 md:col-span-2 md:row-start-2">
+	<label class="col-span-1 row-start-3 md:col-span-2 md:row-start-2" for="price">
 		<span>Price</span>
 		<div class="input-group grid-cols-[auto_1fr]">
 			<div class="input-group-shim">$</div>
 			<input
-				class="input"
-				type="text"
 				id="price"
 				name="price"
-				bind:value={data.price}
+				class="input"
 				autocomplete="off"
+				type="text"
+				bind:value={data.price}
 			/>
 		</div>
 	</label>
 
-	<label for="image" class="col-span-1 md:col-span-2">
+	<label class="col-span-1 md:col-span-2" for="image">
 		<span>Upload Image</span>
-		<input class="input" type="file" accept="image/*" id="image" name="image" />
+		<input id="image" name="image" class="input" accept="image/*" type="file" />
 	</label>
 
-	<label for="image_url" class="col-span-1 md:col-span-4">
+	<label class="col-span-1 md:col-span-4" for="image_url">
 		<span>Image URL</span>
 		<input
-			class="input"
-			type="text"
 			id="image_url"
 			name="image_url"
-			bind:value={data.image_url}
+			class="input"
 			autocomplete="off"
+			type="text"
+			bind:value={data.image_url}
 		/>
 	</label>
 
-	<label for="note" class="col-span-1 md:col-span-6">
+	<label class="col-span-1 md:col-span-6" for="note">
 		<span>Notes</span>
 		<textarea
-			class="textarea"
-			name="note"
 			id="note"
-			rows="4"
+			name="note"
+			class="textarea"
 			placeholder="i.e. size, color, etc."
+			rows="4"
 			bind:value={data.note}
 		/>
 	</label>
 
 	<div class="flex flex-row space-x-4">
-		<button type="submit" class="btn variant-filled-primary w-min" disabled={loading}>
+		<button class="btn variant-filled-primary w-min" disabled={loading} type="submit">
 			{buttonText}
 		</button>
-		<button type="button" class="btn variant-ghost-secondary w-min" on:click={() => history.back()}>
+		<button class="btn variant-ghost-secondary w-min" type="button" on:click={() => history.back()}>
 			Cancel
 		</button>
 	</div>

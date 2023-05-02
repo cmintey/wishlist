@@ -34,27 +34,27 @@
 >
 	<div class="flex flex-col items-start space-y-4">
 		<PasswordInput
-			label="Current Password"
 			id="oldpassword"
 			name="oldPassword"
 			autocomplete="current-password"
+			label="Current Password"
 			bind:value={passwordReset.current}
 		/>
 		<div>
 			<PasswordInput
-				label="New Password"
 				id="newpassword"
 				autocomplete="new-password"
-				bind:value={passwordReset.new}
+				label="New Password"
 				strengthMeter
+				bind:value={passwordReset.new}
 			/>
 		</div>
 
 		<PasswordInput
-			label="Confirm Password"
 			id="confirmpassword"
 			name="newPassword"
 			autocomplete="new-password"
+			label="Confirm Password"
 			bind:value={passwordReset.confirm}
 		/>
 		{#if passwordReset.new !== passwordReset.confirm}
@@ -74,12 +74,12 @@
 			</ul>
 		{/if}
 		<button
-			type="submit"
-			formaction="?/passwordchange"
 			class="btn variant-filled-primary w-fit"
 			disabled={passwordReset.current === "" ||
 				passwordReset.new === "" ||
 				passwordReset.new !== passwordReset.confirm}
+			formaction="?/passwordchange"
+			type="submit"
 		>
 			Update Password
 		</button>

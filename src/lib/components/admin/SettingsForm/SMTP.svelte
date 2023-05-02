@@ -14,10 +14,10 @@
 	<h2>SMTP</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
+			id="enableSMTP"
+			name="enableSMTP"
 			class="checkbox"
 			type="checkbox"
-			name="enableSMTP"
-			id="enableSMTP"
 			bind:checked={enabled}
 		/>
 		<span>Enable</span>
@@ -27,61 +27,61 @@
 			<label for="smtpHost">
 				<span>Host</span>
 				<input
-					class="input"
-					type="text"
-					name="smtpHost"
 					id="smtpHost"
+					name="smtpHost"
+					class="input"
 					autocomplete="off"
 					required
+					type="text"
 					bind:value={host}
 				/>
 			</label>
 			<label for="smtpPort">
 				<span>Port</span>
 				<input
-					class="input"
-					type="text"
-					name="smtpPort"
 					id="smtpPort"
+					name="smtpPort"
+					class="input"
 					autocomplete="off"
 					required
+					type="text"
 					bind:value={port}
 				/>
 			</label>
 			<label for="smtpUser">
 				<span>User</span>
 				<input
-					class="input"
-					type="text"
-					name="smtpUser"
 					id="smtpUser"
+					name="smtpUser"
+					class="input"
 					autocomplete="off"
 					required
+					type="text"
 					bind:value={user}
 				/>
 			</label>
-			<PasswordInput label="Password" name="smtpPass" id="smtpPass" required bind:value={pass} />
+			<PasswordInput id="smtpPass" name="smtpPass" label="Password" required bind:value={pass} />
 			<label for="smtpFrom">
 				<span>From Email</span>
 				<input
-					class="input"
-					type="text"
-					name="smtpFrom"
 					id="smtpFrom"
+					name="smtpFrom"
+					class="input"
 					autocomplete="off"
 					required
+					type="text"
 					bind:value={from}
 				/>
 			</label>
 			<label for="smtpFromName">
 				<span>From Name</span>
 				<input
-					class="input"
-					type="text"
-					name="smtpFromName"
 					id="smtpFromName"
+					name="smtpFromName"
+					class="input"
 					autocomplete="off"
 					required
+					type="text"
 					bind:value={fromName}
 				/>
 			</label>

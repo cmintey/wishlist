@@ -43,6 +43,7 @@
 </script>
 
 <form
+	class="flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0"
 	method="POST"
 	use:enhance={({ data }) => {
 		data.set("invite-email", email);
@@ -55,16 +56,15 @@
 			update();
 		};
 	}}
-	class="flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0"
 >
 	<button class="btn variant-filled-primary w-fit" type="button" on:click={triggerInviteModal}>
 		<iconify-icon icon="ion:person-add" />
 		<p>Invite User</p>
 	</button>
 
-	<input class="hidden" name="invite-group" id="invite-group" />
+	<input id="invite-group" name="invite-group" class="hidden" />
 	{#if config.smtp.enable}
-		<input class="hidden" name="invite-email" id="invite-email" />
+		<input id="invite-email" name="invite-email" class="hidden" />
 	{/if}
 
 	{#if form?.url}
@@ -74,5 +74,5 @@
 		</div>
 	{/if}
 
-	<button class="hidden" type="submit" bind:this={submitButton} />
+	<button bind:this={submitButton} class="hidden" type="submit" />
 </form>

@@ -17,13 +17,13 @@
 			{#each navItems as navItem}
 				<li>
 					<a
-						href={navItem.href}
-						data-sveltekit-preload-data
-						on:click={() => drawerStore.close()}
 						class="list-option space-x-1 font-bold"
 						class:variant-filled-primary={$page.url.pathname === navItem.href}
+						data-sveltekit-preload-data
+						href={navItem.href}
+						on:click={() => drawerStore.close()}
 					>
-						<iconify-icon icon={navItem.icon} class="text-xl" />
+						<iconify-icon class="text-xl" icon={navItem.icon} />
 						<p>{navItem.label}</p>
 					</a>
 				</li>

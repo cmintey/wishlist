@@ -23,42 +23,42 @@
 		<div
 			class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
 		>
-			<input class="hidden" id="tokenId" name="tokenId" value={data.id} />
+			<input id="tokenId" name="tokenId" class="hidden" value={data.id} />
 			<label for="name">
 				<span>Name</span>
-				<input class="input" type="text" id="name" name="name" autocomplete="name" required />
+				<input id="name" name="name" class="input" autocomplete="name" required type="text" />
 			</label>
 
 			<div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
 				<label for="username">
 					<span>Username</span>
 					<input
-						class="input"
-						type="text"
 						id="username"
 						name="username"
-						autocomplete="username"
+						class="input"
 						autocapitalize="off"
+						autocomplete="username"
 						required
+						type="text"
 					/>
 				</label>
 				<label for="email">
 					<span>Email</span>
-					<input class="input" type="email" id="email" name="email" autocomplete="email" required />
+					<input id="email" name="email" class="input" autocomplete="email" required type="email" />
 				</label>
 			</div>
 
 			<PasswordInput
-				label="Password"
 				id="password"
 				name="password"
+				label="Password"
 				required
-				bind:value={password}
 				strengthMeter
+				bind:value={password}
 			/>
 			<PasswordInput
-				label="Confirm Password"
 				id="confirmpassword"
+				label="Confirm Password"
 				required
 				bind:value={passwordConfirm}
 			/>
@@ -84,8 +84,8 @@
 			<div class="flex items-center justify-center space-x-4 pb-2">
 				<button
 					class="btn variant-filled-primary w-min"
-					type="submit"
 					disabled={password !== passwordConfirm}
+					type="submit"
 				>
 					Sign Up
 				</button>

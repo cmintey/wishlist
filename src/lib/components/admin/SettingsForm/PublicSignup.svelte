@@ -6,10 +6,10 @@
 	<h2>Public Signup</h2>
 	<label class="unstyled flex flex-row space-x-2">
 		<input
+			id="enableSignup"
+			name="enableSignup"
 			class="checkbox"
 			type="checkbox"
-			name="enableSignup"
-			id="enableSignup"
 			bind:checked={enabled}
 		/>
 		<span>Enable</span>

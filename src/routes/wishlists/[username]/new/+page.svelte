@@ -45,7 +45,7 @@
 {/if}
 
 <form method="POST" use:enhance>
-	<ItemForm data={itemData} buttonText="Add Item" />
+	<ItemForm buttonText="Add Item" data={itemData} />
 </form>
 
 <svelte:head>

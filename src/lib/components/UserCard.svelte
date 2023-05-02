@@ -12,7 +12,7 @@
 	};
 </script>
 
-<a class="card" href="/wishlists/{user.username}" data-sveltekit-preload-data>
+<a class="card" data-sveltekit-preload-data href="/wishlists/{user.username}">
 	<div class="card-header">
 		<div class="flex flex-row items-center space-x-4">
 			<Avatar {user} width="w-14" />

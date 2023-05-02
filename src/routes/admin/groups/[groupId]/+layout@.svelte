@@ -24,9 +24,9 @@
 <TabGroup>
 	{#each tabs as { label, href }, value}
 		<Tab
-			bind:group={selectedTab}
 			name={label}
 			{value}
+			bind:group={selectedTab}
 			on:change={() => goto(`/admin/groups/${$page.params.groupId}${href}`)}
 		>
 			{label}

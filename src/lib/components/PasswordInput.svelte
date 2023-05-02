@@ -48,25 +48,25 @@
 	<span>{label}</span>
 	<div class="input-group grid-cols-[1fr_auto]">
 		<input
-			class="input"
-			type={visible ? "text" : "password"}
 			{id}
 			{name}
-			{required}
+			class="input"
 			class:input-error={error}
-			{value}
 			{autocomplete}
+			{required}
+			type={visible ? "text" : "password"}
+			{value}
 			on:input={(e) => (value = e.currentTarget.value)}
 			{...$$props}
 		/>
 		<button
-			type="button"
 			id="showpassword"
+			tabindex="-1"
+			type="button"
 			on:click|preventDefault={handleClick}
 			on:keypress|preventDefault
-			tabindex="-1"
 		>
-			<iconify-icon icon="ion:{visible ? 'eye-off' : 'eye'}" class="-mb-0.5" />
+			<iconify-icon class="-mb-0.5" icon="ion:{visible ? 'eye-off' : 'eye'}" />
 		</button>
 	</div>
 </label>
@@ -75,8 +75,8 @@
 	<div class="flex flex-row items-center space-x-1">
 		<ProgressBar
 			label="Password Strength"
-			value={strength.score + 1}
 			max={5}
+			value={strength.score + 1}
 			bind:meter={meterLookup[strength.score.valueOf()]}
 		/>
 		<div

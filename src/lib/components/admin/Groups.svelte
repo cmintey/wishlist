@@ -75,5 +75,5 @@
 </div>
 
 {#if groupData}
-	<Table source={groupData} interactive on:selected={selectionHandler} />
+	<Table interactive source={groupData} on:selected={selectionHandler} />
 {/if}

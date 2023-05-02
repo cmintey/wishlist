@@ -5,4 +5,4 @@
 	export let data: PageData;
 </script>
 
-<Users users={data.users} currentUser={data.user} config={data.config} groups={data.groups} />
+<Users config={data.config} currentUser={data.user} groups={data.groups} users={data.users} />
