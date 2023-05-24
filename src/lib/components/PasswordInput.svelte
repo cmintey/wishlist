@@ -90,7 +90,7 @@
 
 	<div class="card variant-filled p-4" data-popup="suggestions">
 		{#if strength.feedback.warning}
-			<div class="flex flex-row space-x-4 items-center pb-1">
+			<div class="flex flex-row items-center space-x-4 pb-1">
 				<iconify-icon icon="ion:alert-circle" />
 				<p>{strength.feedback.warning}</p>
 			</div>

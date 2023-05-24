@@ -3,7 +3,7 @@
 </script>
 
 {#if approvalCount > 0}
-	<aside class="alert variant-ghost-primary">
+	<aside class="variant-ghost-primary alert">
 		<div><iconify-icon class="text-4xl" icon="ion:information-circle" /></div>
 		<div class="alert-message">
 			<span class="text-2xl font-bold">Approval Needed</span>

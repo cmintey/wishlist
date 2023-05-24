@@ -42,7 +42,7 @@
 </script>
 
 <div class="flex space-x-2">
-	<button class="btn variant-ghost-error w-fit" type="button" on:click={handleDelete}>
+	<button class="variant-ghost-error btn w-fit" type="button" on:click={handleDelete}>
 		Clear Lists
 	</button>
 </div>

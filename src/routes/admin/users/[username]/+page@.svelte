@@ -61,16 +61,16 @@
 			Generate Reset Password Link
 		</button>
 		{#if data.editingUser.role.name == "ADMIN"}
-			<button class="btn variant-ghost-secondary w-fit" formaction="?/remove-admin">
+			<button class="variant-ghost-secondary btn w-fit" formaction="?/remove-admin">
 				Remove Admin
 			</button>
 		{:else}
-			<button class="btn variant-ghost-secondary w-fit" formaction="?/make-admin">
+			<button class="variant-ghost-secondary btn w-fit" formaction="?/make-admin">
 				Make Admin
 			</button>
 		{/if}
 		<button
-			class="btn variant-ghost-error w-fit"
+			class="variant-ghost-error btn w-fit"
 			type="button"
 			on:click={() => handleDelete(data.editingUser.username, data.editingUser.id)}
 		>

@@ -89,7 +89,7 @@
 		</button>
 		{#if saved && config.smtp.enable}
 			<button
-				class="btn variant-ghost-primary mt-2 h-min w-fit"
+				class="variant-ghost-primary btn mt-2 h-min w-fit"
 				disabled={sending || sent}
 				formaction="?/send-test"
 				type="submit"

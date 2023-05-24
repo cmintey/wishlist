@@ -41,7 +41,7 @@
 <div class="flex flex-row space-x-4 pb-4">
 	<span class="relative">
 		<button
-			class="chip variant-ringed-primary"
+			class="variant-ringed-primary chip"
 			class:variant-ghost-primary={claimOption !== "all"}
 			use:popup={menuSettings}
 		>
