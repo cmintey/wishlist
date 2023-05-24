@@ -19,7 +19,7 @@
 
 {#if data.valid}
 	<div class="flex flex-col items-center space-y-4">
-		<h1>Reset Password</h1>
+		<h1 class="h1">Reset Password</h1>
 
 		<form
 			class="w-80"

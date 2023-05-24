@@ -26,7 +26,7 @@
 
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
 	<div class="pb-4">
-		<aside class="alert variant-ghost-warning">
+		<aside class="variant-ghost-warning alert">
 			<span class="text-4xl">⚠️</span>
 			<div class="alert-message">
 				<span class="text-2xl font-bold">Heads up!</span>
@@ -36,7 +36,7 @@
 				</p>
 			</div>
 			<div class="alert-actions">
-				<button class="btn variant-ghost-warning" on:click={() => (warningHidden = true)}>
+				<button class="variant-ghost-warning btn" on:click={() => (warningHidden = true)}>
 					Acknowledge
 				</button>
 			</div>

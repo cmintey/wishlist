@@ -79,7 +79,7 @@
 		<iconify-icon icon="ion:person-add" />
 		<span>Add Member</span>
 	</button>
-	<button class="btn variant-filled-error" on:click={deleteGroup}>Delete Group</button>
+	<button class="variant-filled-error btn" on:click={deleteGroup}>Delete Group</button>
 </div>
 
 <div class="flex flex-col space-y-2">

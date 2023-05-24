@@ -4,7 +4,7 @@
 </script>
 
 {#if !$smtpAcknowledged && !smtpEnable}
-	<aside class="alert variant-ghost-warning mb-2">
+	<aside class="variant-ghost-warning alert mb-2">
 		<div>
 			<span class="text-4xl">⚠️</span>
 		</div>
@@ -16,8 +16,8 @@
 			</p>
 		</div>
 		<div class="alert-actions">
-			<a class="btn variant-filled-warning" href="/admin" target="_blank">View docs</a>
-			<button class="btn-icon variant-ghost-error" on:click={() => ($smtpAcknowledged = true)}>
+			<a class="variant-filled-warning btn" href="/admin" target="_blank">View docs</a>
+			<button class="variant-ghost-error btn-icon" on:click={() => ($smtpAcknowledged = true)}>
 				<iconify-icon icon="ion:close" />
 			</button>
 		</div>

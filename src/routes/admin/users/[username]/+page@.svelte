@@ -49,10 +49,10 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-	<h1 class="mb-2">{data.editingUser.name}'s Settings</h1>
+	<h1 class="h1 mb-2">{data.editingUser.name}'s Settings</h1>
 	<hr />
-	<h2>Username: {data.editingUser.username}</h2>
-	<h3>Id: {data.editingUser.id}</h3>
+	<h2 class="h2">Username: {data.editingUser.username}</h2>
+	<h3 class="h3">Id: {data.editingUser.id}</h3>
 </div>
 
 <form method="POST" use:enhance>
@@ -61,16 +61,16 @@
 			Generate Reset Password Link
 		</button>
 		{#if data.editingUser.role.name == "ADMIN"}
-			<button class="btn variant-ghost-secondary w-fit" formaction="?/remove-admin">
+			<button class="variant-ghost-secondary btn w-fit" formaction="?/remove-admin">
 				Remove Admin
 			</button>
 		{:else}
-			<button class="btn variant-ghost-secondary w-fit" formaction="?/make-admin">
+			<button class="variant-ghost-secondary btn w-fit" formaction="?/make-admin">
 				Make Admin
 			</button>
 		{/if}
 		<button
-			class="btn variant-ghost-error w-fit"
+			class="variant-ghost-error btn w-fit"
 			type="button"
 			on:click={() => handleDelete(data.editingUser.username, data.editingUser.id)}
 		>

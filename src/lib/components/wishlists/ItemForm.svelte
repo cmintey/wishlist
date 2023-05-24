@@ -108,7 +108,7 @@
 		<button class="btn variant-filled-primary w-min" disabled={loading} type="submit">
 			{buttonText}
 		</button>
-		<button class="btn variant-ghost-secondary w-min" type="button" on:click={() => history.back()}>
+		<button class="variant-ghost-secondary btn w-min" type="button" on:click={() => history.back()}>
 			Cancel
 		</button>
 	</div>

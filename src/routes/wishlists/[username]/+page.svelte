@@ -60,12 +60,12 @@
 	}
 </script>
 
-<h1 class="pb-4">
+<h1 class="h1 pb-4">
 	{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} Wishes
 </h1>
 
 {#if data.approvals.length > 0}
-	<h2 class="pb-2">Approvals</h2>
+	<h2 class="h2 pb-2">Approvals</h2>
 	<div class="flex flex-col space-y-4 pb-2">
 		{#each data.approvals as item (item.id)}
 			<div

@@ -19,7 +19,7 @@
 	};
 </script>
 
-<h1>{data.group.name} Group</h1>
+<h1 class="h1">{data.group.name} Group</h1>
 
 <TabGroup>
 	{#each tabs as { label, href }, value}

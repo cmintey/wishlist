@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "@skeletonlabs/skeleton/styles/all.css";
+	import "@skeletonlabs/skeleton/styles/skeleton.css";
 	import "../theme.postcss";
 	import "../app.postcss";
 

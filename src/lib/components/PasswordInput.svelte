@@ -72,7 +72,7 @@
 </label>
 
 {#if strengthMeter && value !== "" && strength}
-	<div class="flex flex-row items-center space-x-1">
+	<div class="flex flex-row items-center space-x-1 pt-1">
 		<ProgressBar
 			label="Password Strength"
 			max={5}
@@ -89,10 +89,20 @@
 	</div>
 
 	<div class="card variant-filled p-4" data-popup="suggestions">
-		{#each strength.feedback.suggestions as suggestion}
-			<p>{suggestion}</p>
-		{/each}
-		<p>{strength.feedback.warning}</p>
+		{#if strength.feedback.warning}
+			<div class="flex flex-row items-center space-x-4 pb-1">
+				<iconify-icon icon="ion:alert-circle" />
+				<p>{strength.feedback.warning}</p>
+			</div>
+		{/if}
+		<ul class="list">
+			{#each strength.feedback.suggestions as suggestion}
+				<li>
+					<iconify-icon icon="ion:arrow-forward" />
+					<p>{suggestion}</p>
+				</li>
+			{/each}
+		</ul>
 	</div>
 
 	{#if strength.score < 3}
