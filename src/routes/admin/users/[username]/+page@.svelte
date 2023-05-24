@@ -49,10 +49,10 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-	<h1 class="mb-2">{data.editingUser.name}'s Settings</h1>
+	<h1 class="h1 mb-2">{data.editingUser.name}'s Settings</h1>
 	<hr />
-	<h2>Username: {data.editingUser.username}</h2>
-	<h3>Id: {data.editingUser.id}</h3>
+	<h2 class="h2">Username: {data.editingUser.username}</h2>
+	<h3 class="h3">Id: {data.editingUser.id}</h3>
 </div>
 
 <form method="POST" use:enhance>

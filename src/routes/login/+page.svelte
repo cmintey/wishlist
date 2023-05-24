@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-	<h1>Sign in</h1>
+	<h1 class="h1">Sign in</h1>
 
 	<form
 		class="w-80"

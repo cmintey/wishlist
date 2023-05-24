@@ -17,7 +17,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-	<h1>Create an account</h1>
+	<h1 class="h1">Create an account</h1>
 
 	<form class="w-80 md:w-1/3" method="POST" use:enhance>
 		<div

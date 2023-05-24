@@ -11,7 +11,7 @@
 
 {#if data.smtpEnabled}
 	<div class="flex flex-col items-center space-y-4">
-		<h1>Reset Password</h1>
+		<h1 class="h1">Reset Password</h1>
 		{#if form?.success}
 			<div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
 				<iconify-icon icon="ion:checkmark-circle-outline" width="100" />
@@ -62,7 +62,7 @@
 	</div>
 {:else}
 	<div class="flex flex-col items-center space-y-4">
-		<h1>Self-service password reset unavailable.</h1>
+		<h1 class="h1">Self-service password reset unavailable.</h1>
 		<span class="text-xl">Please contact the site administrator to reset your password.</span>
 		<a href="/login">Return to login</a>
 	</div>

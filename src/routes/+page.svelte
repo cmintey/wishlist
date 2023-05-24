@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex flex-col space-y-4" in:fade>
-	<h1>Lists</h1>
+	<h1 class="h1">Lists</h1>
 	<ApprovalAlert approvalCount={data.me._count.items} />
 	<UserCard hideCount user={data.me} />
 
