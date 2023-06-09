@@ -27,7 +27,7 @@
 			name={label}
 			{value}
 			bind:group={selectedTab}
-			on:change={() => goto(`/admin/groups/${$page.params.groupId}${href}`)}
+			on:change={() => goto(`/admin/groups/${$page.params.groupId}${href}`, { replaceState: true })}
 		>
 			{label}
 		</Tab>
