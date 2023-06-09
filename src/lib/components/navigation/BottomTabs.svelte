@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
+	import { isInstalled } from "$lib/stores/is-installed";
 	import { TabGroup, Tab } from "@skeletonlabs/skeleton";
-	import { getContext } from "svelte";
-	import type { Writable } from "svelte/store";
 
 	export let navItems: NavItem[];
 
-	let isInstalled = getContext<Writable<boolean>>("nav");
 	let tabsBottomNav: number;
 
 	tabsBottomNav = navItems.findIndex((n) => $page.url.pathname.startsWith(n.href));

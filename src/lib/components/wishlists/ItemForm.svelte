@@ -104,13 +104,21 @@
 		/>
 	</label>
 
-	<div class="flex flex-row space-x-4">
-		<button class="btn variant-filled-primary w-min" disabled={loading} type="submit">
-			{buttonText}
-		</button>
-		<button class="variant-ghost-secondary btn w-min" type="button" on:click={() => history.back()}>
-			Cancel
-		</button>
+	<div class="flex flex-col space-y-2">
+		<span class="text-sm">*required field</span>
+
+		<div class="flex flex-row space-x-4">
+			<button class="btn variant-filled-primary w-min" disabled={loading} type="submit">
+				{buttonText}
+			</button>
+			<button
+				class="variant-ghost-secondary btn w-min"
+				type="button"
+				on:click={() => history.back()}
+			>
+				Cancel
+			</button>
+		</div>
 	</div>
 </div>
 

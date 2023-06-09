@@ -14,9 +14,9 @@
 	import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
 	import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
 	import type { LayoutData } from "./$types";
-	import { writable, type Writable } from "svelte/store";
-	import { getContext, onMount, setContext } from "svelte";
+	import { onMount } from "svelte";
 	import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
+	import { isInstalled } from "$lib/stores/is-installed";
 
 	export let data: LayoutData;
 
@@ -30,8 +30,6 @@
 		showNavigationLoadingBar = false;
 	});
 
-	setContext("nav", writable<boolean>(false));
-	let isInstalled = getContext<Writable<boolean>>("nav");
 	onMount(() => {
 		if (window.matchMedia("(display-mode: standalone)").matches) {
 			$isInstalled = true;
