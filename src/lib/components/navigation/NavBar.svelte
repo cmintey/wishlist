@@ -4,13 +4,10 @@
 	import { page } from "$app/stores";
 	import NavMenu from "./NavMenu.svelte";
 	import type { User } from "lucia-auth";
-	import { getContext } from "svelte";
-	import type { Writable } from "svelte/store";
+	import { isInstalled } from "$lib/stores/is-installed";
 
 	export let navItems: NavItem[];
 	export let user: User | null;
-
-	let isInstalled = getContext<Writable<boolean>>("nav");
 </script>
 
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
