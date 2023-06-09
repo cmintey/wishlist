@@ -27,17 +27,18 @@
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
 	<div class="pb-4">
 		<aside class="variant-ghost-warning alert">
-			<span class="text-4xl">⚠️</span>
-			<div class="alert-message">
-				<span class="text-2xl font-bold">Heads up!</span>
-				<p>
-					You are making a suggestion to {data.owner.name}. {data.owner.name} will need to approve your
-					suggestion before it is added to their list.
-				</p>
+			<div class="alert-message flex flex-row items-center space-x-4 space-y-0">
+				<span><iconify-icon class="text-4xl" icon="ion:warning" /></span>
+				<div>
+					<span class="text-xl font-bold">Heads up!</span>
+					<p class="text-sm">
+						{data.owner.name} will need to approve your suggestion before it is added to their list.
+					</p>
+				</div>
 			</div>
 			<div class="alert-actions">
-				<button class="variant-ghost-warning btn" on:click={() => (warningHidden = true)}>
-					Acknowledge
+				<button class="variant-ghost-warning btn btn-sm" on:click={() => (warningHidden = true)}>
+					OK
 				</button>
 			</div>
 		</aside>
