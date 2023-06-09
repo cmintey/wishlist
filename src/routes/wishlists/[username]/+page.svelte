@@ -109,8 +109,9 @@
 <!-- Add Item button -->
 {#if data.listOwner.isMe || data.suggestionsEnabled}
 	<button
-		class="z-90 btn variant-ghost-surface fixed bottom-4 right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10"
+		class="z-90 btn variant-ghost-surface fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10"
 		class:bottom-16={$isInstalled}
+		class:bottom-4={!$isInstalled}
 		on:click={() => goto(`${$page.url}/new`)}
 	>
 		<iconify-icon height="32" icon="ion:add" width="32" />
