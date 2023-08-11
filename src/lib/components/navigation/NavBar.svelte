@@ -3,11 +3,11 @@
 	import logo from "$lib/assets/logo.png";
 	import { page } from "$app/stores";
 	import NavMenu from "./NavMenu.svelte";
-	import type { User } from "lucia-auth";
+	import type { User } from "lucia";
 	import { isInstalled } from "$lib/stores/is-installed";
 
 	export let navItems: NavItem[];
-	export let user: User | null;
+	export let user: User | undefined;
 </script>
 
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
@@ -27,7 +27,7 @@
 
 			<a class="flex flex-row items-center space-x-2" href="/">
 				<img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-				<span class="text-2xl font-bold text-primary-900-50-token md:text-3xl">Wishlist</span>
+				<span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
 			</a>
 		</div>
 	</svelte:fragment>

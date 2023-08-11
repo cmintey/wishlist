@@ -6,7 +6,7 @@ import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
 	}
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(400, "item id must be a number");
 	}
 
-	const activeMembership = await getActiveMembership(user);
+	const activeMembership = await getActiveMembership(session.user);
 	const config = await getConfig(activeMembership.groupId);
 
 	let item;
@@ -42,7 +42,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		throw error(404, "item not found");
 	}
 
-	if (config.suggestions.method === "surprise" && user.username !== item.addedBy?.username) {
+	if (
+		config.suggestions.method === "surprise" &&
+		session.user.username !== item.addedBy?.username
+	) {
 		throw error(401, "cannot edit item that you did not create");
 	}
 
@@ -57,7 +60,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
 	default: async ({ locals, request, params }) => {
-		const { user: me } = await locals.validateUser();
+		const session = await locals.validate();
+		if (!session) throw error(401, "Not authorized");
 		const form = await request.formData();
 		const url = form.get("url") as string;
 		const image_url = form.get("image_url") as string;
@@ -77,7 +81,7 @@ export const actions: Actions = {
 
 		if (create_image) {
 			const ext = image.name.split(".").pop();
-			filename = me?.username + "-" + Date.now().toString() + "." + ext;
+			filename = session.user.username + "-" + Date.now().toString() + "." + ext;
 
 			const ab = await image.arrayBuffer();
 

@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import type { User } from "lucia-auth";
+import type { User } from "lucia";
 import { client } from "./prisma";
 
 export const getActiveMembership = async (user: User) => {

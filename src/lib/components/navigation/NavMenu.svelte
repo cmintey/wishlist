@@ -12,14 +12,17 @@
 		type PopupSettings
 	} from "@skeletonlabs/skeleton";
 	import Avatar from "../Avatar.svelte";
-	import type { User } from "lucia-auth";
+	import type { User } from "lucia";
 
-	export let user: User | null;
+	export let user: User | undefined;
 
 	const menuSettings: PopupSettings = {
 		event: "click",
 		target: "user"
 	};
+
+	let userAPI: UserAPI;
+	$: if (user) userAPI = new UserAPI(user.userId);
 
 	const createGroup = () => {
 		const settings: ModalSettings = {
@@ -31,11 +34,12 @@
 			response: async (name: string) => {
 				const groupsAPI = new GroupsAPI();
 				const group = await groupsAPI.create(name);
-				if (user) {
-					const groupAPI = new GroupAPI(group.id);
-					await groupAPI.addMember(user.userId);
+				if (user && userAPI) {
+					const activeGroup = await userAPI.activeGroup();
+					if (!activeGroup) await userAPI.setActiveGroup(group.id);
 				}
 				await invalidateAll();
+				await goto("/");
 			},
 			// Optionally override the button text
 			buttonTextCancel: "Cancel",
@@ -44,9 +48,6 @@
 
 		modalStore.trigger(settings);
 	};
-
-	let userAPI: UserAPI;
-	$: if (user) userAPI = new UserAPI(user.userId);
 
 	const changeGroup = (groups: Group[]) => {
 		const settings: ModalSettings = {

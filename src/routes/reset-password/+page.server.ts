@@ -57,7 +57,7 @@ export const actions: Actions = {
 			return fail(400, { error: true, errors });
 		}
 
-		const user = await client.authUser.findUnique({
+		const user = await client.user.findUnique({
 			where: {
 				id: pwdData.data.userId
 			},

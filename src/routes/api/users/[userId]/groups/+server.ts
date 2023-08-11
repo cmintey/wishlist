@@ -5,10 +5,10 @@ import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params, locals, url }) => {
-	const { session, user: sessionUser } = await locals.validateUser();
+	const session = await locals.validate();
 
 	if (!session) throw error(401, "user is not authenticated");
-	if (params.userId !== sessionUser.userId && sessionUser.roleId !== Role.ADMIN)
+	if (params.userId !== session.user.userId && session.user.roleId !== Role.ADMIN)
 		throw error(401, "not authorized");
 
 	let groups: Group[];

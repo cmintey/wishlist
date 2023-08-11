@@ -6,18 +6,18 @@ import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
 	}
-	const activeMembership = await getActiveMembership(user);
+	const activeMembership = await getActiveMembership(session.user);
 	const config = await getConfig(activeMembership.groupId);
 
-	if (!config.suggestions.enable && user.username !== params.username) {
+	if (!config.suggestions.enable && session.user.username !== params.username) {
 		throw error(401, "Suggestions are disabled");
 	}
 
-	const listOwner = await client.authUser.findFirst({
+	const listOwner = await client.user.findFirst({
 		where: {
 			username: params.username,
 			UserGroupMembership: {
@@ -41,17 +41,17 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			name: listOwner.name,
 			isMe: params.username === listOwner.username
 		},
-		suggestion: user.username !== params.username,
+		suggestion: session.user.username !== params.username,
 		suggestionMethod: config.suggestions.method
 	};
 };
 
 export const actions: Actions = {
 	default: async ({ request, locals, params }) => {
-		const { user: me, session } = await locals.validateUser();
+		const session = await locals.validate();
 		if (!session) throw error(401);
 
-		const activeMembership = await getActiveMembership(me);
+		const activeMembership = await getActiveMembership(session.user);
 		const config = await getConfig(activeMembership.groupId);
 
 		const form = await request.formData();
@@ -73,7 +73,7 @@ export const actions: Actions = {
 
 		if (create_image) {
 			const ext = image.name.split(".").pop();
-			filename = me?.username + "-" + Date.now().toString() + "." + ext;
+			filename = session.user.username + "-" + Date.now().toString() + "." + ext;
 
 			const ab = await image.arrayBuffer();
 
@@ -84,7 +84,7 @@ export const actions: Actions = {
 			price = price.slice(price.indexOf("$") + 1);
 		}
 
-		await client.authUser.update({
+		await client.user.update({
 			where: {
 				username: params.username
 			},
@@ -96,8 +96,9 @@ export const actions: Actions = {
 						url,
 						note,
 						image_url: create_image ? filename : image_url,
-						addedById: me.userId,
-						approved: params.username === me.username || config.suggestions.method !== "approval",
+						addedById: session.user.userId,
+						approved:
+							params.username === session.user.username || config.suggestions.method !== "approval",
 						groupId: activeMembership.groupId
 					}
 				}

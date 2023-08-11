@@ -58,7 +58,7 @@ export const actions: Actions = {
 			return fail(400, { error: true, errors });
 		}
 
-		const userCount = await client.authUser.count();
+		const userCount = await client.user.count();
 		let groupId: string | undefined;
 		if (signupData.data.tokenId && Number.isSafeInteger(signupData.data.tokenId)) {
 			groupId = await client.signupToken
@@ -75,7 +75,7 @@ export const actions: Actions = {
 
 		try {
 			const user = await auth.createUser({
-				primaryKey: {
+				key: {
 					providerId: "username",
 					providerUserId: signupData.data.username,
 					password: signupData.data.password
@@ -87,7 +87,10 @@ export const actions: Actions = {
 					roleId: userCount > 0 ? Role.USER : Role.ADMIN
 				}
 			});
-			const session = await auth.createSession(user.userId);
+			const session = await auth.createSession({
+				userId: user.userId,
+				attributes: {}
+			});
 			locals.setSession(session);
 
 			if (groupId) {

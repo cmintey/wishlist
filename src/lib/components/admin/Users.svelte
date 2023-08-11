@@ -33,8 +33,8 @@
 		};
 	}
 
-	const selectionHandler = (meta: CustomEvent<User>) => {
-		const user = meta.detail;
+	const selectionHandler = (meta: CustomEvent<string[]>) => {
+		const user = meta.detail as unknown as User;
 		goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.username}`);
 	};
 </script>

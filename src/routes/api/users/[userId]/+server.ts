@@ -3,16 +3,16 @@ import { client } from "$lib/server/prisma";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
-	const { session, user: sessionUser } = await locals.validateUser();
+	const session = await locals.validate();
 
 	if (!session) throw error(401, "user is not authenticated");
-	if (!(sessionUser.roleId === Role.ADMIN)) throw error(401, "must be admin to delete a user");
+	if (!(session.user.roleId === Role.ADMIN)) throw error(401, "must be admin to delete a user");
 
 	if (!params.userId) {
 		throw error(400, "must specify an item to delete");
 	}
 
-	const user = await client.authUser.findUnique({
+	const user = await client.user.findUnique({
 		where: {
 			id: params.userId
 		},
@@ -25,7 +25,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		throw error(404, "user id not found");
 	}
 
-	if (user.id === sessionUser.userId) {
+	if (user.id === session.user.userId) {
 		throw error(400, "cannot delete yourself");
 	}
 
@@ -35,7 +35,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 				userId: user.id
 			}
 		});
-		const deletedUser = await client.authUser.delete({
+		const deletedUser = await client.user.delete({
 			where: {
 				id: user.id
 			}

@@ -4,7 +4,7 @@ import { _authCheck } from "./users/[userId]/+server";
 import { client } from "$lib/server/prisma";
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
-	const { authenticated } = await _authCheck(locals.validateUser, params.groupId);
+	const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
 	if (!authenticated) {
 		throw error(401, "User is not authorized to delete this group");

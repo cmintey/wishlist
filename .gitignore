@@ -12,3 +12,4 @@ vite.config.ts.timestamp-*
 data/
 uploads/
 prisma/*.db
+prisma/*.db-journal

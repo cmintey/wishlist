@@ -1,6 +1,6 @@
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({ locals }) => {
-	const { user } = await locals.validateUser();
-	return { user };
+	const session = await locals.validate();
+	return { user: session?.user };
 }) satisfies LayoutServerLoad;
