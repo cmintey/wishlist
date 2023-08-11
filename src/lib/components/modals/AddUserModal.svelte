@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { UsersAPI } from "$lib/api/users";
-	import type { AuthUser } from "@prisma/client";
+	import type { User } from "@prisma/client";
 	import { ListBox, ListBoxItem, modalStore } from "@skeletonlabs/skeleton";
 
 	export let parent: any;
@@ -15,7 +15,7 @@
 
 	const usersAPI = new UsersAPI();
 
-	let users: AuthUser[] = [];
+	let users: User[] = [];
 	const doSearch = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
 		const resp = await usersAPI.search(e.currentTarget.value);
 		users = await resp.json();

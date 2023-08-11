@@ -5,14 +5,14 @@ import { redirect, error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ locals, params }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin/groups/${params.groupId}`);
 	}
 
 	const userGroupRoleId = await client.userGroupMembership.findFirst({
 		where: {
-			userId: user.userId,
+			userId: session.user.userId,
 			groupId: params.groupId
 		},
 		select: {
@@ -20,7 +20,7 @@ export const load = (async ({ locals, params }) => {
 		}
 	});
 
-	if (!(user.roleId === Role.ADMIN || userGroupRoleId?.roleId === Role.GROUP_MANAGER)) {
+	if (!(session.user.roleId === Role.ADMIN || userGroupRoleId?.roleId === Role.GROUP_MANAGER)) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
@@ -65,7 +65,7 @@ export const load = (async ({ locals, params }) => {
 		group,
 		user: {
 			isAdmin: true,
-			...user
+			...session.user
 		},
 		config: getConfig(group.id)
 	};

@@ -3,15 +3,15 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
-export const _authCheck = async (validateUser: App.Locals["validateUser"], groupId: string) => {
-	const { session, user: sessionUser } = await validateUser();
+export const _authCheck = async (validate: App.Locals["validate"], groupId: string) => {
+	const session = await validate();
 	if (!session) {
 		throw error(401, "Must authenticate first");
 	}
 
-	const user = await client.authUser.findFirstOrThrow({
+	const user = await client.user.findFirstOrThrow({
 		where: {
-			id: sessionUser.userId
+			id: session.user.userId
 		},
 		select: {
 			id: true,
@@ -35,7 +35,7 @@ export const _authCheck = async (validateUser: App.Locals["validateUser"], group
 };
 
 export const GET: RequestHandler = async ({ locals, params }) => {
-	const { authenticated, user } = await _authCheck(locals.validateUser, params.groupId);
+	const { authenticated, user } = await _authCheck(locals.validate, params.groupId);
 
 	if (!authenticated && user.id !== params.userId) {
 		throw error(401, "User is not authorized to view this membership");
@@ -61,7 +61,7 @@ export const GET: RequestHandler = async ({ locals, params }) => {
 };
 
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
-	const { authenticated } = await _authCheck(locals.validateUser, params.groupId);
+	const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
 	if (!authenticated) {
 		throw error(401, "User is not authorized to add a member to this group");
@@ -97,7 +97,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 };
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
-	const { authenticated } = await _authCheck(locals.validateUser, params.groupId);
+	const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
 	if (!authenticated) {
 		throw error(401, "User is not authorized to add a member to this group");
@@ -129,7 +129,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 };
 
 export const PATCH: RequestHandler = async ({ locals, params, request }) => {
-	const { authenticated } = await _authCheck(locals.validateUser, params.groupId);
+	const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
 	if (!authenticated) {
 		throw error(401, "User is not authorized to add a member to this group");

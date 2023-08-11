@@ -5,18 +5,18 @@ import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin/users/${params.username}`);
 	}
-	if (user.roleId != Role.ADMIN) {
+	if (session.user.roleId != Role.ADMIN) {
 		throw error(401, "Not authorized to view admin panel");
 	}
-	if (user.username === params.username) {
+	if (session.user.username === params.username) {
 		throw redirect(303, "/account");
 	}
 
-	const editingUser = await client.authUser.findUnique({
+	const editingUser = await client.user.findUnique({
 		where: {
 			username: params.username
 		},
@@ -34,12 +34,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	if (!editingUser) throw error(404, "User not found");
 
-	return { editingUser, user };
+	return { editingUser, user: session.user };
 };
 
 export const actions: Actions = {
 	"reset-password": async ({ params, url }) => {
-		const user = await client.authUser.findUnique({
+		const user = await client.user.findUnique({
 			where: {
 				username: params.username
 			},
@@ -65,7 +65,7 @@ export const actions: Actions = {
 		}
 	},
 	"make-admin": async ({ params }) => {
-		await client.authUser.update({
+		await client.user.update({
 			where: {
 				username: params.username
 			},
@@ -77,7 +77,7 @@ export const actions: Actions = {
 		return { success: true, url: null };
 	},
 	"remove-admin": async ({ params }) => {
-		await client.authUser.update({
+		await client.user.update({
 			where: {
 				username: params.username
 			},

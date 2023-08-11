@@ -32,7 +32,10 @@ export const actions: Actions = {
 
 		try {
 			const key = await auth.useKey("username", loginData.data.username, loginData.data.password);
-			const session = await auth.createSession(key.userId);
+			const session = await auth.createSession({
+				userId: key.userId,
+				attributes: {}
+			});
 			locals.setSession(session);
 		} catch (e) {
 			// invalid credentials

@@ -5,14 +5,15 @@ import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load = (async ({ locals }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login`);
 	}
+	const user = session.user;
 
 	const activeMembership = await getActiveMembership(user);
 
-	const me = await client.authUser.findUniqueOrThrow({
+	const me = await client.user.findUniqueOrThrow({
 		select: {
 			name: true,
 			username: true,
@@ -44,7 +45,7 @@ export const load = (async ({ locals }) => {
 		}
 	});
 
-	const users = await client.authUser.findMany({
+	const users = await client.user.findMany({
 		where: {
 			username: {
 				not: user.username

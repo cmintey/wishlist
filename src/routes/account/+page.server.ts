@@ -1,26 +1,26 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { resetPasswordSchema } from "$lib/validations";
-import type { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { fail, redirect } from "@sveltejs/kit";
 import { writeFileSync } from "fs";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
+import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/account`);
 	}
 
 	return {
-		user
+		user: session.user
 	};
 };
 
 export const actions: Actions = {
 	profile: async ({ request, locals }) => {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.validate();
 		if (!session) throw redirect(302, "/login?ref=/account");
 
 		const formData = Object.fromEntries(await request.formData());
@@ -42,14 +42,14 @@ export const actions: Actions = {
 		}
 
 		try {
-			await client.authUser.update({
+			await client.user.update({
 				data: {
 					name: nameData.data.name,
 					username: nameData.data.username,
 					email: nameData.data.email
 				},
 				where: {
-					username: user.username
+					username: session.user.username
 				}
 			});
 		} catch (e) {
@@ -64,7 +64,7 @@ export const actions: Actions = {
 	},
 
 	profilePicture: async ({ request, locals }) => {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.validate();
 		if (!session) throw redirect(302, "/login?ref=/account");
 
 		const form = await request.formData();
@@ -76,7 +76,7 @@ export const actions: Actions = {
 
 		if (create_image) {
 			const ext = image.name.split(".").pop();
-			filename = user?.username + "-" + Date.now().toString() + "." + ext;
+			filename = session.user.username + "-" + Date.now().toString() + "." + ext;
 
 			const ab = await image.arrayBuffer();
 
@@ -85,9 +85,9 @@ export const actions: Actions = {
 		}
 
 		if (filename) {
-			await client.authUser.update({
+			await client.user.update({
 				where: {
-					id: user.userId
+					id: session.user.userId
 				},
 				data: {
 					picture: filename
@@ -97,7 +97,7 @@ export const actions: Actions = {
 	},
 
 	passwordchange: async ({ request, locals }) => {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.validate();
 		if (!session) throw redirect(302, "/login?ref=/account");
 
 		const formData = Object.fromEntries(await request.formData());
@@ -114,7 +114,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.useKey("username", user.username, pwdData.data.oldPassword);
+			await auth.useKey("username", session.user.username, pwdData.data.oldPassword);
 		} catch {
 			return fail(400, {
 				error: true,
@@ -123,7 +123,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.updateKeyPassword("username", user.username, pwdData.data.newPassword);
+			await auth.updateKeyPassword("username", session.user.username, pwdData.data.newPassword);
 		} catch {
 			return fail(400, {
 				error: true,

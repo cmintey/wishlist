@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/stores";
-	import type { User } from "lucia-auth";
+	import type { User } from "lucia";
 
 	export let user: User;
 </script>

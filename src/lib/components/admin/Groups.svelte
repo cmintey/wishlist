@@ -31,8 +31,8 @@
 		};
 	}
 
-	const selectionHandler = (meta: CustomEvent<Group>) => {
-		const group = meta.detail;
+	const selectionHandler = (meta: CustomEvent<string[]>) => {
+		const group: Group = meta.detail as unknown as Group;
 		goto(`/admin/groups/${group.id}`);
 	};
 

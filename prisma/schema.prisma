@@ -4,14 +4,13 @@ datasource db {
 }
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["filteredRelationCount"]
-    binaryTargets   = ["native", "debian-openssl-1.1.x", "linux-arm64-openssl-1.1.x"]
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "debian-openssl-1.1.x", "linux-arm64-openssl-1.1.x"]
 }
 
-model AuthUser {
+model User {
     id                  String                @id @unique @default(cuid())
-    auth_session        AuthSession[]
+    auth_session        Session[]
     username            String                @unique
     name                String
     email               String                @unique @default("changeme@email.com")
@@ -21,30 +20,28 @@ model AuthUser {
     plegedItems         Item[]                @relation("PledgedItems")
     role                Role                  @relation(fields: [roleId], references: [id])
     roleId              Int                   @default(1)
-    auth_key            AuthKey[]
+    key                 Key[]
     UserGroupMembership UserGroupMembership[]
 
     @@map("user")
 }
 
-model AuthSession {
-    id             String   @id @unique
+model Session {
+    id             String @id @unique
     user_id        String
     active_expires BigInt
     idle_expires   BigInt
-    auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@index([user_id])
     @@map("session")
 }
 
-model AuthKey {
-    id              String   @id @unique
+model Key {
+    id              String  @id @unique
     hashed_password String?
     user_id         String
-    primary_key     Boolean
-    expires         BigInt?
-    auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@index([user_id])
     @@map("key")
@@ -53,7 +50,7 @@ model AuthKey {
 model Role {
     id                  Int                   @id @unique
     name                String
-    User                AuthUser[]
+    User                User[]
     UserGroupMembership UserGroupMembership[]
 }
 
@@ -67,34 +64,34 @@ model Group {
 }
 
 model UserGroupMembership {
-    id      String   @id @unique @default(uuid())
-    active  Boolean  @default(false)
-    user    AuthUser @relation(fields: [userId], references: [id])
-    group   Group    @relation(fields: [groupId], references: [id])
-    role    Role     @relation(fields: [roleId], references: [id])
+    id      String  @id @unique @default(uuid())
+    active  Boolean @default(false)
+    user    User    @relation(fields: [userId], references: [id])
+    group   Group   @relation(fields: [groupId], references: [id])
+    role    Role    @relation(fields: [roleId], references: [id])
     userId  String
     groupId String
-    roleId  Int      @default(1)
+    roleId  Int     @default(1)
 
     @@map("user_group_membership")
 }
 
 model Item {
-    id          Int       @id @unique @default(autoincrement())
+    id          Int     @id @unique @default(autoincrement())
     name        String
     price       String?
     url         String?
     note        String?
     image_url   String?
-    user        AuthUser  @relation(name: "MyItems", fields: [userId], references: [id])
+    user        User    @relation(name: "MyItems", fields: [userId], references: [id])
     userId      String
-    addedBy     AuthUser  @relation(name: "AddedItems", fields: [addedById], references: [id])
+    addedBy     User    @relation(name: "AddedItems", fields: [addedById], references: [id])
     addedById   String
-    pledgedBy   AuthUser? @relation(name: "PledgedItems", fields: [pledgedById], references: [id])
+    pledgedBy   User?   @relation(name: "PledgedItems", fields: [pledgedById], references: [id])
     pledgedById String?
-    approved    Boolean   @default(true)
-    purchased   Boolean   @default(false)
-    group       Group?    @relation(fields: [groupId], references: [id])
+    approved    Boolean @default(true)
+    purchased   Boolean @default(false)
+    group       Group?  @relation(fields: [groupId], references: [id])
     groupId     String?
 
     @@index([userId])

@@ -2,7 +2,8 @@ import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
-import type { Session } from "lucia-auth";
+import assert from "assert";
+import type { Session } from "lucia";
 
 const validateItem = async (itemId: string | undefined, session: Session | null) => {
 	if (!session) throw error(401, "user is not authenticated");
@@ -38,28 +39,28 @@ const validateItem = async (itemId: string | undefined, session: Session | null)
 };
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 
 	const foundItem = await validateItem(params?.itemId, session);
+	assert(session);
+	assert(params.itemId);
 
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	const activeMembership = await getActiveMembership(user!);
+	const activeMembership = await getActiveMembership(session.user);
 	const config = await getConfig(activeMembership.groupId);
 
 	let suggestionDenied = false;
 	const suggestionMethod = config.suggestions.method;
-	if (foundItem.user.username === user?.username && suggestionMethod !== "surprise") {
+	if (foundItem.user.username === session.user.username && suggestionMethod !== "surprise") {
 		suggestionDenied = true;
 	}
 
-	if (!suggestionDenied && foundItem.addedBy.username !== user?.username) {
+	if (!suggestionDenied && foundItem.addedBy.username !== session.user.username) {
 		throw error(401, "user cannot delete an item they did not create");
 	}
 
 	try {
 		const item = await client.item.delete({
 			where: {
-				// @ts-expect-error params.itemId is checked in a previous function
 				id: parseInt(params.itemId)
 			},
 			select: {
@@ -78,7 +79,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 };
 
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
-	const { session } = await locals.validateUser();
+	const session = await locals.validate();
 
 	await validateItem(params?.itemId, session);
 

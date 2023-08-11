@@ -8,15 +8,15 @@ import generateToken, { hashToken } from "$lib/server/token";
 import { z } from "zod";
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/admin/users`);
 	}
-	if (user.roleId !== Role.ADMIN) {
+	if (session.user.roleId !== Role.ADMIN) {
 		throw error(401, "Not authorized to view admin panel");
 	}
 
-	const users = await client.authUser.findMany({
+	const users = await client.user.findMany({
 		select: {
 			username: true,
 			name: true,
@@ -45,7 +45,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	return {
 		user: {
 			isAdmin: true,
-			...user
+			...session.user
 		},
 		users: users.map((user) => ({
 			isAdmin: user.role.id === Role.ADMIN,

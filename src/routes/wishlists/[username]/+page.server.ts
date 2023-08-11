@@ -7,14 +7,14 @@ import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params, depends, url }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.validate();
 	if (!session) {
 		throw redirect(302, `/login?ref=/wishlists/${params.username}`);
 	}
 
 	depends("list:poll");
 
-	const activeMembership = await getActiveMembership(user);
+	const activeMembership = await getActiveMembership(session.user);
 	const config = await getConfig(activeMembership.groupId);
 
 	try {
@@ -39,13 +39,13 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 		}
 	};
 
-	if (config.suggestions.method === "approval" && params.username !== user.username) {
+	if (config.suggestions.method === "approval" && params.username !== session.user.username) {
 		search.approved = true;
 	}
 
-	if (config.suggestions.method === "surprise" && params.username === user.username) {
+	if (config.suggestions.method === "surprise" && params.username === session.user.username) {
 		search.addedBy = {
-			username: user.username
+			username: session.user.username
 		};
 	}
 
@@ -82,7 +82,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 		}
 	});
 
-	const listOwner = await client.authUser.findUnique({
+	const listOwner = await client.user.findUnique({
 		where: {
 			username: params.username
 		},
@@ -92,9 +92,9 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 	});
 
 	return {
-		user,
+		user: session.user,
 		listOwner: {
-			isMe: params.username === user.username,
+			isMe: params.username === session.user.username,
 			name: listOwner?.name
 		},
 		items: wishlistItems.filter((item) => item.approved),
