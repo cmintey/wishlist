@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
-	import { toastStore } from "@skeletonlabs/skeleton";
+	import { getToastStore } from "@skeletonlabs/skeleton";
 	import type { PageServerData } from "./$types";
 
 	export let data: PageServerData;
+
+    const toastStore = getToastStore();
 </script>
 
 {#if data?.item}

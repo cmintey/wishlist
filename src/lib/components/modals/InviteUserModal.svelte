@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { ListBox, ListBoxItem, modalStore } from "@skeletonlabs/skeleton";
+	import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
 	export let parent: any;
+    const modalStore = getModalStore();
 	let userEmail: string;
 	let selectedGroup: string;
 

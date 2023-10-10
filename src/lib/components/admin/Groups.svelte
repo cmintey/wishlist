@@ -5,9 +5,9 @@
 		tableMapperValues,
 		tableSourceMapper,
 		type TableSource,
-		modalStore,
+		getModalStore,
 		type ModalSettings,
-		toastStore
+		getToastStore
 	} from "@skeletonlabs/skeleton";
 	import Search from "../Search.svelte";
 	import { GroupsAPI } from "$lib/api/groups";
@@ -19,6 +19,9 @@
 	};
 
 	export let groups: Group[];
+
+    const modalStore = getModalStore();
+    const toastStore = getToastStore();
 
 	let groupsFiltered: Group[];
 

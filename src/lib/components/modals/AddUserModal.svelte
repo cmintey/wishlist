@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { UsersAPI } from "$lib/api/users";
 	import type { User } from "@prisma/client";
-	import { ListBox, ListBoxItem, modalStore } from "@skeletonlabs/skeleton";
+	import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
 	export let parent: any;
+
+    const modalStore = getModalStore();
 	let selectedUser: string;
 
 	function onFormSubmit(): void {
