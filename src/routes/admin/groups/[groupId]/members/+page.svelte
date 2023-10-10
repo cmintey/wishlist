@@ -2,10 +2,12 @@
 	import { goto, invalidateAll } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { GroupAPI } from "$lib/api/groups";
-	import { modalStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
+
+    const modalStore = getModalStore();
 
 	type UserData = (typeof data.group.users)[number];
 

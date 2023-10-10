@@ -1,10 +1,8 @@
 <script lang="ts">
-	import "@skeletonlabs/skeleton/styles/skeleton.css";
-	import "../theme.postcss";
 	import "../app.postcss";
 
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
-	import { AppShell, Modal, Toast, storePopup, type ModalComponent } from "@skeletonlabs/skeleton";
+	import { AppShell, Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
 	import NavBar from "$lib/components/navigation/NavBar.svelte";
@@ -29,6 +27,8 @@
 	afterNavigate(() => {
 		showNavigationLoadingBar = false;
 	});
+
+    initializeStores();
 
 	onMount(() => {
 		if (window.matchMedia("(display-mode: standalone)").matches) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AppBar, drawerStore } from "@skeletonlabs/skeleton";
+	import { AppBar, getDrawerStore } from "@skeletonlabs/skeleton";
 	import logo from "$lib/assets/logo.png";
 	import { page } from "$app/stores";
 	import NavMenu from "./NavMenu.svelte";
@@ -8,6 +8,8 @@
 
 	export let navItems: NavItem[];
 	export let user: User | undefined;
+
+    const drawerStore = getDrawerStore();
 </script>
 
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">

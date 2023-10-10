@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { Drawer, drawerStore } from "@skeletonlabs/skeleton";
+	import { Drawer, getDrawerStore } from "@skeletonlabs/skeleton";
 	import { page } from "$app/stores";
 
 	export let navItems: NavItem[];
+
+    const drawerStore = getDrawerStore();
 </script>
 
 <Drawer position="left">

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/stores";
-	import { toastStore } from "@skeletonlabs/skeleton";
+	import { getToastStore } from "@skeletonlabs/skeleton";
 	import PasswordInput from "../PasswordInput.svelte";
+
+    const toastStore = getToastStore();
 
 	let passwordReset = {
 		current: "",

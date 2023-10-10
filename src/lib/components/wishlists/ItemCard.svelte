@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto, invalidateAll } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { Item } from "@prisma/client";
 	import { ItemAPI } from "$lib/api/items";
 
@@ -17,6 +17,9 @@
 	};
 	export let user: PartialUser & { userId: string };
 	export let showFor = false;
+
+    const modalStore = getModalStore();
+    const toastStore = getToastStore();
 
 	let image_url: string;
 	const itemAPI = new ItemAPI(item.id);

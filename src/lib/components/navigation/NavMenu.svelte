@@ -6,7 +6,7 @@
 	import type { Group } from "@prisma/client";
 	import {
 		LightSwitch,
-		modalStore,
+		getModalStore,
 		popup,
 		type ModalSettings,
 		type PopupSettings
@@ -15,6 +15,8 @@
 	import type { User } from "lucia";
 
 	export let user: User | undefined;
+    
+    const modalStore = getModalStore();
 
 	const menuSettings: PopupSettings = {
 		event: "click",

@@ -2,11 +2,14 @@
 	import { enhance } from "$app/forms";
 	import { goto, invalidateAll } from "$app/navigation";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
-	import { modalStore, toastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
 	export let form: ActionData;
+
+    const modalStore = getModalStore();
+    const toastStore = getToastStore();
 
 	const handleDelete = async (username: string, userId: string) => {
 		const settings: ModalSettings = {

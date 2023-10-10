@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { toastStore, type ToastSettings, modalStore } from "@skeletonlabs/skeleton";
+	import { getToastStore, type ToastSettings, getModalStore } from "@skeletonlabs/skeleton";
 	import TokenCopy from "$lib/components/TokenCopy.svelte";
 	import { page } from "$app/stores";
 	import type { Group } from "@prisma/client";
 
 	export let config: Config;
 	export let groups: Group[];
+
+    const modalStore = getModalStore();
+    const toastStore = getToastStore();
 
 	$: form = $page.form;
 
