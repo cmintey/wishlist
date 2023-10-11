@@ -99,7 +99,7 @@ model Item {
 }
 
 model PasswordReset {
-    id          Int      @id @unique @default(autoincrement())
+    id          String   @id @unique @default(uuid())
     createdAt   DateTime @default(now())
     expiresIn   Int
     userId      String
@@ -111,7 +111,7 @@ model PasswordReset {
 }
 
 model SignupToken {
-    id          Int      @id @unique @default(autoincrement())
+    id          String   @id @unique @default(uuid())
     createdAt   DateTime @default(now())
     expiresIn   Int
     hashedToken String

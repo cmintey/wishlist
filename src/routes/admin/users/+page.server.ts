@@ -78,7 +78,7 @@ export const actions: Actions = {
 		const formData = Object.fromEntries(await request.formData());
 		const schema = z.object({
 			"invite-email": z.string().email(),
-			"invite-group": z.string().nonempty()
+			"invite-group": z.string().min(1)
 		});
 
 		const emailData = schema.safeParse(formData);

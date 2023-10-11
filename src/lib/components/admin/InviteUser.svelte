@@ -8,8 +8,8 @@
 	export let config: Config;
 	export let groups: Group[];
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
+	const modalStore = getModalStore();
+	const toastStore = getToastStore();
 
 	$: form = $page.form;
 
@@ -48,9 +48,9 @@
 <form
 	class="flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0"
 	method="POST"
-	use:enhance={({ data }) => {
-		data.set("invite-email", email);
-		data.set("invite-group", groupId);
+	use:enhance={({ formData }) => {
+		formData.set("invite-email", email);
+		formData.set("invite-group", groupId);
 
 		return async ({ result, update }) => {
 			if (result.type === "success" && config.smtp.enable) {
@@ -60,7 +60,7 @@
 		};
 	}}
 >
-	<button class="btn variant-filled-primary w-fit" type="button" on:click={triggerInviteModal}>
+	<button class="variant-filled-primary btn w-fit" type="button" on:click={triggerInviteModal}>
 		<iconify-icon icon="ion:person-add" />
 		<p>Invite User</p>
 	</button>
