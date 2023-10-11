@@ -108,7 +108,7 @@
 		<span class="text-sm">*required field</span>
 
 		<div class="flex flex-row space-x-4">
-			<button class="btn variant-filled-primary w-min" disabled={loading} type="submit">
+			<button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
 				{buttonText}
 			</button>
 			<button

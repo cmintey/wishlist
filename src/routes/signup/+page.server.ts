@@ -60,11 +60,11 @@ export const actions: Actions = {
 
 		const userCount = await client.user.count();
 		let groupId: string | undefined;
-		if (signupData.data.tokenId && Number.isSafeInteger(signupData.data.tokenId)) {
+		if (signupData.data.tokenId) {
 			groupId = await client.signupToken
 				.findUnique({
 					where: {
-						id: Number.parseInt(signupData.data.tokenId)
+						id: signupData.data.tokenId
 					},
 					select: {
 						groupId: true
@@ -103,10 +103,10 @@ export const actions: Actions = {
 				});
 			}
 
-			if (signupData.data.tokenId && Number.isSafeInteger(signupData.data.tokenId)) {
+			if (signupData.data.tokenId) {
 				await client.signupToken.update({
 					where: {
-						id: Number.parseInt(signupData.data.tokenId)
+						id: signupData.data.tokenId
 					},
 					data: {
 						redeemed: true

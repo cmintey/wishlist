@@ -56,19 +56,6 @@
 			/>
 		</div>
 	</div>
-	<!-- <div class="flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0">
-		<PublicSignup bind:enabled={config.enableSignup} />
-		<Suggestions bind:enabled={config.suggestions.enable} bind:method={config.suggestions.method} />
-	</div>
-	<Smtp
-		bind:enabled={config.smtp.enable}
-		bind:host={config.smtp.host}
-		bind:port={config.smtp.port}
-		bind:user={config.smtp.user}
-		bind:pass={config.smtp.pass}
-		bind:from={config.smtp.from}
-		bind:fromName={config.smtp.fromName}
-	/> -->
 
 	{#if form?.error && form?.errors}
 		<ul>
@@ -79,7 +66,7 @@
 	{/if}
 
 	<div class="mt-2 flex items-end space-x-4">
-		<button class="btn variant-filled-primary mt-2" type="submit">
+		<button class="variant-filled-primary btn mt-2" type="submit">
 			{#if saved}
 				<iconify-icon icon="ion:checkmark" />
 				<p>Saved</p>
@@ -95,9 +82,7 @@
 				type="submit"
 			>
 				{#if sending}
-					<span class="h-6 w-6">
-						<ProgressRadial stroke={64} />
-					</span>
+					<ProgressRadial stroke={64} width="w-6" />
 				{:else if sent}
 					<iconify-icon icon="ion:checkmark" />
 					<p>Sent</p>
