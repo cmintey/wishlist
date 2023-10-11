@@ -42,10 +42,14 @@ export const actions: Actions = {
 		const schema = resetPasswordSchema.and(
 			z.object({
 				userId: z.string().cuid(),
-				id: z.coerce.number().int().min(1)
+				id: z.string().uuid()
 			})
 		);
-		const pwdData = schema.safeParse({ ...formData, oldPassword: "reset" });
+		const pwdData = schema.safeParse({
+			...formData,
+			oldPassword: "reset",
+			newPassword: formData.password
+		});
 
 		if (!pwdData.success) {
 			const errors = pwdData.error.errors.map((error) => {

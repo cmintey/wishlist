@@ -2,7 +2,8 @@ import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { redirect, error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad, Actions } from "./$types";
+import { inviteUser } from "$lib/server/invite-user";
 
 export const load = (async ({ locals, params }) => {
 	const session = await locals.validate();
@@ -70,3 +71,7 @@ export const load = (async ({ locals, params }) => {
 		config: getConfig(group.id)
 	};
 }) satisfies PageServerLoad;
+
+export const actions: Actions = {
+	default: inviteUser
+};

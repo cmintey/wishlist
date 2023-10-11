@@ -2,16 +2,21 @@
 	import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
 	export let parent: any;
-    const modalStore = getModalStore();
-	let userEmail: string;
-	let selectedGroup: string;
+	const modalStore = getModalStore();
 
 	// passed in via meta
 	let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];
+	let defaultGroup: Record<string, string> = $modalStore[0]
+		? $modalStore[0].meta?.defaultGroup
+		: undefined;
 	let smtpEnabled: boolean = $modalStore[0] ? $modalStore[0].meta?.smtpEnabled : false;
+
+	let userEmail: string;
+	let selectedGroup: string | undefined = defaultGroup.id || undefined;
 
 	function onFormSubmit(): void {
 		if (selectedGroup) {
+			console.log("selected group: ", selectedGroup);
 			if ($modalStore[0].response)
 				$modalStore[0].response({
 					group: selectedGroup,
@@ -46,14 +51,16 @@
 		</label>
 	{/if}
 
-	<label for="group">Group</label>
-	<ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
-		{#each groups as group}
-			<ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
-				{group.name}
-			</ListBoxItem>
-		{/each}
-	</ListBox>
+	{#if groups && groups.length > 0}
+		<label for="group">Group</label>
+		<ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
+			{#each groups as group}
+				<ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
+					{group.name}
+				</ListBoxItem>
+			{/each}
+		</ListBox>
+	{/if}
 
 	<footer class="modal-footer {parent.regionFooter}">
 		<button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>
