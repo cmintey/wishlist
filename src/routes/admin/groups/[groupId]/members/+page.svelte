@@ -4,10 +4,11 @@
 	import { GroupAPI } from "$lib/api/groups";
 	import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { PageData } from "./$types";
+	import InviteUser from "$lib/components/admin/InviteUser.svelte";
 
 	export let data: PageData;
 
-    const modalStore = getModalStore();
+	const modalStore = getModalStore();
 
 	type UserData = (typeof data.group.users)[number];
 
@@ -74,19 +75,20 @@
 
 <div class="flex space-x-4 py-4">
 	<button
-		class="btn variant-filled-primary"
+		class="variant-filled-primary btn"
 		type="button"
 		on:click={() => modalStore.trigger(addUserModalSettings)}
 	>
 		<iconify-icon icon="ion:person-add" />
 		<span>Add Member</span>
 	</button>
+	<InviteUser config={data.config} defaultGroup={data.group} />
 	<button class="variant-filled-error btn" on:click={deleteGroup}>Delete Group</button>
 </div>
 
 <div class="flex flex-col space-y-2">
 	<div class="table-container">
-		<table class="table-interactive table" role="grid">
+		<table class="table table-interactive" role="grid">
 			<thead class="table-head">
 				<tr>
 					{#each head as label}

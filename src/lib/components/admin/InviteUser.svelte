@@ -6,7 +6,8 @@
 	import type { Group } from "@prisma/client";
 
 	export let config: Config;
-	export let groups: Group[];
+	export let groups: Group[] = [];
+	export let defaultGroup: Group | undefined = undefined;
 
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
@@ -34,6 +35,7 @@
 			component: "inviteUser",
 			meta: {
 				groups,
+				defaultGroup,
 				smtpEnabled: config.smtp.enable
 			},
 			response(data: { group?: string; email?: string }) {

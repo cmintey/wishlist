@@ -30,7 +30,7 @@
 			}}
 		>
 			<div
-				class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
+				class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token"
 			>
 				<PasswordInput
 					id="password"
@@ -38,6 +38,7 @@
 					autocomplete="new-password"
 					label="New Password"
 					required
+					strengthMeter
 					bind:value={newPassword}
 				/>
 				<PasswordInput
@@ -66,7 +67,7 @@
 					</ul>
 				{/if}
 				<button
-					class="btn variant-filled-primary w-fit"
+					class="variant-filled-primary btn w-fit"
 					disabled={newPassword === "" || newPassword !== confirmPassword}
 					type="submit"
 				>
