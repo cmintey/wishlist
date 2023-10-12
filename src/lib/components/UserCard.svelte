@@ -14,18 +14,19 @@
 
 <a class="card" data-sveltekit-preload-data href="/wishlists/{user.username}">
 	<div class="card-header">
-		<div class="flex flex-row items-center space-x-4">
+		<div class="flex flex-row items-center space-x-4 pb-4">
 			<Avatar {user} width="w-14" />
-			<span class="text-3xl font-bold">
-				<span class="unstyled no-underline text-primary-700-200-token">{user.name}</span>
-			</span>
+			<div class="flex flex-col">
+				<span class="text-3xl font-bold">
+					<span class="unstyled text-primary-700-200-token no-underline">{user.name}</span>
+				</span>
+				<div class="flex flex-row items-center space-x-2">
+					<iconify-icon icon="ion:gift" />
+					<span>
+						{!hideCount && user._count ? `${user._count.items}/` : ""}{user.items.length}
+					</span>
+				</div>
+			</div>
 		</div>
-	</div>
-
-	<div class="flex flex-row items-center space-x-2 p-4">
-		<iconify-icon icon="ion:gift" />
-		<span>
-			{!hideCount && user._count ? `${user._count.items}/` : ""}{user.items.length}
-		</span>
 	</div>
 </a>

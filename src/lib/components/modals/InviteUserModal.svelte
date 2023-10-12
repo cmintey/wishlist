@@ -12,11 +12,10 @@
 	let smtpEnabled: boolean = $modalStore[0] ? $modalStore[0].meta?.smtpEnabled : false;
 
 	let userEmail: string;
-	let selectedGroup: string | undefined = defaultGroup.id || undefined;
+	let selectedGroup: string | undefined = defaultGroup?.id || undefined;
 
 	function onFormSubmit(): void {
 		if (selectedGroup) {
-			console.log("selected group: ", selectedGroup);
 			if ($modalStore[0].response)
 				$modalStore[0].response({
 					group: selectedGroup,
