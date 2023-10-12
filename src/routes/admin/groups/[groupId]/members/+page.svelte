@@ -83,7 +83,6 @@
 		<span>Add Member</span>
 	</button>
 	<InviteUser config={data.config} defaultGroup={data.group} />
-	<button class="variant-filled-error btn" on:click={deleteGroup}>Delete Group</button>
 </div>
 
 <div class="flex flex-col space-y-2">
@@ -126,4 +125,5 @@
 			</tbody>
 		</table>
 	</div>
+	<button class="variant-filled-error btn w-fit" on:click={deleteGroup}>Delete Group</button>
 </div>
