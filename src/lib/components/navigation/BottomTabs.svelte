@@ -13,7 +13,7 @@
 
 {#if $isInstalled}
 	<TabGroup
-		class="w-full py-4 bg-surface-200-700-token md:hidden"
+		class="bg-surface-200-700-token w-full pb-6 pt-4 md:hidden"
 		active="variant-glass-primary"
 		border=""
 		hover="hover:variant-soft-primary"

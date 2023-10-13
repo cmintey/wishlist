@@ -8,7 +8,6 @@
 </script>
 
 <div class="flex flex-col space-y-4" in:fade>
-	<h1 class="h1">Lists</h1>
 	<ApprovalAlert approvalCount={data.me._count.items} />
 	<UserCard hideCount user={data.me} />
 
@@ -18,5 +17,5 @@
 </div>
 
 <svelte:head>
-	<title>Wishlist</title>
+	<title>Lists</title>
 </svelte:head>
