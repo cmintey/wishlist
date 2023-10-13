@@ -61,10 +61,6 @@
 	}
 </script>
 
-<h1 class="h1 pb-4">
-	{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} Wishes
-</h1>
-
 {#if data.approvals.length > 0}
 	<h2 class="h2 pb-2">Approvals</h2>
 	<div class="flex flex-col space-y-4 pb-2">
@@ -109,8 +105,8 @@
 <!-- Add Item button -->
 {#if data.listOwner.isMe || data.suggestionsEnabled}
 	<button
-		class="z-90 btn variant-ghost-surface fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10"
-		class:bottom-16={$isInstalled}
+		class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
+		class:bottom-24={$isInstalled}
 		class:bottom-4={!$isInstalled}
 		on:click={() => goto(`${$page.url}/new`)}
 	>

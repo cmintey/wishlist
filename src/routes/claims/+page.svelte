@@ -28,8 +28,6 @@
 	$: items = data.items;
 </script>
 
-<h1 class="h1 pb-4">My Claims</h1>
-
 {#if data.items.length === 0}
 	<div>
 		<p>No items yet</p>

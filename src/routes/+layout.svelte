@@ -2,7 +2,14 @@
 	import "../app.postcss";
 
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
-	import { AppShell, Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
+	import {
+		AppShell,
+		Modal,
+		Toast,
+		storePopup,
+		type ModalComponent,
+		initializeStores
+	} from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
 	import NavBar from "$lib/components/navigation/NavBar.svelte";
@@ -19,6 +26,7 @@
 	export let data: LayoutData;
 
 	let showNavigationLoadingBar = false;
+	let documentTitle: string | undefined;
 
 	beforeNavigate(() => {
 		showNavigationLoadingBar = true;
@@ -26,9 +34,10 @@
 
 	afterNavigate(() => {
 		showNavigationLoadingBar = false;
+		documentTitle = document?.title;
 	});
 
-    initializeStores();
+	initializeStores();
 
 	onMount(() => {
 		if (window.matchMedia("(display-mode: standalone)").matches) {
@@ -80,6 +89,9 @@
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<div class="px-4 py-4 md:px-12 lg:px-32 xl:px-56">
+		{#if !$isInstalled && documentTitle}
+			<h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
+		{/if}
 		<slot />
 	</div>
 
