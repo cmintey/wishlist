@@ -22,10 +22,7 @@
 	</a>
 {:else}
 	<button class="btn w-fit p-0" type="button" on:click={() => history.back()}>
-		<!-- <div class="flex flex-row items-center space-x-1"> -->
 		<iconify-icon icon="ion:arrow-back" />
-
 		<span class="text-xl">{documentTitle || label}</span>
-		<!-- </div> -->
 	</button>
 {/if}
