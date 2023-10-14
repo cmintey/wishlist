@@ -51,6 +51,6 @@
 
 <svelte:head>
 	<title>
-		Create Wish {!data.owner.isMe && `for ${data.owner.name}`}
+		Create Wish {data.owner.isMe ? "" : `for ${data.owner.name}`}
 	</title>
 </svelte:head>
