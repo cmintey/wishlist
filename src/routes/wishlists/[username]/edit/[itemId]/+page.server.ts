@@ -1,9 +1,9 @@
 import { error, fail, redirect } from "@sveltejs/kit";
-import { writeFileSync } from "fs";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { createImage } from "$lib/server/image-util";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const session = await locals.validate();
@@ -75,18 +75,7 @@ export const actions: Actions = {
 			return fail(400, { name, missing: true });
 		}
 
-		let filename = "";
-
-		const create_image = image.size > 0 && image.size <= 5000000;
-
-		if (create_image) {
-			const ext = image.name.split(".").pop();
-			filename = session.user.username + "-" + Date.now().toString() + "." + ext;
-
-			const ab = await image.arrayBuffer();
-
-			writeFileSync(`uploads/${filename}`, Buffer.from(ab));
-		}
+		const filename = await createImage(session.user.username, image);
 
 		await client.item.update({
 			where: {
@@ -96,7 +85,7 @@ export const actions: Actions = {
 				name,
 				price,
 				url,
-				image_url: create_image ? filename : image_url,
+				image_url: filename || image_url,
 				note
 			}
 		});
