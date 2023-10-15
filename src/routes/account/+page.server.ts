@@ -2,10 +2,10 @@ import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { resetPasswordSchema } from "$lib/validations";
 import { fail, redirect } from "@sveltejs/kit";
-import { writeFileSync } from "fs";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { createImage } from "$lib/server/image-util";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.validate();
@@ -70,19 +70,7 @@ export const actions: Actions = {
 		const form = await request.formData();
 		const image = form.get("profilePic") as File;
 
-		let filename = null;
-
-		const create_image = image.size > 0 && image.size <= 5000000;
-
-		if (create_image) {
-			const ext = image.name.split(".").pop();
-			filename = session.user.username + "-" + Date.now().toString() + "." + ext;
-
-			const ab = await image.arrayBuffer();
-
-			writeFileSync(`uploads/${filename}`, Buffer.from(ab));
-			console.log("wrote image");
-		}
+		const filename = await createImage(session.user.username, image);
 
 		if (filename) {
 			await client.user.update({
