@@ -14,8 +14,7 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
 	if (!config.smtp.enable) {
 		await client.signupToken.create({
 			data: {
-				hashedToken: hashToken(token),
-				expiresIn: 21600000 // 6 hours in milliseconds
+				hashedToken: hashToken(token)
 			}
 		});
 
@@ -43,7 +42,6 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
 	await client.signupToken.create({
 		data: {
 			hashedToken: hashToken(token),
-			expiresIn: 21600000, // 6 hours in milliseconds
 			groupId: emailData.data["invite-group"]
 		}
 	});

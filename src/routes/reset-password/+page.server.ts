@@ -5,6 +5,7 @@ import { resetPasswordSchema } from "$lib/validations";
 import { error, fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
+import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ request }) => {
 	const url = new URL(request.url);
@@ -19,16 +20,15 @@ export const load: PageServerLoad = async ({ request }) => {
 			select: {
 				id: true,
 				userId: true,
-				createdAt: true,
-				expiresIn: true
+				createdAt: true
 			}
 		});
 
 		if (!reset) throw error(400, "reset token not found");
 
-		const createdAt = reset.createdAt;
-		const expiry = createdAt.getTime() + reset.expiresIn;
-		if (expiry - Date.now() > 0) {
+		const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
+		const expiry = reset.createdAt.getTime() + expiresIn;
+		if (Date.now() < expiry) {
 			return { valid: true, userId: reset.userId, id: reset.id };
 		}
 	}
