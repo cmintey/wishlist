@@ -39,6 +39,7 @@ services:
       - ./data:/usr/src/app/data
     environment:
       ORIGIN: https://wishlist.example.com
+      TOKEN_TIME: 72 # hours until signup and password reset tokens expire
 ```
 
 Then simply run `docker compose up -d`.
