@@ -6,6 +6,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
 import { getConfig } from "$lib/server/config";
 import { Role } from "$lib/schema";
+import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
 	// If the user session exists, redirect authenticated users to the profile page.
@@ -23,16 +24,15 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 			},
 			select: {
 				id: true,
-				createdAt: true,
-				expiresIn: true
+				createdAt: true
 			}
 		});
 
 		if (!signup) throw error(400, "reset token not found");
 
-		const createdAt = signup.createdAt;
-		const expiry = createdAt.getTime() + signup.expiresIn;
-		if (expiry - Date.now() > 0) {
+		const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
+		const expiry = signup.createdAt.getTime() + expiresIn;
+		if (Date.now() < expiry) {
 			return { valid: true, id: signup.id };
 		}
 		throw error(400, "Invite code is either invalid or already been used");

@@ -53,8 +53,7 @@ export const actions: Actions = {
 			await client.passwordReset.create({
 				data: {
 					userId: user.id,
-					hashedToken: hashToken(token),
-					expiresIn: 21600000 // 6 hours in milliseconds
+					hashedToken: hashToken(token)
 				}
 			});
 

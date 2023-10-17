@@ -50,14 +50,12 @@ export const actions: Actions = {
 			await client.passwordReset.create({
 				data: {
 					userId: user.id,
-					hashedToken: hashToken(token),
-					expiresIn: 21600000 // 6 hours in milliseconds
+					hashedToken: hashToken(token)
 				}
 			});
 
 			if (config.smtp.enable && user.email) {
-				const sent = await sendPasswordReset(user.email, tokenUrl.href);
-				console.log(`email sent: ${sent}`);
+				await sendPasswordReset(user.email, tokenUrl.href);
 			}
 		}
 

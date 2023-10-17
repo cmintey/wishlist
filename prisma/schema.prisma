@@ -101,7 +101,6 @@ model Item {
 model PasswordReset {
     id          String   @id @unique @default(uuid())
     createdAt   DateTime @default(now())
-    expiresIn   Int
     userId      String
     hashedToken String
     redeemed    Boolean  @default(false)
@@ -113,7 +112,6 @@ model PasswordReset {
 model SignupToken {
     id          String   @id @unique @default(uuid())
     createdAt   DateTime @default(now())
-    expiresIn   Int
     hashedToken String
     redeemed    Boolean  @default(false)
     groupId     String   @default("global")
