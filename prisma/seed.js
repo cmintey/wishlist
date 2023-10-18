@@ -40,7 +40,7 @@ const roles = async () => {
 
 const groups = async () => {
 	const groupCount = await prisma.group.count();
-	const userCount = await prisma.authUser.count();
+	const userCount = await prisma.user.count();
 
 	if (userCount > 0 && groupCount === 0) {
 		const defaultGroup = await prisma.group.create({
@@ -49,7 +49,7 @@ const groups = async () => {
 			}
 		});
 
-		const allUsers = await prisma.authUser.findMany();
+		const allUsers = await prisma.user.findMany();
 		for (const user of allUsers) {
 			await prisma.userGroupMembership.create({
 				data: {
