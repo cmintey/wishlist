@@ -61,19 +61,18 @@
 	onMount(() => {
 		if (window.matchMedia("(display-mode: standalone)").matches) {
 			$isInstalled = true;
-		}
 
-		const main = document.getElementById("main");
-		const ptr = PullToRefresh.init({
-			mainElement: main as unknown as string,
-			distThreshold: 70,
-			resistanceFunction: (t) => Math.min(1, t / 4.5),
-			shouldPullToRefresh: () => scrollPosition === 0,
-			onRefresh() {
-				window.location.reload();
-			}
-		});
-		return () => ptr.destroy();
+			const ptr = PullToRefresh.init({
+				mainElement: document.getElementById("main") as unknown as string,
+				distThreshold: 70,
+				resistanceFunction: (t) => Math.min(1, t / 4.5),
+				shouldPullToRefresh: () => scrollPosition === 0,
+				onRefresh() {
+					window.location.reload();
+				}
+			});
+			return () => ptr.destroy();
+		}
 	});
 
 	$: navItems = [
@@ -127,7 +126,7 @@
 	</div>
 
 	<svelte:fragment slot="footer">
-		<BottomTabs {navItems} />
+		<BottomTabs {navItems} user={data.user} />
 	</svelte:fragment>
 </AppShell>
 

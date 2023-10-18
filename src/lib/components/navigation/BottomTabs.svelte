@@ -3,15 +3,17 @@
 	import { page } from "$app/stores";
 	import { isInstalled } from "$lib/stores/is-installed";
 	import { TabGroup, Tab } from "@skeletonlabs/skeleton";
+	import type { User } from "lucia";
 
 	export let navItems: NavItem[];
+	export let user: User | undefined;
 
 	let tabsBottomNav: number;
 
 	tabsBottomNav = navItems.findIndex((n) => $page.url.pathname.startsWith(n.href));
 </script>
 
-{#if $isInstalled}
+{#if user && $isInstalled}
 	<TabGroup
 		class="bg-surface-200-700-token w-full pb-6 pt-4 md:hidden"
 		active="variant-glass-primary"
