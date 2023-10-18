@@ -18,8 +18,8 @@
 	export let user: PartialUser & { userId: string };
 	export let showFor = false;
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
+	const modalStore = getModalStore();
+	const toastStore = getToastStore();
 
 	let image_url: string;
 	const itemAPI = new ItemAPI(item.id);
@@ -146,12 +146,12 @@
 
 			<span class="text-base md:text-lg">
 				{#if showFor}
-					For <span class="font-bold text-secondary-700-200-token">{item.user?.name}</span>
+					For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
 				{:else}
-					Added by <span class="font-bold text-secondary-700-200-token">{item.addedBy?.name}</span>
+					Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
 				{/if}
 			</span>
-			<p>{item.note}</p>
+			<p class="whitespace-pre-wrap">{item.note}</p>
 		</div>
 	</div>
 
@@ -182,7 +182,7 @@
 					<span>Claimed by {item.pledgedBy?.name}</span>
 				{/if}
 			{:else}
-				<button class="btn btn-sm variant-filled-secondary md:btn" on:click={() => handleClaim()}>
+				<button class="variant-filled-secondary btn btn-sm md:btn" on:click={() => handleClaim()}>
 					Claim
 				</button>
 			{/if}
