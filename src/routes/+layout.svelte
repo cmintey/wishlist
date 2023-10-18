@@ -1,6 +1,7 @@
 <script lang="ts">
 	import "../app.postcss";
 
+	import type { ComponentEvents } from "svelte";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { page } from "$app/stores";
 	import {
@@ -23,6 +24,7 @@
 	import { onMount } from "svelte";
 	import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
 	import { isInstalled } from "$lib/stores/is-installed";
+	import PullToRefresh from "pulltorefreshjs";
 
 	export let data: LayoutData;
 
@@ -38,6 +40,7 @@
 	let showNavigationLoadingBar = false;
 	let documentTitle: string | undefined;
 	let disabled = false;
+	let scrollPosition = 0;
 
 	beforeNavigate(() => {
 		showNavigationLoadingBar = true;
@@ -51,10 +54,26 @@
 
 	initializeStores();
 
+	const scrollHandler = (event: ComponentEvents<AppShell>["scroll"]) => {
+		scrollPosition = event.currentTarget.scrollTop;
+	};
+
 	onMount(() => {
 		if (window.matchMedia("(display-mode: standalone)").matches) {
 			$isInstalled = true;
 		}
+
+		const main = document.getElementById("main");
+		const ptr = PullToRefresh.init({
+			mainElement: main as unknown as string,
+			distThreshold: 70,
+			resistanceFunction: (t) => Math.min(1, t / 4.5),
+			shouldPullToRefresh: () => scrollPosition === 0,
+			onRefresh() {
+				window.location.reload();
+			}
+		});
+		return () => ptr.destroy();
 	});
 
 	$: navItems = [
@@ -92,7 +111,7 @@
 
 <NavigationDrawer {navItems} />
 
-<AppShell>
+<AppShell on:scroll={scrollHandler}>
 	<svelte:fragment slot="header">
 		{#if showNavigationLoadingBar}
 			<NavigationLoadingBar />
@@ -100,7 +119,7 @@
 		<NavBar {navItems} user={data.user} />
 	</svelte:fragment>
 	<!-- Router Slot -->
-	<div class="px-4 py-4 md:px-12 lg:px-32 xl:px-56">
+	<div id="main" class="px-4 py-4 md:px-12 lg:px-32 xl:px-56">
 		{#if !$isInstalled && !disabled && documentTitle}
 			<h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
 		{/if}
