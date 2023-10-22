@@ -141,7 +141,7 @@
 
 		<div class="flex flex-col">
 			{#if item.price}
-				<span class="text-lg font-semibold">${item.price}</span>
+				<span class="text-lg font-semibold">{item.price}</span>
 			{/if}
 
 			<span class="text-base md:text-lg">

@@ -42,4 +42,7 @@ RUN chmod +x entrypoint.sh
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data
 
+ENV DEFAULT_CURRENCY USD
+ENV TOKEN_TIME 72
+
 ENTRYPOINT [ "sh", "entrypoint.sh" ]

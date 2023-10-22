@@ -8,6 +8,9 @@ dependencies:
   '@lucia-auth/adapter-prisma':
     specifier: ^3.0.2
     version: 3.0.2(@prisma/client@5.4.2)(lucia@2.7.1)
+  '@metascraper/helpers':
+    specifier: ^5.37.1
+    version: 5.37.1
   '@prisma/client':
     specifier: ^5.4.2
     version: 5.4.2(prisma@5.4.2)
@@ -79,6 +82,9 @@ devDependencies:
   '@tailwindcss/forms':
     specifier: ^0.5.6
     version: 0.5.6(tailwindcss@3.3.3)
+  '@types/metascraper':
+    specifier: ^5.14.2
+    version: 5.14.2
   '@types/node':
     specifier: ^18.18.4
     version: 18.18.4
@@ -2079,6 +2085,10 @@ packages:
 
   /@types/json-schema@7.0.13:
     resolution: {integrity: sha512-RbSSoHliUbnXj3ny0CNFOoxrIDV6SUGyStHsvDqosw6CkdPV8TtWGlfecuK4ToyMEAql6pzNxgCFKanovUzlgQ==}
+    dev: true
+
+  /@types/metascraper@5.14.2:
+    resolution: {integrity: sha512-4Q53SxitINRzFu0XRMqq0zdoNHoXqAUOyLA+cC7XlUScHEDokQqNCljLYXeSBOgY706sHKK64+jj4AUZfge8GQ==}
     dev: true
 
   /@types/node@18.18.4:

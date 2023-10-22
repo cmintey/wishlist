@@ -59,7 +59,7 @@ export const actions: Actions = {
 		const image_url = form.get("image_url") as string;
 		const image = form.get("image") as File;
 		const name = form.get("name") as string;
-		let price = form.get("price") as string;
+		const price = form.get("price") as string;
 		const note = form.get("note") as string;
 
 		// check for empty values
@@ -68,10 +68,6 @@ export const actions: Actions = {
 		}
 
 		const filename = await createImage(session.user.username, image);
-
-		if (price.indexOf("$") !== -1) {
-			price = price.slice(price.indexOf("$") + 1);
-		}
 
 		await client.user.update({
 			where: {
