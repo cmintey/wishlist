@@ -10,6 +10,7 @@
 	import { quintOut } from "svelte/easing";
 	import { crossfade } from "svelte/transition";
 	import { isInstalled } from "$lib/stores/is-installed";
+	import empty from "$lib/assets/no_wishes.svg";
 
 	export let data: PageData;
 
@@ -78,8 +79,9 @@
 {/if}
 
 {#if data.items.length === 0}
-	<div>
-		<p>No items yet</p>
+	<div class="flex flex-col items-center justify-center space-y-4 pt-4">
+		<img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
+		<p class="text-2xl">No wishes yet</p>
 	</div>
 {:else}
 	{#if !data.listOwner.isMe}
