@@ -2,6 +2,7 @@
 	import { page } from "$app/stores";
 	import type { Item } from "@prisma/client";
 	import Backdrop from "$lib/components/Backdrop.svelte";
+	import { env } from "$env/dynamic/public";
 
 	export let data: Item;
 	export let buttonText: string;
@@ -9,6 +10,14 @@
 	$: form = $page.form;
 	let loading = false;
 	let urlChanged = false;
+
+	const formatPrice = (price: number | null, currency: string | null) => {
+		if (!price) return null;
+		return Intl.NumberFormat(undefined, {
+			style: "currency",
+			currency: currency ? currency : env.PUBLIC_DEFAULT_CURRENCY
+		}).format(price);
+	};
 
 	const getInfo = async () => {
 		if (data.url && urlChanged) {
@@ -18,7 +27,7 @@
 				let productData: ProductData = await res.json();
 				data.name = productData.name ? productData.name : productData.title || "";
 				data.image_url = productData.image;
-				data.price = productData.price?.toString() || null;
+				data.price = formatPrice(productData.price, productData.currency);
 			} else {
 				console.log("invalid url");
 			}
@@ -31,30 +40,40 @@
 <div class="grid grid-cols-1 gap-4 md:grid-cols-6">
 	<label class="col-span-1 md:col-span-6" for="url">
 		<span>Item URL</span>
-		<input
-			id="url"
-			name="url"
-			class="input"
-			placeholder="Enter a URL to fetch the item data"
-			type="url"
-			bind:value={data.url}
-			on:focusout={() => getInfo()}
-			on:change={() => (urlChanged = true)}
-		/>
+		<div class="input-group grid-cols-[auto_1fr]">
+			<div class="input-group-shim">
+				<iconify-icon icon="ion:bag-handle"></iconify-icon>
+			</div>
+			<input
+				id="url"
+				name="url"
+				class="input"
+				placeholder="Enter a URL to fetch the item data"
+				type="url"
+				bind:value={data.url}
+				on:focusout={() => getInfo()}
+				on:change={() => (urlChanged = true)}
+			/>
+		</div>
 	</label>
 
 	<label class="col-span-1 row-start-2 md:col-span-4" for="name">
 		<span>Item Name*</span>
-		<input
-			id="name"
-			name="name"
-			class="input"
-			class:input-invalid={form?.missing}
-			autocomplete="off"
-			required
-			type="text"
-			bind:value={data.name}
-		/>
+		<div class="input-group grid-cols-[auto_1fr]">
+			<div class="input-group-shim">
+				<iconify-icon icon="ion:gift"></iconify-icon>
+			</div>
+			<input
+				id="name"
+				name="name"
+				class="input"
+				class:input-invalid={form?.missing}
+				autocomplete="off"
+				required
+				type="text"
+				bind:value={data.name}
+			/>
+		</div>
 		{#if form?.missing}
 			<p class="unstyled pt-2 text-xs text-warning-500">Item name required</p>
 		{/if}
@@ -63,7 +82,9 @@
 	<label class="col-span-1 row-start-3 md:col-span-2 md:row-start-2" for="price">
 		<span>Price</span>
 		<div class="input-group grid-cols-[auto_1fr]">
-			<div class="input-group-shim">$</div>
+			<div class="input-group-shim">
+				<iconify-icon icon="ion:cash"></iconify-icon>
+			</div>
 			<input
 				id="price"
 				name="price"
@@ -82,14 +103,19 @@
 
 	<label class="col-span-1 md:col-span-4" for="image_url">
 		<span>Image URL</span>
-		<input
-			id="image_url"
-			name="image_url"
-			class="input"
-			autocomplete="off"
-			type="text"
-			bind:value={data.image_url}
-		/>
+		<div class="input-group grid-cols-[auto_1fr]">
+			<div class="input-group-shim">
+				<iconify-icon icon="ion:image"></iconify-icon>
+			</div>
+			<input
+				id="image_url"
+				name="image_url"
+				class="input"
+				autocomplete="off"
+				type="text"
+				bind:value={data.image_url}
+			/>
+		</div>
 	</label>
 
 	<label class="col-span-1 md:col-span-6" for="note">

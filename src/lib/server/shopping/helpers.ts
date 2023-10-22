@@ -1,5 +1,7 @@
 /* eslint no-useless-escape: 0 */
-export const toPriceFormat = (price: string) => {
+export const toPriceFormat = (price: string | undefined | null) => {
+	if (!price) return;
+
 	if (typeof price === "string") {
 		// remove all non-numeric characters and symbols like $, € and others others.
 		// except for '.' and ','

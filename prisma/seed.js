@@ -40,9 +40,8 @@ const roles = async () => {
 
 const groups = async () => {
 	const groupCount = await prisma.group.count();
-	const userCount = await prisma.user.count();
 
-	if (userCount > 0 && groupCount === 0) {
+	if (groupCount === 0) {
 		const defaultGroup = await prisma.group.create({
 			data: {
 				name: "Default"
@@ -83,6 +82,7 @@ const groups = async () => {
 				}
 			});
 		}
+		console.log("created default group");
 	} else {
 		console.log("skipping default group creation");
 	}
