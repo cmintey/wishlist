@@ -21,9 +21,11 @@
 
 	<form class="w-80 md:w-1/3" method="POST" use:enhance>
 		<div
-			class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
+			class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token"
 		>
-			<input id="tokenId" name="tokenId" class="hidden" value={data.id} />
+			{#if data.id}
+				<input id="tokenId" name="tokenId" class="hidden" value={data.id} />
+			{/if}
 			<label for="name">
 				<span>Name</span>
 				<input id="name" name="name" class="input" autocomplete="name" required type="text" />
@@ -83,7 +85,7 @@
 
 			<div class="flex items-center justify-center space-x-4 pb-2">
 				<button
-					class="btn variant-filled-primary w-min"
+					class="variant-filled-primary btn w-min"
 					disabled={password !== passwordConfirm}
 					type="submit"
 				>
