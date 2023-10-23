@@ -58,8 +58,16 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 		};
 	}
 
+	const orderBy: Prisma.ItemOrderByWithRelationInput = {};
+	const sort = url.searchParams.get("sort");
+	const direction = url.searchParams.get("dir");
+	if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
+		orderBy.price = direction;
+	}
+
 	const wishlistItems = await client.item.findMany({
 		where: search,
+		orderBy,
 		include: {
 			addedBy: {
 				select: {

@@ -11,6 +11,7 @@
 	import { crossfade } from "svelte/transition";
 	import { isInstalled } from "$lib/stores/is-installed";
 	import empty from "$lib/assets/no_wishes.svg";
+	import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
 
 	export let data: PageData;
 
@@ -84,10 +85,15 @@
 		<p class="text-2xl">No wishes yet</p>
 	</div>
 {:else}
-	{#if !data.listOwner.isMe}
-		<ClaimFilterChip />
-	{/if}
+	<!-- chips -->
+	<div class="flex flex-row flex-wrap space-x-4">
+		{#if !data.listOwner.isMe}
+			<ClaimFilterChip />
+		{/if}
+		<SortBy />
+	</div>
 
+	<!-- items -->
 	<div class="flex flex-col space-y-4">
 		{#each data.items as item (item.id)}
 			<div
