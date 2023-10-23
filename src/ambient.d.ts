@@ -55,3 +55,10 @@ type Config = {
 	};
 	smtp: SMTPConfig;
 };
+
+type Option = {
+	value: string;
+	direction?: Direction;
+	displayValue: string;
+};
+type Direction = "asc" | "desc";
