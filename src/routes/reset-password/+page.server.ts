@@ -41,7 +41,7 @@ export const actions: Actions = {
 		const formData = Object.fromEntries(await request.formData());
 		const schema = resetPasswordSchema.and(
 			z.object({
-				userId: z.string().cuid(),
+				userId: z.string(),
 				id: z.string().uuid()
 			})
 		);
