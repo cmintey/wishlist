@@ -19,12 +19,23 @@
 		}).format(price);
 	};
 
+	const extractUrl = (url: string) => {
+		const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
+		const matches = url.match(urlRegex);
+		if (matches) {
+			return matches[0];
+		}
+		return null;
+	};
+
 	const getInfo = async () => {
 		if (data.url && urlChanged) {
 			loading = true;
-			const res = await fetch(`/api/product?url=${data.url}`);
+			const url = extractUrl(data.url);
+			const res = await fetch(`/api/product?url=${url}`);
 			if (res.ok) {
 				let productData: ProductData = await res.json();
+				data.url = productData.url ? productData.url : url;
 				data.name = productData.name ? productData.name : productData.title || "";
 				data.image_url = productData.image;
 				data.price = formatPrice(productData.price, productData.currency);
