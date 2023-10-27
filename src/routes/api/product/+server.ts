@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 import { gotScraping } from "got-scraping";
-import metascraper from "metascraper";
+import metascraper, { type Metadata } from "metascraper";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
@@ -23,6 +23,10 @@ const goShopping = async (targetUrl: string) => {
 	return metadata;
 };
 
+const isCaptchaResponse = (metadata: Metadata) => {
+	return metadata.image.toLocaleLowerCase().indexOf("captcha") >= 0;
+};
+
 export const GET: RequestHandler = async ({ request }) => {
 	const url = new URL(request.url).searchParams.get("url");
 	let isUrlValid = false;
@@ -35,7 +39,12 @@ export const GET: RequestHandler = async ({ request }) => {
 		}
 		if (!isUrlValid) throw error(400, "valid url not provided");
 
-		const metadata = await goShopping(url);
+		let metadata = await goShopping(url);
+		if (isCaptchaResponse(metadata)) {
+			// retry with the resolved URL
+			metadata = await goShopping(metadata.url);
+		}
+
 		return new Response(JSON.stringify(metadata));
 	} else {
 		throw error(400, "must specify url in query parameters");
