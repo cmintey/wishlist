@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import ItemCard from "$lib/components/wishlists/ItemCard.svelte";
+	import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
 	import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
 	import { goto, invalidate } from "$app/navigation";
 	import { page } from "$app/stores";

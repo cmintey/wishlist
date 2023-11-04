@@ -1,20 +1,24 @@
-<script lang="ts">
-	import { goto, invalidateAll } from "$app/navigation";
-	import { page } from "$app/stores";
-	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
-	import type { Item } from "@prisma/client";
-	import { ItemAPI } from "$lib/api/items";
-
-	type PartialUser = {
+<script context="module" lang="ts">
+	export type PartialUser = {
 		username: string;
 		name: string;
 	};
-
-	export let item: Item & {
+	export type FullItem = Item & {
 		addedBy: PartialUser | null;
 		pledgedBy: PartialUser | null;
 		user: PartialUser | null;
 	};
+</script>
+
+<script lang="ts">
+	import { invalidateAll } from "$app/navigation";
+	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import type { Item } from "@prisma/client";
+	import { ItemAPI } from "$lib/api/items";
+	import ApprovalButtons from "./ApprovalButtons.svelte";
+	import ClaimButtons from "./ClaimButtons.svelte";
+
+	export let item: FullItem;
 	export let user: PartialUser & { userId: string };
 	export let showFor = false;
 
@@ -122,7 +126,7 @@
 <div class="card" class:variant-ghost-warning={!item.approved}>
 	<header class="card-header">
 		<div class="flex w-full">
-			<span class="truncate text-xl font-bold md:text-2xl">
+			<span class="line-clamp-2 text-xl font-bold md:text-2xl">
 				{#if item.url}
 					<a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">
 						{item.name}
@@ -151,69 +155,25 @@
 					Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
 				{/if}
 			</span>
-			<p class="whitespace-pre-wrap">{item.note}</p>
+			<p class="line-clamp-4 whitespace-pre-wrap">{item.note}</p>
 		</div>
 	</div>
 
-	<footer class="card-footer">
-		<div class="flex flex-row justify-between">
-			{#if user.username === $page.params.username}
-				<div />
-			{:else if item.pledgedBy}
-				{#if item.pledgedBy.username === user.username}
-					<div class="flex flex-row space-x-2 md:space-x-4">
-						<button
-							class="variant-ghost-secondary btn btn-sm md:btn"
-							on:click={() => handleClaim(true)}
-						>
-							Unclaim
-						</button>
-						<label class="unstyled flex items-center space-x-2 text-sm md:text-base">
-							<input
-								class="checkbox"
-								type="checkbox"
-								bind:checked={item.purchased}
-								on:change={(event) => handlePurchased(event.currentTarget?.checked)}
-							/>
-							<span>Purchased</span>
-						</label>
-					</div>
-				{:else}
-					<span>Claimed by {item.pledgedBy?.name}</span>
-				{/if}
-			{:else}
-				<button class="variant-filled-secondary btn btn-sm md:btn" on:click={() => handleClaim()}>
-					Claim
-				</button>
-			{/if}
+	<footer class="card-footer flex flex-row justify-between">
+		<ClaimButtons
+			{item}
+			{user}
+			on:claim={() => handleClaim()}
+			on:unclaim={() => handleClaim(true)}
+			on:purchase={(event) => handlePurchased(event.detail.purchased)}
+		/>
 
-			<div class="flex flex-row space-x-2 md:space-x-4">
-				{#if !item.approved}
-					<button
-						class="variant-filled-success btn btn-sm md:btn"
-						on:click={() => handleApproval(true)}
-					>
-						Approve
-					</button>
-					<button
-						class="variant-filled-error btn btn-sm md:btn"
-						on:click={() => handleApproval(false)}
-					>
-						Deny
-					</button>
-				{:else if user.username === item.user?.username || user.username === item.addedBy?.username}
-					<button
-						class="variant-ghost-primary btn btn-sm md:btn"
-						on:click={() =>
-							goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`)}
-					>
-						Edit
-					</button>
-					<button class="variant-filled-error btn btn-sm md:btn" on:click={handleDelete}>
-						Delete
-					</button>
-				{/if}
-			</div>
-		</div>
+		<ApprovalButtons
+			{item}
+			{user}
+			on:approve={() => handleApproval(true)}
+			on:deny={() => handleApproval(false)}
+			on:delete={handleDelete}
+		/>
 	</footer>
 </div>
