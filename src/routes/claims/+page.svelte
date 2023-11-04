@@ -3,7 +3,7 @@
 	import { crossfade } from "svelte/transition";
 	import { flip } from "svelte/animate";
 	import type { PageData } from "./$types";
-	import ItemCard from "$lib/components/wishlists/ItemCard.svelte";
+	import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
 	import noClaims from "$lib/assets/no_claims.svg";
 
 	export let data: PageData;
