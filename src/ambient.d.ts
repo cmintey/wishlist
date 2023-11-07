@@ -1,5 +1,3 @@
-import type { Group } from "@prisma/client";
-
 declare module "@samirrayani/metascraper-shopping" {
 	export default function rules(): import("metascraper").Rule;
 }
@@ -65,7 +63,7 @@ type Option = {
 };
 type Direction = "asc" | "desc";
 
-type GroupInformation = Group & {
+type GroupInformation = import("@prisma/client").Group & {
 	isManager: boolean;
 	active: boolean;
 };

@@ -1,5 +1,4 @@
 import type { Group, UserGroupMembership } from "@prisma/client";
-import type { GroupInformation } from "../../ambient";
 
 export class UserAPI {
 	userId: string;

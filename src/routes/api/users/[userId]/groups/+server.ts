@@ -3,7 +3,6 @@ import { client } from "$lib/server/prisma";
 import type { Group, Role as RoleModel } from "@prisma/client";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import type { GroupInformation } from "../../../../../ambient";
 
 export const GET: RequestHandler = async ({ params, locals, url }) => {
 	const session = await locals.validate();
