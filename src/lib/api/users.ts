@@ -20,7 +20,7 @@ export class UserAPI {
 		return await fetch(`/api/users/${this.userId}${path}`, options);
 	};
 
-	groups = async (): Promise<Group[]> => {
+	groups = async (): Promise<GroupInformation[]> => {
 		return await this._makeRequest("GET", "/groups")
 			.then((resp) => resp.json())
 			.then(({ groups }) => groups);

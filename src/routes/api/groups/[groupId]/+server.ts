@@ -32,3 +32,35 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 
 	return new Response(JSON.stringify(deletedGroup));
 };
+
+export const PATCH: RequestHandler = async ({ locals, params, request }) => {
+	const { authenticated } = await _authCheck(locals.validate, params.groupId);
+
+	if (!authenticated) {
+		throw error(401, "User is not authorized to modify this group");
+	}
+
+	const body = (await request.json()) as Record<string, unknown>;
+	if (!body?.name) {
+		return new Response(JSON.stringify({}), { status: 200 });
+	}
+
+	const group = await client.group.findUnique({
+		where: {
+			id: params.groupId
+		}
+	});
+
+	if (!group) throw error(404, "Group does not exist");
+
+	const updatedGroup = await client.group.update({
+		data: {
+			name: body.name
+		},
+		where: {
+			id: group.id
+		}
+	});
+
+	return new Response(JSON.stringify(updatedGroup), { status: 200 });
+};

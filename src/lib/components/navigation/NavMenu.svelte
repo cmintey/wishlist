@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from "$app/navigation";
-	import { GroupAPI, GroupsAPI } from "$lib/api/groups";
+	import { GroupsAPI } from "$lib/api/groups";
 	import { UserAPI } from "$lib/api/users";
 	import { Role } from "$lib/schema";
 	import type { Group } from "@prisma/client";
@@ -15,8 +15,8 @@
 	import type { User } from "lucia";
 
 	export let user: User | undefined;
-    
-    const modalStore = getModalStore();
+
+	const modalStore = getModalStore();
 
 	const menuSettings: PopupSettings = {
 		event: "click",
@@ -94,27 +94,28 @@
 
 					<hr />
 
-					{#await userAPI.activeGroup() then group}
-						<div class="flex flex-row items-center space-x-4 px-4 py-2">
-							<iconify-icon icon="ion:people" />
-							<span>{group.name} Group</span>
-						</div>
-						{#await new GroupAPI(group.id).isManager(user.userId) then manager}
-							{#if manager}
-								<li>
-									<button
-										class="list-option w-full"
-										on:click={() => goto(`/admin/groups/${group.id}`)}
-									>
-										<iconify-icon icon="ion:settings" />
-										<p>Manage Group</p>
-									</button>
-								</li>
-							{/if}
-						{/await}
-					{/await}
-
 					{#await userAPI.groups() then groups}
+						{#each groups as group}
+							{#if group.active}
+								{#if groups.length > 1}
+									<div class="flex w-fit flex-row items-center space-x-4 px-4 py-2">
+										<iconify-icon icon="ion:people" />
+										<span>{group.name}</span>
+									</div>
+								{/if}
+								{#if group.isManager}
+									<li>
+										<button
+											class="list-option w-full"
+											on:click={() => goto(`/admin/groups/${group.id}`)}
+										>
+											<iconify-icon icon="ion:settings" />
+											<p>Manage Group</p>
+										</button>
+									</li>
+								{/if}
+							{/if}
+						{/each}
 						{#if groups.length > 1}
 							<li>
 								<button class="list-option w-full" on:click={() => changeGroup(groups)}>

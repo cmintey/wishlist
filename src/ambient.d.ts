@@ -62,3 +62,8 @@ type Option = {
 	displayValue: string;
 };
 type Direction = "asc" | "desc";
+
+type GroupInformation = import("@prisma/client").Group & {
+	isManager: boolean;
+	active: boolean;
+};
