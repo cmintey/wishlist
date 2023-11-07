@@ -57,6 +57,10 @@ export class GroupAPI {
 	delete = async (): Promise<Group> => {
 		return await this._makeRequest("DELETE").then((resp) => resp.json());
 	};
+
+	update = async (group: Partial<Group>) => {
+		return await this._makeRequest("PATCH", "/", group).then((resp) => resp.json());
+	};
 }
 
 export class GroupsAPI {
