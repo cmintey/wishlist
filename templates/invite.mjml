@@ -13,7 +13,7 @@
     <!-- Logo Headaer -->
     <mj-section padding-bottom="0px">
       <mj-column>
-        <mj-image src="{{baseUrl}}/android-chrome-512x512.png" alt="Wishlist Logo" width="120px" padding-bottom="0px" />
+        <mj-image src="{{baseUrl}}/android-chrome-512x512.png" alt="Wishlist Logo" width="120px" padding-bottom="0px" rel="notrack" />
         <mj-text align="center" font-size="32px" padding-top="0px" color="#531f5e">Wishlist</mj-text>
 
         <mj-divider border-width="2px" width="45%"></mj-divider>
@@ -32,7 +32,7 @@
         </mj-text>
 
 
-        <mj-button href="{{url}}" rel="notrack" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">Join Wishlist</mj-button>
+        <mj-button href="{{url}}" rel="noreferrer" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">Join Wishlist</mj-button>
       </mj-column>
     </mj-section>
     <mj-section>
