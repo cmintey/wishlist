@@ -3,9 +3,11 @@ import Handlebars from "handlebars";
 import { readFile } from "fs";
 import type Mail from "nodemailer/lib/mailer";
 import { getConfig } from "$lib/server/config";
+import { env } from "$env/dynamic/private";
 
 type TemplateData = {
 	url: string;
+	baseUrl: string;
 };
 
 let passResetTempl: HandlebarsTemplateDelegate<TemplateData>;
@@ -65,7 +67,7 @@ const sendEmail = async (options: Mail.Options) => {
 };
 
 export const sendSignupLink = async (to: string, url: string) => {
-	const html = inviteTempl({ url });
+	const html = inviteTempl({ url, baseUrl: env.ORIGIN || "http://localhost:5173" });
 	return await sendEmail({
 		to,
 		subject: "Wishlist Invite",
@@ -75,7 +77,7 @@ export const sendSignupLink = async (to: string, url: string) => {
 };
 
 export const sendPasswordReset = async (to: string, url: string) => {
-	const html = passResetTempl({ url });
+	const html = passResetTempl({ url, baseUrl: env.ORIGIN || "http://localhost:5173" });
 	return await sendEmail({
 		to,
 		subject: "Password Reset",
