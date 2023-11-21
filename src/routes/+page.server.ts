@@ -59,6 +59,7 @@ export const load = (async ({ locals }) => {
 			}
 		},
 		select: {
+			id: true,
 			username: true,
 			name: true,
 			picture: true,
