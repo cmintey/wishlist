@@ -2,8 +2,8 @@
 	import { invalidateAll } from "$app/navigation";
 	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
+	const modalStore = getModalStore();
+	const toastStore = getToastStore();
 
 	const handleDelete = async () => {
 		const settings: ModalSettings = {

@@ -34,7 +34,7 @@
 		</button>
 		<div class="card variant-filled-secondary p-2" data-popup="copy">
 			Copy to clipboard
-			<div class="arrow variant-filled-secondary" />
+			<div class="variant-filled-secondary arrow" />
 		</div>
 		{#if copiedVisible}
 			<span out:fade>Copied!</span>
