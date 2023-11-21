@@ -5,7 +5,7 @@
 
 	export let parent: any;
 
-    const modalStore = getModalStore();
+	const modalStore = getModalStore();
 	let selectedUser: string;
 
 	function onFormSubmit(): void {

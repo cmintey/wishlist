@@ -23,7 +23,7 @@
 		}}
 	>
 		<div
-			class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
+			class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token"
 		>
 			<label for="username">
 				<span>Username</span>
@@ -60,7 +60,7 @@
 				{/if}
 
 				<div class="flex items-center justify-center space-x-4">
-					<button class="btn variant-filled-primary w-min">Log In</button>
+					<button class="variant-filled-primary btn w-min">Log In</button>
 					{#if data.enableSignup}
 						<a href="/signup">Create an account</a>
 					{/if}

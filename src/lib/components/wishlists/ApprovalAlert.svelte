@@ -3,7 +3,7 @@
 </script>
 
 {#if approvalCount > 0}
-	<aside class="variant-ghost-primary alert">
+	<aside class="alert variant-ghost-primary">
 		<div class="alert-message flex flex-row items-center space-x-4 space-y-0">
 			<div><iconify-icon class="text-4xl" icon="ion:information-circle" /></div>
 			<div class="flex flex-col">
@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div class="alert-actions">
-			<a class="btn btn-sm variant-filled-primary" href="/wishlists/me">View Wishes</a>
+			<a class="variant-filled-primary btn btn-sm" href="/wishlists/me">View Wishes</a>
 		</div>
 	</aside>
 {/if}

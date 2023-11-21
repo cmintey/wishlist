@@ -55,7 +55,7 @@
 			</ul>
 		{/if}
 
-		<button class="btn variant-filled-primary w-fit" formaction="?/profile" type="submit">
+		<button class="variant-filled-primary btn w-fit" formaction="?/profile" type="submit">
 			Update
 		</button>
 	</div>

@@ -34,7 +34,7 @@
 				}}
 			>
 				<div
-					class="flex flex-col space-y-4 p-4 bg-surface-100-800-token rounded-container-token ring-outline-token"
+					class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token"
 				>
 					<label class="w-full" for="email">
 						<span>Email</span>
@@ -48,13 +48,13 @@
 						/>
 					</label>
 					{#if form?.error}
-						<span class="text-xs text-error-700-200-token">
+						<span class="text-error-700-200-token text-xs">
 							Please provide a valid email address.
 						</span>
 					{/if}
 
 					<div>
-						<button class="btn variant-filled-primary" type="submit">Submit</button>
+						<button class="variant-filled-primary btn" type="submit">Submit</button>
 					</div>
 				</div>
 			</form>

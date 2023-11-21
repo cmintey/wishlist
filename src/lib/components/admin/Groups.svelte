@@ -20,8 +20,8 @@
 
 	export let groups: Group[];
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
+	const modalStore = getModalStore();
+	const toastStore = getToastStore();
 
 	let groupsFiltered: Group[];
 
@@ -71,7 +71,7 @@
 
 <div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0">
 	<Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
-	<button class="btn variant-filled-primary" on:click={createGroup}>
+	<button class="variant-filled-primary btn" on:click={createGroup}>
 		<iconify-icon icon="ion:add" />
 		<p>Create Group</p>
 	</button>

@@ -23,7 +23,7 @@
 		bind:method={data.config.suggestions.method}
 	/>
 
-	<button class="btn variant-filled-primary mt-2" type="submit">
+	<button class="variant-filled-primary btn mt-2" type="submit">
 		{#if saved}
 			<iconify-icon icon="ion:checkmark" />
 			<p>Saved</p>

@@ -4,7 +4,7 @@
 
 	export let navItems: NavItem[];
 
-    const drawerStore = getDrawerStore();
+	const drawerStore = getDrawerStore();
 </script>
 
 <Drawer position="left">

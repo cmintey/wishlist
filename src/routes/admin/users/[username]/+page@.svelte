@@ -8,8 +8,8 @@
 	export let data: PageData;
 	export let form: ActionData;
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
+	const modalStore = getModalStore();
+	const toastStore = getToastStore();
 
 	const handleDelete = async (username: string, userId: string) => {
 		const settings: ModalSettings = {
@@ -60,7 +60,7 @@
 
 <form method="POST" use:enhance>
 	<div class="mt-4 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-		<button class="btn variant-filled-primary w-fit" formaction="?/reset-password">
+		<button class="variant-filled-primary btn w-fit" formaction="?/reset-password">
 			Generate Reset Password Link
 		</button>
 		{#if data.editingUser.role.name == "ADMIN"}

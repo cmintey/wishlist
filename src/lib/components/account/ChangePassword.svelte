@@ -4,7 +4,7 @@
 	import { getToastStore } from "@skeletonlabs/skeleton";
 	import PasswordInput from "../PasswordInput.svelte";
 
-    const toastStore = getToastStore();
+	const toastStore = getToastStore();
 
 	let passwordReset = {
 		current: "",
@@ -76,7 +76,7 @@
 			</ul>
 		{/if}
 		<button
-			class="btn variant-filled-primary w-fit"
+			class="variant-filled-primary btn w-fit"
 			disabled={passwordReset.current === "" ||
 				passwordReset.new === "" ||
 				passwordReset.new !== passwordReset.confirm}

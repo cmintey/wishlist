@@ -6,7 +6,7 @@
 
 	export let data: PageServerData;
 
-    const toastStore = getToastStore();
+	const toastStore = getToastStore();
 </script>
 
 {#if data?.item}
