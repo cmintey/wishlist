@@ -90,12 +90,13 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 		}
 	});
 
-	const listOwner = await client.user.findUnique({
+	const listOwner = await client.user.findUniqueOrThrow({
 		where: {
 			username: params.username
 		},
 		select: {
-			name: true
+			name: true,
+			id: true
 		}
 	});
 
@@ -103,7 +104,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
 		user: session.user,
 		listOwner: {
 			isMe: params.username === session.user.username,
-			name: listOwner?.name
+			...listOwner
 		},
 		items: wishlistItems.filter((item) => item.approved),
 		approvals: wishlistItems.filter((item) => !item.approved),

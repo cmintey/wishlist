@@ -10,6 +10,7 @@
 			items: number;
 		};
 	};
+	export let newItems = false;
 </script>
 
 <a class="card" data-sveltekit-preload-data href="/wishlists/{user.username}">
@@ -25,6 +26,13 @@
 					<span>
 						{!hideCount && user._count ? `${user._count.items}/` : ""}{user.items.length}
 					</span>
+					{#if newItems}
+						<iconify-icon
+							class="text-primary-700-200-token opacity-40"
+							icon="ion:ellipse-sharp"
+							width="10px"
+						/>
+					{/if}
 				</div>
 			</div>
 		</div>

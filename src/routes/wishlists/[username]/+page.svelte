@@ -12,6 +12,7 @@
 	import { isInstalled } from "$lib/stores/is-installed";
 	import empty from "$lib/assets/no_wishes.svg";
 	import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
+	import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
 
 	export let data: PageData;
 
@@ -54,7 +55,11 @@
 		}, 5000);
 	};
 
-	onMount(pollUpdate);
+	onMount(async () => {
+		const userHash = await hash(data.listOwner.id);
+		$viewedItems[userHash] = await hashItems(data.items);
+		pollUpdate();
+	});
 	onDestroy(() => clearTimeout(pollTimeout));
 
 	$: if (!$idle && !polling) {
