@@ -1,6 +1,6 @@
 <div align="center">
 <img src="./src/lib/assets/logo.png" width="200" />
-<h3>Wishlist</h3>
+<h1>Wishlist</h1>
 <p> A sharable wishlist for your friends and family </p>
 </div>
 
@@ -16,8 +16,8 @@ Wishlist is a self-hosted wishlist application that you can share with your frie
 - [x] Invite users via email (SMTP configuration required)
 - [x] Options for [suggestions](#suggestions)
 - [x] PWA Support
+- [x] Group support
 - [ ] Draw names for a "secret santa" experience
-- [ ] Group support
 
 ## Getting Started
 
@@ -30,15 +30,15 @@ version: "3"
 
 services:
   wishlist:
-    container_name: wishlist-app
-    image: cmintey/wishlist:latest
+    container_name: wishlist
+    image: ghcr.io/cmintey/wishlist:latest
     ports:
       - 3280:3280
     volumes:
-      - ./uploads:/usr/src/app/uploads
-      - ./data:/usr/src/app/data
+      - ./uploads:/usr/src/app/uploads  # This is where user image uploads will be stored
+      - ./data:/usr/src/app/data        # This is where the sqlite database will be stored
     environment:
-      ORIGIN: https://wishlist.example.com
+      ORIGIN: https://wishlist.example.com # The URL users will connect to
       TOKEN_TIME: 72 # hours until signup and password reset tokens expire
 ```
 
@@ -49,6 +49,12 @@ You can now connect to your application at `http://<host>:3280`.
 > **Note**
 >
 > Set the `ORIGIN` environment variable to the url you will be connecting to, otherwise you will experience issues
+
+## Groups
+
+Wishlist has support for multiple wishlist groups. For example, you can have one group for friends and one for family. The wishes on these lists will be completely separate. You can switch between groups using the menu when you click on your profile picture.
+
+Currently, anyone can create a group. The group creator is automatically added as a "manager" of the group. A Group Manager can invite users to Wishlist and add/remove existing users to the group they manage. The Group Manager can also delete the group. An Admin will have the same permissions as the Group Manager.
 
 ## Configuration
 
@@ -64,15 +70,15 @@ If you have [SMTP enabled](#smtp), then you can enter a user's email and an invi
 
 Suggestions are enabled by default. With suggestions enabled, you will be able to add items to another person's wishlist. There are a few different suggestion methods.
 
-#### Approval Required
+#### ▶ Approval Required
 
 In this mode, the suggested item will need to be approved by the suggestee in order for it to show up on their wishlist. If the item is approved, it can be edited and deleted by the suggestee at any time.
 
-#### Auto Approval
+#### ▶ Auto Approval
 
 In this mode, the suggested item will be automatically approved and added to the wishlist. Similar to the previous method, the item can be edited and delted by the suggestee at any time.
 
-#### Suprise Me
+#### ▶ Suprise Me
 
 In this mode, the suggested item is automatically approved and added to the wishlist. **However**, the item only shows for everyone except for the suggestee. The suggestee cannot see and therefore cannot edit or delete the item once it has been added.
 
