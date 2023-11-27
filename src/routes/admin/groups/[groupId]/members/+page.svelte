@@ -5,6 +5,7 @@
 	import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
 	import type { PageData } from "./$types";
 	import InviteUser from "$lib/components/admin/InviteUser.svelte";
+	import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
 
 	export let data: PageData;
 
@@ -125,5 +126,8 @@
 			</tbody>
 		</table>
 	</div>
-	<button class="variant-filled-error btn w-fit" on:click={deleteGroup}>Delete Group</button>
+	<div>
+		<button class="variant-filled-error btn w-fit" on:click={deleteGroup}>Delete Group</button>
+		<ClearListsButton groupId={$page.params.groupId} />
+	</div>
 </div>
