@@ -46,10 +46,16 @@
 		showNavigationLoadingBar = true;
 	});
 
-	afterNavigate(() => {
+	afterNavigate((params) => {
 		showNavigationLoadingBar = false;
 		documentTitle = document?.title;
 		disabled = titleDisabledUrls.find((url) => $page.url.pathname === url) !== undefined;
+		// scroll to top
+		const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
+		const elemPage = document.querySelector("#page");
+		if (isNewPage && elemPage !== null) {
+			elemPage.scrollTop = 0;
+		}
 	});
 
 	initializeStores();
