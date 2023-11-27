@@ -46,3 +46,23 @@ export class ItemAPI {
 		return await this._makeRequest("PATCH", { purchased: false });
 	};
 }
+
+export class ItemsAPI {
+	_makeRequest = async (method: string, path: string, body?: Record<string, unknown>) => {
+		const options: RequestInit = {
+			method,
+			headers: {
+				"content-type": "application/json",
+				accept: "application/json"
+			}
+		};
+
+		if (body) options.body = JSON.stringify(body);
+
+		return await fetch(`/api/items${path}`, options);
+	};
+
+	delete = async (groupId?: string) => {
+		return await this._makeRequest("DELETE", groupId ? `?groupId=${groupId}` : "");
+	};
+}

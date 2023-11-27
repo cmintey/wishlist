@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { _authCheck } from "./users/[userId]/+server";
 import { client } from "$lib/server/prisma";
+import { _authCheck } from "./auth";
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
 	const { authenticated } = await _authCheck(locals.validate, params.groupId);
