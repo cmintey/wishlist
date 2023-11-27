@@ -2,7 +2,7 @@
 	import { AppBar, getDrawerStore } from "@skeletonlabs/skeleton";
 	import logo from "$lib/assets/logo.png";
 	import { page } from "$app/stores";
-	import NavMenu from "./NavMenu.svelte";
+	import NavMenu from "./NavMenu/NavMenu.svelte";
 	import type { User } from "lucia";
 	import { isInstalled } from "$lib/stores/is-installed";
 	import BackButton from "../BackButton.svelte";
