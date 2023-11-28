@@ -1,49 +1,49 @@
 <script lang="ts">
-	import { invalidateAll } from "$app/navigation";
-	import { ItemsAPI } from "$lib/api/items";
-	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+    import { invalidateAll } from "$app/navigation";
+    import { ItemsAPI } from "$lib/api/items";
+    import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
-	export let groupId: string | undefined = undefined;
+    export let groupId: string | undefined = undefined;
 
-	const modalStore = getModalStore();
-	const toastStore = getToastStore();
-	const itemsAPI = new ItemsAPI();
+    const modalStore = getModalStore();
+    const toastStore = getToastStore();
+    const itemsAPI = new ItemsAPI();
 
-	const handleDelete = async () => {
-		const settings: ModalSettings = {
-			type: "confirm",
-			title: "Please Confirm",
-			body: `Are you sure you wish to clear all wishlists ${
-				groupId ? "" : "across <b>all groups</b>"
-			}? <b>This action is irreversible!</b>`,
-			// confirm = TRUE | cancel = FALSE
-			response: async (r: boolean) => {
-				if (r) {
-					const resp = await itemsAPI.delete(groupId);
+    const handleDelete = async () => {
+        const settings: ModalSettings = {
+            type: "confirm",
+            title: "Please Confirm",
+            body: `Are you sure you wish to clear all wishlists ${
+                groupId ? "" : "across <b>all groups</b>"
+            }? <b>This action is irreversible!</b>`,
+            // confirm = TRUE | cancel = FALSE
+            response: async (r: boolean) => {
+                if (r) {
+                    const resp = await itemsAPI.delete(groupId);
 
-					if (resp.ok) {
-						invalidateAll();
+                    if (resp.ok) {
+                        invalidateAll();
 
-						toastStore.trigger({
-							message: "Wishlists cleared.",
-							autohide: true,
-							timeout: 5000
-						});
-					} else {
-						toastStore.trigger({
-							message: `Oops! Something went wrong.`,
-							background: "variant-filled-warning",
-							autohide: true,
-							timeout: 5000
-						});
-					}
-				}
-			}
-		};
-		modalStore.trigger(settings);
-	};
+                        toastStore.trigger({
+                            message: "Wishlists cleared.",
+                            autohide: true,
+                            timeout: 5000
+                        });
+                    } else {
+                        toastStore.trigger({
+                            message: `Oops! Something went wrong.`,
+                            background: "variant-filled-warning",
+                            autohide: true,
+                            timeout: 5000
+                        });
+                    }
+                }
+            }
+        };
+        modalStore.trigger(settings);
+    };
 </script>
 
 <button class="variant-filled-error btn w-fit" type="button" on:click={handleDelete}>
-	Clear {groupId ? "" : "All"} Lists
+    Clear {groupId ? "" : "All"} Lists
 </button>

@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { Avatar } from "@skeletonlabs/skeleton";
+    import { Avatar } from "@skeletonlabs/skeleton";
 
-	export let user: {
-		name: string;
-		picture?: string | null;
-	};
+    export let user: {
+        name: string;
+        picture?: string | null;
+    };
 </script>
 
 <Avatar
-	background="bg-primary-400-500-token"
-	initials={user?.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-	src={user?.picture ? `/api/assets/${user.picture}` : ""}
-	{...$$props}
+    background="bg-primary-400-500-token"
+    initials={user?.name.split(" ").reduce((x, y) => x + y.at(0), "")}
+    src={user?.picture ? `/api/assets/${user.picture}` : ""}
+    {...$$props}
 />
