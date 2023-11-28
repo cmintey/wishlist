@@ -34,7 +34,7 @@
 	{:else if showName}
 		<span>Claimed by {item.pledgedBy?.name}</span>
 	{:else}
-		<button class="variant-filled-secondary btn btn-sm md:btn" disabled>Claimed</button>
+		<span>Claimed</span>
 	{/if}
 {:else}
 	<button class="variant-filled-secondary btn btn-sm md:btn" on:click={() => dispatch("claim")}>

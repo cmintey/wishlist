@@ -17,7 +17,7 @@ export enum ConfigKey {
 	CLAIMS_SHOW_NAME = "claims.showName"
 }
 
-type GroupConfig = Partial<Pick<Config, "suggestions">>;
+type GroupConfig = Partial<Pick<Config, "suggestions" | "claims">>;
 
 export const getConfig = async (groupId?: string): Promise<Config> => {
 	let configItems = await client.systemConfig.findMany({
@@ -72,7 +72,8 @@ export const getConfig = async (groupId?: string): Promise<Config> => {
 		},
 		smtp: smtpConfig,
 		claims: {
-			showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true"
+			showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true",
+			...groupConfig.claims
 		}
 	};
 
@@ -96,6 +97,9 @@ const getGroupConfig = async (groupId: string): Promise<GroupConfig> => {
 			suggestions: {
 				enable: configMap[ConfigKey.SUGGESTIONS_ENABLE] === "true",
 				method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval"
+			},
+			claims: {
+				showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true"
 			}
 		};
 	}
