@@ -12,7 +12,13 @@
 
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
-	import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+	import {
+		getDrawerStore,
+		getModalStore,
+		getToastStore,
+		type DrawerSettings,
+		type ModalSettings
+	} from "@skeletonlabs/skeleton";
 	import type { Item } from "@prisma/client";
 	import { ItemAPI } from "$lib/api/items";
 	import ApprovalButtons from "./ApprovalButtons.svelte";
@@ -24,6 +30,7 @@
 
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
+	const drawerStore = getDrawerStore();
 
 	let image_url: string;
 	const itemAPI = new ItemAPI(item.id);
@@ -95,6 +102,16 @@
 		}
 	});
 
+	const drawerSettings: DrawerSettings = {
+		id: "item",
+		position: "bottom",
+		height: "max-h-fit",
+		meta: {
+			item,
+			showFor
+		}
+	};
+
 	const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
 	const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
 
@@ -123,12 +140,23 @@
 	};
 </script>
 
-<div class="card" class:variant-ghost-warning={!item.approved}>
+<button
+	class="card card-hover block text-start"
+	class:variant-ghost-warning={!item.approved}
+	type="button"
+	on:click={() => drawerStore.open(drawerSettings)}
+>
 	<header class="card-header">
 		<div class="flex w-full">
 			<span class="line-clamp-2 text-xl font-bold md:text-2xl">
 				{#if item.url}
-					<a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">
+					<a
+						class="dark:!text-primary-200"
+						href={item.url}
+						rel="noreferrer"
+						target="_blank"
+						on:click|stopPropagation
+					>
 						{item.name}
 					</a>
 				{:else}
@@ -176,4 +204,4 @@
 			on:delete={handleDelete}
 		/>
 	</footer>
-</div>
+</button>

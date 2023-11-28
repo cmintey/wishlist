@@ -16,7 +16,7 @@
 		<div class="flex flex-row space-x-2 md:space-x-4">
 			<button
 				class="variant-ghost-secondary btn btn-sm md:btn"
-				on:click={() => dispatch("unclaim")}
+				on:click|stopPropagation={() => dispatch("unclaim")}
 			>
 				Unclaim
 			</button>
@@ -26,6 +26,7 @@
 					type="checkbox"
 					bind:checked={item.purchased}
 					on:change={(event) => dispatch("purchase", { purchased: event.currentTarget?.checked })}
+					on:click|stopPropagation
 				/>
 				<span>Purchased</span>
 			</label>
@@ -34,7 +35,10 @@
 		<span>Claimed by {item.pledgedBy?.name}</span>
 	{/if}
 {:else}
-	<button class="variant-filled-secondary btn btn-sm md:btn" on:click={() => dispatch("claim")}>
+	<button
+		class="variant-filled-secondary btn btn-sm md:btn"
+		on:click|stopPropagation={() => dispatch("claim")}
+	>
 		Claim
 	</button>
 {/if}
