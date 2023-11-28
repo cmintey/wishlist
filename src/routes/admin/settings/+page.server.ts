@@ -32,7 +32,6 @@ export const actions: Actions = {
 	},
 	settings: async ({ request }) => {
 		const formData = Object.fromEntries(await request.formData());
-
 		const configData = settingSchema.safeParse(formData);
 
 		if (!configData.success) {
@@ -79,7 +78,10 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
 			enable: configData.enableSuggestions,
 			method: configData.suggestionMethod
 		},
-		smtp: smtpConfig
+		smtp: smtpConfig,
+		claims: {
+			showName: configData.claimsShowName
+		}
 	};
 
 	return newConfig;

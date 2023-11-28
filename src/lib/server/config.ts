@@ -13,10 +13,11 @@ export enum ConfigKey {
 	SMTP_USER = "smtp.user",
 	SMTP_PASS = "smtp.pass",
 	SMTP_FROM = "smtp.from",
-	SMTP_FROM_NAME = "smtp.fromName"
+	SMTP_FROM_NAME = "smtp.fromName",
+	CLAIMS_SHOW_NAME = "claims.showName"
 }
 
-type GroupConfig = Partial<Pick<Config, "suggestions">>;
+type GroupConfig = Partial<Pick<Config, "suggestions" | "claims">>;
 
 export const getConfig = async (groupId?: string): Promise<Config> => {
 	let configItems = await client.systemConfig.findMany({
@@ -69,10 +70,14 @@ export const getConfig = async (groupId?: string): Promise<Config> => {
 			method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval",
 			...groupConfig.suggestions
 		},
-		smtp: smtpConfig
+		smtp: smtpConfig,
+		claims: {
+			showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true",
+			...groupConfig.claims
+		}
 	};
 
-	return config as Config;
+	return config;
 };
 
 const getGroupConfig = async (groupId: string): Promise<GroupConfig> => {
@@ -92,6 +97,9 @@ const getGroupConfig = async (groupId: string): Promise<GroupConfig> => {
 			suggestions: {
 				enable: configMap[ConfigKey.SUGGESTIONS_ENABLE] === "true",
 				method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval"
+			},
+			claims: {
+				showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true"
 			}
 		};
 	}
@@ -107,6 +115,9 @@ const createDefaultConfig = async (): Promise<void> => {
 		},
 		smtp: {
 			enable: false
+		},
+		claims: {
+			showName: true
 		}
 	};
 
@@ -115,7 +126,6 @@ const createDefaultConfig = async (): Promise<void> => {
 
 export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => {
 	const configMap: Record<string, string | null | undefined> = {};
-	if (config.enableSignup) configMap[ConfigKey.SIGNUP_ENABLE] = config?.enableSignup?.toString();
 
 	if (config.smtp) {
 		configMap[ConfigKey.SMTP_ENABLE] = config?.smtp?.enable.toString();
@@ -127,8 +137,10 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
 		configMap[ConfigKey.SMTP_FROM_NAME] = config?.smtp?.fromName;
 	}
 
+	configMap[ConfigKey.SIGNUP_ENABLE] = config?.enableSignup?.toString();
 	configMap[ConfigKey.SUGGESTIONS_ENABLE] = config?.suggestions?.enable.toString();
 	configMap[ConfigKey.SUGGESTIONS_METHOD] = config?.suggestions?.method;
+	configMap[ConfigKey.CLAIMS_SHOW_NAME] = config?.claims?.showName.toString();
 
 	for (const [key, value] of Object.entries(configMap)) {
 		await client.systemConfig.upsert({
