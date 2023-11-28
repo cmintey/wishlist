@@ -20,6 +20,7 @@
 
 	export let item: FullItem;
 	export let user: PartialUser & { userId: string };
+	export let showClaimedName: boolean;
 	export let showFor = false;
 
 	const modalStore = getModalStore();
@@ -162,6 +163,7 @@
 	<footer class="card-footer flex flex-row justify-between">
 		<ClaimButtons
 			{item}
+			showName={showClaimedName}
 			{user}
 			on:claim={() => handleClaim()}
 			on:unclaim={() => handleClaim(true)}

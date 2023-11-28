@@ -54,6 +54,9 @@ type Config = {
 		method: SuggestionMethod;
 	};
 	smtp: SMTPConfig;
+	claims: {
+		showName: boolean;
+	};
 };
 
 type Option = {

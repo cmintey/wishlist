@@ -77,7 +77,7 @@
 				out:send|local={{ key: item.id }}
 				animate:flip={{ duration: 200 }}
 			>
-				<ItemCard {item} user={data.user} />
+				<ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
 			</div>
 		{/each}
 	</div>
@@ -106,7 +106,7 @@
 				out:send|local={{ key: item.id }}
 				animate:flip={{ duration: 200 }}
 			>
-				<ItemCard {item} user={data.user} />
+				<ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
 			</div>
 		{/each}
 	</div>

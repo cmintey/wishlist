@@ -5,6 +5,7 @@
 
 	export let item: FullItem;
 	export let user: PartialUser;
+	export let showName: boolean;
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -30,8 +31,10 @@
 				<span>Purchased</span>
 			</label>
 		</div>
-	{:else}
+	{:else if showName}
 		<span>Claimed by {item.pledgedBy?.name}</span>
+	{:else}
+		<button class="variant-filled-secondary btn btn-sm md:btn" disabled>Claimed</button>
 	{/if}
 {:else}
 	<button class="variant-filled-secondary btn btn-sm md:btn" on:click={() => dispatch("claim")}>
