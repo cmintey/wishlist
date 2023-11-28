@@ -6,91 +6,88 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage } from "$lib/server/image-util";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	const session = await locals.validate();
-	if (!session) {
-		throw redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
-	}
+    const session = await locals.validate();
+    if (!session) {
+        throw redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
+    }
 
-	if (isNaN(parseInt(params.itemId))) {
-		throw error(400, "item id must be a number");
-	}
+    if (isNaN(parseInt(params.itemId))) {
+        throw error(400, "item id must be a number");
+    }
 
-	const activeMembership = await getActiveMembership(session.user);
-	const config = await getConfig(activeMembership.groupId);
+    const activeMembership = await getActiveMembership(session.user);
+    const config = await getConfig(activeMembership.groupId);
 
-	let item;
-	try {
-		item = await client.item.findFirstOrThrow({
-			where: {
-				id: parseInt(params.itemId),
-				groupId: activeMembership.groupId
-			},
-			include: {
-				addedBy: {
-					select: {
-						username: true
-					}
-				},
-				user: {
-					select: {
-						username: true
-					}
-				}
-			}
-		});
-	} catch {
-		throw error(404, "item not found");
-	}
+    let item;
+    try {
+        item = await client.item.findFirstOrThrow({
+            where: {
+                id: parseInt(params.itemId),
+                groupId: activeMembership.groupId
+            },
+            include: {
+                addedBy: {
+                    select: {
+                        username: true
+                    }
+                },
+                user: {
+                    select: {
+                        username: true
+                    }
+                }
+            }
+        });
+    } catch {
+        throw error(404, "item not found");
+    }
 
-	if (
-		config.suggestions.method === "surprise" &&
-		session.user.username !== item.addedBy?.username
-	) {
-		throw error(401, "cannot edit item that you did not create");
-	}
+    if (config.suggestions.method === "surprise" && session.user.username !== item.addedBy?.username) {
+        throw error(401, "cannot edit item that you did not create");
+    }
 
-	if (params.username !== item.user.username) {
-		throw error(400, `Item does not belong to ${params.username}`);
-	}
+    if (params.username !== item.user.username) {
+        throw error(400, `Item does not belong to ${params.username}`);
+    }
 
-	return {
-		item
-	};
+    return {
+        item
+    };
 };
 
 export const actions: Actions = {
-	default: async ({ locals, request, params }) => {
-		const session = await locals.validate();
-		if (!session) throw error(401, "Not authorized");
-		const form = await request.formData();
-		const url = form.get("url") as string;
-		const image_url = form.get("image_url") as string;
-		const image = form.get("image") as File;
-		const name = form.get("name") as string;
-		const price = form.get("price") as string;
-		const note = form.get("note") as string;
+    default: async ({ locals, request, params }) => {
+        const session = await locals.validate();
+        if (!session) throw error(401, "Not authorized");
+        const form = await request.formData();
+        const url = form.get("url") as string;
+        const image_url = form.get("image_url") as string;
+        const image = form.get("image") as File;
+        const name = form.get("name") as string;
+        const price = form.get("price") as string;
+        const note = form.get("note") as string;
 
-		// check for empty values
-		if (!name) {
-			return fail(400, { name, missing: true });
-		}
+        // check for empty values
+        if (!name) {
+            return fail(400, { name, missing: true });
+        }
 
-		const filename = await createImage(session.user.username, image);
+        const filename = await createImage(session.user.username, image);
 
-		await client.item.update({
-			where: {
-				id: parseInt(params.itemId)
-			},
-			data: {
-				name,
-				price,
-				url,
-				image_url: filename || image_url,
-				note
-			}
-		});
+        await client.item.update({
+            where: {
+                id: parseInt(params.itemId)
+            },
+            data: {
+                name,
+                price,
+                url,
+                image_url: filename || image_url,
+                note
+            }
+        });
 
-		const ref = new URL(request.url).searchParams.get("ref");
-		throw redirect(302, ref ?? `/wishlists/${params.username}`);
-	}
+        const ref = new URL(request.url).searchParams.get("ref");
+        throw redirect(302, ref ?? `/wishlists/${params.username}`);
+    }
 };

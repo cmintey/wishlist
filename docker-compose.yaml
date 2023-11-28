@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  app:
-    container_name: wishlist-app
-    image: cmintey/wishlist
-    build: .
-    ports:
-      - 3280:3280
-    volumes:
-      - ./uploads:/usr/src/app/uploads
-      - ./data:/usr/src/app/data
-    env_file:
-      - .env
+    app:
+        container_name: wishlist-app
+        image: cmintey/wishlist
+        build: .
+        ports:
+            - 3280:3280
+        volumes:
+            - ./uploads:/usr/src/app/uploads
+            - ./data:/usr/src/app/data
+        env_file:
+            - .env

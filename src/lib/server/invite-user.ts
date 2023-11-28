@@ -6,46 +6,46 @@ import { client } from "./prisma";
 import generateToken, { hashToken } from "./token";
 
 export const inviteUser = async ({ url, request }: RequestEvent) => {
-	const token = await generateToken();
-	const tokenUrl = new URL(`/signup?token=${token}`, url);
+    const token = await generateToken();
+    const tokenUrl = new URL(`/signup?token=${token}`, url);
 
-	const config = await getConfig();
+    const config = await getConfig();
 
-	if (!config.smtp.enable) {
-		await client.signupToken.create({
-			data: {
-				hashedToken: hashToken(token)
-			}
-		});
+    if (!config.smtp.enable) {
+        await client.signupToken.create({
+            data: {
+                hashedToken: hashToken(token)
+            }
+        });
 
-		return { action: "invite-email", success: true, url: tokenUrl.href };
-	}
+        return { action: "invite-email", success: true, url: tokenUrl.href };
+    }
 
-	const formData = Object.fromEntries(await request.formData());
-	const schema = z.object({
-		"invite-email": z.string().email(),
-		"invite-group": z.string().min(1)
-	});
+    const formData = Object.fromEntries(await request.formData());
+    const schema = z.object({
+        "invite-email": z.string().email(),
+        "invite-group": z.string().min(1)
+    });
 
-	const emailData = schema.safeParse(formData);
+    const emailData = schema.safeParse(formData);
 
-	if (!emailData.success) {
-		const errors = emailData.error.errors.map((error) => {
-			return {
-				field: error.path[0],
-				message: error.message
-			};
-		});
-		return fail(400, { action: "invite-email", error: true, errors });
-	}
+    if (!emailData.success) {
+        const errors = emailData.error.errors.map((error) => {
+            return {
+                field: error.path[0],
+                message: error.message
+            };
+        });
+        return fail(400, { action: "invite-email", error: true, errors });
+    }
 
-	await client.signupToken.create({
-		data: {
-			hashedToken: hashToken(token),
-			groupId: emailData.data["invite-group"]
-		}
-	});
+    await client.signupToken.create({
+        data: {
+            hashedToken: hashToken(token),
+            groupId: emailData.data["invite-group"]
+        }
+    });
 
-	await sendSignupLink(emailData.data["invite-email"], tokenUrl.href);
-	return { action: "invite-email", success: true, url: null };
+    await sendSignupLink(emailData.data["invite-email"], tokenUrl.href);
+    return { action: "invite-email", success: true, url: null };
 };
