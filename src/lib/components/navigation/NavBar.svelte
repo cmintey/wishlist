@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AppBar, getDrawerStore } from "@skeletonlabs/skeleton";
+	import { AppBar, getDrawerStore, type DrawerSettings } from "@skeletonlabs/skeleton";
 	import logo from "$lib/assets/logo.png";
 	import { page } from "$app/stores";
 	import NavMenu from "./NavMenu/NavMenu.svelte";
@@ -11,6 +11,11 @@
 	export let user: User | undefined;
 
 	const drawerStore = getDrawerStore();
+	const drawerSettings: DrawerSettings = {
+		id: "nav",
+		position: "left",
+		width: "w-[280px] md:w-[480px]"
+	};
 </script>
 
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
@@ -20,10 +25,7 @@
 				{#if user}
 					<button
 						class="btn btn-sm p-0 pt-0.5 md:hidden"
-						on:click={() =>
-							drawerStore.open({
-								width: "w-[280px] md:w-[480px]"
-							})}
+						on:click={() => drawerStore.open(drawerSettings)}
 					>
 						<iconify-icon class="text-2xl" icon="ion:menu" />
 					</button>

@@ -16,7 +16,6 @@
 
 	import NavBar from "$lib/components/navigation/NavBar.svelte";
 	import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
-	import NavigationDrawer from "$lib/components/navigation/NavigationDrawer.svelte";
 	import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
 	import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
 	import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
@@ -25,6 +24,8 @@
 	import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
 	import { isInstalled } from "$lib/stores/is-installed";
 	import PullToRefresh from "pulltorefreshjs";
+	import { navItems } from "$lib/components/navigation/navigation";
+	import Drawer from "$lib/components/Drawer.svelte";
 
 	export let data: LayoutData;
 
@@ -75,24 +76,6 @@
 		}
 	});
 
-	$: navItems = [
-		{
-			label: "Home",
-			href: "/",
-			icon: "ion:home"
-		},
-		{
-			label: "My Wishes",
-			href: "/wishlists/me",
-			icon: "ion:gift"
-		},
-		{
-			label: "My Claims",
-			href: "/claims",
-			icon: "ion:albums"
-		}
-	] satisfies NavItem[];
-
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	const modalComponentRegistry: Record<string, ModalComponent> = {
@@ -108,7 +91,7 @@
 	};
 </script>
 
-<NavigationDrawer {navItems} />
+<Drawer />
 
 <AppShell on:scroll={scrollHandler}>
 	<svelte:fragment slot="header">
