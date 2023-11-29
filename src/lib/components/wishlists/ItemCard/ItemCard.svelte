@@ -107,6 +107,7 @@
         id: "item",
         position: "bottom",
         height: "max-h-fit",
+        padding: "md:px-12 lg:px-32 xl:px-56",
         meta: {
             item,
             showFor
@@ -142,7 +143,7 @@
 </script>
 
 <button
-    class="card card-hover block text-start"
+    class="card card-hover block w-full text-start"
     class:variant-ghost-warning={!item.approved}
     type="button"
     on:click={() => drawerStore.open(drawerSettings)}
