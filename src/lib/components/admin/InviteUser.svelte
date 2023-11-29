@@ -1,83 +1,83 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
-	import { getToastStore, type ToastSettings, getModalStore } from "@skeletonlabs/skeleton";
-	import TokenCopy from "$lib/components/TokenCopy.svelte";
-	import { page } from "$app/stores";
-	import type { Group } from "@prisma/client";
+    import { enhance } from "$app/forms";
+    import { getToastStore, type ToastSettings, getModalStore } from "@skeletonlabs/skeleton";
+    import TokenCopy from "$lib/components/TokenCopy.svelte";
+    import { page } from "$app/stores";
+    import type { Group } from "@prisma/client";
 
-	export let config: Config;
-	export let groups: Group[] = [];
-	export let defaultGroup: Group | undefined = undefined;
+    export let config: Config;
+    export let groups: Group[] = [];
+    export let defaultGroup: Group | undefined = undefined;
 
-	const modalStore = getModalStore();
-	const toastStore = getToastStore();
+    const modalStore = getModalStore();
+    const toastStore = getToastStore();
 
-	$: form = $page.form;
+    $: form = $page.form;
 
-	const triggerToast = () => {
-		const toastConfig: ToastSettings = {
-			message: "Invite sent!",
-			background: "variant-filled-success",
-			autohide: true,
-			timeout: 3000
-		};
-		toastStore.trigger(toastConfig);
-	};
+    const triggerToast = () => {
+        const toastConfig: ToastSettings = {
+            message: "Invite sent!",
+            background: "variant-filled-success",
+            autohide: true,
+            timeout: 3000
+        };
+        toastStore.trigger(toastConfig);
+    };
 
-	let groupId: string;
-	let email: string;
+    let groupId: string;
+    let email: string;
 
-	let submitButton: HTMLButtonElement;
+    let submitButton: HTMLButtonElement;
 
-	const triggerInviteModal = () => {
-		modalStore.trigger({
-			type: "component",
-			component: "inviteUser",
-			meta: {
-				groups,
-				defaultGroup,
-				smtpEnabled: config.smtp.enable
-			},
-			response(data: { group?: string; email?: string }) {
-				if (data.group) groupId = data.group;
-				if (data.email) email = data.email;
-				if (data.group) submitButton.click();
-			}
-		});
-	};
+    const triggerInviteModal = () => {
+        modalStore.trigger({
+            type: "component",
+            component: "inviteUser",
+            meta: {
+                groups,
+                defaultGroup,
+                smtpEnabled: config.smtp.enable
+            },
+            response(data: { group?: string; email?: string }) {
+                if (data.group) groupId = data.group;
+                if (data.email) email = data.email;
+                if (data.group) submitButton.click();
+            }
+        });
+    };
 </script>
 
 <form
-	class="flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0"
-	method="POST"
-	use:enhance={({ formData }) => {
-		formData.set("invite-email", email);
-		formData.set("invite-group", groupId);
+    class="flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0"
+    method="POST"
+    use:enhance={({ formData }) => {
+        formData.set("invite-email", email);
+        formData.set("invite-group", groupId);
 
-		return async ({ result, update }) => {
-			if (result.type === "success" && config.smtp.enable) {
-				triggerToast();
-			}
-			update();
-		};
-	}}
+        return async ({ result, update }) => {
+            if (result.type === "success" && config.smtp.enable) {
+                triggerToast();
+            }
+            update();
+        };
+    }}
 >
-	<button class="variant-filled-primary btn w-fit" type="button" on:click={triggerInviteModal}>
-		<iconify-icon icon="ion:person-add" />
-		<p>Invite User</p>
-	</button>
+    <button class="variant-filled-primary btn w-fit" type="button" on:click={triggerInviteModal}>
+        <iconify-icon icon="ion:person-add" />
+        <p>Invite User</p>
+    </button>
 
-	<input id="invite-group" name="invite-group" class="hidden" />
-	{#if config.smtp.enable}
-		<input id="invite-email" name="invite-email" class="hidden" />
-	{/if}
+    <input id="invite-group" name="invite-group" class="hidden" />
+    {#if config.smtp.enable}
+        <input id="invite-email" name="invite-email" class="hidden" />
+    {/if}
 
-	{#if form?.url}
-		<div class="flex flex-col space-y-2 md:flex-row md:items-center md:space-x-2 md:space-y-0">
-			<TokenCopy url={form.url}>Invite link</TokenCopy>
-			<span class="text-sm italic">This invite link is only valid for one signup</span>
-		</div>
-	{/if}
+    {#if form?.url}
+        <div class="flex flex-col space-y-2 md:flex-row md:items-center md:space-x-2 md:space-y-0">
+            <TokenCopy url={form.url}>Invite link</TokenCopy>
+            <span class="text-sm italic">This invite link is only valid for one signup</span>
+        </div>
+    {/if}
 
-	<button bind:this={submitButton} class="hidden" type="submit" />
+    <button bind:this={submitButton} class="hidden" type="submit" />
 </form>

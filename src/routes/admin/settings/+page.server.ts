@@ -8,79 +8,81 @@ import { settingSchema } from "$lib/validations";
 import type { z } from "zod";
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.validate();
-	if (!session) {
-		throw redirect(302, `/login?ref=/admin`);
-	}
-	if (session.user.roleId !== Role.ADMIN) {
-		throw error(401, "Not authorized to view admin panel");
-	}
+    const session = await locals.validate();
+    if (!session) {
+        throw redirect(302, `/login?ref=/admin`);
+    }
+    if (session.user.roleId !== Role.ADMIN) {
+        throw error(401, "Not authorized to view admin panel");
+    }
 
-	const config = getConfig();
+    const config = getConfig();
 
-	return {
-		config
-	};
+    return {
+        config
+    };
 };
 
 export const actions: Actions = {
-	"send-test": async ({ locals }) => {
-		const session = await locals.validate();
-		if (!session) return fail(400);
-		await sendTest(session.user.email);
-		return { action: "send-test", success: true };
-	},
-	settings: async ({ request }) => {
-		const formData = Object.fromEntries(await request.formData());
+    "send-test": async ({ locals }) => {
+        const session = await locals.validate();
+        if (!session) return fail(400);
+        await sendTest(session.user.email);
+        return { action: "send-test", success: true };
+    },
+    settings: async ({ request }) => {
+        const formData = Object.fromEntries(await request.formData());
+        const configData = settingSchema.safeParse(formData);
 
-		const configData = settingSchema.safeParse(formData);
+        if (!configData.success) {
+            const errors = configData.error.errors.map((error) => {
+                return {
+                    field: error.path[0],
+                    message: error.message
+                };
+            });
+            return fail(400, { action: "settings", error: true, errors });
+        }
 
-		if (!configData.success) {
-			const errors = configData.error.errors.map((error) => {
-				return {
-					field: error.path[0],
-					message: error.message
-				};
-			});
-			return fail(400, { action: "settings", error: true, errors });
-		}
+        const newConfig = generateConfig(configData.data);
+        await writeConfig(newConfig);
 
-		const newConfig = generateConfig(configData.data);
-		await writeConfig(newConfig);
-
-		return { action: "settings", success: true };
-	}
+        return { action: "settings", success: true };
+    }
 };
 
 const generateConfig = (configData: z.infer<typeof settingSchema>) => {
-	const smtpConfig: SMTPConfig = configData.enableSMTP
-		? {
-				enable: true,
-				host: configData.smtpHost!,
-				port: configData.smtpPort!,
-				user: configData.smtpUser!,
-				pass: configData.smtpPass!,
-				from: configData.smtpFrom!,
-				fromName: configData.smtpFromName!
-		  }
-		: {
-				enable: false,
-				host: configData.smtpHost,
-				port: configData.smtpPort,
-				user: configData.smtpUser,
-				pass: configData.smtpPass,
-				from: configData.smtpFrom,
-				fromName: configData.smtpFromName
-		  };
+    const smtpConfig: SMTPConfig = configData.enableSMTP
+        ? {
+              enable: true,
+              host: configData.smtpHost!,
+              port: configData.smtpPort!,
+              user: configData.smtpUser!,
+              pass: configData.smtpPass!,
+              from: configData.smtpFrom!,
+              fromName: configData.smtpFromName!
+          }
+        : {
+              enable: false,
+              host: configData.smtpHost,
+              port: configData.smtpPort,
+              user: configData.smtpUser,
+              pass: configData.smtpPass,
+              from: configData.smtpFrom,
+              fromName: configData.smtpFromName
+          };
 
-	const newConfig: Config = {
-		enableSignup: configData.enableSignup,
-		suggestions: {
-			enable: configData.enableSuggestions,
-			method: configData.suggestionMethod
-		},
-		smtp: smtpConfig
-	};
+    const newConfig: Config = {
+        enableSignup: configData.enableSignup,
+        suggestions: {
+            enable: configData.enableSuggestions,
+            method: configData.suggestionMethod
+        },
+        smtp: smtpConfig,
+        claims: {
+            showName: configData.claimsShowName
+        }
+    };
 
-	return newConfig;
+    return newConfig;
 };
