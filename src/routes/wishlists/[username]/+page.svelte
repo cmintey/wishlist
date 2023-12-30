@@ -96,12 +96,29 @@
 
     <!-- items -->
     <div class="flex flex-col space-y-4">
-        {#each data.items as item (item.id)}
-            <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
-            </div>
-        {/each}
+        {#if data.listOwner.isMe}
+            {#each data.items as item (item.id)}
+                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
+                </div>
+            {/each}
+        {:else}
+            <!-- unclaimed-->
+            {#each data.items.filter((item) => !item.pledgedById) as item (item.id)}
+                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
+                </div>
+            {/each}
+            <!-- claimed -->
+            {#each data.items.filter((item) => item.pledgedById) as item (item.id)}
+                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
+                </div>
+            {/each}
+        {/if}
     </div>
+
+    <!-- spacer -->
     <footer>
         <div class="h-16" />
     </footer>
