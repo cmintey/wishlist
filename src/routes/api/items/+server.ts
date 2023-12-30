@@ -6,6 +6,7 @@ import { _authCheck } from "../groups/[groupId]/auth";
 
 export const DELETE: RequestHandler = async ({ locals, request }) => {
     const groupId = new URL(request.url).searchParams.get("groupId");
+    const claimed = new URL(request.url).searchParams.get("claimed");
     if (groupId) {
         const { authenticated } = await _authCheck(locals.validate, groupId);
         if (!authenticated) {
@@ -24,7 +25,8 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
     try {
         const items = await client.item.deleteMany({
             where: {
-                groupId: groupId ? groupId : undefined
+                groupId: groupId ? groupId : undefined,
+                pledgedById: claimed && Boolean(claimed) ? { not: null } : undefined
             }
         });
         return new Response(JSON.stringify(items), { status: 200 });
