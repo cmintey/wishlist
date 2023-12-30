@@ -10,7 +10,7 @@
 
     const hasNewItems = async (user: PageUserData) => {
         if (user.items.length === 0) return false;
-        const userHash = await hash(user.id);
+        const userHash = await hash(user.id + data.groupId);
         const currentHash = await hashItems(user.items);
         const viewedHash = $viewedItems[userHash];
         return currentHash !== viewedHash;

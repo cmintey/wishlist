@@ -56,7 +56,7 @@
     };
 
     onMount(async () => {
-        const userHash = await hash(data.listOwner.id);
+        const userHash = await hash(data.listOwner.id + data.groupId);
         $viewedItems[userHash] = await hashItems(data.items);
         pollUpdate();
     });

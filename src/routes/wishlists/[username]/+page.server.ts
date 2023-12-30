@@ -111,6 +111,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
         items: wishlistItems.filter((item) => item.approved),
         approvals: wishlistItems.filter((item) => !item.approved),
         suggestionsEnabled: config.suggestions.enable,
-        showClaimedName: config.claims.showName
+        showClaimedName: config.claims.showName,
+        groupId: activeMembership.groupId,
     };
 };
