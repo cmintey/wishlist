@@ -43,7 +43,7 @@
     </div>
 {/if}
 
-<form method="POST" use:enhance>
+<form enctype="multipart/form-data" method="POST" use:enhance>
     <ItemForm buttonText="Add Item" data={itemData} />
 </form>
 
