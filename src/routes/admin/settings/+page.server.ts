@@ -10,13 +10,13 @@ import type { z } from "zod";
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/admin`);
+        redirect(302, `/login?ref=/admin`);
     }
     if (session.user.roleId !== Role.ADMIN) {
-        throw error(401, "Not authorized to view admin panel");
+        error(401, "Not authorized to view admin panel");
     }
 
-    const config = getConfig();
+    const config = await getConfig();
 
     return {
         config

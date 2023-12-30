@@ -6,12 +6,12 @@ import assert from "assert";
 import type { Session } from "lucia";
 
 const validateItem = async (itemId: string | undefined, session: Session | null) => {
-    if (!session) throw error(401, "user is not authenticated");
+    if (!session) error(401, "user is not authenticated");
 
     if (!itemId) {
-        throw error(400, "must specify an item to delete");
+        error(400, "must specify an item to delete");
     } else if (isNaN(parseInt(itemId))) {
-        throw error(400, "item id must be a number");
+        error(400, "item id must be a number");
     }
 
     const item = await client.item.findUnique({
@@ -33,7 +33,7 @@ const validateItem = async (itemId: string | undefined, session: Session | null)
     });
 
     if (!item) {
-        throw error(404, "item id not found");
+        error(404, "item id not found");
     }
     return item;
 };
@@ -55,7 +55,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
     }
 
     if (!suggestionDenied && foundItem.addedBy.username !== session.user.username) {
-        throw error(401, "user cannot delete an item they did not create");
+        error(401, "user cannot delete an item they did not create");
     }
 
     try {
@@ -74,7 +74,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 
         return new Response(JSON.stringify(item), { status: 200 });
     } catch (e) {
-        throw error(404, "item id not found");
+        error(404, "item id not found");
     }
 };
 
@@ -130,6 +130,6 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 
         return new Response(JSON.stringify(item), { status: 200 });
     } catch (e) {
-        throw error(404, "item id not found");
+        error(404, "item id not found");
     }
 };

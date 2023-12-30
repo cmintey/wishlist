@@ -7,13 +7,13 @@ import type { Actions, PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/admin/users/${params.username}`);
+        redirect(302, `/login?ref=/admin/users/${params.username}`);
     }
     if (session.user.roleId != Role.ADMIN) {
-        throw error(401, "Not authorized to view admin panel");
+        error(401, "Not authorized to view admin panel");
     }
     if (session.user.username === params.username) {
-        throw redirect(303, "/account");
+        redirect(303, "/account");
     }
 
     const editingUser = await client.user.findUnique({
@@ -32,7 +32,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         }
     });
 
-    if (!editingUser) throw error(404, "User not found");
+    if (!editingUser) error(404, "User not found");
 
     return { editingUser, user: session.user };
 };
@@ -60,7 +60,7 @@ export const actions: Actions = {
             const tokenUrl = new URL(`/reset-password?token=${token}`, url);
             return { success: true, url: tokenUrl.href };
         } else {
-            throw error(400, "unable to find user");
+            error(400, "unable to find user");
         }
     },
     "make-admin": async ({ params }) => {

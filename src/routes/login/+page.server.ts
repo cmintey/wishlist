@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
     const session = await locals.validate();
     if (session) {
         const ref = new URL(request.url).searchParams.get("ref");
-        throw redirect(302, ref || "/");
+        redirect(302, ref || "/");
     }
     const config = await getConfig();
     return { enableSignup: config.enableSignup };

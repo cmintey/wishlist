@@ -10,7 +10,7 @@ import { createImage } from "$lib/server/image-util";
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/account`);
+        redirect(302, `/login?ref=/account`);
     }
 
     return {
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
     profile: async ({ request, locals }) => {
         const session = await locals.validate();
-        if (!session) throw redirect(302, "/login?ref=/account");
+        if (!session) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const schema = z.object({
@@ -65,7 +65,7 @@ export const actions: Actions = {
 
     profilePicture: async ({ request, locals }) => {
         const session = await locals.validate();
-        if (!session) throw redirect(302, "/login?ref=/account");
+        if (!session) redirect(302, "/login?ref=/account");
 
         const form = await request.formData();
         const image = form.get("profilePic") as File;
@@ -86,7 +86,7 @@ export const actions: Actions = {
 
     passwordchange: async ({ request, locals }) => {
         const session = await locals.validate();
-        if (!session) throw redirect(302, "/login?ref=/account");
+        if (!session) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const pwdData = resetPasswordSchema.safeParse(formData);

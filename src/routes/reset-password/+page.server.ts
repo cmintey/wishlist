@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ request }) => {
             }
         });
 
-        if (!reset) throw error(400, "reset token not found");
+        if (!reset) error(400, "reset token not found");
 
         const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
         const expiry = reset.createdAt.getTime() + expiresIn;

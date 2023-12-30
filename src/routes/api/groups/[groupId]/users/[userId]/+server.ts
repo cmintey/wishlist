@@ -8,7 +8,7 @@ export const GET: RequestHandler = async ({ locals, params }) => {
     const { authenticated, user } = await _authCheck(locals.validate, params.groupId);
 
     if (!authenticated && user.id !== params.userId) {
-        throw error(401, "User is not authorized to view this membership");
+        error(401, "User is not authorized to view this membership");
     }
 
     const group = await client.group.findUniqueOrThrow({
@@ -16,7 +16,7 @@ export const GET: RequestHandler = async ({ locals, params }) => {
             id: params.groupId
         }
     });
-    if (!group) throw error(404, "group not found");
+    if (!group) error(404, "group not found");
 
     const membership = await client.userGroupMembership.findFirst({
         where: {
@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ locals, params }) => {
         }
     });
 
-    if (!membership) throw error(400, "user is not a member of the group");
+    if (!membership) error(400, "user is not a member of the group");
 
     return new Response(JSON.stringify({ membership }), { status: 200 });
 };
@@ -34,7 +34,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
     if (!authenticated) {
-        throw error(401, "User is not authorized to add a member to this group");
+        error(401, "User is not authorized to add a member to this group");
     }
 
     const group = await client.group.findUniqueOrThrow({
@@ -42,7 +42,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             id: params.groupId
         }
     });
-    if (!group) throw error(404, "group not found");
+    if (!group) error(404, "group not found");
 
     const data = await request.json();
 
@@ -53,7 +53,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         }
     });
 
-    if (membership) throw error(400, "user is already member of the group");
+    if (membership) error(400, "user is already member of the group");
 
     membership = await client.userGroupMembership.create({
         data: {
@@ -70,7 +70,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
     if (!authenticated) {
-        throw error(401, "User is not authorized to add a member to this group");
+        error(401, "User is not authorized to add a member to this group");
     }
 
     const group = await client.group.findUniqueOrThrow({
@@ -78,7 +78,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
             id: params.groupId
         }
     });
-    if (!group) throw error(404, "group not found");
+    if (!group) error(404, "group not found");
 
     let membership = await client.userGroupMembership.findFirstOrThrow({
         where: {
@@ -87,7 +87,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
         }
     });
 
-    if (!membership) throw error(400, "user is not a member of the group");
+    if (!membership) error(400, "user is not a member of the group");
 
     membership = await client.userGroupMembership.delete({
         where: {
@@ -102,7 +102,7 @@ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
     const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
     if (!authenticated) {
-        throw error(401, "User is not authorized to add a member to this group");
+        error(401, "User is not authorized to add a member to this group");
     }
 
     const group = await client.group.findUniqueOrThrow({
@@ -110,7 +110,7 @@ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
             id: params.groupId
         }
     });
-    if (!group) throw error(404, "group not found");
+    if (!group) error(404, "group not found");
 
     let membership = await client.userGroupMembership.findFirstOrThrow({
         where: {
@@ -119,7 +119,7 @@ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
         }
     });
 
-    if (!membership) throw error(400, "user is not a member of the group");
+    if (!membership) error(400, "user is not a member of the group");
 
     const body = await request.json();
     const data: {

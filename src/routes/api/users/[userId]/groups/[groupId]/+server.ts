@@ -7,8 +7,8 @@ import type { RequestHandler } from "./$types";
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
     const session = await locals.validate();
 
-    if (!session) throw error(401, "user is not authenticated");
-    if (params.userId !== session.user.userId && session.user.roleId !== Role.ADMIN) throw error(401, "not authorized");
+    if (!session) error(401, "user is not authenticated");
+    if (params.userId !== session.user.userId && session.user.roleId !== Role.ADMIN) error(401, "not authorized");
 
     const data = await request.json();
 
@@ -29,10 +29,10 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
                 }
             });
         } catch {
-            throw error(400, "user is not a member of the group");
+            error(400, "user is not a member of the group");
         }
 
-        if (activeMembership?.id === membership.id) throw error(400, "group is already active");
+        if (activeMembership?.id === membership.id) error(400, "group is already active");
 
         membership = await client.userGroupMembership.update({
             where: {

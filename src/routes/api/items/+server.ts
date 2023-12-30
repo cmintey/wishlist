@@ -9,15 +9,15 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
     if (groupId) {
         const { authenticated } = await _authCheck(locals.validate, groupId);
         if (!authenticated) {
-            throw error(401, "Not authorized to delete items for this group");
+            error(401, "Not authorized to delete items for this group");
         }
     } else {
         const session = await locals.validate();
         if (!session) {
-            throw error(401, "Must authenticate first");
+            error(401, "Must authenticate first");
         }
         if (session.user.roleId !== Role.ADMIN) {
-            throw error(401, "Not authorized to delete items");
+            error(401, "Not authorized to delete items");
         }
     }
 
@@ -29,6 +29,6 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         });
         return new Response(JSON.stringify(items), { status: 200 });
     } catch (e) {
-        throw error(500, "Unable to delete items");
+        error(500, "Unable to delete items");
     }
 };

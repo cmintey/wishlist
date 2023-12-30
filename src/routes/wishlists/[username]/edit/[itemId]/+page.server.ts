@@ -8,11 +8,11 @@ import { createImage } from "$lib/server/image-util";
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
+        redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
     }
 
     if (isNaN(parseInt(params.itemId))) {
-        throw error(400, "item id must be a number");
+        error(400, "item id must be a number");
     }
 
     const activeMembership = await getActiveMembership(session.user);
@@ -39,15 +39,15 @@ export const load: PageServerLoad = async ({ locals, params }) => {
             }
         });
     } catch {
-        throw error(404, "item not found");
+        error(404, "item not found");
     }
 
     if (config.suggestions.method === "surprise" && session.user.username !== item.addedBy?.username) {
-        throw error(401, "cannot edit item that you did not create");
+        error(401, "cannot edit item that you did not create");
     }
 
     if (params.username !== item.user.username) {
-        throw error(400, `Item does not belong to ${params.username}`);
+        error(400, `Item does not belong to ${params.username}`);
     }
 
     return {
@@ -58,7 +58,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 export const actions: Actions = {
     default: async ({ locals, request, params }) => {
         const session = await locals.validate();
-        if (!session) throw error(401, "Not authorized");
+        if (!session) error(401, "Not authorized");
         const form = await request.formData();
         const url = form.get("url") as string;
         const image_url = form.get("image_url") as string;
@@ -88,6 +88,6 @@ export const actions: Actions = {
         });
 
         const ref = new URL(request.url).searchParams.get("ref");
-        throw redirect(302, ref ?? `/wishlists/${params.username}`);
+        redirect(302, ref ?? `/wishlists/${params.username}`);
     }
 };
