@@ -122,5 +122,6 @@
     <div>
         <button class="variant-filled-error btn w-fit" on:click={deleteGroup}>Delete Group</button>
         <ClearListsButton groupId={$page.params.groupId} />
+        <ClearListsButton claimed groupId={$page.params.groupId} />
     </div>
 </div>

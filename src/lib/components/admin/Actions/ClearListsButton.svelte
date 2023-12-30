@@ -4,6 +4,7 @@
     import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
     export let groupId: string | undefined = undefined;
+    export let claimed: boolean = false;
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
@@ -13,13 +14,13 @@
         const settings: ModalSettings = {
             type: "confirm",
             title: "Please Confirm",
-            body: `Are you sure you wish to clear all wishlists ${
-                groupId ? "" : "across <b>all groups</b>"
+            body: `Are you sure you wish to clear ${claimed ? "claimed items" : "all wishlists"} ${
+                groupId ? "in this group" : "across <b>all groups</b>"
             }? <b>This action is irreversible!</b>`,
             // confirm = TRUE | cancel = FALSE
             response: async (r: boolean) => {
                 if (r) {
-                    const resp = await itemsAPI.delete(groupId);
+                    const resp = await itemsAPI.delete(groupId, claimed);
 
                     if (resp.ok) {
                         invalidateAll();
@@ -45,5 +46,6 @@
 </script>
 
 <button class="variant-filled-error btn w-fit" type="button" on:click={handleDelete}>
-    Clear {groupId ? "" : "All"} Lists
+    Clear {groupId ? "" : "All"}
+    {claimed ? "Claimed Items" : "Lists"}
 </button>

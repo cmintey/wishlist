@@ -4,4 +4,5 @@
 
 <div class="flex space-x-2">
     <ClearListsButton />
+    <ClearListsButton claimed />
 </div>

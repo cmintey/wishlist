@@ -62,7 +62,10 @@ export class ItemsAPI {
         return await fetch(`/api/items${path}`, options);
     };
 
-    delete = async (groupId?: string) => {
-        return await this._makeRequest("DELETE", groupId ? `?groupId=${groupId}` : "");
+    delete = async (groupId?: string, claimed?: boolean) => {
+        const searchParams = new URLSearchParams();
+        if (groupId) searchParams.append("groupId", groupId);
+        if (claimed) searchParams.append("claimed", `${claimed}`);
+        return await this._makeRequest("DELETE", "?" + searchParams.toString());
     };
 }
