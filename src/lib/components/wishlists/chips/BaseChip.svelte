@@ -55,7 +55,7 @@
 </script>
 
 <div class="flex flex-row space-x-4 pb-4">
-    <span class="relative">
+    <span>
         <button
             class="variant-ringed-primary chip"
             class:variant-ghost-primary={selectedOption !== defaultOption}

@@ -4,7 +4,7 @@
     const options: Option[] = [
         {
             value: "all",
-            displayValue: "All"
+            displayValue: "Filter"
         },
         {
             value: "claimed",
