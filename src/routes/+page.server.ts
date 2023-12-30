@@ -92,6 +92,7 @@ export const load = (async ({ locals }) => {
     return {
         me,
         users,
-        luciaUser: user
+        luciaUser: user,
+        groupId: activeMembership.groupId
     };
 }) satisfies PageServerLoad;
