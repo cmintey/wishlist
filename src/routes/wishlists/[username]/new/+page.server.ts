@@ -8,13 +8,13 @@ import { createImage } from "$lib/server/image-util";
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/wishlists/${params.username}/new`);
+        redirect(302, `/login?ref=/wishlists/${params.username}/new`);
     }
     const activeMembership = await getActiveMembership(session.user);
     const config = await getConfig(activeMembership.groupId);
 
     if (!config.suggestions.enable && session.user.username !== params.username) {
-        throw error(401, "Suggestions are disabled");
+        error(401, "Suggestions are disabled");
     }
 
     const listOwner = await client.user.findFirst({
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         }
     });
 
-    if (!listOwner) throw error(404, "user is not part of group");
+    if (!listOwner) error(404, "user is not part of group");
 
     return {
         owner: {
@@ -49,7 +49,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 export const actions: Actions = {
     default: async ({ request, locals, params }) => {
         const session = await locals.validate();
-        if (!session) throw error(401);
+        if (!session) error(401);
 
         const activeMembership = await getActiveMembership(session.user);
         const config = await getConfig(activeMembership.groupId);
@@ -89,6 +89,6 @@ export const actions: Actions = {
             }
         });
 
-        throw redirect(302, `/wishlists/${params.username}`);
+        redirect(302, `/wishlists/${params.username}`);
     }
 };

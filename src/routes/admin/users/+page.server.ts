@@ -8,13 +8,13 @@ import { inviteUser } from "$lib/server/invite-user";
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/admin/users`);
+        redirect(302, `/login?ref=/admin/users`);
     }
     if (session.user.roleId !== Role.ADMIN) {
-        throw error(401, "Not authorized to view admin panel");
+        error(401, "Not authorized to view admin panel");
     }
 
-    const users = await client.user.findMany({
+    const usersQuery = client.user.findMany({
         select: {
             username: true,
             name: true,
@@ -36,9 +36,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         }
     });
 
-    const groups = client.group.findMany();
-
-    const config = getConfig();
+    const [users, groups, config] = await Promise.all([usersQuery, client.group.findMany(), getConfig()]);
 
     return {
         user: {

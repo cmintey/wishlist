@@ -6,12 +6,12 @@ import { Role } from "$lib/schema";
 export const PUT: RequestHandler = async ({ locals, request }) => {
     const session = await locals.validate();
     if (!session) {
-        throw error(401, "Must authenticate first");
+        error(401, "Must authenticate first");
     }
 
     const data = await request.json();
 
-    if (!data.name) throw error(400, "must specify group name in body");
+    if (!data.name) error(400, "must specify group name in body");
 
     const group = await client.group.create({
         data: {

@@ -6,13 +6,13 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/admin/groups`);
+        redirect(302, `/login?ref=/admin/groups`);
     }
     if (session.user.roleId !== Role.ADMIN) {
-        throw error(401, "Not authorized to view admin panel");
+        error(401, "Not authorized to view admin panel");
     }
 
-    const groups = client.group
+    const groups = await client.group
         .findMany({
             select: {
                 id: true,

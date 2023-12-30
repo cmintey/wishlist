@@ -7,13 +7,13 @@ import { getActiveMembership } from "$lib/server/group-membership";
 export const load = (async ({ locals }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login`);
+        redirect(302, `/login`);
     }
     const user = session.user;
 
     const activeMembership = await getActiveMembership(user);
 
-    const me = await client.user.findUniqueOrThrow({
+    const userQuery = client.user.findUniqueOrThrow({
         select: {
             name: true,
             username: true,
@@ -45,7 +45,7 @@ export const load = (async ({ locals }) => {
         }
     });
 
-    const users = await client.user.findMany({
+    const usersQuery = client.user.findMany({
         where: {
             username: {
                 not: user.username
@@ -86,6 +86,9 @@ export const load = (async ({ locals }) => {
             }
         }
     });
+
+    const [me, users] = await Promise.all([userQuery, usersQuery]);
+
     return {
         me,
         users,

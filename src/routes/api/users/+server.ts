@@ -5,7 +5,7 @@ import { type RequestHandler, error } from "@sveltejs/kit";
 export const GET: RequestHandler = async ({ locals, url }) => {
     const session = await locals.validate();
 
-    if (!session) throw error(401, "user is not authenticated");
+    if (!session) error(401, "user is not authenticated");
 
     let users: User[] = [];
 

@@ -9,7 +9,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 export const load: PageServerLoad = async ({ locals, params, depends, url }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/wishlists/${params.username}`);
+        redirect(302, `/login?ref=/wishlists/${params.username}`);
     }
 
     depends("list:poll");
@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
             }
         });
     } catch {
-        throw error(404, "user is not part of the group");
+        error(404, "user is not part of the group");
     }
 
     const search: Prisma.ItemWhereInput = {
@@ -65,7 +65,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
         orderBy.price = direction;
     }
 
-    const wishlistItems = await client.item.findMany({
+    const wishlistItemsQuery = client.item.findMany({
         where: search,
         orderBy,
         include: {
@@ -90,7 +90,7 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
         }
     });
 
-    const listOwner = await client.user.findUniqueOrThrow({
+    const listOwnerQuery = client.user.findUniqueOrThrow({
         where: {
             username: params.username
         },
@@ -99,6 +99,8 @@ export const load: PageServerLoad = async ({ locals, params, depends, url }) => 
             id: true
         }
     });
+
+    const [wishlistItems, listOwner] = await Promise.all([wishlistItemsQuery, listOwnerQuery]);
 
     return {
         user: session.user,

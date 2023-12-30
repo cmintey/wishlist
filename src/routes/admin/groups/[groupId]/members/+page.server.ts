@@ -8,7 +8,7 @@ import { inviteUser } from "$lib/server/invite-user";
 export const load = (async ({ locals, params }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/admin/groups/${params.groupId}`);
+        redirect(302, `/login?ref=/admin/groups/${params.groupId}`);
     }
 
     const userGroupRoleId = await client.userGroupMembership.findFirst({
@@ -22,7 +22,7 @@ export const load = (async ({ locals, params }) => {
     });
 
     if (!(session.user.roleId === Role.ADMIN || userGroupRoleId?.roleId === Role.GROUP_MANAGER)) {
-        throw error(401, "Not authorized to view admin panel");
+        error(401, "Not authorized to view admin panel");
     }
 
     const group = await client.group
@@ -62,13 +62,15 @@ export const load = (async ({ locals, params }) => {
             }))
         }));
 
+    const config = await getConfig(group.id);
+
     return {
         group,
         user: {
             isAdmin: true,
             ...session.user
         },
-        config: getConfig(group.id)
+        config
     };
 }) satisfies PageServerLoad;
 

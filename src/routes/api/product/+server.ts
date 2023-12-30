@@ -24,7 +24,7 @@ const goShopping = async (targetUrl: string) => {
 };
 
 const isCaptchaResponse = (metadata: Metadata) => {
-    return metadata.image.toLocaleLowerCase().indexOf("captcha") >= 0;
+    return metadata.image && metadata.image.toLocaleLowerCase().indexOf("captcha") >= 0;
 };
 
 export const GET: RequestHandler = async ({ request }) => {
@@ -37,16 +37,16 @@ export const GET: RequestHandler = async ({ request }) => {
         } catch {
             isUrlValid = false;
         }
-        if (!isUrlValid) throw error(400, "valid url not provided");
+        if (!isUrlValid) error(400, "valid url not provided");
 
         let metadata = await goShopping(url);
-        if (isCaptchaResponse(metadata)) {
+        if (isCaptchaResponse(metadata) && metadata.url) {
             // retry with the resolved URL
             metadata = await goShopping(metadata.url);
         }
 
         return new Response(JSON.stringify(metadata));
     } else {
-        throw error(400, "must specify url in query parameters");
+        error(400, "must specify url in query parameters");
     }
 };

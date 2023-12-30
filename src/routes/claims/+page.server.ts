@@ -7,7 +7,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
     if (!session) {
-        throw redirect(302, `/login?ref=/claims`);
+        redirect(302, `/login?ref=/claims`);
     }
 
     const activeMembership = await getActiveMembership(session.user);

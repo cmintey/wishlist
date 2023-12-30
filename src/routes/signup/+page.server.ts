@@ -11,7 +11,7 @@ import { env } from "$env/dynamic/private";
 export const load: PageServerLoad = async ({ locals, request }) => {
     // If the user session exists, redirect authenticated users to the profile page.
     const session = await locals.validate();
-    if (session) throw redirect(302, "/");
+    if (session) redirect(302, "/");
 
     const config = await getConfig();
 
@@ -28,17 +28,17 @@ export const load: PageServerLoad = async ({ locals, request }) => {
             }
         });
 
-        if (!signup) throw error(400, "reset token not found");
+        if (!signup) error(400, "reset token not found");
 
         const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
         const expiry = signup.createdAt.getTime() + expiresIn;
         if (Date.now() < expiry) {
             return { valid: true, id: signup.id };
         }
-        throw error(400, "Invite code is either invalid or already been used");
+        error(400, "Invite code is either invalid or already been used");
     }
     if (!config.enableSignup) {
-        throw error(404, "This instance is invite only");
+        error(404, "This instance is invite only");
     }
 };
 

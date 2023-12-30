@@ -7,7 +7,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
     if (!authenticated) {
-        throw error(401, "User is not authorized to delete this group");
+        error(401, "User is not authorized to delete this group");
     }
 
     const group = await client.group.findUnique({
@@ -16,7 +16,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
         }
     });
 
-    if (!group) throw error(404, "Group does not exist");
+    if (!group) error(404, "Group does not exist");
 
     await client.userGroupMembership.deleteMany({
         where: {
@@ -37,7 +37,7 @@ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
     const { authenticated } = await _authCheck(locals.validate, params.groupId);
 
     if (!authenticated) {
-        throw error(401, "User is not authorized to modify this group");
+        error(401, "User is not authorized to modify this group");
     }
 
     const body = (await request.json()) as Record<string, unknown>;
@@ -51,7 +51,7 @@ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
         }
     });
 
-    if (!group) throw error(404, "Group does not exist");
+    if (!group) error(404, "Group does not exist");
 
     const updatedGroup = await client.group.update({
         data: {

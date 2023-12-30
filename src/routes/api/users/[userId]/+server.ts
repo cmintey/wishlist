@@ -5,11 +5,11 @@ import { type RequestHandler, error } from "@sveltejs/kit";
 export const DELETE: RequestHandler = async ({ params, locals }) => {
     const session = await locals.validate();
 
-    if (!session) throw error(401, "user is not authenticated");
-    if (!(session.user.roleId === Role.ADMIN)) throw error(401, "must be admin to delete a user");
+    if (!session) error(401, "user is not authenticated");
+    if (!(session.user.roleId === Role.ADMIN)) error(401, "must be admin to delete a user");
 
     if (!params.userId) {
-        throw error(400, "must specify an item to delete");
+        error(400, "must specify an item to delete");
     }
 
     const user = await client.user.findUnique({
@@ -22,11 +22,11 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
     });
 
     if (!user) {
-        throw error(404, "user id not found");
+        error(404, "user id not found");
     }
 
     if (user.id === session.user.userId) {
-        throw error(400, "cannot delete yourself");
+        error(400, "cannot delete yourself");
     }
 
     try {
@@ -43,6 +43,6 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 
         return new Response(JSON.stringify(deletedUser), { status: 200 });
     } catch (e) {
-        throw error(404, "user id not found");
+        error(404, "user id not found");
     }
 };

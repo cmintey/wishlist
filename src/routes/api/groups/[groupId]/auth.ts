@@ -5,7 +5,7 @@ import { error } from "@sveltejs/kit";
 export const _authCheck = async (validate: App.Locals["validate"], groupId: string) => {
     const session = await validate();
     if (!session) {
-        throw error(401, "Must authenticate first");
+        error(401, "Must authenticate first");
     }
 
     const user = await client.user.findFirstOrThrow({

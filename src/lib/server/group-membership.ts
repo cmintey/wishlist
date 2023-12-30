@@ -17,7 +17,7 @@ export const getActiveMembership = async (user: User) => {
             }
         });
         if (!membership) {
-            throw redirect(302, "/group-error");
+            redirect(302, "/group-error");
         }
         await client.userGroupMembership.update({
             where: {

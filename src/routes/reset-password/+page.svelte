@@ -24,7 +24,7 @@
         <form
             class="w-80"
             method="POST"
-            use:enhance={({ data: formData }) => {
+            use:enhance={({ formData }) => {
                 formData.append("userId", data.userId || "");
                 formData.append("id", `${data.id}` || "0");
             }}

@@ -16,7 +16,7 @@
         use:enhance={(form) => {
             return async ({ result, update }) => {
                 if (result.type === "failure") {
-                    form.form.reset();
+                    form.formElement.reset();
                 }
                 await update();
             };
