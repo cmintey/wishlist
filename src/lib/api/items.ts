@@ -63,9 +63,9 @@ export class ItemsAPI {
     };
 
     delete = async (groupId?: string, claimed?: boolean) => {
-        const searchParams = new URLSearchParams()
-        if (groupId) searchParams.append("groupId", groupId)
-        if (claimed) searchParams.append("claimed", `${claimed}`)
+        const searchParams = new URLSearchParams();
+        if (groupId) searchParams.append("groupId", groupId);
+        if (claimed) searchParams.append("claimed", `${claimed}`);
         return await this._makeRequest("DELETE", "?" + searchParams.toString());
     };
 }
