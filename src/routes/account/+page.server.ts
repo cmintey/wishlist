@@ -80,7 +80,7 @@ export const actions: Actions = {
                 where: {
                     id: session.user.userId
                 }
-            })
+            });
             await client.user.update({
                 where: {
                     id: session.user.userId
@@ -90,7 +90,7 @@ export const actions: Actions = {
                 }
             });
             if (user.picture) {
-                await tryDeleteImage(user.picture)
+                await tryDeleteImage(user.picture);
             }
         }
     },

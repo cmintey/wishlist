@@ -76,7 +76,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
         });
 
         if (item.image_url) {
-            await tryDeleteImage(item.image_url)
+            await tryDeleteImage(item.image_url);
         }
 
         return new Response(JSON.stringify(item), { status: 200 });
@@ -140,7 +140,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
         });
 
         if (deleteOldImage && item.image_url) {
-            await tryDeleteImage(item.image_url)
+            await tryDeleteImage(item.image_url);
         }
 
         return new Response(JSON.stringify(updatedItem), { status: 200 });

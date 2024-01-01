@@ -17,16 +17,16 @@ export const createImage = async (username: string, image: File): Promise<string
 
 export const deleteImage = async (filename: string): Promise<void> => {
     try {
-        await unlink(`uploads/${filename}`)
+        await unlink(`uploads/${filename}`);
     } catch (e) {
-        console.warn("Unable to delete file: ", filename)
+        console.warn("Unable to delete file: ", filename);
     }
-}
+};
 
 export const tryDeleteImage = async (imageUrl: string): Promise<void> => {
     try {
         new URL(imageUrl);
     } catch {
-        await deleteImage(imageUrl)
+        await deleteImage(imageUrl);
     }
-}
+};

@@ -37,7 +37,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
             }
         });
         if (deletedUser && deletedUser.picture) {
-            await tryDeleteImage(deletedUser.picture)
+            await tryDeleteImage(deletedUser.picture);
         }
 
         return new Response(JSON.stringify(deletedUser), { status: 200 });

@@ -78,7 +78,7 @@ export const actions: Actions = {
             where: {
                 id: parseInt(params.itemId)
             }
-        })
+        });
 
         await client.item.update({
             where: {
@@ -94,7 +94,7 @@ export const actions: Actions = {
         });
 
         if (filename && item.image_url && item.image_url !== filename) {
-            await tryDeleteImage(item.image_url)
+            await tryDeleteImage(item.image_url);
         }
 
         const ref = new URL(request.url).searchParams.get("ref");

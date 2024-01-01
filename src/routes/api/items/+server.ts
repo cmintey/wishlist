@@ -37,17 +37,17 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
 
         for (const item of items) {
             if (item.image_url) {
-                await tryDeleteImage(item.image_url)
+                await tryDeleteImage(item.image_url);
             }
         }
 
         const deletedItems = await client.item.deleteMany({
             where: {
                 id: {
-                    in: items.map(item => item.id)
+                    in: items.map((item) => item.id)
                 }
             }
-        })
+        });
 
         return new Response(JSON.stringify(deletedItems), { status: 200 });
     } catch (e) {
