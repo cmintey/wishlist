@@ -3,6 +3,7 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { _authCheck } from "../groups/[groupId]/auth";
+import { tryDeleteImage } from "$lib/server/image-util";
 
 export const DELETE: RequestHandler = async ({ locals, request }) => {
     const groupId = new URL(request.url).searchParams.get("groupId");
@@ -23,13 +24,32 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
     }
 
     try {
-        const items = await client.item.deleteMany({
+        const items = await client.item.findMany({
+            select: {
+                id: true,
+                image_url: true
+            },
             where: {
                 groupId: groupId ? groupId : undefined,
                 pledgedById: claimed && Boolean(claimed) ? { not: null } : undefined
             }
         });
-        return new Response(JSON.stringify(items), { status: 200 });
+
+        for (const item of items) {
+            if (item.image_url) {
+                await tryDeleteImage(item.image_url);
+            }
+        }
+
+        const deletedItems = await client.item.deleteMany({
+            where: {
+                id: {
+                    in: items.map((item) => item.id)
+                }
+            }
+        });
+
+        return new Response(JSON.stringify(deletedItems), { status: 200 });
     } catch (e) {
         error(500, "Unable to delete items");
     }
