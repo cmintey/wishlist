@@ -66,8 +66,8 @@ model Group {
 model UserGroupMembership {
     id      String  @id @unique @default(uuid())
     active  Boolean @default(false)
-    user    User    @relation(fields: [userId], references: [id])
-    group   Group   @relation(fields: [groupId], references: [id])
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
     role    Role    @relation(fields: [roleId], references: [id])
     userId  String
     groupId String
@@ -83,15 +83,15 @@ model Item {
     url         String?
     note        String?
     image_url   String?
-    user        User    @relation(name: "MyItems", fields: [userId], references: [id])
+    user        User    @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
-    addedBy     User    @relation(name: "AddedItems", fields: [addedById], references: [id])
+    addedBy     User    @relation(name: "AddedItems", fields: [addedById], references: [id], onDelete: Cascade)
     addedById   String
-    pledgedBy   User?   @relation(name: "PledgedItems", fields: [pledgedById], references: [id])
+    pledgedBy   User?   @relation(name: "PledgedItems", fields: [pledgedById], references: [id], onDelete: SetNull)
     pledgedById String?
     approved    Boolean @default(true)
     purchased   Boolean @default(false)
-    group       Group?  @relation(fields: [groupId], references: [id])
+    group       Group?  @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId     String?
 
     @@index([userId])

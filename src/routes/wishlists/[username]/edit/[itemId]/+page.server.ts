@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { createImage } from "$lib/server/image-util";
+import { createImage, tryDeleteImage } from "$lib/server/image-util";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.validate();
@@ -74,6 +74,12 @@ export const actions: Actions = {
 
         const filename = await createImage(session.user.username, image);
 
+        const item = await client.item.findUniqueOrThrow({
+            where: {
+                id: parseInt(params.itemId)
+            }
+        })
+
         await client.item.update({
             where: {
                 id: parseInt(params.itemId)
@@ -86,6 +92,10 @@ export const actions: Actions = {
                 note
             }
         });
+
+        if (filename && item.image_url && item.image_url !== filename) {
+            await tryDeleteImage(item.image_url)
+        }
 
         const ref = new URL(request.url).searchParams.get("ref");
         redirect(302, ref ?? `/wishlists/${params.username}`);

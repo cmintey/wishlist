@@ -1,4 +1,5 @@
 import { Role } from "$lib/schema";
+import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
@@ -30,16 +31,14 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
     }
 
     try {
-        await client.userGroupMembership.deleteMany({
-            where: {
-                userId: user.id
-            }
-        });
         const deletedUser = await client.user.delete({
             where: {
                 id: user.id
             }
         });
+        if (deletedUser && deletedUser.picture) {
+            await tryDeleteImage(deletedUser.picture)
+        }
 
         return new Response(JSON.stringify(deletedUser), { status: 200 });
     } catch (e) {

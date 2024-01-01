@@ -5,7 +5,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { createImage } from "$lib/server/image-util";
+import { createImage, tryDeleteImage } from "$lib/server/image-util";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
@@ -73,6 +73,14 @@ export const actions: Actions = {
         const filename = await createImage(session.user.username, image);
 
         if (filename) {
+            const user = await client.user.findUniqueOrThrow({
+                select: {
+                    picture: true
+                },
+                where: {
+                    id: session.user.userId
+                }
+            })
             await client.user.update({
                 where: {
                     id: session.user.userId
@@ -81,6 +89,9 @@ export const actions: Actions = {
                     picture: filename
                 }
             });
+            if (user.picture) {
+                await tryDeleteImage(user.picture)
+            }
         }
     },
 

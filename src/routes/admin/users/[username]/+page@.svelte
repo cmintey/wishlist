@@ -32,7 +32,7 @@
                         invalidateAll();
 
                         toastStore.trigger({
-                            message: `${userId} was deleted`,
+                            message: `${username} was deleted`,
                             autohide: true,
                             timeout: 5000
                         });

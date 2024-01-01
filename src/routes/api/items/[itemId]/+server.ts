@@ -1,5 +1,6 @@
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import assert from "assert";
@@ -28,7 +29,8 @@ const validateItem = async (itemId: string | undefined, session: Session | null)
                 select: {
                     username: true
                 }
-            }
+            },
+            image_url: true
         }
     });
 
@@ -68,9 +70,14 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                     select: {
                         username: true
                     }
-                }
+                },
+                image_url: true
             }
         });
+
+        if (item.image_url) {
+            await tryDeleteImage(item.image_url)
+        }
 
         return new Response(JSON.stringify(item), { status: 200 });
     } catch (e) {
@@ -81,7 +88,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
     const session = await locals.validate();
 
-    await validateItem(params?.itemId, session);
+    const item = await validateItem(params?.itemId, session);
 
     const body = (await request.json()) as Record<string, unknown>;
     const data: {
@@ -97,12 +104,16 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
         approved?: boolean;
         purchased?: boolean;
     } = {};
+    let deleteOldImage = false;
 
     if (body.name && typeof body.name === "string") data.name = body.name;
     if (body.price && typeof body.price === "string") data.price = body.price;
     if (body.url && typeof body.url === "string") data.url = body.url;
     if (body.note && typeof body.note === "string") data.note = body.note;
-    if (body.image_url && typeof body.image_url === "string") data.image_url = body.image_url;
+    if (body.image_url && typeof body.image_url === "string") {
+        data.image_url = body.image_url;
+        deleteOldImage = true;
+    }
     if (body.pledgedById && typeof body.pledgedById === "string") {
         if (body.pledgedById === "0") {
             data.pledgedBy = {
@@ -120,7 +131,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
     if (Object.keys(body).includes("purchased") && typeof body.purchased === "boolean") data.purchased = body.purchased;
 
     try {
-        const item = await client.item.update({
+        const updatedItem = await client.item.update({
             where: {
                 // @ts-expect-error params.itemId is checked in a previous function
                 id: parseInt(params.itemId)
@@ -128,7 +139,11 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             data
         });
 
-        return new Response(JSON.stringify(item), { status: 200 });
+        if (deleteOldImage && item.image_url) {
+            await tryDeleteImage(item.image_url)
+        }
+
+        return new Response(JSON.stringify(updatedItem), { status: 200 });
     } catch (e) {
         error(404, "item id not found");
     }
