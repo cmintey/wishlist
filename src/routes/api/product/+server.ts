@@ -18,8 +18,13 @@ const scraper = metascraper([
 ]);
 
 const goShopping = async (targetUrl: string) => {
-    const { body: html, url } = await gotScraping(targetUrl);
-    const metadata = await scraper({ html, url });
+    const resp = await gotScraping({
+        url: targetUrl,
+        headerGeneratorOptions: {
+            devices: ["desktop"]
+        }
+    });
+    const metadata = await scraper({ html: resp.body, url: resp.url });
     return metadata;
 };
 
@@ -43,6 +48,9 @@ export const GET: RequestHandler = async ({ request }) => {
         if (isCaptchaResponse(metadata) && metadata.url) {
             // retry with the resolved URL
             metadata = await goShopping(metadata.url);
+        }
+        if (isCaptchaResponse(metadata)) {
+            error(424, "product information not available");
         }
 
         return new Response(JSON.stringify(metadata));
