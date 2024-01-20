@@ -6,13 +6,11 @@ import type { Prisma } from "@prisma/client";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 
-export const load: PageServerLoad = async ({ locals, params, depends, url }) => {
+export const load: PageServerLoad = async ({ locals, params, url }) => {
     const session = await locals.validate();
     if (!session) {
         redirect(302, `/login?ref=/wishlists/${params.username}`);
     }
-
-    depends("list:poll");
 
     const activeMembership = await getActiveMembership(session.user);
     const config = await getConfig(activeMembership.groupId);

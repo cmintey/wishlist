@@ -2,9 +2,8 @@
     import type { PageData } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
-    import { goto, invalidate } from "$app/navigation";
+    import { goto } from "$app/navigation";
     import { page } from "$app/stores";
-    import { listen, idle } from "$lib/stores/idle";
     import { onDestroy, onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { quintOut } from "svelte/easing";
@@ -13,8 +12,11 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
+    import { SSEvents } from "$lib/schema";
 
     export let data: PageData;
+    type Item = PageData["items"][0];
+    let items: Item[] = data.items;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -34,38 +36,47 @@
         }
     });
 
-    // Poll for updates
-    listen({
-        timer: 5 * 60 * 1000 // 5 minutes
-    });
-
-    let polling = true;
-    let pollTimeout: number;
-
-    const pollUpdate = () => {
-        if ($idle) {
-            polling = false;
-            return;
-        }
-
-        //@ts-expect-error setTimeout returns number in web
-        pollTimeout = setTimeout(async () => {
-            await invalidate("list:poll");
-            pollUpdate();
-        }, 5000);
-    };
-
+    let eventSource: EventSource;
     onMount(async () => {
         const userHash = await hash(data.listOwner.id + data.groupId);
-        $viewedItems[userHash] = await hashItems(data.items);
-        pollUpdate();
-    });
-    onDestroy(() => clearTimeout(pollTimeout));
+        $viewedItems[userHash] = await hashItems(items);
 
-    $: if (!$idle && !polling) {
-        polling = true;
-        pollUpdate();
-    }
+        subscribeToEvents();
+    });
+    onDestroy(() => eventSource?.close());
+
+    const subscribeToEvents = () => {
+        eventSource = new EventSource("/api/items/updates");
+        eventSource.addEventListener(SSEvents.item.update, (e) => {
+            const message = JSON.parse(e.data) as Item;
+            updateItems(message);
+        });
+        eventSource.addEventListener(SSEvents.item.delete, (e) => {
+            const message = JSON.parse(e.data) as Item;
+            removeItem(message);
+        });
+        eventSource.addEventListener(SSEvents.item.create, (e) => {
+            const message = JSON.parse(e.data) as Item;
+            addItem(message);
+        });
+    };
+
+    const updateItems = (updatedItem: Item) => {
+        items = items.map((item) => {
+            if (item.id === updatedItem.id) {
+                return { ...item, ...updatedItem };
+            }
+            return item;
+        });
+    };
+
+    const removeItem = (removedItem: Item) => {
+        items = items.filter((item) => item.id !== removedItem.id);
+    };
+
+    const addItem = (addedItem: Item) => {
+        items = [...items, addedItem];
+    };
 </script>
 
 {#if data.approvals.length > 0}
@@ -80,7 +91,7 @@
     <hr class="pb-2" />
 {/if}
 
-{#if data.items.length === 0}
+{#if items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
         <img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
         <p class="text-2xl">No wishes yet</p>
@@ -97,20 +108,20 @@
     <!-- items -->
     <div class="flex flex-col space-y-4">
         {#if data.listOwner.isMe}
-            {#each data.items as item (item.id)}
+            {#each items as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
         {:else}
             <!-- unclaimed-->
-            {#each data.items.filter((item) => !item.pledgedById) as item (item.id)}
+            {#each items.filter((item) => !item.pledgedById) as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
             <!-- claimed -->
-            {#each data.items.filter((item) => item.pledgedById) as item (item.id)}
+            {#each items.filter((item) => item.pledgedById) as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>

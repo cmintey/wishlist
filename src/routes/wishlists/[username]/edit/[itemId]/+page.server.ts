@@ -4,6 +4,8 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
+import { itemEmitter } from "$lib/server/events/emitters";
+import { SSEvents } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.validate();
@@ -80,7 +82,7 @@ export const actions: Actions = {
             }
         });
 
-        await client.item.update({
+        const updatedItem = await client.item.update({
             where: {
                 id: parseInt(params.itemId)
             },
@@ -90,8 +92,30 @@ export const actions: Actions = {
                 url,
                 image_url: filename || image_url,
                 note
+            },
+            include: {
+                addedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                pledgedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                user: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                }
             }
         });
+
+        itemEmitter.emit(SSEvents.item.update, updatedItem);
 
         if (filename && item.image_url && item.image_url !== filename) {
             await tryDeleteImage(item.image_url);
