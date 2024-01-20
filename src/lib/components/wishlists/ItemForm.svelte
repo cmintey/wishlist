@@ -3,6 +3,7 @@
     import type { Item } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
+    import { getToastStore } from "@skeletonlabs/skeleton";
 
     export let data: Item;
     export let buttonText: string;
@@ -10,6 +11,7 @@
     $: form = $page.form;
     let loading = false;
     let urlChanged = false;
+    const toastStore = getToastStore();
 
     const formatPrice = (price: number | null, currency: string | null) => {
         if (!price) return null;
@@ -28,6 +30,15 @@
         return null;
     };
 
+    const triggerToast = () => {
+        toastStore.trigger({
+            message: `Unable to find product information. You can still fill in the details manually.`,
+            background: "variant-filled-warning",
+            autohide: true,
+            timeout: 5000
+        });
+    };
+
     const getInfo = async () => {
         if (data.url && urlChanged) {
             loading = true;
@@ -40,7 +51,7 @@
                 data.image_url = productData.image;
                 data.price = formatPrice(productData.price, productData.currency);
             } else {
-                console.log("invalid url");
+                triggerToast();
             }
             loading = false;
             urlChanged = false;
