@@ -3,3 +3,11 @@ export enum Role {
     ADMIN,
     GROUP_MANAGER
 }
+
+export const SSEvents = {
+    item: {
+        update: "item_update",
+        create: "item_create",
+        delete: "item_delete"
+    }
+};

@@ -1,4 +1,6 @@
+import { SSEvents } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
+import { itemEmitter } from "$lib/server/events/emitters";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
@@ -66,6 +68,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                 id: parseInt(params.itemId)
             },
             select: {
+                id: true,
                 addedBy: {
                     select: {
                         username: true
@@ -74,6 +77,8 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                 image_url: true
             }
         });
+
+        itemEmitter.emit(SSEvents.item.delete, item);
 
         if (item.image_url) {
             await tryDeleteImage(item.image_url);
@@ -136,12 +141,34 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
                 // @ts-expect-error params.itemId is checked in a previous function
                 id: parseInt(params.itemId)
             },
+            include: {
+                addedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                pledgedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                user: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                }
+            },
             data
         });
 
         if (deleteOldImage && item.image_url) {
             await tryDeleteImage(item.image_url);
         }
+
+        itemEmitter.emit(SSEvents.item.update, updatedItem);
 
         return new Response(JSON.stringify(updatedItem), { status: 200 });
     } catch (e) {

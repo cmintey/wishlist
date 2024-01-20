@@ -1,9 +1,10 @@
-import { Role } from "$lib/schema";
+import { Role, SSEvents } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { _authCheck } from "../groups/[groupId]/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
+import { itemEmitter } from "$lib/server/events/emitters";
 
 export const DELETE: RequestHandler = async ({ locals, request }) => {
     const groupId = new URL(request.url).searchParams.get("groupId");
@@ -39,6 +40,7 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
             if (item.image_url) {
                 await tryDeleteImage(item.image_url);
             }
+            itemEmitter.emit(SSEvents.item.delete, item);
         }
 
         const deletedItems = await client.item.deleteMany({

@@ -4,6 +4,8 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage } from "$lib/server/image-util";
+import { SSEvents } from "$lib/schema";
+import { itemEmitter } from "$lib/server/events/emitters";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.validate();
@@ -69,25 +71,47 @@ export const actions: Actions = {
 
         const filename = await createImage(session.user.username, image);
 
-        await client.user.update({
+        const user = await client.user.findUniqueOrThrow({
             where: {
                 username: params.username
-            },
+            }
+        });
+
+        const item = await client.item.create({
             data: {
-                items: {
-                    create: {
-                        name,
-                        price,
-                        url,
-                        note,
-                        image_url: filename || image_url,
-                        addedById: session.user.userId,
-                        approved: params.username === session.user.username || config.suggestions.method !== "approval",
-                        groupId: activeMembership.groupId
+                userId: user.id,
+                name,
+                price,
+                url,
+                note,
+                image_url: filename || image_url,
+                addedById: session.user.userId,
+                approved: params.username === session.user.username || config.suggestions.method !== "approval",
+                groupId: activeMembership.groupId
+            },
+            include: {
+                addedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                pledgedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                user: {
+                    select: {
+                        username: true,
+                        name: true
                     }
                 }
             }
         });
+
+        itemEmitter.emit(SSEvents.item.create, item);
 
         redirect(302, `/wishlists/${params.username}`);
     }
