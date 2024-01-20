@@ -50,7 +50,7 @@ export const GET: RequestHandler = async ({ request }) => {
             metadata = await goShopping(metadata.url);
         }
         if (isCaptchaResponse(metadata)) {
-            error(424, "product information not available")
+            error(424, "product information not available");
         }
 
         return new Response(JSON.stringify(metadata));
