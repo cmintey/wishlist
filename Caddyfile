@@ -4,10 +4,6 @@
 }
 
 :3280 {
-    log {
-        format console
-    }
-
     @static {
 		file
 		path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
