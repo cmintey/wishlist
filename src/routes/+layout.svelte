@@ -22,7 +22,15 @@
 
     export let data: LayoutData;
 
-    const titleDisabledUrls = ["/login", "/signup", "/", "/forgot-password", "/reset-password", "/group-error"];
+    const titleDisabledUrls = [
+        "/login",
+        "/signup",
+        "/",
+        "/forgot-password",
+        "/reset-password",
+        "/group-error",
+        "/setup-wizard"
+    ];
 
     let showNavigationLoadingBar = false;
     let documentTitle: string | undefined;

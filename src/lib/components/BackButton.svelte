@@ -4,7 +4,15 @@
     import logo from "$lib/assets/logo.png";
 
     export let label = "Back";
-    const disabledUrls = ["/login", "/signup", "/", "/forgot-password", "/reset-password", "/group-error"];
+    const disabledUrls = [
+        "/login",
+        "/signup",
+        "/",
+        "/forgot-password",
+        "/reset-password",
+        "/group-error",
+        "/setup-wizard"
+    ];
 
     let documentTitle: string | undefined;
     let disabled = true;
