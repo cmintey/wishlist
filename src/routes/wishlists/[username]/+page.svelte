@@ -16,7 +16,6 @@
 
     export let data: PageData;
     type Item = PageData["items"][0];
-    let items: Item[] = data.items;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -39,7 +38,7 @@
     let eventSource: EventSource;
     onMount(async () => {
         const userHash = await hash(data.listOwner.id + data.groupId);
-        $viewedItems[userHash] = await hashItems(items);
+        $viewedItems[userHash] = await hashItems(data.items);
 
         subscribeToEvents();
     });
@@ -62,7 +61,7 @@
     };
 
     const updateItems = (updatedItem: Item) => {
-        items = items.map((item) => {
+        data.items = data.items.map((item) => {
             if (item.id === updatedItem.id) {
                 return { ...item, ...updatedItem };
             }
@@ -71,11 +70,11 @@
     };
 
     const removeItem = (removedItem: Item) => {
-        items = items.filter((item) => item.id !== removedItem.id);
+        data.items = data.items.filter((item) => item.id !== removedItem.id);
     };
 
     const addItem = (addedItem: Item) => {
-        items = [...items, addedItem];
+        data.items = [...data.items, addedItem];
     };
 </script>
 
@@ -91,7 +90,7 @@
     <hr class="pb-2" />
 {/if}
 
-{#if items.length === 0}
+{#if data.items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
         <img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
         <p class="text-2xl">No wishes yet</p>
@@ -108,20 +107,20 @@
     <!-- items -->
     <div class="flex flex-col space-y-4">
         {#if data.listOwner.isMe}
-            {#each items as item (item.id)}
+            {#each data.items as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
         {:else}
             <!-- unclaimed-->
-            {#each items.filter((item) => !item.pledgedById) as item (item.id)}
+            {#each data.items.filter((item) => !item.pledgedById) as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
             <!-- claimed -->
-            {#each items.filter((item) => item.pledgedById) as item (item.id)}
+            {#each data.items.filter((item) => item.pledgedById) as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
