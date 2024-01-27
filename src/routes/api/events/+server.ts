@@ -10,8 +10,9 @@ export const GET = (async () => {
     subscribeToEvent(itemEmitter, SSEvents.item.delete);
     return new Response(readable, {
         headers: {
-            "cache-control": "no-cache",
-            "content-type": "text/event-stream"
+            "Cache-Control": "no-cache",
+            "Content-Type": "text/event-stream",
+            "X-Accel-Buffering": "no"
         }
     });
 }) satisfies RequestHandler;

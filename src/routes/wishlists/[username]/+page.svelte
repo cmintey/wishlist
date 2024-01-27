@@ -45,7 +45,7 @@
     onDestroy(() => eventSource?.close());
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource("/api/items/updates");
+        eventSource = new EventSource("/api/events");
         eventSource.addEventListener(SSEvents.item.update, (e) => {
             const message = JSON.parse(e.data) as Item;
             updateItems(message);
