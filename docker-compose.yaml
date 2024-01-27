@@ -7,6 +7,7 @@ services:
         build: .
         ports:
             - 3280:3280
+            - 3000:3000
         volumes:
             - ./uploads:/usr/src/app/uploads
             - ./data:/usr/src/app/data

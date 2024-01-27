@@ -9,6 +9,10 @@
 		path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
 	}
 
+    @not_sse {
+        not path /api/events
+    }
+
     # Handles User Images
 	handle_path /api/assets/* {
 		header @static Cache-Control max-age=31536000
@@ -16,8 +20,14 @@
 		file_server
 	}
 
-    encode gzip
-    reverse_proxy :3000
+    # gzip makes sse not work so use it for everything but the events api
+    encode @not_sse {
+        gzip
+    }
+
+    reverse_proxy :3000 {
+        flush_interval -1
+    }
 }
 
 
