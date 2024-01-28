@@ -1,7 +1,7 @@
 // https://github.com/sanrafa/sveltekit-sse-example/tree/main
 import type EventEmitter from "node:events";
 
-export function createSSE(retry = 0) {
+export function createSSE<T>(retry = 0) {
     const { readable, writable } = new TransformStream({
         start(ctr) {
             if (retry > 0) ctr.enqueue(`retry: ${retry}\n\n`);
@@ -22,9 +22,11 @@ export function createSSE(retry = 0) {
 
     return {
         readable,
-        async subscribeToEvent(emitter: EventEmitter, event: string) {
-            function listener(data: any) {
-                writer.write({ event, data });
+        async subscribeToEvent(emitter: EventEmitter, event: string, predicate?: (arg: T) => boolean) {
+            function listener(data: T) {
+                if (!predicate || (predicate && predicate(data))) {
+                    writer.write({ event, data });
+                }
             }
             emitter.on(event, listener);
             await writer.closed.catch((e) => {

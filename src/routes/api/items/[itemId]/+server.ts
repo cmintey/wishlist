@@ -69,6 +69,8 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
             },
             select: {
                 id: true,
+                groupId: true,
+                userId: true,
                 addedBy: {
                     select: {
                         username: true

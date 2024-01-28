@@ -16,6 +16,9 @@
 
     export let data: PageData;
     type Item = PageData["items"][0];
+    $: allItems = data.items;
+    $: approvals = allItems.filter((item) => !item.approved);
+    $: items = allItems.filter((item) => item.approved);
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -37,31 +40,41 @@
 
     let eventSource: EventSource;
     onMount(async () => {
-        const userHash = await hash(data.listOwner.id + data.groupId);
-        $viewedItems[userHash] = await hashItems(data.items);
-
+        await updateHash();
         subscribeToEvents();
     });
     onDestroy(() => eventSource?.close());
 
+    const updateHash = async () => {
+        const userHash = await hash(data.listOwner.id + data.groupId);
+        $viewedItems[userHash] = await hashItems(allItems);
+    };
+
     const subscribeToEvents = () => {
-        eventSource = new EventSource("/api/events");
+        eventSource = new EventSource(`${$page.url.pathname}/events`);
         eventSource.addEventListener(SSEvents.item.update, (e) => {
             const message = JSON.parse(e.data) as Item;
             updateItems(message);
+            updateHash();
         });
         eventSource.addEventListener(SSEvents.item.delete, (e) => {
             const message = JSON.parse(e.data) as Item;
             removeItem(message);
+            updateHash();
         });
         eventSource.addEventListener(SSEvents.item.create, (e) => {
             const message = JSON.parse(e.data) as Item;
             addItem(message);
+            updateHash();
         });
     };
 
     const updateItems = (updatedItem: Item) => {
-        data.items = data.items.map((item) => {
+        // for when an item gets approved
+        if (!allItems.find((item) => item.id === updatedItem.id)) {
+            addItem(updatedItem);
+        }
+        allItems = allItems.map((item) => {
             if (item.id === updatedItem.id) {
                 return { ...item, ...updatedItem };
             }
@@ -70,18 +83,31 @@
     };
 
     const removeItem = (removedItem: Item) => {
-        data.items = data.items.filter((item) => item.id !== removedItem.id);
+        allItems = allItems.filter((item) => item.id !== removedItem.id);
     };
 
     const addItem = (addedItem: Item) => {
-        data.items = [...data.items, addedItem];
+        if (!(addedItem.approved || data.listOwner.isMe)) {
+            return;
+        }
+        allItems = [...allItems, addedItem];
     };
 </script>
 
-{#if data.approvals.length > 0}
+<!-- chips -->
+{#if allItems.length > 0}
+    <div class="flex flex-row flex-wrap space-x-4">
+        {#if !data.listOwner.isMe}
+            <ClaimFilterChip />
+        {/if}
+        <SortBy />
+    </div>
+{/if}
+
+{#if approvals.length > 0}
     <h2 class="h2 pb-2">Approvals</h2>
     <div class="flex flex-col space-y-4 pb-2">
-        {#each data.approvals as item (item.id)}
+        {#each approvals as item (item.id)}
             <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                 <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
             </div>
@@ -90,37 +116,29 @@
     <hr class="pb-2" />
 {/if}
 
-{#if data.items.length === 0}
+{#if items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
         <img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
         <p class="text-2xl">No wishes yet</p>
     </div>
 {:else}
-    <!-- chips -->
-    <div class="flex flex-row flex-wrap space-x-4">
-        {#if !data.listOwner.isMe}
-            <ClaimFilterChip />
-        {/if}
-        <SortBy />
-    </div>
-
     <!-- items -->
     <div class="flex flex-col space-y-4">
         {#if data.listOwner.isMe}
-            {#each data.items as item (item.id)}
+            {#each items as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
         {:else}
             <!-- unclaimed-->
-            {#each data.items.filter((item) => !item.pledgedById) as item (item.id)}
+            {#each items.filter((item) => !item.pledgedById) as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
             <!-- claimed -->
-            {#each data.items.filter((item) => item.pledgedById) as item (item.id)}
+            {#each items.filter((item) => item.pledgedById) as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>

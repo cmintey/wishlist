@@ -11,7 +11,6 @@
 </script>
 
 <script lang="ts">
-    import { invalidateAll } from "$app/navigation";
     import {
         getDrawerStore,
         getModalStore,
@@ -23,6 +22,7 @@
     import { ItemAPI } from "$lib/api/items";
     import ApprovalButtons from "./ApprovalButtons.svelte";
     import ClaimButtons from "./ClaimButtons.svelte";
+    import { invalidateAll } from "$app/navigation";
 
     export let item: FullItem;
     export let user: PartialUser & { userId: string };
@@ -89,8 +89,6 @@
                 const resp = await (approve ? itemAPI.approve() : itemAPI.deny());
 
                 if (resp.ok) {
-                    invalidateAll();
-
                     toastStore.trigger({
                         message: `${item.name} was ${approve ? "approved" : "denied"}`,
                         autohide: true,
@@ -121,8 +119,6 @@
         const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user.userId));
 
         if (resp.ok) {
-            invalidateAll();
-
             toastStore.trigger({
                 message: `${unclaim ? "Unclaimed" : "Claimed"} item`,
                 autohide: true,
@@ -134,11 +130,7 @@
     };
 
     const handlePurchased = async (purchased: boolean) => {
-        const resp = await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
-
-        if (resp.ok) {
-            invalidateAll();
-        }
+        await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
     };
 </script>
 
