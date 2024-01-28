@@ -106,8 +106,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
             isMe: params.username === session.user.username,
             ...listOwner
         },
-        items: wishlistItems.filter((item) => item.approved),
-        approvals: wishlistItems.filter((item) => !item.approved),
+        items: wishlistItems,
         suggestionsEnabled: config.suggestions.enable,
         showClaimedName: config.claims.showName,
         groupId: activeMembership.groupId
