@@ -7,7 +7,8 @@
         { href: "/users", label: "Users" },
         { href: "/groups", label: "Groups" },
         { href: "/settings", label: "Settings" },
-        { href: "/actions", label: "Actions" }
+        { href: "/actions", label: "Actions" },
+        { href: "/about", label: "About" }
     ];
 
     let selectedTab = 0;
@@ -36,5 +37,5 @@
 </TabGroup>
 
 <svelte:head>
-    <title>Admin Settings</title>
+    <title>Administration</title>
 </svelte:head>
