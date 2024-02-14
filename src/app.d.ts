@@ -23,6 +23,13 @@ declare global {
         // eslint-disable-next-line @typescript-eslint/no-empty-interface
         interface Locals extends AuthRequest {}
     }
+
+    // App version
+    declare const __VERSION__: string;
+    // git commit sha
+    declare const __COMMIT_SHA__: string;
+    // Date built
+    declare const __LASTMOD__: string;
 }
 
 export {};

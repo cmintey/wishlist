@@ -3,6 +3,7 @@ import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { getConfig } from "$lib/server/config";
 
 export const load = (async ({ locals }) => {
     const session = await locals.validate();
@@ -12,6 +13,7 @@ export const load = (async ({ locals }) => {
     const user = session.user;
 
     const activeMembership = await getActiveMembership(user);
+    const config = await getConfig(activeMembership.groupId);
 
     const userQuery = client.user.findUniqueOrThrow({
         select: {
@@ -23,9 +25,10 @@ export const load = (async ({ locals }) => {
                     id: true
                 },
                 where: {
-                    addedBy: {
-                        username: user.username
-                    },
+                    addedBy:
+                        config.suggestions.enable && config.suggestions.method === "surprise"
+                            ? { username: user.username }
+                            : undefined,
                     groupId: activeMembership.groupId
                 }
             },
@@ -68,7 +71,8 @@ export const load = (async ({ locals }) => {
                     id: true
                 },
                 where: {
-                    groupId: activeMembership.groupId
+                    groupId: activeMembership.groupId,
+                    approved: true
                 }
             },
             _count: {
