@@ -3,14 +3,21 @@ import { auth } from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/validations";
 import { getConfig } from "$lib/server/config";
+import { client } from "$lib/server/prisma";
 
-// If the user exists, redirect authenticated users to the profile page.
 export const load: PageServerLoad = async ({ locals, request }) => {
     const session = await locals.validate();
+
     if (session) {
         const ref = new URL(request.url).searchParams.get("ref");
         redirect(302, ref || "/");
     }
+
+    const userCount = await client.user.count();
+    if (userCount === 0) {
+        redirect(302, "/setup-wizard");
+    }
+
     const config = await getConfig();
     return { enableSignup: config.enableSignup };
 };

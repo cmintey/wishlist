@@ -17,17 +17,17 @@
 
 <!-- TODO: Add tooltips explaining the various settings -->
 <form
-    action="?/settings"
+    action="/admin/settings?/settings"
     method="POST"
     use:enhance={({ action }) => {
-        if (action.search === "?/send-test") {
+        if (action.search.endsWith("?/send-test")) {
             sending = true;
         }
         return ({ action, result }) => {
-            if (action.search === "?/settings" && result.type === "success") {
+            if (action.search.endsWith("?/settings") && result.type === "success") {
                 saved = true;
             }
-            if (action.search === "?/send-test" && result.type === "success") {
+            if (action.search.endsWith("?/send-test") && result.type === "success") {
                 sending = false;
                 sent = true;
             }
@@ -79,7 +79,7 @@
             <button
                 class="variant-ghost-primary btn mt-2 h-min w-fit"
                 disabled={sending || sent}
-                formaction="?/send-test"
+                formaction="/admin/settings?/send-test"
                 type="submit"
             >
                 {#if sending}

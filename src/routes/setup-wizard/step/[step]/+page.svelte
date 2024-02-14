@@ -6,6 +6,8 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
+    // TODO: Add validatino so user cannot skip first step or go back to first step
+
     interface StepperState {
         current: number;
         total: number;
@@ -22,23 +24,21 @@
     const submit = writable(() => {});
     setContext("submit", submit);
 
-    const onSubmit = () => {
-        $submit();
-        if (!$page.form?.error && currentStep + 1 < $state.total) {
-            goto(`/setup-wizard/step/${currentStep + 1}`);
-        }
-    };
+    $: if ($page.form?.success) next();
 
-    const onComplete = () => {
-        $submit();
-        if (!$page.form?.error && currentStep + 1 === $state.total) {
-            goto(`/login`);
+    const next = () => {
+        if (currentStep + 1 < $state.total) {
+            $state.current = $state.current + 1;
+            goto(`/setup-wizard/step/${currentStep + 2}`);
+        } else {
+            goto("/login");
         }
     };
 
     const onBack = () => {
-        if (currentStep - 1 >= 0) {
-            goto(`/setup-wizard/step/${currentStep - 1}`);
+        if (currentStep >= 0) {
+            $state.current = $state.current - 1;
+            goto(`/setup-wizard/step/${currentStep}`);
         }
     };
 </script>
@@ -48,10 +48,10 @@
 
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->
-        <button class="variant-ghost btn" disabled={$state.current === 0} type="button" on:click={onBack}>Back</button>
+        <button class="variant-ghost btn" disabled={$state.current <= 1} type="button" on:click={onBack}>Back</button>
         {#if currentStep < $state.total - 1}
             <!-- Button: Next -->
-            <button class="variant-filled btn" disabled={locked} type="submit" on:click={onSubmit}>
+            <button class="variant-filled btn" disabled={locked} type="submit" on:click={$submit}>
                 {#if locked}
                     <svg
                         class="aspect-square w-3 fill-current"
@@ -67,7 +67,7 @@
             </button>
         {:else}
             <!-- Button: Complete -->
-            <button class="variant-filled-primary btn" disabled={locked} type="submit" on:click={onComplete}>
+            <button class="variant-filled-primary btn" disabled={locked} type="submit" on:click={$submit}>
                 Complete
             </button>
         {/if}
