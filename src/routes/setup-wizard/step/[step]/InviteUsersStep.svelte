@@ -15,7 +15,6 @@
         settings.
     </span>
 
-    <pre>{groups[0].id}</pre>
     <form
         action="/admin/users"
         method="POST"

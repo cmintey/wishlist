@@ -1,6 +1,3 @@
-<script context="module" lang="ts">
-</script>
-
 <script lang="ts">
     import { getToastStore, type ToastSettings, getModalStore } from "@skeletonlabs/skeleton";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
