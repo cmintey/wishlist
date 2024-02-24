@@ -9,7 +9,6 @@ import { Role } from "$lib/schema";
 import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
-    // If the user session exists, redirect authenticated users to the profile page.
     const session = await locals.validate();
     if (session) redirect(302, "/");
 
@@ -71,6 +70,14 @@ export const actions: Actions = {
                     }
                 })
                 .then((data) => data?.groupId);
+        } else if (userCount === 0) {
+            groupId = (
+                await client.group.findFirst({
+                    select: {
+                        id: true
+                    }
+                })
+            )?.id;
         }
 
         try {
@@ -113,6 +120,7 @@ export const actions: Actions = {
                     }
                 });
             }
+            return { success: true };
         } catch (e) {
             return fail(400, {
                 error: true,

@@ -22,7 +22,15 @@
 
     export let data: LayoutData;
 
-    const titleDisabledUrls = ["/login", "/signup", "/", "/forgot-password", "/reset-password", "/group-error"];
+    const titleDisabledUrls = [
+        "/login",
+        "/signup",
+        "/",
+        "/forgot-password",
+        "/reset-password",
+        "/group-error",
+        /\/setup-wizard\/.*/
+    ];
 
     let showNavigationLoadingBar = false;
     let documentTitle: string | undefined;
@@ -36,7 +44,7 @@
     afterNavigate((params) => {
         showNavigationLoadingBar = false;
         documentTitle = document?.title;
-        disabled = titleDisabledUrls.find((url) => $page.url.pathname === url) !== undefined;
+        disabled = titleDisabledUrls.find((url) => $page.url.pathname.match(url)) !== undefined;
         // scroll to top
         const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
         const elemPage = document.querySelector("#page");

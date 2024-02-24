@@ -4,6 +4,7 @@
     import Search from "../Search.svelte";
     import InviteUser from "./InviteUser.svelte";
     import type { Group } from "@prisma/client";
+    import { enhance } from "$app/forms";
 
     type User = {
         username: string;
@@ -36,7 +37,9 @@
 
 <div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0">
     <Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
-    <InviteUser {config} {groups} />
+    <form method="POST" use:enhance>
+        <InviteUser {config} {groups} />
+    </form>
 </div>
 
 {#if userData}
