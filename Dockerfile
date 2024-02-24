@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential python3 openssl \
+    && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
 RUN npm i -g pnpm@latest-8
 RUN pnpm i --frozen-lockfile
