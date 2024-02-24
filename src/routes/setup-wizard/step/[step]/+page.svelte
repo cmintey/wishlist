@@ -1,25 +1,24 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
-    import { getContext, setContext } from "svelte";
+    import { getContext, onMount, setContext } from "svelte";
     import { writable, type Writable } from "svelte/store";
     import { steps } from "./steps";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    // TODO: Add validatino so user cannot skip first step or go back to first step
+    let locked = false;
 
     interface StepperState {
         current: number;
         total: number;
     }
 
-    const currentStep = Number.parseInt($page.params.step) - 1;
-
     const state: Writable<StepperState> = getContext("state");
-    $state.total = steps.length;
-    $state.current = currentStep;
 
-    let locked = false;
+    onMount(() => {
+        $state.total = steps.length;
+        $state.current = Number.parseInt($page.params.step) - 1;
+    });
 
     const submit = writable(() => {});
     setContext("submit", submit);
@@ -27,18 +26,16 @@
     $: if ($page.form?.success) next();
 
     const next = () => {
-        if (currentStep + 1 < $state.total) {
+        if ($state.current + 1 < $state.total) {
             $state.current = $state.current + 1;
-            goto(`/setup-wizard/step/${currentStep + 2}`);
-        } else {
-            goto("/login");
+            goto(`/setup-wizard/step/${$state.current + 1}`);
         }
     };
 
     const onBack = () => {
-        if (currentStep >= 0) {
+        if ($state.current >= 0) {
             $state.current = $state.current - 1;
-            goto(`/setup-wizard/step/${currentStep}`);
+            goto(`/setup-wizard/step/${$state.current + 1}`);
         }
     };
 </script>
@@ -48,26 +45,27 @@
 
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->
-        <button class="variant-ghost btn" disabled={$state.current <= 1} type="button" on:click={onBack}>Back</button>
-        {#if currentStep < $state.total - 1}
+        <button class="variant-ghost btn" disabled={$state.current <= 1} type="button" on:click={onBack}>
+            <iconify-icon icon="ion:arrow-back"></iconify-icon>
+            <span>Back</span>
+        </button>
+        {#if $state.current < $state.total - 1}
             <!-- Button: Next -->
             <button class="variant-filled btn" disabled={locked} type="submit" on:click={$submit}>
                 {#if locked}
-                    <svg
-                        class="aspect-square w-3 fill-current"
-                        viewBox="0 0 448 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
-                        />
-                    </svg>
+                    <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
                 <span>Next</span>
+                <iconify-icon icon="ion:arrow-forward"></iconify-icon>
             </button>
         {:else}
             <!-- Button: Complete -->
-            <button class="variant-filled-primary btn" disabled={locked} type="submit" on:click={$submit}>
+            <button
+                class="variant-filled-primary btn"
+                disabled={locked}
+                type="submit"
+                on:click={() => goto("/login", { invalidateAll: true })}
+            >
                 Complete
             </button>
         {/if}

@@ -6,6 +6,7 @@
     import type { PageData } from "./$types";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
+    import { enhance } from "$app/forms";
 
     export let data: PageData;
 
@@ -79,7 +80,9 @@
         <iconify-icon icon="ion:person-add" />
         <span>Add Member</span>
     </button>
-    <InviteUser config={data.config} defaultGroup={data.group} />
+    <form method="POST" use:enhance>
+        <InviteUser config={data.config} defaultGroup={data.group} />
+    </form>
 </div>
 
 <div class="flex flex-col space-y-2">

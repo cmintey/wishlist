@@ -11,7 +11,7 @@
         "/forgot-password",
         "/reset-password",
         "/group-error",
-        "/setup-wizard"
+        /\/setup-wizard\/.*/
     ];
 
     let documentTitle: string | undefined;
@@ -19,7 +19,7 @@
 
     afterNavigate(() => {
         documentTitle = document?.title;
-        disabled = disabledUrls.find((url) => $page.url.pathname === url) !== undefined;
+        disabled = disabledUrls.find((url) => $page.url.pathname.match(url)) !== undefined;
     });
 </script>
 

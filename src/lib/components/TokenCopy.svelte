@@ -1,8 +1,10 @@
 <script lang="ts">
     import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
 
     export let url: string;
+    const dispatch = createEventDispatcher();
 
     let copiedVisible = false;
 
@@ -24,6 +26,7 @@
             class="btn btn-icon"
             type="button"
             on:click={() => {
+                dispatch("copied");
                 copiedVisible = true;
                 setTimeout(() => (copiedVisible = false), 1000);
             }}
