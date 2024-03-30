@@ -6,7 +6,7 @@ import { env } from "$env/dynamic/private";
 
 const adapter = new PrismaAdapter(client.session, client.user);
 
-const origin = new URL(env.ORIGIN);
+const origin = new URL(env.ORIGIN || "localhost:3280");
 export const auth = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
