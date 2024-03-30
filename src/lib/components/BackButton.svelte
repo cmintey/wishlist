@@ -7,7 +7,7 @@
     const disabledUrls = [
         "/login",
         "/signup",
-        "/",
+        /^\/$/,
         "/forgot-password",
         "/reset-password",
         "/group-error",
