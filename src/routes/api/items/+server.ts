@@ -10,16 +10,15 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
     const groupId = new URL(request.url).searchParams.get("groupId");
     const claimed = new URL(request.url).searchParams.get("claimed");
     if (groupId) {
-        const { authenticated } = await _authCheck(locals.validate, groupId);
+        const { authenticated } = await _authCheck(locals, groupId);
         if (!authenticated) {
             error(401, "Not authorized to delete items for this group");
         }
     } else {
-        const session = await locals.validate();
-        if (!session) {
+        if (!locals.user) {
             error(401, "Must authenticate first");
         }
-        if (session.user.roleId !== Role.ADMIN) {
+        if (locals.user.roleId !== Role.ADMIN) {
             error(401, "Not authorized to delete items");
         }
     }
@@ -28,7 +27,7 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         const items = await client.item.findMany({
             select: {
                 id: true,
-                image_url: true
+                imageUrl: true
             },
             where: {
                 groupId: groupId ? groupId : undefined,
@@ -37,8 +36,8 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         });
 
         for (const item of items) {
-            if (item.image_url) {
-                await tryDeleteImage(item.image_url);
+            if (item.imageUrl) {
+                await tryDeleteImage(item.imageUrl);
             }
             itemEmitter.emit(SSEvents.item.delete, item);
         }

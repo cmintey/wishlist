@@ -6,7 +6,7 @@
     import type { User } from "lucia";
 
     export let navItems: NavItem[];
-    export let user: User | undefined;
+    export let user: User | null;
 
     let tabsBottomNav: number;
 

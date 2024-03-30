@@ -23,7 +23,8 @@ export const loginSchema = z.object({
 
 export const resetPasswordSchema = z.object({
     oldPassword: z.string().min(1),
-    newPassword: passwordZxcvbn
+    newPassword: passwordZxcvbn,
+    invalidateSessions: z.coerce.boolean().default(false)
 });
 
 export const settingSchema = z.object({

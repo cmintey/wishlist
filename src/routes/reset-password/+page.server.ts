@@ -6,6 +6,7 @@ import { error, fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import { env } from "$env/dynamic/private";
+import { LegacyScrypt } from "lucia";
 
 export const load: PageServerLoad = async ({ request }) => {
     const url = new URL(request.url);
@@ -73,7 +74,19 @@ export const actions: Actions = {
 
         if (user) {
             try {
-                await auth.updateKeyPassword("username", user.username, pwdData.data.newPassword);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const [_, hashedPassword] = await Promise.all([
+                    await auth.invalidateUserSessions(user.id),
+                    await new LegacyScrypt().hash(pwdData.data.newPassword)
+                ]);
+                await client.user.update({
+                    data: {
+                        hashedPassword
+                    },
+                    where: {
+                        id: user.id
+                    }
+                });
                 await client.passwordReset.update({
                     where: {
                         id: pwdData.data.id

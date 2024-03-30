@@ -6,11 +6,10 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
 
 export const load = (async ({ locals }) => {
-    const session = await locals.validate();
-    if (!session) {
+    const user = locals.user;
+    if (!user) {
         redirect(302, `/login`);
     }
-    const user = session.user;
 
     const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);

@@ -12,7 +12,7 @@
         price: null,
         url: null,
         note: null,
-        image_url: null,
+        imageUrl: null,
         userId: "",
         addedById: "",
         pledgedById: null,

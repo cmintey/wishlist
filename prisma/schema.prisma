@@ -10,7 +10,7 @@ generator client {
 
 model User {
     id                  String                @id @unique @default(cuid())
-    auth_session        Session[]
+    sessions            Session[]
     username            String                @unique
     name                String
     email               String                @unique @default("changeme@email.com")
@@ -20,31 +20,20 @@ model User {
     plegedItems         Item[]                @relation("PledgedItems")
     role                Role                  @relation(fields: [roleId], references: [id])
     roleId              Int                   @default(1)
-    key                 Key[]
     UserGroupMembership UserGroupMembership[]
+    hashedPassword      String
 
     @@map("user")
 }
 
 model Session {
-    id             String @id @unique
-    user_id        String
-    active_expires BigInt
-    idle_expires   BigInt
-    user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    id        String   @id @unique
+    userId    String
+    expiresAt DateTime
+    user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 
-    @@index([user_id])
+    @@index([userId])
     @@map("session")
-}
-
-model Key {
-    id              String  @id @unique
-    hashed_password String?
-    user_id         String
-    user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-    @@index([user_id])
-    @@map("key")
 }
 
 model Role {
@@ -52,6 +41,8 @@ model Role {
     name                String
     User                User[]
     UserGroupMembership UserGroupMembership[]
+
+    @@map("role")
 }
 
 model Group {
@@ -73,6 +64,9 @@ model UserGroupMembership {
     groupId String
     roleId  Int     @default(1)
 
+    @@index([userId])
+    @@index([groupId])
+    @@index([userId, groupId])
     @@map("user_group_membership")
 }
 
@@ -82,7 +76,7 @@ model Item {
     price       String?
     url         String?
     note        String?
-    image_url   String?
+    imageUrl    String?
     user        User    @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     addedBy     User    @relation(name: "AddedItems", fields: [addedById], references: [id], onDelete: Cascade)
@@ -95,6 +89,7 @@ model Item {
     groupId     String?
 
     @@index([userId])
+    @@index([pledgedById])
     @@map("items")
 }
 

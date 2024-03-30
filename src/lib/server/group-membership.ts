@@ -5,7 +5,7 @@ import { client } from "./prisma";
 export const getActiveMembership = async (user: User) => {
     let activeMembership = await client.userGroupMembership.findFirst({
         where: {
-            userId: user.userId,
+            userId: user.id,
             active: true
         }
     });
@@ -13,7 +13,7 @@ export const getActiveMembership = async (user: User) => {
     if (!activeMembership) {
         const membership = await client.userGroupMembership.findFirst({
             where: {
-                userId: user.userId
+                userId: user.id
             }
         });
         if (!membership) {

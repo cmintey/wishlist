@@ -48,7 +48,7 @@
                 let productData: ProductData = await res.json();
                 data.url = productData.url ? productData.url : url;
                 data.name = productData.name ? productData.name : productData.title || "";
-                data.image_url = productData.image;
+                data.imageUrl = productData.image;
                 data.price = formatPrice(productData.price, productData.currency);
             } else {
                 triggerToast();
@@ -128,7 +128,7 @@
                 class="input"
                 autocomplete="off"
                 type="text"
-                bind:value={data.image_url}
+                bind:value={data.imageUrl}
             />
         </div>
     </label>

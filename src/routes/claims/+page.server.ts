@@ -5,17 +5,16 @@ import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/claims`);
     }
 
-    const activeMembership = await getActiveMembership(session.user);
+    const activeMembership = await getActiveMembership(locals.user);
 
     const wishlistItems = await client.item.findMany({
         where: {
             pledgedBy: {
-                username: session.user.username
+                username: locals.user.username
             },
             groupId: activeMembership.groupId
         },
@@ -42,7 +41,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     });
 
     return {
-        user: session.user,
+        user: locals.user,
         items: wishlistItems
     };
 };

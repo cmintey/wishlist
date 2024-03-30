@@ -8,8 +8,7 @@ import { itemEmitter } from "$lib/server/events/emitters";
 import { SSEvents } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
     }
 
@@ -17,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(400, "item id must be a number");
     }
 
-    const activeMembership = await getActiveMembership(session.user);
+    const activeMembership = await getActiveMembership(locals.user);
     const config = await getConfig(activeMembership.groupId);
 
     let item;
@@ -44,7 +43,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(404, "item not found");
     }
 
-    if (config.suggestions.method === "surprise" && session.user.username !== item.addedBy?.username) {
+    if (config.suggestions.method === "surprise" && locals.user.username !== item.addedBy?.username) {
         error(401, "cannot edit item that you did not create");
     }
 
@@ -59,11 +58,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
     default: async ({ locals, request, params }) => {
-        const session = await locals.validate();
-        if (!session) error(401, "Not authorized");
+        if (!locals.user) error(401, "Not authorized");
         const form = await request.formData();
         const url = form.get("url") as string;
-        const image_url = form.get("image_url") as string;
+        const imageUrl = form.get("image_url") as string;
         const image = form.get("image") as File;
         const name = form.get("name") as string;
         const price = form.get("price") as string;
@@ -74,7 +72,7 @@ export const actions: Actions = {
             return fail(400, { name, missing: true });
         }
 
-        const filename = await createImage(session.user.username, image);
+        const filename = await createImage(locals.user.username, image);
 
         const item = await client.item.findUniqueOrThrow({
             where: {
@@ -90,7 +88,7 @@ export const actions: Actions = {
                 name,
                 price,
                 url,
-                image_url: filename || image_url,
+                imageUrl: filename || imageUrl,
                 note
             },
             include: {
@@ -117,8 +115,8 @@ export const actions: Actions = {
 
         itemEmitter.emit(SSEvents.item.update, updatedItem);
 
-        if (filename && item.image_url && item.image_url !== filename) {
-            await tryDeleteImage(item.image_url);
+        if (filename && item.imageUrl && item.imageUrl !== filename) {
+            await tryDeleteImage(item.imageUrl);
         }
 
         const ref = new URL(request.url).searchParams.get("ref");

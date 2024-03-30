@@ -2,15 +2,14 @@ import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 
-export const _authCheck = async (validate: App.Locals["validate"], groupId: string) => {
-    const session = await validate();
-    if (!session) {
+export const _authCheck = async (locals: App.Locals, groupId: string) => {
+    if (!locals.user) {
         error(401, "Must authenticate first");
     }
 
     const user = await client.user.findFirstOrThrow({
         where: {
-            id: session.user.userId
+            id: locals.user.id
         },
         select: {
             id: true,

@@ -3,9 +3,7 @@ import type { User } from "@prisma/client";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ locals, url }) => {
-    const session = await locals.validate();
-
-    if (!session) error(401, "user is not authenticated");
+    if (!locals.user) error(401, "user is not authenticated");
 
     let users: User[] = [];
 

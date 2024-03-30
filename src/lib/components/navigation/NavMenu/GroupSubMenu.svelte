@@ -11,7 +11,7 @@
     const modalStore = getModalStore();
 
     let userAPI: UserAPI;
-    $: if (user) userAPI = new UserAPI(user.userId);
+    $: if (user) userAPI = new UserAPI(user.id);
 
     const createGroup = () => {
         const settings: ModalSettings = {

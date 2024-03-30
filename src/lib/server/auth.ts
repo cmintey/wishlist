@@ -1,13 +1,17 @@
-import { lucia } from "lucia";
-import { prisma } from "@lucia-auth/adapter-prisma";
+import { Lucia } from "lucia";
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { dev } from "$app/environment";
 import { client } from "./prisma";
-import { sveltekit } from "lucia/middleware";
 
-export const auth = lucia({
-    adapter: prisma(client),
-    middleware: sveltekit(),
-    env: dev ? "DEV" : "PROD",
+const adapter = new PrismaAdapter(client.session, client.user);
+
+export const auth = new Lucia(adapter, {
+    sessionCookie: {
+        attributes: {
+            secure: !dev,
+            path: "/"
+        }
+    },
     getUserAttributes: (data) => {
         return {
             username: data.username,
@@ -19,4 +23,19 @@ export const auth = lucia({
     }
 });
 
-export type Auth = typeof auth;
+declare module "lucia" {
+    interface Register {
+        Lucia: typeof auth;
+        DatabaseSessionAttributes: DatabaseSessionAttributes;
+        DatabaseUserAttributes: DatabaseUserAttributes;
+    }
+}
+
+interface DatabaseSessionAttributes {}
+interface DatabaseUserAttributes {
+    username: string;
+    name: string;
+    email: string;
+    roleId: number;
+    picture?: string | null;
+}
