@@ -6,22 +6,23 @@ import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
+import { LegacyScrypt } from "lucia";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate();
-    if (!session) {
+    const user = locals.user;
+    if (!user) {
         redirect(302, `/login?ref=/account`);
     }
 
     return {
-        user: session.user
+        user
     };
 };
 
 export const actions: Actions = {
     profile: async ({ request, locals }) => {
-        const session = await locals.validate();
-        if (!session) redirect(302, "/login?ref=/account");
+        const user = locals.user;
+        if (!user) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const schema = z.object({
@@ -49,7 +50,7 @@ export const actions: Actions = {
                     email: nameData.data.email
                 },
                 where: {
-                    username: session.user.username
+                    username: user.username
                 }
             });
         } catch (e) {
@@ -64,13 +65,12 @@ export const actions: Actions = {
     },
 
     profilePicture: async ({ request, locals }) => {
-        const session = await locals.validate();
-        if (!session) redirect(302, "/login?ref=/account");
+        if (!locals.user) redirect(302, "/login?ref=/account");
 
         const form = await request.formData();
         const image = form.get("profilePic") as File;
 
-        const filename = await createImage(session.user.username, image);
+        const filename = await createImage(locals.user.username, image);
 
         if (filename) {
             const user = await client.user.findUniqueOrThrow({
@@ -78,12 +78,12 @@ export const actions: Actions = {
                     picture: true
                 },
                 where: {
-                    id: session.user.userId
+                    id: locals.user.id
                 }
             });
             await client.user.update({
                 where: {
-                    id: session.user.userId
+                    id: locals.user.id
                 },
                 data: {
                     picture: filename
@@ -95,9 +95,8 @@ export const actions: Actions = {
         }
     },
 
-    passwordchange: async ({ request, locals }) => {
-        const session = await locals.validate();
-        if (!session) redirect(302, "/login?ref=/account");
+    passwordchange: async ({ request, locals, cookies }) => {
+        if (!(locals.user && locals.session)) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const pwdData = resetPasswordSchema.safeParse(formData);
@@ -113,8 +112,23 @@ export const actions: Actions = {
         }
 
         try {
-            await auth.useKey("username", session.user.username, pwdData.data.oldPassword);
-        } catch {
+            const user = await client.user.findUniqueOrThrow({
+                select: {
+                    hashedPassword: true
+                },
+                where: {
+                    id: locals.user.id
+                }
+            });
+
+            const validPassword = await new LegacyScrypt().verify(user.hashedPassword, pwdData.data.oldPassword);
+            if (!validPassword) {
+                return fail(400, {
+                    error: true,
+                    errors: [{ field: "currentPassword", message: "Incorrect password" }]
+                });
+            }
+        } catch (e) {
             return fail(400, {
                 error: true,
                 errors: [{ field: "currentPassword", message: "Incorrect password" }]
@@ -122,7 +136,27 @@ export const actions: Actions = {
         }
 
         try {
-            await auth.updateKeyPassword("username", session.user.username, pwdData.data.newPassword);
+            const newHashedPassword = await new LegacyScrypt().hash(pwdData.data.newPassword);
+            await client.user.update({
+                data: {
+                    hashedPassword: newHashedPassword
+                },
+                where: {
+                    id: locals.user.id
+                }
+            });
+            const session = await auth.createSession(locals.user.id, {});
+            const sessionCookie = auth.createSessionCookie(session.id);
+            if (pwdData.data.invalidateSessions) {
+                console.log("invalidating all sessions");
+                await auth.invalidateUserSessions(locals.user.id);
+            } else {
+                await auth.invalidateSession(locals.session.id);
+                cookies.set(sessionCookie.name, sessionCookie.value, {
+                    path: "/",
+                    ...sessionCookie.attributes
+                });
+            }
         } catch {
             return fail(400, {
                 error: true,

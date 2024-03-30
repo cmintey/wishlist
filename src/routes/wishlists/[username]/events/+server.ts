@@ -8,8 +8,7 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 
 export const GET = (async ({ locals, params }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         error(401, "Unauthorized");
     }
 
@@ -27,7 +26,7 @@ export const GET = (async ({ locals, params }) => {
                 groupId: true
             },
             where: {
-                userId: session.user.userId,
+                userId: locals.user.id,
                 active: true
             }
         })
@@ -37,7 +36,7 @@ export const GET = (async ({ locals, params }) => {
     if (
         config.suggestions.enable &&
         config.suggestions.method === "surprise" &&
-        params.username === session.user.username
+        params.username === locals.user.username
     ) {
         return new Response();
     }

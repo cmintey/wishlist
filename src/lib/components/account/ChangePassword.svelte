@@ -75,6 +75,10 @@
                 {/each}
             </ul>
         {/if}
+        <label class="unstyled flex flex-row space-x-2">
+            <input id="invalidateSessions" name="invalidateSessions" class="checkbox" type="checkbox" />
+            <span>Sign out of all devices?</span>
+        </label>
         <button
             class="variant-filled-primary btn w-fit"
             disabled={passwordReset.current === "" ||

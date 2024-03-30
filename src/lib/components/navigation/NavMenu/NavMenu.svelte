@@ -6,7 +6,7 @@
     import type { User } from "lucia";
     import GroupSubMenu from "./GroupSubMenu.svelte";
 
-    export let user: User | undefined;
+    export let user: User | null;
 
     const menuSettings: PopupSettings = {
         event: "click",

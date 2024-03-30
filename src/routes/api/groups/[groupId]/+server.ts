@@ -4,7 +4,7 @@ import { client } from "$lib/server/prisma";
 import { _authCheck } from "./auth";
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
-    const { authenticated } = await _authCheck(locals.validate, params.groupId);
+    const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to delete this group");
@@ -34,7 +34,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 };
 
 export const PATCH: RequestHandler = async ({ locals, params, request }) => {
-    const { authenticated } = await _authCheck(locals.validate, params.groupId);
+    const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to modify this group");

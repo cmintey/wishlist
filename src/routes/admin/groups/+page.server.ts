@@ -4,11 +4,10 @@ import { redirect, error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/admin/groups`);
     }
-    if (session.user.roleId !== Role.ADMIN) {
+    if (locals.user.roleId !== Role.ADMIN) {
         error(401, "Not authorized to view admin panel");
     }
 

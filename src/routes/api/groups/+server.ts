@@ -4,8 +4,7 @@ import type { RequestHandler } from "./$types";
 import { Role } from "$lib/schema";
 
 export const PUT: RequestHandler = async ({ locals, request }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         error(401, "Must authenticate first");
     }
 
@@ -20,7 +19,7 @@ export const PUT: RequestHandler = async ({ locals, request }) => {
     });
     await client.userGroupMembership.create({
         data: {
-            userId: session.user.userId,
+            userId: locals.user.id,
             groupId: group.id,
             roleId: Role.GROUP_MANAGER
         }

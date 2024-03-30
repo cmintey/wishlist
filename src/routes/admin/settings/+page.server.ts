@@ -8,11 +8,10 @@ import { settingSchema } from "$lib/validations";
 import type { z } from "zod";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/admin`);
     }
-    if (session.user.roleId !== Role.ADMIN) {
+    if (locals.user.roleId !== Role.ADMIN) {
         error(401, "Not authorized to view admin panel");
     }
 
@@ -25,9 +24,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
     "send-test": async ({ locals }) => {
-        const session = await locals.validate();
-        if (!session) return fail(400);
-        await sendTest(session.user.email);
+        if (!locals.user) return fail(400);
+        await sendTest(locals.user.email);
         return { action: "send-test", success: true };
     },
     settings: async ({ request }) => {

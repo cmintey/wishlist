@@ -7,10 +7,10 @@ import { hashToken } from "$lib/server/token";
 import { getConfig } from "$lib/server/config";
 import { Role } from "$lib/schema";
 import { env } from "$env/dynamic/private";
+import { LegacyScrypt } from "lucia";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
-    const session = await locals.validate();
-    if (session) redirect(302, "/");
+    if (locals.user) redirect(302, "/");
 
     const config = await getConfig();
 
@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ request, locals }) => {
+    default: async ({ request, cookies }) => {
         const formData = Object.fromEntries(await request.formData());
         const signupData = signupSchema.safeParse(formData);
 
@@ -81,30 +81,32 @@ export const actions: Actions = {
         }
 
         try {
-            const user = await auth.createUser({
-                key: {
-                    providerId: "username",
-                    providerUserId: signupData.data.username,
-                    password: signupData.data.password
+            const hashedPassword = await new LegacyScrypt().hash(signupData.data.password);
+            const user = await client.user.create({
+                select: {
+                    id: true
                 },
-                attributes: {
+                data: {
                     username: signupData.data.username,
                     email: signupData.data.email,
+                    hashedPassword,
                     name: signupData.data.name,
                     roleId: userCount > 0 ? Role.USER : Role.ADMIN
                 }
             });
-            const session = await auth.createSession({
-                userId: user.userId,
-                attributes: {}
+
+            const session = await auth.createSession(user.id, {});
+            const sessionCookie = auth.createSessionCookie(session.id);
+            cookies.set(sessionCookie.name, sessionCookie.value, {
+                path: "/",
+                ...sessionCookie.attributes
             });
-            locals.setSession(session);
 
             if (groupId) {
                 await client.userGroupMembership.create({
                     data: {
                         groupId: groupId,
-                        userId: user.userId,
+                        userId: user.id,
                         active: true
                     }
                 });

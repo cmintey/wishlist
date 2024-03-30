@@ -25,7 +25,7 @@
     import { invalidateAll } from "$app/navigation";
 
     export let item: FullItem;
-    export let user: PartialUser & { userId: string };
+    export let user: PartialUser & { id: string };
     export let showClaimedName: boolean;
     export let showFor = false;
 
@@ -33,15 +33,15 @@
     const toastStore = getToastStore();
     const drawerStore = getDrawerStore();
 
-    let image_url: string;
+    let imageUrl: string;
     const itemAPI = new ItemAPI(item.id);
 
-    $: if (item.image_url) {
+    $: if (item.imageUrl) {
         try {
-            new URL(item.image_url);
-            image_url = item.image_url;
+            new URL(item.imageUrl);
+            imageUrl = item.imageUrl;
         } catch {
-            image_url = `/api/assets/${item.image_url}`;
+            imageUrl = `/api/assets/${item.imageUrl}`;
         }
     }
 
@@ -116,7 +116,7 @@
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
 
     const handleClaim = async (unclaim = false) => {
-        const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user.userId));
+        const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user.id));
 
         if (resp.ok) {
             toastStore.trigger({
@@ -161,8 +161,8 @@
     </header>
 
     <div class="flex flex-row space-x-2 p-4">
-        {#if image_url}
-            <img class="h-36 w-36 object-contain" alt="product" src={image_url} />
+        {#if imageUrl}
+            <img class="h-36 w-36 object-contain" alt="product" src={imageUrl} />
         {/if}
 
         <div class="flex flex-col">

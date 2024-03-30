@@ -6,10 +6,9 @@ import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import assert from "assert";
-import type { Session } from "lucia";
 
-const validateItem = async (itemId: string | undefined, session: Session | null) => {
-    if (!session) error(401, "user is not authenticated");
+const validateItem = async (itemId: string | undefined, locals: App.Locals) => {
+    if (!locals.user) error(401, "user is not authenticated");
 
     if (!itemId) {
         error(400, "must specify an item to delete");
@@ -32,7 +31,7 @@ const validateItem = async (itemId: string | undefined, session: Session | null)
                     username: true
                 }
             },
-            image_url: true
+            imageUrl: true
         }
     });
 
@@ -43,22 +42,20 @@ const validateItem = async (itemId: string | undefined, session: Session | null)
 };
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
-    const session = await locals.validate();
-
-    const foundItem = await validateItem(params?.itemId, session);
-    assert(session);
+    const foundItem = await validateItem(params?.itemId, locals);
+    assert(locals.user);
     assert(params.itemId);
 
-    const activeMembership = await getActiveMembership(session.user);
+    const activeMembership = await getActiveMembership(locals.user);
     const config = await getConfig(activeMembership.groupId);
 
     let suggestionDenied = false;
     const suggestionMethod = config.suggestions.method;
-    if (foundItem.user.username === session.user.username && suggestionMethod !== "surprise") {
+    if (foundItem.user.username === locals.user.username && suggestionMethod !== "surprise") {
         suggestionDenied = true;
     }
 
-    if (!suggestionDenied && foundItem.addedBy.username !== session.user.username) {
+    if (!suggestionDenied && foundItem.addedBy.username !== locals.user.username) {
         error(401, "user cannot delete an item they did not create");
     }
 
@@ -76,14 +73,14 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                         username: true
                     }
                 },
-                image_url: true
+                imageUrl: true
             }
         });
 
         itemEmitter.emit(SSEvents.item.delete, item);
 
-        if (item.image_url) {
-            await tryDeleteImage(item.image_url);
+        if (item.imageUrl) {
+            await tryDeleteImage(item.imageUrl);
         }
 
         return new Response(JSON.stringify(item), { status: 200 });
@@ -93,9 +90,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 };
 
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
-    const session = await locals.validate();
-
-    const item = await validateItem(params?.itemId, session);
+    const item = await validateItem(params?.itemId, locals);
 
     const body = (await request.json()) as Record<string, unknown>;
     const data: {
@@ -166,8 +161,8 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             data
         });
 
-        if (deleteOldImage && item.image_url) {
-            await tryDeleteImage(item.image_url);
+        if (deleteOldImage && item.imageUrl) {
+            await tryDeleteImage(item.imageUrl);
         }
 
         itemEmitter.emit(SSEvents.item.update, updatedItem);

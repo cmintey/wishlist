@@ -8,14 +8,13 @@ import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/wishlists/${params.username}/new`);
     }
-    const activeMembership = await getActiveMembership(session.user);
+    const activeMembership = await getActiveMembership(locals.user);
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && session.user.username !== params.username) {
+    if (!config.suggestions.enable && locals.user.username !== params.username) {
         error(401, "Suggestions are disabled");
     }
 
@@ -41,24 +40,23 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     return {
         owner: {
             name: listOwner.name,
-            isMe: listOwner.username === session.user.username
+            isMe: listOwner.username === locals.user.username
         },
-        suggestion: session.user.username !== params.username,
+        suggestion: locals.user.username !== params.username,
         suggestionMethod: config.suggestions.method
     };
 };
 
 export const actions: Actions = {
     default: async ({ request, locals, params }) => {
-        const session = await locals.validate();
-        if (!session) error(401);
+        if (!locals.user) error(401);
 
-        const activeMembership = await getActiveMembership(session.user);
+        const activeMembership = await getActiveMembership(locals.user);
         const config = await getConfig(activeMembership.groupId);
 
         const form = await request.formData();
         const url = form.get("url") as string;
-        const image_url = form.get("image_url") as string;
+        const imageUrl = form.get("image_url") as string;
         const image = form.get("image") as File;
         const name = form.get("name") as string;
         const price = form.get("price") as string;
@@ -69,7 +67,7 @@ export const actions: Actions = {
             return fail(400, { name, missing: true });
         }
 
-        const filename = await createImage(session.user.username, image);
+        const filename = await createImage(locals.user.username, image);
 
         const user = await client.user.findUniqueOrThrow({
             where: {
@@ -84,9 +82,9 @@ export const actions: Actions = {
                 price,
                 url,
                 note,
-                image_url: filename || image_url,
-                addedById: session.user.userId,
-                approved: params.username === session.user.username || config.suggestions.method !== "approval",
+                imageUrl: filename || imageUrl,
+                addedById: locals.user.id,
+                approved: params.username === locals.user.username || config.suggestions.method !== "approval",
                 groupId: activeMembership.groupId
             },
             include: {

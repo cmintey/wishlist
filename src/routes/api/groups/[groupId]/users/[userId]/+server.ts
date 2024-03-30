@@ -5,7 +5,7 @@ import type { RequestHandler } from "./$types";
 import { _authCheck } from "../../auth";
 
 export const GET: RequestHandler = async ({ locals, params }) => {
-    const { authenticated, user } = await _authCheck(locals.validate, params.groupId);
+    const { authenticated, user } = await _authCheck(locals, params.groupId);
 
     if (!authenticated && user.id !== params.userId) {
         error(401, "User is not authorized to view this membership");
@@ -31,7 +31,7 @@ export const GET: RequestHandler = async ({ locals, params }) => {
 };
 
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
-    const { authenticated } = await _authCheck(locals.validate, params.groupId);
+    const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to add a member to this group");
@@ -67,7 +67,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 };
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
-    const { authenticated } = await _authCheck(locals.validate, params.groupId);
+    const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to add a member to this group");
@@ -99,7 +99,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 };
 
 export const PATCH: RequestHandler = async ({ locals, params, request }) => {
-    const { authenticated } = await _authCheck(locals.validate, params.groupId);
+    const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to add a member to this group");

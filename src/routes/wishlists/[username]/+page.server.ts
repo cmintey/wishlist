@@ -7,12 +7,11 @@ import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/wishlists/${params.username}`);
     }
 
-    const activeMembership = await getActiveMembership(session.user);
+    const activeMembership = await getActiveMembership(locals.user);
     const config = await getConfig(activeMembership.groupId);
 
     try {
@@ -37,13 +36,13 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
         }
     };
 
-    if (config.suggestions.method === "approval" && params.username !== session.user.username) {
+    if (config.suggestions.method === "approval" && params.username !== locals.user.username) {
         search.approved = true;
     }
 
-    if (config.suggestions.method === "surprise" && params.username === session.user.username) {
+    if (config.suggestions.method === "surprise" && params.username === locals.user.username) {
         search.addedBy = {
-            username: session.user.username
+            username: locals.user.username
         };
     }
 
@@ -101,9 +100,9 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
     const [wishlistItems, listOwner] = await Promise.all([wishlistItemsQuery, listOwnerQuery]);
 
     return {
-        user: session.user,
+        user: locals.user,
         listOwner: {
-            isMe: params.username === session.user.username,
+            isMe: params.username === locals.user.username,
             ...listOwner
         },
         items: wishlistItems,

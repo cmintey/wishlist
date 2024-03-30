@@ -8,7 +8,7 @@
     import BackButton from "../BackButton.svelte";
 
     export let navItems: NavItem[];
-    export let user: User | undefined;
+    export let user: User | null;
 
     const drawerStore = getDrawerStore();
     const drawerSettings: DrawerSettings = {

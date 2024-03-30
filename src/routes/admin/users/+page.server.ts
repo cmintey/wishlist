@@ -6,11 +6,10 @@ import type { Actions, PageServerLoad } from "./$types";
 import { inviteUser } from "$lib/server/invite-user";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate();
-    if (!session) {
+    if (!locals.user) {
         redirect(302, `/login?ref=/admin/users`);
     }
-    if (session.user.roleId !== Role.ADMIN) {
+    if (locals.user.roleId !== Role.ADMIN) {
         error(401, "Not authorized to view admin panel");
     }
 
@@ -41,7 +40,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     return {
         user: {
             isAdmin: true,
-            ...session.user
+            ...locals.user
         },
         users: users.map((user) => ({
             isAdmin: user.role.id === Role.ADMIN,
