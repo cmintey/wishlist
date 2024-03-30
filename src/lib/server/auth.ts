@@ -2,13 +2,15 @@ import { Lucia } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { dev } from "$app/environment";
 import { client } from "./prisma";
+import { env } from "$env/dynamic/private";
 
 const adapter = new PrismaAdapter(client.session, client.user);
 
+const origin = new URL(env.ORIGIN || "localhost:3280");
 export const auth = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
-            secure: !dev,
+            secure: !dev && origin.protocol === "https:",
             path: "/"
         }
     },
