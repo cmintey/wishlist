@@ -1,6 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import Claims from "$lib/components/admin/SettingsForm/Claims.svelte";
+    import ListMode from "$lib/components/admin/SettingsForm/ListMode.svelte";
     import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
     import type { PageData } from "./$types";
 
@@ -20,6 +21,9 @@
     }}
 >
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="col-span-1">
+            <ListMode bind:mode={data.config.listMode} />
+        </div>
         <div class="col-span-1">
             <Suggestions bind:enabled={data.config.suggestions.enable} bind:method={data.config.suggestions.method} />
         </div>

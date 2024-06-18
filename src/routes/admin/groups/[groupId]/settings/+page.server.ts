@@ -46,7 +46,8 @@ export const actions: Actions = {
         const groupSettingSchema = settingSchema.pick({
             suggestionMethod: true,
             enableSuggestions: true,
-            claimsShowName: true
+            claimsShowName: true,
+            listMode: true
         });
 
         const configData = groupSettingSchema.safeParse(formData);
@@ -68,7 +69,8 @@ export const actions: Actions = {
             },
             claims: {
                 showName: configData.data.claimsShowName
-            }
+            },
+            listMode: configData.data.listMode
         };
         await writeConfig(newConfig, params.groupId);
 
