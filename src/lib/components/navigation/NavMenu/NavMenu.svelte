@@ -16,7 +16,7 @@
 
 {#if user}
     <div class="flex md:pr-4">
-        <button use:popup={menuSettings}>
+        <button class="h-10 md:h-12" use:popup={menuSettings}>
             <Avatar {user} width="h-10 md:h-12" />
         </button>
         <div>
