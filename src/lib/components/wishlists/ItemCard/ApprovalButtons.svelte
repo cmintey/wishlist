@@ -5,7 +5,7 @@
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
 
     export let item: FullItem;
-    export let user: PartialUser;
+    export let user: PartialUser | undefined;
 
     const dispatch = createEventDispatcher();
 </script>
@@ -18,7 +18,7 @@
         <button class="variant-filled-error btn btn-sm md:btn" on:click|stopPropagation={() => dispatch("deny")}>
             Deny
         </button>
-    {:else if user.username === item.user?.username || user.username === item.addedBy?.username}
+    {:else if user?.username === item.user?.username || user?.username === item.addedBy?.username}
         <button
             class="variant-ghost-primary btn btn-sm md:btn"
             on:click|stopPropagation={() => goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`)}

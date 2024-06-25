@@ -7,8 +7,8 @@ import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import assert from "assert";
 
-const validateItem = async (itemId: string | undefined, locals: App.Locals) => {
-    if (!locals.user) error(401, "user is not authenticated");
+const validateItem = async (itemId: string | undefined, locals: App.Locals, checkPublic = false) => {
+    if (!checkPublic && !locals.user) error(401, "user is not authenticated");
 
     if (!itemId) {
         error(400, "must specify an item to delete");
@@ -28,7 +28,13 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals) => {
             },
             user: {
                 select: {
-                    username: true
+                    username: true,
+                    id: true
+                }
+            },
+            group: {
+                select: {
+                    id: true
                 }
             },
             imageUrl: true
@@ -38,6 +44,21 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals) => {
     if (!item) {
         error(404, "item id not found");
     }
+
+    if (checkPublic) {
+        const count = await client.publicList.count({
+            where: {
+                userId: item.user.id,
+                groupId: item.group!.id
+            }
+        });
+        if (!locals.user && count > 0) {
+            return item;
+        } else {
+            error(401, "Item is not public. User is not authenticated");
+        }
+    }
+
     return item;
 };
 
@@ -90,9 +111,9 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 };
 
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
-    const item = await validateItem(params?.itemId, locals);
-
     const body = (await request.json()) as Record<string, unknown>;
+    const item = await validateItem(params?.itemId, locals, body.publicPledgedById !== undefined);
+
     const data: {
         name?: string;
         price?: string;
@@ -100,6 +121,10 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
         note?: string;
         image_url?: string;
         pledgedBy?: {
+            connect?: { id: string };
+            disconnect?: boolean;
+        };
+        publicPledgedBy?: {
             connect?: { id: string };
             disconnect?: boolean;
         };
@@ -129,6 +154,19 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             };
         }
     }
+    if (body.publicPledgedById && typeof body.publicPledgedById === "string") {
+        if (body.publicPledgedById === "0") {
+            data.publicPledgedBy = {
+                disconnect: true
+            };
+        } else {
+            data.publicPledgedBy = {
+                connect: {
+                    id: body.publicPledgedById
+                }
+            };
+        }
+    }
     if (Object.keys(body).includes("approved") && typeof body.approved === "boolean") data.approved = body.approved;
     if (Object.keys(body).includes("purchased") && typeof body.purchased === "boolean") data.purchased = body.purchased;
 
@@ -146,6 +184,12 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
                     }
                 },
                 pledgedBy: {
+                    select: {
+                        username: true,
+                        name: true
+                    }
+                },
+                publicPledgedBy: {
                     select: {
                         username: true,
                         name: true

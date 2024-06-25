@@ -108,6 +108,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
         items: wishlistItems,
         suggestionsEnabled: config.suggestions.enable,
         showClaimedName: config.claims.showName,
+        listMode: config.listMode,
         groupId: activeMembership.groupId
     };
 };

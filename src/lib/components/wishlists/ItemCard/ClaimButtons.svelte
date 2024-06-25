@@ -4,16 +4,17 @@
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
 
     export let item: FullItem;
-    export let user: PartialUser;
+    export let user: PartialUser | undefined;
     export let showName: boolean;
+    export let onPublicList = false;
 
     const dispatch = createEventDispatcher();
 </script>
 
-{#if user.username === $page.params.username}
+{#if !onPublicList && user?.username === $page.params?.username}
     <div />
-{:else if item.pledgedBy}
-    {#if item.pledgedBy.username === user.username}
+{:else if item.pledgedBy || item.publicPledgedBy}
+    {#if !onPublicList && item.pledgedBy?.username === user?.username}
         <div class="flex flex-row space-x-2 md:space-x-4">
             <button
                 class="variant-ghost-secondary btn btn-sm md:btn"
@@ -33,7 +34,7 @@
             </label>
         </div>
     {:else if showName}
-        <span>Claimed by {item.pledgedBy?.name}</span>
+        <span>Claimed by {item.publicPledgedBy ? item.publicPledgedBy?.name : item.pledgedBy?.name}</span>
     {:else}
         <span>Claimed</span>
     {/if}

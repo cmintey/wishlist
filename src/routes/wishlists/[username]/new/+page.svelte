@@ -16,6 +16,7 @@
         userId: "",
         addedById: "",
         pledgedById: null,
+        publicPledgedById: null,
         approved: true,
         purchased: false,
         groupId: null

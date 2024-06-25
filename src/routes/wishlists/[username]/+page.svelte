@@ -13,6 +13,8 @@
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
     import { SSEvents } from "$lib/schema";
+    import { PublicListAPI } from "$lib/api/lists";
+    import TokenCopy from "$lib/components/TokenCopy.svelte";
 
     export let data: PageData;
     type Item = PageData["items"][0];
@@ -92,6 +94,22 @@
         }
         allItems = [...allItems, addedItem];
     };
+
+    let publicListUrl: URL;
+    const getOrCreatePublicList = async () => {
+        let publicListId = "";
+        const publicListApi = new PublicListAPI(data.groupId);
+        const resp = await publicListApi.get();
+        if (resp.ok) {
+            publicListId = (await resp.json()).id;
+        } else {
+            const createResp = await publicListApi.create();
+            if (createResp.ok) {
+                publicListId = (await createResp.json()).id;
+            }
+        }
+        publicListUrl = new URL(`/lists/${publicListId}`, window.location as unknown as URL);
+    };
 </script>
 
 <!-- chips -->
@@ -101,6 +119,18 @@
             <ClaimFilterChip />
         {/if}
         <SortBy />
+    </div>
+{/if}
+
+{#if data.listMode === "registry"}
+    <div class="flex flex-row space-x-2 pb-4">
+        {#if publicListUrl}
+            <div class="flex flex-row">
+                <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>Public URL</TokenCopy>
+            </div>
+        {:else}
+            <button class="variant-ringed-surface btn btn-sm" on:click={getOrCreatePublicList}>Share List</button>
+        {/if}
     </div>
 {/if}
 

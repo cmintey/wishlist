@@ -27,6 +27,15 @@ model User {
     @@map("user")
 }
 
+model SystemUser {
+    id       String  @id @unique @default(cuid())
+    username String
+    name     String? @default("Anonymous")
+    Item     Item[]  @relation("PublicPledgedItems")
+
+    @@map("system_user")
+}
+
 model Session {
     id        String   @id @unique
     userId    String
@@ -73,22 +82,24 @@ model UserGroupMembership {
 }
 
 model Item {
-    id          Int     @id @unique @default(autoincrement())
-    name        String
-    price       String?
-    url         String?
-    note        String?
-    imageUrl    String?
-    user        User    @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
-    userId      String
-    addedBy     User    @relation(name: "AddedItems", fields: [addedById], references: [id], onDelete: Cascade)
-    addedById   String
-    pledgedBy   User?   @relation(name: "PledgedItems", fields: [pledgedById], references: [id], onDelete: SetNull)
-    pledgedById String?
-    approved    Boolean @default(true)
-    purchased   Boolean @default(false)
-    group       Group?  @relation(fields: [groupId], references: [id], onDelete: Cascade)
-    groupId     String?
+    id                Int         @id @unique @default(autoincrement())
+    name              String
+    price             String?
+    url               String?
+    note              String?
+    imageUrl          String?
+    user              User        @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
+    userId            String
+    addedBy           User        @relation(name: "AddedItems", fields: [addedById], references: [id], onDelete: Cascade)
+    addedById         String
+    pledgedBy         User?       @relation(name: "PledgedItems", fields: [pledgedById], references: [id], onDelete: SetNull)
+    pledgedById       String?
+    publicPledgedBy   SystemUser? @relation(name: "PublicPledgedItems", fields: [publicPledgedById], references: [id], onDelete: SetNull)
+    publicPledgedById String?
+    approved          Boolean     @default(true)
+    purchased         Boolean     @default(false)
+    group             Group?      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    groupId           String?
 
     @@index([userId])
     @@index([pledgedById])
