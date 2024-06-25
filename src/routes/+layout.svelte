@@ -56,7 +56,8 @@
     initializeStores();
 
     const scrollHandler = (event: ComponentEvents<AppShell>["scroll"]) => {
-        scrollPosition = event.currentTarget.scrollTop;
+        //@ts-expect-error scrollTop doesn't exist on currentTarget
+        scrollPosition = event.currentTarget?.scrollTop;
     };
 
     onMount(() => {
