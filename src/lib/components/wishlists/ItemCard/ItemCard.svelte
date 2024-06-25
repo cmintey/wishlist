@@ -3,9 +3,14 @@
         username: string;
         name: string;
     };
+    export type PublicUser = {
+        username: string;
+        name: string | null;
+    };
     export type FullItem = Item & {
         addedBy: PartialUser | null;
         pledgedBy: PartialUser | null;
+        publicPledgedBy?: PublicUser | null;
         user: PartialUser | null;
     };
 </script>
@@ -25,9 +30,10 @@
     import { invalidateAll } from "$app/navigation";
 
     export let item: FullItem;
-    export let user: PartialUser & { id: string };
-    export let showClaimedName: boolean;
+    export let user: (PartialUser & { id: string }) | undefined = undefined;
+    export let showClaimedName = false;
     export let showFor = false;
+    export let onPublicList = false;
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
@@ -116,16 +122,41 @@
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
 
     const handleClaim = async (unclaim = false) => {
-        const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user.id));
+        if (user?.id) {
+            const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user?.id));
 
-        if (resp.ok) {
-            toastStore.trigger({
-                message: `${unclaim ? "Unclaimed" : "Claimed"} item`,
-                autohide: true,
-                timeout: 5000
-            });
+            if (resp.ok) {
+                toastStore.trigger({
+                    message: `${unclaim ? "Unclaimed" : "Claimed"} item`,
+                    autohide: true,
+                    timeout: 5000
+                });
+            } else {
+                triggerErrorToast();
+            }
         } else {
-            triggerErrorToast();
+            modalStore.trigger({
+                type: "component",
+                component: "createSystemUser",
+                async response(data: { id?: string }) {
+                    if (unclaim) {
+                        return;
+                    }
+                    if (data.id) {
+                        const resp = await itemAPI.publicClaim(data.id);
+
+                        if (resp.ok) {
+                            toastStore.trigger({
+                                message: "Claimed item",
+                                autohide: true,
+                                timeout: 5000
+                            });
+                        } else {
+                            triggerErrorToast();
+                        }
+                    }
+                }
+            });
         }
     };
 
@@ -173,7 +204,7 @@
             <span class="text-base md:text-lg">
                 {#if showFor}
                     For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
-                {:else}
+                {:else if !onPublicList}
                     Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
                 {/if}
             </span>
@@ -184,6 +215,7 @@
     <footer class="card-footer flex flex-row justify-between">
         <ClaimButtons
             {item}
+            {onPublicList}
             showName={showClaimedName}
             {user}
             on:claim={() => handleClaim()}

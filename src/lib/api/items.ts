@@ -38,6 +38,10 @@ export class ItemAPI {
         return await this._makeRequest("PATCH", { pledgedById: "0" });
     };
 
+    publicClaim = async (systemUserId: string) => {
+        return await this._makeRequest("PATCH", { publicPledgedById: systemUserId });
+    };
+
     purchase = async () => {
         return await this._makeRequest("PATCH", { purchased: true });
     };

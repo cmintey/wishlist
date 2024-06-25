@@ -79,7 +79,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         smtp: smtpConfig,
         claims: {
             showName: configData.claimsShowName
-        }
+        },
+        listMode: "standard"
     };
 
     return newConfig;

@@ -38,5 +38,10 @@ export const settingSchema = z.object({
     smtpPass: z.string().optional(),
     smtpFrom: z.string().optional(),
     smtpFromName: z.string().optional(),
-    claimsShowName: z.coerce.boolean().default(false)
+    claimsShowName: z.coerce.boolean().default(false),
+    listMode: z.enum(["standard", "registry"]).default("standard")
+});
+
+export const publicListCreateSchema = z.object({
+    groupId: z.string()
 });

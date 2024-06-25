@@ -27,6 +27,8 @@ type ProductData = {
 
 type SuggestionMethod = "surprise" | "auto-approval" | "approval";
 
+type ListMode = "standard" | "registry";
+
 type SMTPConfig =
     | {
           enable: false;
@@ -57,6 +59,7 @@ type Config = {
     claims: {
         showName: boolean;
     };
+    listMode: ListMode;
 };
 
 type Option = {

@@ -4,6 +4,7 @@
     import { fade } from "svelte/transition";
 
     export let url: string;
+    export let btnStyle = "btn-icon";
     const dispatch = createEventDispatcher();
 
     let copiedVisible = false;
@@ -23,7 +24,7 @@
     </span>
     <div class="flex flex-row items-center">
         <button
-            class="btn btn-icon"
+            class="btn {btnStyle}"
             type="button"
             on:click={() => {
                 dispatch("copied");
