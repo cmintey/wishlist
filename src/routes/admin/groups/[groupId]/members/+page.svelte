@@ -7,6 +7,7 @@
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
     import { enhance } from "$app/forms";
+    import Alert from "$lib/components/Alert.svelte";
 
     export let data: PageData;
 
@@ -90,18 +91,10 @@
         </form>
     </div>
 {:else}
-    <aside class="alert variant-ghost-primary mb-2">
-        <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
-            <iconify-icon class="text-4xl" icon="ion:information-circle" />
-            <div>
-                <p>
-                    This group is in <b>Registry Mode</b>
-                    . No additional members can be added in this mode. You can get a public link to your list on your list
-                    page.
-                </p>
-            </div>
-        </div>
-    </aside>
+    <Alert type="info">
+        This group is in <b>Registry Mode</b>
+        . No additional members can be added in this mode. You can get a public link to your list on your list page.
+    </Alert>
 {/if}
 
 <div class="flex flex-col space-y-2">

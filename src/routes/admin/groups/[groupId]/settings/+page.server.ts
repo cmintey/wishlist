@@ -33,10 +33,18 @@ export const load = (async ({ locals, params }) => {
         }
     });
 
-    const config = await getConfig(group.id);
+    const [membershipCount, config] = await Promise.all([
+        await client.userGroupMembership.count({
+            where: {
+                groupId: group.id
+            }
+        }),
+        getConfig(group.id)
+    ]);
 
     return {
-        config
+        config,
+        membershipCount
     };
 }) satisfies PageServerLoad;
 

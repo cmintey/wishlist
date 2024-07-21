@@ -20,9 +20,9 @@
         };
     }}
 >
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 pb-2 md:grid-cols-2">
         <div class="col-span-1">
-            <ListMode bind:mode={data.config.listMode} />
+            <ListMode disabled={data.membershipCount > 1} bind:mode={data.config.listMode} />
         </div>
         <div class="col-span-1">
             <Suggestions bind:enabled={data.config.suggestions.enable} bind:method={data.config.suggestions.method} />
