@@ -138,7 +138,7 @@ model SystemConfig {
 }
 
 model PublicList {
-    id      String @id @unique @default(uuid())
+    id      String @id @unique @default(cuid())
     userId  String
     groupId String
     user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
