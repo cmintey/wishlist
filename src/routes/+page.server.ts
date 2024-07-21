@@ -13,6 +13,9 @@ export const load = (async ({ locals }) => {
 
     const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);
+    if (config.listMode === "registry") {
+        redirect(302, "/wishlists/me");
+    }
 
     const userQuery = client.user.findUniqueOrThrow({
         select: {
