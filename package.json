@@ -57,6 +57,7 @@
     "dependencies": {
         "@lucia-auth/adapter-prisma": "^4.0.1",
         "@metascraper/helpers": "^5.45.10",
+        "@paralleldrive/cuid2": "^2.2.2",
         "@prisma/client": "^5.15.1",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
