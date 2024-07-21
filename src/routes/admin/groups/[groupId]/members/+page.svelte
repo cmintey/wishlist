@@ -75,15 +75,34 @@
     };
 </script>
 
-<div class="flex space-x-4 py-4">
-    <button class="variant-filled-primary btn" type="button" on:click={() => modalStore.trigger(addUserModalSettings)}>
-        <iconify-icon icon="ion:person-add" />
-        <span>Add Member</span>
-    </button>
-    <form method="POST" use:enhance>
-        <InviteUser config={data.config} defaultGroup={data.group} />
-    </form>
-</div>
+{#if data.config.listMode !== "registry"}
+    <div class="flex space-x-4 py-4">
+        <button
+            class="variant-filled-primary btn"
+            type="button"
+            on:click={() => modalStore.trigger(addUserModalSettings)}
+        >
+            <iconify-icon icon="ion:person-add" />
+            <span>Add Member</span>
+        </button>
+        <form method="POST" use:enhance>
+            <InviteUser config={data.config} defaultGroup={data.group} />
+        </form>
+    </div>
+{:else}
+    <aside class="alert variant-ghost-primary mb-2">
+        <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
+            <iconify-icon class="text-4xl" icon="ion:information-circle" />
+            <div>
+                <p>
+                    This group is in <b>Registry Mode</b>
+                    . No additional members can be added in this mode. You can get a public link to your list on your list
+                    page.
+                </p>
+            </div>
+        </div>
+    </aside>
+{/if}
 
 <div class="flex flex-col space-y-2">
     <div class="table-container">

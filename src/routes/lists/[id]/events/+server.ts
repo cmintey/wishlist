@@ -8,8 +8,6 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 
 export const GET = (async ({ params }) => {
-    // TODO:  This endpoint should only be accessible to public users who are not signed in and has a valid public id
-
     const list = await client.publicList.findUnique({
         select: {
             userId: true,
