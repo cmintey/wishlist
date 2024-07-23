@@ -59,3 +59,22 @@ export class UsersAPI {
         return await this._makeRequest("GET", `?name=${search}`);
     };
 }
+
+export class SystemUsersAPI {
+    _makeRequest = async (method: string, body: Record<string, any>) => {
+        const options: RequestInit = {
+            method,
+            headers: {
+                "content-type": "application/json",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        };
+
+        return await fetch(`/api/users/public`, options);
+    };
+
+    create = async (username: string, name?: string) => {
+        return await this._makeRequest("POST", { username, name });
+    };
+}

@@ -7,6 +7,7 @@
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
     import { enhance } from "$app/forms";
+    import Alert from "$lib/components/Alert.svelte";
 
     export let data: PageData;
 
@@ -75,15 +76,26 @@
     };
 </script>
 
-<div class="flex space-x-4 py-4">
-    <button class="variant-filled-primary btn" type="button" on:click={() => modalStore.trigger(addUserModalSettings)}>
-        <iconify-icon icon="ion:person-add" />
-        <span>Add Member</span>
-    </button>
-    <form method="POST" use:enhance>
-        <InviteUser config={data.config} defaultGroup={data.group} />
-    </form>
-</div>
+{#if data.config.listMode !== "registry"}
+    <div class="flex space-x-4 py-4">
+        <button
+            class="variant-filled-primary btn"
+            type="button"
+            on:click={() => modalStore.trigger(addUserModalSettings)}
+        >
+            <iconify-icon icon="ion:person-add" />
+            <span>Add Member</span>
+        </button>
+        <form method="POST" use:enhance>
+            <InviteUser config={data.config} defaultGroup={data.group} />
+        </form>
+    </div>
+{:else}
+    <Alert type="info">
+        This group is in <b>Registry Mode</b>
+        . No additional members can be added in this mode. You can get a public link to your list on your list page.
+    </Alert>
+{/if}
 
 <div class="flex flex-col space-y-2">
     <div class="table-container">

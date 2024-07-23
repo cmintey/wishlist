@@ -19,6 +19,7 @@
     import PullToRefresh from "pulltorefreshjs";
     import { navItems } from "$lib/components/navigation/navigation";
     import Drawer from "$lib/components/Drawer.svelte";
+    import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
 
     export let data: LayoutData;
 
@@ -29,7 +30,8 @@
         "/forgot-password",
         "/reset-password",
         "/group-error",
-        /\/setup-wizard\/?.*/
+        /\/setup-wizard\/?.*/,
+        "/lists"
     ];
 
     let showNavigationLoadingBar = false;
@@ -88,6 +90,9 @@
         },
         inviteUser: {
             ref: InviteUserModal
+        },
+        createSystemUser: {
+            ref: CreateSystemUser
         }
     };
 </script>
