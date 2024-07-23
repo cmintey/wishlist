@@ -78,6 +78,12 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
                     name: true
                 }
             },
+            publicPledgedBy: {
+                select: {
+                    username: true,
+                    name: true
+                }
+            },
             user: {
                 select: {
                     username: true,
