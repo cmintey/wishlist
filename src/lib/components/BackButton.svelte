@@ -11,7 +11,7 @@
         "/forgot-password",
         "/reset-password",
         "/group-error",
-        /\/setup-wizard\/.*/,
+        /\/setup-wizard\/?.*/,
         "/lists"
     ];
 
