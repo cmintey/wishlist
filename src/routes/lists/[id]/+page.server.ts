@@ -1,6 +1,7 @@
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { getConfig } from "$lib/server/config";
 
 export const load = (async ({ params }) => {
     const list = await client.publicList.findUnique({
@@ -13,6 +14,11 @@ export const load = (async ({ params }) => {
         }
     });
     if (!list) {
+        error(404, "Public list not found");
+    }
+
+    const config = await getConfig(list.groupId);
+    if (config.listMode !== "registry") {
         error(404, "Public list not found");
     }
 

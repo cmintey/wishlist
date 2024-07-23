@@ -44,7 +44,6 @@
         eventSource = new EventSource(`${$page.url.pathname}/events`);
         eventSource.addEventListener(SSEvents.item.update, (e) => {
             const message = JSON.parse(e.data) as Item;
-            console.log(message);
             updateItems(message);
         });
         eventSource.addEventListener(SSEvents.item.delete, (e) => {
