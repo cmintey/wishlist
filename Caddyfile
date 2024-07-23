@@ -10,7 +10,7 @@
 	}
 
     @not_sse {
-        not path /api/events
+        not path /wishlists/*/events
     }
 
     # Handles User Images
