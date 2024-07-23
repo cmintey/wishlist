@@ -6,7 +6,7 @@ COPY ./ .
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
-RUN npm i -g pnpm@latest-8
+RUN npm i -g pnpm@latest-9
 RUN pnpm i --frozen-lockfile
 RUN pnpm prisma generate
 RUN pnpm run build
@@ -36,7 +36,7 @@ COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
-RUN npm i -g pnpm@latest-8
+RUN npm i -g pnpm@latest-9
 RUN chmod +x entrypoint.sh
 
 VOLUME /usr/src/app/uploads
