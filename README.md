@@ -17,6 +17,7 @@ Wishlist is a self-hosted wishlist application that you can share with your frie
 -   [x] Options for [suggestions](#suggestions)
 -   [x] PWA Support
 -   [x] Group support
+-   [x] Registry Mode
 -   [ ] Draw names for a "secret santa" experience
 
 ## Getting Started
@@ -55,6 +56,12 @@ You can now connect to your application at `http://<host>:3280`.
 Wishlist has support for multiple wishlist groups. For example, you can have one group for friends and one for family. The wishes on these lists will be completely separate. You can switch between groups using the menu when you click on your profile picture.
 
 Currently, anyone can create a group. The group creator is automatically added as a "manager" of the group. A Group Manager can invite users to Wishlist and add/remove existing users to the group they manage. The Group Manager can also delete the group. An Admin will have the same permissions as the Group Manager.
+
+## Registry Mode
+
+Wishlist has the ability to turn a group into a Registry. In this mode, only a single user can be part of the group and there is only one list. The owner of the group can add items to the list as normal and then get a public link to share out to friends and family. Users accessing this link will not need to sign in or create an account. Public users can view the items on the list and also claim items. In order to claim an item, the user just needs to enter some identifier (email for example) and can optionally add their name. Currently there is no way to un-claim items that are claimed in this manner.
+
+To activate this mode, go to the admin panel of your group and change the mode from "Wishlist" to "Registry".
 
 ## Configuration
 
