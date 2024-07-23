@@ -2,6 +2,7 @@ import { client } from "$lib/server/prisma";
 import { publicListCreateSchema } from "$lib/validations";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { init } from "@paralleldrive/cuid2";
+import { getConfig } from "$lib/server/config";
 
 export const GET: RequestHandler = async ({ request, locals }) => {
     if (!locals.user) {
@@ -13,6 +14,11 @@ export const GET: RequestHandler = async ({ request, locals }) => {
     const groupId = url.searchParams.get("groupId");
     if (!groupId) {
         error(422, "Missing groupId from request parameters");
+    }
+
+    const config = await getConfig(groupId);
+    if (config.listMode !== "registry") {
+        error(422, "Group is not in registry mode. Cannot get a public link");
     }
 
     const existingList = await client.publicList.findFirst({
@@ -42,6 +48,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         error(422, data.error.message);
     }
     const groupId = data.data.groupId;
+
+    const config = await getConfig(groupId);
+    if (config.listMode !== "registry") {
+        error(422, "Group is not in registry mode. Cannot get a public link");
+    }
 
     const existingList = await client.publicList.findFirst({
         select: {
