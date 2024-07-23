@@ -29,7 +29,7 @@
         "/forgot-password",
         "/reset-password",
         "/group-error",
-        /\/setup-wizard\/.*/
+        /\/setup-wizard\/?.*/
     ];
 
     let showNavigationLoadingBar = false;
