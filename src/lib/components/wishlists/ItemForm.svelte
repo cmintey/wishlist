@@ -10,7 +10,7 @@
 
     $: form = $page.form;
     let loading = false;
-    let urlChanged = false;
+    let urlFetched = false;
     const toastStore = getToastStore();
 
     const formatPrice = (price: number | null, currency: string | null) => {
@@ -40,7 +40,7 @@
     };
 
     const getInfo = async () => {
-        if (data.url && urlChanged) {
+        if (data.url && !urlFetched) {
             loading = true;
             const url = extractUrl(data.url);
             const res = await fetch(`/api/product?url=${url}`);
@@ -54,7 +54,7 @@
                 triggerToast();
             }
             loading = false;
-            urlChanged = false;
+            urlFetched = true;
         }
     };
 </script>
@@ -62,20 +62,47 @@
 <div class="grid grid-cols-1 gap-4 md:grid-cols-6">
     <label class="col-span-1 md:col-span-6" for="url">
         <span>Item URL</span>
-        <div class="input-group grid-cols-[auto_1fr]">
-            <div class="input-group-shim">
-                <iconify-icon icon="ion:bag-handle"></iconify-icon>
+        <div class="flex flex-row space-x-4">
+            <div class="input-group grid-cols-[auto_1fr_auto]">
+                <div class="input-group-shim">
+                    <iconify-icon icon="ion:bag-handle"></iconify-icon>
+                </div>
+                <input
+                    id="url"
+                    name="url"
+                    class="input"
+                    placeholder="Enter a URL to fetch the item data"
+                    type="url"
+                    bind:value={data.url}
+                    on:focusout={() => getInfo()}
+                />
+                {#if data.url}
+                    <button
+                        id="reset-field"
+                        tabindex="-1"
+                        type="button"
+                        on:click={() => (data.url = null)}
+                        on:keypress|preventDefault
+                    >
+                        <iconify-icon icon="ion:close-circle" />
+                    </button>
+                {/if}
             </div>
-            <input
-                id="url"
-                name="url"
-                class="input"
-                placeholder="Enter a URL to fetch the item data"
-                type="url"
-                bind:value={data.url}
-                on:focusout={() => getInfo()}
-                on:change={() => (urlChanged = true)}
-            />
+            {#if data.url}
+                <button
+                    id="refresh-item"
+                    class="variant-ghost-primary btn btn-icon"
+                    tabindex="-1"
+                    type="button"
+                    on:click|preventDefault={() => {
+                        urlFetched = false;
+                        getInfo();
+                    }}
+                    on:keypress|preventDefault
+                >
+                    <iconify-icon icon="ion:refresh" />
+                </button>
+            {/if}
         </div>
     </label>
 
