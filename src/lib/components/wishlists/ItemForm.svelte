@@ -78,7 +78,7 @@
                 />
                 {#if data.url}
                     <button
-                        id="showpassword"
+                        id="reset-field"
                         tabindex="-1"
                         type="button"
                         on:click={() => (data.url = null)}
@@ -90,7 +90,7 @@
             </div>
             {#if data.url}
                 <button
-                    id="showpassword"
+                    id="refresh-item"
                     class="variant-ghost-primary btn btn-icon"
                     tabindex="-1"
                     type="button"
