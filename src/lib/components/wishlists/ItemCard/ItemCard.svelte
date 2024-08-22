@@ -101,6 +101,7 @@
                         autohide: true,
                         timeout: 5000
                     });
+                    drawerStore.close();
                 } else {
                     triggerErrorToast();
                 }
@@ -148,6 +149,7 @@
                 }
             });
         }
+        drawerStore.close();
     };
 
     const handlePurchased = async (purchased: boolean) => {
