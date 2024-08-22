@@ -77,6 +77,7 @@
                         autohide: true,
                         timeout: 5000
                     });
+                    drawerStore.close();
                 } else {
                     triggerErrorToast();
                 }
@@ -106,17 +107,6 @@
             }
         }
     });
-
-    const drawerSettings: DrawerSettings = {
-        id: "item",
-        position: "bottom",
-        height: "max-h-fit",
-        padding: "md:px-12 lg:px-32 xl:px-56",
-        meta: {
-            item,
-            showFor
-        }
-    };
 
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
@@ -162,6 +152,24 @@
 
     const handlePurchased = async (purchased: boolean) => {
         await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
+    };
+
+    const drawerSettings: DrawerSettings = {
+        id: "item",
+        position: "bottom",
+        height: "max-h-fit",
+        padding: "md:px-12 lg:px-32 xl:px-56",
+        meta: {
+            item,
+            showFor,
+            user,
+            showClaimedName,
+            onPublicList,
+            handleClaim,
+            handleDelete,
+            handlePurchased,
+            handleApproval
+        }
     };
 </script>
 
