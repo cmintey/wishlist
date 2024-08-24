@@ -18,7 +18,7 @@ export const createImage = async (username: string, image: File): Promise<string
 export const deleteImage = async (filename: string): Promise<void> => {
     try {
         await unlink(`uploads/${filename}`);
-    } catch (e) {
+    } catch {
         console.warn("Unable to delete file: ", filename);
     }
 };

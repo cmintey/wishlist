@@ -152,7 +152,7 @@ export default () => {
 
                 try {
                     if (image) new URL(image); //catch if not a valid URL and assume it's because of protocol
-                } catch (e) {
+                } catch {
                     if (image) return `${protocol}${image}`;
                 }
 

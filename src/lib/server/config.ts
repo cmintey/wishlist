@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { client } from "./prisma";
 
 const GLOBAL = "global";

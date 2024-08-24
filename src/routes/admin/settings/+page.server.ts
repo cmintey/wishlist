@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Role } from "$lib/schema";
 import { getConfig, writeConfig } from "$lib/server/config";
 import { redirect, error, fail, type Actions } from "@sveltejs/kit";

@@ -105,7 +105,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
         }
 
         return new Response(JSON.stringify(item), { status: 200 });
-    } catch (e) {
+    } catch {
         error(404, "item id not found");
     }
 };
@@ -212,7 +212,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
         itemEmitter.emit(SSEvents.item.update, updatedItem);
 
         return new Response(JSON.stringify(updatedItem), { status: 200 });
-    } catch (e) {
+    } catch {
         error(404, "item id not found");
     }
 };
