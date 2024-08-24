@@ -5,7 +5,6 @@ declare global {
     /// <reference types="@sveltejs/kit" />
     declare namespace App {
         // Locals must be an interface and not a type
-        // eslint-disable-next-line @typescript-eslint/no-empty-interface
         interface Locals {
             user: import("lucia").User | null;
             session: import("lucia").Session | null;

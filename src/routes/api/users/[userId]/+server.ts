@@ -39,7 +39,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
         }
 
         return new Response(JSON.stringify(deletedUser), { status: 200 });
-    } catch (e) {
+    } catch {
         error(404, "user id not found");
     }
 };

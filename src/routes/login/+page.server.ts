@@ -62,7 +62,7 @@ export const actions: Actions = {
                 path: "/",
                 ...sessionCookie.attributes
             });
-        } catch (e) {
+        } catch {
             // invalid credentials
             return fail(400, { username: loginData.data.username, password: "", incorrect: true });
         }

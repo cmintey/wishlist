@@ -51,7 +51,7 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         });
 
         return new Response(JSON.stringify(deletedItems), { status: 200 });
-    } catch (e) {
+    } catch {
         error(500, "Unable to delete items");
     }
 };

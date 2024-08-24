@@ -128,7 +128,7 @@ export const actions: Actions = {
                     errors: [{ field: "currentPassword", message: "Incorrect password" }]
                 });
             }
-        } catch (e) {
+        } catch {
             return fail(400, {
                 error: true,
                 errors: [{ field: "currentPassword", message: "Incorrect password" }]

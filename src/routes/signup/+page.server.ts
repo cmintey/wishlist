@@ -123,7 +123,7 @@ export const actions: Actions = {
                 });
             }
             return { success: true };
-        } catch (e) {
+        } catch {
             return fail(400, {
                 error: true,
                 errors: [{ field: "username", message: "User with username or email already exists" }]
