@@ -18,6 +18,7 @@
     import { dragHandleZone } from "svelte-dnd-action";
     import { ItemsAPI } from "$lib/api/items";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
 
     export let data: PageData;
     type Item = PageData["items"][0];
@@ -169,13 +170,7 @@
             <SortBy />
         </div>
         {#if data.listOwner.isMe}
-            <div>
-                {#if reordering}
-                    <button class="variant-ghost-secondary chip" on:click={handleReorderFinalize}>Finish</button>
-                {:else}
-                    <button class="variant-filled-primary chip" on:click={() => (reordering = true)}>Reorder</button>
-                {/if}
-            </div>
+            <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
         {/if}
     </div>
 {/if}
