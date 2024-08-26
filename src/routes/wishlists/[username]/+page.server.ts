@@ -55,11 +55,23 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
         };
     }
 
-    const orderBy: Prisma.ItemOrderByWithRelationInput = {};
+    let orderBy: Prisma.ItemOrderByWithRelationInput[];
     const sort = url.searchParams.get("sort");
     const direction = url.searchParams.get("dir");
     if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy.price = direction;
+        orderBy = [{ price: direction }];
+    } else {
+        orderBy = [
+            {
+                displayOrder: {
+                    sort: "asc",
+                    nulls: "last"
+                }
+            },
+            {
+                id: "asc"
+            }
+        ];
     }
 
     const wishlistItemsQuery = client.item.findMany({

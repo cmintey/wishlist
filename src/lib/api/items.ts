@@ -52,7 +52,7 @@ export class ItemAPI {
 }
 
 export class ItemsAPI {
-    _makeRequest = async (method: string, path: string, body?: Record<string, unknown>) => {
+    _makeRequest = async (method: string, path: string, body?: any) => {
         const options: RequestInit = {
             method,
             headers: {
@@ -71,5 +71,9 @@ export class ItemsAPI {
         if (groupId) searchParams.append("groupId", groupId);
         if (claimed) searchParams.append("claimed", `${claimed}`);
         return await this._makeRequest("DELETE", "?" + searchParams.toString());
+    };
+
+    updateMany = async (items: (Record<string, unknown> & { id: number })[]) => {
+        return await this._makeRequest("PATCH", "", items);
     };
 }

@@ -1,9 +1,11 @@
 import { SSEvents } from "$lib/schema";
+import { patchItem } from "$lib/server/api-common";
 import { getConfig } from "$lib/server/config";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
+import type { Prisma } from "@prisma/client";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import assert from "assert";
 
@@ -114,67 +116,14 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
     const body = (await request.json()) as Record<string, unknown>;
     const item = await validateItem(params?.itemId, locals, body.publicPledgedById !== undefined);
 
-    const data: {
-        name?: string;
-        price?: string;
-        url?: string;
-        note?: string;
-        image_url?: string;
-        pledgedBy?: {
-            connect?: { id: string };
-            disconnect?: boolean;
-        };
-        publicPledgedBy?: {
-            connect?: { id: string };
-            disconnect?: boolean;
-        };
-        approved?: boolean;
-        purchased?: boolean;
-    } = {};
-    let deleteOldImage = false;
-
-    if (body.name && typeof body.name === "string") data.name = body.name;
-    if (body.price && typeof body.price === "string") data.price = body.price;
-    if (body.url && typeof body.url === "string") data.url = body.url;
-    if (body.note && typeof body.note === "string") data.note = body.note;
-    if (body.image_url && typeof body.image_url === "string") {
-        data.image_url = body.image_url;
-        deleteOldImage = true;
-    }
-    if (body.pledgedById && typeof body.pledgedById === "string") {
-        if (body.pledgedById === "0") {
-            data.pledgedBy = {
-                disconnect: true
-            };
-        } else {
-            data.pledgedBy = {
-                connect: {
-                    id: body.pledgedById
-                }
-            };
-        }
-    }
-    if (body.publicPledgedById && typeof body.publicPledgedById === "string") {
-        if (body.publicPledgedById === "0") {
-            data.publicPledgedBy = {
-                disconnect: true
-            };
-        } else {
-            data.publicPledgedBy = {
-                connect: {
-                    id: body.publicPledgedById
-                }
-            };
-        }
-    }
-    if (Object.keys(body).includes("approved") && typeof body.approved === "boolean") data.approved = body.approved;
-    if (Object.keys(body).includes("purchased") && typeof body.purchased === "boolean") data.purchased = body.purchased;
+    const { data, deleteOldImage } = patchItem(body);
 
     try {
+        const id = data.id;
+        delete data.id;
         const updatedItem = await client.item.update({
             where: {
-                // @ts-expect-error params.itemId is checked in a previous function
-                id: parseInt(params.itemId)
+                id
             },
             include: {
                 addedBy: {
@@ -202,7 +151,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
                     }
                 }
             },
-            data
+            data: data as Prisma.ItemUpdateInput
         });
 
         if (deleteOldImage && item.imageUrl) {
