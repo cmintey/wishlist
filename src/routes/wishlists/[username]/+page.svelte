@@ -17,6 +17,7 @@
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone } from "svelte-dnd-action";
     import { ItemsAPI } from "$lib/api/items";
+    import { getToastStore } from "@skeletonlabs/skeleton";
 
     export let data: PageData;
     type Item = PageData["items"][0];
@@ -26,6 +27,7 @@
     const flipDurationMs = 200;
     let reordering = false;
     const itemsAPI = new ItemsAPI();
+    const toastStore = getToastStore();
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -119,19 +121,20 @@
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
     };
+    const swap = <T,>(arr: T[], a: number, b: number) => {
+        return arr.with(a, arr[b]).with(b, arr[a]);
+    };
     const handleIncreasePriority = (itemId: number) => {
         const itemIdx = allItems.findIndex((item) => item.id === itemId);
-        const oldItem = allItems[itemIdx - 1];
-        allItems[itemIdx - 1] = allItems[itemIdx];
-        allItems[itemIdx] = oldItem;
-        allItems = [...allItems];
+        if (itemIdx > 0) {
+            allItems = swap(allItems, itemIdx, itemIdx - 1);
+        }
     };
     const handleDecreasePriority = (itemId: number) => {
         const itemIdx = allItems.findIndex((item) => item.id === itemId);
-        const oldItem = allItems[itemIdx + 1];
-        allItems[itemIdx + 1] = allItems[itemIdx];
-        allItems[itemIdx] = oldItem;
-        allItems = [...allItems];
+        if (itemIdx < allItems.length - 1) {
+            allItems = swap(allItems, itemIdx, itemIdx + 1);
+        }
     };
     const handleReorderFinalize = async () => {
         reordering = false;
@@ -140,7 +143,13 @@
             displayOrder: idx
         }));
         const response = await itemsAPI.updateMany(displayOrderUpdate);
-        console.log(response);
+        if (!response.ok) {
+            toastStore.trigger({
+                message: "Unable to update item ordering",
+                background: "variant-filled-error"
+            });
+            allItems = data.items;
+        }
     };
 </script>
 
