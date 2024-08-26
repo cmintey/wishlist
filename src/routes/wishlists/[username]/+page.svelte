@@ -15,12 +15,17 @@
     import { SSEvents } from "$lib/schema";
     import { PublicListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
+    import { dragHandleZone } from "svelte-dnd-action";
+    import { ItemsAPI } from "$lib/api/items";
 
     export let data: PageData;
     type Item = PageData["items"][0];
     $: allItems = data.items;
     $: approvals = allItems.filter((item) => !item.approved);
     $: items = allItems.filter((item) => item.approved);
+    const flipDurationMs = 200;
+    let reordering = false;
+    const itemsAPI = new ItemsAPI();
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -110,15 +115,51 @@
         }
         publicListUrl = new URL(`/lists/${publicListId}`, window.location as unknown as URL);
     };
+
+    const handleDnd = (e: CustomEvent) => {
+        allItems = e.detail.items;
+    };
+    const handleIncreasePriority = (itemId: number) => {
+        const itemIdx = allItems.findIndex((item) => item.id === itemId);
+        const oldItem = allItems[itemIdx - 1];
+        allItems[itemIdx - 1] = allItems[itemIdx];
+        allItems[itemIdx] = oldItem;
+        allItems = [...allItems];
+    };
+    const handleDecreasePriority = (itemId: number) => {
+        const itemIdx = allItems.findIndex((item) => item.id === itemId);
+        const oldItem = allItems[itemIdx + 1];
+        allItems[itemIdx + 1] = allItems[itemIdx];
+        allItems[itemIdx] = oldItem;
+        allItems = [...allItems];
+    };
+    const handleReorderFinalize = async () => {
+        reordering = false;
+        const displayOrderUpdate = allItems.map((item, idx) => ({
+            id: item.id,
+            displayOrder: idx
+        }));
+        const response = await itemsAPI.updateMany(displayOrderUpdate);
+        console.log(response);
+    };
 </script>
 
 <!-- chips -->
 {#if allItems.length > 0}
-    <div class="flex flex-row flex-wrap space-x-4">
-        {#if !data.listOwner.isMe}
-            <ClaimFilterChip />
-        {/if}
-        <SortBy />
+    <div class="flex justify-between">
+        <div class="flex flex-row flex-wrap space-x-4">
+            {#if !data.listOwner.isMe}
+                <ClaimFilterChip />
+            {/if}
+            <SortBy />
+        </div>
+        <div>
+            {#if reordering}
+                <button class="variant-ghost-secondary chip" on:click={handleReorderFinalize}>Finish</button>
+            {:else}
+                <button class="variant-filled-primary chip" on:click={() => (reordering = true)}>Reorder</button>
+            {/if}
+        </div>
     </div>
 {/if}
 
@@ -153,23 +194,62 @@
     </div>
 {:else}
     <!-- items -->
-    <div class="flex flex-col space-y-4">
+    <div
+        class="flex flex-col space-y-4 p-1 rounded-container-token"
+        on:consider={handleDnd}
+        on:finalize={handleDnd}
+        use:dragHandleZone={{
+            items,
+            flipDurationMs,
+            dragDisabled: !reordering,
+            dropTargetClasses: ["variant-ringed-primary"],
+            dropTargetStyle: {}
+        }}
+    >
         {#if data.listOwner.isMe}
-            {#each items as item (item.id)}
-                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
-                </div>
-            {/each}
+            <!-- Workaround for svelte-dnd not playing nicely with transitions -->
+            {#if reordering}
+                {#each items as item (item.id)}
+                    <div animate:flip={{ duration: flipDurationMs }}>
+                        <ItemCard
+                            {item}
+                            onDecreasePriority={handleDecreasePriority}
+                            onIncreasePriority={handleIncreasePriority}
+                            reorderActions
+                            showClaimedName={data.showClaimedName}
+                            user={data.user}
+                        />
+                    </div>
+                {/each}
+            {:else}
+                {#each items as item (item.id)}
+                    <div
+                        in:receive={{ key: item.id }}
+                        out:send|local={{ key: item.id }}
+                        animate:flip={{ duration: flipDurationMs }}
+                    >
+                        <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
+                    </div>
+                {/each}
+            {/if}
         {:else}
             <!-- unclaimed-->
             {#each items.filter((item) => !item.pledgedById) as item (item.id)}
-                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                <div
+                    in:receive={{ key: item.id }}
+                    out:send|local={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
             <!-- claimed -->
             {#each items.filter((item) => item.pledgedById) as item (item.id)}
-                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                <div
+                    in:receive={{ key: item.id }}
+                    out:send|local={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}

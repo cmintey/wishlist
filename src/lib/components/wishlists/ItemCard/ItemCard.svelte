@@ -28,12 +28,16 @@
     import ApprovalButtons from "./ApprovalButtons.svelte";
     import ClaimButtons from "./ClaimButtons.svelte";
     import { invalidateAll } from "$app/navigation";
+    import { dragHandle } from "svelte-dnd-action";
 
     export let item: FullItem;
     export let user: (PartialUser & { id: string }) | undefined = undefined;
     export let showClaimedName = false;
     export let showFor = false;
     export let onPublicList = false;
+    export let reorderActions = false;
+    export let onIncreasePriority: ((itemId: number) => void) | undefined = undefined;
+    export let onDecreasePriority: ((itemId: number) => void) | undefined = undefined;
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
@@ -222,23 +226,54 @@
         </div>
     </div>
 
-    <footer class="card-footer flex flex-row justify-between">
-        <ClaimButtons
-            {item}
-            {onPublicList}
-            showName={showClaimedName}
-            {user}
-            on:claim={() => handleClaim()}
-            on:unclaim={() => handleClaim(true)}
-            on:purchase={(event) => handlePurchased(event.detail.purchased)}
-        />
+    <footer
+        class="card-footer flex flex-row"
+        class:justify-between={!reorderActions}
+        class:justify-center={reorderActions}
+    >
+        {#if reorderActions}
+            <div class="w-max space-x-4">
+                <button
+                    class="variant-outline-primary btn btn-icon btn-icon-sm md:btn-icon"
+                    aria-label="lower priority for {item.name}"
+                    on:click|stopPropagation={() => onDecreasePriority && onDecreasePriority(item.id)}
+                >
+                    <iconify-icon icon="ion:arrow-down"></iconify-icon>
+                </button>
+                <button
+                    class="variant-outline-primary btn md:btn-lg"
+                    aria-label="drag-handle for {item.name}"
+                    on:click|stopPropagation={() => {}}
+                    use:dragHandle
+                >
+                    <iconify-icon icon="ion:reorder-two"></iconify-icon>
+                </button>
+                <button
+                    class="variant-outline-primary btn btn-icon btn-icon-sm md:btn-icon"
+                    aria-label="increase priority for {item.name}"
+                    on:click|stopPropagation={() => onIncreasePriority && onIncreasePriority(item.id)}
+                >
+                    <iconify-icon icon="ion:arrow-up"></iconify-icon>
+                </button>
+            </div>
+        {:else}
+            <ClaimButtons
+                {item}
+                {onPublicList}
+                showName={showClaimedName}
+                {user}
+                on:claim={() => handleClaim()}
+                on:unclaim={() => handleClaim(true)}
+                on:purchase={(event) => handlePurchased(event.detail.purchased)}
+            />
 
-        <ApprovalButtons
-            {item}
-            {user}
-            on:approve={() => handleApproval(true)}
-            on:deny={() => handleApproval(false)}
-            on:delete={handleDelete}
-        />
+            <ApprovalButtons
+                {item}
+                {user}
+                on:approve={() => handleApproval(true)}
+                on:deny={() => handleApproval(false)}
+                on:delete={handleDelete}
+            />
+        {/if}
     </footer>
 </button>
