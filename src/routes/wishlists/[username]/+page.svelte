@@ -168,13 +168,15 @@
             {/if}
             <SortBy />
         </div>
-        <div>
-            {#if reordering}
-                <button class="variant-ghost-secondary chip" on:click={handleReorderFinalize}>Finish</button>
-            {:else}
-                <button class="variant-filled-primary chip" on:click={() => (reordering = true)}>Reorder</button>
-            {/if}
-        </div>
+        {#if data.listOwner.isMe}
+            <div>
+                {#if reordering}
+                    <button class="variant-ghost-secondary chip" on:click={handleReorderFinalize}>Finish</button>
+                {:else}
+                    <button class="variant-filled-primary chip" on:click={() => (reordering = true)}>Reorder</button>
+                {/if}
+            </div>
+        {/if}
     </div>
 {/if}
 
