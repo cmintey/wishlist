@@ -42,8 +42,7 @@ export const GET = (async ({ locals, params }) => {
     }
 
     const predicate = (item: Item) => {
-        const b = activeGroup.groupId === item.groupId && wishlistUser.id === item.userId;
-        return b;
+        return activeGroup.groupId === item.groupId && wishlistUser.id === item.userId;
     };
 
     const { readable, subscribeToEvent } = createSSE<Item>();

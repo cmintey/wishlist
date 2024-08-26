@@ -119,11 +119,10 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
     const { data, deleteOldImage } = patchItem(body);
 
     try {
-        const id = data.id;
         delete data.id;
         const updatedItem = await client.item.update({
             where: {
-                id
+                id: parseInt(params.itemId!)
             },
             include: {
                 addedBy: {
