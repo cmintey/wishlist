@@ -139,7 +139,7 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
             }
         }
 
-        // itemEmitter.emit(SSEvents.item.update, updatedItem);
+        itemEmitter.emit(SSEvents.items.update);
 
         return new Response(JSON.stringify(updatedItems), { status: 200 });
     } catch {

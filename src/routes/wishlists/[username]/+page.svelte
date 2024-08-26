@@ -2,7 +2,7 @@
     import type { PageData } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
-    import { goto } from "$app/navigation";
+    import { goto, invalidate } from "$app/navigation";
     import { page } from "$app/stores";
     import { onDestroy, onMount } from "svelte";
     import { flip } from "svelte/animate";
@@ -63,7 +63,7 @@
         eventSource = new EventSource(`${$page.url.pathname}/events`);
         eventSource.addEventListener(SSEvents.item.update, (e) => {
             const message = JSON.parse(e.data) as Item;
-            updateItems(message);
+            updateItem(message);
             updateHash();
         });
         eventSource.addEventListener(SSEvents.item.delete, (e) => {
@@ -76,9 +76,15 @@
             addItem(message);
             updateHash();
         });
+        eventSource.addEventListener(SSEvents.items.update, () => {
+            if (!data.listOwner.isMe) {
+                invalidate("data:items");
+                updateHash();
+            }
+        });
     };
 
-    const updateItems = (updatedItem: Item) => {
+    const updateItem = (updatedItem: Item) => {
         // for when an item gets approved
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);

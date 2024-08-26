@@ -51,6 +51,7 @@ export const GET = (async ({ locals, params }) => {
     subscribeToEvent(itemEmitter, SSEvents.item.update, predicate);
     subscribeToEvent(itemEmitter, SSEvents.item.create, predicate);
     subscribeToEvent(itemEmitter, SSEvents.item.delete, predicate);
+    subscribeToEvent(itemEmitter, SSEvents.items.update);
 
     return new Response(readable, {
         headers: {
