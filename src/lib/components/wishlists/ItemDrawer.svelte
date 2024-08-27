@@ -16,7 +16,7 @@
     const handleApproval: (v: boolean) => void = $drawerStore.meta.handleApproval;
 </script>
 
-<div class="flex flex-col space-y-2 p-4 pb-12">
+<div class="flex max-h-[80dvh] flex-col space-y-2 p-4 pb-12">
     <div class="flex w-full justify-center">
         <hr class="self-c !w-12 !rounded !border-t-4" />
     </div>
@@ -25,7 +25,7 @@
     </span>
     <div class="flex justify-center">
         {#if item.imageUrl}
-            <img class="" alt="product" src={item.imageUrl} />
+            <img class="max-h-full max-w-[80%] object-contain" alt="product" src={item.imageUrl} />
         {/if}
     </div>
     <div class="flex flex-row space-x-2 text-base md:text-lg">

@@ -164,7 +164,7 @@
     const drawerSettings: DrawerSettings = {
         id: "item",
         position: "bottom",
-        height: "max-h-fit",
+        height: "max-h-screen",
         padding: "md:px-12 lg:px-32 xl:px-56",
         meta: {
             item,
