@@ -6,20 +6,12 @@
 
     export let data: PageData;
 
-    let itemData: Item = {
-        id: 0,
+    let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
         name: "",
         price: null,
         url: null,
         note: null,
-        imageUrl: null,
-        userId: "",
-        addedById: "",
-        pledgedById: null,
-        publicPledgedById: null,
-        approved: true,
-        purchased: false,
-        groupId: null
+        imageUrl: null
     };
 
     let warningHidden = false;
