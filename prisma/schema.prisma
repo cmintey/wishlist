@@ -100,6 +100,7 @@ model Item {
     purchased         Boolean     @default(false)
     group             Group?      @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId           String?
+    displayOrder      Int?
 
     @@index([userId])
     @@index([pledgedById])

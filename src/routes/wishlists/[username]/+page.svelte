@@ -2,7 +2,7 @@
     import type { PageData } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
-    import { goto } from "$app/navigation";
+    import { goto, invalidate } from "$app/navigation";
     import { page } from "$app/stores";
     import { onDestroy, onMount } from "svelte";
     import { flip } from "svelte/animate";
@@ -15,12 +15,20 @@
     import { SSEvents } from "$lib/schema";
     import { PublicListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
+    import { dragHandleZone } from "svelte-dnd-action";
+    import { ItemsAPI } from "$lib/api/items";
+    import { getToastStore } from "@skeletonlabs/skeleton";
+    import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
 
     export let data: PageData;
     type Item = PageData["items"][0];
     $: allItems = data.items;
     $: approvals = allItems.filter((item) => !item.approved);
     $: items = allItems.filter((item) => item.approved);
+    const flipDurationMs = 200;
+    let reordering = false;
+    const itemsAPI = new ItemsAPI();
+    const toastStore = getToastStore();
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -56,7 +64,7 @@
         eventSource = new EventSource(`${$page.url.pathname}/events`);
         eventSource.addEventListener(SSEvents.item.update, (e) => {
             const message = JSON.parse(e.data) as Item;
-            updateItems(message);
+            updateItem(message);
             updateHash();
         });
         eventSource.addEventListener(SSEvents.item.delete, (e) => {
@@ -69,9 +77,15 @@
             addItem(message);
             updateHash();
         });
+        eventSource.addEventListener(SSEvents.items.update, () => {
+            if (!data.listOwner.isMe) {
+                invalidate("data:items");
+                updateHash();
+            }
+        });
     };
 
-    const updateItems = (updatedItem: Item) => {
+    const updateItem = (updatedItem: Item) => {
         // for when an item gets approved
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);
@@ -110,15 +124,54 @@
         }
         publicListUrl = new URL(`/lists/${publicListId}`, window.location as unknown as URL);
     };
+
+    const handleDnd = (e: CustomEvent) => {
+        allItems = e.detail.items;
+    };
+    const swap = <T,>(arr: T[], a: number, b: number) => {
+        return arr.with(a, arr[b]).with(b, arr[a]);
+    };
+    const handleIncreasePriority = (itemId: number) => {
+        const itemIdx = allItems.findIndex((item) => item.id === itemId);
+        if (itemIdx > 0) {
+            allItems = swap(allItems, itemIdx, itemIdx - 1);
+        }
+    };
+    const handleDecreasePriority = (itemId: number) => {
+        const itemIdx = allItems.findIndex((item) => item.id === itemId);
+        if (itemIdx < allItems.length - 1) {
+            allItems = swap(allItems, itemIdx, itemIdx + 1);
+        }
+    };
+    const handleReorderFinalize = async () => {
+        reordering = false;
+        const displayOrderUpdate = allItems.map((item, idx) => ({
+            id: item.id,
+            displayOrder: idx
+        }));
+        const response = await itemsAPI.updateMany(displayOrderUpdate);
+        if (!response.ok) {
+            toastStore.trigger({
+                message: "Unable to update item ordering",
+                background: "variant-filled-error"
+            });
+            allItems = data.items;
+        }
+    };
 </script>
 
 <!-- chips -->
 {#if allItems.length > 0}
-    <div class="flex flex-row flex-wrap space-x-4">
-        {#if !data.listOwner.isMe}
-            <ClaimFilterChip />
+    <div class="flex justify-between">
+        <div class="flex flex-row flex-wrap space-x-4">
+            {#if !data.listOwner.isMe}
+                <ClaimFilterChip />
+            {/if}
+            <SortBy />
+        </div>
+        {#if data.listOwner.isMe}
+            <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
         {/if}
-        <SortBy />
     </div>
 {/if}
 
@@ -153,23 +206,62 @@
     </div>
 {:else}
     <!-- items -->
-    <div class="flex flex-col space-y-4">
+    <div
+        class="flex flex-col space-y-4 p-1 rounded-container-token"
+        on:consider={handleDnd}
+        on:finalize={handleDnd}
+        use:dragHandleZone={{
+            items,
+            flipDurationMs,
+            dragDisabled: !reordering,
+            dropTargetClasses: ["variant-ringed-primary"],
+            dropTargetStyle: {}
+        }}
+    >
         {#if data.listOwner.isMe}
-            {#each items as item (item.id)}
-                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
-                </div>
-            {/each}
+            <!-- Workaround for svelte-dnd not playing nicely with transitions -->
+            {#if reordering}
+                {#each items as item (item.id)}
+                    <div animate:flip={{ duration: flipDurationMs }}>
+                        <ItemCard
+                            {item}
+                            onDecreasePriority={handleDecreasePriority}
+                            onIncreasePriority={handleIncreasePriority}
+                            reorderActions
+                            showClaimedName={data.showClaimedName}
+                            user={data.user}
+                        />
+                    </div>
+                {/each}
+            {:else}
+                {#each items as item (item.id)}
+                    <div
+                        in:receive={{ key: item.id }}
+                        out:send|local={{ key: item.id }}
+                        animate:flip={{ duration: flipDurationMs }}
+                    >
+                        <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
+                    </div>
+                {/each}
+            {/if}
         {:else}
             <!-- unclaimed-->
             {#each items.filter((item) => !item.pledgedById) as item (item.id)}
-                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                <div
+                    in:receive={{ key: item.id }}
+                    out:send|local={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}
             <!-- claimed -->
             {#each items.filter((item) => item.pledgedById) as item (item.id)}
-                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                <div
+                    in:receive={{ key: item.id }}
+                    out:send|local={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
                     <ItemCard {item} showClaimedName={data.showClaimedName} user={data.user} />
                 </div>
             {/each}

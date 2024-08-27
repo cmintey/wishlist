@@ -42,8 +42,7 @@ export const GET = (async ({ locals, params }) => {
     }
 
     const predicate = (item: Item) => {
-        const b = activeGroup.groupId === item.groupId && wishlistUser.id === item.userId;
-        return b;
+        return activeGroup.groupId === item.groupId && wishlistUser.id === item.userId;
     };
 
     const { readable, subscribeToEvent } = createSSE<Item>();
@@ -51,6 +50,7 @@ export const GET = (async ({ locals, params }) => {
     subscribeToEvent(itemEmitter, SSEvents.item.update, predicate);
     subscribeToEvent(itemEmitter, SSEvents.item.create, predicate);
     subscribeToEvent(itemEmitter, SSEvents.item.delete, predicate);
+    subscribeToEvent(itemEmitter, SSEvents.items.update);
 
     return new Response(readable, {
         headers: {

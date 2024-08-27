@@ -28,12 +28,17 @@
     import ApprovalButtons from "./ApprovalButtons.svelte";
     import ClaimButtons from "./ClaimButtons.svelte";
     import { invalidateAll } from "$app/navigation";
+    import type { ItemVoidFunction } from "./ReorderButtons.svelte";
+    import ReorderButtons from "./ReorderButtons.svelte";
 
     export let item: FullItem;
     export let user: (PartialUser & { id: string }) | undefined = undefined;
     export let showClaimedName = false;
     export let showFor = false;
     export let onPublicList = false;
+    export let reorderActions = false;
+    export let onIncreasePriority: ItemVoidFunction | undefined = undefined;
+    export let onDecreasePriority: ItemVoidFunction | undefined = undefined;
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
@@ -222,23 +227,31 @@
         </div>
     </div>
 
-    <footer class="card-footer flex flex-row justify-between">
-        <ClaimButtons
-            {item}
-            {onPublicList}
-            showName={showClaimedName}
-            {user}
-            on:claim={() => handleClaim()}
-            on:unclaim={() => handleClaim(true)}
-            on:purchase={(event) => handlePurchased(event.detail.purchased)}
-        />
+    <footer
+        class="card-footer flex flex-row"
+        class:justify-between={!reorderActions}
+        class:justify-center={reorderActions}
+    >
+        {#if reorderActions}
+            <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
+        {:else}
+            <ClaimButtons
+                {item}
+                {onPublicList}
+                showName={showClaimedName}
+                {user}
+                on:claim={() => handleClaim()}
+                on:unclaim={() => handleClaim(true)}
+                on:purchase={(event) => handlePurchased(event.detail.purchased)}
+            />
 
-        <ApprovalButtons
-            {item}
-            {user}
-            on:approve={() => handleApproval(true)}
-            on:deny={() => handleApproval(false)}
-            on:delete={handleDelete}
-        />
+            <ApprovalButtons
+                {item}
+                {user}
+                on:approve={() => handleApproval(true)}
+                on:deny={() => handleApproval(false)}
+                on:delete={handleDelete}
+            />
+        {/if}
     </footer>
 </button>

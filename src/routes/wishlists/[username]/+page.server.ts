@@ -6,7 +6,7 @@ import type { Prisma } from "@prisma/client";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 
-export const load: PageServerLoad = async ({ locals, params, url }) => {
+export const load: PageServerLoad = async ({ locals, params, url, depends }) => {
     if (!locals.user) {
         redirect(302, `/login?ref=/wishlists/${params.username}`);
     }
@@ -55,11 +55,23 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
         };
     }
 
-    const orderBy: Prisma.ItemOrderByWithRelationInput = {};
+    let orderBy: Prisma.ItemOrderByWithRelationInput[];
     const sort = url.searchParams.get("sort");
     const direction = url.searchParams.get("dir");
     if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy.price = direction;
+        orderBy = [{ price: direction }];
+    } else {
+        orderBy = [
+            {
+                displayOrder: {
+                    sort: "asc",
+                    nulls: "last"
+                }
+            },
+            {
+                id: "asc"
+            }
+        ];
     }
 
     const wishlistItemsQuery = client.item.findMany({
@@ -105,6 +117,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
     const [wishlistItems, listOwner] = await Promise.all([wishlistItemsQuery, listOwnerQuery]);
 
+    depends("data:items");
     return {
         user: locals.user,
         listOwner: {

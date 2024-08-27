@@ -9,5 +9,8 @@ export const SSEvents = {
         update: "item_update",
         create: "item_create",
         delete: "item_delete"
+    },
+    items: {
+        update: "items_update"
     }
 };

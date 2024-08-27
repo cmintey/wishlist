@@ -5,7 +5,7 @@
     import { env } from "$env/dynamic/public";
     import { getToastStore } from "@skeletonlabs/skeleton";
 
-    export let data: Item;
+    export let data: Partial<Item>;
     export let buttonText: string;
 
     $: form = $page.form;
