@@ -225,7 +225,7 @@
         {/if}
 
         <div class="flex flex-col">
-            {#if item.price}
+            {#if item.price || item.itemPrice}
                 <span class="text-lg font-semibold">{formatPrice(item, locale)}</span>
             {/if}
 

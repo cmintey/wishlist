@@ -59,7 +59,13 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
     const sort = url.searchParams.get("sort");
     const direction = url.searchParams.get("dir");
     if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy = [{ price: direction }];
+        orderBy = [
+            {
+                itemPrice: {
+                    value: direction
+                }
+            }
+        ];
     } else {
         orderBy = [
             {
@@ -102,12 +108,7 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
                     name: true
                 }
             },
-            itemPrice: {
-                select: {
-                    value: true,
-                    currency: true
-                }
-            }
+            itemPrice: true
         }
     });
 
