@@ -1,17 +1,34 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import type { Item } from "@prisma/client";
+    import type { Item, ItemPrice } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { onMount } from "svelte";
+    import CurrencyInput from "../CurrencyInput.svelte";
+    import { getPriceValue } from "$lib/price-formatter";
 
-    export let data: Partial<Item>;
+    export let data: Partial<Item> & {
+        itemPrice?: ItemPrice;
+    };
     export let buttonText: string;
 
     $: form = $page.form;
     let loading = false;
     let urlFetched = false;
     const toastStore = getToastStore();
+    let locale: string | undefined;
+    let price: number = getPriceValue(data);
+    let userCurrency: string = data.itemPrice?.currency || env.PUBLIC_DEFAULT_CURRENCY;
+    let previousCurrency = userCurrency;
+
+    onMount(() => {
+        if (navigator.languages?.length > 0) {
+            locale = navigator.languages[0];
+        } else {
+            locale = navigator.language;
+        }
+    });
 
     const formatPrice = (price: number | null, currency: string | null) => {
         if (!price) return null;
@@ -56,6 +73,27 @@
             loading = false;
             urlFetched = true;
         }
+    };
+
+    const validateCurrency = (currency: string | undefined) => {
+        if (!currency) {
+            userCurrency = previousCurrency;
+            toastStore.trigger({
+                message: "Price must have a currency"
+            });
+            return;
+        }
+        try {
+            Intl.NumberFormat(undefined, { style: "currency", currency });
+        } catch {
+            userCurrency = previousCurrency;
+            toastStore.trigger({
+                background: "variant-filled-warning",
+                message: `Currency code is invalid. A list of valid currency codes can be found <a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)" target="_blank" rel="noopener noreferrer">here</a>`
+            });
+            return;
+        }
+        previousCurrency = userCurrency;
     };
 </script>
 
@@ -130,12 +168,26 @@
 
     <label class="col-span-1 row-start-3 md:col-span-2 md:row-start-2" for="price">
         <span>Price</span>
-        <div class="input-group grid-cols-[auto_1fr]">
+        <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon icon="ion:cash"></iconify-icon>
             </div>
-            <input id="price" name="price" class="input" autocomplete="off" type="text" bind:value={data.price} />
+            <CurrencyInput
+                id="price"
+                name="price"
+                autocomplete="off"
+                currency={previousCurrency}
+                {locale}
+                bind:value={price}
+            />
+            <input
+                class="border-surface-400-500-token w-[6ch] border-l focus:border-surface-400-500-token"
+                maxlength="3"
+                on:change={(e) => validateCurrency(e.currentTarget.value)}
+                bind:value={userCurrency}
+            />
         </div>
+        <pre>{price}</pre>
     </label>
 
     <label class="col-span-1 md:col-span-2" for="image">

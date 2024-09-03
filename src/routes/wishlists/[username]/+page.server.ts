@@ -101,6 +101,12 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
                     username: true,
                     name: true
                 }
+            },
+            itemPrice: {
+                select: {
+                    value: true,
+                    currency: true
+                }
             }
         }
     });
