@@ -6,6 +6,10 @@ type ItemWithPrice = {
     itemPrice?: ItemPrice | null;
 };
 
+const getMaximumFractionDigits = (currency: string) => {
+    return getFormatter(currency).resolvedOptions().maximumFractionDigits || 2;
+};
+
 export const getFormatter = (currency: string | null, locale: string | undefined = undefined) => {
     return Intl.NumberFormat(locale, {
         style: "currency",
@@ -20,7 +24,7 @@ export const formatPrice = (item: ItemWithPrice, locale: string | undefined = un
     }
 
     const formatter = getFormatter(item.itemPrice.currency, locale);
-    const maxFracDigits = formatter.resolvedOptions().maximumFractionDigits || 2;
+    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency);
 
     const value = item.itemPrice.value / Math.pow(10, maxFracDigits);
     return formatter.format(value);
@@ -34,6 +38,11 @@ export const getPriceValue = (item: ItemWithPrice) => {
     if (!item.itemPrice) {
         return 0;
     }
-    const maxFracDigits = getFormatter(item.itemPrice.currency).resolvedOptions().maximumFractionDigits || 2;
+    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency);
     return item.itemPrice.value / Math.pow(10, maxFracDigits);
+};
+
+export const getMinorUnits = (value: number, currency: string) => {
+    const maxFracDigits = getMaximumFractionDigits(currency);
+    return value * Math.pow(10, maxFracDigits);
 };

@@ -124,7 +124,8 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
                         username: true,
                         name: true
                     }
-                }
+                },
+                itemPrice: true
             },
             data: patch.data as Prisma.ItemUpdateInput
         });

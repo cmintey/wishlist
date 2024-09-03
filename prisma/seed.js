@@ -128,11 +128,7 @@ const patchPrice = async () => {
         if (!priceWithoutSymbols) {
             return;
         }
-        // if (/^\d+$/.test(priceWithoutSymbols)) {
-        //     // price is already digit
-        //     console.log("Price is already an integer value");
-        //     newPriceValue = parseInt(priceWithoutSymbols);
-        // } else
+
         if (commaGroupSepRegex.test(priceWithoutSymbols)) {
             // price is a number with comma as the group separator
             console.log("Price detected as using group separator ',' and decimal separator '.'");

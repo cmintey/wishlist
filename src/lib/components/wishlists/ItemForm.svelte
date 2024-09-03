@@ -30,14 +30,6 @@
         }
     });
 
-    const formatPrice = (price: number | null, currency: string | null) => {
-        if (!price) return null;
-        return Intl.NumberFormat(undefined, {
-            style: "currency",
-            currency: currency ? currency : env.PUBLIC_DEFAULT_CURRENCY
-        }).format(price);
-    };
-
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
         const matches = url.match(urlRegex);
@@ -66,7 +58,16 @@
                 data.url = productData.url ? productData.url : url;
                 data.name = productData.name ? productData.name : productData.title || "";
                 data.imageUrl = productData.image;
-                data.price = formatPrice(productData.price, productData.currency);
+                if (productData.price) {
+                    data.itemPrice = {
+                        id: "temp-id",
+                        currency: productData.currency || env.PUBLIC_DEFAULT_CURRENCY,
+                        value: productData.price
+                    };
+                    price = data.itemPrice.value;
+                    userCurrency = data.itemPrice.currency;
+                    previousCurrency = userCurrency;
+                }
             } else {
                 triggerToast();
             }
@@ -180,14 +181,14 @@
                 {locale}
                 bind:value={price}
             />
+            <input id="currency" name="currency" type="hidden" bind:value={userCurrency} />
             <input
-                class="border-surface-400-500-token w-[6ch] border-l focus:border-surface-400-500-token"
+                class="border-surface-400-500-token w-[8ch] border-l focus:border-surface-400-500-token"
                 maxlength="3"
                 on:change={(e) => validateCurrency(e.currentTarget.value)}
                 bind:value={userCurrency}
             />
         </div>
-        <pre>{price}</pre>
     </label>
 
     <label class="col-span-1 md:col-span-2" for="image">

@@ -6,6 +6,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage } from "$lib/server/image-util";
 import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
+import { getMinorUnits } from "$lib/price-formatter";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
@@ -60,6 +61,7 @@ export const actions: Actions = {
         const image = form.get("image") as File;
         const name = form.get("name") as string;
         const price = form.get("price") as string;
+        const currency = form.get("currency") as string;
         const note = form.get("note") as string;
 
         // check for empty values
@@ -75,17 +77,29 @@ export const actions: Actions = {
             }
         });
 
+        let itemPriceId = null;
+        if (price && currency) {
+            await client.itemPrice
+                .create({
+                    data: {
+                        value: getMinorUnits(parseFloat(price), currency),
+                        currency
+                    }
+                })
+                .then((itemPrice) => (itemPriceId = itemPrice.id));
+        }
+
         const item = await client.item.create({
             data: {
                 userId: user.id,
                 name,
-                price,
                 url,
                 note,
                 imageUrl: filename || imageUrl,
                 addedById: locals.user.id,
                 approved: params.username === locals.user.username || config.suggestions.method !== "approval",
-                groupId: activeMembership.groupId
+                groupId: activeMembership.groupId,
+                itemPriceId
             },
             include: {
                 addedBy: {
@@ -105,7 +119,8 @@ export const actions: Actions = {
                         username: true,
                         name: true
                     }
-                }
+                },
+                itemPrice: true
             }
         });
 

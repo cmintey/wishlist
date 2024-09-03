@@ -29,6 +29,7 @@
         return new Intl.NumberFormat(locale, {
             currency: currency,
             style: "currency",
+            currencyDisplay: "narrowSymbol",
             maximumFractionDigits: maximumFractionDigits || 0,
             minimumFractionDigits: minimumFractionDigits || 0
         }).format(value);
@@ -162,7 +163,7 @@
     $: isPositive = value > 0;
     $: isZero = !isNegative && !isPositive;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $: value, setFormattedValue();
+    $: value, currency, setFormattedValue();
 </script>
 
 <div class="border-surface-400-500-token border-r focus:border-surface-400-500-token">
