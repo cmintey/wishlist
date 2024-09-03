@@ -12,6 +12,7 @@
         pledgedBy: PartialUser | null;
         publicPledgedBy?: PublicUser | null;
         user: PartialUser | null;
+        itemPrice: ItemPrice | null;
     };
 </script>
 
@@ -23,13 +24,15 @@
         type DrawerSettings,
         type ModalSettings
     } from "@skeletonlabs/skeleton";
-    import type { Item } from "@prisma/client";
+    import type { Item, ItemPrice } from "@prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import ApprovalButtons from "./ApprovalButtons.svelte";
     import ClaimButtons from "./ClaimButtons.svelte";
     import { invalidateAll } from "$app/navigation";
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import ReorderButtons from "./ReorderButtons.svelte";
+    import { formatPrice } from "$lib/price-formatter";
+    import { onMount } from "svelte";
 
     export let item: FullItem;
     export let user: (PartialUser & { id: string }) | undefined = undefined;
@@ -46,6 +49,7 @@
 
     let imageUrl: string;
     const itemAPI = new ItemAPI(item.id);
+    let locale: string | undefined;
 
     $: if (item.imageUrl) {
         try {
@@ -55,6 +59,14 @@
             imageUrl = `/api/assets/${item.imageUrl}`;
         }
     }
+
+    onMount(() => {
+        if (navigator.languages?.length > 0) {
+            locale = navigator.languages[0];
+        } else {
+            locale = navigator.language;
+        }
+    });
 
     const triggerErrorToast = () => {
         toastStore.trigger({
@@ -170,6 +182,7 @@
             item,
             showFor,
             user,
+            locale,
             showClaimedName,
             onPublicList,
             handleClaim,
@@ -213,7 +226,7 @@
 
         <div class="flex flex-col">
             {#if item.price}
-                <span class="text-lg font-semibold">{item.price}</span>
+                <span class="text-lg font-semibold">{formatPrice(item, locale)}</span>
             {/if}
 
             <span class="text-base md:text-lg">

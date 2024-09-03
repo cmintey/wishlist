@@ -3,10 +3,12 @@
     import type { FullItem, PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ApprovalButtons from "./ItemCard/ApprovalButtons.svelte";
+    import { formatPrice } from "$lib/price-formatter";
 
     const drawerStore = getDrawerStore();
     const item: FullItem = $drawerStore.meta.item;
     const user: PartialUser | undefined = $drawerStore.meta.user;
+    const locale: string | undefined = $drawerStore.meta.locale;
     const showFor: boolean = $drawerStore.meta.showFor;
     const showName: boolean = $drawerStore.meta.showName;
     const onPublicList: boolean = $drawerStore.meta.onPublicList;
@@ -30,7 +32,7 @@
     </div>
     <div class="flex flex-row space-x-2 text-base md:text-lg">
         {#if item.price}
-            <span class="font-semibold">{item.price}</span>
+            <span class="font-semibold">{formatPrice(item, locale)}</span>
             <span>·</span>
         {/if}
 

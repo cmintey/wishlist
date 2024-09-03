@@ -36,7 +36,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
                     select: {
                         username: true
                     }
-                }
+                },
+                itemPrice: true
             }
         });
     } catch {
