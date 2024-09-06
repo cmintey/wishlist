@@ -47,7 +47,7 @@
         {/if}
     </div>
     <div class="flex flex-row space-x-2 text-base md:text-lg">
-        {#if item.price}
+        {#if item.price || item.itemPrice}
             <span class="font-semibold">{formatPrice(item, locale)}</span>
             <span>·</span>
         {/if}

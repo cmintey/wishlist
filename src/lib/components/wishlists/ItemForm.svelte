@@ -9,7 +9,7 @@
     import CurrencyInput from "../CurrencyInput.svelte";
 
     export let data: Partial<Item> & {
-        itemPrice?: ItemPrice;
+        itemPrice?: ItemPrice | null;
     };
     export let buttonText: string;
 
