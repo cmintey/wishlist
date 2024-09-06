@@ -87,6 +87,7 @@
         }
         try {
             Intl.NumberFormat(undefined, { style: "currency", currency });
+            userCurrency = currency.toUpperCase();
         } catch {
             userCurrency = previousCurrency;
             toastStore.trigger({
@@ -177,7 +178,7 @@
             <CurrencyInput id="price" name="price" currency={previousCurrency} {locale} bind:value={price} />
             <input id="currency" name="currency" type="hidden" bind:value={userCurrency} />
             <input
-                class="border-surface-400-500-token w-[8ch] border-l focus:border-surface-400-500-token"
+                class="border-surface-400-500-token w-[8ch] border-l uppercase focus:border-surface-400-500-token"
                 maxlength="3"
                 on:change={(e) => validateCurrency(e.currentTarget.value)}
                 bind:value={userCurrency}
