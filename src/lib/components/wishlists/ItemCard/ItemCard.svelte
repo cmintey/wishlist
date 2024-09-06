@@ -28,11 +28,12 @@
     import { ItemAPI } from "$lib/api/items";
     import ApprovalButtons from "./ApprovalButtons.svelte";
     import ClaimButtons from "./ClaimButtons.svelte";
-    import { invalidateAll } from "$app/navigation";
+    import { goto, invalidateAll } from "$app/navigation";
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import ReorderButtons from "./ReorderButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
     import { onMount } from "svelte";
+    import { page } from "$app/stores";
 
     export let item: FullItem;
     export let user: (PartialUser & { id: string }) | undefined = undefined;
@@ -128,6 +129,9 @@
 
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
+    const handleEdit = () => {
+        goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`);
+    };
 
     const handleClaim = async (unclaim = false) => {
         if (user?.id) {
@@ -188,7 +192,8 @@
             handleClaim,
             handleDelete,
             handlePurchased,
-            handleApproval
+            handleApproval,
+            handleEdit
         }
     };
 </script>
@@ -264,6 +269,7 @@
                 on:approve={() => handleApproval(true)}
                 on:deny={() => handleApproval(false)}
                 on:delete={handleDelete}
+                on:edit={handleEdit}
             />
         {/if}
     </footer>

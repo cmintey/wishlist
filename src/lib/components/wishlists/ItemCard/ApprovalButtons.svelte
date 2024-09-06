@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
     import { createEventDispatcher } from "svelte";
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
 
@@ -8,10 +6,6 @@
     export let user: PartialUser | undefined;
 
     const dispatch = createEventDispatcher();
-    const onEdit = () => {
-        dispatch("edit");
-        goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`);
-    };
 </script>
 
 <div class="flex flex-row space-x-2 md:space-x-4">
@@ -23,7 +17,9 @@
             Deny
         </button>
     {:else if user?.username === item.user?.username || user?.username === item.addedBy?.username}
-        <button class="variant-ghost-primary btn btn-sm md:btn" on:click|stopPropagation={onEdit}>Edit</button>
+        <button class="variant-ghost-primary btn btn-sm md:btn" on:click|stopPropagation={() => dispatch("edit")}>
+            Edit
+        </button>
         <button class="variant-filled-error btn btn-sm md:btn" on:click|stopPropagation={() => dispatch("delete")}>
             Delete
         </button>
