@@ -6,6 +6,14 @@ type ItemWithPrice = {
     itemPrice?: ItemPrice | null;
 };
 
+export type LocaleConfig = {
+    currencySymbol: string;
+    groupSeparator: string;
+    decimalSeparator: string;
+    prefix: string;
+    suffix: string;
+};
+
 const getMaximumFractionDigits = (currency: string) => {
     return getFormatter(currency).resolvedOptions().maximumFractionDigits || 2;
 };
@@ -45,4 +53,32 @@ export const getPriceValue = (item: ItemWithPrice) => {
 export const getMinorUnits = (value: number, currency: string) => {
     const maxFracDigits = getMaximumFractionDigits(currency);
     return value * Math.pow(10, maxFracDigits);
+};
+
+const defaultConfig: LocaleConfig = {
+    currencySymbol: "",
+    groupSeparator: "",
+    decimalSeparator: "",
+    prefix: "",
+    suffix: ""
+};
+
+export const getLocaleConfig = (formatter: Intl.NumberFormat) => {
+    return formatter.formatToParts(1000.1).reduce((prev, curr, i): LocaleConfig => {
+        if (curr.type === "currency") {
+            if (i === 0) {
+                return { ...prev, currencySymbol: curr.value, prefix: curr.value };
+            } else {
+                return { ...prev, currencySymbol: curr.value, suffix: curr.value };
+            }
+        }
+        if (curr.type === "group") {
+            return { ...prev, groupSeparator: curr.value };
+        }
+        if (curr.type === "decimal") {
+            return { ...prev, decimalSeparator: curr.value };
+        }
+
+        return prev;
+    }, defaultConfig);
 };

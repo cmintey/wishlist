@@ -5,8 +5,8 @@
     import { env } from "$env/dynamic/public";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
-    import CurrencyInput from "../CurrencyInput.svelte";
     import { getPriceValue } from "$lib/price-formatter";
+    import CurrencyInput from "../CurrencyInput.svelte";
 
     export let data: Partial<Item> & {
         itemPrice?: ItemPrice;
@@ -173,14 +173,7 @@
             <div class="input-group-shim">
                 <iconify-icon icon="ion:cash"></iconify-icon>
             </div>
-            <CurrencyInput
-                id="price"
-                name="price"
-                autocomplete="off"
-                currency={previousCurrency}
-                {locale}
-                bind:value={price}
-            />
+            <CurrencyInput id="price" name="price" currency={previousCurrency} {locale} bind:value={price} />
             <input id="currency" name="currency" type="hidden" bind:value={userCurrency} />
             <input
                 class="border-surface-400-500-token w-[8ch] border-l focus:border-surface-400-500-token"
