@@ -19,7 +19,8 @@
     const toastStore = getToastStore();
     let locale: string | undefined;
     let price: number = getPriceValue(data);
-    let userCurrency: string = data.itemPrice?.currency || env.PUBLIC_DEFAULT_CURRENCY;
+    const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
+    let userCurrency: string = data.itemPrice?.currency || defaultCurrency;
     let previousCurrency = userCurrency;
 
     onMount(() => {
@@ -61,7 +62,7 @@
                 if (productData.price) {
                     data.itemPrice = {
                         id: "temp-id",
-                        currency: productData.currency || env.PUBLIC_DEFAULT_CURRENCY,
+                        currency: productData.currency || defaultCurrency,
                         value: productData.price
                     };
                     price = data.itemPrice.value;
