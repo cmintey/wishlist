@@ -124,6 +124,11 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
 
     const [wishlistItems, listOwner] = await Promise.all([wishlistItemsQuery, listOwnerQuery]);
 
+    if (sort === "price" && direction === "asc") {
+        // need to re-sort when descending since Prisma can't order with nulls last
+        wishlistItems.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+    }
+
     depends("data:items");
     return {
         user: locals.user,
