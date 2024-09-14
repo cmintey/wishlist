@@ -1,3 +1,4 @@
+import { getMinorUnits } from "$lib/price-formatter";
 import type { Prisma } from "@prisma/client";
 
 export const patchItem = (body: Record<string, unknown>) => {
@@ -7,7 +8,6 @@ export const patchItem = (body: Record<string, unknown>) => {
     let deleteOldImage = false;
 
     if (body.name && typeof body.name === "string") data.name = body.name;
-    if (body.price && typeof body.price === "string") data.price = body.price;
     if (body.url && typeof body.url === "string") data.url = body.url;
     if (body.note && typeof body.note === "string") data.note = body.note;
     if (body.displayOrder !== null && typeof body.displayOrder === "number")
@@ -15,6 +15,15 @@ export const patchItem = (body: Record<string, unknown>) => {
     if (body.image_url && typeof body.image_url === "string") {
         data.imageUrl = body.image_url;
         deleteOldImage = true;
+    }
+    if (body.price && typeof body.price === "number" && body.currency && typeof body.currency === "string") {
+        data.itemPrice = {
+            create: {
+                value: getMinorUnits(body.price, body.currency),
+                currency: body.currency
+            },
+            delete: true
+        };
     }
     if (body.pledgedById && typeof body.pledgedById === "string") {
         if (body.pledgedById === "0") {

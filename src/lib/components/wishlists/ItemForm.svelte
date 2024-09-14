@@ -1,25 +1,35 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import type { Item } from "@prisma/client";
+    import type { Item, ItemPrice } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { onMount } from "svelte";
+    import { getPriceValue } from "$lib/price-formatter";
+    import CurrencyInput from "../CurrencyInput.svelte";
 
-    export let data: Partial<Item>;
+    export let data: Partial<Item> & {
+        itemPrice?: ItemPrice | null;
+    };
     export let buttonText: string;
 
     $: form = $page.form;
     let loading = false;
     let urlFetched = false;
     const toastStore = getToastStore();
+    let locale: string | undefined;
+    let price: number = getPriceValue(data);
+    const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
+    let userCurrency: string = data.itemPrice?.currency || defaultCurrency;
+    let previousCurrency = userCurrency;
 
-    const formatPrice = (price: number | null, currency: string | null) => {
-        if (!price) return null;
-        return Intl.NumberFormat(undefined, {
-            style: "currency",
-            currency: currency ? currency : env.PUBLIC_DEFAULT_CURRENCY
-        }).format(price);
-    };
+    onMount(() => {
+        if (navigator.languages?.length > 0) {
+            locale = navigator.languages[0];
+        } else {
+            locale = navigator.language;
+        }
+    });
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -49,13 +59,44 @@
                 data.url = productData.url ? productData.url : url;
                 data.name = productData.name ? productData.name : productData.title || "";
                 data.imageUrl = productData.image;
-                data.price = formatPrice(productData.price, productData.currency);
+                if (productData.price) {
+                    data.itemPrice = {
+                        id: "temp-id",
+                        currency: productData.currency || defaultCurrency,
+                        value: productData.price
+                    };
+                    price = data.itemPrice.value;
+                    userCurrency = data.itemPrice.currency;
+                    previousCurrency = userCurrency;
+                }
             } else {
                 triggerToast();
             }
             loading = false;
             urlFetched = true;
         }
+    };
+
+    const validateCurrency = (currency: string | undefined) => {
+        if (!currency) {
+            userCurrency = previousCurrency;
+            toastStore.trigger({
+                message: "Price must have a currency"
+            });
+            return;
+        }
+        try {
+            Intl.NumberFormat(undefined, { style: "currency", currency });
+            userCurrency = currency.toUpperCase();
+        } catch {
+            userCurrency = previousCurrency;
+            toastStore.trigger({
+                background: "variant-filled-warning",
+                message: `Currency code is invalid. A list of valid currency codes can be found <a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)" target="_blank" rel="noopener noreferrer">here</a>`
+            });
+            return;
+        }
+        previousCurrency = userCurrency;
     };
 </script>
 
@@ -130,11 +171,18 @@
 
     <label class="col-span-1 row-start-3 md:col-span-2 md:row-start-2" for="price">
         <span>Price</span>
-        <div class="input-group grid-cols-[auto_1fr]">
+        <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon icon="ion:cash"></iconify-icon>
             </div>
-            <input id="price" name="price" class="input" autocomplete="off" type="text" bind:value={data.price} />
+            <CurrencyInput id="price" name="price" currency={previousCurrency} {locale} bind:value={price} />
+            <input id="currency" name="currency" type="hidden" bind:value={userCurrency} />
+            <input
+                class="border-surface-400-500-token w-[8ch] border-l uppercase focus:border-surface-400-500-token"
+                maxlength="3"
+                on:change={(e) => validateCurrency(e.currentTarget.value)}
+                bind:value={userCurrency}
+            />
         </div>
     </label>
 

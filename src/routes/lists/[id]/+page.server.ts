@@ -51,7 +51,8 @@ export const load = (async ({ params }) => {
                     username: true,
                     name: true
                 }
-            }
+            },
+            itemPrice: true
         }
     });
 

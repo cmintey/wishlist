@@ -85,6 +85,8 @@ model Item {
     id                Int         @id @unique @default(autoincrement())
     name              String
     price             String?
+    itemPriceId       String?
+    itemPrice         ItemPrice?  @relation(fields: [itemPriceId], references: [id], onDelete: SetNull)
     url               String?
     note              String?
     imageUrl          String?
@@ -105,6 +107,15 @@ model Item {
     @@index([userId])
     @@index([pledgedById])
     @@map("items")
+}
+
+model ItemPrice {
+    id       String @id @unique @default(uuid())
+    value    Int
+    currency String
+    Item     Item[]
+
+    @@map("item_price")
 }
 
 model PasswordReset {

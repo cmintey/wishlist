@@ -59,7 +59,13 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
     const sort = url.searchParams.get("sort");
     const direction = url.searchParams.get("dir");
     if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy = [{ price: direction }];
+        orderBy = [
+            {
+                itemPrice: {
+                    value: direction
+                }
+            }
+        ];
     } else {
         orderBy = [
             {
@@ -101,7 +107,8 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
                     username: true,
                     name: true
                 }
-            }
+            },
+            itemPrice: true
         }
     });
 
@@ -116,6 +123,11 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
     });
 
     const [wishlistItems, listOwner] = await Promise.all([wishlistItemsQuery, listOwnerQuery]);
+
+    if (sort === "price" && direction === "asc") {
+        // need to re-sort when descending since Prisma can't order with nulls last
+        wishlistItems.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+    }
 
     depends("data:items");
     return {

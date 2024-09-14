@@ -6,6 +6,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { SSEvents } from "$lib/schema";
+import { getMinorUnits } from "$lib/price-formatter";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
@@ -36,7 +37,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
                     select: {
                         username: true
                     }
-                }
+                },
+                itemPrice: true
             }
         });
     } catch {
@@ -65,6 +67,7 @@ export const actions: Actions = {
         const image = form.get("image") as File;
         const name = form.get("name") as string;
         const price = form.get("price") as string;
+        const currency = form.get("currency") as string;
         const note = form.get("note") as string;
 
         // check for empty values
@@ -80,16 +83,28 @@ export const actions: Actions = {
             }
         });
 
+        let itemPriceId = null;
+        if (price && currency) {
+            await client.itemPrice
+                .create({
+                    data: {
+                        value: getMinorUnits(parseFloat(price), currency),
+                        currency
+                    }
+                })
+                .then((itemPrice) => (itemPriceId = itemPrice.id));
+        }
+
         const updatedItem = await client.item.update({
             where: {
                 id: parseInt(params.itemId)
             },
             data: {
                 name,
-                price,
                 url,
                 imageUrl: filename || imageUrl,
-                note
+                note,
+                itemPriceId
             },
             include: {
                 addedBy: {
@@ -109,9 +124,18 @@ export const actions: Actions = {
                         username: true,
                         name: true
                     }
-                }
+                },
+                itemPrice: true
             }
         });
+
+        if (item.itemPriceId !== null && item.itemPriceId !== itemPriceId) {
+            await client.itemPrice.delete({
+                where: {
+                    id: item.itemPriceId
+                }
+            });
+        }
 
         itemEmitter.emit(SSEvents.item.update, updatedItem);
 
