@@ -1,3 +1,14 @@
 {
-    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html", "markdown", "svelte"]
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "markdown",
+        "svelte"
+    ],
+    "i18n-ally.localesPaths": [
+        "src/i18n"
+    ]
 }

@@ -19,6 +19,7 @@
     import { ItemsAPI } from "$lib/api/items";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -197,7 +198,7 @@
 {/if}
 
 {#if approvals.length > 0}
-    <h2 class="h2 pb-2">Approvals</h2>
+    <h2 class="h2 pb-2">{$t("wishes.approvals")}</h2>
     <div class="flex flex-col space-y-4 pb-2">
         {#each approvals as item (item.id)}
             <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
@@ -211,7 +212,7 @@
 {#if items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
         <img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
-        <p class="text-2xl">No wishes yet</p>
+        <p class="text-2xl">{$t("wishes.no-wishes-yet")}</p>
     </div>
 {:else}
     <!-- items -->
@@ -297,5 +298,5 @@
 {/if}
 
 <svelte:head>
-    <title>{data.listOwner.isMe ? "My" : `${data.listOwner.name}'s`} Wishes</title>
+    <title>{$t("wishes.title", { values: { isSelf: data.listOwner.isMe, name: data.listOwner.name } })}</title>
 </svelte:head>

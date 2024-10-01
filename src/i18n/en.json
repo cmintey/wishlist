@@ -1,0 +1,8 @@
+{
+    "wishes": {
+        "title": "{isSelf, select, true {My} other {{name}'s}} Wishes",
+        "no-wishes": "No wishes yet",
+        "approvals": "Approvals",
+        "share": "Share List"
+    }
+}

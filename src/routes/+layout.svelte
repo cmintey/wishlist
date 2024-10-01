@@ -19,6 +19,7 @@
     import { navItems } from "$lib/components/navigation/navigation";
     import Drawer from "$lib/components/Drawer.svelte";
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
+    import { initLang } from "$lib/i18n";
 
     interface Props {
         data: LayoutData;
@@ -59,6 +60,7 @@
     initializeStores();
 
     onMount(() => {
+        initLang();
         if (window.matchMedia("(display-mode: standalone)").matches) {
             $isInstalled = true;
             const ptr = PullToRefresh.init({
