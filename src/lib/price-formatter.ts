@@ -44,7 +44,7 @@ export const formatNumberAsPrice = (price: number, locale: string | undefined = 
 
 export const getPriceValue = (item: ItemWithPrice) => {
     if (!item.itemPrice) {
-        return 0;
+        return null;
     }
     const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency);
     return item.itemPrice.value / Math.pow(10, maxFracDigits);
