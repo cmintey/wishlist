@@ -27,8 +27,6 @@ Getting started is simple with Docker Compose
 Create a `docker-compose.yaml` file:
 
 ```compose.yml
-version: "3"
-
 services:
   wishlist:
     container_name: wishlist
