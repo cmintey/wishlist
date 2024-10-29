@@ -3,7 +3,7 @@
     interface Props {
         title?: string | null;
         type: AlertType;
-        children?: import('svelte').Snippet;
+        children?: import("svelte").Snippet;
     }
 
     let { title = null, type, children }: Props = $props();

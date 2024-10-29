@@ -74,8 +74,8 @@
         {/if}
         <button
             class="variant-ghost-error btn w-fit"
-            type="button"
             onclick={() => handleDelete(data.editingUser.username, data.editingUser.id)}
+            type="button"
         >
             Delete User
         </button>

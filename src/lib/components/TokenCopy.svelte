@@ -30,13 +30,13 @@
     <div class="flex flex-row items-center">
         <button
             class="btn {btnStyle}"
-            type="button"
             aria-label="copy to clipboard"
             onclick={() => {
                 dispatch("copied");
                 copiedVisible = true;
                 setTimeout(() => (copiedVisible = false), 1000);
             }}
+            type="button"
             use:clipboard={{ element: "tokenUrl" }}
             use:popup={tooltipSettings}
         >

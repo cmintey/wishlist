@@ -1,4 +1,4 @@
-<script module lang="ts">
+<script lang="ts" module>
     export type ItemVoidFunction = (itemId: number) => void;
 </script>
 

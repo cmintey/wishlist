@@ -11,13 +11,7 @@
         prefix?: string | undefined;
     }
 
-    let {
-        options,
-        defaultOption,
-        searchParam,
-        directionParam = undefined,
-        prefix = undefined
-    }: Props = $props();
+    let { options, defaultOption, searchParam, directionParam = undefined, prefix = undefined }: Props = $props();
 
     let filter = $page.url.searchParams.get(searchParam);
     let direction = directionParam ? $page.url.searchParams.get(searchParam) : null;
@@ -83,7 +77,7 @@
                 class="arrow text-xs duration-300 ease-out"
                 class:rotate-180={menuOpen}
                 icon="ion:caret-down"
-></iconify-icon>
+            ></iconify-icon>
         </button>
         <nav class="card list-nav p-4 shadow-xl" data-popup={popupKey}>
             <ul>

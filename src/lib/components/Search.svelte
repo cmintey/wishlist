@@ -7,7 +7,6 @@
         result: typeof data;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let { data, keys, result = $bindable() }: Props = $props();
     let search = $state("");
 
