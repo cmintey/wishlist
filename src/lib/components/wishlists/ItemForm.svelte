@@ -17,14 +17,15 @@
 
     let { data = $bindable(), buttonText }: Props = $props();
 
+    let productData = $state(data);
     let form = $derived($page.form);
     let loading = $state(false);
     let urlFetched = $state(false);
     const toastStore = getToastStore();
     let locale: string | undefined = $state();
-    let price: number | null = $state(getPriceValue(data));
+    let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
-    let userCurrency: string = $state(data.itemPrice?.currency || defaultCurrency);
+    let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
 
     onMount(() => {
         if (navigator.languages?.length > 0) {
@@ -53,23 +54,22 @@
     };
 
     const getInfo = async () => {
-        if (data.url && !urlFetched) {
+        if (productData.url && !urlFetched) {
             loading = true;
-            const url = extractUrl(data.url);
+            const url = extractUrl(productData.url);
             const res = await fetch(`/api/product?url=${url}`);
             if (res.ok) {
-                let productData: ProductData = await res.json();
-                data.url = productData.url ? productData.url : url;
-                data.name = productData.name ? productData.name : productData.title || "";
-                data.imageUrl = productData.image;
-                if (productData.price) {
-                    data.itemPrice = {
+                let newProductData: ProductData = await res.json();
+                productData.url = newProductData.url ? newProductData.url : url;
+                productData.name = newProductData.name ? newProductData.name : newProductData.title || "";
+                productData.imageUrl = newProductData.image;
+                if (newProductData.price) {
+                    productData.itemPrice = {
                         id: "temp-id",
-                        currency: productData.currency || defaultCurrency,
-                        value: productData.price
+                        currency: newProductData.currency || defaultCurrency,
+                        value: newProductData.price
                     };
-                    price = data.itemPrice.value;
-                    userCurrency = data.itemPrice.currency;
+                    price = newProductData.price;
                 }
             } else {
                 triggerToast();
@@ -95,13 +95,13 @@
                     onfocusout={() => getInfo()}
                     placeholder="Enter a URL to fetch the item data"
                     type="url"
-                    bind:value={data.url}
+                    bind:value={productData.url}
                 />
-                {#if data.url}
+                {#if productData.url}
                     <button
                         id="reset-field"
                         aria-label="clear url field"
-                        onclick={() => (data.url = null)}
+                        onclick={() => (productData.url = null)}
                         onkeypress={(e) => e.preventDefault()}
                         tabindex="-1"
                         type="button"
@@ -110,7 +110,7 @@
                     </button>
                 {/if}
             </div>
-            {#if data.url}
+            {#if productData.url}
                 <button
                     id="refresh-item"
                     class="variant-ghost-primary btn btn-icon"
@@ -144,7 +144,7 @@
                 autocomplete="off"
                 required
                 type="text"
-                bind:value={data.name}
+                bind:value={productData.name}
             />
         </div>
         {#if form?.missing}
@@ -174,7 +174,7 @@
                 class="input"
                 autocomplete="off"
                 type="text"
-                bind:value={data.imageUrl}
+                bind:value={productData.imageUrl}
             />
         </div>
     </label>
@@ -187,7 +187,7 @@
             class="textarea"
             placeholder="i.e. size, color, etc."
             rows="4"
-            bind:value={data.note}
+            bind:value={productData.note}
         ></textarea>
     </label>
 

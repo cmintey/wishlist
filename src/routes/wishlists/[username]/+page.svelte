@@ -63,6 +63,10 @@
     });
     onDestroy(() => eventSource?.close());
 
+    $effect(() => {
+        allItems = data.items;
+    });
+
     const updateHash = async () => {
         const userHash = await hash(data.listOwner.id + data.groupId);
         $viewedItems[userHash] = await hashItems(allItems);
@@ -288,7 +292,7 @@
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
-        onclick={() => goto(`${$page.url}/new`)}
+        onclick={() => goto(`${$page.url.pathname}/new`)}
     >
         <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>

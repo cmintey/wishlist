@@ -49,7 +49,6 @@
     };
 </script>
 
-s
 <button class="variant-filled-error btn w-fit" onclick={handleDelete} type="button">
     Clear {groupId ? "" : "All"}
     {claimed ? "Claimed Items" : "Lists"}

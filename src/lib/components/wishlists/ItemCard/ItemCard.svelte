@@ -212,11 +212,13 @@
     });
 </script>
 
-<button
+<div
     class="card card-hover block w-full text-start"
     class:variant-ghost-warning={!item.approved}
     onclick={() => drawerStore.open(drawerSettings)}
-    type="button"
+    onkeyup={(e) => (e.key === "Enter" ? drawerStore.open(drawerSettings) : null)}
+    role="button"
+    tabindex="0"
 >
     <header class="card-header">
         <div class="flex w-full">
@@ -240,7 +242,7 @@
 
     <div class="flex flex-row space-x-2 p-4">
         {#if imageUrl}
-            <img class="h-36 w-36 object-contain" alt="product" src={imageUrl} />
+            <img class="h-36 w-36 object-contain" alt={item.name} referrerpolicy="no-referrer" src={imageUrl} />
         {/if}
 
         <div class="flex flex-col">
@@ -287,4 +289,4 @@
             />
         {/if}
     </footer>
-</button>
+</div>
