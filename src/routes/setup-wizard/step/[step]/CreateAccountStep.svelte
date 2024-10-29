@@ -4,7 +4,8 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
-    let form: HTMLFormElement;
+    let form: HTMLFormElement | undefined = $state();
+
     const submit: Writable<() => void> = getContext("submit");
     $submit = () => {
         form?.requestSubmit();

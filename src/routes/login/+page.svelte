@@ -3,8 +3,12 @@
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import type { ActionData, PageServerData } from "./$types";
 
-    export let data: PageServerData;
-    export let form: ActionData;
+    interface Props {
+        data: PageServerData;
+        form: ActionData;
+    }
+
+    let { data, form }: Props = $props();
 </script>
 
 <div class="flex flex-col items-center space-y-4">

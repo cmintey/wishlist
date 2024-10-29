@@ -7,15 +7,15 @@
 
     const config: Config = $page.data.config;
 
-    let form: HTMLFormElement;
+    let form: HTMLFormElement | undefined = $state();
+    let sending = $state(false);
+    let saved = $state(false);
+    let sent = $state(false);
+
     const submit: Writable<() => void> = getContext("submit");
     $submit = () => {
         form?.requestSubmit();
     };
-
-    let sending = false;
-    let saved = false;
-    let sent = false;
 </script>
 
 <div class="flex flex-col items-center space-y-4">

@@ -5,9 +5,13 @@
     import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
     import type { PageData } from "./$types";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
 
-    let saved = false;
+    let { data = $bindable() }: Props = $props();
+
+    let saved = $state(false);
 </script>
 
 <form
@@ -34,7 +38,7 @@
 
     <button class="variant-filled-primary btn mt-2" type="submit">
         {#if saved}
-            <iconify-icon icon="ion:checkmark" />
+            <iconify-icon icon="ion:checkmark"></iconify-icon>
             <p>Saved</p>
         {:else}
             Save

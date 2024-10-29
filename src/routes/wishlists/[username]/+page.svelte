@@ -20,15 +20,24 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
     type Item = PageData["items"][0];
-    $: allItems = data.items;
-    $: approvals = allItems.filter((item) => !item.approved);
-    $: items = allItems.filter((item) => item.approved);
+
+    let { data }: Props = $props();
+
+    let allItems = $state(data.items);
+    let reordering = $state(false);
+    let publicListUrl: URL | undefined = $state();
+
+    let approvals = $derived(allItems.filter((item) => !item.approved));
+    let items = $derived(allItems.filter((item) => item.approved));
+
     const flipDurationMs = 200;
-    let reordering = false;
     const itemsAPI = new ItemsAPI();
     const toastStore = getToastStore();
+    let eventSource: EventSource;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -48,7 +57,6 @@
         }
     });
 
-    let eventSource: EventSource;
     onMount(async () => {
         await updateHash();
         subscribeToEvents();
@@ -109,7 +117,6 @@
         allItems = [...allItems, addedItem];
     };
 
-    let publicListUrl: URL;
     const getOrCreatePublicList = async () => {
         let publicListId = "";
         const publicListApi = new PublicListAPI(data.groupId);
@@ -182,7 +189,7 @@
                 <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>Public URL</TokenCopy>
             </div>
         {:else}
-            <button class="variant-ringed-surface btn btn-sm" on:click={getOrCreatePublicList}>Share List</button>
+            <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>Share List</button>
         {/if}
     </div>
 {/if}
@@ -208,8 +215,8 @@
     <!-- items -->
     <div
         class="flex flex-col space-y-4 p-1 rounded-container-token"
-        on:consider={handleDnd}
-        on:finalize={handleDnd}
+        onconsider={handleDnd}
+        onfinalize={handleDnd}
         use:dragHandleZone={{
             items,
             flipDurationMs,
@@ -270,7 +277,7 @@
 
     <!-- spacer -->
     <footer>
-        <div class="h-16" />
+        <div class="h-16"></div>
     </footer>
 {/if}
 
@@ -280,9 +287,10 @@
         class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
-        on:click={() => goto(`${$page.url}/new`)}
+        aria-label="add item"
+        onclick={() => goto(`${$page.url}/new`)}
     >
-        <iconify-icon height="32" icon="ion:add" width="32" />
+        <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>
 {/if}
 

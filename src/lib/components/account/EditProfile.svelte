@@ -3,7 +3,11 @@
     import { page } from "$app/stores";
     import type { User } from "lucia";
 
-    export let user: User;
+    interface Props {
+        user: User;
+    }
+
+    let { user = $bindable() }: Props = $props();
 </script>
 
 <form method="POST" use:enhance>

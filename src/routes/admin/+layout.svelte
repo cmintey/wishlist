@@ -3,6 +3,12 @@
     import { Tab, TabGroup } from "@skeletonlabs/skeleton";
     import type { Snapshot } from "./$types";
 
+    interface Props {
+        children?: import("svelte").Snippet;
+    }
+
+    let { children }: Props = $props();
+
     const tabs = [
         { href: "/users", label: "Users" },
         { href: "/groups", label: "Groups" },
@@ -11,7 +17,7 @@
         { href: "/about", label: "About" }
     ];
 
-    let selectedTab = 0;
+    let selectedTab = $state(0);
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,
@@ -31,9 +37,9 @@
         </Tab>
     {/each}
 
-    <svelte:fragment slot="panel">
-        <slot />
-    </svelte:fragment>
+    {#snippet panel()}
+        {@render children?.()}
+    {/snippet}
 </TabGroup>
 
 <svelte:head>

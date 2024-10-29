@@ -4,11 +4,15 @@
     import SettingsForm from "$lib/components/admin/SettingsForm/index.svelte";
     import type { PageData } from "./$types";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
 
-    let sending = false;
-    let saved = false;
-    let sent = false;
+    let { data }: Props = $props();
+
+    let sending = $state(false);
+    let saved = $state(false);
+    let sent = $state(false);
 </script>
 
 <SmtpAlert smtpEnable={data.config.smtp.enable} />

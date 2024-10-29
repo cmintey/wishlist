@@ -5,12 +5,14 @@
     import { TabGroup, Tab } from "@skeletonlabs/skeleton";
     import type { User } from "lucia";
 
-    export let navItems: NavItem[];
-    export let user: User | null;
+    interface Props {
+        navItems: NavItem[];
+        user: User | null;
+    }
 
-    let tabsBottomNav: number;
+    let { navItems, user }: Props = $props();
 
-    tabsBottomNav = navItems.findIndex((n) => $page.url.pathname.startsWith(n.href));
+    let tabsBottomNav: number | undefined = $state(navItems.findIndex((n) => $page.url.pathname.startsWith(n.href)));
 </script>
 
 {#if user && $isInstalled}
@@ -25,7 +27,7 @@
     >
         {#each navItems as navItem, value}
             <Tab name={navItem.label} {value} bind:group={tabsBottomNav} on:click={() => goto(`${navItem.href}`)}>
-                <iconify-icon class="text-xl" icon={navItem.icon} />
+                <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
             </Tab>
         {/each}
     </TabGroup>

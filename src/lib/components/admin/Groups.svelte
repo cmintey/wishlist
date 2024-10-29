@@ -18,21 +18,22 @@
         userCount: number;
     };
 
-    export let groups: Group[];
+    interface Props {
+        groups: Group[];
+    }
+
+    let { groups }: Props = $props();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
-    let groupsFiltered: Group[];
+    let groupsFiltered: Group[] = $state(groups);
 
-    let groupData: TableSource;
-    $: if (groupsFiltered) {
-        groupData = {
-            head: ["Name", "User Count"],
-            body: tableMapperValues(groupsFiltered, ["name", "userCount"]),
-            meta: tableSourceMapper(groupsFiltered, ["name", "id"])
-        };
-    }
+    let groupData: TableSource = $derived({
+        head: ["Name", "User Count"],
+        body: tableMapperValues(groupsFiltered, ["name", "userCount"]),
+        meta: tableSourceMapper(groupsFiltered, ["name", "id"])
+    });
 
     const selectionHandler = (meta: CustomEvent<string[]>) => {
         const group: Group = meta.detail as unknown as Group;
@@ -71,8 +72,8 @@
 
 <div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0">
     <Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
-    <button class="variant-filled-primary btn" on:click={createGroup}>
-        <iconify-icon icon="ion:add" />
+    <button class="variant-filled-primary btn" onclick={createGroup}>
+        <iconify-icon icon="ion:add"></iconify-icon>
         <p>Create Group</p>
     </button>
 </div>

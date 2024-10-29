@@ -5,15 +5,19 @@
     import type { Group } from "@prisma/client";
     import { fade } from "svelte/transition";
 
-    export let config: Config;
-    export let groups: Group[] = [];
-    export let defaultGroup: Group | undefined = undefined;
-    export let vertical = false;
+    interface Props {
+        config: Config;
+        groups?: Group[];
+        defaultGroup?: Group | undefined;
+        vertical?: boolean;
+    }
+
+    let { config, groups = [], defaultGroup = undefined, vertical = false }: Props = $props();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
-    $: form = $page.form;
+    let form = $derived($page.form);
 
     const triggerToast = () => {
         const toastConfig: ToastSettings = {
@@ -25,19 +29,21 @@
         toastStore.trigger(toastConfig);
     };
 
-    if (form?.success && config.smtp.enable) {
-        triggerToast();
-    }
+    let groupId = $state("");
+    let email = $state("");
+    let submitButton: HTMLButtonElement | undefined = $state();
+    let showUrl = $state(true);
 
-    let groupId = "";
-    let email = "";
-    let submitButton: HTMLButtonElement;
-    let showUrl = true;
+    $effect(() => {
+        if (form?.success && config.smtp.enable) {
+            triggerToast();
+        }
+    });
 
     const triggerInviteModal = () => {
         if (groups.length === 0 && defaultGroup) {
             groupId = defaultGroup.id;
-            setTimeout(() => submitButton.click(), 200);
+            setTimeout(() => submitButton?.click(), 200);
             showUrl = true;
             return;
         }
@@ -53,7 +59,7 @@
             response(data: { group?: string; email?: string }) {
                 if (data.group) groupId = data.group;
                 if (data.email) email = data.email;
-                if (groupId) setTimeout(() => submitButton.click(), 200);
+                if (groupId) setTimeout(() => submitButton?.click(), 200);
                 showUrl = true;
             }
         });
@@ -61,8 +67,8 @@
 </script>
 
 <div class="flex flex-col space-y-4 {vertical ? 'items-center' : 'md:flex-row md:items-end md:space-x-4 md:space-y-0'}">
-    <button class="variant-filled-primary btn w-fit" type="button" on:click={triggerInviteModal}>
-        <iconify-icon icon="ion:person-add" />
+    <button class="variant-filled-primary btn w-fit" onclick={triggerInviteModal} type="button">
+        <iconify-icon icon="ion:person-add"></iconify-icon>
         <p>Invite User</p>
     </button>
 
@@ -85,5 +91,6 @@
         </div>
     {/if}
 
-    <button bind:this={submitButton} class="hidden" type="submit" />
+    <!-- svelte-ignore a11y_consider_explicit_label -->
+    <button bind:this={submitButton} class="hidden" type="submit"></button>
 </div>

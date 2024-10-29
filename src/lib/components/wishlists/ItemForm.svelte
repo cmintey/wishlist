@@ -8,19 +8,23 @@
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
 
-    export let data: Partial<Item> & {
-        itemPrice?: ItemPrice | null;
-    };
-    export let buttonText: string;
+    interface Props {
+        data: Partial<Item> & {
+            itemPrice?: ItemPrice | null;
+        };
+        buttonText: string;
+    }
 
-    $: form = $page.form;
-    let loading = false;
-    let urlFetched = false;
+    let { data = $bindable(), buttonText }: Props = $props();
+
+    let form = $derived($page.form);
+    let loading = $state(false);
+    let urlFetched = $state(false);
     const toastStore = getToastStore();
-    let locale: string | undefined;
-    let price: number | null = getPriceValue(data);
+    let locale: string | undefined = $state();
+    let price: number | null = $state(getPriceValue(data));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
-    let userCurrency: string = data.itemPrice?.currency || defaultCurrency;
+    let userCurrency: string = $state(data.itemPrice?.currency || defaultCurrency);
 
     onMount(() => {
         if (navigator.languages?.length > 0) {
@@ -88,20 +92,21 @@
                     id="url"
                     name="url"
                     class="input"
+                    onfocusout={() => getInfo()}
                     placeholder="Enter a URL to fetch the item data"
                     type="url"
                     bind:value={data.url}
-                    on:focusout={() => getInfo()}
                 />
                 {#if data.url}
                     <button
                         id="reset-field"
+                        aria-label="clear url field"
+                        onclick={() => (data.url = null)}
+                        onkeypress={(e) => e.preventDefault()}
                         tabindex="-1"
                         type="button"
-                        on:click={() => (data.url = null)}
-                        on:keypress|preventDefault
                     >
-                        <iconify-icon icon="ion:close-circle" />
+                        <iconify-icon icon="ion:close-circle"></iconify-icon>
                     </button>
                 {/if}
             </div>
@@ -109,15 +114,17 @@
                 <button
                     id="refresh-item"
                     class="variant-ghost-primary btn btn-icon"
-                    tabindex="-1"
-                    type="button"
-                    on:click|preventDefault={() => {
+                    aria-label="refresh item data"
+                    onclick={(e) => {
+                        e.preventDefault();
                         urlFetched = false;
                         getInfo();
                     }}
-                    on:keypress|preventDefault
+                    onkeypress={(e) => e.preventDefault()}
+                    tabindex="-1"
+                    type="button"
                 >
-                    <iconify-icon icon="ion:refresh" />
+                    <iconify-icon icon="ion:refresh"></iconify-icon>
                 </button>
             {/if}
         </div>
@@ -181,7 +188,7 @@
             placeholder="i.e. size, color, etc."
             rows="4"
             bind:value={data.note}
-        />
+        ></textarea>
     </label>
 
     <div class="flex flex-col space-y-2">
@@ -191,7 +198,7 @@
             <button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
                 {buttonText}
             </button>
-            <button class="variant-ghost-secondary btn w-min" type="button" on:click={() => history.back()}>
+            <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
                 Cancel
             </button>
         </div>

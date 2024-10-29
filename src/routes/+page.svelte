@@ -5,8 +5,12 @@
     import ApprovalAlert from "$lib/components/wishlists/ApprovalAlert.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
     type PageUserData = (typeof data)["users"][0];
+
+    let { data }: Props = $props();
 
     const hasNewItems = async (user: PageUserData) => {
         if (user.items.length === 0) return false;

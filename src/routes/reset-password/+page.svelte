@@ -5,11 +5,15 @@
     import { onMount } from "svelte";
     import type { ActionData, PageData } from "./$types";
 
-    export let data: PageData;
-    export let form: ActionData;
+    interface Props {
+        data: PageData;
+        form: ActionData;
+    }
 
-    let newPassword = "";
-    let confirmPassword = "";
+    let { data, form }: Props = $props();
+
+    let newPassword = $state("");
+    let confirmPassword = $state("");
 
     onMount(() => {
         if (data.valid) window.history.replaceState({}, "", "/reset-password");
@@ -81,7 +85,7 @@
 {#if form?.success}
     <div class="flex flex-col items-center space-y-4">
         <div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
-            <iconify-icon icon="ion:checkmark-circle-outline" width="100" />
+            <iconify-icon icon="ion:checkmark-circle-outline" width="100"></iconify-icon>
             <span class="text-xl font-bold">Success!</span>
             <p>
                 Your password was reset. <a href="/login">Click here</a>

@@ -6,13 +6,23 @@
     import Smtp from "./SMTP.svelte";
     import Claims from "./Claims.svelte";
 
-    export let config: Config;
-    export let hideActions = false;
-    export let saved = false;
-    export let sending = false;
-    export let sent = false;
+    interface Props {
+        config: Config;
+        hideActions?: boolean;
+        saved?: boolean;
+        sending?: boolean;
+        sent?: boolean;
+    }
 
-    $: form = $page.form;
+    let {
+        config = $bindable(),
+        hideActions = false,
+        saved = false,
+        sending = false,
+        sent = false
+    }: Props = $props();
+
+    let form = $derived($page.form);
 </script>
 
 <!-- TODO: Add tooltips explaining the various settings -->
@@ -52,7 +62,7 @@
     <div class="mt-2 flex items-end space-x-4">
         <button class="variant-filled-primary btn mt-2" type="submit">
             {#if saved}
-                <iconify-icon icon="ion:checkmark" />
+                <iconify-icon icon="ion:checkmark"></iconify-icon>
                 <p>Save</p>
             {:else}
                 Save
@@ -68,7 +78,7 @@
                 {#if sending}
                     <ProgressRadial stroke={64} width="w-6" />
                 {:else if sent}
-                    <iconify-icon icon="ion:checkmark" />
+                    <iconify-icon icon="ion:checkmark"></iconify-icon>
                     <p>Sent</p>
                 {:else}
                     Test Email

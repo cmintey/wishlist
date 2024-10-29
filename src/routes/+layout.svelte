@@ -21,8 +21,18 @@
     import Drawer from "$lib/components/Drawer.svelte";
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
 
-    export let data: LayoutData;
+    interface Props {
+        data: LayoutData;
+        children?: import("svelte").Snippet;
+    }
 
+    let { data, children }: Props = $props();
+
+    let showNavigationLoadingBar = $state(false);
+    let documentTitle: string | undefined = $state();
+    let disabled = $state(false);
+
+    let scrollPosition = 0;
     const titleDisabledUrls = [
         "/login",
         "/signup",
@@ -33,11 +43,6 @@
         /\/setup-wizard\/?.*/,
         "/lists"
     ];
-
-    let showNavigationLoadingBar = false;
-    let documentTitle: string | undefined;
-    let disabled = false;
-    let scrollPosition = 0;
 
     beforeNavigate(() => {
         showNavigationLoadingBar = true;
@@ -100,23 +105,23 @@
 <Drawer />
 
 <AppShell on:scroll={scrollHandler}>
-    <svelte:fragment slot="header">
+    {#snippet header()}
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
         <NavBar {navItems} user={data.user} />
-    </svelte:fragment>
+    {/snippet}
     <!-- Router Slot -->
     <div id="main" class="px-4 py-4 md:px-12 lg:px-32 xl:px-56">
         {#if !$isInstalled && !disabled && documentTitle}
             <h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
         {/if}
-        <slot />
+        {@render children?.()}
     </div>
 
-    <svelte:fragment slot="footer">
+    {#snippet footer()}
         <BottomTabs {navItems} user={data.user} />
-    </svelte:fragment>
+    {/snippet}
 </AppShell>
 
 <Toast />

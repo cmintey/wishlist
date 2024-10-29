@@ -3,8 +3,12 @@
     import { ItemsAPI } from "$lib/api/items";
     import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
-    export let groupId: string | undefined = undefined;
-    export let claimed: boolean = false;
+    interface Props {
+        groupId?: string | undefined;
+        claimed?: boolean;
+    }
+
+    let { groupId = undefined, claimed = false }: Props = $props();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
@@ -45,7 +49,8 @@
     };
 </script>
 
-<button class="variant-filled-error btn w-fit" type="button" on:click={handleDelete}>
+s
+<button class="variant-filled-error btn w-fit" onclick={handleDelete} type="button">
     Clear {groupId ? "" : "All"}
     {claimed ? "Claimed Items" : "Lists"}
 </button>

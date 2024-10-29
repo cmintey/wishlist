@@ -3,11 +3,16 @@
     import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
 
-    export let url: string;
-    export let btnStyle = "btn-icon";
+    interface Props {
+        url: string;
+        btnStyle?: string;
+        children?: import("svelte").Snippet;
+    }
+
+    let { url, btnStyle = "btn-icon", children }: Props = $props();
     const dispatch = createEventDispatcher();
 
-    let copiedVisible = false;
+    let copiedVisible = $state(false);
 
     const tooltipSettings: PopupSettings = {
         event: "hover",
@@ -18,7 +23,7 @@
 <div class="w-100 flex flex-row items-center">
     <span class="text-ellipsis">
         <a href={url}>
-            <slot />
+            {@render children?.()}
         </a>
         <span data-clipboard="tokenUrl" hidden>{url}</span>
     </span>
@@ -26,7 +31,8 @@
         <button
             class="btn {btnStyle}"
             type="button"
-            on:click={() => {
+            aria-label="copy to clipboard"
+            onclick={() => {
                 dispatch("copied");
                 copiedVisible = true;
                 setTimeout(() => (copiedVisible = false), 1000);
@@ -34,11 +40,11 @@
             use:clipboard={{ element: "tokenUrl" }}
             use:popup={tooltipSettings}
         >
-            <iconify-icon icon="ion:copy" />
+            <iconify-icon icon="ion:copy"></iconify-icon>
         </button>
         <div class="card variant-filled-secondary p-2" data-popup="copy">
             Copy to clipboard
-            <div class="variant-filled-secondary arrow" />
+            <div class="variant-filled-secondary arrow"></div>
         </div>
         {#if copiedVisible}
             <span out:fade>Copied!</span>

@@ -23,7 +23,7 @@
         handleEdit();
     };
 
-    let imageUrl: string;
+    let imageUrl: string | undefined = $state();
     if (item.imageUrl) {
         try {
             new URL(item.imageUrl);
