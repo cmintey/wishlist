@@ -61,7 +61,7 @@
         </span>
     </div>
     <p class="whitespace-pre-wrap">{item.note}</p>
-    <div class="flex flex-row justify-between">
+    <div class="flex flex-row justify-between pb-4">
         <ClaimButtons
             {item}
             {onPublicList}
