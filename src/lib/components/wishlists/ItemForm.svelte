@@ -62,7 +62,24 @@
                 let newProductData: ProductData = await res.json();
                 productData.url = newProductData.url ? newProductData.url : url;
                 productData.name = newProductData.name ? newProductData.name : newProductData.title || "";
-                productData.imageUrl = newProductData.image;
+                if (newProductData.image) {
+                    try {
+                        const imageUrl = new URL(newProductData.image);
+                        productData.imageUrl = imageUrl.href;
+                    } catch {
+                        if (newProductData.url) {
+                            try {
+                                console.log(newProductData.url);
+                                const url = new URL(newProductData.url);
+                                const imageUrl = new URL(newProductData.image, url);
+                                productData.imageUrl = imageUrl.href;
+                            } catch {
+                                // invalid image, stop strying to make it work
+                            }
+                        }
+                    }
+                }
+
                 if (newProductData.price) {
                     productData.itemPrice = {
                         id: "temp-id",
