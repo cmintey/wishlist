@@ -2,13 +2,17 @@
     import { SystemUsersAPI } from "$lib/api/users";
     import { getModalStore } from "@skeletonlabs/skeleton";
 
-    export let parent: any;
+    interface Props {
+        parent: any;
+    }
+
+    let { parent }: Props = $props();
 
     const modalStore = getModalStore();
     const systemUsersAPI = new SystemUsersAPI();
 
-    let username = "";
-    let name = "";
+    let username = $state("");
+    let name = $state("");
 
     async function onFormSubmit(): Promise<void> {
         if (username) {
@@ -28,7 +32,7 @@
         <span>Email</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
-                <iconify-icon class="text-lg" icon="ion:person" />
+                <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
             </div>
             <input class="input" type="text" bind:value={username} />
         </div>
@@ -38,16 +42,16 @@
         <span>Name (optional)</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
-                <iconify-icon class="text-lg" icon="ion:person" />
+                <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
             </div>
             <input class="input" type="text" bind:value={name} />
         </div>
     </label>
 
     <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>
+        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>OK</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>OK</button>
     </footer>
 </div>

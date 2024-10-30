@@ -5,7 +5,11 @@
     import type { PageData } from "./$types";
     import CreateAccountForm from "$lib/components/CreateAccountForm.svelte";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
+
+    let { data }: Props = $props();
 
     onMount(() => {
         if (data.valid) window.history.replaceState({}, "", "/signup");

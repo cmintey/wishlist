@@ -4,7 +4,11 @@
     import type { Item } from "@prisma/client";
     import type { PageData } from "./$types";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
+
+    let { data }: Props = $props();
 
     let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
         name: "",
@@ -14,14 +18,14 @@
         imageUrl: null
     };
 
-    let warningHidden = false;
+    let warningHidden = $state(false);
 </script>
 
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
     <div class="pb-4">
         <aside class="alert variant-ghost-warning">
             <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
-                <span><iconify-icon class="text-4xl" icon="ion:warning" /></span>
+                <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
                 <div>
                     <span class="text-xl font-bold">Heads up!</span>
                     <p class="text-sm">
@@ -30,7 +34,7 @@
                 </div>
             </div>
             <div class="alert-actions">
-                <button class="variant-ghost-warning btn btn-sm" on:click={() => (warningHidden = true)}>OK</button>
+                <button class="variant-ghost-warning btn btn-sm" onclick={() => (warningHidden = true)}>OK</button>
             </div>
         </aside>
     </div>

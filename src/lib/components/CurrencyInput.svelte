@@ -4,25 +4,41 @@
     import { onMount } from "svelte";
     import { getToastStore } from "@skeletonlabs/skeleton";
 
-    export let value: number | null = null;
-    export let locale: string = "en-US";
-    export let currency: string = "USD";
-    export let name: string;
-    export let id: string;
-    export let disabled: boolean = false;
+    interface Props {
+        value?: number | null;
+        locale?: string;
+        currency?: string;
+        name: string;
+        id: string;
+        disabled?: boolean;
+    }
+
+    let {
+        value = $bindable(null),
+        locale = "en-US",
+        currency = $bindable("USD"),
+        name,
+        id,
+        disabled = false
+    }: Props = $props();
 
     const toastStore = getToastStore();
-    let formatter = getFormatter(currency, locale);
-    let localeConfig = getLocaleConfig(formatter);
-    let maximumFractionDigits = formatter.resolvedOptions().maximumFractionDigits || 2;
+    let formatter = $derived(getFormatter(currency, locale));
+    let localeConfig = $derived(getLocaleConfig(formatter));
+    let maximumFractionDigits = $derived(formatter.resolvedOptions().maximumFractionDigits || 2);
     let inputtedValue = value !== null ? value.toString() : "";
-    let displayValue = inputtedValue;
-    let inputElement: HTMLInputElement | undefined;
-    let isMounted = false;
+    let displayValue = $state(inputtedValue);
+    let inputElement: HTMLInputElement | undefined = $state();
+    let isMounted = $state(false);
     let previousCurrency = currency;
 
     onMount(() => {
         isMounted = true;
+    });
+
+    $effect(() => {
+        if (isMounted && document.activeElement !== inputElement && value !== null)
+            displayValue = formatter.format(value);
     });
 
     // Checks if the key pressed is allowed
@@ -96,14 +112,6 @@
         }
         previousCurrency = currency;
     };
-
-    $: formatter = getFormatter(currency, locale);
-    $: {
-        if (isMounted && document.activeElement !== inputElement && value !== null)
-            displayValue = formatter.format(value);
-    }
-    $: console.log(value);
-    $: console.log(displayValue);
 </script>
 
 <div class="input-group grid-cols-[auto_1fr_auto]">
@@ -120,19 +128,19 @@
             autocomplete="off"
             {disabled}
             inputmode={maximumFractionDigits > 0 ? "decimal" : "numeric"}
+            onblur={handleBlur}
+            onfocus={handleFocus}
+            onkeydown={handleKeyDown}
             placeholder={formatter.format(0)}
             type="text"
             bind:value={displayValue}
-            on:keydown={handleKeyDown}
-            on:blur={handleBlur}
-            on:focus={handleFocus}
         />
     </div>
     <input id="currency" name="currency" type="hidden" bind:value={currency} />
     <input
         class="border-surface-400-500-token w-[8ch] border-l uppercase focus:border-surface-400-500-token"
         maxlength="3"
+        onchange={validateCurrency}
         value={currency}
-        on:change={validateCurrency}
     />
 </div>

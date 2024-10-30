@@ -23,7 +23,7 @@
         handleEdit();
     };
 
-    let imageUrl: string;
+    let imageUrl: string | undefined = $state();
     if (item.imageUrl) {
         try {
             new URL(item.imageUrl);
@@ -61,7 +61,7 @@
         </span>
     </div>
     <p class="whitespace-pre-wrap">{item.note}</p>
-    <div class="flex flex-row justify-between">
+    <div class="flex flex-row justify-between pb-4">
         <ClaimButtons
             {item}
             {onPublicList}

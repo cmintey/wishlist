@@ -13,21 +13,22 @@
         isAdmin: boolean;
     };
 
-    export let users: (User & { groups?: string[] })[];
-    export let currentUser: User;
-    export let config: Config;
-    export let groups: Group[];
-
-    let usersFiltered: (User & { groups?: string[] })[];
-
-    let userData: TableSource;
-    $: if (usersFiltered) {
-        userData = {
-            head: ["Name", "Username", "Email", "Admin", "Groups"],
-            body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
-            meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin"])
-        };
+    interface Props {
+        users: (User & { groups?: string[] })[];
+        currentUser: User;
+        config: Config;
+        groups: Group[];
     }
+
+    let { users, currentUser, config, groups }: Props = $props();
+
+    let usersFiltered: (User & { groups?: string[] })[] = $state(users);
+
+    let userData: TableSource = $derived({
+        head: ["Name", "Username", "Email", "Admin", "Groups"],
+        body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
+        meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin"])
+    });
 
     const selectionHandler = (meta: CustomEvent<string[]>) => {
         const user = meta.detail as unknown as User;

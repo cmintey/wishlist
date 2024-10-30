@@ -4,14 +4,28 @@
     import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
 
-    export let id: string;
-    export let name: string | undefined = undefined;
-    export let label: string;
-    export let required = false;
-    export let autocomplete: string | null | undefined = undefined;
-    export let error = false;
-    export let value: string | null | undefined = "";
-    export let strengthMeter = false;
+    interface Props {
+        id: string;
+        name?: string | undefined;
+        label: string;
+        required?: boolean;
+        autocomplete?: AutoFill | null | undefined;
+        error?: boolean;
+        value?: string | null | undefined;
+        strengthMeter?: boolean;
+    }
+
+    let {
+        id,
+        name = undefined,
+        label,
+        required = false,
+        autocomplete = undefined,
+        error = false,
+        value = $bindable(""),
+        strengthMeter = false,
+        ...restProps
+    }: Props = $props();
 
     onMount(async () => {
         if (strengthMeter) {
@@ -20,16 +34,15 @@
         }
     });
 
-    let strength: ZxcvbnResult | undefined;
-    $: strength = value ? zxcvbn(value) : undefined;
-
-    let visible = false;
-
-    const handleClick = () => {
-        visible = !visible;
-    };
+    let strength: ZxcvbnResult | undefined = $derived(value ? zxcvbn(value) : undefined);
+    let visible = $state(false);
 
     const meterLookup = ["bg-error-500", "bg-error-500", "bg-error-500", "bg-warning-500", "bg-success-500"];
+
+    const handleClick = (e: Event) => {
+        e.preventDefault();
+        visible = !visible;
+    };
 
     const popupSettings: PopupSettings = {
         event: "hover",
@@ -47,20 +60,21 @@
             class="input"
             class:input-error={error}
             {autocomplete}
+            oninput={(e) => (value = e.currentTarget.value)}
             {required}
             type={visible ? "text" : "password"}
             {value}
-            on:input={(e) => (value = e.currentTarget.value)}
-            {...$$props}
+            {...restProps}
         />
         <button
             id="showpassword"
+            aria-label="toggle password visibility"
+            onclick={handleClick}
+            onkeypress={(e) => e.preventDefault()}
             tabindex="-1"
             type="button"
-            on:click|preventDefault={handleClick}
-            on:keypress|preventDefault
         >
-            <iconify-icon class="-mb-0.5" icon="ion:{visible ? 'eye-off' : 'eye'}" />
+            <iconify-icon class="-mb-0.5" icon="ion:{visible ? 'eye-off' : 'eye'}"></iconify-icon>
         </button>
     </div>
 </label>
@@ -78,21 +92,21 @@
             class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
             use:popup={popupSettings}
         >
-            <iconify-icon icon="ion:information-circle-outline" />
+            <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
         </div>
     </div>
 
     <div class="card variant-filled p-4" data-popup="suggestions">
         {#if strength.feedback.warning}
             <div class="flex flex-row items-center space-x-4 pb-1">
-                <iconify-icon icon="ion:alert-circle" />
+                <iconify-icon icon="ion:alert-circle"></iconify-icon>
                 <p>{strength.feedback.warning}</p>
             </div>
         {/if}
         <ul class="list">
             {#each strength.feedback.suggestions as suggestion}
                 <li>
-                    <iconify-icon icon="ion:arrow-forward" />
+                    <iconify-icon icon="ion:arrow-forward"></iconify-icon>
                     <p>{suggestion}</p>
                 </li>
             {/each}

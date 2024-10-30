@@ -5,11 +5,16 @@
     import { page } from "$app/stores";
     import { GroupAPI } from "$lib/api/groups";
 
-    export let data: LayoutData;
+    interface Props {
+        data: LayoutData;
+        children?: import("svelte").Snippet;
+    }
+
+    let { data, children }: Props = $props();
 
     const groupAPI = new GroupAPI(data.group.id);
-    let editing = false;
-    let newGroupName: string;
+    let editing = $state(false);
+    let newGroupName: string | undefined = $state();
     const saveGroupName = async () => {
         if (newGroupName) {
             await groupAPI.update({ name: newGroupName });
@@ -23,7 +28,7 @@
         { href: "/settings", label: "Settings" }
     ];
 
-    let selectedTab = 0;
+    let selectedTab = $state(0);
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,
@@ -41,16 +46,16 @@
             bind:value={newGroupName}
         />
         <div class="flex flex-row items-center -space-x-2">
-            <button class="btn-icon pr-0" on:click={() => saveGroupName()}>
+            <button class="btn-icon pr-0" aria-label="save group name" onclick={() => saveGroupName()}>
                 <iconify-icon icon="ion:save" width="24px"></iconify-icon>
             </button>
-            <button class="btn-icon pl-0" on:click={() => (editing = !editing)}>
+            <button class="btn-icon pl-0" aria-label="cancel editing" onclick={() => (editing = !editing)}>
                 <iconify-icon class="text-error-500" icon="ion:close" width="24px"></iconify-icon>
             </button>
         </div>
     {:else}
         <h2 class="h2 pb-2">{data.group.name}</h2>
-        <button class="btn-icon" on:click={() => (editing = !editing)}>
+        <button class="btn-icon" aria-label="edit group name" onclick={() => (editing = !editing)}>
             <iconify-icon icon="ion:create-outline" width="24px"></iconify-icon>
         </button>
     {/if}
@@ -68,9 +73,9 @@
         </Tab>
     {/each}
 
-    <svelte:fragment slot="panel">
-        <slot />
-    </svelte:fragment>
+    {#snippet panel()}
+        {@render children?.()}
+    {/snippet}
 </TabGroup>
 
 <svelte:head>

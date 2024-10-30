@@ -6,11 +6,11 @@
 
     const toastStore = getToastStore();
 
-    let passwordReset = {
+    let passwordReset = $state({
         current: "",
         new: "",
         confirm: ""
-    };
+    });
 </script>
 
 <form

@@ -3,10 +3,14 @@
     import type { User } from "@prisma/client";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
-    export let parent: any;
+    interface Props {
+        parent: any;
+    }
+
+    let { parent }: Props = $props();
 
     const modalStore = getModalStore();
-    let selectedUser: string;
+    let selectedUser: string | undefined = $state();
 
     function onFormSubmit(): void {
         if (selectedUser) {
@@ -17,7 +21,7 @@
 
     const usersAPI = new UsersAPI();
 
-    let users: User[] = [];
+    let users: User[] = $state([]);
     const doSearch = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
         const resp = await usersAPI.search(e.currentTarget.value);
         users = await resp.json();
@@ -31,9 +35,9 @@
         <span>Search</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
-                <iconify-icon class="text-lg" icon="ion:search" />
+                <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
             </div>
-            <input class="input" type="search" on:input={doSearch} />
+            <input class="input" oninput={doSearch} type="search" />
         </div>
     </label>
 
@@ -48,9 +52,9 @@
     {/if}
 
     <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>
+        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>Add User</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Add User</button>
     </footer>
 </div>

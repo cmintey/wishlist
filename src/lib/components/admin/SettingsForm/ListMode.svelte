@@ -1,8 +1,12 @@
 <script lang="ts">
     import Alert from "$lib/components/Alert.svelte";
 
-    export let mode: ListMode;
-    export let disabled = false;
+    interface Props {
+        mode: ListMode;
+        disabled?: boolean;
+    }
+
+    let { mode = $bindable(), disabled = false }: Props = $props();
 </script>
 
 <div class="flex flex-col space-y-2">

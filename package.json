@@ -18,20 +18,20 @@
     "devDependencies": {
         "@eslint/js": "^9.11.1",
         "@floating-ui/dom": "^1.6.11",
-        "@skeletonlabs/skeleton": "^2.10.2",
+        "@skeletonlabs/skeleton": "^2.10.3",
         "@skeletonlabs/tw-plugin": "^0.4.0",
-        "@sveltejs/adapter-node": "^5.2.5",
-        "@sveltejs/kit": "^2.6.1",
-        "@sveltejs/vite-plugin-svelte": "^3.1.2",
+        "@sveltejs/adapter-node": "^5.2.9",
+        "@sveltejs/kit": "^2.7.3",
+        "@sveltejs/vite-plugin-svelte": "^4.0.0",
         "@tailwindcss/forms": "^0.5.9",
         "@types/eslint": "^9.6.1",
         "@types/metascraper": "^5.14.3",
         "@types/node": "^20.16.10",
         "@types/nodemailer": "^6.4.16",
         "@types/pulltorefreshjs": "^0.1.7",
-        "@vite-pwa/sveltekit": "^0.6.5",
+        "@vite-pwa/sveltekit": "^0.6.6",
         "autoprefixer": "^10.4.20",
-        "eslint-plugin-svelte": "^2.44.1",
+        "eslint-plugin-svelte": "^2.45.1",
         "fuzzysort": "^3.0.2",
         "globals": "^15.9.0",
         "postcss": "^8.4.47",
@@ -40,9 +40,9 @@
         "prettier-plugin-svelte": "^3.2.7",
         "prettier-plugin-tailwindcss": "^0.6.8",
         "pulltorefreshjs": "^0.1.22",
-        "svelte": "^4.2.19",
+        "svelte": "^5.1.4",
         "svelte-check": "^4.0.4",
-        "svelte-dnd-action": "^0.9.51",
+        "svelte-dnd-action": "^0.9.52",
         "svelte-preprocess": "^6.0.3",
         "tailwindcss": "^3.4.13",
         "ts-node": "^10.9.2",
@@ -77,6 +77,11 @@
         "zod": "^3.23.8"
     },
     "engines": {
-        "node": "^20"
+        "node": "^22"
+    },
+    "pnpm": {
+        "overrides": {
+            "tough-cookie": "5.0.0"
+        }
     }
 }

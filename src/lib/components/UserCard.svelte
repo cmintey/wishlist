@@ -1,16 +1,20 @@
 <script lang="ts">
     import Avatar from "./Avatar.svelte";
 
-    export let hideCount = false;
-    export let user: {
-        name: string;
-        username: string;
-        items: { id: number }[];
-        _count?: {
-            items: number;
+    interface Props {
+        hideCount?: boolean;
+        user: {
+            name: string;
+            username: string;
+            items: { id: number }[];
+            _count?: {
+                items: number;
+            };
         };
-    };
-    export let newItems = false;
+        newItems?: boolean;
+    }
+
+    let { hideCount = false, user, newItems = false }: Props = $props();
 </script>
 
 <a class="card" data-sveltekit-preload-data href="/wishlists/{user.username}">
@@ -22,7 +26,7 @@
                     <span class="unstyled text-primary-700-200-token no-underline">{user.name}</span>
                 </span>
                 <div class="flex flex-row items-center space-x-2">
-                    <iconify-icon icon="ion:gift" />
+                    <iconify-icon icon="ion:gift"></iconify-icon>
                     <span>
                         {!hideCount && user._count ? `${user._count.items}/` : ""}{user.items.length}
                     </span>
@@ -31,7 +35,7 @@
                             class="text-primary-700-200-token opacity-40"
                             icon="ion:ellipse-sharp"
                             width="10px"
-                        />
+                        ></iconify-icon>
                     {/if}
                 </div>
             </div>

@@ -1,7 +1,11 @@
 <script lang="ts">
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
-    export let parent: any;
+    interface Props {
+        parent: any;
+    }
+
+    let { parent }: Props = $props();
     const modalStore = getModalStore();
 
     // passed in via meta
@@ -9,8 +13,8 @@
     let defaultGroup: Record<string, string> = $modalStore[0] ? $modalStore[0].meta?.defaultGroup : undefined;
     let smtpEnabled: boolean = $modalStore[0] ? $modalStore[0].meta?.smtpEnabled : false;
 
-    let userEmail: string;
-    let selectedGroup: string | undefined = defaultGroup?.id || undefined;
+    let userEmail: string | undefined = $state();
+    let selectedGroup: string | undefined = $state(defaultGroup?.id || undefined);
 
     function onFormSubmit(): void {
         if (selectedGroup) {
@@ -60,9 +64,9 @@
     {/if}
 
     <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>
+        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>Invite</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Invite</button>
     </footer>
 </div>

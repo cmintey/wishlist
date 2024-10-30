@@ -8,19 +8,24 @@
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
 
-    export let data: Partial<Item> & {
-        itemPrice?: ItemPrice | null;
-    };
-    export let buttonText: string;
+    interface Props {
+        data: Partial<Item> & {
+            itemPrice?: ItemPrice | null;
+        };
+        buttonText: string;
+    }
 
-    $: form = $page.form;
-    let loading = false;
-    let urlFetched = false;
+    let { data = $bindable(), buttonText }: Props = $props();
+
+    let productData = $state(data);
+    let form = $derived($page.form);
+    let loading = $state(false);
+    let urlFetched = $state(false);
     const toastStore = getToastStore();
-    let locale: string | undefined;
-    let price: number | null = getPriceValue(data);
+    let locale: string | undefined = $state();
+    let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
-    let userCurrency: string = data.itemPrice?.currency || defaultCurrency;
+    let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
 
     onMount(() => {
         if (navigator.languages?.length > 0) {
@@ -49,23 +54,39 @@
     };
 
     const getInfo = async () => {
-        if (data.url && !urlFetched) {
+        if (productData.url && !urlFetched) {
             loading = true;
-            const url = extractUrl(data.url);
+            const url = extractUrl(productData.url);
             const res = await fetch(`/api/product?url=${url}`);
             if (res.ok) {
-                let productData: ProductData = await res.json();
-                data.url = productData.url ? productData.url : url;
-                data.name = productData.name ? productData.name : productData.title || "";
-                data.imageUrl = productData.image;
-                if (productData.price) {
-                    data.itemPrice = {
+                let newProductData: ProductData = await res.json();
+                productData.url = newProductData.url ? newProductData.url : url;
+                productData.name = newProductData.name ? newProductData.name : newProductData.title || "";
+                if (newProductData.image) {
+                    try {
+                        const imageUrl = new URL(newProductData.image);
+                        productData.imageUrl = imageUrl.href;
+                    } catch {
+                        if (newProductData.url) {
+                            try {
+                                console.log(newProductData.url);
+                                const url = new URL(newProductData.url);
+                                const imageUrl = new URL(newProductData.image, url);
+                                productData.imageUrl = imageUrl.href;
+                            } catch {
+                                // invalid image, stop strying to make it work
+                            }
+                        }
+                    }
+                }
+
+                if (newProductData.price) {
+                    productData.itemPrice = {
                         id: "temp-id",
-                        currency: productData.currency || defaultCurrency,
-                        value: productData.price
+                        currency: newProductData.currency || defaultCurrency,
+                        value: newProductData.price
                     };
-                    price = data.itemPrice.value;
-                    userCurrency = data.itemPrice.currency;
+                    price = newProductData.price;
                 }
             } else {
                 triggerToast();
@@ -88,36 +109,39 @@
                     id="url"
                     name="url"
                     class="input"
+                    onfocusout={() => getInfo()}
                     placeholder="Enter a URL to fetch the item data"
                     type="url"
-                    bind:value={data.url}
-                    on:focusout={() => getInfo()}
+                    bind:value={productData.url}
                 />
-                {#if data.url}
+                {#if productData.url}
                     <button
                         id="reset-field"
+                        aria-label="clear url field"
+                        onclick={() => (productData.url = null)}
+                        onkeypress={(e) => e.preventDefault()}
                         tabindex="-1"
                         type="button"
-                        on:click={() => (data.url = null)}
-                        on:keypress|preventDefault
                     >
-                        <iconify-icon icon="ion:close-circle" />
+                        <iconify-icon icon="ion:close-circle"></iconify-icon>
                     </button>
                 {/if}
             </div>
-            {#if data.url}
+            {#if productData.url}
                 <button
                     id="refresh-item"
                     class="variant-ghost-primary btn btn-icon"
-                    tabindex="-1"
-                    type="button"
-                    on:click|preventDefault={() => {
+                    aria-label="refresh item data"
+                    onclick={(e) => {
+                        e.preventDefault();
                         urlFetched = false;
                         getInfo();
                     }}
-                    on:keypress|preventDefault
+                    onkeypress={(e) => e.preventDefault()}
+                    tabindex="-1"
+                    type="button"
                 >
-                    <iconify-icon icon="ion:refresh" />
+                    <iconify-icon icon="ion:refresh"></iconify-icon>
                 </button>
             {/if}
         </div>
@@ -137,7 +161,7 @@
                 autocomplete="off"
                 required
                 type="text"
-                bind:value={data.name}
+                bind:value={productData.name}
             />
         </div>
         {#if form?.missing}
@@ -167,7 +191,7 @@
                 class="input"
                 autocomplete="off"
                 type="text"
-                bind:value={data.imageUrl}
+                bind:value={productData.imageUrl}
             />
         </div>
     </label>
@@ -180,8 +204,8 @@
             class="textarea"
             placeholder="i.e. size, color, etc."
             rows="4"
-            bind:value={data.note}
-        />
+            bind:value={productData.note}
+        ></textarea>
     </label>
 
     <div class="flex flex-col space-y-2">
@@ -191,7 +215,7 @@
             <button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
                 {buttonText}
             </button>
-            <button class="variant-ghost-secondary btn w-min" type="button" on:click={() => history.back()}>
+            <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
                 Cancel
             </button>
         </div>

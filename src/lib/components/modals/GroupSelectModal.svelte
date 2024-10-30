@@ -1,9 +1,13 @@
 <script lang="ts">
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
-    export let parent: any;
+    interface Props {
+        parent: any;
+    }
+
+    let { parent }: Props = $props();
     const modalStore = getModalStore();
-    let selectedGroup: string;
+    let selectedGroup: string | undefined = $state();
     let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];
 
     function onFormSubmit(): void {
@@ -25,9 +29,9 @@
     </ListBox>
 
     <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>
+        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>Change Group</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Change Group</button>
     </footer>
 </div>

@@ -1,7 +1,11 @@
 <script lang="ts">
     import { ProgressRadial } from "@skeletonlabs/skeleton";
 
-    export let text: string;
+    interface Props {
+        text: string;
+    }
+
+    let { text }: Props = $props();
 </script>
 
 <div

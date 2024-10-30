@@ -1,4 +1,4 @@
-FROM node:lts-slim as build
+FROM node:lts-slim AS build
 
 WORKDIR /usr/src/app
 
@@ -12,10 +12,10 @@ RUN pnpm prisma generate
 RUN pnpm run build
 RUN pnpm prune --prod
 
-FROM node:lts-slim as app
+FROM node:lts-slim AS app
 
-ENV NODE_ENV production
-ENV BODY_SIZE_LIMIT 5000000
+ENV NODE_ENV=production
+ENV BODY_SIZE_LIMIT=5000000
 
 WORKDIR /usr/src/app
 
@@ -42,7 +42,7 @@ RUN chmod +x entrypoint.sh
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data
 
-ENV DEFAULT_CURRENCY USD
-ENV TOKEN_TIME 72
+ENV DEFAULT_CURRENCY=USD
+ENV TOKEN_TIME=72
 
 ENTRYPOINT [ "sh", "entrypoint.sh" ]

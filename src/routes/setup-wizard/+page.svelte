@@ -3,8 +3,8 @@
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
 
+    let introStep = $state(0);
     let getStarted = false;
-    let introStep = 0;
     let statements = ["Hi!", "Welcome to Wishlist", "Let's get started"];
 
     onMount(() => {
@@ -31,8 +31,8 @@
             <button
                 style:visibility={introStep < 2 ? "hidden" : ""}
                 class="variant-filled-primary btn"
+                onclick={() => goto("setup-wizard/step/1")}
                 type="button"
-                on:click={() => goto("setup-wizard/step/1")}
                 in:fade={{ delay: 1200 }}
             >
                 Get Started

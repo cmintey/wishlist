@@ -3,10 +3,14 @@
     import Backdrop from "$lib/components/Backdrop.svelte";
     import type { ActionData, PageData } from "./$types";
 
-    export let data: PageData;
-    export let form: ActionData;
+    interface Props {
+        data: PageData;
+        form: ActionData;
+    }
 
-    let loading = false;
+    let { data, form }: Props = $props();
+
+    let loading = $state(false);
 </script>
 
 {#if data.smtpEnabled}
@@ -14,7 +18,7 @@
         <h1 class="h1">Reset Password</h1>
         {#if form?.success}
             <div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
-                <iconify-icon icon="ion:checkmark-circle-outline" width="100" />
+                <iconify-icon icon="ion:checkmark-circle-outline" width="100"></iconify-icon>
                 <span class="text-xl font-bold">Success!</span>
                 <p>Check your email and follow the link to reset your password.</p>
             </div>

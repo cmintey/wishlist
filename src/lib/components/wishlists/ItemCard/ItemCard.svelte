@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script lang="ts" module>
     export type PartialUser = {
         username: string;
         name: string;
@@ -35,31 +35,45 @@
     import { onMount } from "svelte";
     import { page } from "$app/stores";
 
-    export let item: FullItem;
-    export let user: (PartialUser & { id: string }) | undefined = undefined;
-    export let showClaimedName = false;
-    export let showFor = false;
-    export let onPublicList = false;
-    export let reorderActions = false;
-    export let onIncreasePriority: ItemVoidFunction | undefined = undefined;
-    export let onDecreasePriority: ItemVoidFunction | undefined = undefined;
+    interface Props {
+        item: FullItem;
+        user?: (PartialUser & { id: string }) | undefined;
+        showClaimedName?: boolean;
+        showFor?: boolean;
+        onPublicList?: boolean;
+        reorderActions?: boolean;
+        onIncreasePriority?: ItemVoidFunction | undefined;
+        onDecreasePriority?: ItemVoidFunction | undefined;
+    }
+
+    let {
+        item,
+        user = undefined,
+        showClaimedName = false,
+        showFor = false,
+        onPublicList = false,
+        reorderActions = false,
+        onIncreasePriority = undefined,
+        onDecreasePriority = undefined
+    }: Props = $props();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
     const drawerStore = getDrawerStore();
 
-    let imageUrl: string;
-    const itemAPI = new ItemAPI(item.id);
-    let locale: string | undefined;
-
-    $: if (item.imageUrl) {
-        try {
-            new URL(item.imageUrl);
-            imageUrl = item.imageUrl;
-        } catch {
-            imageUrl = `/api/assets/${item.imageUrl}`;
+    let imageUrl: string | undefined = $derived.by(() => {
+        if (item.imageUrl) {
+            try {
+                new URL(item.imageUrl);
+                return item.imageUrl;
+            } catch {
+                return `/api/assets/${item.imageUrl}`;
+            }
         }
-    }
+    });
+    let locale: string | undefined = $state();
+
+    const itemAPI = new ItemAPI(item.id);
 
     onMount(() => {
         if (navigator.languages?.length > 0) {
@@ -177,7 +191,7 @@
         await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
     };
 
-    const drawerSettings: DrawerSettings = {
+    const drawerSettings: DrawerSettings = $derived({
         id: "item",
         position: "bottom",
         height: "max-h-screen",
@@ -195,14 +209,16 @@
             handleApproval,
             handleEdit
         }
-    };
+    });
 </script>
 
-<button
+<div
     class="card card-hover block w-full text-start"
     class:variant-ghost-warning={!item.approved}
-    type="button"
-    on:click={() => drawerStore.open(drawerSettings)}
+    onclick={() => drawerStore.open(drawerSettings)}
+    onkeyup={(e) => (e.key === "Enter" ? drawerStore.open(drawerSettings) : null)}
+    role="button"
+    tabindex="0"
 >
     <header class="card-header">
         <div class="flex w-full">
@@ -211,9 +227,9 @@
                     <a
                         class="dark:!text-primary-200"
                         href={item.url}
+                        onclick={(e) => e.stopPropagation()}
                         rel="noreferrer"
                         target="_blank"
-                        on:click|stopPropagation
                     >
                         {item.name}
                     </a>
@@ -226,7 +242,7 @@
 
     <div class="flex flex-row space-x-2 p-4">
         {#if imageUrl}
-            <img class="h-36 w-36 object-contain" alt="product" src={imageUrl} />
+            <img class="h-36 w-36 object-contain" alt={item.name} referrerpolicy="no-referrer" src={imageUrl} />
         {/if}
 
         <div class="flex flex-col">
@@ -273,4 +289,4 @@
             />
         {/if}
     </footer>
-</button>
+</div>
