@@ -17,7 +17,7 @@
 
 {#if user && $isInstalled}
     <TabGroup
-        class="bg-surface-200-700-token w-full pb-6 pt-4 md:hidden"
+        class="bottom-nav bg-surface-200-700-token w-full pt-4 md:hidden"
         active="variant-glass-primary"
         border=""
         hover="hover:variant-soft-primary"
@@ -32,3 +32,9 @@
         {/each}
     </TabGroup>
 {/if}
+
+<style global>
+    .bottom-nav {
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+</style>
