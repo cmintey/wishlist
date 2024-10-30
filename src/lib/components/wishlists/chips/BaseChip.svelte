@@ -62,7 +62,7 @@
     <span>
         <button
             class="variant-ringed-primary chip"
-            class:variant-ghost-primary={selectedOption !== defaultOption}
+            class:variant-ghost-primary={selectedOption.value !== defaultOption.value}
             use:popup={menuSettings}
         >
             {#if selectedOption.direction === "asc"}
