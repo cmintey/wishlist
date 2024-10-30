@@ -61,6 +61,7 @@
                 mainElement: document.getElementById("main") as unknown as string,
                 distThreshold: 70,
                 resistanceFunction: (t) => Math.min(1, t / 4.5),
+                shouldPullToRefresh: () => window.scrollY === 0,
                 onRefresh() {
                     window.location.reload();
                 }
