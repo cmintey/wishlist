@@ -13,6 +13,9 @@ export const hashItems = async (items: Partial<Item>[]): Promise<string> => {
 };
 
 export const hash = async (data: string): Promise<string> => {
+    if (!window || !window.isSecureContext) {
+        return Promise.resolve("");
+    }
     const encoder = new TextEncoder();
     const digest = await crypto.subtle.digest("SHA-256", encoder.encode(data));
     return btoa(String.fromCharCode(...new Uint8Array(digest)));
