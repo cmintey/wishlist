@@ -46,24 +46,25 @@
         showNavigationLoadingBar = true;
     });
 
-    afterNavigate(() => {
+    afterNavigate((params) => {
         showNavigationLoadingBar = false;
         documentTitle = document?.title;
         disabled = titleDisabledUrls.find((url) => $page.url.pathname.match(url)) !== undefined;
+        if (params.type !== "popstate" && params.to?.url.pathname !== params.from?.url.pathname) {
+            const elemPage = document.querySelector("#page");
+            if (elemPage) elemPage.scrollTop = 0;
+        }
     });
 
     initializeStores();
 
     onMount(() => {
-        $isInstalled = true;
-
         if (window.matchMedia("(display-mode: standalone)").matches) {
             $isInstalled = true;
             const ptr = PullToRefresh.init({
                 mainElement: document.getElementById("main") as unknown as string,
                 distThreshold: 70,
                 resistanceFunction: (t) => Math.min(1, t / 4.5),
-                shouldPullToRefresh: () => document.getElementById("main")?.scrollTop === 0,
                 onRefresh() {
                     window.location.reload();
                 }
@@ -92,22 +93,22 @@
 
 <Drawer />
 
-<div class="flex h-screen flex-col overflow-hidden">
-    <header class="w-full">
+<div class="min-h-screen">
+    <header class="sticky top-0 z-10">
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
         <NavBar {navItems} user={data.user} />
     </header>
 
-    <main id="main" class="flex-1 overflow-y-scroll px-4 py-4 md:px-12 lg:px-32 xl:px-56">
+    <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
         {#if !$isInstalled && !disabled && documentTitle}
             <h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
         {/if}
         {@render children?.()}
     </main>
 
-    <footer class="w-full">
+    <footer class="sticky bottom-0 z-10">
         <BottomTabs {navItems} user={data.user} />
     </footer>
 </div>
