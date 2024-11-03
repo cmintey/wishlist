@@ -2,10 +2,11 @@ FROM node:lts-slim AS build
 
 WORKDIR /usr/src/app
 
-COPY ./ .
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
+
+COPY ./ .
 RUN npm i -g pnpm@latest-9
 RUN pnpm i --frozen-lockfile
 RUN pnpm prisma generate
