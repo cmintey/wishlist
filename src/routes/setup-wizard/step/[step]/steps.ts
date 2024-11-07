@@ -3,4 +3,7 @@ import CreateAccountStep from "./CreateAccountStep.svelte";
 import GlobalSettingsStep from "./GlobalSettingsStep.svelte";
 import InviteUsersStep from "./InviteUsersStep.svelte";
 
-export const steps: Component[] = [CreateAccountStep, GlobalSettingsStep, InviteUsersStep];
+export interface Props {
+    onSuccess: () => void;
+}
+export const steps: Component<Props>[] = [CreateAccountStep, GlobalSettingsStep, InviteUsersStep];

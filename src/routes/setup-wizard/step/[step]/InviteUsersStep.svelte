@@ -3,10 +3,8 @@
     import { page } from "$app/stores";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
+    import type { Props } from "./steps";
 
-    interface Props {
-        onSuccess: () => void;
-    }
     let { onSuccess }: Props = $props();
 
     let config: Config = $derived($page.data.config);

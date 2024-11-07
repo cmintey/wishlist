@@ -3,10 +3,8 @@
     import CreateAccountForm from "$lib/components/CreateAccountForm.svelte";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
+    import type { Props } from "./steps";
 
-    interface Props {
-        onSuccess: () => void;
-    }
     let { onSuccess }: Props = $props();
 
     let form: HTMLFormElement | undefined = $state();

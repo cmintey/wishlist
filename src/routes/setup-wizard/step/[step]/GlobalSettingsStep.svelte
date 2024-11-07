@@ -4,10 +4,8 @@
     import SettingsForm from "$lib/components/admin/SettingsForm/index.svelte";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
+    import type { Props } from "./steps";
 
-    interface Props {
-        onSuccess: () => void;
-    }
     let { onSuccess }: Props = $props();
 
     let config: Config = $state($page.data.config);
