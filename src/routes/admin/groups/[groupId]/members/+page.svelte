@@ -27,8 +27,10 @@
         type: "component",
         component: "addUser",
         response: async (userId: string) => {
-            await groupAPI.addMember(userId);
-            invalidateAll();
+            if (userId) {
+                await groupAPI.addMember(userId);
+                invalidateAll();
+            }
         }
     };
 

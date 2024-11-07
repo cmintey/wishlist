@@ -48,6 +48,9 @@
             valueAttr: { type: "text", minlength: 3, maxlength: 32, required: true },
             // Returns the updated response value
             response: async (name: string) => {
+                if (!name) {
+                    return;
+                }
                 const groupsAPI = new GroupsAPI();
                 const group = await groupsAPI.create(name);
                 if (group) {

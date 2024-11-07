@@ -19,29 +19,35 @@
 
     let form = $derived($page.form);
 
-    const triggerToast = () => {
-        const toastConfig: ToastSettings = {
-            message: "Invite sent!",
-            background: "variant-filled-success",
-            autohide: true,
-            timeout: 3000
-        };
-        toastStore.trigger(toastConfig);
-    };
-
     let groupId = $state("");
     let email = $state("");
     let submitButton: HTMLButtonElement | undefined = $state();
     let showUrl = $state(true);
 
     $effect(() => {
-        if (form?.success && config.smtp.enable) {
-            triggerToast();
+        if (form?.success && form?.sent !== null && config.smtp.enable) {
+            let toastConfig: ToastSettings;
+            if (form?.sent) {
+                toastConfig = {
+                    message: "Invite sent!",
+                    background: "variant-filled-success",
+                    autohide: true,
+                    timeout: 3000
+                };
+            } else {
+                toastConfig = {
+                    message: `Invite failed to send: ${form?.message} `,
+                    background: "variant-filled-error",
+                    autohide: true,
+                    timeout: 3000
+                };
+            }
+            toastStore.trigger(toastConfig);
         }
     });
 
     const triggerInviteModal = () => {
-        if (groups.length === 0 && defaultGroup) {
+        if (!config.smtp.enable && groups.length === 0 && defaultGroup) {
             groupId = defaultGroup.id;
             setTimeout(() => submitButton?.click(), 200);
             showUrl = true;
