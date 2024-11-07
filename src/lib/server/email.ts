@@ -43,7 +43,10 @@ const sendEmail = async (options: Mail.Options) => {
             !config.smtp.fromName)
     ) {
         console.log("SMTP not set up properly, check your settings");
-        return false;
+        return {
+            success: false,
+            message: "SMTP not set up properly, check your settings"
+        };
     }
 
     const transport = nodemailer.createTransport({
@@ -54,16 +57,26 @@ const sendEmail = async (options: Mail.Options) => {
             pass: config.smtp.pass
         }
     });
-    const msgInfo = await transport.sendMail({
-        from: {
-            name: config.smtp.fromName,
-            address: config.smtp.from
-        },
-        ...options
-    });
 
-    console.log(msgInfo);
-    return msgInfo.accepted.length > 0;
+    return await transport
+        .sendMail({
+            from: {
+                name: config.smtp.fromName,
+                address: config.smtp.from
+            },
+            ...options
+        })
+        .then((msgInfo) => ({
+            success: msgInfo.accepted.length === 1,
+            message: null
+        }))
+        .catch((e) => {
+            console.error(e);
+            return {
+                success: false,
+                message: e?.response
+            };
+        });
 };
 
 export const sendSignupLink = async (to: string, url: string) => {

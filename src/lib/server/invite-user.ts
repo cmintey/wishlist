@@ -44,7 +44,7 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
             }
         });
 
-        return { action: "invite-email", success: true, url: tokenUrl.href };
+        return { action: "invite-email", success: true, sent: null, message: null, url: tokenUrl.href };
     }
 
     await client.signupToken.create({
@@ -54,6 +54,6 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
         }
     });
 
-    await sendSignupLink(data.data["invite-email"]!, tokenUrl.href);
-    return { action: "invite-email", success: true, url: null };
+    const msgInfo = await sendSignupLink(data.data["invite-email"]!, tokenUrl.href);
+    return { action: "invite-email", success: true, sent: msgInfo.success, message: msgInfo.message, url: null };
 };
