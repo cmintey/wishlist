@@ -5,8 +5,7 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
-    const config: Config = $page.data.config;
-
+    let config: Config = $state($page.data.config);
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
     let saved = $state(false);

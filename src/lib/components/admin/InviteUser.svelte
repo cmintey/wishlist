@@ -25,7 +25,8 @@
     let showUrl = $state(true);
 
     $effect(() => {
-        if (form?.success && form?.sent !== null && config.smtp.enable) {
+        $inspect(form);
+        if (form?.success && form?.sent !== undefined && config.smtp.enable) {
             let toastConfig: ToastSettings;
             if (form?.sent) {
                 toastConfig = {
