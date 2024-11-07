@@ -4,6 +4,11 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
+    interface Props {
+        onSuccess: () => void;
+    }
+    let { onSuccess }: Props = $props();
+
     let form: HTMLFormElement | undefined = $state();
 
     const submit: Writable<() => void> = getContext("submit");
@@ -21,7 +26,12 @@
         action="/signup"
         method="POST"
         use:enhance={() => {
-            return async ({ result }) => await applyAction(result);
+            return async ({ result }) => {
+                await applyAction(result);
+                if (result.type === "success" && result.data?.success) {
+                    onSuccess();
+                }
+            };
         }}
     >
         <CreateAccountForm hideActions />

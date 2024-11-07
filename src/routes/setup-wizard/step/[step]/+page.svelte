@@ -23,10 +23,6 @@
         $state.current = Number.parseInt($page.params.step) - 1;
     });
 
-    $effect(() => {
-        if ($page.form?.success) next();
-    });
-
     const next = () => {
         if ($state.current + 1 < $state.total) {
             $state.current = $state.current + 1;
@@ -43,7 +39,7 @@
 </script>
 
 <div transition:fade>
-    <SvelteComponent />
+    <SvelteComponent onSuccess={next} />
 
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->

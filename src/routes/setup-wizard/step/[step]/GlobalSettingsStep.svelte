@@ -5,6 +5,11 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
+    interface Props {
+        onSuccess: () => void;
+    }
+    let { onSuccess }: Props = $props();
+
     let config: Config = $state($page.data.config);
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
@@ -42,6 +47,9 @@
                     }
 
                     await applyAction(result);
+                    if (result.type === "success" && result.data?.success) {
+                        onSuccess();
+                    }
                 };
             }}
         >
