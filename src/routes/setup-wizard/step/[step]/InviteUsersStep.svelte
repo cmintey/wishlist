@@ -4,7 +4,7 @@
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
 
-    const config: Config = $page.data.config;
+    $: config = $page.data.config satisfies Config;
     const groups: Group[] = $page.data.groups;
 </script>
 
