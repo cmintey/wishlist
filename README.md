@@ -16,9 +16,23 @@ Wishlist is a self-hosted wishlist application that you can share with your frie
 -   [x] Invite users via email (SMTP configuration required)
 -   [x] Options for [suggestions](#suggestions)
 -   [x] PWA Support
--   [x] Group support
--   [x] Registry Mode
--   [ ] Draw names for a "secret santa" experience
+-   [x] Multiple groups
+-   [x] Registry Mode (single list)
+
+<p float="left">
+    <img src="./assets/homepage-desktop.png" width="74%" />
+    <img src="./assets/homepage-mobile.png" width="25%" />
+    Multiple groups for friends and family
+</p>
+
+<p float="left">
+    <img src="./assets/my-wishes-mobile.png" width="49%" />
+    <img src="./assets/wishes-mobile.png" width="49%" />
+    Add items to your list so other's can claim them
+</p>
+
+<img src="./assets/wish-form.png" />
+Create a wish from a URL, or manually fill in the details
 
 ## Getting Started
 
@@ -48,6 +62,12 @@ You can now connect to your application at `http://<host>:3280`.
 > **Note**
 >
 > Set the `ORIGIN` environment variable to the url you will be connecting to, otherwise you will experience issues
+
+### Environment Variables
+
+`ORIGIN`: The URL your users will connect to e.g. `https://wishlist.domain.com`
+`TOKEN_TIME`: The amount of time (hours) that signup and password reset tokens are valid for
+`DEFAULT_CURRENCY`: The global default currency to be used. Currency can still be changed on a per-item basis
 
 ## Groups
 
