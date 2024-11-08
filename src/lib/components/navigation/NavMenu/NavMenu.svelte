@@ -6,7 +6,11 @@
     import type { User } from "lucia";
     import GroupSubMenu from "./GroupSubMenu.svelte";
 
-    export let user: User | null;
+    interface Props {
+        user: User | null;
+    }
+
+    let { user }: Props = $props();
 
     const menuSettings: PopupSettings = {
         event: "click",
@@ -24,14 +28,14 @@
                 <ul>
                     <li>
                         <a href="/account">
-                            <iconify-icon icon="ion:person" />
+                            <iconify-icon icon="ion:person"></iconify-icon>
                             <span class="flex-auto">Account</span>
                         </a>
                     </li>
                     {#if user.roleId == Role.ADMIN}
                         <li>
                             <a href="/admin">
-                                <iconify-icon icon="ion:settings" />
+                                <iconify-icon icon="ion:settings"></iconify-icon>
                                 <span class="flex-auto">Admin</span>
                             </a>
                         </li>
@@ -44,12 +48,12 @@
                     <li>
                         <button
                             class="list-option w-full"
-                            on:click={async () => {
+                            onclick={async () => {
                                 await fetch("/logout", { method: "POST" });
                                 invalidateAll();
                             }}
                         >
-                            <iconify-icon icon="ion:log-out" />
+                            <iconify-icon icon="ion:log-out"></iconify-icon>
                             <p>Sign Out</p>
                         </button>
                     </li>

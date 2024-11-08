@@ -1,6 +1,10 @@
 <script lang="ts">
-    export let enabled: boolean;
-    export let method: SuggestionMethod;
+    interface Props {
+        enabled: boolean;
+        method: SuggestionMethod;
+    }
+
+    let { enabled = $bindable(), method = $bindable() }: Props = $props();
 </script>
 
 <div class="flex flex-col space-y-2">

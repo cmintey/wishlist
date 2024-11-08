@@ -4,7 +4,11 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageServerData } from "./$types";
 
-    export let data: PageServerData;
+    interface Props {
+        data: PageServerData;
+    }
+
+    let { data }: Props = $props();
 
     const toastStore = getToastStore();
 </script>

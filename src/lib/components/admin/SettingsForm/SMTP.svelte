@@ -1,13 +1,25 @@
 <script lang="ts">
     import PasswordInput from "$lib/components/PasswordInput.svelte";
 
-    export let enabled: boolean;
-    export let host: string | undefined | null;
-    export let port: number | undefined | null;
-    export let user: string | undefined | null;
-    export let pass: string | undefined | null;
-    export let from: string | undefined | null;
-    export let fromName: string | undefined | null;
+    interface Props {
+        enabled: boolean;
+        host: string | undefined | null;
+        port: number | undefined | null;
+        user: string | undefined | null;
+        pass: string | undefined | null;
+        from: string | undefined | null;
+        fromName: string | undefined | null;
+    }
+
+    let {
+        enabled = $bindable(),
+        host = $bindable(),
+        port = $bindable(),
+        user = $bindable(),
+        pass = $bindable(),
+        from = $bindable(),
+        fromName = $bindable()
+    }: Props = $props();
 </script>
 
 <div class="flex flex-col space-y-2">

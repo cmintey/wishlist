@@ -13,17 +13,15 @@
         total: number;
     }
 
+    const submit = writable(() => {});
+    setContext("submit", submit);
     const state: Writable<StepperState> = getContext("state");
+    const SvelteComponent = $derived(steps[$state.current]);
 
     onMount(() => {
         $state.total = steps.length;
         $state.current = Number.parseInt($page.params.step) - 1;
     });
-
-    const submit = writable(() => {});
-    setContext("submit", submit);
-
-    $: if ($page.form?.success) next();
 
     const next = () => {
         if ($state.current + 1 < $state.total) {
@@ -41,17 +39,17 @@
 </script>
 
 <div transition:fade>
-    <svelte:component this={steps[$state.current]} />
+    <SvelteComponent onSuccess={next} />
 
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->
-        <button class="variant-ghost btn" disabled={$state.current <= 1} type="button" on:click={onBack}>
+        <button class="variant-ghost btn" disabled={$state.current <= 1} onclick={onBack} type="button">
             <iconify-icon icon="ion:arrow-back"></iconify-icon>
             <span>Back</span>
         </button>
         {#if $state.current < $state.total - 1}
             <!-- Button: Next -->
-            <button class="variant-filled btn" disabled={locked} type="submit" on:click={$submit}>
+            <button class="variant-filled btn" disabled={locked} onclick={$submit} type="submit">
                 {#if locked}
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
@@ -63,8 +61,8 @@
             <button
                 class="variant-filled-primary btn"
                 disabled={locked}
+                onclick={() => goto("/login", { invalidateAll: true })}
                 type="submit"
-                on:click={() => goto("/login", { invalidateAll: true })}
             >
                 Complete
             </button>

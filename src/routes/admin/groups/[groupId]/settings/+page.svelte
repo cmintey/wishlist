@@ -5,9 +5,14 @@
     import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
     import type { PageData } from "./$types";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
 
-    let saved = false;
+    let { data }: Props = $props();
+
+    let config = $state(data.config);
+    let saved = $state(false);
 </script>
 
 <form
@@ -22,19 +27,19 @@
 >
     <div class="grid grid-cols-1 gap-4 pb-2 md:grid-cols-2">
         <div class="col-span-1">
-            <ListMode disabled={data.membershipCount > 1} bind:mode={data.config.listMode} />
+            <ListMode disabled={data.membershipCount > 1} bind:mode={config.listMode} />
         </div>
         <div class="col-span-1">
-            <Suggestions bind:enabled={data.config.suggestions.enable} bind:method={data.config.suggestions.method} />
+            <Suggestions bind:enabled={config.suggestions.enable} bind:method={config.suggestions.method} />
         </div>
         <div class="col-span-1">
-            <Claims bind:enabled={data.config.claims.showName} />
+            <Claims bind:enabled={config.claims.showName} />
         </div>
     </div>
 
     <button class="variant-filled-primary btn mt-2" type="submit">
         {#if saved}
-            <iconify-icon icon="ion:checkmark" />
+            <iconify-icon icon="ion:checkmark"></iconify-icon>
             <p>Saved</p>
         {:else}
             Save

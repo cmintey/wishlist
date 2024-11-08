@@ -3,7 +3,11 @@
     import { page } from "$app/stores";
     import logo from "$lib/assets/logo.png";
 
-    export let label = "Back";
+    interface Props {
+        label?: string;
+    }
+
+    let { label = "Back" }: Props = $props();
     const disabledUrls = [
         "/login",
         "/signup",
@@ -15,8 +19,8 @@
         "/lists"
     ];
 
-    let documentTitle: string | undefined;
-    let disabled = true;
+    let documentTitle: string | undefined = $state();
+    let disabled = $state(true);
 
     afterNavigate(() => {
         documentTitle = document?.title;
@@ -30,8 +34,8 @@
         <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
     </a>
 {:else}
-    <button class="btn w-fit p-0" type="button" on:click={() => history.back()}>
-        <iconify-icon icon="ion:arrow-back" />
+    <button class="btn w-fit p-0" onclick={() => history.back()} type="button">
+        <iconify-icon icon="ion:arrow-back"></iconify-icon>
         <span class="text-xl">{documentTitle || label}</span>
     </button>
 {/if}

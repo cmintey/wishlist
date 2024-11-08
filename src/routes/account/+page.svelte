@@ -3,20 +3,25 @@
     import ChangePassword from "$lib/components/account/ChangePassword.svelte";
     import EditProfile from "$lib/components/account/EditProfile.svelte";
     import Avatar from "$lib/components/Avatar.svelte";
-    import { FileButton, Tab, TabGroup } from "@skeletonlabs/skeleton";
+    import { FileButton, Tab } from "@skeletonlabs/skeleton";
     import type { PageServerData } from "./$types";
+    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
 
-    export let data: PageServerData;
+    interface Props {
+        data: PageServerData;
+    }
 
-    let submitButton: HTMLElement;
+    let { data }: Props = $props();
 
-    let tabSet = 0;
+    let submitButton: HTMLElement | undefined = $state();
+
+    let tabSet = $state(0);
 </script>
 
 <TabGroup>
     <Tab name="Profile" value={0} bind:group={tabSet}>Profile</Tab>
     <Tab name="Security" value={1} bind:group={tabSet}>Security</Tab>
-    <svelte:fragment slot="panel">
+    {#snippet panel()}
         {#if tabSet === 0}
             <div class="flex w-fit flex-col items-center">
                 <div class="relative m-auto h-full w-full max-w-[150px]">
@@ -33,11 +38,12 @@
                             name="profilePic"
                             accept="image/*"
                             button="btn-icon btn-icon-sm variant-glass-secondary"
-                            on:change={() => submitButton.click()}
+                            on:change={() => submitButton?.click()}
                         >
-                            <iconify-icon class="text-2xl" icon="ion:camera" />
+                            <iconify-icon class="text-2xl" icon="ion:camera"></iconify-icon>
                         </FileButton>
-                        <button bind:this={submitButton} type="submit" />
+                        <!-- svelte-ignore a11y_consider_explicit_label -->
+                        <button bind:this={submitButton} hidden type="submit"></button>
                     </form>
                 </div>
 
@@ -46,7 +52,7 @@
         {:else if tabSet === 1}
             <ChangePassword />
         {/if}
-    </svelte:fragment>
+    {/snippet}
 </TabGroup>
 
 <svelte:head>

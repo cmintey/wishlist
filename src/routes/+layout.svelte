@@ -1,10 +1,9 @@
 <script lang="ts">
     import "../app.postcss";
 
-    import type { ComponentEvents } from "svelte";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import { page } from "$app/stores";
-    import { AppShell, Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
+    import { Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
     import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 
     import NavBar from "$lib/components/navigation/NavBar.svelte";
@@ -21,7 +20,16 @@
     import Drawer from "$lib/components/Drawer.svelte";
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
 
-    export let data: LayoutData;
+    interface Props {
+        data: LayoutData;
+        children?: import("svelte").Snippet;
+    }
+
+    let { data, children }: Props = $props();
+
+    let showNavigationLoadingBar = $state(false);
+    let documentTitle: string | undefined = $state();
+    let disabled = $state(false);
 
     const titleDisabledUrls = [
         "/login",
@@ -34,11 +42,6 @@
         "/lists"
     ];
 
-    let showNavigationLoadingBar = false;
-    let documentTitle: string | undefined;
-    let disabled = false;
-    let scrollPosition = 0;
-
     beforeNavigate(() => {
         showNavigationLoadingBar = true;
     });
@@ -47,30 +50,21 @@
         showNavigationLoadingBar = false;
         documentTitle = document?.title;
         disabled = titleDisabledUrls.find((url) => $page.url.pathname.match(url)) !== undefined;
-        // scroll to top
-        const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
-        const elemPage = document.querySelector("#page");
-        if (isNewPage && elemPage !== null) {
-            elemPage.scrollTop = 0;
+        if (params.type !== "popstate" && params.to?.url.pathname !== params.from?.url.pathname) {
+            const elemPage = document.querySelector("#page");
+            if (elemPage) elemPage.scrollTop = 0;
         }
     });
 
     initializeStores();
 
-    const scrollHandler = (event: ComponentEvents<AppShell>["scroll"]) => {
-        //@ts-expect-error scrollTop doesn't exist on currentTarget
-        scrollPosition = event.currentTarget?.scrollTop;
-    };
-
     onMount(() => {
         if (window.matchMedia("(display-mode: standalone)").matches) {
             $isInstalled = true;
-
             const ptr = PullToRefresh.init({
                 mainElement: document.getElementById("main") as unknown as string,
                 distThreshold: 70,
                 resistanceFunction: (t) => Math.min(1, t / 4.5),
-                shouldPullToRefresh: () => scrollPosition === 0,
                 onRefresh() {
                     window.location.reload();
                 }
@@ -99,25 +93,25 @@
 
 <Drawer />
 
-<AppShell on:scroll={scrollHandler}>
-    <svelte:fragment slot="header">
+<div class="min-h-screen">
+    <header class="sticky top-0 z-10">
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
         <NavBar {navItems} user={data.user} />
-    </svelte:fragment>
-    <!-- Router Slot -->
-    <div id="main" class="px-4 py-4 md:px-12 lg:px-32 xl:px-56">
+    </header>
+
+    <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
         {#if !$isInstalled && !disabled && documentTitle}
             <h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
         {/if}
-        <slot />
-    </div>
+        {@render children?.()}
+    </main>
 
-    <svelte:fragment slot="footer">
+    <footer class="sticky bottom-0 z-10">
         <BottomTabs {navItems} user={data.user} />
-    </svelte:fragment>
-</AppShell>
+    </footer>
+</div>
 
 <Toast />
 <Modal components={modalComponentRegistry} />

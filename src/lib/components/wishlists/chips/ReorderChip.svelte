@@ -1,12 +1,16 @@
 <script lang="ts">
-    export let reordering: boolean;
-    export let onFinalize: VoidFunction;
+    interface Props {
+        reordering: boolean;
+        onFinalize: VoidFunction;
+    }
+
+    let { reordering = $bindable(), onFinalize }: Props = $props();
 </script>
 
 <div>
     {#if reordering}
-        <button class="variant-ghost-secondary chip" on:click={onFinalize}>Finish</button>
+        <button class="variant-ghost-secondary chip" onclick={onFinalize}>Finish</button>
     {:else}
-        <button class="variant-filled-primary chip" on:click={() => (reordering = true)}>Reorder</button>
+        <button class="variant-filled-primary chip" onclick={() => (reordering = true)}>Reorder</button>
     {/if}
 </div>

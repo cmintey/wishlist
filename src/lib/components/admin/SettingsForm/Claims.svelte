@@ -1,5 +1,9 @@
 <script lang="ts">
-    export let enabled: boolean;
+    interface Props {
+        enabled: boolean;
+    }
+
+    let { enabled = $bindable() }: Props = $props();
 </script>
 
 <div class="flex flex-col space-y-2">

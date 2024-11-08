@@ -4,18 +4,20 @@
     import SettingsForm from "$lib/components/admin/SettingsForm/index.svelte";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
+    import type { Props } from "./steps";
 
-    const config: Config = $page.data.config;
+    let { onSuccess }: Props = $props();
 
-    let form: HTMLFormElement;
+    let config: Config = $state($page.data.config);
+    let form: HTMLFormElement | undefined = $state();
+    let sending = $state(false);
+    let saved = $state(false);
+    let sent = $state(false);
+
     const submit: Writable<() => void> = getContext("submit");
     $submit = () => {
         form?.requestSubmit();
     };
-
-    let sending = false;
-    let saved = false;
-    let sent = false;
 </script>
 
 <div class="flex flex-col items-center space-y-4">
@@ -43,6 +45,9 @@
                     }
 
                     await applyAction(result);
+                    if (result.type === "success" && result.data?.success) {
+                        onSuccess();
+                    }
                 };
             }}
         >

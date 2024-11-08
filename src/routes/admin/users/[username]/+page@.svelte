@@ -5,8 +5,12 @@
     import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
     import type { ActionData, PageData } from "./$types";
 
-    export let data: PageData;
-    export let form: ActionData;
+    interface Props {
+        data: PageData;
+        form: ActionData;
+    }
+
+    let { data, form }: Props = $props();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
@@ -70,8 +74,8 @@
         {/if}
         <button
             class="variant-ghost-error btn w-fit"
+            onclick={() => handleDelete(data.editingUser.username, data.editingUser.id)}
             type="button"
-            on:click={() => handleDelete(data.editingUser.username, data.editingUser.id)}
         >
             Delete User
         </button>

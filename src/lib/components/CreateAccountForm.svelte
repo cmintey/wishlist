@@ -2,13 +2,17 @@
     import { page } from "$app/stores";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
 
-    export let hideActions = false;
+    interface Props {
+        hideActions?: boolean;
+    }
 
-    let data = $page.data;
-    let formData = $page.form;
+    let { hideActions = false }: Props = $props();
 
-    let password = "";
-    let passwordConfirm = "";
+    let data = $derived($page.data);
+    let formData = $derived($page.form);
+
+    let password = $state("");
+    let passwordConfirm = $state("");
 </script>
 
 <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">

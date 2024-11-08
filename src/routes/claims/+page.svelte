@@ -6,7 +6,11 @@
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
+
+    let { data }: Props = $props();
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -26,7 +30,7 @@
         }
     });
 
-    $: items = data.items;
+    let items = $derived(data.items);
 </script>
 
 {#if data.items.length === 0}

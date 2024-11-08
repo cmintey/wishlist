@@ -3,8 +3,11 @@
     import { page } from "$app/stores";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
+    import type { Props } from "./steps";
 
-    $: config = $page.data.config satisfies Config;
+    let { onSuccess }: Props = $props();
+
+    let config: Config = $derived($page.data.config);
     const groups: Group[] = $page.data.groups;
 </script>
 
@@ -19,7 +22,12 @@
         action="/admin/users"
         method="POST"
         use:enhance={() => {
-            return async ({ result }) => await applyAction(result);
+            return async ({ result }) => {
+                await applyAction(result);
+                if (result.type === "success" && result.data?.success) {
+                    onSuccess();
+                }
+            };
         }}
     >
         <InviteUser {config} defaultGroup={groups[0]} vertical />

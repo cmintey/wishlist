@@ -9,7 +9,11 @@
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
+
+    let { data }: Props = $props();
 
     const modalStore = getModalStore();
 
@@ -82,10 +86,10 @@
     <div class="flex space-x-4 py-4">
         <button
             class="variant-filled-primary btn"
+            onclick={() => modalStore.trigger(addUserModalSettings)}
             type="button"
-            on:click={() => modalStore.trigger(addUserModalSettings)}
         >
-            <iconify-icon icon="ion:person-add" />
+            <iconify-icon icon="ion:person-add"></iconify-icon>
             <span>Add Member</span>
         </button>
         <form method="POST" use:enhance>
@@ -122,13 +126,17 @@
                             </td>
                         {/each}
                         <td>
-                            <button class="btn-icon" on:click={() => toggleManager(user.id, !user.isGroupManager)}>
-                                <iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}" />
+                            <button
+                                class="btn-icon"
+                                aria-label="toggle manager"
+                                onclick={() => toggleManager(user.id, !user.isGroupManager)}
+                            >
+                                <iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}"></iconify-icon>
                             </button>
                         </td>
                         <td aria-colindex={dataKeys.length} role="gridcell" tabindex={-1}>
-                            <button class="btn-icon" on:click={() => removeMember(user.id)}>
-                                <iconify-icon icon="ion:trash-bin" />
+                            <button class="btn-icon" aria-label="remove member" onclick={() => removeMember(user.id)}>
+                                <iconify-icon icon="ion:trash-bin"></iconify-icon>
                             </button>
                         </td>
                     </tr>
@@ -137,7 +145,7 @@
         </table>
     </div>
     <div>
-        <button class="variant-filled-error btn w-fit" on:click={deleteGroup}>Delete Group</button>
+        <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>Delete Group</button>
         <ClearListsButton groupId={$page.params.groupId} />
         <ClearListsButton claimed groupId={$page.params.groupId} />
     </div>

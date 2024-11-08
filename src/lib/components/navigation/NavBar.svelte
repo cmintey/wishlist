@@ -7,8 +7,12 @@
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
 
-    export let navItems: NavItem[];
-    export let user: User | null;
+    interface Props {
+        navItems: NavItem[];
+        user: User | null;
+    }
+
+    let { navItems, user }: Props = $props();
 
     const drawerStore = getDrawerStore();
     const drawerSettings: DrawerSettings = {
@@ -19,12 +23,16 @@
 </script>
 
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
-    <svelte:fragment slot="lead">
+    {#snippet lead()}
         <div class="flex content-center items-center space-x-4">
             {#if user && !$isInstalled}
                 {#if user}
-                    <button class="btn btn-sm p-0 pt-0.5 md:hidden" on:click={() => drawerStore.open(drawerSettings)}>
-                        <iconify-icon class="text-2xl" icon="ion:menu" />
+                    <button
+                        class="btn btn-sm p-0 pt-0.5 md:hidden"
+                        aria-label="menu"
+                        onclick={() => drawerStore.open(drawerSettings)}
+                    >
+                        <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
                     </button>
                 {/if}
                 <a class="flex flex-row items-center space-x-2" href="/">
@@ -35,7 +43,7 @@
                 <BackButton />
             {/if}
         </div>
-    </svelte:fragment>
+    {/snippet}
 
     {#if user}
         <div class="hidden flex-row items-center pl-4 pt-0.5 md:flex">
@@ -52,7 +60,7 @@
         </div>
     {/if}
 
-    <svelte:fragment slot="trail">
+    {#snippet trail()}
         <NavMenu {user} />
-    </svelte:fragment>
+    {/snippet}
 </AppBar>

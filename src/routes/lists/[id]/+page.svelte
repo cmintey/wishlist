@@ -11,10 +11,14 @@
     import { SSEvents } from "$lib/schema";
     import { onMount, onDestroy } from "svelte";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
     type Item = PageData["items"][0];
-    $: allItems = data.items;
-    $: items = allItems.filter((item) => item.approved);
+
+    let { data }: Props = $props();
+    let allItems = $state(data.items);
+    let items = $derived(allItems.filter((item) => item.approved));
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -112,7 +116,7 @@
 
     <!-- spacer -->
     <footer>
-        <div class="h-16" />
+        <div class="h-16"></div>
     </footer>
 {/if}
 
