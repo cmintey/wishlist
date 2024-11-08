@@ -8,8 +8,8 @@
 
     let { hideActions = false }: Props = $props();
 
-    let data = $page.data;
-    let formData = $page.form;
+    let data = $derived($page.data);
+    let formData = $derived($page.form);
 
     let password = $state("");
     let passwordConfirm = $state("");
