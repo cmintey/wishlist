@@ -1,9 +1,10 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import { Tab, TabGroup } from "@skeletonlabs/skeleton";
+    import { Tab } from "@skeletonlabs/skeleton";
     import type { LayoutData, Snapshot } from "./$types";
     import { page } from "$app/stores";
     import { GroupAPI } from "$lib/api/groups";
+    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
 
     interface Props {
         data: LayoutData;

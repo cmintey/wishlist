@@ -1,7 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Tab, TabGroup } from "@skeletonlabs/skeleton";
+    import { Tab } from "@skeletonlabs/skeleton";
     import type { Snapshot } from "./$types";
+    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
 
     interface Props {
         children?: import("svelte").Snippet;

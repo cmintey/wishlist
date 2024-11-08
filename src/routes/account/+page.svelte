@@ -3,8 +3,9 @@
     import ChangePassword from "$lib/components/account/ChangePassword.svelte";
     import EditProfile from "$lib/components/account/EditProfile.svelte";
     import Avatar from "$lib/components/Avatar.svelte";
-    import { FileButton, Tab, TabGroup } from "@skeletonlabs/skeleton";
+    import { FileButton, Tab } from "@skeletonlabs/skeleton";
     import type { PageServerData } from "./$types";
+    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
 
     interface Props {
         data: PageServerData;
