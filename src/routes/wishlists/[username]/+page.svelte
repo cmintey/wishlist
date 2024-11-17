@@ -172,19 +172,17 @@
 </script>
 
 <!-- chips -->
-{#if allItems.length > 0}
-    <div class="flex justify-between">
-        <div class="flex flex-row flex-wrap space-x-4">
-            {#if !data.listOwner.isMe}
-                <ClaimFilterChip />
-            {/if}
-            <SortBy />
-        </div>
-        {#if data.listOwner.isMe}
-            <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
+<div class="flex justify-between">
+    <div class="flex flex-row flex-wrap space-x-4">
+        {#if !data.listOwner.isMe}
+            <ClaimFilterChip />
         {/if}
+        <SortBy />
     </div>
-{/if}
+    {#if data.listOwner.isMe}
+        <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
+    {/if}
+</div>
 
 {#if data.listMode === "registry"}
     <div class="flex flex-row space-x-2 pb-4">
