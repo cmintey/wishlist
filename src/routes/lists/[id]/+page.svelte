@@ -44,6 +44,10 @@
     });
     onDestroy(() => eventSource?.close());
 
+    $effect(() => {
+        allItems = data.items;
+    });
+
     const subscribeToEvents = () => {
         eventSource = new EventSource(`${$page.url.pathname}/events`);
         eventSource.addEventListener(SSEvents.item.update, (e) => {
@@ -85,12 +89,10 @@
 <h1 class="h1 pb-2 md:pb-4">{`${data?.user.name}'s`} Wishes</h1>
 
 <!-- chips -->
-{#if items.length > 0}
-    <div class="flex flex-row flex-wrap space-x-4">
-        <ClaimFilterChip />
-        <SortBy />
-    </div>
-{/if}
+<div class="flex flex-row flex-wrap space-x-4">
+    <ClaimFilterChip />
+    <SortBy />
+</div>
 
 {#if items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">

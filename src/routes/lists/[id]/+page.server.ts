@@ -2,8 +2,9 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getConfig } from "$lib/server/config";
+import { createFilter, createSorts } from "$lib/server/sort-filter-util";
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, url }) => {
     const list = await client.publicList.findUnique({
         select: {
             user: true,
@@ -22,11 +23,17 @@ export const load = (async ({ params }) => {
         error(404, "Public list not found");
     }
 
+    const filter = createFilter(url.searchParams.get("filter"));
+    filter.userId = list.user.id;
+    filter.groupId = list.groupId;
+
+    const sort = url.searchParams.get("sort");
+    const direction = url.searchParams.get("dir");
+    const orderBy = createSorts(sort, direction);
+
     const items = await client.item.findMany({
-        where: {
-            userId: list.user.id,
-            groupId: list.groupId
-        },
+        where: filter,
+        orderBy: orderBy,
         include: {
             addedBy: {
                 select: {
@@ -55,6 +62,11 @@ export const load = (async ({ params }) => {
             itemPrice: true
         }
     });
+
+    if (sort === "price" && direction === "asc") {
+        // need to re-sort when descending since Prisma can't order with nulls last
+        items.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+    }
 
     return {
         user: {

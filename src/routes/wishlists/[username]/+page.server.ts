@@ -2,9 +2,9 @@ import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
-import type { Prisma } from "@prisma/client";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { createFilter, createSorts } from "$lib/server/sort-filter-util";
 
 export const load: PageServerLoad = async ({ locals, params, url, depends }) => {
     if (!locals.user) {
@@ -27,7 +27,9 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
         error(404, "user is not part of the group");
     }
 
-    const search: Prisma.ItemWhereInput = {
+    let search = createFilter(url.searchParams.get("filter"));
+    search = {
+        ...search,
         user: {
             username: params.username
         },
@@ -46,39 +48,9 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
         };
     }
 
-    const filter = url.searchParams.get("filter");
-    if (filter === "unclaimed") {
-        search.pledgedById = null;
-    } else if (filter === "claimed") {
-        search.pledgedById = {
-            not: null
-        };
-    }
-
-    let orderBy: Prisma.ItemOrderByWithRelationInput[];
     const sort = url.searchParams.get("sort");
     const direction = url.searchParams.get("dir");
-    if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy = [
-            {
-                itemPrice: {
-                    value: direction
-                }
-            }
-        ];
-    } else {
-        orderBy = [
-            {
-                displayOrder: {
-                    sort: "asc",
-                    nulls: "last"
-                }
-            },
-            {
-                id: "asc"
-            }
-        ];
-    }
+    const orderBy = createSorts(sort, direction);
 
     const wishlistItemsQuery = client.item.findMany({
         where: search,
