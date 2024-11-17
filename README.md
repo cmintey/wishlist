@@ -51,7 +51,8 @@ services:
       - ./uploads:/usr/src/app/uploads  # This is where user image uploads will be stored
       - ./data:/usr/src/app/data        # This is where the sqlite database will be stored
     environment:
-      ORIGIN: https://wishlist.example.com # The URL users will connect to
+      # ORIGIN: https://wishlist.example.com
+      ORIGIN: http://192.168.2.10:3280 # The URL your users will be connecting to
       TOKEN_TIME: 72 # hours until signup and password reset tokens expire
 ```
 
@@ -65,7 +66,7 @@ You can now connect to your application at `http://<host>:3280`.
 
 ### Environment Variables
 
-`ORIGIN`: The URL your users will connect to e.g. `https://wishlist.domain.com`
+`ORIGIN`: The URL your users will connect to e.g. `https://wishlist.domain.com`, `http://192.168.2.10:3280`. **Note**, if this value is an IP address, then it must include the exposed port of the application
 
 `TOKEN_TIME`: The amount of time (hours) that signup and password reset tokens are valid for
 
