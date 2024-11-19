@@ -1,5 +1,6 @@
 <script lang="ts">
     import Alert from "$lib/components/Alert.svelte";
+    import BaseSetting from "./BaseSetting.svelte";
 
     interface Props {
         mode: ListMode;
@@ -9,8 +10,7 @@
     let { mode = $bindable(), disabled = false }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">Wishlist Mode</h2>
+<BaseSetting title="Wishlist Mode">
     {#if disabled}
         <Alert type="info">
             There are other members in this group, you cannot switch the mode until you remove all but one member.
@@ -22,4 +22,4 @@
             <option value="registry">Registry</option>
         {/if}
     </select>
-</div>
+</BaseSetting>

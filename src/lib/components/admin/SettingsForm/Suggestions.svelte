@@ -1,4 +1,6 @@
 <script lang="ts">
+    import BaseSetting from "./BaseSetting.svelte";
+
     interface Props {
         enabled: boolean;
         method: SuggestionMethod;
@@ -7,8 +9,7 @@
     let { enabled = $bindable(), method = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">Suggestions</h2>
+<BaseSetting title="Suggestions">
     <label class="unstyled flex flex-row space-x-2">
         <input
             id="enableSuggestions"
@@ -29,4 +30,4 @@
             </select>
         </label>
     {/if}
-</div>
+</BaseSetting>

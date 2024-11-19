@@ -73,3 +73,9 @@ type GroupInformation = import("@prisma/client").Group & {
     isManager: boolean;
     active: boolean;
 };
+
+type DeepPartial<T> = T extends object
+    ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;

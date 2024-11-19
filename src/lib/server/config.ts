@@ -2,7 +2,7 @@ import { client } from "./prisma";
 
 const GLOBAL = "global";
 
-export enum ConfigKey {
+enum ConfigKey {
     SIGNUP_ENABLE = "enableSignup",
     SUGGESTIONS_ENABLE = "suggestions.enable",
     SUGGESTIONS_METHOD = "suggestions.method",
@@ -17,9 +17,7 @@ export enum ConfigKey {
     LIST_MODE = "listMode"
 }
 
-type GroupConfig = Partial<Pick<Config, "suggestions" | "claims" | "listMode">>;
-
-export const getConfig = async (groupId?: string): Promise<Config> => {
+export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
     let configItems = await client.systemConfig.findMany({
         where: {
             groupId: "global"
@@ -34,13 +32,17 @@ export const getConfig = async (groupId?: string): Promise<Config> => {
         });
     }
 
-    let groupConfig: GroupConfig = {};
-    if (groupId) groupConfig = await getGroupConfig(groupId);
-
-    const configMap: Record<string, string | null | undefined> = {};
+    let configMap: Record<string, string | null> = {};
     for (const { key, value } of configItems) {
         configMap[key] = value;
     }
+
+    let groupConfigMap: Record<string, string | null> = {};
+    if (groupId) groupConfigMap = await getGroupConfig(groupId);
+    configMap = {
+        ...configMap,
+        ...groupConfigMap
+    };
 
     const smtpConfig: SMTPConfig =
         configMap[ConfigKey.SMTP_ENABLE] === "true"
@@ -49,7 +51,7 @@ export const getConfig = async (groupId?: string): Promise<Config> => {
                   host: configMap[ConfigKey.SMTP_HOST]!,
                   port: Number(configMap[ConfigKey.SMTP_PORT])!,
                   user: configMap[ConfigKey.SMTP_USER]!,
-                  pass: configMap[ConfigKey.SMTP_PASS]!,
+                  pass: maskable(configMap[ConfigKey.SMTP_PASS]!, !includeSensitive),
                   from: configMap[ConfigKey.SMTP_FROM]!,
                   fromName: configMap[ConfigKey.SMTP_FROM_NAME]!
               }
@@ -58,7 +60,7 @@ export const getConfig = async (groupId?: string): Promise<Config> => {
                   host: configMap[ConfigKey.SMTP_HOST],
                   port: Number(configMap[ConfigKey.SMTP_PORT]),
                   user: configMap[ConfigKey.SMTP_USER],
-                  pass: configMap[ConfigKey.SMTP_PASS],
+                  pass: maskable(configMap[ConfigKey.SMTP_PASS]!, !includeSensitive),
                   from: configMap[ConfigKey.SMTP_FROM],
                   fromName: configMap[ConfigKey.SMTP_FROM_NAME]
               };
@@ -67,42 +69,31 @@ export const getConfig = async (groupId?: string): Promise<Config> => {
         enableSignup: configMap[ConfigKey.SIGNUP_ENABLE] === "true",
         suggestions: {
             enable: configMap[ConfigKey.SUGGESTIONS_ENABLE] === "true",
-            method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval",
-            ...groupConfig.suggestions
+            method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval"
         },
         smtp: smtpConfig,
         claims: {
-            showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true",
-            ...groupConfig.claims
+            showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true"
         },
-        listMode: groupConfig.listMode || (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard"
+        listMode: (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard"
     };
 
     return config;
 };
 
-const getGroupConfig = async (groupId: string): Promise<GroupConfig> => {
+const getGroupConfig = async (groupId: string): Promise<Record<string, string | null>> => {
     const configItems = await client.systemConfig.findMany({
         where: {
             groupId
         }
     });
 
-    const configMap: Record<string, string | null | undefined> = {};
+    const configMap: Record<string, string | null> = {};
     for (const { key, value } of configItems) {
         configMap[key] = value;
     }
 
-    return {
-        suggestions: {
-            enable: configMap[ConfigKey.SUGGESTIONS_ENABLE] === "true",
-            method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval"
-        },
-        claims: {
-            showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true"
-        },
-        listMode: (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard"
-    };
+    return configMap;
 };
 
 const createDefaultConfig = async (): Promise<void> => {
@@ -161,4 +152,8 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
             }
         });
     }
+};
+
+const maskable = (value: string, mask: boolean) => {
+    return mask ? "*****" : value;
 };

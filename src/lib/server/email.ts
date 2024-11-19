@@ -30,7 +30,7 @@ readFile("templates/invite.html", "utf-8", (err, data) => {
 });
 
 const sendEmail = async (options: Mail.Options) => {
-    const config = await getConfig();
+    const config = await getConfig(undefined, true);
 
     if (
         !config.smtp.enable ||
