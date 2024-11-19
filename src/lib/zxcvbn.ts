@@ -11,3 +11,6 @@ export const loadOptions = async () => {
         translations: langEn.translations
     };
 };
+
+export const meterLabel = ["Very weak", "Weak", "Moderate", "Strong", "Very Strong"];
+export const strengthOptions = ["Off", ...meterLabel];

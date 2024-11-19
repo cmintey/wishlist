@@ -3,13 +3,17 @@
 
     interface Props {
         title: string;
+        subtitle?: string;
         children: Snippet;
     }
 
-    const { title, children }: Props = $props();
+    const { title, subtitle, children }: Props = $props();
 </script>
 
 <div class="flex flex-col space-y-2">
-    <h3 class="h3">{title}</h3>
+    <h2 class="h2">{title}</h2>
+    {#if subtitle}
+        <span>{subtitle}</span>
+    {/if}
     {@render children()}
 </div>

@@ -21,9 +21,9 @@
         <span>Enable</span>
     </label>
     {#if enabled}
-        <label class="w-fit">
+        <label class="flex flex-col" for="suggestionMethod">
             <span>Method</span>
-            <select id="suggestionMethod" name="suggestionMethod" class="select" bind:value={method}>
+            <select id="suggestionMethod" name="suggestionMethod" class="select w-full" bind:value={method}>
                 <option value="surprise">Surprise Me</option>
                 <option value="auto-approval">Auto-Approve</option>
                 <option value="approval">Approval Required</option>

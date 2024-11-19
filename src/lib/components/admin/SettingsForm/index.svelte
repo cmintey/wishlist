@@ -5,6 +5,7 @@
     import Suggestions from "./Suggestions.svelte";
     import Smtp from "./SMTP.svelte";
     import Claims from "./Claims.svelte";
+    import Security from "./Security.svelte";
 
     interface Props {
         config: Config;
@@ -20,7 +21,7 @@
 </script>
 
 <!-- TODO: Add tooltips explaining the various settings -->
-<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 gap-y-8 md:grid-cols-2">
     <div class="col-span-1">
         <PublicSignup bind:enabled={config.enableSignup} />
     </div>
@@ -30,8 +31,11 @@
     <div class="col-span-1">
         <Claims bind:enabled={config.claims.showName} />
     </div>
+    <div class="col-span-1">
+        <Security bind:passwordStrength={config.security.passwordStrength} />
+    </div>
 
-    <div class="col-span-1 md:col-span-3">
+    <div class="col-span-1 md:col-span-2">
         <Smtp
             bind:enabled={config.smtp.enable}
             bind:host={config.smtp.host}

@@ -60,6 +60,9 @@ type Config = {
         showName: boolean;
     };
     listMode: ListMode;
+    security: {
+        passwordStrength: number;
+    };
 };
 
 type Option = {

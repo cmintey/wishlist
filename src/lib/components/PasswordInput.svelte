@@ -1,6 +1,6 @@
 <script lang="ts">
     import { zxcvbn, zxcvbnOptions, type ZxcvbnResult } from "@zxcvbn-ts/core";
-    import { loadOptions } from "$lib/zxcvbn";
+    import { loadOptions, meterLabel } from "$lib/zxcvbn";
     import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
 
@@ -37,7 +37,7 @@
     let strength: ZxcvbnResult | undefined = $derived(value ? zxcvbn(value) : undefined);
     let visible = $state(false);
 
-    const meterLookup = ["bg-error-500", "bg-error-500", "bg-error-500", "bg-warning-500", "bg-success-500"];
+    const meterLookup = ["bg-error-500", "bg-error-500", "bg-warning-500", "bg-success-500", "bg-success-500"];
 
     const handleClick = (e: Event) => {
         e.preventDefault();
@@ -113,11 +113,5 @@
         </ul>
     </div>
 
-    {#if strength.score < 3}
-        <p>Weak</p>
-    {:else if strength.score < 4}
-        <p>Moderate</p>
-    {:else}
-        <p>Strong</p>
-    {/if}
+    <p>{meterLabel[strength?.score]}</p>
 {/if}

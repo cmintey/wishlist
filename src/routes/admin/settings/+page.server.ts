@@ -79,7 +79,10 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         claims: {
             showName: configData.claimsShowName
         },
-        listMode: "standard"
+        listMode: "standard",
+        security: {
+            passwordStrength: configData.passwordStrength
+        }
     };
 
     return newConfig;

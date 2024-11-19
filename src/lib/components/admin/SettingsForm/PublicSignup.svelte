@@ -8,7 +8,7 @@
     let { enabled = $bindable() }: Props = $props();
 </script>
 
-<BaseSetting title="Publis Signup">
+<BaseSetting title="Public Signup">
     <label class="unstyled flex flex-row space-x-2">
         <input id="enableSignup" name="enableSignup" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>Enable</span>
