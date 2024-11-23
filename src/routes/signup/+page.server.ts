@@ -8,10 +8,12 @@ import { getConfig } from "$lib/server/config";
 import { Role } from "$lib/schema";
 import { env } from "$env/dynamic/private";
 import { LegacyScrypt } from "lucia";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
     if (locals.user) redirect(302, "/");
 
+    const $t = await getFormatter();
     const config = await getConfig();
 
     const token = new URL(request.url).searchParams.get("token");
@@ -27,17 +29,17 @@ export const load: PageServerLoad = async ({ locals, request }) => {
             }
         });
 
-        if (!signup) error(400, "reset token not found");
+        if (!signup) error(400, $t("errors.reset-token-not-found"));
 
         const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
         const expiry = signup.createdAt.getTime() + expiresIn;
         if (Date.now() < expiry) {
             return { valid: true, id: signup.id };
         }
-        error(400, "Invite code is either invalid or already been used");
+        error(400, $t("errors.invite-code-invalid"));
     }
     if (!config.enableSignup) {
-        error(404, "This instance is invite only");
+        error(404, $t("errors.this-instance-is-invite-only"));
     }
 };
 
@@ -45,6 +47,7 @@ export const actions: Actions = {
     default: async ({ request, cookies }) => {
         const formData = Object.fromEntries(await request.formData());
         const signupData = signupSchema.safeParse(formData);
+        const $t = await getFormatter();
 
         // check for empty values
         if (!signupData.success) {
@@ -126,7 +129,7 @@ export const actions: Actions = {
         } catch {
             return fail(400, {
                 error: true,
-                errors: [{ field: "username", message: "User with username or email already exists" }]
+                errors: [{ field: "username", message: $t("errors.user-already-exists") }]
             });
         }
     }

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
+    import { t } from "svelte-i18n";
     import notFoundAsset from "$lib/assets/not_found.svg";
     import errorAsset from "$lib/assets/error.svg";
     import unauthorizedAsset from "$lib/assets/unauthorized.svg";
@@ -12,15 +13,15 @@
     const errors: Record<number, ErrorInfo> = {
         401: {
             image: unauthorizedAsset,
-            message: "Not Authorized"
+            message: $t("errors.unauthorized")
         },
         404: {
             image: notFoundAsset,
-            message: "The page you were looking for wasn't found"
+            message: $t("errors.the-page-you-were-looking-for-wasnt-found")
         },
         500: {
             image: errorAsset,
-            message: "Something went wrong"
+            message: $t("errors.something-went-wrong")
         }
     };
 

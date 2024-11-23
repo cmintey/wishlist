@@ -10,6 +10,7 @@
     import { page } from "$app/stores";
     import { SSEvents } from "$lib/schema";
     import { onMount, onDestroy } from "svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -86,7 +87,7 @@
     };
 </script>
 
-<h1 class="h1 pb-2 md:pb-4">{`${data?.user.name}'s`} Wishes</h1>
+<h1 class="h1 pb-2 md:pb-4">{$t("wishes.wishes-for", { values: { listOwner: data?.user.name } })}</h1>
 
 <!-- chips -->
 <div class="flex flex-row flex-wrap space-x-4">
@@ -96,8 +97,8 @@
 
 {#if items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
-        <img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
-        <p class="text-2xl">No wishes yet</p>
+        <img class="w-3/4 md:w-1/3" alt={$t("a11y.two-people-looking-in-an-empty-box")} src={empty} />
+        <p class="text-2xl">{$t("wishes.no-wishes-yet")}</p>
     </div>
 {:else}
     <!-- items -->
@@ -123,5 +124,5 @@
 {/if}
 
 <svelte:head>
-    <title>{`${data?.user.name}'s`} Wishes</title>
+    <title>{$t("wishes.wishes-for", { values: { listOwner: data?.user.name } })}</title>
 </svelte:head>

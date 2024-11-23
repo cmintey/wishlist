@@ -3,6 +3,7 @@
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import type { Item } from "@prisma/client";
     import type { PageData } from "./$types";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -27,9 +28,9 @@
             <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
                 <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
                 <div>
-                    <span class="text-xl font-bold">Heads up!</span>
+                    <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>
                     <p class="text-sm">
-                        {data.owner.name} will need to approve your suggestion before it is added to their list.
+                        {$t("wishes.approval-required", { values: { listOwner: data.owner.name } })}
                     </p>
                 </div>
             </div>
@@ -45,7 +46,9 @@
 </form>
 
 <svelte:head>
-    <title>
-        Create Wish {data.owner.isMe ? "" : `for ${data.owner.name}`}
-    </title>
+    {#if data.owner.isMe}
+        <title>{$t("wishes.create")}</title>
+    {:else}
+        <title>{$t("wishes.create-for", { values: { listOwner: data.owner.name } })}</title>
+    {/if}
 </svelte:head>

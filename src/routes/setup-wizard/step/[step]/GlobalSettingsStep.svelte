@@ -5,6 +5,7 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
+    import { t } from "svelte-i18n";
 
     let { onSuccess }: Props = $props();
 
@@ -21,11 +22,8 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-    <h1 class="h1">Global Settings</h1>
-    <span>
-        These settings will be applied to all groups that are created. Some settings may be overrided by individual
-        groups.
-    </span>
+    <h1 class="h1">{$t("setup.global-settings")}</h1>
+    <span>{$t("setup.global-settings-subtext")}</span>
     <div class="bg-surface-100-800-token ring-outline-token p-4 rounded-container-token">
         <form
             bind:this={form}

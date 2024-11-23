@@ -5,6 +5,7 @@
     import { steps } from "./steps";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
+    import { t } from "svelte-i18n";
 
     let locked = false;
 
@@ -45,7 +46,7 @@
         <!-- Button: Back -->
         <button class="variant-ghost btn" disabled={$state.current <= 1} onclick={onBack} type="button">
             <iconify-icon icon="ion:arrow-back"></iconify-icon>
-            <span>Back</span>
+            <span>{$t("setup.back")}</span>
         </button>
         {#if $state.current < $state.total - 1}
             <!-- Button: Next -->
@@ -53,7 +54,7 @@
                 {#if locked}
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
-                <span>Next</span>
+                <span>{$t("setup.next")}</span>
                 <iconify-icon icon="ion:arrow-forward"></iconify-icon>
             </button>
         {:else}
@@ -64,7 +65,7 @@
                 onclick={() => goto("/login", { invalidateAll: true })}
                 type="submit"
             >
-                Complete
+                {$t("setup.complete")}
             </button>
         {/if}
     </div>

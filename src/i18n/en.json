@@ -1,8 +1,100 @@
 {
-    "wishes": {
-        "title": "{isSelf, select, true {My} other {{name}'s}} Wishes",
-        "no-wishes": "No wishes yet",
-        "approvals": "Approvals",
-        "share": "Share List"
-    }
+  "a11y": {
+    "a-person-looking-at-an-empty-board": "A person looking at an empty board",
+    "menu": "menu",
+    "two-people-looking-in-an-empty-box": "Two people looking in an empty box"
+  },
+  "app": {
+    "home": "Home",
+    "my-claims": "My Claims"
+  },
+  "auth": {
+    "check-your-email": "Check your email and follow the link to reset your password.",
+    "click-here-to-login": "Click here to login.",
+    "confirm-password": "Confirm Password",
+    "contact-admin": "Please contact the site administrator to reset your password.",
+    "create-an-account": "Create an account",
+    "email": "Email",
+    "enter-email": "Enter your email address and we'll send you a password reset link.",
+    "forgot-password": "Forgot password?",
+    "log-in": "Log In",
+    "new-password": "New Password",
+    "password": "Password",
+    "passwords-must-match": "Passwords must match",
+    "reset-password": "Reset Password",
+    "return-to-login": "Return to login",
+    "self-service-password-reset-unavailable": "Self-service password reset unavailable.",
+    "sign-in": "Sign in",
+    "signup": "Signup",
+    "update-password": "Update Password",
+    "username": "Username",
+    "your-password-was-reset": "Your password was reset."
+  },
+  "errors": {
+    "asset-not-found": "Asset not found",
+    "cannot-edit-item-that-you-did-not-create": "Cannot edit item that you did not create",
+    "cant-find-your-group": "Can't find your group!",
+    "group-does-not-exist": "Group does not exist",
+    "invalid-credentials": "Invalid credentials!",
+    "invalid-email": "Please provide a valid email address.",
+    "invite-code-invalid": "Invite code is either invalid or already been used",
+    "item-id-must-be-a-number": "Item id must be a number",
+    "item-invalid-ownership": "Item does not belong to {username}",
+    "item-not-found": "Item not found",
+    "item-with-id-item-id-not-found": "Item with id {id} not found",
+    "must-specify-an-item-to-delete": "Must specify an item to delete",
+    "must-specify-asset-id": "Must specify asset id",
+    "must-specify-group-name-in-body": "Must specify group name in body",
+    "no-group-friendly-msg": "If you're seeing this page, it's because you aren't in a group yet! Either request a group to join, or create your own.",
+    "not-authorized": "Not Authorized",
+    "one-or-more-items-missing-an-id": "One or more items missing an id",
+    "public-list-not-found": "Public list not found",
+    "reset-token-not-found": "Reset token not found",
+    "something-went-wrong": "Something went wrong",
+    "suggestions-are-disabled": "Suggestions are disabled",
+    "the-page-you-were-looking-for-wasnt-found": "The page you were looking for wasn't found",
+    "this-instance-is-invite-only": "This instance is invite only",
+    "unable-to-delete-items": "Unable to delete items",
+    "unauthenticated": "Must authenticate first",
+    "user-already-exists": "User with username or email already exists",
+    "user-not-in-group": "User is not part of this group"
+  },
+  "general": {
+    "processing": "Processing...",
+    "submit": "Submit",
+    "success": "Success!"
+  },
+  "setup": {
+    "back": "Back",
+    "complete": "Complete",
+    "create-your-account": "Create your account",
+    "first-account-admin": "Your first account will be the administrator. You can always add more admins later.",
+    "get-started": "Get Started",
+    "global-settings": "Global Settings",
+    "global-settings-subtext": "These settings will be applied to all groups that are created. Some settings may be overrided by individual groups.",
+    "hi": "Hi!",
+    "invite-users": "Invite Users",
+    "invite-users-subtext": "If you're ready, invite some additional users! You can always invite users later from the admin or group settings.",
+    "lets-get-started": "Let's get started",
+    "next": "Next",
+    "unable-to-update-password": "Unable to update password",
+    "welcome-to-wishlist": "Welcome to Wishlist"
+  },
+  "wishes": {
+    "approval-required": "{listOwner} will need to approve your suggestion before it is added to their list.",
+    "approvals": "Approvals",
+    "create": "Create Wish",
+    "create-for": "Create Wish for {listOwner}",
+    "edit-wish": "Edit Wish",
+    "heads-up": "Heads up!",
+    "lists": "Lists",
+    "my-wishes": "My Wishes",
+    "no-wishes-yet": "No wishes yet",
+    "nothing-claimed-yet": "Nothing claimed yet",
+    "public-url": "Public URL",
+    "share": "Share List",
+    "unable-to-update-item-ordering": "Unable to update item ordering",
+    "updated-success": "Item updated successfully",
+    "wishes-for": "{listOwner}'s Wishes"
+  }
 }

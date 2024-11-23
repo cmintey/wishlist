@@ -5,6 +5,7 @@
     import type { PageData } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -35,8 +36,8 @@
 
 {#if data.items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
-        <img class="w-3/4 md:w-1/3" alt="A person looking at an empty board" src={noClaims} />
-        <p class="text-2xl">Nothing claimed yet</p>
+        <img class="w-3/4 md:w-1/3" alt={$t("a11y.a-person-looking-at-an-empty-board")} src={noClaims} />
+        <p class="text-2xl">{$t("wishes.nothing-claimed-yet")}</p>
     </div>
 {:else}
     <div class="flex flex-col space-y-4">
@@ -54,5 +55,5 @@
 {/if}
 
 <svelte:head>
-    <title>My Claims</title>
+    <title>{$t("app.my-claims")}</title>
 </svelte:head>

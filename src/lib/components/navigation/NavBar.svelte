@@ -6,6 +6,7 @@
     import type { User } from "lucia";
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         navItems: NavItem[];
@@ -29,7 +30,7 @@
                 {#if user}
                     <button
                         class="btn btn-sm p-0 pt-0.5 md:hidden"
-                        aria-label="menu"
+                        aria-label={$t("a11y.menu")}
                         onclick={() => drawerStore.open(drawerSettings)}
                     >
                         <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>

@@ -11,7 +11,7 @@
     import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
     import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
     import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
-    import type { LayoutData } from "./$types";
+    import type { LayoutServerData } from "./$types";
     import { onMount } from "svelte";
     import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
@@ -19,10 +19,9 @@
     import { navItems } from "$lib/components/navigation/navigation";
     import Drawer from "$lib/components/Drawer.svelte";
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
-    import { initLang } from "$lib/i18n";
 
     interface Props {
-        data: LayoutData;
+        data: LayoutServerData;
         children?: import("svelte").Snippet;
     }
 
@@ -60,7 +59,6 @@
     initializeStores();
 
     onMount(() => {
-        initLang();
         if (window.matchMedia("(display-mode: standalone)").matches) {
             $isInstalled = true;
             const ptr = PullToRefresh.init({
@@ -100,7 +98,11 @@
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
-        <NavBar {navItems} user={data.user} />
+        {#await navItems}
+            <NavBar navItems={[]} user={data.user} />
+        {:then navItems}
+            <NavBar {navItems} user={data.user} />
+        {/await}
     </header>
 
     <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
@@ -111,7 +113,9 @@
     </main>
 
     <footer class="sticky bottom-0 z-10">
-        <BottomTabs {navItems} user={data.user} />
+        {#await navItems then navItems}
+            <BottomTabs {navItems} user={data.user} />
+        {/await}
     </footer>
 </div>
 

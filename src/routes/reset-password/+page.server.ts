@@ -7,8 +7,10 @@ import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import { env } from "$env/dynamic/private";
 import { LegacyScrypt } from "lucia";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ request }) => {
+    const $t = await getFormatter();
     const url = new URL(request.url);
     const token = url.searchParams.get("token");
 
@@ -25,7 +27,7 @@ export const load: PageServerLoad = async ({ request }) => {
             }
         });
 
-        if (!reset) error(400, "reset token not found");
+        if (!reset) error(400, $t("errors.reset-token-not-found"));
 
         const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
         const expiry = reset.createdAt.getTime() + expiresIn;
@@ -39,6 +41,7 @@ export const load: PageServerLoad = async ({ request }) => {
 
 export const actions: Actions = {
     default: async ({ request }) => {
+        const $t = await getFormatter();
         const formData = Object.fromEntries(await request.formData());
         const schema = resetPasswordSchema.and(
             z.object({
@@ -99,7 +102,7 @@ export const actions: Actions = {
             } catch {
                 return fail(400, {
                     error: true,
-                    errors: [{ field: "newPassword", message: "Unable to update password" }]
+                    errors: [{ field: "newPassword", message: $t("setup.unable-to-update-password") }]
                 });
             }
         }

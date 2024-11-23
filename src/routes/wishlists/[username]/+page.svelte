@@ -164,7 +164,7 @@
         const response = await itemsAPI.updateMany(displayOrderUpdate);
         if (!response.ok) {
             toastStore.trigger({
-                message: "Unable to update item ordering",
+                message: $t("wishes.unable-to-update-item-ordering"),
                 background: "variant-filled-error"
             });
             allItems = data.items;
@@ -189,10 +189,12 @@
     <div class="flex flex-row space-x-2 pb-4">
         {#if publicListUrl}
             <div class="flex flex-row">
-                <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>Public URL</TokenCopy>
+                <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>$t('wishes.public-url')</TokenCopy>
             </div>
         {:else}
-            <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>Share List</button>
+            <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>
+                $t('wishes.share')
+            </button>
         {/if}
     </div>
 {/if}
@@ -211,7 +213,7 @@
 
 {#if items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
-        <img class="w-3/4 md:w-1/3" alt="Two people looking in an empty box" src={empty} />
+        <img class="w-3/4 md:w-1/3" alt={$t("a11y.two-people-looking-in-an-empty-box")} src={empty} />
         <p class="text-2xl">{$t("wishes.no-wishes-yet")}</p>
     </div>
 {:else}
@@ -298,5 +300,11 @@
 {/if}
 
 <svelte:head>
-    <title>{$t("wishes.title", { values: { isSelf: data.listOwner.isMe, name: data.listOwner.name } })}</title>
+    {#if data.listOwner.isMe}
+        <title>{$t("wishes.my-wishes")}</title>
+    {:else}
+        <title>
+            {$t("wishes.wishes-for", { values: { listOwner: data.listOwner.name } })}
+        </title>
+    {/if}
 </svelte:head>

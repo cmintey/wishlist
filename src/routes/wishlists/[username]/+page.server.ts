@@ -5,6 +5,7 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createFilter, createSorts } from "$lib/server/sort-filter-util";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals, params, url, depends }) => {
     if (!locals.user) {
@@ -13,6 +14,7 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
 
     const activeMembership = await getActiveMembership(locals.user);
     const config = await getConfig(activeMembership.groupId);
+    const $t = await getFormatter();
 
     try {
         await client.userGroupMembership.findFirstOrThrow({
@@ -24,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
             }
         });
     } catch {
-        error(404, "user is not part of the group");
+        error(404, $t("errors.user-not-in-group"));
     }
 
     let search = createFilter(url.searchParams.get("filter"));
