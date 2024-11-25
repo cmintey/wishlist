@@ -8,6 +8,7 @@
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -20,7 +21,7 @@
     type UserData = (typeof data.group.users)[number];
 
     const groupAPI = new GroupAPI($page.params.groupId);
-    const head = ["Name", "Username", "Email"];
+    const head = [$t("admin.name-header"), $t("auth.username"), $t("auth.email")];
     const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
 
     const addUserModalSettings: ModalSettings = {
@@ -34,15 +35,15 @@
         }
     };
 
-    const toggleManager = async (userId: string, manager: boolean) => {
+    const toggleManager = async (userId: string, isManager: boolean) => {
         modalStore.trigger({
             type: "confirm",
-            title: `${manager ? "Add" : "Remove"} Manager`,
-            body: `Are you sure you want to ${manager ? "add" : "remove"} this user as group manager?`,
+            title: $t("admin.add-remove-manager-title", { values: { isManager } }),
+            body: $t("admin.add-remove-manager-message", { values: { isManager } }),
             async response(r) {
                 if (!r) return;
 
-                if (manager) await groupAPI.makeManager(userId);
+                if (isManager) await groupAPI.makeManager(userId);
                 else await groupAPI.removeManager(userId);
 
                 await invalidateAll();
@@ -53,8 +54,8 @@
     const removeMember = (userId: string) => {
         modalStore.trigger({
             type: "confirm",
-            title: "Remove Member",
-            body: "Are you sure you want to remove this user from the group?",
+            title: $t("admin.remove-member-title"),
+            body: $t("admin.remove-member-message"),
             async response(r) {
                 if (!r) return;
 
@@ -67,8 +68,8 @@
     const deleteGroup = () => {
         modalStore.trigger({
             type: "confirm",
-            title: "Delete Group",
-            body: "Are you sure you want to delete this group? This action is <b>irreversible</b>!",
+            title: $t("admin.delete-group-title"),
+            body: $t("admin.delete-group-message"),
             async response(r) {
                 if (!r) return;
 
@@ -90,7 +91,7 @@
             type="button"
         >
             <iconify-icon icon="ion:person-add"></iconify-icon>
-            <span>Add Member</span>
+            <span>{$t("admin.add-member")}</span>
         </button>
         <form method="POST" use:enhance>
             <InviteUser config={data.config} defaultGroup={data.group} />
@@ -98,8 +99,7 @@
     </div>
 {:else}
     <Alert type="info">
-        This group is in <b>Registry Mode</b>
-        . No additional members can be added in this mode. You can get a public link to your list on your list page.
+        {@html $t("admin.registry-mode-alert-text")}
     </Alert>
 {/if}
 
@@ -113,8 +113,8 @@
                             {label}
                         </th>
                     {/each}
-                    <th>Manager</th>
-                    <th>Remove</th>
+                    <th>{$t("admin.manager")}</th>
+                    <th>{$t("general.remove")}</th>
                 </tr>
             </thead>
             <tbody class="table-body">
@@ -128,14 +128,20 @@
                         <td>
                             <button
                                 class="btn-icon"
-                                aria-label="toggle manager"
+                                aria-label={$t("a11y.toggle-manager", {
+                                    values: { isManager: user.isGroupManager, user: user.name }
+                                })}
                                 onclick={() => toggleManager(user.id, !user.isGroupManager)}
                             >
                                 <iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}"></iconify-icon>
                             </button>
                         </td>
                         <td aria-colindex={dataKeys.length} role="gridcell" tabindex={-1}>
-                            <button class="btn-icon" aria-label="remove member" onclick={() => removeMember(user.id)}>
+                            <button
+                                class="btn-icon"
+                                aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
+                                onclick={() => removeMember(user.id)}
+                            >
                                 <iconify-icon icon="ion:trash-bin"></iconify-icon>
                             </button>
                         </td>
@@ -145,7 +151,7 @@
         </table>
     </div>
     <div>
-        <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>Delete Group</button>
+        <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>{$t("admin.delete-group-title")}</button>
         <ClearListsButton groupId={$page.params.groupId} />
         <ClearListsButton claimed groupId={$page.params.groupId} />
     </div>

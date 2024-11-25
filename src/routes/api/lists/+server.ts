@@ -3,22 +3,24 @@ import { publicListCreateSchema } from "$lib/validations";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { init } from "@paralleldrive/cuid2";
 import { getConfig } from "$lib/server/config";
+import { getFormatter } from "$lib/i18n";
 
 export const GET: RequestHandler = async ({ request, locals }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
-        error(401, "User is not authenticated");
+        error(401, $t("errors.unauthenticated"));
     }
 
     const url = new URL(request.url);
 
     const groupId = url.searchParams.get("groupId");
     if (!groupId) {
-        error(422, "Missing groupId from request parameters");
+        error(422, $t("errors.missing-groupid-from-request-parameters"));
     }
 
     const config = await getConfig(groupId);
     if (config.listMode !== "registry") {
-        error(422, "Group is not in registry mode. Cannot get a public link");
+        error(422, $t("errors.group-is-not-in-registry-mode-cannot-get-a-public-link"));
     }
 
     const existingList = await client.publicList.findFirst({
@@ -38,8 +40,9 @@ export const GET: RequestHandler = async ({ request, locals }) => {
 };
 
 export const POST: RequestHandler = async ({ request, locals }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
-        error(401, "User is not authenticated");
+        error(401, $t("errors.unauthenticated"));
     }
 
     const data = await request.json().then(publicListCreateSchema.safeParse);
@@ -51,7 +54,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const config = await getConfig(groupId);
     if (config.listMode !== "registry") {
-        error(422, "Group is not in registry mode. Cannot get a public link");
+        error(422, $t("errors.group-is-not-in-registry-mode-cannot-get-a-public-link"));
     }
 
     const existingList = await client.publicList.findFirst({
@@ -64,7 +67,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         }
     });
     if (existingList) {
-        error(409, "Public list already exists for the user and group");
+        error(409, $t("errors.public-list-already-exists-for-the-user-and-group"));
     }
 
     const createId = init({

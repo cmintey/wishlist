@@ -8,6 +8,7 @@ import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
 import metascraperAmazon from "metascraper-amazon";
 import shopping from "$lib/server/shopping";
+import { getFormatter } from "$lib/i18n";
 
 const scraper = metascraper([
     metascraperAmazon(),
@@ -33,6 +34,7 @@ const isCaptchaResponse = (metadata: Metadata) => {
 };
 
 export const GET: RequestHandler = async ({ request }) => {
+    const $t = await getFormatter();
     const url = new URL(request.url).searchParams.get("url");
     let isUrlValid = false;
 
@@ -42,7 +44,7 @@ export const GET: RequestHandler = async ({ request }) => {
         } catch {
             isUrlValid = false;
         }
-        if (!isUrlValid) error(400, "valid url not provided");
+        if (!isUrlValid) error(400, $t("errors.valid-url-not-provided"));
 
         let metadata = await goShopping(url);
         if (isCaptchaResponse(metadata) && metadata.url) {
@@ -50,11 +52,11 @@ export const GET: RequestHandler = async ({ request }) => {
             metadata = await goShopping(metadata.url);
         }
         if (isCaptchaResponse(metadata)) {
-            error(424, "product information not available");
+            error(424, $t("errors.product-information-not-available"));
         }
 
         return new Response(JSON.stringify(metadata));
     } else {
-        error(400, "must specify url in query parameters");
+        error(400, $t("errors.must-specify-url-in-query-parameters"));
     }
 };

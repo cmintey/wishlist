@@ -6,6 +6,7 @@
     import { FileButton, Tab } from "@skeletonlabs/skeleton";
     import type { PageServerData } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageServerData;
@@ -19,8 +20,8 @@
 </script>
 
 <TabGroup>
-    <Tab name="Profile" value={0} bind:group={tabSet}>Profile</Tab>
-    <Tab name="Security" value={1} bind:group={tabSet}>Security</Tab>
+    <Tab name="Profile" value={0} bind:group={tabSet}>{$t("admin.profile")}</Tab>
+    <Tab name="Security" value={1} bind:group={tabSet}>{$t("admin.security")}</Tab>
     {#snippet panel()}
         {#if tabSet === 0}
             <div class="flex w-fit flex-col items-center">
@@ -37,6 +38,7 @@
                             id="profilePic"
                             name="profilePic"
                             accept="image/*"
+                            aria-label={$t("a11y.upload-profile-image")}
                             button="btn-icon btn-icon-sm variant-glass-secondary"
                             on:change={() => submitButton?.click()}
                         >
@@ -56,5 +58,5 @@
 </TabGroup>
 
 <svelte:head>
-    <title>Account</title>
+    <title>{$t("admin.account")}</title>
 </svelte:head>
