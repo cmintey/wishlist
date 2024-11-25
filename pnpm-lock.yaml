@@ -156,6 +156,9 @@ importers:
       svelte-preprocess:
         specifier: ^6.0.3
         version: 6.0.3(@babel/core@7.26.0)(postcss-load-config@5.1.0(jiti@1.21.6)(postcss@8.4.47))(postcss@8.4.47)(svelte@5.1.12)(typescript@5.6.3)
+      sveltekit-sse:
+        specifier: ^0.13.9
+        version: 0.13.9(@microsoft/fetch-event-source@2.0.1)(@sveltejs/kit@2.8.0(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.12)(vite@5.4.10(@types/node@22.9.0)(terser@5.36.0)))(svelte@5.1.12)(vite@5.4.10(@types/node@22.9.0)(terser@5.36.0)))(svelte@5.1.12)
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.6.3))
@@ -1038,6 +1041,9 @@ packages:
   '@metascraper/helpers@5.45.25':
     resolution: {integrity: sha512-XkhgbhsY0mu84SnBVrm1nn9tBL0MfNnJAyAfJZV0VboIP30BYhMYFficR+ELQG15fflm02uQxH6HsfDk3guQ3A==}
     engines: {node: '>= 16'}
+
+  '@microsoft/fetch-event-source@2.0.1':
+    resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
 
   '@noble/hashes@1.5.0':
     resolution: {integrity: sha512-1j6kQFb7QRru7eKN3ZDvRcP13rugwdxZqCjbiAVZfIJwgj2A65UmT4TgARXGlXgnRkORLTDTrO19ZErt7+QXgA==}
@@ -3641,6 +3647,13 @@ packages:
     resolution: {integrity: sha512-U9BwbSybb9QAKAHg4hl61hVBk97U2QjUKmZa5++QEGoi6Nml6x6cC9KmNT1XObGawToN3DdLpdCs/Z5Yl5IXjQ==}
     engines: {node: '>=18'}
 
+  sveltekit-sse@0.13.9:
+    resolution: {integrity: sha512-NsBKmdMhMFTYcTMpIm0V2nX6k0vAjeuyb1esXufCyUJfF8kj5E1umv0Ay9EpAUrc0dFAsI0FsSqRTHnKoKGNYw==}
+    peerDependencies:
+      '@microsoft/fetch-event-source': ^2.0.1
+      '@sveltejs/kit': ^2.0.0
+      svelte: ^4.0.0 || ^5.0.0-next.0
+
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
@@ -5057,6 +5070,8 @@ snapshots:
       - canvas
       - supports-color
       - utf-8-validate
+
+  '@microsoft/fetch-event-source@2.0.1': {}
 
   '@noble/hashes@1.5.0': {}
 
@@ -7708,6 +7723,12 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.12
       zimmerframe: 1.1.2
+
+  sveltekit-sse@0.13.9(@microsoft/fetch-event-source@2.0.1)(@sveltejs/kit@2.8.0(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.12)(vite@5.4.10(@types/node@22.9.0)(terser@5.36.0)))(svelte@5.1.12)(vite@5.4.10(@types/node@22.9.0)(terser@5.36.0)))(svelte@5.1.12):
+    dependencies:
+      '@microsoft/fetch-event-source': 2.0.1
+      '@sveltejs/kit': 2.8.0(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.12)(vite@5.4.10(@types/node@22.9.0)(terser@5.36.0)))(svelte@5.1.12)(vite@5.4.10(@types/node@22.9.0)(terser@5.36.0))
+      svelte: 5.1.12
 
   symbol-tree@3.2.4: {}
 

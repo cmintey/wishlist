@@ -12,13 +12,14 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
-    import { SSEvents } from "$lib/schema";
+    import { SSEvent } from "$lib/schema";
     import { PublicListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone } from "svelte-dnd-action";
     import { ItemsAPI } from "$lib/api/items";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
+    import { source, type Source } from "sveltekit-sse";
 
     interface Props {
         data: PageData;
@@ -37,7 +38,7 @@
     const flipDurationMs = 200;
     const itemsAPI = new ItemsAPI();
     const toastStore = getToastStore();
-    let eventSource: EventSource;
+    let eventSource: Source;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -73,27 +74,30 @@
     };
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource(`${$page.url.pathname}/events`);
-        eventSource.addEventListener(SSEvents.item.update, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            updateItem(message);
+        eventSource = source(`${$page.url.pathname}/events`);
+        eventSource
+            .select(SSEvent.ItemUpdate)
+            .json()
+            .subscribe((e) => {
+                console.log(e);
+                if (e) updateItem(e as Item);
+            });
+        eventSource
+            .select(SSEvent.ItemDelete)
+            .json()
+            .subscribe((e) => {
+                if (e) removeItem(e as Item);
+            });
+        eventSource
+            .select(SSEvent.ItemCreate)
+            .json()
+            .subscribe((e) => {
+                console.log(e);
+                if (e) addItem(e as Item);
+            });
+        eventSource.select(SSEvent.ItemsUpdate).subscribe(() => {
+            invalidate("data:items");
             updateHash();
-        });
-        eventSource.addEventListener(SSEvents.item.delete, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            removeItem(message);
-            updateHash();
-        });
-        eventSource.addEventListener(SSEvents.item.create, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            addItem(message);
-            updateHash();
-        });
-        eventSource.addEventListener(SSEvents.items.update, () => {
-            if (!data.listOwner.isMe) {
-                invalidate("data:items");
-                updateHash();
-            }
         });
     };
 
@@ -108,10 +112,12 @@
             }
             return item;
         });
+        updateHash();
     };
 
     const removeItem = (removedItem: Item) => {
         allItems = allItems.filter((item) => item.id !== removedItem.id);
+        updateHash();
     };
 
     const addItem = (addedItem: Item) => {
@@ -119,6 +125,7 @@
             return;
         }
         allItems = [...allItems, addedItem];
+        updateHash();
     };
 
     const getOrCreatePublicList = async () => {

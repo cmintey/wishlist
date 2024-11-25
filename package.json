@@ -44,6 +44,7 @@
         "svelte-check": "^4.0.5",
         "svelte-dnd-action": "^0.9.52",
         "svelte-preprocess": "^6.0.3",
+        "sveltekit-sse": "^0.13.9",
         "tailwindcss": "^3.4.14",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1",

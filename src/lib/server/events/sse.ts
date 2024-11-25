@@ -1,38 +1,32 @@
-// https://github.com/sanrafa/sveltekit-sse-example/tree/main
+import type { SSEvent } from "$lib/schema";
 import type EventEmitter from "node:events";
+import type { Unsafe } from "sveltekit-sse";
 
-export function createSSE<T>(retry = 0) {
-    const { readable, writable } = new TransformStream({
-        start(ctr) {
-            if (retry > 0) ctr.enqueue(`retry: ${retry}\n\n`);
-        },
-        transform({ event, data }, ctr) {
-            let msg = data?.id ? `id: ${String(data.id)}\n` : ": hi\n\n";
-            if (event) msg += `event: ${event}\n`;
-            if (typeof data === "string") {
-                msg += "data: " + data.trim().replace(/\n+/gm, "\ndata: ") + "\n\n";
-            } else {
-                msg += `data: ${JSON.stringify(data)}\n\n`;
-            }
-            ctr.enqueue(msg);
-        }
-    });
+type Writer = (eventName: string, data: string) => Unsafe<void, Error>;
 
-    const writer = writable.getWriter();
+export const subscribe = <T>(
+    emit: Writer,
+    emitter: EventEmitter,
+    predicate?: (arg: T) => boolean,
+    ...events: SSEvent[]
+) => {
+    const listeners: Record<string, (...args: any) => void> = {};
 
-    return {
-        readable,
-        async subscribeToEvent(emitter: EventEmitter, event: string, predicate?: (arg: T) => boolean) {
-            function listener(data: T) {
-                if (!predicate || (predicate && predicate(data))) {
-                    writer.write({ event, data });
+    for (const event of events) {
+        const listener = (data: T) => {
+            if (!predicate || (predicate && predicate(data))) {
+                const { error } = emit(event, JSON.stringify(data));
+                if (error) {
+                    emitter.off(event, listener);
                 }
             }
-            emitter.on(event, listener);
-            await writer.closed.catch((e) => {
-                if (e) console.error(e);
-            });
-            emitter.off(event, listener);
-        }
+        };
+        emitter.on(event, listener);
+        listeners[event] = listener;
+    }
+    return function close() {
+        Object.keys(listeners).forEach((evt) => {
+            emitter.off(evt, listeners[evt]);
+        });
     };
-}
+};

@@ -1,10 +1,10 @@
-import { Role, SSEvents } from "$lib/schema";
+import { Role, SSEvent } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { _authCheck } from "../groups/[groupId]/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
-import { itemEmitter } from "$lib/server/events/emitters";
+import { emitEvent } from "$lib/server/events/emitters";
 import type { Prisma } from "@prisma/client";
 import { patchItem } from "$lib/server/api-common";
 
@@ -41,7 +41,7 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
             if (item.imageUrl) {
                 await tryDeleteImage(item.imageUrl);
             }
-            itemEmitter.emit(SSEvents.item.delete, item);
+            emitEvent(SSEvent.ItemDelete, item);
         }
 
         const deletedItems = await client.item.deleteMany({
@@ -131,19 +131,20 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
         });
     });
 
+    let updatedItems;
     try {
-        const updatedItems = await client.$transaction(itemsToUpdate);
-
-        if (imageUrlsToDelete.length > 0) {
-            for (const imageUrl of imageUrlsToDelete) {
-                if (imageUrl) await tryDeleteImage(imageUrl as string);
-            }
-        }
-
-        itemEmitter.emit(SSEvents.items.update);
-
-        return new Response(JSON.stringify(updatedItems), { status: 200 });
+        updatedItems = await client.$transaction(itemsToUpdate);
     } catch {
-        error(404, "item id not found");
+        error(404, "Unable to update items");
     }
+
+    if (imageUrlsToDelete.length > 0) {
+        for (const imageUrl of imageUrlsToDelete) {
+            if (imageUrl) await tryDeleteImage(imageUrl as string);
+        }
+    }
+
+    emitEvent(SSEvent.ItemsUpdate);
+
+    return new Response(JSON.stringify(updatedItems), { status: 200 });
 };

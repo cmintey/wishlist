@@ -1,13 +1,14 @@
-import { SSEvents } from "$lib/schema";
+import { SSEvent } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
-import { createSSE } from "$lib/server/events/sse";
+import { subscribe } from "$lib/server/events/sse";
 import type { Item } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { produce } from "sveltekit-sse";
 
-export const GET = (async ({ params }) => {
+export const POST = (async ({ params }) => {
     const list = await client.publicList.findUnique({
         select: {
             userId: true,
@@ -26,21 +27,14 @@ export const GET = (async ({ params }) => {
         return new Response();
     }
 
-    const predicate = (item: Item) => {
-        return list.groupId === item.groupId && list.userId === item.userId;
+    const predicate = (item: Item | undefined) => {
+        if (item) {
+            return list.groupId === item.groupId && list.userId === item.userId;
+        }
+        return true;
     };
 
-    const { readable, subscribeToEvent } = createSSE<Item>();
-
-    subscribeToEvent(itemEmitter, SSEvents.item.update, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.item.create, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.item.delete, predicate);
-
-    return new Response(readable, {
-        headers: {
-            "Cache-Control": "no-cache",
-            "Content-Type": "text/event-stream",
-            "X-Accel-Buffering": "no"
-        }
+    return produce(({ emit }) => {
+        return subscribe(emit, itemEmitter, predicate, SSEvent.ItemCreate, SSEvent.ItemUpdate, SSEvent.ItemDelete);
     });
 }) satisfies RequestHandler;

@@ -1,7 +1,7 @@
-import { SSEvents } from "$lib/schema";
+import { SSEvent } from "$lib/schema";
 import { patchItem } from "$lib/server/api-common";
 import { getConfig } from "$lib/server/config";
-import { itemEmitter } from "$lib/server/events/emitters";
+import { emitEvent } from "$lib/server/events/emitters";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
@@ -100,7 +100,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
             }
         });
 
-        itemEmitter.emit(SSEvents.item.delete, item);
+        emitEvent(SSEvent.ItemDelete, item);
 
         if (item.imageUrl) {
             await tryDeleteImage(item.imageUrl);
@@ -158,7 +158,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             await tryDeleteImage(item.imageUrl);
         }
 
-        itemEmitter.emit(SSEvents.item.update, updatedItem);
+        emitEvent(SSEvent.ItemUpdate, item);
 
         return new Response(JSON.stringify(updatedItem), { status: 200 });
     } catch {

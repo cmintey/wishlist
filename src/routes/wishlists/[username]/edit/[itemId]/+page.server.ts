@@ -4,8 +4,8 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { SSEvents } from "$lib/schema";
+import { emitEvent } from "$lib/server/events/emitters";
+import { SSEvent } from "$lib/schema";
 import { getMinorUnits } from "$lib/price-formatter";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -137,7 +137,7 @@ export const actions: Actions = {
             });
         }
 
-        itemEmitter.emit(SSEvents.item.update, updatedItem);
+        emitEvent(SSEvent.ItemUpdate, updatedItem);
 
         if (filename && item.imageUrl && item.imageUrl !== filename) {
             await tryDeleteImage(item.imageUrl);

@@ -4,13 +4,9 @@ export enum Role {
     GROUP_MANAGER
 }
 
-export const SSEvents = {
-    item: {
-        update: "item_update",
-        create: "item_create",
-        delete: "item_delete"
-    },
-    items: {
-        update: "items_update"
-    }
-};
+export enum SSEvent {
+    ItemUpdate = "item_update",
+    ItemCreate = "item_create",
+    ItemDelete = "item_delete",
+    ItemsUpdate = "items_update"
+}

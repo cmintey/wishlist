@@ -1,13 +1,14 @@
-import { SSEvents } from "$lib/schema";
+import { SSEvent } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
-import { createSSE } from "$lib/server/events/sse";
+import { subscribe } from "$lib/server/events/sse";
 import type { Item } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { produce } from "sveltekit-sse";
 
-export const GET = (async ({ locals, params }) => {
+export const POST = (async ({ locals, params }) => {
     if (!locals.user) {
         error(401, "Unauthorized");
     }
@@ -41,22 +42,22 @@ export const GET = (async ({ locals, params }) => {
         return new Response();
     }
 
-    const predicate = (item: Item) => {
-        return activeGroup.groupId === item.groupId && wishlistUser.id === item.userId;
+    const predicate = (item: Item | undefined) => {
+        if (item) {
+            return activeGroup.groupId === item.groupId && wishlistUser.id === item.userId;
+        }
+        return params.username !== locals.user?.username;
     };
 
-    const { readable, subscribeToEvent } = createSSE<Item>();
-
-    subscribeToEvent(itemEmitter, SSEvents.item.update, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.item.create, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.item.delete, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.items.update);
-
-    return new Response(readable, {
-        headers: {
-            "Cache-Control": "no-cache",
-            "Content-Type": "text/event-stream",
-            "X-Accel-Buffering": "no"
-        }
+    return produce(({ emit }) => {
+        return subscribe(
+            emit,
+            itemEmitter,
+            predicate,
+            SSEvent.ItemCreate,
+            SSEvent.ItemUpdate,
+            SSEvent.ItemDelete,
+            SSEvent.ItemsUpdate
+        );
     });
 }) satisfies RequestHandler;

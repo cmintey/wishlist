@@ -8,8 +8,9 @@
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
     import { page } from "$app/stores";
-    import { SSEvents } from "$lib/schema";
+    import { SSEvent } from "$lib/schema";
     import { onMount, onDestroy } from "svelte";
+    import { source, type Source } from "sveltekit-sse";
 
     interface Props {
         data: PageData;
@@ -19,6 +20,7 @@
     let { data }: Props = $props();
     let allItems = $state(data.items);
     let items = $derived(allItems.filter((item) => item.approved));
+    let eventSource: Source;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -38,7 +40,6 @@
         }
     });
 
-    let eventSource: EventSource;
     onMount(async () => {
         subscribeToEvents();
     });
@@ -49,22 +50,30 @@
     });
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource(`${$page.url.pathname}/events`);
-        eventSource.addEventListener(SSEvents.item.update, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            updateItems(message);
-        });
-        eventSource.addEventListener(SSEvents.item.delete, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            removeItem(message);
-        });
-        eventSource.addEventListener(SSEvents.item.create, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            addItem(message);
-        });
+        eventSource = source(`${$page.url.pathname}/events`);
+        eventSource
+            .select(SSEvent.ItemUpdate)
+            .json()
+            .subscribe((e) => {
+                console.log(e);
+                if (e) updateItem(e as Item);
+            });
+        eventSource
+            .select(SSEvent.ItemDelete)
+            .json()
+            .subscribe((e) => {
+                if (e) removeItem(e as Item);
+            });
+        eventSource
+            .select(SSEvent.ItemCreate)
+            .json()
+            .subscribe((e) => {
+                console.log(e);
+                if (e) addItem(e as Item);
+            });
     };
 
-    const updateItems = (updatedItem: Item) => {
+    const updateItem = (updatedItem: Item) => {
         // for when an item gets approved
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);
