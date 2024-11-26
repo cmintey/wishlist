@@ -5,6 +5,7 @@
 <script lang="ts">
     import { dragHandle } from "svelte-dnd-action";
     import type { FullItem } from "./ItemCard.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         item: FullItem;
@@ -13,12 +14,14 @@
     }
 
     let { item, onIncreasePriority = undefined, onDecreasePriority = undefined }: Props = $props();
+
+    let messageObj = $derived({ values: { name: item.name } });
 </script>
 
 <div class="w-max space-x-4">
     <button
         class="variant-outline-primary btn btn-icon btn-icon-sm md:btn-icon"
-        aria-label="lower priority for {item.name}"
+        aria-label={$t("a11y.decrease-priority", messageObj)}
         onclick={(e) => {
             e.stopPropagation();
             if (onDecreasePriority) onDecreasePriority(item.id);
@@ -28,7 +31,7 @@
     </button>
     <button
         class="variant-outline-primary btn md:btn-lg"
-        aria-label="drag-handle for {item.name}"
+        aria-label={$t("a11y.drag-handle", messageObj)}
         onclick={(e) => e.stopPropagation()}
         use:dragHandle
     >
@@ -36,7 +39,7 @@
     </button>
     <button
         class="variant-outline-primary btn btn-icon btn-icon-sm md:btn-icon"
-        aria-label="increase priority for {item.name}"
+        aria-label={$t("a11y.increase-priority", messageObj)}
         onclick={(e) => {
             e.stopPropagation();
             if (onIncreasePriority) onIncreasePriority(item.id);

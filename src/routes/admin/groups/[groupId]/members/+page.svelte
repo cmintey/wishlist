@@ -21,7 +21,7 @@
     type UserData = (typeof data.group.users)[number];
 
     const groupAPI = new GroupAPI($page.params.groupId);
-    const head = [$t("admin.name-header"), $t("auth.username"), $t("auth.email")];
+    const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];
     const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
 
     const addUserModalSettings: ModalSettings = {

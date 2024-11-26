@@ -1,6 +1,7 @@
 <script lang="ts">
     import { getDrawerStore } from "@skeletonlabs/skeleton";
     import { page } from "$app/stores";
+    import { t } from "svelte-i18n";
 
     interface Props {
         navItems: NavItem[];
@@ -13,7 +14,7 @@
 
 <div class="mt-4 flex flex-row place-content-between items-center px-4">
     <span class="text-4xl">Wishlist</span>
-    <button class="btn-icon" aria-label="close" onclick={() => drawerStore.close()}>
+    <button class="btn-icon" aria-label={$t("a11y.close")} onclick={() => drawerStore.close()}>
         <iconify-icon icon="ion:close" width="32"></iconify-icon>
     </button>
 </div>

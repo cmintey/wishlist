@@ -4,9 +4,9 @@
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
     import { getToastStore } from "@skeletonlabs/skeleton";
-    import { onMount } from "svelte";
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: Partial<Item> & {
@@ -22,18 +22,9 @@
     let loading = $state(false);
     let urlFetched = $state(false);
     const toastStore = getToastStore();
-    let locale: string | undefined = $state();
     let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
-
-    onMount(() => {
-        if (navigator.languages?.length > 0) {
-            locale = navigator.languages[0];
-        } else {
-            locale = navigator.language;
-        }
-    });
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -46,7 +37,7 @@
 
     const triggerToast = () => {
         toastStore.trigger({
-            message: `Unable to find product information. You can still fill in the details manually.`,
+            message: $t("errors.unable-to-find-product-information"),
             background: "variant-filled-warning",
             autohide: true,
             timeout: 5000
@@ -99,7 +90,7 @@
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-6">
     <label class="col-span-1 md:col-span-6" for="url">
-        <span>Item URL</span>
+        <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row space-x-4">
             <div class="input-group grid-cols-[auto_1fr_auto]">
                 <div class="input-group-shim">
@@ -110,14 +101,14 @@
                     name="url"
                     class="input"
                     onfocusout={() => getInfo()}
-                    placeholder="Enter a URL to fetch the item data"
+                    placeholder={$t("wishes.url-placeholder")}
                     type="url"
                     bind:value={productData.url}
                 />
                 {#if productData.url}
                     <button
                         id="reset-field"
-                        aria-label="clear url field"
+                        aria-label={$t("a11y.clear-url-field")}
                         onclick={() => (productData.url = null)}
                         onkeypress={(e) => e.preventDefault()}
                         tabindex="-1"
@@ -131,7 +122,7 @@
                 <button
                     id="refresh-item"
                     class="variant-ghost-primary btn btn-icon"
-                    aria-label="refresh item data"
+                    aria-label={$t("a11y.refresh-item-data")}
                     onclick={(e) => {
                         e.preventDefault();
                         urlFetched = false;
@@ -148,7 +139,7 @@
     </label>
 
     <label class="col-span-1 row-start-2 md:col-span-4" for="name">
-        <span>Item Name*</span>
+        <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
                 <iconify-icon icon="ion:gift"></iconify-icon>
@@ -165,22 +156,22 @@
             />
         </div>
         {#if form?.missing}
-            <p class="unstyled pt-2 text-xs text-warning-500">Item name required</p>
+            <p class="unstyled pt-2 text-xs text-warning-500">{$t("errors.item-name-required")}</p>
         {/if}
     </label>
 
     <label class="col-span-1 row-start-3 md:col-span-2 md:row-start-2" for="price">
-        <span>Price</span>
-        <CurrencyInput id="price" name="price" currency={userCurrency} {locale} bind:value={price} />
+        <span>{$t("wishes.price")}</span>
+        <CurrencyInput id="price" name="price" currency={userCurrency} bind:value={price} />
     </label>
 
     <label class="col-span-1 md:col-span-2" for="image">
-        <span>Upload Image</span>
+        <span>{$t("wishes.upload-image")}</span>
         <input id="image" name="image" class="input" accept="image/*" type="file" />
     </label>
 
     <label class="col-span-1 md:col-span-4" for="image_url">
-        <span>Image URL</span>
+        <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
                 <iconify-icon icon="ion:image"></iconify-icon>
@@ -197,7 +188,7 @@
     </label>
 
     <label class="col-span-1 md:col-span-6" for="note">
-        <span>Notes</span>
+        <span>{$t("wishes.notes")}</span>
         <textarea
             id="note"
             name="note"
@@ -209,19 +200,19 @@
     </label>
 
     <div class="flex flex-col space-y-2">
-        <span class="text-sm">*required field</span>
+        <span class="text-sm">*{$t("general.required-field")}</span>
 
         <div class="flex flex-row space-x-4">
             <button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
                 {buttonText}
             </button>
             <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
-                Cancel
+                {$t("general.cancel")}
             </button>
         </div>
     </div>
 </div>
 
 {#if loading}
-    <Backdrop text="Hang tight, gathering product data" />
+    <Backdrop text={$t("wishes.hang-tight-gathering-product-data")} />
 {/if}

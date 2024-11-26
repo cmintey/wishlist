@@ -3,27 +3,20 @@
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { t } from "svelte-i18n";
 
     interface Props {
         value?: number | null;
-        locale?: string;
         currency?: string;
         name: string;
         id: string;
         disabled?: boolean;
     }
 
-    let {
-        value = $bindable(null),
-        locale = "en-US",
-        currency = $bindable("USD"),
-        name,
-        id,
-        disabled = false
-    }: Props = $props();
+    let { value = $bindable(null), currency = $bindable("USD"), name, id, disabled = false }: Props = $props();
 
     const toastStore = getToastStore();
-    let formatter = $derived(getFormatter(currency, locale));
+    let formatter = $derived(getFormatter(currency));
     let localeConfig = $derived(getLocaleConfig(formatter));
     let maximumFractionDigits = $derived(formatter.resolvedOptions().maximumFractionDigits || 2);
     let inputtedValue = value !== null ? value.toString() : "";
@@ -95,7 +88,7 @@
         if (!e.currentTarget.value) {
             currency = previousCurrency;
             toastStore.trigger({
-                message: "Price must have a currency"
+                message: $t("errors.price-must-have-a-currency")
             });
             return;
         }
@@ -106,7 +99,7 @@
             e.currentTarget.value = previousCurrency;
             toastStore.trigger({
                 background: "variant-filled-warning",
-                message: `Currency code is invalid. A list of valid currency codes can be found <a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)" target="_blank" rel="noopener noreferrer">here</a>`
+                message: $t("errors.invalid-currency-code")
             });
             return;
         }

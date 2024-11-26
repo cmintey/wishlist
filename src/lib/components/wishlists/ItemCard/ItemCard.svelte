@@ -32,8 +32,8 @@
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import ReorderButtons from "./ReorderButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
-    import { onMount } from "svelte";
     import { page } from "$app/stores";
+    import { t } from "svelte-i18n";
 
     interface Props {
         item: FullItem;
@@ -71,21 +71,12 @@
             }
         }
     });
-    let locale: string | undefined = $state();
 
     const itemAPI = new ItemAPI(item.id);
 
-    onMount(() => {
-        if (navigator.languages?.length > 0) {
-            locale = navigator.languages[0];
-        } else {
-            locale = navigator.language;
-        }
-    });
-
     const triggerErrorToast = () => {
         toastStore.trigger({
-            message: `Oops! Something went wrong.`,
+            message: $t("general.oops"),
             background: "variant-filled-warning",
             autohide: true,
             timeout: 5000
@@ -95,7 +86,7 @@
     const confirmDeleteModal: ModalSettings = {
         type: "confirm",
         title: "Please Confirm",
-        body: `Are you sure you wish to delete ${item.name}?`,
+        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: item.name } }),
         // confirm = TRUE | cancel = FALSE
         response: async (r: boolean) => {
             if (r) {
@@ -105,7 +96,7 @@
                     invalidateAll();
 
                     toastStore.trigger({
-                        message: `${item.name} was deleted`,
+                        message: $t("wishes.item-was-deleted", { values: { name: item.name } }),
                         autohide: true,
                         timeout: 5000
                     });
@@ -119,17 +110,15 @@
 
     const approvalModal = (approve: boolean): ModalSettings => ({
         type: "confirm",
-        title: "Please Confirm",
-        body: `Are you sure you wish to <b>${approve ? "approve" : "deny"}</b> suggestion ${item.name} from ${
-            item.addedBy?.name
-        }?`,
+        title: $t("general.please-confirm"),
+        body: $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } }),
         response: async (r: boolean) => {
             if (r) {
                 const resp = await (approve ? itemAPI.approve() : itemAPI.deny());
 
                 if (resp.ok) {
                     toastStore.trigger({
-                        message: `${item.name} was ${approve ? "approved" : "denied"}`,
+                        message: $t("wishes.item-approved", { values: { name: item.name, approved: approve } }),
                         autohide: true,
                         timeout: 5000
                     });
@@ -153,7 +142,7 @@
 
             if (resp.ok) {
                 toastStore.trigger({
-                    message: `${unclaim ? "Unclaimed" : "Claimed"} item`,
+                    message: $t("wishes.claimed-item", { values: { claimed: !unclaim } }),
                     autohide: true,
                     timeout: 5000
                 });
@@ -173,7 +162,7 @@
 
                         if (resp.ok) {
                             toastStore.trigger({
-                                message: "Claimed item",
+                                message: $t("wishes.claimed-item", { values: { claimed: true } }),
                                 autohide: true,
                                 timeout: 5000
                             });
@@ -200,7 +189,6 @@
             item,
             showFor,
             user,
-            locale,
             showClaimedName,
             onPublicList,
             handleClaim,
@@ -247,14 +235,14 @@
 
         <div class="flex flex-col">
             {#if item.price || item.itemPrice}
-                <span class="text-lg font-semibold">{formatPrice(item, locale)}</span>
+                <span class="text-lg font-semibold">{formatPrice(item)}</span>
             {/if}
 
             <span class="text-base md:text-lg">
                 {#if showFor}
-                    For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
+                    {@html $t("wishes.for", { values: { name: item.user?.name } })}
                 {:else if !onPublicList}
-                    Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
+                    {@html $t("wishes.added-by", { values: { name: item.addedBy?.name } })}
                 {/if}
             </span>
             <p class="line-clamp-4 whitespace-pre-wrap">{item.note}</p>
