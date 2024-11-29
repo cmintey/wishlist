@@ -3,19 +3,26 @@
     import { ProgressRadial } from "@skeletonlabs/skeleton";
     import PublicSignup from "./PublicSignup.svelte";
     import Suggestions from "./Suggestions.svelte";
-    import Smtp from "./SMTP.svelte";
     import Claims from "./Claims.svelte";
     import Security from "./Security.svelte";
+    import DefaultGroup from "./DefaultGroup.svelte";
+    import Smtp from "./SMTP.svelte";
+
+    type Group = {
+        id: string;
+        name: string;
+    };
 
     interface Props {
         config: Config;
+        groups: Group[];
         hideActions?: boolean;
         saved?: boolean;
         sending?: boolean;
         sent?: boolean;
     }
 
-    let { config = $bindable(), hideActions = false, saved = false, sending = false, sent = false }: Props = $props();
+    let { config = $bindable(), groups = [], hideActions = false, saved = false, sending = false, sent = false }: Props = $props();
 
     let form = $derived($page.form);
 </script>
@@ -33,6 +40,9 @@
     </div>
     <div class="col-span-1">
         <Security bind:passwordStrength={config.security.passwordStrength} />
+    </div>
+    <div class="col-span-1">
+        <DefaultGroup {groups} bind:groupId={config.defaultGroup} />
     </div>
 
     <div class="col-span-1 md:col-span-2">

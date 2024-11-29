@@ -11,6 +11,7 @@
     let { data }: Props = $props();
 
     let config = $state(data.config);
+    let groups = $state(data.groups);
     let sending = $state(false);
     let saved = $state(false);
     let sent = $state(false);
@@ -36,5 +37,5 @@
         };
     }}
 >
-    <SettingsForm {config} {saved} {sending} {sent} />
+    <SettingsForm {config} {groups} {saved} {sending} {sent} />
 </form>

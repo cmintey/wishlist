@@ -63,6 +63,7 @@ type Config = {
     security: {
         passwordStrength: number;
     };
+    defaultGroup?: string | null;
 };
 
 type Option = {

@@ -1,4 +1,5 @@
 import { Role } from "$lib/schema";
+import { client } from "$lib/server/prisma";
 import { getConfig, writeConfig } from "$lib/server/config";
 import { redirect, error, fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
@@ -16,8 +17,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const config = await getConfig(undefined, true);
 
+    const groups = await client.group
+        .findMany({
+            select: {
+                id: true,
+                name: true
+            }
+        })
+
     return {
-        config
+        config,
+        groups
     };
 };
 
@@ -82,7 +92,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         listMode: "standard",
         security: {
             passwordStrength: configData.passwordStrength
-        }
+        },
+        defaultGroup: configData.defaultGroup
     };
 
     return newConfig;
