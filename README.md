@@ -79,6 +79,7 @@ It is recommended to run Wishlist behind a reverse proxy. Currently, Wishlist do
 #### Nginx
 
 There is a [known issue](https://github.com/cmintey/wishlist/issues/170) when running behind Nginx. It is recommended to set the following properties in your Nginx configuration:
+
 ```
 proxy_buffer_size   128k;
 proxy_buffers   4 256k;
