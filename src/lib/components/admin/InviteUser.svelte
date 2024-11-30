@@ -4,6 +4,7 @@
     import { page } from "$app/stores";
     import type { Group } from "@prisma/client";
     import { fade } from "svelte/transition";
+    import { t } from "svelte-i18n";
 
     interface Props {
         config: Config;
@@ -29,14 +30,14 @@
             let toastConfig: ToastSettings;
             if (form?.sent) {
                 toastConfig = {
-                    message: "Invite sent!",
+                    message: $t("general.invite-sent"),
                     background: "variant-filled-success",
                     autohide: true,
                     timeout: 3000
                 };
             } else {
                 toastConfig = {
-                    message: `Invite failed to send: ${form?.message} `,
+                    message: $t("errors.invite-failed-to-send", { values: { errorMessage: form?.message } }),
                     background: "variant-filled-error",
                     autohide: true,
                     timeout: 3000
@@ -67,7 +68,8 @@
                 if (data.email) email = data.email;
                 if (groupId) setTimeout(() => submitButton?.click(), 200);
                 showUrl = true;
-            }
+            },
+            buttonTextCancel: $t("general.cancel")
         });
     };
 </script>
@@ -75,7 +77,7 @@
 <div class="flex flex-col space-y-4 {vertical ? 'items-center' : 'md:flex-row md:items-end md:space-x-4 md:space-y-0'}">
     <button class="variant-filled-primary btn w-fit" onclick={triggerInviteModal} type="button">
         <iconify-icon icon="ion:person-add"></iconify-icon>
-        <p>Invite User</p>
+        <p>{$t("general.invite-user")}</p>
     </button>
 
     <input id="invite-group" name="invite-group" class="hidden" value={groupId} />
@@ -91,9 +93,9 @@
             out:fade
         >
             <TokenCopy url={form.url} on:copied={() => setTimeout(() => (showUrl = false), 1000)}>
-                Invite link
+                {$t("general.invite-link")}
             </TokenCopy>
-            <span class="text-sm italic">This invite link is only valid for one signup</span>
+            <span class="text-sm italic">{$t("general.this-invite-link-is-only-valid-for-one-signup")}</span>
         </div>
     {/if}
 

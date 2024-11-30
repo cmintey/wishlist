@@ -31,10 +31,10 @@
             };
         }}
     >
-        <ItemForm buttonText="Save" data={data?.item} />
+        <ItemForm buttonText={$t("general.save")} data={data?.item} />
     </form>
 {/if}
 
 <svelte:head>
-    <title>$t('wishes.edit-wish')</title>
+    <title>{$t("wishes.edit-wish")}</title>
 </svelte:head>

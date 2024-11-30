@@ -193,7 +193,7 @@
             id="note"
             name="note"
             class="textarea"
-            placeholder="i.e. size, color, etc."
+            placeholder={$t("wishes.note-placeholder")}
             rows="4"
             bind:value={productData.note}
         ></textarea>

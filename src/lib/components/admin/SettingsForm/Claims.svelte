@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { t } from "svelte-i18n";
+
     interface Props {
         enabled: boolean;
     }
@@ -7,9 +9,9 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-    <h2 class="h2">Claims</h2>
+    <h2 class="h2">{$t("admin.claims")}</h2>
     <label class="unstyled flex flex-row space-x-2">
         <input id="claimsShowName" name="claimsShowName" class="checkbox" type="checkbox" bind:checked={enabled} />
-        <span>Show Name</span>
+        <span>{$t("admin.show-name")}</span>
     </label>
 </div>

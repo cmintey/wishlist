@@ -1,5 +1,6 @@
 <script lang="ts">
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         enabled: boolean;
@@ -23,15 +24,15 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-    <h2 class="h2">SMTP</h2>
+    <h2 class="h2">{$t("admin.smtp")}</h2>
     <label class="unstyled flex flex-row space-x-2">
         <input id="enableSMTP" name="enableSMTP" class="checkbox" type="checkbox" bind:checked={enabled} />
-        <span>Enable</span>
+        <span>{$t("general.enable")}</span>
     </label>
     {#if enabled}
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
             <label for="smtpHost">
-                <span>Host</span>
+                <span>{$t("admin.smtp-host")}</span>
                 <input
                     id="smtpHost"
                     name="smtpHost"
@@ -43,7 +44,7 @@
                 />
             </label>
             <label for="smtpPort">
-                <span>Port</span>
+                <span>{$t("admin.smtp-port")}</span>
                 <input
                     id="smtpPort"
                     name="smtpPort"
@@ -55,7 +56,7 @@
                 />
             </label>
             <label for="smtpUser">
-                <span>User</span>
+                <span>{$t("general.user")}</span>
                 <input
                     id="smtpUser"
                     name="smtpUser"
@@ -68,7 +69,7 @@
             </label>
             <PasswordInput id="smtpPass" name="smtpPass" label="Password" required bind:value={pass} />
             <label for="smtpFrom">
-                <span>From Email</span>
+                <span>{$t("admin.smtp-from-email")}</span>
                 <input
                     id="smtpFrom"
                     name="smtpFrom"
@@ -80,7 +81,7 @@
                 />
             </label>
             <label for="smtpFromName">
-                <span>From Name</span>
+                <span>{$t("admin.smtp-from-name")}</span>
                 <input
                     id="smtpFromName"
                     name="smtpFromName"

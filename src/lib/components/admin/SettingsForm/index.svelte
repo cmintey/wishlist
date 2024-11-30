@@ -5,6 +5,7 @@
     import Suggestions from "./Suggestions.svelte";
     import Smtp from "./SMTP.svelte";
     import Claims from "./Claims.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         config: Config;
@@ -57,9 +58,9 @@
         <button class="variant-filled-primary btn mt-2" type="submit">
             {#if saved}
                 <iconify-icon icon="ion:checkmark"></iconify-icon>
-                <p>Save</p>
+                <p>{$t("general.save")}</p>
             {:else}
-                Save
+                {$t("general.save")}
             {/if}
         </button>
         {#if saved && config.smtp.enable}

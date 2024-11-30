@@ -41,9 +41,9 @@
     <button class="variant-filled-primary btn mt-2" type="submit">
         {#if saved}
             <iconify-icon icon="ion:checkmark"></iconify-icon>
-            <p>{$t("admin.saved")}</p>
+            <p>{$t("general.saved")}</p>
         {:else}
-            {$t("admin.save")}
+            {$t("general.save")}
         {/if}
     </button>
 </form>

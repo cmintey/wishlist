@@ -35,14 +35,16 @@
                 </div>
             </div>
             <div class="alert-actions">
-                <button class="variant-ghost-warning btn btn-sm" onclick={() => (warningHidden = true)}>OK</button>
+                <button class="variant-ghost-warning btn btn-sm" onclick={() => (warningHidden = true)}>
+                    {$t("general.ok")}
+                </button>
             </div>
         </aside>
     </div>
 {/if}
 
 <form enctype="multipart/form-data" method="POST" use:enhance>
-    <ItemForm buttonText="Add Item" data={itemData} />
+    <ItemForm buttonText={$t("wishes.add-item")} data={itemData} />
 </form>
 
 <svelte:head>
