@@ -133,6 +133,7 @@ SMTP does not need to be configured for the app to function. SMTP enables inviti
 If you have a reverse proxy you want to use to login your users, you do it via our proxy authentication method. To configure this method, your proxy must send HTTP headers containing the name, username and email of the logged in user.
 You configure the 
 
+`HEADER_AUTH`: Enable proxy authentication
 `HEADER_USERNAME`: The name of the headers that contains the username of the user
 `HEADER_NAME`: The name of the headers that contains the full name of the user
 `HEADER_EMAIL`: The name of the headers that contains the email of the user
