@@ -1,6 +1,6 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { resetPasswordSchema } from "$lib/validations";
+import { getResetPasswordSchema } from "$lib/validations";
 import { fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
@@ -107,6 +107,7 @@ export const actions: Actions = {
         if (!(locals.user && locals.session)) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
+        const resetPasswordSchema = await getResetPasswordSchema();
         const pwdData = resetPasswordSchema.safeParse(formData);
 
         if (!pwdData.success) {

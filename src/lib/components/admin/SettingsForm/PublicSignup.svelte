@@ -1,4 +1,6 @@
 <script lang="ts">
+    import BaseSetting from "./BaseSetting.svelte";
+
     import { t } from "svelte-i18n";
 
     interface Props {
@@ -8,10 +10,9 @@
     let { enabled = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">{$t("admin.public-signup")}</h2>
+<BaseSetting title={$t("admin.public-signup")}>
     <label class="unstyled flex flex-row space-x-2">
         <input id="enableSignup" name="enableSignup" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("general.enable")}</span>
     </label>
-</div>
+</BaseSetting>

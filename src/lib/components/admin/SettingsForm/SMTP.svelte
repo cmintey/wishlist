@@ -1,5 +1,6 @@
 <script lang="ts">
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import BaseSetting from "./BaseSetting.svelte";
     import { t } from "svelte-i18n";
 
     interface Props {
@@ -23,8 +24,7 @@
     }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">{$t("admin.smtp")}</h2>
+<BaseSetting title={$t("admin.smtp")}>
     <label class="unstyled flex flex-row space-x-2">
         <input id="enableSMTP" name="enableSMTP" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("general.enable")}</span>
@@ -94,4 +94,4 @@
             </label>
         </div>
     {/if}
-</div>
+</BaseSetting>

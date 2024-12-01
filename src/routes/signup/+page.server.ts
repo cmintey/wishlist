@@ -1,6 +1,6 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { signupSchema } from "$lib/validations";
+import { getSignupSchema } from "$lib/validations";
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
@@ -46,6 +46,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
         const formData = Object.fromEntries(await request.formData());
+        const signupSchema = await getSignupSchema();
         const signupData = signupSchema.safeParse(formData);
         const $t = await getFormatter();
 

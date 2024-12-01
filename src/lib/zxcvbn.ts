@@ -23,3 +23,6 @@ export const loadOptions = async () => {
         }
     };
 };
+
+export const meterLabel = ["Very weak", "Weak", "Moderate", "Strong", "Very Strong"];
+export const strengthOptions = ["Off", ...meterLabel];

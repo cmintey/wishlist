@@ -1,7 +1,7 @@
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { hashToken } from "$lib/server/token";
-import { resetPasswordSchema } from "$lib/validations";
+import { getResetPasswordSchema } from "$lib/validations";
 import { error, fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
@@ -43,6 +43,7 @@ export const actions: Actions = {
     default: async ({ request }) => {
         const $t = await getFormatter();
         const formData = Object.fromEntries(await request.formData());
+        const resetPasswordSchema = await getResetPasswordSchema();
         const schema = resetPasswordSchema.and(
             z.object({
                 userId: z.string(),

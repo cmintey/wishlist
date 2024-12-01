@@ -1,5 +1,6 @@
 <script lang="ts">
     import Alert from "$lib/components/Alert.svelte";
+    import BaseSetting from "./BaseSetting.svelte";
     import { t } from "svelte-i18n";
 
     interface Props {
@@ -10,8 +11,7 @@
     let { mode = $bindable(), disabled = false }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">{$t("admin.wishlist-mode")}</h2>
+<BaseSetting title={$t("admin.wishlist-mode")}>
     {#if disabled}
         <Alert type="info">{$t("admin.wishlist-mode-alert")}</Alert>
     {/if}
@@ -21,4 +21,4 @@
             <option value="registry">{$t("admin.wishlist-mode-registry")}</option>
         {/if}
     </select>
-</div>
+</BaseSetting>

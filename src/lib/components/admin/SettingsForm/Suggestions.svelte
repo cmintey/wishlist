@@ -1,4 +1,5 @@
 <script lang="ts">
+    import BaseSetting from "./BaseSetting.svelte";
     import { t } from "svelte-i18n";
 
     interface Props {
@@ -9,8 +10,7 @@
     let { enabled = $bindable(), method = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">{$t("admin.suggestions")}</h2>
+<BaseSetting title={$t("admin.suggestions")}>
     <label class="unstyled flex flex-row space-x-2">
         <input
             id="enableSuggestions"
@@ -22,13 +22,13 @@
         <span>{$t("general.enable")}</span>
     </label>
     {#if enabled}
-        <label class="w-fit">
+        <label class="flex flex-col" for="suggestionMethod">
             <span>{$t("admin.suggestions-method")}</span>
-            <select id="suggestionMethod" name="suggestionMethod" class="select" bind:value={method}>
+            <select id="suggestionMethod" name="suggestionMethod" class="select w-full" bind:value={method}>
                 <option value="surprise">{$t("admin.suggestions-surprise-me")}</option>
                 <option value="auto-approval">{$t("admin.suggestions-auto-approve")}</option>
                 <option value="approval">{$t("admin.suggestions-approval-required")}</option>
             </select>
         </label>
     {/if}
-</div>
+</BaseSetting>
