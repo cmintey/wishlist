@@ -1,4 +1,6 @@
 <script lang="ts">
+    import BaseSetting from "./BaseSetting.svelte";
+
     interface Props {
         enabled: boolean;
         method: SuggestionMethod;
@@ -7,8 +9,7 @@
     let { enabled = $bindable(), method = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-col space-y-2">
-    <h2 class="h2">Suggestions</h2>
+<BaseSetting title="Suggestions">
     <label class="unstyled flex flex-row space-x-2">
         <input
             id="enableSuggestions"
@@ -20,13 +21,13 @@
         <span>Enable</span>
     </label>
     {#if enabled}
-        <label class="w-fit">
+        <label class="flex flex-col" for="suggestionMethod">
             <span>Method</span>
-            <select id="suggestionMethod" name="suggestionMethod" class="select" bind:value={method}>
+            <select id="suggestionMethod" name="suggestionMethod" class="select w-full" bind:value={method}>
                 <option value="surprise">Surprise Me</option>
                 <option value="auto-approval">Auto-Approve</option>
                 <option value="approval">Approval Required</option>
             </select>
         </label>
     {/if}
-</div>
+</BaseSetting>

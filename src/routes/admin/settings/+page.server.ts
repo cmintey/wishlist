@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         error(401, "Not authorized to view admin panel");
     }
 
-    const config = await getConfig();
+    const config = await getConfig(undefined, true);
 
     return {
         config
@@ -79,7 +79,10 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         claims: {
             showName: configData.claimsShowName
         },
-        listMode: "standard"
+        listMode: "standard",
+        security: {
+            passwordStrength: configData.passwordStrength
+        }
     };
 
     return newConfig;
