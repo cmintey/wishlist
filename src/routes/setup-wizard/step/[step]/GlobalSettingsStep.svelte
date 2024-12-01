@@ -5,10 +5,12 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
+    import type { Group } from "@prisma/client";
 
     let { onSuccess }: Props = $props();
 
     let config: Config = $state($page.data.config);
+    let groups: Group[] = $state($page.data.groups);
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
     let saved = $state(false);
@@ -51,7 +53,7 @@
                 };
             }}
         >
-            <SettingsForm {config} hideActions {saved} {sending} {sent} />
+            <SettingsForm {config} {groups} hideActions {saved} {sending} {sent} />
         </form>
     </div>
 </div>
