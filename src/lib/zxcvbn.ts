@@ -24,5 +24,11 @@ export const loadOptions = async () => {
     };
 };
 
-export const meterLabel = ["Very weak", "Weak", "Moderate", "Strong", "Very Strong"];
-export const strengthOptions = ["Off", ...meterLabel];
+export const meterLabel = [
+    "general.very-weak",
+    "general.weak",
+    "general.moderate",
+    "general.strong",
+    "general.very-strong"
+];
+export const strengthOptions = ["general.off", ...meterLabel];

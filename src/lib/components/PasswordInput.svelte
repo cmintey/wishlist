@@ -114,5 +114,5 @@
         </ul>
     </div>
 
-    <p>{meterLabel[strength?.score]}</p>
+    <p>{$t(meterLabel[strength?.score])}</p>
 {/if}

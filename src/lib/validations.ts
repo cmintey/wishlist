@@ -2,21 +2,23 @@ import { z } from "zod";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { loadOptions, meterLabel } from "$lib/zxcvbn";
 import { getConfig } from "./server/config";
+import { getFormatter } from "./i18n";
 
 await loadOptions().then((options) => zxcvbnOptions.setOptions(options));
+const $t = await getFormatter();
 
 const passwordZxcvbn = (minScore: number) => {
+    const minStrength = $t(meterLabel[minScore]);
+    const message = $t("errors.password-min-strength", { values: { minStrength } });
     return z
         .string()
-        .min(1, "Password must not be blank")
-        .refine((pass) => zxcvbn(pass).score >= minScore, {
-            message: `Password must be at least '${meterLabel[minScore]}'`
-        });
+        .min(1, $t("errors.password-must-not-be-blank"))
+        .refine((pass) => zxcvbn(pass).score >= minScore, { message });
 };
 
 export const loginSchema = z.object({
-    username: z.string().trim().min(1, "Username must not be blank"),
-    password: z.string().min(1, "Password must not be blank")
+    username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
+    password: z.string().min(1, $t("errors.password-must-not-be-blank"))
 });
 
 export const getResetPasswordSchema = async () => {
@@ -31,8 +33,8 @@ export const getResetPasswordSchema = async () => {
 export const getSignupSchema = async () => {
     const { security } = await getConfig();
     return z.object({
-        name: z.string().trim().min(1, "Name must not be blank"),
-        username: z.string().trim().min(1, "Username must not be blank"),
+        name: z.string().trim().min(1, $t("errors.name-must-not-be-blank")),
+        username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
         email: z.string().email(),
         password: passwordZxcvbn(security.passwordStrength),
         tokenId: z.string().optional()
