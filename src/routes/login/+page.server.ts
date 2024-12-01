@@ -15,6 +15,11 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
         redirect(302, ref || "/");
     }
 
+    const userCount = await client.user.count();
+    if (userCount === 0) {
+        redirect(302, "/setup-wizard");
+    }
+
     /* Header authentication */
     if (env.HEADER_AUTH_ENABLED) {
         const username = request.headers.get(env.HEADER_USERNAME);
@@ -71,11 +76,6 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
         }
     }
     /* End header authentication */
-
-    const userCount = await client.user.count();
-    if (userCount === 0) {
-        redirect(302, "/setup-wizard");
-    }
 
     return { enableSignup: config.enableSignup };
 };
