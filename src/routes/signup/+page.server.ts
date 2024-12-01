@@ -5,9 +5,9 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { hashToken } from "$lib/server/token";
 import { getConfig } from "$lib/server/config";
-import { Role } from "$lib/schema";
 import { env } from "$env/dynamic/private";
-import { LegacyScrypt } from "lucia";
+import { createUser } from "$lib/server/user";
+import { Role } from "$lib/schema";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
     if (locals.user) redirect(302, "/");
@@ -43,7 +43,6 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
-        const config = await getConfig();
         const formData = Object.fromEntries(await request.formData());
         const signupSchema = await getSignupSchema();
         const signupData = signupSchema.safeParse(formData);
@@ -60,44 +59,12 @@ export const actions: Actions = {
         }
 
         const userCount = await client.user.count();
-        let groupId: string | undefined;
-        if (signupData.data.tokenId) {
-            groupId = await client.signupToken
-                .findUnique({
-                    where: {
-                        id: signupData.data.tokenId
-                    },
-                    select: {
-                        groupId: true
-                    }
-                })
-                .then((data) => data?.groupId);
-        } else if (userCount === 0) {
-            groupId = (
-                await client.group.findFirst({
-                    select: {
-                        id: true
-                    }
-                })
-            )?.id;
-        } else if (config.defaultGroup) {
-            groupId = config.defaultGroup;
-        }
-
         try {
-            const hashedPassword = await new LegacyScrypt().hash(signupData.data.password);
-            const user = await client.user.create({
-                select: {
-                    id: true
-                },
-                data: {
-                    username: signupData.data.username,
-                    email: signupData.data.email,
-                    hashedPassword,
-                    name: signupData.data.name,
-                    roleId: userCount > 0 ? Role.USER : Role.ADMIN
-                }
-            });
+            const user = await createUser({
+                username: signupData.data.username,
+                email: signupData.data.email,
+                name: signupData.data.name
+            }, userCount > 0 ? Role.USER : Role.ADMIN, signupData.data.password, signupData.data.tokenId);
 
             const session = await auth.createSession(user.id, {});
             const sessionCookie = auth.createSessionCookie(session.id);
@@ -105,27 +72,6 @@ export const actions: Actions = {
                 path: "/",
                 ...sessionCookie.attributes
             });
-
-            if (groupId) {
-                await client.userGroupMembership.create({
-                    data: {
-                        groupId: groupId,
-                        userId: user.id,
-                        active: true
-                    }
-                });
-            }
-
-            if (signupData.data.tokenId) {
-                await client.signupToken.update({
-                    where: {
-                        id: signupData.data.tokenId
-                    },
-                    data: {
-                        redeemed: true
-                    }
-                });
-            }
             return { success: true };
         } catch {
             return fail(400, {

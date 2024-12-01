@@ -7,6 +7,7 @@ import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { LegacyScrypt } from "lucia";
 import type { PageServerLoad, Actions } from "./$types";
+import { createUser } from "$lib/server/user";
 
 export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     const config = await getConfig();
@@ -43,18 +44,12 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
                     return fail(400, { username: username, password: "", incorrect: true });
                 }
                 const userCount = await client.user.count();
-                user = await client.user.create({
-                    select: {
-                        id: true
-                    },
-                    data: {
-                        username: username,
-                        email: email,
-                        hashedPassword: "",
-                        name: name,
-                        roleId: userCount > 0 ? Role.USER : Role.ADMIN
-                    }
-                });
+                user = await createUser({
+                    username: username,
+                    email: email,
+                    name: name
+                }, userCount > 0 ? Role.USER : Role.ADMIN, "");
+                
                 if (config.defaultGroup) {
                     await client.userGroupMembership.create({
                         data: {
