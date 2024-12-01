@@ -130,10 +130,16 @@ SMTP does not need to be configured for the app to function. SMTP enables inviti
 
 ### Proxy authentication
 
-If you have a reverse proxy you want to use to login your users, you do it via our proxy authentication method. To configure this method, your proxy must send HTTP headers containing the name, username and email of the logged in user.
-You configure the 
+> [!WARNING]  
+> When header authentication is enabled, Wishlist makes no assumptions about the validity of the headers. It is up to you to have your proxy properly configured. An improperly configured proxy **could allow anyone** to gain access to the application by forging the headers.
+
+If you have a reverse proxy you want to use to login your users, you do it via our proxy authentication method. To configure this method, your proxy must send HTTP headers containing the name, username and email for the logged in user.
+You configure this using environment variables.
 
 `HEADER_AUTH`: Enable proxy authentication
+
 `HEADER_USERNAME`: The name of the headers that contains the username of the user
+
 `HEADER_NAME`: The name of the headers that contains the full name of the user
+
 `HEADER_EMAIL`: The name of the headers that contains the email of the user
