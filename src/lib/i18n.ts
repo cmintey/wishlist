@@ -16,8 +16,8 @@ export const getFormatter = async () => {
 };
 
 export const initLang = async () => {
+    register("dev", () => Promise.resolve({}));
     register("en", () => import("../i18n/en.json"));
-    register("es", () => import("../i18n/es.json"));
 
     await init({
         fallbackLocale: dev ? "dev" : defaultLocale,
