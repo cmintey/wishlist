@@ -43,6 +43,7 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
+        const config = await getConfig();
         const formData = Object.fromEntries(await request.formData());
         const signupSchema = await getSignupSchema();
         const signupData = signupSchema.safeParse(formData);
@@ -79,6 +80,8 @@ export const actions: Actions = {
                     }
                 })
             )?.id;
+        } else if (config.defaultGroup) {
+            groupId = config.defaultGroup;
         }
 
         try {
