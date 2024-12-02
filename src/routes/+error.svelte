@@ -13,7 +13,7 @@
     const errors: Record<number, ErrorInfo> = {
         401: {
             image: unauthorizedAsset,
-            message: $t("errors.unauthorized")
+            message: $t("errors.not-authorized")
         },
         404: {
             image: notFoundAsset,
