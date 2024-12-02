@@ -60,11 +60,16 @@ export const actions: Actions = {
 
         const userCount = await client.user.count();
         try {
-            const user = await createUser({
-                username: signupData.data.username,
-                email: signupData.data.email,
-                name: signupData.data.name
-            }, userCount > 0 ? Role.USER : Role.ADMIN, signupData.data.password, signupData.data.tokenId);
+            const user = await createUser(
+                {
+                    username: signupData.data.username,
+                    email: signupData.data.email,
+                    name: signupData.data.name
+                },
+                userCount > 0 ? Role.USER : Role.ADMIN,
+                signupData.data.password,
+                signupData.data.tokenId
+            );
 
             const session = await auth.createSession(user.id, {});
             const sessionCookie = auth.createSessionCookie(session.id);

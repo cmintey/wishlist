@@ -22,34 +22,38 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     }
 
     /* Header authentication */
-    if (env.HEADER_AUTH_ENABLED == 'true') {
+    if (env.HEADER_AUTH_ENABLED == "true") {
         const username = request.headers.get(env.HEADER_USERNAME);
         if (username) {
             let user = await client.user.findUnique({
                 select: {
-                    id: true,
+                    id: true
                 },
                 where: {
                     username: username
                 }
             });
-    
+
             if (!user) {
-                if(!env.HEADER_EMAIL || !env.HEADER_NAME) {
+                if (!env.HEADER_EMAIL || !env.HEADER_NAME) {
                     return fail(400, { username: username, password: "", incorrect: true });
                 }
                 const name = request.headers.get(env.HEADER_NAME);
                 const email = request.headers.get(env.HEADER_EMAIL);
-                if(!name || !email) {
+                if (!name || !email) {
                     return fail(400, { username: username, password: "", incorrect: true });
                 }
                 const userCount = await client.user.count();
-                user = await createUser({
-                    username: username,
-                    email: email,
-                    name: name
-                }, userCount > 0 ? Role.USER : Role.ADMIN, "");
-                
+                user = await createUser(
+                    {
+                        username: username,
+                        email: email,
+                        name: name
+                    },
+                    userCount > 0 ? Role.USER : Role.ADMIN,
+                    ""
+                );
+
                 if (config.defaultGroup) {
                     await client.userGroupMembership.create({
                         data: {
@@ -60,7 +64,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
                     });
                 }
             }
-    
+
             const session = await auth.createSession(user.id, {});
             const sessionCookie = auth.createSessionCookie(session.id);
             cookies.set(sessionCookie.name, sessionCookie.value, {

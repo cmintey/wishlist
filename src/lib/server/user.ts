@@ -4,7 +4,7 @@ import { getConfig } from "$lib/server/config";
 import { LegacyScrypt } from "lucia";
 import type { User } from "@prisma/client";
 
-type UserMinimal = Pick<User, 'username' | 'email' | 'name'>;
+type UserMinimal = Pick<User, "username" | "email" | "name">;
 
 export const createUser = async (user: UserMinimal, role: Role, password: string, signupTokenId?: string) => {
     const config = await getConfig();
@@ -68,4 +68,4 @@ export const createUser = async (user: UserMinimal, role: Role, password: string
     }
 
     return newUser;
-}
+};
