@@ -15,7 +15,8 @@ export const load: PageServerLoad = async ({ locals, request }) => {
         redirect(302, `/login?ref=/account`);
     }
 
-    const isProxyUser = env.HEADER_AUTH_ENABLED == "true" && !!request.headers.get(env.HEADER_USERNAME);
+    const isProxyUser =
+        env.HEADER_AUTH_ENABLED && env.HEADER_AUTH_ENABLED == "true" && !!request.headers.get(env.HEADER_USERNAME);
 
     return {
         user,
