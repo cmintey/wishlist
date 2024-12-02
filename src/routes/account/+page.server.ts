@@ -16,7 +16,9 @@ export const load: PageServerLoad = async ({ locals, request }) => {
     }
 
     const isProxyUser =
-        env.HEADER_AUTH_ENABLED && env.HEADER_AUTH_ENABLED == "true" && !!request.headers.get(env.HEADER_USERNAME);
+        (env.HEADER_AUTH_ENABLED ?? "false") == "true" &&
+        !!env.HEADER_USERNAME &&
+        !!request.headers.get(env.HEADER_USERNAME);
 
     return {
         user,
