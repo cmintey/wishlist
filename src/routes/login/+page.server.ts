@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     }
 
     /* Header authentication */
-    if ((env.HEADER_AUTH_ENABLED ?? "false") == "true") {
+    if ((env.HEADER_AUTH_ENABLED ?? "false") == "true" && !!env.HEADER_USERNAME) {
         const username = request.headers.get(env.HEADER_USERNAME);
         if (username) {
             let user = await client.user.findUnique({
