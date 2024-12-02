@@ -43,7 +43,6 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
-
         const config = await getConfig();
         const formData = Object.fromEntries(await request.formData());
         const signupSchema = await getSignupSchema();

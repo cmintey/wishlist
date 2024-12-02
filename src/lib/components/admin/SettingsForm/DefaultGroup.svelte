@@ -1,6 +1,6 @@
 <script lang="ts">
     import BaseSetting from "./BaseSetting.svelte";
-    
+
     type Group = {
         id: string;
         name: string;

@@ -17,13 +17,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const config = await getConfig(undefined, true);
 
-    const groups = await client.group
-        .findMany({
-            select: {
-                id: true,
-                name: true
-            }
-        })
+    const groups = await client.group.findMany({
+        select: {
+            id: true,
+            name: true
+        }
+    });
 
     return {
         config,

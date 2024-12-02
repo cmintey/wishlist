@@ -22,7 +22,14 @@
         sent?: boolean;
     }
 
-    let { config = $bindable(), groups = [], hideActions = false, saved = false, sending = false, sent = false }: Props = $props();
+    let {
+        config = $bindable(),
+        groups = [],
+        hideActions = false,
+        saved = false,
+        sending = false,
+        sent = false
+    }: Props = $props();
 
     let form = $derived($page.form);
 </script>
