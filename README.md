@@ -134,4 +134,4 @@ Code contributions are always welcome! If you have something in mind that you wo
 
 ### Translations
 
-Translations are provided by the community and new translations are greatly appreciated. Translations are managed through [Weblate](https://hosted.weblate.org/projects/wishlist/wishlist-web/). With Weblate, you can contribute an entire language, or make suggestions to existing translations. If the language you wish to translate has not been added yet, you can request it [here](https://hosted.weblate.org/new-lang/wishlist/wishlist-web/).
+Translations are provided by the community and new translations are greatly appreciated. Translations are managed through [Weblate](https://hosted.weblate.org/projects/wishlist/wishlist-web/). With Weblate, you can contribute an entire language, or make suggestions to existing translations. If the language you wish to translate has not been added yet, you can request it [here](https://hosted.weblate.org/new-lang/wishlist/wishlist-web/). The translation strings use ICU Message Syntax which you can reference [here](https://formatjs.github.io/docs/core-concepts/icu-syntax). 
