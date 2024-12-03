@@ -62,7 +62,7 @@ model Group {
     UserGroupMembership UserGroupMembership[]
     Item                Item[]
     publicLists         PublicList[]
-    List                List[]
+    lists               List[]
 
     @@map("group")
 }
