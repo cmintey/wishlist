@@ -23,6 +23,7 @@ model User {
     UserGroupMembership UserGroupMembership[]
     hashedPassword      String
     publicLists         PublicList[]
+    lists               List[]
 
     @@map("user")
 }
@@ -61,6 +62,7 @@ model Group {
     UserGroupMembership UserGroupMembership[]
     Item                Item[]
     publicLists         PublicList[]
+    List                List[]
 
     @@map("group")
 }
@@ -79,6 +81,22 @@ model UserGroupMembership {
     @@index([groupId])
     @@index([userId, groupId])
     @@map("user_group_membership")
+}
+
+model List {
+    id      String  @id @unique @default(cuid())
+    name    String?
+    owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    ownerId String
+    group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    groupId String
+    public  Boolean @default(false)
+    items   Item[]
+
+    @@index([ownerId])
+    @@index([groupId])
+    @@index([ownerId, groupId])
+    @@map("list")
 }
 
 model Item {
@@ -103,6 +121,7 @@ model Item {
     group             Group?      @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId           String?
     displayOrder      Int?
+    lists             List[]
 
     @@index([userId])
     @@index([pledgedById])
