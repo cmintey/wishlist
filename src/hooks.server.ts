@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { auth } from "$lib/server/auth";
 import type { Handle } from "@sveltejs/kit";
 
@@ -24,6 +25,11 @@ export const handle: Handle = async ({ event, resolve }) => {
             ...sessionCookie.attributes
         });
     }
+    const isProxyUser = (env.HEADER_AUTH_ENABLED ?? "false") == "true" &&
+    !!env.HEADER_USERNAME &&
+    !!event.request.headers.get(env.HEADER_USERNAME);
+
+    event.locals.isProxyUser = isProxyUser;
     event.locals.user = user;
     event.locals.session = session;
     return resolve(event);

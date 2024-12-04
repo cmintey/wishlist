@@ -7,6 +7,7 @@ declare global {
         // Locals must be an interface and not a type
         interface Locals {
             user: import("lucia").User | null;
+            isProxyUser: boolean;
             session: import("lucia").Session | null;
         }
     }
