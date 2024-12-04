@@ -98,7 +98,7 @@
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
-        <NavBar {navItems} user={data.user} />
+        <NavBar isProxyUser={data.isProxyUser} {navItems} user={data.user} />
     </header>
 
     <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
