@@ -25,9 +25,10 @@ export const handle: Handle = async ({ event, resolve }) => {
             ...sessionCookie.attributes
         });
     }
-    const isProxyUser = (env.HEADER_AUTH_ENABLED ?? "false") == "true" &&
-    !!env.HEADER_USERNAME &&
-    !!event.request.headers.get(env.HEADER_USERNAME);
+    const isProxyUser =
+        (env.HEADER_AUTH_ENABLED ?? "false") == "true" &&
+        !!env.HEADER_USERNAME &&
+        !!event.request.headers.get(env.HEADER_USERNAME);
 
     event.locals.isProxyUser = isProxyUser;
     event.locals.user = user;
