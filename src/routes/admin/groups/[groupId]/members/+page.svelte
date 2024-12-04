@@ -69,8 +69,9 @@
         if (data.config.defaultGroup === $page.params.groupId) {
             modalStore.trigger({
                 type: "alert",
-                title: "Cannot Delete Default Group",
-                body: "You cannot delete the default group. Please change the default group before deleting this group."
+                title: $t("errors.cannot-delete-default-group"),
+                body: $t("general.cannot-delete-default-group-msg"),
+                buttonTextCancel: $t("general.ok")
             });
             return;
         }
