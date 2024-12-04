@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { auth } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { getResetPasswordSchema } from "$lib/validations";
@@ -9,14 +10,20 @@ import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { LegacyScrypt } from "lucia";
 import { getFormatter } from "$lib/i18n";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, request }) => {
     const user = locals.user;
     if (!user) {
         redirect(302, `/login?ref=/account`);
     }
 
+    const isProxyUser =
+        (env.HEADER_AUTH_ENABLED ?? "false") == "true" &&
+        !!env.HEADER_USERNAME &&
+        !!request.headers.get(env.HEADER_USERNAME);
+
     return {
-        user
+        user,
+        isProxyUser
     };
 };
 

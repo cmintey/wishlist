@@ -15,7 +15,8 @@ enum ConfigKey {
     SMTP_FROM_NAME = "smtp.fromName",
     CLAIMS_SHOW_NAME = "claims.showName",
     LIST_MODE = "listMode",
-    SECURITY_PASSWORD_STRENGTH = "security.passwordStrength"
+    SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
+    DEFAULT_GROUP = "defaultGroup"
 }
 
 export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
@@ -79,7 +80,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
         listMode: (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard",
         security: {
             passwordStrength: Number(configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] || 2)
-        }
+        },
+        defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!
     };
 
     return config;
@@ -141,6 +143,7 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
     configMap[ConfigKey.CLAIMS_SHOW_NAME] = config?.claims?.showName.toString();
     configMap[ConfigKey.LIST_MODE] = config?.listMode;
     configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] = config?.security?.passwordStrength.toString();
+    configMap[ConfigKey.DEFAULT_GROUP] = config?.defaultGroup;
 
     for (const [key, value] of Object.entries(configMap)) {
         await client.systemConfig.upsert({

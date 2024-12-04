@@ -21,7 +21,9 @@
 
 <TabGroup>
     <Tab name="Profile" value={0} bind:group={tabSet}>{$t("admin.profile")}</Tab>
-    <Tab name="Security" value={1} bind:group={tabSet}>{$t("admin.security")}</Tab>
+    {#if !data.isProxyUser}
+        <Tab name="Security" value={1} bind:group={tabSet}>{$t("admin.security")}</Tab>
+    {/if}
     {#snippet panel()}
         {#if tabSet === 0}
             <div class="flex w-fit flex-col items-center">
@@ -51,7 +53,7 @@
 
                 <EditProfile user={data.user} />
             </div>
-        {:else if tabSet === 1}
+        {:else if tabSet === 1 && !data.isProxyUser}
             <ChangePassword />
         {/if}
     {/snippet}
