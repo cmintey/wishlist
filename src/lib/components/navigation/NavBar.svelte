@@ -11,9 +11,10 @@
     interface Props {
         navItems: NavItem[];
         user: User | null;
+        isProxyUser: boolean;
     }
 
-    let { navItems, user }: Props = $props();
+    let { navItems, user, isProxyUser }: Props = $props();
 
     const drawerStore = getDrawerStore();
     const drawerSettings: DrawerSettings = {
@@ -62,6 +63,6 @@
     {/if}
 
     {#snippet trail()}
-        <NavMenu {user} />
+        <NavMenu {isProxyUser} {user} />
     {/snippet}
 </AppBar>

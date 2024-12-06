@@ -9,9 +9,10 @@
 
     interface Props {
         user: User | null;
+        isProxyUser: boolean;
     }
 
-    let { user }: Props = $props();
+    let { user, isProxyUser }: Props = $props();
 
     const menuSettings: PopupSettings = {
         event: "click",
@@ -44,20 +45,21 @@
 
                     <hr />
                     <GroupSubMenu {user} />
-                    <hr />
-
-                    <li>
-                        <button
-                            class="list-option w-full"
-                            onclick={async () => {
-                                await fetch("/logout", { method: "POST" });
-                                invalidateAll();
-                            }}
-                        >
-                            <iconify-icon icon="ion:log-out"></iconify-icon>
-                            <p>{$t("auth.sign-out")}</p>
-                        </button>
-                    </li>
+                    {#if !isProxyUser}
+                        <hr />
+                        <li>
+                            <button
+                                class="list-option w-full"
+                                onclick={async () => {
+                                    await fetch("/logout", { method: "POST" });
+                                    invalidateAll();
+                                }}
+                            >
+                                <iconify-icon icon="ion:log-out"></iconify-icon>
+                                <p>{$t("auth.sign-out")}</p>
+                            </button>
+                        </li>
+                    {/if}
                     <hr class="pb-1" />
                     <li>
                         <div class="flex w-full justify-around">

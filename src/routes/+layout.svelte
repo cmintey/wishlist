@@ -99,9 +99,9 @@
             <NavigationLoadingBar />
         {/if}
         {#await navItems}
-            <NavBar navItems={[]} user={data.user} />
+            <NavBar isProxyUser={data.isProxyUser} navItems={[]} user={data.user} />
         {:then navItems}
-            <NavBar {navItems} user={data.user} />
+            <NavBar isProxyUser={data.isProxyUser} {navItems} user={data.user} />
         {/await}
     </header>
 
