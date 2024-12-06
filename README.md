@@ -10,14 +10,14 @@ Wishlist is a self-hosted wishlist application that you can share with your frie
 
 ## Features
 
--   [x] Claim items on a wishlist
--   [x] Check off claimed items as purchased
--   [x] Automatically fetch product data from URL
--   [x] Invite users via email (SMTP configuration required)
--   [x] Options for [suggestions](#suggestions)
--   [x] PWA Support
--   [x] Multiple groups
--   [x] Registry Mode (single list)
+- [x] Claim items on a wishlist
+- [x] Check off claimed items as purchased
+- [x] Automatically fetch product data from URL
+- [x] Invite users via email (SMTP configuration required)
+- [x] Options for [suggestions](#suggestions)
+- [x] PWA Support
+- [x] Multiple groups
+- [x] Registry Mode (single list)
 
 <p float="left">
     <img src="./assets/homepage-desktop.png" width="74%" />
