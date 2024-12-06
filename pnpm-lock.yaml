@@ -35,6 +35,9 @@ importers:
       '@zxcvbn-ts/language-es-es':
         specifier: ^3.0.2
         version: 3.0.2
+      '@zxcvbn-ts/language-fr':
+        specifier: ^3.0.2
+        version: 3.0.2
       got-scraping:
         specifier: ^4.0.7
         version: 4.0.7
@@ -1800,6 +1803,9 @@ packages:
 
   '@zxcvbn-ts/language-es-es@3.0.2':
     resolution: {integrity: sha512-5IbEduFuUtzA6fQtatPo8HIyuIyu6nqsEksz+jXwpFhNUqh+pplFLrpdHbdJ0RENrJ5uk+Fz1pPOTDgBbLPSZQ==}
+
+  '@zxcvbn-ts/language-fr@3.0.2':
+    resolution: {integrity: sha512-Tj9jS/Z8mNBAD21pn8Mp4O86CPrwImysO1fM3DG+fsfk8W79/MDzqpFDBHiqpu69Uo3LPPctMHEEteakFWt4Qg==}
 
   abbrev@2.0.0:
     resolution: {integrity: sha512-6/mh1E2u2YgEsCHdY0Yx5oW+61gZU+1vXaoiHHrpKeuRNNgFvS+/jrwHiQhB5apAf5oB7UB7E19ol2R2LKH8hQ==}
@@ -5953,6 +5959,8 @@ snapshots:
   '@zxcvbn-ts/language-en@3.0.2': {}
 
   '@zxcvbn-ts/language-es-es@3.0.2': {}
+
+  '@zxcvbn-ts/language-fr@3.0.2': {}
 
   abbrev@2.0.0: {}
 

@@ -7,7 +7,9 @@ export const loadOptions = async () => {
     const langEn = await import("@zxcvbn-ts/language-en");
     let langUser: any;
     if (lang?.toLowerCase() === "es-es") {
-        langUser = await import(`@zxcvbn-ts/language-es-es`);
+        langUser = await import("@zxcvbn-ts/language-es-es");
+    } else if (lang?.toLowerCase().split("-")[0]) {
+        langUser = await import("@zxcvbn-ts/language-fr");
     }
 
     return {
