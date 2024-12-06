@@ -56,7 +56,7 @@
                     data-sveltekit-preload-data
                     href={navItem.href}
                 >
-                    {navItem.label}
+                    {$t(navItem.labelKey)}
                 </a>
             {/each}
         </div>

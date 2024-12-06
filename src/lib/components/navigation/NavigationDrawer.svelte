@@ -30,7 +30,7 @@
                     onclick={() => drawerStore.close()}
                 >
                     <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
-                    <p>{navItem.label}</p>
+                    <p>{$t(navItem.labelKey)}</p>
                 </a>
             </li>
         {/each}

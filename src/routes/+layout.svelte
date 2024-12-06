@@ -98,11 +98,7 @@
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
-        {#await navItems}
-            <NavBar isProxyUser={data.isProxyUser} navItems={[]} user={data.user} />
-        {:then navItems}
-            <NavBar isProxyUser={data.isProxyUser} {navItems} user={data.user} />
-        {/await}
+        <NavBar isProxyUser={data.isProxyUser} {navItems} user={data.user} />
     </header>
 
     <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
@@ -113,9 +109,7 @@
     </main>
 
     <footer class="sticky bottom-0 z-10">
-        {#await navItems then navItems}
-            <BottomTabs {navItems} user={data.user} />
-        {/await}
+        <BottomTabs {navItems} user={data.user} />
     </footer>
 </div>
 
