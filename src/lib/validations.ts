@@ -5,9 +5,9 @@ import { getConfig } from "./server/config";
 import { getFormatter } from "./i18n";
 
 await loadOptions().then((options) => zxcvbnOptions.setOptions(options));
-const $t = await getFormatter();
 
-const passwordZxcvbn = (minScore: number) => {
+const passwordZxcvbn = async (minScore: number) => {
+    const $t = await getFormatter();
     const minStrength = $t(meterLabel[minScore]);
     const message = $t("errors.password-min-strength", { values: { minStrength } });
     return z
@@ -16,27 +16,31 @@ const passwordZxcvbn = (minScore: number) => {
         .refine((pass) => zxcvbn(pass).score >= minScore, { message });
 };
 
-export const loginSchema = z.object({
-    username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
-    password: z.string().min(1, $t("errors.password-must-not-be-blank"))
-});
+export const getLoginSchema = async () => {
+    const $t = await getFormatter();
+    return z.object({
+        username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
+        password: z.string().min(1, $t("errors.password-must-not-be-blank"))
+    });
+};
 
 export const getResetPasswordSchema = async () => {
     const { security } = await getConfig();
     return z.object({
         oldPassword: z.string().min(1),
-        newPassword: passwordZxcvbn(security.passwordStrength),
+        newPassword: await passwordZxcvbn(security.passwordStrength),
         invalidateSessions: z.coerce.boolean().default(false)
     });
 };
 
 export const getSignupSchema = async () => {
+    const $t = await getFormatter();
     const { security } = await getConfig();
     return z.object({
         name: z.string().trim().min(1, $t("errors.name-must-not-be-blank")),
         username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
         email: z.string().email(),
-        password: passwordZxcvbn(security.passwordStrength),
+        password: await passwordZxcvbn(security.passwordStrength),
         tokenId: z.string().optional()
     });
 };
