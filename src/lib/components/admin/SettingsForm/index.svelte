@@ -7,6 +7,7 @@
     import Security from "./Security.svelte";
     import DefaultGroup from "./DefaultGroup.svelte";
     import Smtp from "./SMTP.svelte";
+    import { t } from "svelte-i18n";
 
     type Group = {
         id: string;
@@ -78,9 +79,9 @@
         <button class="variant-filled-primary btn mt-2" type="submit">
             {#if saved}
                 <iconify-icon icon="ion:checkmark"></iconify-icon>
-                <p>Save</p>
+                <p>{$t("general.save")}</p>
             {:else}
-                Save
+                {$t("general.save")}
             {/if}
         </button>
         {#if saved && config.smtp.enable}

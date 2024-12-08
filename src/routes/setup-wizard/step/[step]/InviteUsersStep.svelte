@@ -4,6 +4,7 @@
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
     import type { Props } from "./steps";
+    import { t } from "svelte-i18n";
 
     let { onSuccess }: Props = $props();
 
@@ -12,11 +13,8 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-    <h1 class="h1">Invite Users</h1>
-    <span>
-        If you're ready, invite some additional users! You can always invite users later from the admin or group
-        settings.
-    </span>
+    <h1 class="h1">{$t("setup.invite-users")}</h1>
+    <span>{$t("setup.invite-users-subtext")}</span>
 
     <form
         action="/admin/users"

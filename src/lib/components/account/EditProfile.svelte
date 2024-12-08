@@ -2,6 +2,7 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/stores";
     import type { User } from "lucia";
+    import { t } from "svelte-i18n";
 
     interface Props {
         user: User;
@@ -13,7 +14,7 @@
 <form method="POST" use:enhance>
     <div class="flex flex-col space-y-4">
         <label for="name">
-            <span>Name</span>
+            <span>{$t("auth.name")}</span>
             <input
                 id="name"
                 name="name"
@@ -26,7 +27,7 @@
         </label>
 
         <label for="username">
-            <span>Username</span>
+            <span>{$t("auth.username")}</span>
             <input
                 id="username"
                 name="username"
@@ -39,7 +40,7 @@
         </label>
 
         <label for="email">
-            <span>Email</span>
+            <span>{$t("auth.email")}</span>
             <input
                 id="email"
                 name="email"
@@ -59,6 +60,8 @@
             </ul>
         {/if}
 
-        <button class="variant-filled-primary btn w-fit" formaction="?/profile" type="submit">Update</button>
+        <button class="variant-filled-primary btn w-fit" formaction="?/profile" type="submit">
+            {$t("general.update")}
+        </button>
     </div>
 </form>

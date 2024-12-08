@@ -6,8 +6,10 @@ import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { getFormatter } from "$lib/i18n";
 
 export const GET = (async ({ params }) => {
+    const $t = await getFormatter();
     const list = await client.publicList.findUnique({
         select: {
             userId: true,
@@ -18,7 +20,7 @@ export const GET = (async ({ params }) => {
         }
     });
     if (!list) {
-        error(404, "Public list not found");
+        error(404, $t("errors.public-list-not-found"));
     }
 
     const config = await getConfig(list.groupId);

@@ -4,6 +4,7 @@
     import ListMode from "$lib/components/admin/SettingsForm/ListMode.svelte";
     import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
     import type { PageData } from "./$types";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -40,9 +41,9 @@
     <button class="variant-filled-primary btn mt-2" type="submit">
         {#if saved}
             <iconify-icon icon="ion:checkmark"></iconify-icon>
-            <p>Saved</p>
+            <p>{$t("general.saved")}</p>
         {:else}
-            Save
+            {$t("general.save")}
         {/if}
     </button>
 </form>

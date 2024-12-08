@@ -7,21 +7,23 @@ import { tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import type { Prisma } from "@prisma/client";
 import { patchItem } from "$lib/server/api-common";
+import { getFormatter } from "$lib/i18n";
 
 export const DELETE: RequestHandler = async ({ locals, request }) => {
+    const $t = await getFormatter();
     const groupId = new URL(request.url).searchParams.get("groupId");
     const claimed = new URL(request.url).searchParams.get("claimed");
     if (groupId) {
         const { authenticated } = await _authCheck(locals, groupId);
         if (!authenticated) {
-            error(401, "Not authorized to delete items for this group");
+            error(401, $t("errors.not-authorized"));
         }
     } else {
         if (!locals.user) {
-            error(401, "Must authenticate first");
+            error(401, $t("errors.unauthenticated"));
         }
         if (locals.user.roleId !== Role.ADMIN) {
-            error(401, "Not authorized to delete items");
+            error(401, $t("errors.not-authorized"));
         }
     }
 
@@ -54,17 +56,18 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
 
         return new Response(JSON.stringify(deletedItems), { status: 200 });
     } catch {
-        error(500, "Unable to delete items");
+        error(500, $t("errors.unable-to-delete-items"));
     }
 };
 
 export const PATCH: RequestHandler = async ({ locals, request }) => {
-    if (!locals.user) error(401, "user is not authenticated");
+    const $t = await getFormatter();
+    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     const body = (await request.json()) as Record<string, unknown>[];
     const itemIds = body.map((item) => {
         if (!item.id) {
-            error(422, "One or more items missing an id");
+            error(422, $t("errors.one-or-more-items-missing-an-id"));
         }
         return item.id as number;
     });
@@ -83,7 +86,7 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
     const idsSet = new Set(itemIds);
     items.forEach((item) => {
         if (!idsSet.has(item.id)) {
-            error(404, `Item with id ${item.id} not found`);
+            error(404, $t("errors.item-with-id-item-id-not-found", { values: { id: item.id } }));
         }
     });
 
@@ -144,6 +147,6 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
 
         return new Response(JSON.stringify(updatedItems), { status: 200 });
     } catch {
-        error(404, "item id not found");
+        error(404, $t("errors.item-not-found"));
     }
 };

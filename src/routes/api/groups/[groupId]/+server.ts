@@ -2,12 +2,14 @@ import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { client } from "$lib/server/prisma";
 import { _authCheck } from "./auth";
+import { getFormatter } from "$lib/i18n";
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
+    const $t = await getFormatter();
     const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
-        error(401, "User is not authorized to delete this group");
+        error(401, $t("errors.not-authorized"));
     }
 
     const group = await client.group.findUnique({
@@ -16,7 +18,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
         }
     });
 
-    if (!group) error(404, "Group does not exist");
+    if (!group) error(404, $t("errors.group-does-not-exist"));
 
     await client.userGroupMembership.deleteMany({
         where: {
@@ -34,10 +36,11 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 };
 
 export const PATCH: RequestHandler = async ({ locals, params, request }) => {
+    const $t = await getFormatter();
     const { authenticated } = await _authCheck(locals, params.groupId);
 
     if (!authenticated) {
-        error(401, "User is not authorized to modify this group");
+        error(401, $t("errors.not-authorized"));
     }
 
     const body = (await request.json()) as Record<string, unknown>;
@@ -51,7 +54,7 @@ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
         }
     });
 
-    if (!group) error(404, "Group does not exist");
+    if (!group) error(404, $t("errors.group-does-not-exist"));
 
     const updatedGroup = await client.group.update({
         data: {

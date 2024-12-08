@@ -11,6 +11,7 @@
     } from "@skeletonlabs/skeleton";
     import Search from "../Search.svelte";
     import { GroupsAPI } from "$lib/api/groups";
+    import { t } from "svelte-i18n";
 
     type Group = {
         id: string;
@@ -30,7 +31,7 @@
     let groupsFiltered: Group[] = $state(groups);
 
     let groupData: TableSource = $derived({
-        head: ["Name", "User Count"],
+        head: [$t("auth.name"), $t("general.user-count")],
         body: tableMapperValues(groupsFiltered, ["name", "userCount"]),
         meta: tableSourceMapper(groupsFiltered, ["name", "id"])
     });
@@ -43,8 +44,8 @@
     const createGroup = () => {
         const settings: ModalSettings = {
             type: "prompt",
-            title: "Enter Group Name",
-            body: "Provide the name of the group below.",
+            title: $t("general.enter-group-name"),
+            body: $t("general.provide-the-name-of-the-group-below"),
             valueAttr: { type: "text", minlength: 3, maxlength: 32, required: true },
             // Returns the updated response value
             response: async (name: string) => {
@@ -55,18 +56,18 @@
                 const group = await groupsAPI.create(name);
                 if (group) {
                     toastStore.trigger({
-                        message: "Group created successfully!"
+                        message: $t("general.group-created-successfully")
                     });
                 } else {
                     toastStore.trigger({
-                        message: "An unknown error occurred while creating the group"
+                        message: $t("errors.create-group-unknown-error")
                     });
                 }
                 await invalidateAll();
             },
             // Optionally override the button text
-            buttonTextCancel: "Cancel",
-            buttonTextSubmit: "Submit"
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextSubmit: $t("general.submit")
         };
 
         modalStore.trigger(settings);
@@ -77,7 +78,7 @@
     <Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
     <button class="variant-filled-primary btn" onclick={createGroup}>
         <iconify-icon icon="ion:add"></iconify-icon>
-        <p>Create Group</p>
+        <p>{$t("general.create-group")}</p>
     </button>
 </div>
 

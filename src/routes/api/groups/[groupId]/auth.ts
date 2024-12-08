@@ -1,10 +1,12 @@
+import { getFormatter } from "$lib/i18n";
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 
 export const _authCheck = async (locals: App.Locals, groupId: string) => {
+    const $t = await getFormatter();
     if (!locals.user) {
-        error(401, "Must authenticate first");
+        error(401, $t("errors.unauthenticated"));
     }
 
     const user = await client.user.findFirstOrThrow({

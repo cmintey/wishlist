@@ -1,3 +1,4 @@
+import { getFormatter } from "$lib/i18n";
 import { SSEvents } from "$lib/schema";
 import { patchItem } from "$lib/server/api-common";
 import { getConfig } from "$lib/server/config";
@@ -10,12 +11,13 @@ import { error, type RequestHandler } from "@sveltejs/kit";
 import assert from "assert";
 
 const validateItem = async (itemId: string | undefined, locals: App.Locals, checkPublic = false) => {
-    if (!checkPublic && !locals.user) error(401, "user is not authenticated");
+    const $t = await getFormatter();
+    if (!checkPublic && !locals.user) error(401, $t("errors.unauthenticated"));
 
     if (!itemId) {
-        error(400, "must specify an item to delete");
+        error(400, $t("errors.must-specify-an-item-to-delete"));
     } else if (isNaN(parseInt(itemId))) {
-        error(400, "item id must be a number");
+        error(400, $t("errors.item-id-must-be-a-number"));
     }
 
     const item = await client.item.findUnique({
@@ -44,7 +46,7 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
     });
 
     if (!item) {
-        error(404, "item id not found");
+        error(404, $t("errors.item-not-found"));
     }
 
     if (checkPublic) {
@@ -57,7 +59,7 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
         if (!locals.user && count > 0) {
             return item;
         } else {
-            error(401, "Item is not public. User is not authenticated");
+            error(401, $t("errors.not-authorized"));
         }
     }
 
@@ -65,6 +67,7 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
 };
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
+    const $t = await getFormatter();
     const foundItem = await validateItem(params?.itemId, locals);
     assert(locals.user);
     assert(params.itemId);
@@ -79,7 +82,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
     }
 
     if (!suggestionDenied && foundItem.addedBy.username !== locals.user.username) {
-        error(401, "user cannot delete an item they did not create");
+        error(401, $t("errors.not-authorized"));
     }
 
     try {
@@ -108,11 +111,12 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 
         return new Response(JSON.stringify(item), { status: 200 });
     } catch {
-        error(404, "item id not found");
+        error(404, $t("errors.item-not-found"));
     }
 };
 
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
+    const $t = await getFormatter();
     const body = (await request.json()) as Record<string, unknown>;
     const item = await validateItem(params?.itemId, locals, body.publicPledgedById !== undefined);
 
@@ -162,6 +166,6 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
 
         return new Response(JSON.stringify(updatedItem), { status: 200 });
     } catch {
-        error(404, "item id not found");
+        error(404, $t("errors.item-not-found"));
     }
 };

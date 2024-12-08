@@ -5,6 +5,7 @@
     import InviteUser from "./InviteUser.svelte";
     import type { Group } from "@prisma/client";
     import { enhance } from "$app/forms";
+    import { t } from "svelte-i18n";
 
     type User = {
         username: string;
@@ -25,7 +26,7 @@
     let usersFiltered: (User & { groups?: string[] })[] = $state(users);
 
     let userData: TableSource = $derived({
-        head: ["Name", "Username", "Email", "Admin", "Groups"],
+        head: [$t("auth.name"), $t("auth.username"), $t("auth.email"), $t("admin.admin"), $t("admin.groups")],
         body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
         meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin"])
     });

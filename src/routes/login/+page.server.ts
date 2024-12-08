@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import { auth } from "$lib/server/auth";
-import { loginSchema } from "$lib/validations";
+import { getLoginSchema } from "$lib/validations";
 import { getConfig } from "$lib/server/config";
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
@@ -84,7 +84,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
         const formData = Object.fromEntries(await request.formData());
-        const loginData = loginSchema.safeParse(formData);
+        const loginData = (await getLoginSchema()).safeParse(formData);
         // check for empty values
         if (!loginData.success) {
             const errors = loginData.error.errors.map((error) => {

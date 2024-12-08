@@ -1,3 +1,17 @@
 {
-    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html", "markdown", "svelte"]
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html", "markdown", "svelte"],
+    "i18n-ally.localesPaths": ["src/i18n"],
+    "i18n-ally.sortKeys": true,
+    "i18n-ally.keepFulfilled": false,
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.indent": 4,
+    "i18n-ally.dirStructure": "file",
+    "i18n-ally.keysInUse": [
+        "general.moderate",
+        "general.off",
+        "general.strong",
+        "general.very-strong",
+        "general.very-weak",
+        "general.weak"
+    ]
 }

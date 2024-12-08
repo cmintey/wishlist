@@ -3,10 +3,12 @@ import { client } from "$lib/server/prisma";
 import type { UserGroupMembership } from "@prisma/client";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
+import { getFormatter } from "$lib/i18n";
 
 export const PATCH: RequestHandler = async ({ params, locals, request }) => {
-    if (!locals.user) error(401, "user is not authenticated");
-    if (params.userId !== locals.user.id && locals.user.roleId !== Role.ADMIN) error(401, "not authorized");
+    const $t = await getFormatter();
+    if (!locals.user) error(401, $t("errors.unauthenticated"));
+    if (params.userId !== locals.user.id && locals.user.roleId !== Role.ADMIN) error(401, $t("errors.not-authorized"));
 
     const data = await request.json();
 
@@ -27,10 +29,10 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
                 }
             });
         } catch {
-            error(400, "user is not a member of the group");
+            error(400, $t("errors.user-is-not-a-member-of-the-group"));
         }
 
-        if (activeMembership?.id === membership.id) error(400, "group is already active");
+        if (activeMembership?.id === membership.id) error(400, $t("errors.group-is-already-active"));
 
         membership = await client.userGroupMembership.update({
             where: {

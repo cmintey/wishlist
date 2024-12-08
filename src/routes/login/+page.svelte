@@ -2,6 +2,7 @@
     import { enhance } from "$app/forms";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import type { ActionData, PageServerData } from "./$types";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageServerData;
@@ -12,7 +13,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-    <h1 class="h1">Sign in</h1>
+    <h1 class="h1">{$t("auth.sign-in")}</h1>
 
     <form
         class="w-80"
@@ -28,7 +29,7 @@
     >
         <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
             <label for="username">
-                <span>Username</span>
+                <span>{$t("auth.username")}</span>
                 <input
                     id="username"
                     name="username"
@@ -46,11 +47,13 @@
                     id="password"
                     name="password"
                     error={form?.incorrect || form?.error}
-                    label="Password"
+                    label={$t("auth.password")}
                     required
                 />
 
-                {#if form?.incorrect}<span class="unstyled text-xs text-red-500">Invalid credentials!</span>{/if}
+                {#if form?.incorrect}<span class="unstyled text-xs text-red-500">
+                        {$t("errors.invalid-credentials")}
+                    </span>{/if}
                 {#if form?.error}
                     <ul>
                         {#each form.errors as error}
@@ -60,14 +63,14 @@
                 {/if}
 
                 <div class="flex items-center justify-center space-x-4">
-                    <button class="variant-filled-primary btn w-min">Log In</button>
+                    <button class="variant-filled-primary btn w-min">{$t("auth.log-in")}</button>
                     {#if data.enableSignup}
-                        <a href="/signup">Create an account</a>
+                        <a href="/signup">{$t("auth.create-an-account")}</a>
                     {/if}
                 </div>
 
                 <div>
-                    <a class="absolute right-0 top-0 text-sm" href="/forgot-password">Forgot password?</a>
+                    <a class="absolute right-0 top-0 text-sm" href="/forgot-password">{$t("auth.forgot-password")}</a>
                 </div>
             </div>
         </div>
@@ -75,5 +78,5 @@
 </div>
 
 <svelte:head>
-    <title>Login</title>
+    <title>{$t("auth.log-in")}</title>
 </svelte:head>

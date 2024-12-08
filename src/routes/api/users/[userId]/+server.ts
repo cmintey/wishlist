@@ -1,14 +1,16 @@
+import { getFormatter } from "$lib/i18n";
 import { Role } from "$lib/schema";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
-    if (!locals.user) error(401, "user is not authenticated");
-    if (!(locals.user.roleId === Role.ADMIN)) error(401, "must be admin to delete a user");
+    const $t = await getFormatter();
+    if (!locals.user) error(401, $t("errors.unauthenticated"));
+    if (!(locals.user.roleId === Role.ADMIN)) error(401, $t("errors.not-authorized"));
 
     if (!params.userId) {
-        error(400, "must specify an item to delete");
+        error(400, $t("errors.must-specify-an-item-to-delete"));
     }
 
     const user = await client.user.findUnique({
@@ -21,11 +23,11 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
     });
 
     if (!user) {
-        error(404, "user id not found");
+        error(404, $t("errors.user-not-found"));
     }
 
     if (user.id === locals.user.id) {
-        error(400, "cannot delete yourself");
+        error(400, $t("errors.cannot-delete-yourself"));
     }
 
     try {
@@ -40,6 +42,6 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 
         return new Response(JSON.stringify(deletedUser), { status: 200 });
     } catch {
-        error(404, "user id not found");
+        error(404, $t("errors.user-not-found"));
     }
 };

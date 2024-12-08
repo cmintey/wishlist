@@ -4,6 +4,7 @@
     import { isInstalled } from "$lib/stores/is-installed";
     import { TabGroup, Tab } from "@skeletonlabs/skeleton";
     import type { User } from "lucia";
+    import { t } from "svelte-i18n";
 
     interface Props {
         navItems: NavItem[];
@@ -26,7 +27,12 @@
         rounded="rounded-full"
     >
         {#each navItems as navItem, value}
-            <Tab name={navItem.label} {value} bind:group={tabsBottomNav} on:click={() => goto(`${navItem.href}`)}>
+            <Tab
+                name={$t(navItem.labelKey)}
+                {value}
+                bind:group={tabsBottomNav}
+                on:click={() => goto(`${navItem.href}`)}
+            >
                 <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
             </Tab>
         {/each}
