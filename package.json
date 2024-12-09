@@ -72,6 +72,7 @@
         "metascraper-url": "^5.45.25",
         "nodemailer": "^6.9.16",
         "oslo": "^1.2.1",
+        "pino": "^9.5.0",
         "prisma": "^6.0.1",
         "sharp": "^0.33.5",
         "zod": "^3.23.8"

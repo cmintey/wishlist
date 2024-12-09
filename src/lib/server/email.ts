@@ -4,6 +4,7 @@ import { readFile } from "fs";
 import type Mail from "nodemailer/lib/mailer";
 import { getConfig } from "$lib/server/config";
 import { env } from "$env/dynamic/private";
+import { logger } from "$lib/server/logger";
 
 type TemplateData = {
     url: string;
@@ -15,7 +16,7 @@ let inviteTempl: HandlebarsTemplateDelegate<TemplateData>;
 
 readFile("templates/password-reset.html", "utf-8", (err, data) => {
     if (err) {
-        console.log("error reading password reset template");
+        logger.error({ err }, "Error reading password reset email template");
     } else {
         passResetTempl = Handlebars.compile(data);
     }
@@ -23,7 +24,7 @@ readFile("templates/password-reset.html", "utf-8", (err, data) => {
 
 readFile("templates/invite.html", "utf-8", (err, data) => {
     if (err) {
-        console.log("error reading invite template");
+        logger.error({ err }, "Error reading invite email template");
     } else {
         inviteTempl = Handlebars.compile(data);
     }
@@ -42,7 +43,7 @@ const sendEmail = async (options: Mail.Options) => {
             !config.smtp.from &&
             !config.smtp.fromName)
     ) {
-        console.log("SMTP not set up properly, check your settings");
+        logger.error("SMTP not set up properly, check your settings");
         return {
             success: false,
             message: "SMTP not set up properly, check your settings"
@@ -71,7 +72,7 @@ const sendEmail = async (options: Mail.Options) => {
             message: null
         }))
         .catch((e) => {
-            console.error(e);
+            logger.error(e);
             return {
                 success: false,
                 message: e?.response

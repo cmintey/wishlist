@@ -1,5 +1,6 @@
 import sharp from "sharp";
 import { unlink } from "fs/promises";
+import { logger } from "$lib/server/logger";
 
 export const createImage = async (username: string, image: File): Promise<string | null> => {
     let filename = null;
@@ -18,8 +19,8 @@ export const createImage = async (username: string, image: File): Promise<string
 export const deleteImage = async (filename: string): Promise<void> => {
     try {
         await unlink(`uploads/${filename}`);
-    } catch {
-        console.warn("Unable to delete file: ", filename);
+    } catch (err) {
+        logger.warn({ err }, "Unable to delete file: %s", filename);
     }
 };
 

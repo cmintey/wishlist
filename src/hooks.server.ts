@@ -1,13 +1,22 @@
 import { env } from "$env/dynamic/private";
 import { auth } from "$lib/server/auth";
-import type { Handle } from "@sveltejs/kit";
+import { logger } from "$lib/server/logger";
+import type { Handle, HandleServerError } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
     const sessionId = event.cookies.get(auth.sessionCookieName);
     if (!sessionId) {
         event.locals.user = null;
         event.locals.session = null;
-        return resolve(event);
+
+        const response = await resolve(event);
+        logger.info({
+            status: response.status,
+            method: event.request.method,
+            uri: event.url.pathname + event.url.search + event.url.hash,
+            hasSession: false
+        });
+        return response;
     }
 
     const { session, user } = await auth.validateSession(sessionId);
@@ -33,5 +42,27 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.isProxyUser = isProxyUser;
     event.locals.user = user;
     event.locals.session = session;
-    return resolve(event);
+
+    const response = await resolve(event);
+
+    logger.info({
+        status: response.status,
+        method: event.request.method,
+        uri: event.url.pathname + event.url.search + event.url.hash,
+        hasSession: true,
+        isProxyUser
+    });
+    return response;
+};
+
+export const handleError: HandleServerError = async ({ error, event, status, message }) => {
+    logger.error(
+        {
+            status,
+            method: event.request.method,
+            uri: event.url.pathname + event.url.search + event.url.hash,
+            err: error
+        },
+        message
+    );
 };

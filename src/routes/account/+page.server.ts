@@ -7,6 +7,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { LegacyScrypt } from "lucia";
+import { logger } from "$lib/server/logger";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const user = locals.user;
@@ -56,7 +57,7 @@ export const actions: Actions = {
             });
         } catch (e) {
             const err = e as PrismaClientKnownRequestError;
-            console.log(e);
+            logger.error(e);
             const targets = err.meta?.target as string[];
             return fail(400, {
                 error: true,
@@ -150,7 +151,6 @@ export const actions: Actions = {
             const session = await auth.createSession(locals.user.id, {});
             const sessionCookie = auth.createSessionCookie(session.id);
             if (pwdData.data.invalidateSessions) {
-                console.log("invalidating all sessions");
                 await auth.invalidateUserSessions(locals.user.id);
             } else {
                 await auth.invalidateSession(locals.session.id);
