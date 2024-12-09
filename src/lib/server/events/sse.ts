@@ -1,6 +1,7 @@
 // https://github.com/sanrafa/sveltekit-sse-example/tree/main
 import type EventEmitter from "node:events";
 import type { BaseEventHandler } from "../../events";
+import { logger } from "$lib/server/logger";
 
 export function createSSE(retry = 0) {
     const { readable, writable } = new TransformStream({
@@ -31,7 +32,7 @@ export function createSSE(retry = 0) {
             }
             emitter.on(handler.getEventId(), listener);
             await writer.closed.catch((e) => {
-                if (e) console.error(e);
+                logger.error(e);
             });
             emitter.off(handler.getEventId(), listener);
         }

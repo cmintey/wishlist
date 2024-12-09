@@ -16,6 +16,7 @@ import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { getFormatter } from "$lib/server/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
+import { logger } from "$lib/server/logger";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const user = requireLogin();
@@ -65,7 +66,7 @@ export const actions: Actions = {
             });
         } catch (e) {
             const err = e as PrismaClientKnownRequestError;
-            console.log(e);
+            logger.error(e);
             const targets = err.meta?.target as string[];
             return fail(400, {
                 error: true,

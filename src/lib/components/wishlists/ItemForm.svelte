@@ -102,7 +102,6 @@
                     } catch {
                         if (newProductData.url) {
                             try {
-                                console.log(newProductData.url);
                                 const url = new URL(newProductData.url);
                                 const imageUrl = new URL(newProductData.image, url);
                                 productData.imageUrl = imageUrl.href;

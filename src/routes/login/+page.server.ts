@@ -9,6 +9,7 @@ import type { PageServerLoad, Actions } from "./$types";
 import { createUser } from "$lib/server/user";
 import { verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
+import { logger } from "$lib/server/logger";
 
 export const load: PageServerLoad = async ({ locals, request, cookies, url }) => {
     const config = await getConfig();
@@ -42,13 +43,13 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url }) =>
 
             if (!user) {
                 if (!env.HEADER_EMAIL || !env.HEADER_NAME) {
-                    console.error("Missing required environment variables for header authentication");
+                    logger.error("Missing required environment variables for header authentication");
                     return fail(400, { username: username, password: "", incorrect: true });
                 }
                 const name = request.headers.get(env.HEADER_NAME);
                 const email = request.headers.get(env.HEADER_EMAIL);
                 if (!name || !email) {
-                    console.error("Missing required headers for header authentication");
+                    logger.error("Missing required headers for header authentication");
                     return fail(400, { username: username, password: "", incorrect: true });
                 }
                 const userCount = await client.user.count();
