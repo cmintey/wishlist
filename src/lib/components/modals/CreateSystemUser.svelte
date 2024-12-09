@@ -1,6 +1,7 @@
 <script lang="ts">
     import { SystemUsersAPI } from "$lib/api/users";
     import { getModalStore } from "@skeletonlabs/skeleton";
+    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
@@ -26,10 +27,10 @@
 </script>
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">Claim Details</header>
-    <span>Before you can claim the item, we just need one thing from you.</span>
+    <header class="text-2xl font-bold">{$t("wishes.claim-details")}</header>
+    <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
     <label class="w-fit">
-        <span>Email</span>
+        <span>{$t("auth.email")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
@@ -39,7 +40,7 @@
     </label>
 
     <label class="w-fit">
-        <span>Name (optional)</span>
+        <span>{$t("general.name-optional")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
@@ -52,6 +53,6 @@
         <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>OK</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("wishes.claim")}</button>
     </footer>
 </div>

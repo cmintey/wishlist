@@ -1,18 +1,19 @@
 <script lang="ts">
     import BaseChip from "./BaseChip.svelte";
+    import { t } from "svelte-i18n";
 
     const options: Option[] = [
         {
             value: "all",
-            displayValue: "Filter"
+            displayValue: $t("wishes.filter")
         },
         {
             value: "claimed",
-            displayValue: "Claimed"
+            displayValue: $t("wishes.claimed")
         },
         {
             value: "unclaimed",
-            displayValue: "Unclaimed"
+            displayValue: $t("wishes.unclaimed")
         }
     ];
 

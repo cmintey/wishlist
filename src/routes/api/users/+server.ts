@@ -1,9 +1,12 @@
+import { getFormatter } from "$lib/i18n";
 import { client } from "$lib/server/prisma";
 import type { User } from "@prisma/client";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ locals, url }) => {
-    if (!locals.user) error(401, "user is not authenticated");
+    const $t = await getFormatter();
+
+    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     let users: User[] = [];
 

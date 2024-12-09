@@ -3,6 +3,7 @@
     import { Tab } from "@skeletonlabs/skeleton";
     import type { Snapshot } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         children?: import("svelte").Snippet;
@@ -11,11 +12,11 @@
     let { children }: Props = $props();
 
     const tabs = [
-        { href: "/users", label: "Users" },
-        { href: "/groups", label: "Groups" },
-        { href: "/settings", label: "Settings" },
-        { href: "/actions", label: "Actions" },
-        { href: "/about", label: "About" }
+        { href: "/users", label: $t("admin.users") },
+        { href: "/groups", label: $t("admin.groups") },
+        { href: "/settings", label: $t("admin.settings") },
+        { href: "/actions", label: $t("admin.actions") },
+        { href: "/about", label: $t("admin.about") }
     ];
 
     let selectedTab = $state(0);
@@ -44,5 +45,5 @@
 </TabGroup>
 
 <svelte:head>
-    <title>Administration</title>
+    <title>{$t("admin.administration")}</title>
 </svelte:head>

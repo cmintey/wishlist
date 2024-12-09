@@ -2,6 +2,7 @@
     import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
+    import { t } from "svelte-i18n";
 
     interface Props {
         url: string;
@@ -30,7 +31,7 @@
     <div class="flex flex-row items-center">
         <button
             class="btn {btnStyle}"
-            aria-label="copy to clipboard"
+            aria-label={$t("general.copy-to-clipboard")}
             onclick={() => {
                 dispatch("copied");
                 copiedVisible = true;
@@ -43,11 +44,11 @@
             <iconify-icon icon="ion:copy"></iconify-icon>
         </button>
         <div class="card variant-filled-secondary p-2" data-popup="copy">
-            Copy to clipboard
+            {$t("general.copy-to-clipboard")}
             <div class="variant-filled-secondary arrow"></div>
         </div>
         {#if copiedVisible}
-            <span out:fade>Copied!</span>
+            <span out:fade>{$t("general.copied")}</span>
         {/if}
     </div>
 </div>

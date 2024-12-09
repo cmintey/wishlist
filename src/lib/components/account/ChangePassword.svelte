@@ -3,6 +3,7 @@
     import { page } from "$app/stores";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import PasswordInput from "../PasswordInput.svelte";
+    import { t } from "svelte-i18n";
 
     const toastStore = getToastStore();
 
@@ -18,14 +19,14 @@
     use:enhance={() => {
         return async ({ result, update }) => {
             if (result.type === "success") {
-                const t = {
-                    message: "Password updated successfully",
+                const toastSettings = {
+                    message: $t("auth.password-updated-successfully"),
                     autohide: true,
                     timeout: 5000
                 };
 
                 passwordReset.current = "";
-                toastStore.trigger(t);
+                toastStore.trigger(toastSettings);
             }
 
             passwordReset.new = "";
@@ -39,14 +40,14 @@
             id="oldpassword"
             name="oldPassword"
             autocomplete="current-password"
-            label="Current Password"
+            label={$t("auth.current-password")}
             bind:value={passwordReset.current}
         />
         <div>
             <PasswordInput
                 id="newpassword"
                 autocomplete="new-password"
-                label="New Password"
+                label={$t("auth.new-password")}
                 strengthMeter
                 bind:value={passwordReset.new}
             />
@@ -56,11 +57,11 @@
             id="confirmpassword"
             name="newPassword"
             autocomplete="new-password"
-            label="Confirm Password"
+            label={$t("auth.confirm-password")}
             bind:value={passwordReset.confirm}
         />
         {#if passwordReset.new !== passwordReset.confirm}
-            <span class="unstyled text-xs text-red-500">Passwords must match</span>
+            <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
         {/if}
         {#if $page.form?.error && $page.form?.errors}
             <ul>
@@ -77,7 +78,7 @@
         {/if}
         <label class="unstyled flex flex-row space-x-2">
             <input id="invalidateSessions" name="invalidateSessions" class="checkbox" type="checkbox" />
-            <span>Sign out of all devices?</span>
+            <span>{$t("auth.sign-out-of-all-devices")}</span>
         </label>
         <button
             class="variant-filled-primary btn w-fit"
@@ -87,7 +88,7 @@
             formaction="?/passwordchange"
             type="submit"
         >
-            Update Password
+            {$t("auth.update-password")}
         </button>
     </div>
 </form>

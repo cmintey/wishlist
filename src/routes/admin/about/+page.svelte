@@ -1,16 +1,21 @@
 <script lang="ts">
+    import { t, date } from "svelte-i18n";
     const version: string = __VERSION__;
     const sha: string = __COMMIT_SHA__;
-    const builtAt: string = new Date(__LASTMOD__).toLocaleString();
+    const builtAt: Date = new Date(__LASTMOD__);
 </script>
 
 <div class="flex flex-col space-y-2">
     <h2 class="h2">Wishlist</h2>
     <span>
-        Version: <a href="https://github.com/cmintey/wishlist/releases/tag/{version}">{version ? version : "dev"}</a>
+        {@html $t("admin.version", { values: { version: version ? version : $t("admin.dev") } })}
     </span>
     <span>
-        Build: <a href="https://github.com/cmintey/wishlist/commit/{sha}">{sha ? sha : "dev"}</a>
+        {@html $t("admin.build", { values: { sha: sha ? sha : $t("admin.dev") } })}
     </span>
-    <span>Build Date: {builtAt ? builtAt : "unknown"}</span>
+    <span>
+        {$t("admin.build-date", {
+            values: { buildDate: builtAt ? $date(builtAt, { format: "medium" }) : $t("admin.unknown") }
+        })}
+    </span>
 </div>

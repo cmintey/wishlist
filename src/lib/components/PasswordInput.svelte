@@ -3,6 +3,7 @@
     import { loadOptions, meterLabel } from "$lib/zxcvbn";
     import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         id: string;
@@ -68,7 +69,7 @@
         />
         <button
             id="showpassword"
-            aria-label="toggle password visibility"
+            aria-label={$t("a11y.toggle-password-visibility")}
             onclick={handleClick}
             onkeypress={(e) => e.preventDefault()}
             tabindex="-1"
@@ -82,7 +83,7 @@
 {#if strengthMeter && value !== "" && strength}
     <div class="flex flex-row items-center space-x-1 pt-1">
         <ProgressBar
-            label="Password Strength"
+            label={$t("a11y.password-strength")}
             max={5}
             value={strength.score + 1}
             bind:meter={meterLookup[strength.score.valueOf()]}
@@ -113,5 +114,5 @@
         </ul>
     </div>
 
-    <p>{meterLabel[strength?.score]}</p>
+    <p>{$t(meterLabel[strength?.score])}</p>
 {/if}

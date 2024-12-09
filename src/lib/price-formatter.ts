@@ -1,5 +1,6 @@
 import { env } from "$env/dynamic/public";
 import type { ItemPrice } from "@prisma/client";
+import { getNumberFormatter } from "svelte-i18n";
 
 type ItemWithPrice = {
     price?: string | null;
@@ -18,28 +19,28 @@ const getMaximumFractionDigits = (currency: string) => {
     return getFormatter(currency).resolvedOptions().maximumFractionDigits || 2;
 };
 
-export const getFormatter = (currency: string | null, locale: string | undefined = undefined) => {
-    return Intl.NumberFormat(locale, {
+export const getFormatter = (currency: string | null) => {
+    return getNumberFormatter({
         style: "currency",
         currency: currency || env.PUBLIC_DEFAULT_CURRENCY,
         currencyDisplay: "narrowSymbol"
     });
 };
 
-export const formatPrice = (item: ItemWithPrice, locale: string | undefined = undefined) => {
+export const formatPrice = (item: ItemWithPrice) => {
     if (!item.itemPrice) {
         return item.price;
     }
 
-    const formatter = getFormatter(item.itemPrice.currency, locale);
+    const formatter = getFormatter(item.itemPrice.currency);
     const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency);
 
     const value = item.itemPrice.value / Math.pow(10, maxFracDigits);
     return formatter.format(value);
 };
 
-export const formatNumberAsPrice = (price: number, locale: string | undefined = undefined) => {
-    return getFormatter(null, locale).format(price);
+export const formatNumberAsPrice = (price: number) => {
+    return getFormatter(null).format(price);
 };
 
 export const getPriceValue = (item: ItemWithPrice) => {

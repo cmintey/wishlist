@@ -4,13 +4,15 @@ import { client } from "$lib/server/prisma";
 import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { inviteUser } from "$lib/server/invite-user";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
         redirect(302, `/login?ref=/admin/users`);
     }
     if (locals.user.roleId !== Role.ADMIN) {
-        error(401, "Not authorized to view admin panel");
+        error(401, $t("errors.not-authorized"));
     }
 
     const usersQuery = client.user.findMany({

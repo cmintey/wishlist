@@ -1,5 +1,6 @@
 <script lang="ts">
     import fuzzysort from "fuzzysort";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: Record<string, unknown>[];
@@ -21,7 +22,7 @@
 </script>
 
 <label class="w-fit">
-    <span>Search</span>
+    <span>{$t("general.search")}</span>
     <div class="input-group grid-cols-[auto_1fr_auto]">
         <div class="input-group-shim">
             <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>

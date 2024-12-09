@@ -7,14 +7,16 @@ import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { SSEvents } from "$lib/schema";
 import { getMinorUnits } from "$lib/price-formatter";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
         redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
     }
 
+    const $t = await getFormatter();
     if (isNaN(parseInt(params.itemId))) {
-        error(400, "item id must be a number");
+        error(400, $t("errors.item-id-must-be-a-number"));
     }
 
     const activeMembership = await getActiveMembership(locals.user);
@@ -42,15 +44,15 @@ export const load: PageServerLoad = async ({ locals, params }) => {
             }
         });
     } catch {
-        error(404, "item not found");
+        error(404, $t("errors.item-not-found"));
     }
 
     if (config.suggestions.method === "surprise" && locals.user.username !== item.addedBy?.username) {
-        error(401, "cannot edit item that you did not create");
+        error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
     }
 
     if (params.username !== item.user.username) {
-        error(400, `Item does not belong to ${params.username}`);
+        error(400, $t("errors.item-invalid-ownership", { values: { username: params.username } }));
     }
 
     return {

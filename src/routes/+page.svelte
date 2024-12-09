@@ -4,6 +4,7 @@
     import { fade } from "svelte/transition";
     import ApprovalAlert from "$lib/components/wishlists/ApprovalAlert.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -35,5 +36,5 @@
 </div>
 
 <svelte:head>
-    <title>Lists</title>
+    <title>{$t("wishes.lists")}</title>
 </svelte:head>

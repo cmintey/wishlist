@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "lokalise.i18n-ally",
+        "esbenp.prettier-vscode",
+        "svelte.svelte-vscode",
+        "bradlc.vscode-tailwindcss",
+        "prisma.prisma",
+        "vunguyentuan.vscode-postcss"
+    ]
+}

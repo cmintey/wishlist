@@ -1,5 +1,6 @@
 <script lang="ts">
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
+    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
@@ -29,17 +30,17 @@
 </script>
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">Invite User</header>
+    <header class="text-2xl font-bold">{$t("general.invite-user")}</header>
 
     {#if smtpEnabled}
-        <span>Enter the user's email and select a group for the user to join</span>
+        <span>{$t("general.enter-user-email")}</span>
     {:else}
-        <span>Select a group for the user to join. An invite link will be generated</span>
+        <span>{$t("general.select-user-group")}</span>
     {/if}
 
     {#if smtpEnabled}
         <label class="w-fit" for="invite-email">
-            <span>Email</span>
+            <span>{$t("auth.email")}</span>
             <input
                 id="invite-email"
                 name="invite-email"
@@ -53,7 +54,7 @@
     {/if}
 
     {#if groups && groups.length > 0}
-        <label for="group">Group</label>
+        <label for="group">{$t("general.group")}</label>
         <ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
             {#each groups as group}
                 <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
@@ -67,6 +68,6 @@
         <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Invite</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.invite")}</button>
     </footer>
 </div>

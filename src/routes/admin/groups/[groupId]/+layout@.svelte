@@ -5,6 +5,7 @@
     import { page } from "$app/stores";
     import { GroupAPI } from "$lib/api/groups";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: LayoutData;
@@ -25,8 +26,8 @@
     };
 
     const tabs = [
-        { href: "/members", label: "Members" },
-        { href: "/settings", label: "Settings" }
+        { href: "/members", label: $t("admin.members") },
+        { href: "/settings", label: $t("admin.settings") }
     ];
 
     let selectedTab = $state(0);
@@ -42,21 +43,21 @@
         <input
             class="input w-fit"
             placeholder={data.group.name}
-            title="Group Name"
+            title={$t("admin.group-name")}
             type="text"
             bind:value={newGroupName}
         />
         <div class="flex flex-row items-center -space-x-2">
-            <button class="btn-icon pr-0" aria-label="save group name" onclick={() => saveGroupName()}>
+            <button class="btn-icon pr-0" aria-label={$t("a11y.save-group-name")} onclick={() => saveGroupName()}>
                 <iconify-icon icon="ion:save" width="24px"></iconify-icon>
             </button>
-            <button class="btn-icon pl-0" aria-label="cancel editing" onclick={() => (editing = !editing)}>
+            <button class="btn-icon pl-0" aria-label={$t("a11y.cancel-editing")} onclick={() => (editing = !editing)}>
                 <iconify-icon class="text-error-500" icon="ion:close" width="24px"></iconify-icon>
             </button>
         </div>
     {:else}
         <h2 class="h2 pb-2">{data.group.name}</h2>
-        <button class="btn-icon" aria-label="edit group name" onclick={() => (editing = !editing)}>
+        <button class="btn-icon" aria-label={$t("a11y.edit-group-name")} onclick={() => (editing = !editing)}>
             <iconify-icon icon="ion:create-outline" width="24px"></iconify-icon>
         </button>
     {/if}
@@ -80,5 +81,5 @@
 </TabGroup>
 
 <svelte:head>
-    <title>Group Settings</title>
+    <title>{$t("admin.group-settings")}</title>
 </svelte:head>

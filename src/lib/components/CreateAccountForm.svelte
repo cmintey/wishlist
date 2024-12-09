@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         hideActions?: boolean;
@@ -20,13 +21,13 @@
         <input id="tokenId" name="tokenId" class="hidden" value={data.id} />
     {/if}
     <label for="name">
-        <span>Name</span>
+        <span>{$t("auth.name")}</span>
         <input id="name" name="name" class="input" autocomplete="name" required type="text" />
     </label>
 
     <div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
         <label for="username">
-            <span>Username</span>
+            <span>{$t("auth.username")}</span>
             <input
                 id="username"
                 name="username"
@@ -38,16 +39,23 @@
             />
         </label>
         <label for="email">
-            <span>Email</span>
+            <span>{$t("auth.email")}</span>
             <input id="email" name="email" class="input" autocomplete="email" required type="email" />
         </label>
     </div>
 
-    <PasswordInput id="password" name="password" label="Password" required strengthMeter bind:value={password} />
-    <PasswordInput id="confirmpassword" label="Confirm Password" required bind:value={passwordConfirm} />
+    <PasswordInput
+        id="password"
+        name="password"
+        label={$t("auth.password")}
+        required
+        strengthMeter
+        bind:value={password}
+    />
+    <PasswordInput id="confirmpassword" label={$t("auth.confirm-password")} required bind:value={passwordConfirm} />
 
     {#if password !== passwordConfirm}
-        <span class="unstyled text-xs text-red-500">Passwords must match</span>
+        <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
     {/if}
 
     {#if formData?.error}
@@ -67,9 +75,9 @@
     {#if !hideActions}
         <div class="flex items-center justify-center space-x-4 pb-2">
             <button class="variant-filled-primary btn w-min" disabled={password !== passwordConfirm} type="submit">
-                Sign Up
+                {$t("auth.sign-up")}
             </button>
-            <a href="/login">Sign in</a>
+            <a href="/login">{$t("auth.sign-in")}</a>
         </div>
     {/if}
 </div>

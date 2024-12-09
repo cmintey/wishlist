@@ -4,11 +4,11 @@
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ApprovalButtons from "./ItemCard/ApprovalButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
+    import { t } from "svelte-i18n";
 
     const drawerStore = getDrawerStore();
     const item: FullItem = $drawerStore.meta.item;
     const user: PartialUser | undefined = $drawerStore.meta.user;
-    const locale: string | undefined = $drawerStore.meta.locale;
     const showFor: boolean = $drawerStore.meta.showFor;
     const showName: boolean = $drawerStore.meta.showName;
     const onPublicList: boolean = $drawerStore.meta.onPublicList;
@@ -48,15 +48,15 @@
     </div>
     <div class="flex flex-row space-x-2 text-base md:text-lg">
         {#if item.price || item.itemPrice}
-            <span class="font-semibold">{formatPrice(item, locale)}</span>
+            <span class="font-semibold">{formatPrice(item)}</span>
             <span>·</span>
         {/if}
 
         <span>
             {#if showFor}
-                For <span class="text-secondary-700-200-token font-bold">{item.user?.name}</span>
+                {@html $t("wishes.for", { values: { name: item.user?.name } })}
             {:else}
-                Added by <span class="text-secondary-700-200-token font-bold">{item.addedBy?.name}</span>
+                {@html $t("wishes.added-by", { values: { name: item.addedBy?.name } })}
             {/if}
         </span>
     </div>

@@ -8,6 +8,7 @@ import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
 import metascraperAmazon from "metascraper-amazon";
 import shopping from "$lib/server/shopping";
+import { getFormatter, parseAcceptLanguageHeader } from "$lib/i18n";
 
 const scraper = metascraper([
     metascraperAmazon(),
@@ -17,11 +18,12 @@ const scraper = metascraper([
     metascraperUrl()
 ]);
 
-const goShopping = async (targetUrl: string) => {
+const goShopping = async (targetUrl: string, locales: string[]) => {
     const resp = await gotScraping({
         url: targetUrl,
         headerGeneratorOptions: {
-            devices: ["desktop"]
+            devices: ["desktop"],
+            locales
         }
     });
     const metadata = await scraper({ html: resp.body, url: resp.url });
@@ -33,7 +35,10 @@ const isCaptchaResponse = (metadata: Metadata) => {
 };
 
 export const GET: RequestHandler = async ({ request }) => {
+    const $t = await getFormatter();
     const url = new URL(request.url).searchParams.get("url");
+    const acceptLanguage = request.headers?.get("accept-language");
+    const locales = parseAcceptLanguageHeader(acceptLanguage);
     let isUrlValid = false;
 
     if (url) {
@@ -42,19 +47,19 @@ export const GET: RequestHandler = async ({ request }) => {
         } catch {
             isUrlValid = false;
         }
-        if (!isUrlValid) error(400, "valid url not provided");
+        if (!isUrlValid) error(400, $t("errors.valid-url-not-provided"));
 
-        let metadata = await goShopping(url);
+        let metadata = await goShopping(url, locales);
         if (isCaptchaResponse(metadata) && metadata.url) {
             // retry with the resolved URL
-            metadata = await goShopping(metadata.url);
+            metadata = await goShopping(metadata.url, locales);
         }
         if (isCaptchaResponse(metadata)) {
-            error(424, "product information not available");
+            error(424, $t("errors.product-information-not-available"));
         }
 
         return new Response(JSON.stringify(metadata));
     } else {
-        error(400, "must specify url in query parameters");
+        error(400, $t("errors.must-specify-url-in-query-parameters"));
     }
 };

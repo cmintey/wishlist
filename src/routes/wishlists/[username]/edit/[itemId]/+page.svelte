@@ -3,6 +3,7 @@
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageServerData } from "./$types";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageServerData;
@@ -20,20 +21,20 @@
         use:enhance={() => {
             // loading = true;
             return async ({ update }) => {
-                const t = {
-                    message: "Item updated successfully",
+                const c = {
+                    message: $t("wishes.updated-success"),
                     autohide: true,
                     timeout: 5000
                 };
-                toastStore.trigger(t);
+                toastStore.trigger(c);
                 update();
             };
         }}
     >
-        <ItemForm buttonText="Save" data={data?.item} />
+        <ItemForm buttonText={$t("general.save")} data={data?.item} />
     </form>
 {/if}
 
 <svelte:head>
-    <title>Edit Wish</title>
+    <title>{$t("wishes.edit-wish")}</title>
 </svelte:head>

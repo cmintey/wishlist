@@ -1,16 +1,16 @@
 export const navItems = [
     {
-        label: "Home",
+        labelKey: "app.home",
         href: "/",
         icon: "ion:home"
     },
     {
-        label: "My Wishes",
+        labelKey: "wishes.my-wishes",
         href: "/wishlists/me",
         icon: "ion:gift"
     },
     {
-        label: "My Claims",
+        labelKey: "app.my-claims",
         href: "/claims",
         icon: "ion:albums"
     }

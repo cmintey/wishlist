@@ -2,6 +2,7 @@
     import { page } from "$app/stores";
     import { createEventDispatcher } from "svelte";
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         item: FullItem;
@@ -27,7 +28,7 @@
                     dispatch("unclaim");
                 }}
             >
-                Unclaim
+                {$t("wishes.unclaim")}
             </button>
             <label class="unstyled flex items-center space-x-2 text-sm md:text-base">
                 <input
@@ -37,13 +38,17 @@
                     type="checkbox"
                     bind:checked={item.purchased}
                 />
-                <span>Purchased</span>
+                <span>{$t("wishes.purchased")}</span>
             </label>
         </div>
     {:else if showName}
-        <span>Claimed by {item.publicPledgedBy ? item.publicPledgedBy?.name : item.pledgedBy?.name}</span>
+        <span>
+            {$t("wishes.claimed-by", {
+                values: { name: item.publicPledgedBy ? item.publicPledgedBy?.name : item.pledgedBy?.name }
+            })}
+        </span>
     {:else}
-        <span>Claimed</span>
+        <span>{$t("wishes.claimed")}</span>
     {/if}
 {:else}
     <button
@@ -53,6 +58,6 @@
             dispatch("claim");
         }}
     >
-        Claim
+        {$t("wishes.claim")}
     </button>
 {/if}

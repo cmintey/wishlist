@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         item: FullItem;
@@ -21,7 +22,7 @@
                 dispatch("approve");
             }}
         >
-            Approve
+            {$t("wishes.approve")}
         </button>
         <button
             class="variant-filled-error btn btn-sm md:btn"
@@ -30,7 +31,7 @@
                 dispatch("deny");
             }}
         >
-            Deny
+            {$t("wishes.deny")}
         </button>
     {:else if user?.username === item.user?.username || user?.username === item.addedBy?.username}
         <button
@@ -40,7 +41,7 @@
                 dispatch("edit");
             }}
         >
-            Edit
+            {$t("wishes.edit")}
         </button>
         <button
             class="variant-filled-error btn btn-sm md:btn"
@@ -49,7 +50,7 @@
                 dispatch("delete");
             }}
         >
-            Delete
+            {$t("wishes.delete")}
         </button>
     {/if}
 </div>

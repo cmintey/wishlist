@@ -2,6 +2,7 @@
     import { UsersAPI } from "$lib/api/users";
     import type { User } from "@prisma/client";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
+    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
@@ -29,10 +30,10 @@
 </script>
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">Add User</header>
-    <span>Search for a user to add to the group</span>
+    <header class="text-2xl font-bold">{$t("general.add-user")}</header>
+    <span>{$t("general.search-for-user")}</span>
     <label class="w-fit">
-        <span>Search</span>
+        <span>{$t("general.search")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
@@ -55,6 +56,6 @@
         <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Add User</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.add-user")}</button>
     </footer>
 </div>

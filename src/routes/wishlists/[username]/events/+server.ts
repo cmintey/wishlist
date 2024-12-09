@@ -6,10 +6,12 @@ import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
+import { getFormatter } from "$lib/i18n";
 
 export const GET = (async ({ locals, params }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
-        error(401, "Unauthorized");
+        error(401, $t("errors.not-authorized"));
     }
 
     const [wishlistUser, activeGroup] = await Promise.all([

@@ -2,12 +2,13 @@
     import { afterNavigate } from "$app/navigation";
     import { page } from "$app/stores";
     import logo from "$lib/assets/logo.png";
+    import { t } from "svelte-i18n";
 
     interface Props {
         label?: string;
     }
 
-    let { label = "Back" }: Props = $props();
+    let { label = $t("setup.back") }: Props = $props();
     const disabledUrls = [
         "/login",
         "/signup",
@@ -34,7 +35,7 @@
         <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
     </a>
 {:else}
-    <button class="btn w-fit p-0" onclick={() => history.back()} type="button">
+    <button class="btn w-fit p-0" aria-label={$t("setup.back")} onclick={() => history.back()} type="button">
         <iconify-icon icon="ion:arrow-back"></iconify-icon>
         <span class="text-xl">{documentTitle || label}</span>
     </button>
