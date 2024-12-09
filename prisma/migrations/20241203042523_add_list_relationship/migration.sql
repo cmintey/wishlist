@@ -38,10 +38,10 @@ CREATE INDEX "_ItemToList_B_index" ON "_ItemToList"("B");
 -- Create a new list for each user and group
 INSERT INTO "list"
 SELECT userId || groupId AS id, NULL as name, userId AS ownerId, groupId, FALSE AS public
-FROM user_group_membership
+FROM user_group_membership;
 
 -- Add the existing items to the list relationship
 INSERT INTO "_ItemToList" 
-SELECT i.id, l.id
+SELECT i.id AS A, l.id AS B
 FROM "items" i
-JOIN "list" l ON l.ownerId = i.userId AND l.groupId = i.groupId 
+JOIN "list" l ON l.ownerId = i.userId AND l.groupId = i.groupId;

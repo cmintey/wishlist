@@ -178,3 +178,10 @@ model PublicList {
     @@index([userId, groupId])
     @@map("public_list")
 }
+
+model Patch {
+    id          String   @id @unique
+    executed_at DateTime @default(now())
+
+    @@map("patch")
+}
