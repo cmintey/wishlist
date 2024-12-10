@@ -42,7 +42,7 @@ jobs:
         with:
           images: cmintey/wishlist, ghcr.io/cmintey/wishlist
           tags: |
-            type=ref,event=branch
+            type=edge,branch=main
             type=ref,event=tag
 
       - name: Build and Push Web
