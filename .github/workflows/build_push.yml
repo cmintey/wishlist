@@ -2,6 +2,8 @@ name: Build and Push Docker Image
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
   release:
     types: [published]
 
@@ -40,6 +42,7 @@ jobs:
         with:
           images: cmintey/wishlist, ghcr.io/cmintey/wishlist
           tags: |
+            type=ref,event=branch
             type=ref,event=tag
 
       - name: Build and Push Web
