@@ -15,10 +15,10 @@
     interface Props {
         data: PageData;
     }
-    type Item = PageData["items"][0];
+    type Item = PageData["list"]["items"][0];
 
     let { data }: Props = $props();
-    let allItems = $state(data.items);
+    let allItems = $state(data.list.items);
     let items = $derived(allItems.filter((item) => item.approved));
 
     const [send, receive] = crossfade({
@@ -46,7 +46,7 @@
     onDestroy(() => eventSource?.close());
 
     $effect(() => {
-        allItems = data.items;
+        allItems = data.list.items;
     });
 
     const subscribeToEvents = () => {
@@ -87,7 +87,7 @@
     };
 </script>
 
-<h1 class="h1 pb-2 md:pb-4">{$t("wishes.wishes-for", { values: { listOwner: data?.user.name } })}</h1>
+<h1 class="h1 pb-2 md:pb-4">{$t("wishes.wishes-for", { values: { listOwner: data.list.owner.name } })}</h1>
 
 <!-- chips -->
 <div class="flex flex-row flex-wrap space-x-4">
@@ -124,5 +124,5 @@
 {/if}
 
 <svelte:head>
-    <title>{$t("wishes.wishes-for", { values: { listOwner: data?.user.name } })}</title>
+    <title>{$t("wishes.wishes-for", { values: { listOwner: data.list.owner.name } })}</title>
 </svelte:head>

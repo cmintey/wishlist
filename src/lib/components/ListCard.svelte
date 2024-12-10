@@ -21,7 +21,7 @@
     let listName = $derived(list.name || `${list.owner.name}'s Wishes`);
 </script>
 
-<a class="card" data-sveltekit-preload-data href="/wishlists/{list.owner.username}">
+<a class="card" data-sveltekit-preload-data href="/lists/{list.id}">
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
             class="variant-ghost-primary flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
