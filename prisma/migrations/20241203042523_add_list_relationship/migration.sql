@@ -37,8 +37,15 @@ CREATE INDEX "_ItemToList_B_index" ON "_ItemToList"("B");
 
 -- Create a new list for each user and group
 INSERT INTO "list"
-SELECT userId || groupId AS id, NULL as name, userId AS ownerId, groupId, FALSE AS public
-FROM user_group_membership;
+SELECT ugm.userId || ugm.groupId AS id, NULL as name, ugm.userId AS ownerId, ugm.groupId, FALSE AS public
+FROM "user_group_membership" ugm
+LEFT JOIN "public_list" pl ON pl.userId = ugm.userId AND pl.groupId = ugm.groupId
+WHERE pl.id IS NULL;
+
+-- Copy over public lists
+INSERT INTO "list"
+SELECT id, NULL as name, userId AS ownerId, groupId, TRUE AS public
+FROM "public_list";
 
 -- Add the existing items to the list relationship
 INSERT INTO "_ItemToList" 
