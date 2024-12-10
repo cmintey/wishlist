@@ -5,10 +5,16 @@ import { getConfig } from "$lib/server/config";
 import { createFilter, createSorts } from "$lib/server/sort-filter-util";
 
 export const load = (async ({ params, url }) => {
-    const list = await client.publicList.findUnique({
+    const list = await client.list.findUnique({
         select: {
-            user: true,
-            groupId: true
+            name: true,
+            owner: {
+                select: {
+                    name: true
+                }
+            },
+            groupId: true,
+            public: true
         },
         where: {
             id: params.id
@@ -19,13 +25,16 @@ export const load = (async ({ params, url }) => {
     }
 
     const config = await getConfig(list.groupId);
-    if (config.listMode !== "registry") {
+    if (list.public && config.listMode !== "registry") {
         error(404, "Public list not found");
     }
 
     const filter = createFilter(url.searchParams.get("filter"));
-    filter.userId = list.user.id;
-    filter.groupId = list.groupId;
+    filter.lists = {
+        every: {
+            id: params.id
+        }
+    };
 
     const sort = url.searchParams.get("sort");
     const direction = url.searchParams.get("dir");
@@ -69,9 +78,9 @@ export const load = (async ({ params, url }) => {
     }
 
     return {
-        user: {
-            name: list.user.name
-        },
-        items
+        list: {
+            ...list,
+            items
+        }
     };
 }) satisfies PageServerLoad;

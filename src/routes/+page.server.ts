@@ -17,11 +17,21 @@ export const load = (async ({ locals }) => {
         redirect(302, "/wishlists/me");
     }
 
-    const userQuery = client.user.findUniqueOrThrow({
+    const userListsQuery = client.list.findMany({
+        where: {
+            ownerId: user.id,
+            groupId: activeMembership.groupId
+        },
         select: {
+            id: true,
             name: true,
-            username: true,
-            picture: true,
+            owner: {
+                select: {
+                    name: true,
+                    username: true,
+                    picture: true
+                }
+            },
             items: {
                 select: {
                     id: true
@@ -30,75 +40,73 @@ export const load = (async ({ locals }) => {
                     addedBy:
                         config.suggestions.enable && config.suggestions.method === "surprise"
                             ? { username: user.username }
-                            : undefined,
-                    groupId: activeMembership.groupId
+                            : undefined
                 }
             },
             _count: {
                 select: {
                     items: {
                         where: {
-                            approved: false,
-                            groupId: activeMembership.groupId
+                            approved: false
                         }
                     }
                 }
             }
-        },
-        where: {
-            username: user.username
         }
     });
 
-    const usersQuery = client.user.findMany({
+    const otherListsQuery = client.list.findMany({
         where: {
-            username: {
-                not: user.username
+            ownerId: {
+                not: user.id
             },
-            UserGroupMembership: {
-                some: {
-                    group: {
-                        id: activeMembership.groupId
-                    }
-                }
-            }
+            groupId: activeMembership.groupId
         },
         select: {
             id: true,
-            username: true,
             name: true,
-            picture: true,
-            items: {
+            owner: {
                 select: {
-                    id: true
-                },
-                where: {
-                    groupId: activeMembership.groupId,
-                    approved: true
+                    name: true,
+                    username: true,
+                    picture: true
                 }
             },
-            _count: {
+            items: {
                 select: {
-                    items: {
-                        where: {
-                            pledgedById: {
-                                not: null
-                            },
-                            approved: true,
-                            groupId: activeMembership.groupId
-                        }
-                    }
+                    id: true,
+                    approved: true,
+                    pledgedById: true
                 }
             }
         }
     });
 
-    const [me, users] = await Promise.all([userQuery, usersQuery]);
+    const [myLists, otherLists] = await Promise.all([userListsQuery, otherListsQuery]);
 
     return {
-        me,
-        users,
-        luciaUser: user,
-        groupId: activeMembership.groupId
+        myLists: myLists.map((list) => {
+            return {
+                id: list.id,
+                name: list.name,
+                owner: list.owner,
+                claimedCount: undefined,
+                itemCount: list.items.length,
+                unapprovedCount: list._count.items
+            };
+        }),
+        otherLists: otherLists.map((list) => {
+            const claimedCount = list.items.filter((it) => it.approved && it.pledgedById !== null).length;
+            const itemCount = list.items.filter((it) => it.approved).length;
+            const items = list.items.map((it) => ({ id: it.id }));
+            return {
+                id: list.id,
+                name: list.name,
+                owner: list.owner,
+                claimedCount,
+                itemCount,
+                items
+            };
+        })
     };
 }) satisfies PageServerLoad;
