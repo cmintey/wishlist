@@ -24,11 +24,18 @@
     };
 </script>
 
+{#snippet wishlistHeader()}
+    <a class="flex flex-row items-center space-x-2" href="/">
+        <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
+        <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
+    </a>
+{/snippet}
+
 <AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
     {#snippet lead()}
         <div class="flex content-center items-center space-x-4">
-            {#if user && !$isInstalled}
-                {#if user}
+            {#if user}
+                {#if !$isInstalled}
                     <button
                         class="btn btn-sm p-0 pt-0.5 md:hidden"
                         aria-label={$t("a11y.menu")}
@@ -36,13 +43,12 @@
                     >
                         <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
                     </button>
+                    {@render wishlistHeader()}
+                {:else}
+                    <BackButton />
                 {/if}
-                <a class="flex flex-row items-center space-x-2" href="/">
-                    <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-                    <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
-                </a>
             {:else}
-                <BackButton />
+                {@render wishlistHeader()}
             {/if}
         </div>
     {/snippet}

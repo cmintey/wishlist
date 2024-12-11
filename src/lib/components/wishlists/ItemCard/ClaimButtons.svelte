@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { page } from "$app/stores";
     import { createEventDispatcher } from "svelte";
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
+    import { page } from "$app/stores";
 
     interface Props {
         item: FullItem;
@@ -16,10 +16,10 @@
     const dispatch = createEventDispatcher();
 </script>
 
-{#if !onPublicList && user?.username === $page.params?.username}
+{#if !onPublicList && user?.id === $page.data?.user?.id}
     <div></div>
 {:else if item.pledgedBy || item.publicPledgedBy}
-    {#if !onPublicList && item.pledgedBy?.username === user?.username}
+    {#if !onPublicList && item.pledgedBy?.id === user?.id}
         <div class="flex flex-row space-x-2 md:space-x-4">
             <button
                 class="variant-ghost-secondary btn btn-sm md:btn"

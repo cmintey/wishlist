@@ -7,4 +7,5 @@ caddy start --config /usr/src/app/Caddyfile
 
 pnpm prisma migrate deploy
 pnpm prisma db seed
+pnpm db:patch
 pnpm start
