@@ -6,13 +6,15 @@ import type { PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
 import { settingSchema } from "$lib/validations";
 import type { z } from "zod";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
         redirect(302, `/login?ref=/admin`);
     }
     if (locals.user.roleId !== Role.ADMIN) {
-        error(401, "Not authorized to view admin panel");
+        error(401, $t("errors.not-authorized"));
     }
 
     const config = await getConfig(undefined, true);

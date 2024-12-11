@@ -4,8 +4,10 @@ import { client } from "$lib/server/prisma";
 import { redirect, error } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
 import { inviteUser } from "$lib/server/invite-user";
+import { getFormatter } from "$lib/i18n";
 
 export const load = (async ({ locals, params }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
         redirect(302, `/login?ref=/admin/groups/${params.groupId}`);
     }
@@ -21,7 +23,7 @@ export const load = (async ({ locals, params }) => {
     });
 
     if (!(locals.user.roleId === Role.ADMIN || userGroupRoleId?.roleId === Role.GROUP_MANAGER)) {
-        error(401, "Not authorized to view admin panel");
+        error(401, $t("errors.not-authorized"));
     }
 
     const group = await client.group

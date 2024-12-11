@@ -1,6 +1,8 @@
 <script lang="ts">
     import BaseSetting from "./BaseSetting.svelte";
 
+    import { t } from "svelte-i18n";
+
     interface Props {
         enabled: boolean;
     }
@@ -8,9 +10,9 @@
     let { enabled = $bindable() }: Props = $props();
 </script>
 
-<BaseSetting title="Public Signup">
+<BaseSetting title={$t("admin.public-signup")}>
     <label class="unstyled flex flex-row space-x-2">
         <input id="enableSignup" name="enableSignup" class="checkbox" type="checkbox" bind:checked={enabled} />
-        <span>Enable</span>
+        <span>{$t("general.enable")}</span>
     </label>
 </BaseSetting>

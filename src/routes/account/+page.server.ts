@@ -7,6 +7,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { LegacyScrypt } from "lucia";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const user = locals.user;
@@ -22,13 +23,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
     profile: async ({ request, locals }) => {
+        const $t = await getFormatter();
         const user = locals.user;
         if (!user) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const schema = z.object({
-            name: z.string().trim().min(1, "Name must not be blank"),
-            username: z.string().trim().min(1, "Username must not be blank"),
+            name: z.string().trim().min(1, $t("errors.name-must-not-be-blank")),
+            username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
             email: z.string().email()
         });
         const nameData = schema.safeParse(formData);
@@ -60,7 +62,12 @@ export const actions: Actions = {
             const targets = err.meta?.target as string[];
             return fail(400, {
                 error: true,
-                errors: [{ field: targets[0], message: `${targets[0]} already in use` }]
+                errors: [
+                    {
+                        field: "username",
+                        message: $t("errors.username-already-in-use", { values: { username: targets[0] } })
+                    }
+                ]
             });
         }
     },
@@ -97,6 +104,7 @@ export const actions: Actions = {
     },
 
     passwordchange: async ({ request, locals, cookies }) => {
+        const $t = await getFormatter();
         if (!(locals.user && locals.session)) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
@@ -127,13 +135,13 @@ export const actions: Actions = {
             if (!validPassword) {
                 return fail(400, {
                     error: true,
-                    errors: [{ field: "currentPassword", message: "Incorrect password" }]
+                    errors: [{ field: "currentPassword", message: $t("errors.incorrect-password") }]
                 });
             }
         } catch {
             return fail(400, {
                 error: true,
-                errors: [{ field: "currentPassword", message: "Incorrect password" }]
+                errors: [{ field: "currentPassword", message: $t("errors.incorrect-password") }]
             });
         }
 
@@ -150,7 +158,6 @@ export const actions: Actions = {
             const session = await auth.createSession(locals.user.id, {});
             const sessionCookie = auth.createSessionCookie(session.id);
             if (pwdData.data.invalidateSessions) {
-                console.log("invalidating all sessions");
                 await auth.invalidateUserSessions(locals.user.id);
             } else {
                 await auth.invalidateSession(locals.session.id);
@@ -162,7 +169,7 @@ export const actions: Actions = {
         } catch {
             return fail(400, {
                 error: true,
-                errors: [{ field: "newPassword", message: "Unable to update password" }]
+                errors: [{ field: "newPassword", message: $t("setup.unable-to-update-password") }]
             });
         }
     }

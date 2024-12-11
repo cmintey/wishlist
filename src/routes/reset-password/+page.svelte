@@ -4,6 +4,7 @@
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import { onMount } from "svelte";
     import type { ActionData, PageData } from "./$types";
+    import { t } from "svelte-i18n";
 
     interface Props {
         data: PageData;
@@ -23,7 +24,7 @@
 
 {#if data.valid}
     <div class="flex flex-col items-center space-y-4">
-        <h1 class="h1">Reset Password</h1>
+        <h1 class="h1">{$t("auth.reset-password")}</h1>
 
         <form
             class="w-80"
@@ -40,7 +41,7 @@
                     id="password"
                     name="password"
                     autocomplete="new-password"
-                    label="New Password"
+                    label={$t("auth.new-password")}
                     required
                     strengthMeter
                     bind:value={newPassword}
@@ -48,13 +49,13 @@
                 <PasswordInput
                     id="confirmpassword"
                     autocomplete="new-password"
-                    label="Confirm Password"
+                    label={$t("auth.confirm-password")}
                     required
                     bind:value={confirmPassword}
                 />
 
                 {#if newPassword !== confirmPassword}
-                    <span class="unstyled text-xs text-red-500">Passwords must match</span>
+                    <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
                 {/if}
 
                 {#if form?.error}
@@ -75,7 +76,7 @@
                     disabled={newPassword === "" || newPassword !== confirmPassword}
                     type="submit"
                 >
-                    Update Password
+                    {$t("auth.update-password")}
                 </button>
             </div>
         </form>
@@ -86,15 +87,15 @@
     <div class="flex flex-col items-center space-y-4">
         <div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
             <iconify-icon icon="ion:checkmark-circle-outline" width="100"></iconify-icon>
-            <span class="text-xl font-bold">Success!</span>
+            <span class="text-xl font-bold">{$t("general.success")}</span>
             <p>
-                Your password was reset. <a href="/login">Click here</a>
-                to login.
+                {$t("auth.your-password-was-reset")}
+                <a href="/login">{$t("auth.click-here-to-login")}</a>
             </p>
         </div>
     </div>
 {/if}
 
 <svelte:head>
-    <title>Reset Password</title>
+    <title>{$t("auth.reset-password")}</title>
 </svelte:head>

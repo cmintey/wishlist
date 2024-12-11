@@ -3,8 +3,10 @@ import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getConfig } from "$lib/server/config";
 import { createFilter, createSorts } from "$lib/server/sort-filter-util";
+import { getFormatter } from "$lib/i18n";
 
 export const load = (async ({ params, url }) => {
+    const $t = await getFormatter();
     const list = await client.publicList.findUnique({
         select: {
             user: true,
@@ -15,12 +17,12 @@ export const load = (async ({ params, url }) => {
         }
     });
     if (!list) {
-        error(404, "Public list not found");
+        error(404, $t("errors.public-list-not-found"));
     }
 
     const config = await getConfig(list.groupId);
     if (config.listMode !== "registry") {
-        error(404, "Public list not found");
+        error(404, $t("errors.public-list-not-found"));
     }
 
     const filter = createFilter(url.searchParams.get("filter"));

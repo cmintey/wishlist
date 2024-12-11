@@ -7,8 +7,11 @@ import { createImage } from "$lib/server/image-util";
 import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
+import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
+    const $t = await getFormatter();
+
     if (!locals.user) {
         redirect(302, `/login?ref=/wishlists/${params.username}/new`);
     }
@@ -16,7 +19,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     const config = await getConfig(activeMembership.groupId);
 
     if (!config.suggestions.enable && locals.user.username !== params.username) {
-        error(401, "Suggestions are disabled");
+        error(401, $t("errors.suggestions-are-disabled"));
     }
 
     const listOwner = await client.user.findFirst({
@@ -36,7 +39,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         }
     });
 
-    if (!listOwner) error(404, "user is not part of group");
+    if (!listOwner) error(404, $t("errors.user-not-in-group"));
 
     return {
         owner: {

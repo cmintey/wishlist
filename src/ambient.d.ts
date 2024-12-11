@@ -3,7 +3,7 @@ declare module "@samirrayani/metascraper-shopping" {
 }
 
 type NavItem = {
-    label: string;
+    labelKey: string;
     href: string;
     icon: string;
 };

@@ -5,6 +5,7 @@
     import Avatar from "../../Avatar.svelte";
     import type { User } from "lucia";
     import GroupSubMenu from "./GroupSubMenu.svelte";
+    import { t } from "svelte-i18n";
 
     interface Props {
         user: User | null;
@@ -30,14 +31,14 @@
                     <li>
                         <a href="/account">
                             <iconify-icon icon="ion:person"></iconify-icon>
-                            <span class="flex-auto">Account</span>
+                            <span class="flex-auto">{$t("admin.account")}</span>
                         </a>
                     </li>
                     {#if user.roleId == Role.ADMIN}
                         <li>
                             <a href="/admin">
                                 <iconify-icon icon="ion:settings"></iconify-icon>
-                                <span class="flex-auto">Admin</span>
+                                <span class="flex-auto">{$t("admin.admin")}</span>
                             </a>
                         </li>
                     {/if}
@@ -55,14 +56,14 @@
                                 }}
                             >
                                 <iconify-icon icon="ion:log-out"></iconify-icon>
-                                <p>Sign Out</p>
+                                <p>{$t("auth.sign-out")}</p>
                             </button>
                         </li>
                     {/if}
                     <hr class="pb-1" />
                     <li>
                         <div class="flex w-full justify-around">
-                            <p>Mode</p>
+                            <p>{$t("general.mode")}</p>
                             <LightSwitch />
                         </div>
                     </li>

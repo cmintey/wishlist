@@ -4,6 +4,7 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
+    import { t } from "svelte-i18n";
 
     let { onSuccess }: Props = $props();
 
@@ -16,8 +17,8 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-    <h1 class="h1">Create your account</h1>
-    <span>Your first account will be the administrator. You can always add more admins later.</span>
+    <h1 class="h1">{$t("setup.create-your-account")}</h1>
+    <span>{$t("setup.first-account-admin")}</span>
     <form
         bind:this={form}
         class="w-80 md:w-1/3"

@@ -1,5 +1,7 @@
 <script lang="ts">
     import { smtpAcknowledged } from "$lib/stores/smtp-acknowledge";
+    import { t } from "svelte-i18n";
+
     interface Props {
         smtpEnable: boolean;
     }
@@ -12,16 +14,15 @@
         <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
             <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
             <div>
-                <span class="text-xl font-bold">SMTP is not enabled</span>
+                <span class="text-xl font-bold">{$t("general.smtp-is-not-enabled")}</span>
                 <p class="text-sm">
-                    While email setup is not a requirement, users will not be able to reset their passwords via
-                    self-service and you will have to manually send out links to reset passwords.
+                    {$t("general.smtp-not-enabled-implication")}
                 </p>
             </div>
         </div>
         <div class="alert-actions">
             <button class="variant-filled-warning btn btn-sm" onclick={() => ($smtpAcknowledged = true)}>
-                Dismiss
+                {$t("general.dismiss")}
             </button>
         </div>
     </aside>

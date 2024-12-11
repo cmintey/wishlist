@@ -5,6 +5,7 @@
     import type { Group } from "@prisma/client";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
     import type { User } from "lucia";
+    import { t } from "svelte-i18n";
 
     interface Props {
         user: User | undefined;
@@ -21,8 +22,8 @@
     const createGroup = () => {
         const settings: ModalSettings = {
             type: "prompt",
-            title: "Enter Group Name",
-            body: "Provide the name of the group below.",
+            title: $t("general.enter-group-name"),
+            body: $t("general.provide-the-name-of-the-group-below"),
             valueAttr: { type: "text", minlength: 3, maxlength: 32, required: true },
             // Returns the updated response value
             response: async (name: string) => {
@@ -36,8 +37,8 @@
                 await goto("/");
             },
             // Optionally override the button text
-            buttonTextCancel: "Cancel",
-            buttonTextSubmit: "Submit"
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextSubmit: $t("general.submit")
         };
 
         modalStore.trigger(settings);
@@ -55,7 +56,8 @@
                     await userAPI?.setActiveGroup(groupId);
                     await invalidateAll();
                 }
-            }
+            },
+            buttonTextCancel: $t("general.cancel")
         };
         modalStore.trigger(settings);
     };
@@ -77,7 +79,7 @@
                     <li>
                         <button class="list-option w-fit" onclick={() => goto(`/admin/groups/${group.id}`)}>
                             <iconify-icon icon="ion:settings"></iconify-icon>
-                            <span>Manage Group</span>
+                            <span>{$t("general.manage-group")}</span>
                         </button>
                     </li>
                 {/if}
@@ -87,7 +89,7 @@
             <li>
                 <button class="list-option w-fit" onclick={() => changeGroup(groups)}>
                     <iconify-icon icon="ion:swap-horizontal"></iconify-icon>
-                    <span>Change Group</span>
+                    <span>{$t("general.change-group")}</span>
                 </button>
             </li>
         {/if}
@@ -97,6 +99,6 @@
 <li>
     <button class="list-option w-fit" onclick={createGroup}>
         <iconify-icon icon="ion:add"></iconify-icon>
-        <span>Create Group</span>
+        <span>{$t("general.create-group")}</span>
     </button>
 </li>

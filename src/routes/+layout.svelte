@@ -11,7 +11,7 @@
     import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
     import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
     import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
-    import type { LayoutData } from "./$types";
+    import type { LayoutServerData } from "./$types";
     import { onMount } from "svelte";
     import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
@@ -21,7 +21,7 @@
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
 
     interface Props {
-        data: LayoutData;
+        data: LayoutServerData;
         children?: import("svelte").Snippet;
     }
 
