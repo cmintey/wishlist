@@ -29,6 +29,9 @@ importers:
       '@zxcvbn-ts/language-common':
         specifier: ^3.0.4
         version: 3.0.4
+      '@zxcvbn-ts/language-de':
+        specifier: ^3.0.2
+        version: 3.0.2
       '@zxcvbn-ts/language-en':
         specifier: ^3.0.2
         version: 3.0.2
@@ -1795,6 +1798,9 @@ packages:
 
   '@zxcvbn-ts/language-common@3.0.4':
     resolution: {integrity: sha512-viSNNnRYtc7ULXzxrQIVUNwHAPSXRtoIwy/Tq4XQQdIknBzw4vz36lQLF6mvhMlTIlpjoN/Z1GFu/fwiAlUSsw==}
+
+  '@zxcvbn-ts/language-de@3.0.2':
+    resolution: {integrity: sha512-CPl2314qWtnJl4EkeEqFbL4unP6yEAHO976ER+df8CQcKsF4FxdZYEahkleWU66dhNI2VKnmJKNMzq8QtHQKcw==}
 
   '@zxcvbn-ts/language-en@3.0.2':
     resolution: {integrity: sha512-Zp+zL+I6Un2Bj0tRXNs6VUBq3Djt+hwTwUz4dkt2qgsQz47U0/XthZ4ULrT/RxjwJRl5LwiaKOOZeOtmixHnjg==}
@@ -5983,6 +5989,8 @@ snapshots:
       fastest-levenshtein: 1.0.16
 
   '@zxcvbn-ts/language-common@3.0.4': {}
+
+  '@zxcvbn-ts/language-de@3.0.2': {}
 
   '@zxcvbn-ts/language-en@3.0.2': {}
 
