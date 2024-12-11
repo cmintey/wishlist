@@ -130,6 +130,7 @@
         "item-name-required": "Item name required",
         "item-not-found": "Item not found",
         "item-with-id-item-id-not-found": "Item with id {id} not found",
+        "list-not-found": "List not found",
         "missing-groupid-from-request-parameters": "Missing groupId from request parameters",
         "must-specify-an-item-to-delete": "Must specify an item to delete",
         "must-specify-asset-id": "Must specify asset id",

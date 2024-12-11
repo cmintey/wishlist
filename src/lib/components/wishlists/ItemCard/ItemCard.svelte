@@ -2,6 +2,7 @@
     export type PartialUser = {
         username: string;
         name: string;
+        id: string;
     };
     export type PublicUser = {
         username: string;
@@ -37,7 +38,7 @@
 
     interface Props {
         item: FullItem;
-        user?: (PartialUser & { id: string }) | undefined;
+        user?: PartialUser;
         showClaimedName?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
