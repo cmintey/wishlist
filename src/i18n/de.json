@@ -1,1 +1,19 @@
-{}
+{
+    "a11y": {
+        "menu": "Menü",
+        "cancel-editing": "editieren abbrechen",
+        "clear-url-field": "URL-Feld leeren",
+        "close": "schließen",
+        "remove-user-from-group": "{user} aus Gruppe entfernen",
+        "save-group-name": "Gruppennamen speichern",
+        "upload-profile-image": "Profilbild hochladen",
+        "password-strength": "Passwortsicherheit"
+    },
+    "admin": {
+        "administration": "Administration",
+        "about": "Über",
+        "account": "Konto",
+        "actions": "Aktionen",
+        "add-member": "Mitglied hinzufügen"
+    }
+}
