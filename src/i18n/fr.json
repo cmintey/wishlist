@@ -40,7 +40,10 @@
         "group-name": "Nom du groupe",
         "group-settings": "Paramètres du groupe",
         "id-field": "Id Utilisateur: {id}",
-        "claims": "Réservations"
+        "claims": "Réservations",
+        "add-remove-manager-message": "Êtes-vous sûr de vouloir {isManager, select, true {add} other {remove}} cet utilisateur comme gestionnaire de groupe ?",
+        "admin": "Administrateur",
+        "administration": "Administration"
     },
     "auth": {
         "password": "Mot de passe",
