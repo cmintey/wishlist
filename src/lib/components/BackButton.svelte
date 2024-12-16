@@ -16,8 +16,7 @@
         "/forgot-password",
         "/reset-password",
         "/group-error",
-        /\/setup-wizard\/?.*/,
-        "/lists"
+        /\/setup-wizard\/?.*/
     ];
 
     let documentTitle: string | undefined = $state();
