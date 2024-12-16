@@ -1,1 +1,46 @@
-{}
+{
+    "admin": {
+        "administration": "Administración",
+        "settings": "Configuracion",
+        "show-name": "Ver nombre",
+        "smtp-port": "Puerto",
+        "security": "Seguridad",
+        "about": "Acerca de",
+        "account": "Cuenta",
+        "add-member": "Agregar miembro",
+        "actions": "Acciones",
+        "admin": "Admin",
+        "groups": "Grupos",
+        "members": "Miembros",
+        "group-settings": "Configuración grupo",
+        "manager": "Administrador",
+        "make-admin": "Cambiar a admin",
+        "password-strength-requirement": "Requerimiento de fortaleza para clave",
+        "password-strength-warning": "Use con precaución el cambio de este valor o la destativación, si se desactiva, cualquier clave de un caracter o mas es permitida.",
+        "profile": "Perfil",
+        "remove-admin": "Eliminar admin",
+        "public-signup": "Registro publico",
+        "remove-member-title": "Eliminar miembro",
+        "delete-user": "Eliminar usuario",
+        "delete-group-title": "Eliminar grupo",
+        "default-group": "Grupo por defecto",
+        "group-name": "Nombre grupo",
+        "smtp-host": "Host",
+        "suggestions-approval-required": "Requiere aprobación"
+    },
+    "a11y": {
+        "cancel-editing": "Cancelar edición",
+        "close": "Cerrar",
+        "clear-url-field": "Limpiar campo url",
+        "edit-group-name": "Editar nombre de grupo",
+        "decrease-priority": "Reducir prioridad para {name}",
+        "menu": "menu",
+        "refresh-item-data": "Actualizar item",
+        "save-group-name": "Guardar nombre de grupo",
+        "remove-user-from-group": "Eliminar {user} del grupo",
+        "password-strength": "Fortaleza de clave",
+        "increase-priority": "Aumentar prioridad para {name}",
+        "toggle-password-visibility": "Visibilidad de clave",
+        "upload-profile-image": "Cargar imagen de perfil"
+    }
+}
