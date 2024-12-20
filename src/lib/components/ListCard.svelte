@@ -3,7 +3,7 @@
     import Avatar from "./Avatar.svelte";
     import { t } from "svelte-i18n";
 
-    interface ListWithCounts extends Pick<List, "id" | "name"> {
+    interface ListWithCounts extends Pick<List, "id" | "name" | "icon" | "iconColor"> {
         owner: Pick<User, "name" | "username" | "picture">;
         itemCount: number;
         claimedCount?: number;
@@ -19,6 +19,7 @@
     let { hideCount = false, hasNewItems = false, list }: Props = $props();
 
     let listName = $derived(list.name || `${list.owner.name}'s Wishes`);
+    let iconColor = $derived(list.iconColor ? `bg-[${list.iconColor}]` : undefined);
 </script>
 
 <a class="card" data-sveltekit-preload-data href="/lists/{list.id}">
@@ -34,8 +35,8 @@
     {/if}
 
     <div class="flex flex-row items-center space-x-4 p-4 pb-4">
-        <Avatar width="w-14">
-            <iconify-icon icon="ion:gift" width="1.5rem"></iconify-icon>
+        <Avatar background={iconColor} width="w-14">
+            <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </Avatar>
         <div class="flex flex-col space-y-1">
             <span class="text-primary-700-200-token text-4xl font-bold">{listName}</span>

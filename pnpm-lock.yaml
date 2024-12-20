@@ -77,6 +77,9 @@ importers:
       svelte-i18n:
         specifier: ^4.0.1
         version: 4.0.1(svelte@5.7.1)
+      svelte-virtuallists:
+        specifier: ^1.4.0
+        version: 1.4.0(clsx@2.1.1)(svelte@5.7.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -2036,6 +2039,10 @@ packages:
     resolution: {integrity: sha512-zlnpg0jNcibNrO7GG9IeHH7maWFeCz+Ja1wx/7tZNU5ASSSSZ+/qZciM0/LHCYxSdqv5h2sdbQ/PXYdOuetXvA==}
     engines: {node: '>=0.10'}
 
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
+
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
     engines: {node: '>=7.0.0'}
@@ -3904,6 +3911,12 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  svelte-virtuallists@1.4.0:
+    resolution: {integrity: sha512-aN5t/bqaFamq4V8K4TPrV+gbexDH3BkZJaC76FPGJsjggZre3MowcmoOaL6jaOTdUngrUUpeL9a74yXdldis0g==}
+    peerDependencies:
+      clsx: ^2.1.1
+      svelte: ^5.1.0
 
   svelte@5.7.1:
     resolution: {integrity: sha512-kUtiiNcN7ssi5X8OQW8IILoI53RUudjn8TD1910i8cg5c5IRZ4IuaDO1vFl+kZcvv1geYBxlFpi/mj09m/CCBg==}
@@ -6259,6 +6272,8 @@ snapshots:
       memoizee: 0.4.17
       timers-ext: 0.1.8
 
+  clsx@2.1.1: {}
+
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
@@ -8219,6 +8234,11 @@ snapshots:
       postcss: 8.4.49
       postcss-load-config: 6.0.1(jiti@1.21.6)(postcss@8.4.49)(yaml@2.6.1)
       typescript: 5.7.2
+
+  svelte-virtuallists@1.4.0(clsx@2.1.1)(svelte@5.7.1):
+    dependencies:
+      clsx: 2.1.1
+      svelte: 5.7.1
 
   svelte@5.7.1:
     dependencies:

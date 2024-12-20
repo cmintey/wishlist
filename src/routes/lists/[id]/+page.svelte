@@ -20,6 +20,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import { t } from "svelte-i18n";
+    import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
 
     interface Props {
         data: PageData;
@@ -189,7 +190,10 @@
         <SortBy />
     </div>
     {#if data.list.owner.isMe}
-        <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
+        <div class="flex flex-row flex-wrap space-x-4">
+            <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
+            <ManageListChip onclick={() => goto(`${new URL($page.url).pathname}/manage`)} />
+        </div>
     {/if}
 </div>
 

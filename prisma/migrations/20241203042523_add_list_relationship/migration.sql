@@ -5,6 +5,8 @@ CREATE TABLE "list" (
     "ownerId" TEXT NOT NULL,
     "groupId" TEXT NOT NULL,
     "public" BOOLEAN NOT NULL DEFAULT false,
+    "icon" TEXT,
+    "iconColor" TEXT,
     CONSTRAINT "list_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "user" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "list_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "group" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -37,14 +39,14 @@ CREATE INDEX "_ItemToList_B_index" ON "_ItemToList"("B");
 
 -- Create a new list for each user and group
 INSERT INTO "list"
-SELECT ugm.userId || ugm.groupId AS id, NULL as name, ugm.userId AS ownerId, ugm.groupId, FALSE AS public
+SELECT ugm.userId || ugm.groupId AS id, NULL AS name, ugm.userId AS ownerId, ugm.groupId, FALSE AS public, NULL AS icon, NULL AS iconColor
 FROM "user_group_membership" ugm
 LEFT JOIN "public_list" pl ON pl.userId = ugm.userId AND pl.groupId = ugm.groupId
 WHERE pl.id IS NULL;
 
 -- Copy over public lists
 INSERT INTO "list"
-SELECT id, NULL as name, userId AS ownerId, groupId, TRUE AS public
+SELECT id, NULL as name, userId AS ownerId, groupId, TRUE AS public, NULL AS icon, NULL AS iconColor
 FROM "public_list";
 
 -- Add the existing items to the list relationship
