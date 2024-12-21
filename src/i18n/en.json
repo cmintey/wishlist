@@ -16,7 +16,8 @@
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} as manager",
         "toggle-password-visibility": "toggle password visibility",
         "two-people-looking-in-an-empty-box": "Two people looking in an empty box",
-        "upload-profile-image": "upload profile image"
+        "upload-profile-image": "upload profile image",
+        "wishlist-logo": "Wishlist Logo"
     },
     "admin": {
         "about": "About",
@@ -110,6 +111,19 @@
         "update-password": "Update Password",
         "username": "Username",
         "your-password-was-reset": "Your password was reset."
+    },
+    "email": {
+        "invite-body": "You've been invited to join Wishlist! To accept the invitation, click on the link below.",
+        "invite-button": "Join Wishlist",
+        "invite-fallback-text": "Somebody has invited you to join their Wishlist! Follow the link to signup: {url}",
+        "invite-footer": "If you do not wish to join or believe this email to be sent in error, then you can ignore this email.",
+        "invite-subject": "Wishlist Invite",
+        "invite-title": "Welcome to Wishlist!",
+        "pw-reset-body": "If you requested a password reset, click the link below to complete the process. If you didn't make this request, then you can safely ignore this email.",
+        "pw-reset-fallback-text": "Follow the link to reset your password {resetUrl}",
+        "pw-reset-title": "Reset Password",
+        "test-body": "If you're reading this, then congratulations! Email configuration seems to have been set up properly!",
+        "test-subject": "Test from Wishlist"
     },
     "errors": {
         "asset-not-found": "Asset not found",
