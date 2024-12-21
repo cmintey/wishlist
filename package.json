@@ -10,7 +10,8 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "prettier --check . && eslint .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "db:patch": "node prisma/patches/index.js"
     },
     "prisma": {
         "seed": "node prisma/seed.js"
@@ -78,6 +79,7 @@
         "prisma": "^6.0.1",
         "sharp": "^0.33.5",
         "svelte-i18n": "^4.0.1",
+        "svelte-virtuallists": "^1.4.0",
         "zod": "^3.23.8"
     },
     "engines": {

@@ -5,10 +5,10 @@ import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, url }) => {
     const user = locals.user;
     if (!user) {
-        redirect(302, `/login`);
+        redirect(302, `/login?ref=${url.pathname + url.search}`);
     }
 
     const activeMembership = await getActiveMembership(user);
@@ -25,6 +25,8 @@ export const load = (async ({ locals }) => {
         select: {
             id: true,
             name: true,
+            icon: true,
+            iconColor: true,
             owner: {
                 select: {
                     name: true,

@@ -1,3 +1,5 @@
+import type { HTMLAttributes } from "svelte/elements";
+
 declare global {
     // See https://kit.svelte.dev/docs/types#app
     // for information about these interfaces
@@ -18,6 +20,33 @@ declare global {
     declare const __COMMIT_SHA__: string;
     // Date built
     declare const __LASTMOD__: string;
+
+    interface IconifyIconHTMLElement extends HTMLAttributes<HTMLElement> {
+        icon: string;
+        width?: string | number;
+        height?: string | number;
+        rotate?: string | number;
+        flip?: string;
+        mode?: "style" | "bg" | "mask" | "svg";
+        inline?: boolean;
+        noobserver?: boolean;
+        loadIcons?: (icons: string[], callback?: IconifyIconLoaderCallback) => IconifyIconLoaderAbort;
+    }
+
+    declare namespace svelteHTML {
+        interface IntrinsicElements {
+            "iconify-icon": IconifyIconHTMLElement;
+        }
+    }
 }
+
+type IconifyIconLoaderCallback = (
+    loaded: IconifyIconName[],
+    missing: IconifyIconName[],
+    pending: IconifyIconName[],
+    unsubscribe: IconifyIconLoaderAbort
+) => void;
+
+export type IconifyIconLoaderAbort = () => void;
 
 export {};
