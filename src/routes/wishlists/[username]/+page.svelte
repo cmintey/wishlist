@@ -189,11 +189,11 @@
     <div class="flex flex-row space-x-2 pb-4">
         {#if publicListUrl}
             <div class="flex flex-row">
-                <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>$t('wishes.public-url')</TokenCopy>
+                <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>{$t("wishes.public-url")}</TokenCopy>
             </div>
         {:else}
             <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>
-                $t('wishes.share')
+                {$t("wishes.share")}
             </button>
         {/if}
     </div>

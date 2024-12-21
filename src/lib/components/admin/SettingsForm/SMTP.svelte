@@ -67,7 +67,7 @@
                     bind:value={user}
                 />
             </label>
-            <PasswordInput id="smtpPass" name="smtpPass" label="Password" required bind:value={pass} />
+            <PasswordInput id="smtpPass" name="smtpPass" label={$t("auth.password")} required bind:value={pass} />
             <label for="smtpFrom">
                 <span>{$t("admin.smtp-from-email")}</span>
                 <input

@@ -64,7 +64,7 @@
                     <li>
                         <div class="flex w-full justify-around">
                             <p>{$t("general.mode")}</p>
-                            <LightSwitch />
+                            <LightSwitch title={$t("general.toggle-dark-mode")} />
                         </div>
                     </li>
                 </ul>

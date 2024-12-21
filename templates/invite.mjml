@@ -1,46 +1,31 @@
 <mjml>
   <mj-head>
-    <mj-font name="Lato" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
+    <mj-font name="Lato" href="https://fonts.googleapis.com/css2?family=Lato&display=swap"></mj-font>
     <mj-attributes>
-      <mj-all font-family="Lato, ui-sans-serif, system-ui" />
-      <mj-text color="#201a29" />
+      <mj-all font-family="Lato, ui-sans-serif, system-ui"></mj-all>
+      <mj-text color="#201a29"></mj-text>
     </mj-attributes>
-    <mj-preview>
-      Welcome to Wishlist!
-    </mj-preview>
+    <mj-preview>{{previewText}}</mj-preview>
   </mj-head>
   <mj-body background-color="#e3e1e5">
-    <!-- Logo Headaer -->
     <mj-section padding-bottom="0px">
       <mj-column>
-        <mj-image src="{{baseUrl}}/android-chrome-512x512.png" alt="Wishlist Logo" width="120px" padding-bottom="0px" rel="notrack" />
+        <mj-image src="{{baseUrl}}/android-chrome-512x512.png" alt="{{wishlistLogoText}}" width="120px" padding-bottom="0px" rel="notrack"></mj-image>
         <mj-text align="center" font-size="32px" padding-top="0px" color="#531f5e">Wishlist</mj-text>
-
         <mj-divider border-width="2px" width="45%"></mj-divider>
-
-
       </mj-column>
     </mj-section>
-    <!-- Main Body -->
     <mj-section padding-top="0px">
       <mj-column>
-        <mj-text align="center" font-size="28px">Welcome to Wishlist!</mj-text>
-
-        <mj-text align="center" font-size="16px">
-          You've been invited to join Wishlist! To accept the invitation, click on the link below.
-
-        </mj-text>
-
-
-        <mj-button href="{{url}}" rel="noreferrer" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">Join Wishlist</mj-button>
+        <mj-text align="center" font-size="28px">{{titleText}}</mj-text>
+        <mj-text align="center" font-size="16px">{{bodyText}}</mj-text>
+        <mj-button href="{{inviteUrl}}" rel="noreferrer" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">{{buttonText}}</mj-button>
       </mj-column>
     </mj-section>
     <mj-section>
       <mj-column>
-        <mj-divider border-width="1px" />
-        <mj-text align="center">
-          If you do not wish to join or believe this email to be sent in error, then you can ignore this email.
-        </mj-text>
+        <mj-divider border-width="1px"></mj-divider>
+        <mj-text align="center">{{footerText}}</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
