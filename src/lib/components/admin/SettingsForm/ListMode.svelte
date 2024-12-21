@@ -15,8 +15,9 @@
     {#if disabled}
         <Alert type="info">{$t("admin.wishlist-mode-alert")}</Alert>
     {/if}
+    <span>{$t("admin.wishlist-mode-display-text")}</span>
     <select id="listMode" name="listMode" class="select w-fit min-w-64" bind:value={mode}>
-        <option value="standard">Wishlist</option>
+        <option value="standard">{$t("admin.wishlist-mode-wishlist")}</option>
         {#if !disabled}
             <option value="registry">{$t("admin.wishlist-mode-registry")}</option>
         {/if}

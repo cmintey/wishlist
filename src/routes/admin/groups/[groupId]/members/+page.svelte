@@ -32,7 +32,8 @@
                 await groupAPI.addMember(userId);
                 invalidateAll();
             }
-        }
+        },
+        buttonTextCancel: $t("general.cancel")
     };
 
     const toggleManager = async (userId: string, isManager: boolean) => {
@@ -61,7 +62,9 @@
 
                 await groupAPI.removeMember(userId);
                 await invalidateAll();
-            }
+            },
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextConfirm: $t("general.confirm")
         });
     };
 
@@ -87,7 +90,9 @@
                     await invalidateAll();
                     goto("/");
                 }
-            }
+            },
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextConfirm: $t("general.confirm")
         });
     };
 </script>

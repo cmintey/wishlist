@@ -75,7 +75,9 @@
         "version": "Version: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "wishlist-mode": "Wishlist Mode",
         "wishlist-mode-alert": "There are other members in this group, you cannot switch the mode until you remove all but one member.",
-        "wishlist-mode-registry": "Registry"
+        "wishlist-mode-display-text": "In 'Wishlist' mode, you can have multiple users and lists and claim items from other users. In 'Registry' mode, you have a single list which you can publicly share.",
+        "wishlist-mode-registry": "Registry",
+        "wishlist-mode-wishlist": "Wishlist"
     },
     "app": {
         "home": "Home",
@@ -205,6 +207,7 @@
         "submit": "Submit",
         "success": "Success!",
         "this-invite-link-is-only-valid-for-one-signup": "This invite link is only valid for one signup",
+        "toggle-dark-mode": "Toggle light or dark mode",
         "update": "Update",
         "user": "User",
         "user-count": "User Count",
