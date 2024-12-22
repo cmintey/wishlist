@@ -16,7 +16,8 @@
         "increase-priority": "Priorität für {name} erhöhen",
         "refresh-item-data": "Artikeldaten neu laden",
         "toggle-manager": "{isManager, select, true {Entferne} other {Ernenne}} {user} als Leiter",
-        "toggle-password-visibility": "Passwort-Sichtbarkeit umschalten"
+        "toggle-password-visibility": "Passwort-Sichtbarkeit umschalten",
+        "wishlist-logo": "Wishlist Logo"
     },
     "admin": {
         "administration": "Administration",
