@@ -52,11 +52,13 @@
         "users": "Usuarios",
         "unknown": "Desconocido",
         "user-was-deleted": "{username} fue eliminado",
-        "username-field": "Usuario: {username}",
+        "username-field": "Nombre Usuario: {username}",
         "wishlist-mode-registry": "Registro",
         "version": "Version: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "wishlist-mode": "Modo Wishlist",
-        "wishlist-mode-alert": "Hay otros usuarios en este grupo, usted no puede cambiar el modo hasta que remueva usuarios y quede al menos uno."
+        "wishlist-mode-alert": "Hay otros usuarios en este grupo, usted no puede cambiar el modo hasta que remueva usuarios y quede al menos uno.",
+        "wishlist-mode-wishlist": "Wishlist",
+        "wishlist-mode-display-text": "En modo Wishlist, usted puede tener multiples usuarios, listas y reclamar items de otros usuarios. En modo Registry, usted tiene una sola lista que puede publicar y compartir."
     },
     "a11y": {
         "cancel-editing": "Cancelar edición",
@@ -75,7 +77,8 @@
         "drag-handle": "drag handle for {name}",
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} como administrador",
         "two-people-looking-in-an-empty-box": "Dos personas estan revisando una caja vacia",
-        "a-person-looking-at-an-empty-board": "Una persona mirando un tablero vacío"
+        "a-person-looking-at-an-empty-board": "Una persona mirando un tablero vacío",
+        "wishlist-logo": "Wishlist Logo"
     },
     "auth": {
         "log-in": "Ingresar",
@@ -170,9 +173,9 @@
         "mode": "Modo",
         "name-optional": "Nombre (Opcional)",
         "off": "Desactivado",
-        "moderate": "Moderar",
+        "moderate": "Moderado",
         "provide-the-name-of-the-group-below": "Proporcine el nombre del grupo a continuacion.",
-        "smtp-not-enabled-implication": "Mientras que el correo del usuario no es un requerimiento, los usuarios no podran auto gestionar el reinicio de clave y usted debera manualmente enviar los links de reinicio de clave.",
+        "smtp-not-enabled-implication": "Sin la configuracion del servicio SMPT, los usuarios no podran auto gestionar el reinicio de clave y usted debera manualmente enviar los links de reinicio de clave.",
         "select-group": "Seleccione Grupo",
         "strong": "Fuerte",
         "search-for-user": "Buscar usuario para agregar al grupo",
@@ -185,7 +188,7 @@
         "processing": "Procesando…",
         "add-user": "Agregar Usuario",
         "cancel": "Cancelar",
-        "change-group": "Canbiar Grupo",
+        "change-group": "Cambiar Grupo",
         "cannot-delete-default-group-msg": "Usted no puede eliminar el grupo por defecto. Por favor cambie el grupo por defecto antes de eliminar este grupo.",
         "confirm": "Confirmar",
         "copied": "Copiado!",
@@ -207,7 +210,8 @@
         "this-invite-link-is-only-valid-for-one-signup": "El enlace de invitacion es solamente valido por una vez",
         "update": "Actualizar",
         "user": "Usuario",
-        "wishlists-cleared": "Wishlists limpiada."
+        "wishlists-cleared": "Wishlists limpiada.",
+        "toggle-dark-mode": "Intercamnbiar el color del tema"
     },
     "setup": {
         "lets-get-started": "Empecemos",
@@ -245,9 +249,9 @@
         "public-url": "URL Publica",
         "price-low-to-high": "Precio: Menor a Mayor",
         "purchased": "Comprado",
-        "unclaim": "Sin reclamar",
+        "unclaim": "Liberar reclamo",
         "unable-to-update-item-ordering": "No es posible actualizar el orden de los items",
-        "unclaimed": "Liberar reclamo",
+        "unclaimed": "Sin reclamar",
         "view-wishes": "Ver deseos",
         "url-placeholder": "Ingrese URL para capturar datos del item",
         "wishes-for": "Deseos de {listOwner}",
@@ -277,11 +281,24 @@
         "updated-success": "Item actualizado exitosamente",
         "share": "Compartir Lista",
         "nothing-claimed-yet": "Nada reclamado aun",
-        "reorder": "Reorganizar",
+        "reorder": "Orden Manual",
         "upload-image": "Cargar Imagen"
     },
     "app": {
         "home": "Inicio",
         "my-claims": "Mis Reclamos"
+    },
+    "email": {
+        "pw-reset-title": "Reiniciar Clave",
+        "test-subject": "Test de Wishlist",
+        "pw-reset-fallback-text": "Siga en enlace para reiniciar su clave: {resetUrl}",
+        "invite-fallback-text": "Alguien te ha invitado a Wishlist!!! Click en el enlace para inscribirte: {url}",
+        "invite-button": "Unirse a Wishlist",
+        "invite-body": "Usted ha sido invitado a ingresar a Wishlist! Para aceptar la invitacion, presione el enlace a continuacion.",
+        "invite-footer": "Si no deseas ingresar o consideras que este correo fue enviado por error, puedes ingnorar este correo.",
+        "invite-subject": "Invitacion a Wishlist",
+        "invite-title": "Bienvenido a Wishlist!",
+        "test-body": "Si usted esta leyendo esto, Felicitaciones! La configuracion del correo electronico se ha realizado apropiadamente!",
+        "pw-reset-body": "Si usted ha solicitado un reinicio de clave, click en el siguiente enlace. Si ustes NO realizo esta solicitud, puede ignorar este correo."
     }
 }

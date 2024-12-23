@@ -1,1 +1,9 @@
-{}
+{
+    "a11y": {
+        "a-person-looking-at-an-empty-board": "Человек, смотрящий на пустую доску",
+        "cancel-editing": "отменить редактирование",
+        "close": "Закрыть",
+        "decrease-priority": "Понизить приоритет для {name}",
+        "clear-url-field": "очистить поле URL"
+    }
+}
