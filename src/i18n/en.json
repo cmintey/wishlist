@@ -17,7 +17,8 @@
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} as manager",
         "toggle-password-visibility": "toggle password visibility",
         "two-people-looking-in-an-empty-box": "Two people looking in an empty box",
-        "upload-profile-image": "upload profile image"
+        "upload-profile-image": "upload profile image",
+        "wishlist-logo": "Wishlist Logo"
     },
     "admin": {
         "about": "About",
@@ -76,7 +77,9 @@
         "version": "Version: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "wishlist-mode": "Wishlist Mode",
         "wishlist-mode-alert": "There are other members in this group, you cannot switch the mode until you remove all but one member.",
-        "wishlist-mode-registry": "Registry"
+        "wishlist-mode-display-text": "In 'Wishlist' mode, you can have multiple users and lists and claim items from other users. In 'Registry' mode, you have a single list which you can publicly share.",
+        "wishlist-mode-registry": "Registry",
+        "wishlist-mode-wishlist": "Wishlist"
     },
     "app": {
         "home": "Home",
@@ -109,6 +112,19 @@
         "update-password": "Update Password",
         "username": "Username",
         "your-password-was-reset": "Your password was reset."
+    },
+    "email": {
+        "invite-body": "You've been invited to join Wishlist! To accept the invitation, click on the link below.",
+        "invite-button": "Join Wishlist",
+        "invite-fallback-text": "Somebody has invited you to join their Wishlist! Follow the link to signup: {url}",
+        "invite-footer": "If you do not wish to join or believe this email to be sent in error, then you can ignore this email.",
+        "invite-subject": "Wishlist Invite",
+        "invite-title": "Welcome to Wishlist!",
+        "pw-reset-body": "If you requested a password reset, click the link below to complete the process. If you didn't make this request, then you can safely ignore this email.",
+        "pw-reset-fallback-text": "Follow the link to reset your password {resetUrl}",
+        "pw-reset-title": "Reset Password",
+        "test-body": "If you're reading this, then congratulations! Email configuration seems to have been set up properly!",
+        "test-subject": "Test from Wishlist"
     },
     "errors": {
         "asset-not-found": "Asset not found",
@@ -210,6 +226,7 @@
         "submit": "Submit",
         "success": "Success!",
         "this-invite-link-is-only-valid-for-one-signup": "This invite link is only valid for one signup",
+        "toggle-dark-mode": "Toggle light or dark mode",
         "update": "Update",
         "user": "User",
         "user-count": "User Count",

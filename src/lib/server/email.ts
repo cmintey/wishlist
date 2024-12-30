@@ -4,14 +4,23 @@ import { readFile } from "fs";
 import type Mail from "nodemailer/lib/mailer";
 import { getConfig } from "$lib/server/config";
 import { env } from "$env/dynamic/private";
+import { getFormatter } from "$lib/i18n";
 
-type TemplateData = {
+type InviteTemplateData = {
     url: string;
     baseUrl: string;
+    wishlistLogoText: string;
+    previewText: string;
+    titleText: string;
+    bodyText: string;
+    buttonText: string;
+    footerText: string;
 };
 
-let passResetTempl: HandlebarsTemplateDelegate<TemplateData>;
-let inviteTempl: HandlebarsTemplateDelegate<TemplateData>;
+type PasswordResetTemplateData = Omit<InviteTemplateData, "footerText">;
+
+let passResetTempl: HandlebarsTemplateDelegate<PasswordResetTemplateData>;
+let inviteTempl: HandlebarsTemplateDelegate<InviteTemplateData>;
 
 readFile("templates/password-reset.html", "utf-8", (err, data) => {
     if (err) {
@@ -79,30 +88,50 @@ const sendEmail = async (options: Mail.Options) => {
         });
 };
 
-export const sendSignupLink = async (to: string, url: string) => {
-    const html = inviteTempl({ url, baseUrl: env.ORIGIN || "http://localhost:5173" });
+export const sendSignupLink = async (to: string, inviteUrl: string) => {
+    const $t = await getFormatter();
+    const html = inviteTempl({
+        url: inviteUrl,
+        baseUrl: env.ORIGIN || "http://localhost:5173",
+        wishlistLogoText: $t("a11y.wishlist-logo"),
+        previewText: $t("email.invite-title"),
+        titleText: $t("email.invite-title"),
+        bodyText: $t("email.invite-body"),
+        buttonText: $t("email.invite-button"),
+        footerText: $t("email.invite-footer")
+    });
     return await sendEmail({
         to,
-        subject: "Wishlist Invite",
+        subject: $t("email.invite-subject"),
         html,
-        text: `Somebody has invited you to join their Wishlist! Follow the link to signup: ${url}`
+        text: $t("email.invite-fallback-text", { values: { url: inviteUrl } })
     });
 };
 
-export const sendPasswordReset = async (to: string, url: string) => {
-    const html = passResetTempl({ url, baseUrl: env.ORIGIN || "http://localhost:5173" });
+export const sendPasswordReset = async (to: string, resetUrl: string) => {
+    const $t = await getFormatter();
+    const html = passResetTempl({
+        url: resetUrl,
+        baseUrl: env.ORIGIN || "http://localhost:5173",
+        wishlistLogoText: $t("a11y.wishlist-logo"),
+        previewText: $t("email.pw-reset-title"),
+        titleText: $t("email.pw-reset-title"),
+        bodyText: $t("email.pw-reset-body"),
+        buttonText: $t("email.pw-reset-title")
+    });
     return await sendEmail({
         to,
-        subject: "Password Reset",
+        subject: "Wishlist | " + $t("email.pw-reset-title"),
         html,
-        text: `Follow the link to reset your password ${url}`
+        text: $t("email.pw-reset-fallback-text", { values: { url: resetUrl } })
     });
 };
 
 export const sendTest = async (to: string) => {
+    const $t = await getFormatter();
     return await sendEmail({
         to,
-        subject: "Test from Wishlist",
-        text: "If you're reading this, then congratulations! Email configuration seems to have been set up properly!"
+        subject: $t("email.test-subject"),
+        text: $t("email.test-body")
     });
 };

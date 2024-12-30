@@ -20,6 +20,9 @@ export const initLang = async () => {
     register("es", () => import("../i18n/es.json"));
     register("fr", () => import("../i18n/fr.json"));
     register("sv", () => import("../i18n/sv.json"));
+    register("de", () => import("../i18n/de.json"));
+    register("ru", () => import("../i18n/ru.json"));
+    register("pt", () => import("../i18n/pt.json"));
 
     await init({
         fallbackLocale: defaultLocale,
@@ -49,4 +52,9 @@ export const getClosestAvailableLocaleFromHeader = (acceptLanguage: string | und
 export const getClosestAvailableLocale = (langs: readonly string[]) => {
     const $locales = get(locales);
     return langs.find((lang) => $locales.find(($locale) => $locale === lang));
+};
+
+export const getPrimaryLang = () => {
+    const lang = get(locale);
+    return lang?.toLowerCase().split("-")[0];
 };

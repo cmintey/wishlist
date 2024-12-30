@@ -65,7 +65,6 @@
                 }
                 await invalidateAll();
             },
-            // Optionally override the button text
             buttonTextCancel: $t("general.cancel"),
             buttonTextSubmit: $t("general.submit")
         };

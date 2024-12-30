@@ -44,7 +44,7 @@
     <div transition:fade>
         <div class="flex flex-col items-center space-y-4">
             <h1 class="h1">{$t("setup.create-your-account")}</h1>
-            <span>$t('setup.first-account-admin')</span>
+            <span>{$t("setup.first-account-admin")}</span>
         </div>
     </div>
 {/if}

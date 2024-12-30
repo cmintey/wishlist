@@ -9,7 +9,7 @@ export const createImage = async (username: string, image: File): Promise<string
     if (create_image) {
         filename = username + "-" + Date.now().toString() + ".webp";
         const ab = await image.arrayBuffer();
-        await sharp(ab).resize(300).webp().toFile(`uploads/${filename}`);
+        await sharp(ab).rotate().resize(300).webp().toFile(`uploads/${filename}`);
     }
 
     return filename;

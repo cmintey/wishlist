@@ -50,7 +50,9 @@
                         });
                     }
                 }
-            }
+            },
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextConfirm: $t("general.confirm")
         };
         modalStore.trigger(settings);
     };

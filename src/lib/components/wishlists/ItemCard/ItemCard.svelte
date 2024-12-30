@@ -86,7 +86,7 @@
 
     const confirmDeleteModal: ModalSettings = {
         type: "confirm",
-        title: "Please Confirm",
+        title: $t("general.please-confirm"),
         body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: item.name } }),
         // confirm = TRUE | cancel = FALSE
         response: async (r: boolean) => {
@@ -106,7 +106,9 @@
                     triggerErrorToast();
                 }
             }
-        }
+        },
+        buttonTextCancel: $t("general.cancel"),
+        buttonTextConfirm: $t("general.confirm")
     };
 
     const approvalModal = (approve: boolean): ModalSettings => ({
@@ -128,7 +130,9 @@
                     triggerErrorToast();
                 }
             }
-        }
+        },
+        buttonTextCancel: $t("general.cancel"),
+        buttonTextConfirm: $t("general.confirm")
     });
 
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
@@ -171,7 +175,8 @@
                             triggerErrorToast();
                         }
                     }
-                }
+                },
+                buttonTextCancel: $t("general.cancel")
             });
         }
         drawerStore.close();
