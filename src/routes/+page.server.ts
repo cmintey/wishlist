@@ -32,6 +32,8 @@ export const load = (async ({ locals }) => {
                     picture: true
                 }
             },
+            icon: true,
+            iconColor: true,
             items: {
                 select: {
                     id: true
@@ -72,6 +74,8 @@ export const load = (async ({ locals }) => {
                     picture: true
                 }
             },
+            icon: true,
+            iconColor: true,
             items: {
                 select: {
                     id: true,
@@ -90,6 +94,8 @@ export const load = (async ({ locals }) => {
                 id: list.id,
                 name: list.name,
                 owner: list.owner,
+                icon: list.icon,
+                iconColor: list.iconColor,
                 claimedCount: undefined,
                 itemCount: list.items.length,
                 unapprovedCount: list._count.items
@@ -103,6 +109,8 @@ export const load = (async ({ locals }) => {
                 id: list.id,
                 name: list.name,
                 owner: list.owner,
+                icon: list.icon,
+                iconColor: list.iconColor,
                 claimedCount,
                 itemCount,
                 items

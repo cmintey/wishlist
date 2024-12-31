@@ -7,22 +7,23 @@
     import fuzzysort from "fuzzysort";
 
     interface Props {
+        id?: string;
         title?: string;
+        icon?: string | null;
         onIconSelected?: (icon: string) => any;
     }
 
-    let { title, onIconSelected }: Props = $props();
+    let { id, title, icon, onIconSelected }: Props = $props();
 
     let IconifyIcon: IconifyIconHTMLElement | undefined;
     let availableIcons: string[] = $state([]);
-    let iconValue = $state();
+    let iconValue = $state(icon);
     let search = $state("");
     let searchedIcons = $derived.by(() => {
         if (availableIcons) {
             return fuzzysort.go(search, availableIcons, { all: true }).map((result) => result.target);
         }
     });
-    $inspect(search, searchedIcons);
 
     onMount(() => {
         IconifyIcon = window.customElements.get("iconify-icon") as unknown as IconifyIconHTMLElement;
@@ -78,14 +79,14 @@
 </script>
 
 <label for="name" use:popup={iconSelectorPopup}>
-    <span>{title ?? $t("general.select-icon")}</span>
+    <span>{title ?? $t("general.icon")}</span>
     <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
         <div class="input-group-shim items-center">
             <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
         </div>
         <input
-            id="name"
-            name="name"
+            id={id || "name"}
+            name={id || "name"}
             class="input"
             autocomplete="off"
             oninput={(e) => (search = e.currentTarget.value)}
@@ -95,7 +96,7 @@
         />
         {#if iconValue}
             <button
-                id="reset-field"
+                id="reset-icon"
                 class="items-center"
                 aria-label={$t("a11y.clear-icon-field")}
                 onclick={() => {
