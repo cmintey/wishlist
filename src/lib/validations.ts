@@ -63,7 +63,7 @@ export const settingSchema = z.object({
 });
 
 export const publicListCreateSchema = z.object({
-    groupId: z.string()
+    public: z.boolean().optional()
 });
 
 export const getListPropertiesSchema = () => {

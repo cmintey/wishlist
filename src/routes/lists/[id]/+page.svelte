@@ -13,7 +13,7 @@
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
     import { SSEvents } from "$lib/schema";
-    import { PublicListAPI } from "$lib/api/lists";
+    import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone } from "svelte-dnd-action";
     import { ItemsAPI } from "$lib/api/items";
@@ -150,18 +150,19 @@
     };
 
     const getOrCreatePublicList = async () => {
-        let publicListId = "";
-        const publicListApi = new PublicListAPI(data.list.groupId); // TODO: Change this
-        const resp = await publicListApi.get();
-        if (resp.ok) {
-            publicListId = (await resp.json()).id;
-        } else {
-            const createResp = await publicListApi.create();
-            if (createResp.ok) {
-                publicListId = (await createResp.json()).id;
+        if (!data.list.public) {
+            const listApi = new ListAPI(data.list.id);
+            const resp = await listApi.makePublic();
+            if (!resp.ok) {
+                const message = await resp.text();
+                toastStore.trigger({
+                    message,
+                    background: "variant-filled-error"
+                });
+                return;
             }
         }
-        publicListUrl = new URL(`/lists/${publicListId}`, window.location as unknown as URL);
+        publicListUrl = new URL(`/lists/${data.list.id}`, window.location as unknown as URL);
     };
 
     const handleDnd = (e: CustomEvent) => {

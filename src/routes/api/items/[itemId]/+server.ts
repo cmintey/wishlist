@@ -41,6 +41,11 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
                     id: true
                 }
             },
+            lists: {
+                select: {
+                    public: true
+                }
+            },
             imageUrl: true
         }
     });
@@ -50,13 +55,8 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
     }
 
     if (checkPublic) {
-        const count = await client.publicList.count({
-            where: {
-                userId: item.user.id,
-                groupId: item.group!.id
-            }
-        });
-        if (!locals.user && count > 0) {
+        const onPublicList = item.lists.reduce((c, v) => c || v.public, false);
+        if (!locals.user && onPublicList) {
             return item;
         } else {
             error(401, $t("errors.not-authorized"));

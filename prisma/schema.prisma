@@ -22,7 +22,6 @@ model User {
     roleId              Int                   @default(1)
     UserGroupMembership UserGroupMembership[]
     hashedPassword      String
-    publicLists         PublicList[]
     lists               List[]
 
     @@map("user")
@@ -61,7 +60,6 @@ model Group {
     name                String                @unique
     UserGroupMembership UserGroupMembership[]
     Item                Item[]
-    publicLists         PublicList[]
     lists               List[]
 
     @@map("group")
@@ -168,17 +166,6 @@ model SystemConfig {
 
     @@id([key, groupId])
     @@map("system_config")
-}
-
-model PublicList {
-    id      String @id @unique @default(cuid())
-    userId  String
-    groupId String
-    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
-
-    @@index([userId, groupId])
-    @@map("public_list")
 }
 
 model Patch {
