@@ -51,6 +51,13 @@ export const load = (async ({ params, url, locals }) => {
             },
             items
         },
+        loggedInUser: locals.user
+            ? {
+                  id: locals.user.id,
+                  username: locals.user.username,
+                  name: locals.user.name
+              }
+            : undefined,
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
         suggestionsEnabled: config.suggestions.enable

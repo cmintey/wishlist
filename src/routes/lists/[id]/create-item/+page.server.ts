@@ -3,66 +3,64 @@ import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { createImage, tryDeleteImage } from "$lib/server/image-util";
-import { itemEmitter } from "$lib/server/events/emitters";
+import { createImage } from "$lib/server/image-util";
 import { SSEvents } from "$lib/schema";
+import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
+import { getById } from "$lib/server/list";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
-    if (!locals.user) {
-        redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
-    }
-
+export const load: PageServerLoad = async ({ locals, params, url }) => {
     const $t = await getFormatter();
-    if (isNaN(parseInt(params.itemId))) {
-        error(400, $t("errors.item-id-must-be-a-number"));
+
+    if (!locals.user) {
+        redirect(302, `/login?ref=${url.pathname}`);
     }
 
     const activeMembership = await getActiveMembership(locals.user);
+    const list = await getById(params.id);
+    if (!list) {
+        error(404, $t("errors.list-not-found"));
+    }
+    if (list.groupId !== activeMembership.groupId) {
+        error(404, $t("errors.user-not-in-group"));
+    }
+
     const config = await getConfig(activeMembership.groupId);
 
-    let item;
-    try {
-        item = await client.item.findFirstOrThrow({
-            where: {
-                id: parseInt(params.itemId),
-                groupId: activeMembership.groupId
-            },
-            include: {
-                addedBy: {
-                    select: {
-                        username: true
-                    }
-                },
-                user: {
-                    select: {
-                        username: true
-                    }
-                },
-                itemPrice: true
-            }
-        });
-    } catch {
-        error(404, $t("errors.item-not-found"));
-    }
-
-    if (config.suggestions.method === "surprise" && locals.user.username !== item.addedBy?.username) {
-        error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
-    }
-
-    if (params.username !== item.user.username) {
-        error(400, $t("errors.item-invalid-ownership", { values: { username: params.username } }));
+    if (!config.suggestions.enable && locals.user.id !== list?.owner.id) {
+        error(401, $t("errors.suggestions-are-disabled"));
     }
 
     return {
-        item
+        owner: {
+            name: list.owner.name,
+            isMe: list.owner.id === locals.user.id
+        },
+        suggestion: list.owner.id !== locals.user.id,
+        suggestionMethod: config.suggestions.method
     };
 };
 
 export const actions: Actions = {
-    default: async ({ locals, request, params }) => {
-        if (!locals.user) error(401, "Not authorized");
+    default: async ({ request, locals, params }) => {
+        const $t = await getFormatter();
+
+        if (!locals.user) {
+            return fail(401, { success: false, message: $t("errors.unauthenticated") });
+        }
+
+        const activeMembership = await getActiveMembership(locals.user);
+
+        const list = await getById(params.id);
+        if (!list) {
+            return fail(404, { success: false, message: $t("errors.list-not-found") });
+        }
+        if (list.groupId !== activeMembership.groupId) {
+            return fail(404, { success: false, message: $t("errors.user-not-in-group") });
+        }
+        const config = await getConfig(activeMembership.groupId);
+
         const form = await request.formData();
         const url = form.get("url") as string;
         const imageUrl = form.get("image_url") as string;
@@ -79,12 +77,6 @@ export const actions: Actions = {
 
         const filename = await createImage(locals.user.username, image);
 
-        const item = await client.item.findUniqueOrThrow({
-            where: {
-                id: parseInt(params.itemId)
-            }
-        });
-
         let itemPriceId = null;
         if (price && currency) {
             await client.itemPrice
@@ -97,16 +89,22 @@ export const actions: Actions = {
                 .then((itemPrice) => (itemPriceId = itemPrice.id));
         }
 
-        const updatedItem = await client.item.update({
-            where: {
-                id: parseInt(params.itemId)
-            },
+        const item = await client.item.create({
             data: {
+                userId: list.owner.id,
                 name,
                 url,
-                imageUrl: filename || imageUrl,
                 note,
-                itemPriceId
+                imageUrl: filename || imageUrl,
+                addedById: locals.user.id,
+                approved: list.owner.id === locals.user.id || config.suggestions.method !== "approval",
+                groupId: activeMembership.groupId,
+                itemPriceId,
+                lists: {
+                    connect: {
+                        id: list.id
+                    }
+                }
             },
             include: {
                 addedBy: {
@@ -136,21 +134,9 @@ export const actions: Actions = {
             }
         });
 
-        if (item.itemPriceId !== null && item.itemPriceId !== itemPriceId) {
-            await client.itemPrice.delete({
-                where: {
-                    id: item.itemPriceId
-                }
-            });
-        }
-
-        itemEmitter.emit(SSEvents.item.update, updatedItem);
-
-        if (filename && item.imageUrl && item.imageUrl !== filename) {
-            await tryDeleteImage(item.imageUrl);
-        }
+        itemEmitter.emit(SSEvents.item.create, item);
 
         const ref = new URL(request.url).searchParams.get("ref");
-        redirect(302, ref ?? `/wishlists/${params.username}`);
+        redirect(302, ref || "/");
     }
 };

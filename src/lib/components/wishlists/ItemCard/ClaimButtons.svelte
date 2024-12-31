@@ -2,7 +2,6 @@
     import { createEventDispatcher } from "svelte";
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
-    import { page } from "$app/stores";
 
     interface Props {
         item: FullItem;
@@ -16,7 +15,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-{#if !onPublicList && user?.id === $page.data?.user?.id}
+{#if !onPublicList && item.userId === user?.id}
     <div></div>
 {:else if item.pledgedBy || item.publicPledgedBy}
     {#if !onPublicList && item.pledgedBy?.id === user?.id}

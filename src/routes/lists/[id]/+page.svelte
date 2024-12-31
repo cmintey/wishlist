@@ -77,6 +77,24 @@
         allItems = data.list.items;
     });
 
+    const groupItems = (items: Item[]) => {
+        // When on own list, don't separate out claimed vs un-claimed
+        if (data.list.owner.isMe) {
+            return [items, []];
+        }
+        return items.reduce(
+            (g, v) => {
+                if (v.pledgedById || v.publicPledgedById) {
+                    g[1].push(v);
+                } else {
+                    g[0].push(v);
+                }
+                return g;
+            },
+            [[], []] as Item[][]
+        );
+    };
+
     const updateHash = async () => {
         const userHash = await hash(data.list.id);
         $viewedItems[userHash] = await hashItems(allItems);
@@ -211,16 +229,18 @@
     </div>
 {/if}
 
-{#if approvals.length > 0}
-    <h2 class="h2 pb-2">{$t("wishes.approvals")}</h2>
-    <div class="flex flex-col space-y-4 pb-2">
-        {#each approvals as item (item.id)}
-            <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} showClaimedName={data.showClaimedName} user={data.list.owner} />
-            </div>
-        {/each}
+{#if data.list.owner.isMe && approvals.length > 0}
+    <div class="flex flex-col space-y-4 pb-4">
+        <h2 class="h2">{$t("wishes.approvals")}</h2>
+        <div class="flex flex-col space-y-4">
+            {#each approvals as item (item.id)}
+                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.list.owner} />
+                </div>
+            {/each}
+        </div>
+        <hr />
     </div>
-    <hr class="pb-2" />
 {/if}
 
 {#if items.length === 0}
@@ -242,52 +262,31 @@
             dropTargetStyle: {}
         }}
     >
-        {#if data.list.owner.isMe}
-            <!-- Workaround for svelte-dnd not playing nicely with transitions -->
-            {#if reordering}
-                {#each items as item (item.id)}
-                    <div animate:flip={{ duration: flipDurationMs }}>
-                        <ItemCard
-                            {item}
-                            onDecreasePriority={handleDecreasePriority}
-                            onIncreasePriority={handleIncreasePriority}
-                            reorderActions
-                            showClaimedName={data.showClaimedName}
-                            user={data.list.owner}
-                        />
-                    </div>
-                {/each}
-            {:else}
-                {#each items as item (item.id)}
+        <!-- Workaround for svelte-dnd not playing nicely with transitions -->
+        {#if reordering}
+            {#each items as item (item.id)}
+                <div animate:flip={{ duration: flipDurationMs }}>
+                    <ItemCard
+                        {item}
+                        onDecreasePriority={handleDecreasePriority}
+                        onIncreasePriority={handleIncreasePriority}
+                        reorderActions
+                        showClaimedName={data.showClaimedName}
+                        user={data.loggedInUser}
+                    />
+                </div>
+            {/each}
+        {:else}
+            {#each groupItems(items) as groupedItems}
+                {#each groupedItems as item (item.id)}
                     <div
                         in:receive={{ key: item.id }}
                         out:send|local={{ key: item.id }}
                         animate:flip={{ duration: flipDurationMs }}
                     >
-                        <ItemCard {item} showClaimedName={data.showClaimedName} user={data.list.owner} />
+                        <ItemCard {item} showClaimedName={data.showClaimedName} user={data.loggedInUser} />
                     </div>
                 {/each}
-            {/if}
-        {:else}
-            <!-- unclaimed-->
-            {#each items.filter((item) => !item.pledgedById) as item (item.id)}
-                <div
-                    in:receive={{ key: item.id }}
-                    out:send|local={{ key: item.id }}
-                    animate:flip={{ duration: flipDurationMs }}
-                >
-                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.list.owner} />
-                </div>
-            {/each}
-            <!-- claimed -->
-            {#each items.filter((item) => item.pledgedById) as item (item.id)}
-                <div
-                    in:receive={{ key: item.id }}
-                    out:send|local={{ key: item.id }}
-                    animate:flip={{ duration: flipDurationMs }}
-                >
-                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.list.owner} />
-                </div>
             {/each}
         {/if}
     </div>
@@ -305,7 +304,7 @@
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
-        onclick={() => goto(`${$page.url.pathname}/new`)}
+        onclick={() => goto(`${$page.url.pathname}/create-item?ref=${$page.url.pathname}`)}
     >
         <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>
