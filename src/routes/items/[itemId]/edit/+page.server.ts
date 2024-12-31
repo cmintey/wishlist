@@ -1,5 +1,5 @@
 import { error, fail, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "../$types";
+import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
