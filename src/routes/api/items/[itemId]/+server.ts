@@ -99,6 +99,11 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                         username: true
                     }
                 },
+                lists: {
+                    select: {
+                        id: true
+                    }
+                },
                 imageUrl: true
             }
         });
@@ -151,6 +156,11 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
                     select: {
                         username: true,
                         name: true
+                    }
+                },
+                lists: {
+                    select: {
+                        id: true
                     }
                 },
                 itemPrice: true

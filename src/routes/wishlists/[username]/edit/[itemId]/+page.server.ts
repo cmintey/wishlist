@@ -127,6 +127,11 @@ export const actions: Actions = {
                         name: true
                     }
                 },
+                lists: {
+                    select: {
+                        id: true
+                    }
+                },
                 itemPrice: true
             }
         });
