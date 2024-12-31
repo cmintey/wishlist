@@ -5,7 +5,7 @@ import { getFormatter } from "$lib/i18n";
 import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
 
-export const load = (async ({ params, url, locals }) => {
+export const load = (async ({ params, url, locals, depends }) => {
     const $t = await getFormatter();
 
     const list = await getById(params.id);
@@ -42,6 +42,7 @@ export const load = (async ({ params, url, locals }) => {
 
     const items = await getItems(list.id, options);
 
+    depends("data:items");
     return {
         list: {
             ...list,
