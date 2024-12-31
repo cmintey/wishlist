@@ -67,6 +67,8 @@ export const load = (async ({ locals, url }) => {
         select: {
             id: true,
             name: true,
+            icon: true,
+            iconColor: true,
             owner: {
                 select: {
                     name: true,
@@ -91,6 +93,8 @@ export const load = (async ({ locals, url }) => {
             return {
                 id: list.id,
                 name: list.name,
+                icon: list.icon,
+                iconColor: list.iconColor,
                 owner: list.owner,
                 claimedCount: undefined,
                 itemCount: list.items.length,
@@ -104,6 +108,8 @@ export const load = (async ({ locals, url }) => {
             return {
                 id: list.id,
                 name: list.name,
+                icon: list.icon,
+                iconColor: list.iconColor,
                 owner: list.owner,
                 claimedCount,
                 itemCount,

@@ -60,12 +60,14 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
         include: {
             addedBy: {
                 select: {
+                    id: true,
                     username: true,
                     name: true
                 }
             },
             pledgedBy: {
                 select: {
+                    id: true,
                     username: true,
                     name: true
                 }
@@ -78,6 +80,7 @@ export const load: PageServerLoad = async ({ locals, params, url, depends }) => 
             },
             user: {
                 select: {
+                    id: true,
                     username: true,
                     name: true
                 }
