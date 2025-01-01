@@ -27,6 +27,10 @@ export const load = (async ({ params, url, locals, depends }) => {
         if (!list || (!list.public && list.groupId !== activeMembership.groupId)) {
             error(404, $t("errors.list-not-found"));
         }
+        // Owners of the public list need to be in the correct group still
+        if (list.owner.id === locals.user.id && list?.public && list.groupId !== activeMembership.groupId) {
+            error(401, $t("errors.user-must-be-in-the-correct-group"));
+        }
     }
 
     const config = await getConfig(list.groupId);

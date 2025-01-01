@@ -285,7 +285,12 @@
                         out:send|local={{ key: item.id }}
                         animate:flip={{ duration: flipDurationMs }}
                     >
-                        <ItemCard {item} showClaimedName={data.showClaimedName} user={data.loggedInUser} />
+                        <ItemCard
+                            {item}
+                            onPublicList={!data.loggedInUser && data.list.public}
+                            showClaimedName={data.showClaimedName}
+                            user={data.loggedInUser}
+                        />
                     </div>
                 {/each}
             {/each}

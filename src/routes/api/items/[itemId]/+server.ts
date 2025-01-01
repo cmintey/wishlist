@@ -96,6 +96,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                 userId: true,
                 addedBy: {
                     select: {
+                        id: true,
                         username: true
                     }
                 },
@@ -136,24 +137,28 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             include: {
                 addedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 pledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 publicPledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 user: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }

@@ -40,7 +40,7 @@
                 <span>{$t("wishes.purchased")}</span>
             </label>
         </div>
-    {:else if showName}
+    {:else if showName && (item.publicPledgedBy?.name || item.pledgedBy?.name)}
         <span>
             {$t("wishes.claimed-by", {
                 values: { name: item.publicPledgedBy ? item.publicPledgedBy?.name : item.pledgedBy?.name }

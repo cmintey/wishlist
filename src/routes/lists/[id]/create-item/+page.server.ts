@@ -109,18 +109,21 @@ export const actions: Actions = {
             include: {
                 addedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 pledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 user: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
