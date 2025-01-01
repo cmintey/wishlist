@@ -5,6 +5,7 @@
     import { VirtualList } from "svelte-virtuallists";
     import { t } from "svelte-i18n";
     import fuzzysort from "fuzzysort";
+    import ClearableInput from "./ClearableInput.svelte";
 
     interface Props {
         id?: string;
@@ -80,37 +81,28 @@
 
 <label for="name" use:popup={iconSelectorPopup}>
     <span>{title ?? $t("general.icon")}</span>
-    <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-        <div class="input-group-shim items-center">
-            <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
-        </div>
-        <input
-            id={id || "name"}
-            name={id || "name"}
-            class="input"
-            autocomplete="off"
-            oninput={(e) => (search = e.currentTarget.value)}
-            placeholder="gift"
-            type="text"
-            value={iconValue}
-        />
-        {#if iconValue}
-            <button
-                id="reset-icon"
-                class="items-center"
-                aria-label={$t("a11y.clear-icon-field")}
-                onclick={() => {
-                    iconValue = "";
-                    search = "";
-                }}
-                onkeypress={(e) => e.preventDefault()}
-                tabindex="-1"
-                type="button"
-            >
-                <iconify-icon class="text-xl" icon="ion:close-circle"></iconify-icon>
-            </button>
-        {/if}
-    </div>
+    <ClearableInput
+        id={id || "name"}
+        name={id || "name"}
+        class="input"
+        autocomplete="off"
+        clearButtonLabel={$t("a11y.clear-icon-field")}
+        onValueClear={() => {
+            iconValue = "";
+            search = "";
+        }}
+        oninput={(e) => (search = e.currentTarget.value)}
+        placeholder="gift"
+        showClearButton={() => iconValue !== null || iconValue !== undefined}
+        type="text"
+        value={iconValue}
+    >
+        {#snippet lead()}
+            <div class="input-group-shim items-center">
+                <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
+            </div>
+        {/snippet}
+    </ClearableInput>
 </label>
 <div class="card z-50 h-64 w-[22rem] max-w-full overflow-auto pl-2" data-popup="iconSelectorPopup">
     {#await getAvailableIcons()}
