@@ -54,7 +54,7 @@
             async response(groupId: string) {
                 if (groupId) {
                     await userAPI?.setActiveGroup(groupId);
-                    await invalidateAll();
+                    await goto("/");
                 }
             },
             buttonTextCancel: $t("general.cancel")
