@@ -31,10 +31,10 @@
     });
 </script>
 
-<svelte:element this={elementTag} bind:this={element} class="card flex">
+<svelte:element this={elementTag} bind:this={element} class="card">
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="variant-ghost-primary flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
+            class="variant-ghost-primary card-header flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
         >
             <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
