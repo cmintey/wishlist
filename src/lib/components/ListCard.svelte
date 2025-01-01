@@ -43,12 +43,12 @@
         </div>
     {/if}
 
-    <div class="flex flex-row items-center space-x-4 p-4 pb-4">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-4 p-4">
         <div style="background-color: {iconColor};" class="avatar" class:bg-primary-400-500-token={!iconColor}>
             <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
-            <span class="text-primary-700-200-token text-4xl font-bold">{listName}</span>
+            <span class="text-primary-700-200-token text-2xl font-bold md:text-4xl">{listName}</span>
             <div class="flex flex-row items-center space-x-2 text-lg">
                 <Avatar user={list.owner} width="w-6" />
                 <span class="text-primary-700-200-token">{list.owner.name}</span>
@@ -73,6 +73,6 @@
 
 <style lang="postcss">
     .avatar {
-        @apply flex aspect-square w-16 items-center justify-center overflow-hidden rounded-full font-semibold text-surface-50;
+        @apply flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold text-surface-50 md:w-16;
     }
 </style>

@@ -27,7 +27,14 @@
     });
 </script>
 
-<form method="POST" use:enhance>
+<form
+    method="POST"
+    use:enhance={(e) => {
+        if (e.formData.get("iconColor") === defaultColor) {
+            e.formData.delete("iconColor");
+        }
+    }}
+>
     <div class="grid grid-cols-1 gap-4 pb-4 md:grid-cols-2">
         <label class="col-span-1 md:col-span-2" for="name">
             <span>{$t("auth.name")}</span>
