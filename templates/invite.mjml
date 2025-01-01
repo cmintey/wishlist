@@ -19,7 +19,7 @@
       <mj-column>
         <mj-text align="center" font-size="28px">{{titleText}}</mj-text>
         <mj-text align="center" font-size="16px">{{bodyText}}</mj-text>
-        <mj-button href="{{inviteUrl}}" rel="noreferrer" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">{{buttonText}}</mj-button>
+        <mj-button href="{{url}}" rel="noreferrer" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">{{buttonText}}</mj-button>
       </mj-column>
     </mj-section>
     <mj-section>
