@@ -1,3 +1,4 @@
+import { init } from "@paralleldrive/cuid2";
 import { client } from "./prisma";
 import { createFilter, createSorts } from "./sort-filter-util";
 
@@ -9,6 +10,17 @@ export interface GetItemsOptions {
     listOwnerId: string;
     loggedInUserId: string | null;
 }
+
+export const create = async (ownerId: string, groupId: string) => {
+    const cuid2 = init({ length: 10 });
+    return await client.list.create({
+        data: {
+            id: cuid2(),
+            ownerId,
+            groupId
+        }
+    });
+};
 
 export const getById = async (id: string) => {
     return await client.list.findUnique({

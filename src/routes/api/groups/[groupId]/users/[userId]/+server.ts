@@ -3,6 +3,7 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { _authCheck } from "../../auth";
+import { create } from "$lib/server/list";
 
 export const GET: RequestHandler = async ({ locals, params }) => {
     const { authenticated, user } = await _authCheck(locals, params.groupId);
@@ -46,7 +47,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 
     const data = await request.json();
 
-    let membership = await client.userGroupMembership.findFirst({
+    const membership = await client.userGroupMembership.findFirst({
         where: {
             userId: params.userId,
             groupId: group.id
@@ -55,15 +56,19 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 
     if (membership) error(400, "user is already member of the group");
 
-    membership = await client.userGroupMembership.create({
-        data: {
-            userId: params.userId,
-            groupId: group.id,
-            roleId: data.manager ? Role.GROUP_MANAGER : undefined
-        }
-    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [newMembership, _list] = await Promise.all([
+        client.userGroupMembership.create({
+            data: {
+                userId: params.userId,
+                groupId: group.id,
+                roleId: data.manager ? Role.GROUP_MANAGER : undefined
+            }
+        }),
+        create(params.userId, group.id)
+    ]);
 
-    return new Response(JSON.stringify({ membership }), { status: 201 });
+    return new Response(JSON.stringify({ newMembership }), { status: 201 });
 };
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
