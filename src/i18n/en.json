@@ -257,6 +257,7 @@
     "wishes": {
         "add-item": "Add Item",
         "added-by": "Added by <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "anonymous": "Anonymous",
         "approval-confirmation": "Are you sure you wish to <b>{approve, select, true {approve} other {deny}}</b> this suggestion from {name}",
         "approval-needed": "Approval Needed",
         "approval-required": "{listOwner} will need to approve your suggestion before it is added to their list.",
