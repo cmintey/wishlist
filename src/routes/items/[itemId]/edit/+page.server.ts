@@ -11,7 +11,7 @@ import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
-        redirect(302, `/login?ref=/wishlists/${params.username}/edit/${params.itemId}`);
+        redirect(302, `/login?ref=/items/${params.itemId}/edit`);
     }
 
     const $t = await getFormatter();
@@ -32,12 +32,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
             include: {
                 addedBy: {
                     select: {
-                        username: true
+                        id: true
                     }
                 },
                 user: {
                     select: {
-                        username: true
+                        id: true
                     }
                 },
                 itemPrice: true
@@ -47,12 +47,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(404, $t("errors.item-not-found"));
     }
 
-    if (config.suggestions.method === "surprise" && locals.user.username !== item.addedBy?.username) {
+    if (config.suggestions.method === "surprise" && locals.user.id !== item.addedBy.id) {
         error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
     }
 
-    if (params.username !== item.user.username) {
-        error(400, $t("errors.item-invalid-ownership", { values: { username: params.username } }));
+    if (locals.user.id !== item.user.id) {
+        error(400, $t("errors.item-invalid-ownership", { values: { username: locals.user.username } }));
     }
 
     return {
@@ -111,20 +111,28 @@ export const actions: Actions = {
             include: {
                 addedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 pledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 user: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
+                    }
+                },
+                lists: {
+                    select: {
+                        id: true
                     }
                 },
                 itemPrice: true
@@ -146,6 +154,6 @@ export const actions: Actions = {
         }
 
         const ref = new URL(request.url).searchParams.get("ref");
-        redirect(302, ref ?? `/wishlists/${params.username}`);
+        redirect(302, ref || "/");
     }
 };

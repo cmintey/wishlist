@@ -22,7 +22,7 @@ model User {
     roleId              Int                   @default(1)
     UserGroupMembership UserGroupMembership[]
     hashedPassword      String
-    publicLists         PublicList[]
+    lists               List[]
 
     @@map("user")
 }
@@ -60,7 +60,7 @@ model Group {
     name                String                @unique
     UserGroupMembership UserGroupMembership[]
     Item                Item[]
-    publicLists         PublicList[]
+    lists               List[]
 
     @@map("group")
 }
@@ -79,6 +79,24 @@ model UserGroupMembership {
     @@index([groupId])
     @@index([userId, groupId])
     @@map("user_group_membership")
+}
+
+model List {
+    id        String  @id @unique @default(cuid())
+    name      String?
+    owner     User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    ownerId   String
+    group     Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    groupId   String
+    public    Boolean @default(false)
+    items     Item[]
+    icon      String?
+    iconColor String?
+
+    @@index([ownerId])
+    @@index([groupId])
+    @@index([ownerId, groupId])
+    @@map("list")
 }
 
 model Item {
@@ -103,6 +121,7 @@ model Item {
     group             Group?      @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId           String?
     displayOrder      Int?
+    lists             List[]
 
     @@index([userId])
     @@index([pledgedById])
@@ -149,13 +168,9 @@ model SystemConfig {
     @@map("system_config")
 }
 
-model PublicList {
-    id      String @id @unique @default(cuid())
-    userId  String
-    groupId String
-    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+model Patch {
+    id          String   @id @unique
+    executed_at DateTime @default(now())
 
-    @@index([userId, groupId])
-    @@map("public_list")
+    @@map("patch")
 }

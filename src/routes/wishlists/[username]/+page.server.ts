@@ -1,119 +1,31 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-
 import { client } from "$lib/server/prisma";
-import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { createFilter, createSorts } from "$lib/server/sort-filter-util";
 import { getFormatter } from "$lib/i18n";
 
-export const load: PageServerLoad = async ({ locals, params, url, depends }) => {
+export const load: PageServerLoad = async ({ locals, url, params }) => {
+    const $t = await getFormatter();
     if (!locals.user) {
-        redirect(302, `/login?ref=/wishlists/${params.username}`);
+        redirect(302, `/login?ref=${url.pathname}`);
     }
 
     const activeMembership = await getActiveMembership(locals.user);
-    const config = await getConfig(activeMembership.groupId);
-    const $t = await getFormatter();
-
-    try {
-        await client.userGroupMembership.findFirstOrThrow({
-            where: {
-                user: {
-                    username: params.username
-                },
-                groupId: activeMembership.groupId
-            }
-        });
-    } catch {
-        error(404, $t("errors.user-not-in-group"));
-    }
-
-    let search = createFilter(url.searchParams.get("filter"));
-    search = {
-        ...search,
-        user: {
-            username: params.username
-        },
-        group: {
-            id: activeMembership.groupId
-        }
-    };
-
-    if (config.suggestions.method === "approval" && params.username !== locals.user.username) {
-        search.approved = true;
-    }
-
-    if (config.suggestions.method === "surprise" && params.username === locals.user.username) {
-        search.addedBy = {
-            username: locals.user.username
-        };
-    }
-
-    const sort = url.searchParams.get("sort");
-    const direction = url.searchParams.get("dir");
-    const orderBy = createSorts(sort, direction);
-
-    const wishlistItemsQuery = client.item.findMany({
-        where: search,
-        orderBy,
-        include: {
-            addedBy: {
-                select: {
-                    username: true,
-                    name: true
-                }
-            },
-            pledgedBy: {
-                select: {
-                    username: true,
-                    name: true
-                }
-            },
-            publicPledgedBy: {
-                select: {
-                    username: true,
-                    name: true
-                }
-            },
-            user: {
-                select: {
-                    username: true,
-                    name: true
-                }
-            },
-            itemPrice: true
-        }
-    });
-
-    const listOwnerQuery = client.user.findUniqueOrThrow({
-        where: {
-            username: params.username
-        },
+    const list = await client.list.findFirst({
         select: {
-            name: true,
             id: true
+        },
+        where: {
+            owner: {
+                username: params.username
+            },
+            groupId: activeMembership.groupId
         }
     });
 
-    const [wishlistItems, listOwner] = await Promise.all([wishlistItemsQuery, listOwnerQuery]);
-
-    if (sort === "price" && direction === "asc") {
-        // need to re-sort when descending since Prisma can't order with nulls last
-        wishlistItems.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+    if (!list) {
+        error(404, $t("errors.list-not-found"));
     }
 
-    depends("data:items");
-    return {
-        user: locals.user,
-        listOwner: {
-            isMe: params.username === locals.user.username,
-            ...listOwner
-        },
-        items: wishlistItems,
-        suggestionsEnabled: config.suggestions.enable,
-        showClaimedName: config.claims.showName,
-        listMode: config.listMode,
-        groupId: activeMembership.groupId
-    };
+    redirect(302, `/lists/${list.id}`);
 };

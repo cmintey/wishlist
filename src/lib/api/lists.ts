@@ -1,10 +1,10 @@
-export class PublicListAPI {
-    groupId: string;
-    constructor(groupId: string) {
-        this.groupId = groupId;
+export class ListAPI {
+    listId: string;
+    constructor(listId: string) {
+        this.listId = listId;
     }
 
-    _makeRequest = async (method: string) => {
+    _makeRequest = async (method: string, data?: Record<string, any>) => {
         const options: RequestInit = {
             method,
             headers: {
@@ -13,23 +13,15 @@ export class PublicListAPI {
             }
         };
 
-        let url = "/api/lists";
-        if (method !== "GET") {
-            options.body = JSON.stringify({
-                groupId: this.groupId
-            });
-        } else {
-            url += `?groupId=${this.groupId}`;
+        if (data) {
+            options.body = JSON.stringify(data);
         }
 
+        const url = `/api/lists/${this.listId}`;
         return await fetch(url, options);
     };
 
-    get = async () => {
-        return await this._makeRequest("GET");
-    };
-
-    create = async () => {
-        return await this._makeRequest("POST");
+    makePublic = async () => {
+        return await this._makeRequest("PATCH", { public: true });
     };
 }

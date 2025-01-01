@@ -17,7 +17,7 @@
 
     async function onFormSubmit(): Promise<void> {
         if (username) {
-            const resp = await systemUsersAPI.create(username, name === "" ? undefined : name);
+            const resp = await systemUsersAPI.create(username, name === "" ? $t("wishes.anonymous") : name);
             const data = await resp.json();
 
             if ($modalStore[0].response) $modalStore[0].response(data);

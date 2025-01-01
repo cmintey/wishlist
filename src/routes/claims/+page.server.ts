@@ -21,18 +21,21 @@ export const load: PageServerLoad = async ({ locals }) => {
         include: {
             addedBy: {
                 select: {
+                    id: true,
                     username: true,
                     name: true
                 }
             },
             pledgedBy: {
                 select: {
+                    id: true,
                     username: true,
                     name: true
                 }
             },
             user: {
                 select: {
+                    id: true,
                     username: true,
                     name: true
                 }

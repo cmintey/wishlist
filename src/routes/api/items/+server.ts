@@ -31,7 +31,12 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         const items = await client.item.findMany({
             select: {
                 id: true,
-                imageUrl: true
+                imageUrl: true,
+                lists: {
+                    select: {
+                        id: true
+                    }
+                }
             },
             where: {
                 groupId: groupId ? groupId : undefined,
@@ -126,6 +131,11 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
                     select: {
                         username: true,
                         name: true
+                    }
+                },
+                lists: {
+                    select: {
+                        id: true
                     }
                 },
                 itemPrice: true

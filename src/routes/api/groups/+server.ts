@@ -3,6 +3,7 @@ import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/i18n";
+import { create } from "$lib/server/list";
 
 export const PUT: RequestHandler = async ({ locals, request }) => {
     const $t = await getFormatter();
@@ -19,13 +20,16 @@ export const PUT: RequestHandler = async ({ locals, request }) => {
             name: data.name
         }
     });
-    await client.userGroupMembership.create({
-        data: {
-            userId: locals.user.id,
-            groupId: group.id,
-            roleId: Role.GROUP_MANAGER
-        }
-    });
+    await Promise.all([
+        client.userGroupMembership.create({
+            data: {
+                userId: locals.user.id,
+                groupId: group.id,
+                roleId: Role.GROUP_MANAGER
+            }
+        }),
+        create(locals.user.id, group.id)
+    ]);
 
     return new Response(JSON.stringify({ group }), { status: 201 });
 };

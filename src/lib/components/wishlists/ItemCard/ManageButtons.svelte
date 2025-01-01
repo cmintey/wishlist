@@ -33,7 +33,7 @@
         >
             {$t("wishes.deny")}
         </button>
-    {:else if user?.username === item.user?.username || user?.username === item.addedBy?.username}
+    {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
             class="variant-ghost-primary btn btn-sm md:btn"
             onclick={(e) => {

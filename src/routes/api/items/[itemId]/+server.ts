@@ -41,6 +41,11 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
                     id: true
                 }
             },
+            lists: {
+                select: {
+                    public: true
+                }
+            },
             imageUrl: true
         }
     });
@@ -50,13 +55,8 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
     }
 
     if (checkPublic) {
-        const count = await client.publicList.count({
-            where: {
-                userId: item.user.id,
-                groupId: item.group!.id
-            }
-        });
-        if (!locals.user && count > 0) {
+        const onPublicList = item.lists.reduce((c, v) => c || v.public, false);
+        if (!locals.user && onPublicList) {
             return item;
         } else {
             error(401, $t("errors.not-authorized"));
@@ -96,7 +96,13 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
                 userId: true,
                 addedBy: {
                     select: {
+                        id: true,
                         username: true
+                    }
+                },
+                lists: {
+                    select: {
+                        id: true
                     }
                 },
                 imageUrl: true
@@ -131,26 +137,35 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             include: {
                 addedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 pledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 publicPledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 user: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
+                    }
+                },
+                lists: {
+                    select: {
+                        id: true
                     }
                 },
                 itemPrice: true

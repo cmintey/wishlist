@@ -199,17 +199,15 @@
         ></textarea>
     </label>
 
-    <div class="flex flex-col space-y-2">
-        <span class="text-sm">*{$t("general.required-field")}</span>
+    <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
-        <div class="flex flex-row space-x-4">
-            <button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
-                {buttonText}
-            </button>
-            <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
-                {$t("general.cancel")}
-            </button>
-        </div>
+    <div class="col-span-full flex flex-row justify-between">
+        <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
+            {$t("general.cancel")}
+        </button>
+        <button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
+            {buttonText}
+        </button>
     </div>
 </div>
 
