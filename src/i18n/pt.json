@@ -1,1 +1,42 @@
-{}
+{
+    "a11y": {
+        "a-person-looking-at-an-empty-board": "Uma pessoa a olhar para uma placa vazia",
+        "cancel-editing": "cancelar edição",
+        "clear-url-field": "limpar campo url",
+        "close": "fechar",
+        "decrease-priority": "reduzir prioridade para {name}",
+        "edit-group-name": "editar nome do grupo",
+        "drag-handle": "arrastar para {name}",
+        "increase-priority": "aumentar prioridade para {name}",
+        "menu": "menu",
+        "password-strength": "Força da palavra-passe",
+        "refresh-item-data": "atualizar dados do item",
+        "remove-user-from-group": "remover {user} do grupo",
+        "save-group-name": "guardar o nome do grupo",
+        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} como gestor",
+        "toggle-password-visibility": "visibilidade da palavra-passe",
+        "two-people-looking-in-an-empty-box": "Duas pessoas a olhar para uma caixa vazia",
+        "upload-profile-image": "carregar imagem de perfil",
+        "wishlist-logo": "Logótipo da Wishlist"
+    },
+    "admin": {
+        "account": "Conta",
+        "build-date": "Data de construção: {buildDate}",
+        "claims": "Reivindicações",
+        "clear-lists": "Limpar {groupSpecific, select, true {} other {All}} {claimedOnly, select, true {Claimed Items} other {Lists}}",
+        "delete-group-title": "Eliminar grupo",
+        "about": "Sobre",
+        "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Gestor",
+        "administration": "Administração",
+        "build": "Construção: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
+        "clear-lists-confirmation": "Tem a certeza de que deseja limpar {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>todos os grupos</b>}}?<b>Esta ação é irreversível!</b>",
+        "default-group": "Grupo padrão",
+        "delete-group-message": "Tem a certeza de que pretende eliminar este grupo? Esta ação é <b>irreversível</b>!",
+        "delete-user": "Eliminar utilizador",
+        "delete-user-confirmation": "Tem a certeza de que pretende apagar {username}? <b>Esta ação é irreversível!</b>",
+        "actions": "Acções",
+        "add-remove-manager-message": "Tem a certeza de que pretende {isManager, select, true {add} other {remove}} este utilizador como gestor de grupo?",
+        "admin": "Administrador",
+        "add-member": "Adicionar membro"
+    }
+}
