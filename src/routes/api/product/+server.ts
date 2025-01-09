@@ -58,6 +58,10 @@ export const GET: RequestHandler = async ({ request }) => {
             error(424, $t("errors.product-information-not-available"));
         }
 
+        if (metadata.url == metadata.image) {
+            metadata.url = url;
+        }
+
         return new Response(JSON.stringify(metadata));
     } else {
         error(400, $t("errors.must-specify-url-in-query-parameters"));
