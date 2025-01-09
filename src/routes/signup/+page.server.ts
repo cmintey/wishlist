@@ -1,4 +1,4 @@
-import { auth } from "$lib/server/auth";
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { getSignupSchema } from "$lib/validations";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -74,12 +74,9 @@ export const actions: Actions = {
                 signupData.data.tokenId
             );
 
-            const session = await auth.createSession(user.id, {});
-            const sessionCookie = auth.createSessionCookie(session.id);
-            cookies.set(sessionCookie.name, sessionCookie.value, {
-                path: "/",
-                ...sessionCookie.attributes
-            });
+            const sessionToken = generateSessionToken();
+            const session = await createSession(sessionToken, user.id);
+            setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
             return { success: true };
         } catch {
             return fail(400, {

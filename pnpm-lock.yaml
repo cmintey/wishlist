@@ -11,12 +11,18 @@ importers:
 
   .:
     dependencies:
-      '@lucia-auth/adapter-prisma':
-        specifier: ^4.0.1
-        version: 4.0.1(@prisma/client@6.0.1(prisma@6.0.1))(lucia@3.2.2)
       '@metascraper/helpers':
         specifier: ^5.45.25
         version: 5.45.25
+      '@noble/hashes':
+        specifier: ^1.7.0
+        version: 1.7.0
+      '@oslojs/crypto':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@oslojs/encoding':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
@@ -47,9 +53,6 @@ importers:
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
-      lucia:
-        specifier: ^3.2.2
-        version: 3.2.2
       metascraper:
         specifier: ^5.45.25
         version: 5.45.25
@@ -1195,18 +1198,12 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@lucia-auth/adapter-prisma@4.0.1':
-    resolution: {integrity: sha512-3SztRhj1RAHbbhI/0aB7YC5zl6Z6aktPhkWpn2CHhiB03B9x/+A+M6pqJuAt1usU8PzkjVilgRPhrPymMar66A==}
-    peerDependencies:
-      '@prisma/client': ^4.2.0 || ^5.0.0
-      lucia: 3.x
-
   '@metascraper/helpers@5.45.25':
     resolution: {integrity: sha512-XkhgbhsY0mu84SnBVrm1nn9tBL0MfNnJAyAfJZV0VboIP30BYhMYFficR+ELQG15fflm02uQxH6HsfDk3guQ3A==}
     engines: {node: '>= 16'}
 
-  '@noble/hashes@1.6.1':
-    resolution: {integrity: sha512-pq5D8h10hHBjyqX+cfBm0i8JUXJ0UhczFc4r74zbuT9XgewFo2E3J1cOaGtdZynILNmQ685YWGzGE1Zv6io50w==}
+  '@noble/hashes@1.7.0':
+    resolution: {integrity: sha512-HXydb0DgzTpDPwbVeDGCG1gIu7X6+AuU6Zl6av/E/KG8LMsvPntvq+w17CHRpKBmN6Ybdrt1eP3k4cj8DJa78w==}
     engines: {node: ^14.21.3 || >=16}
 
   '@node-rs/argon2-android-arm-eabi@1.7.0':
@@ -3044,9 +3041,6 @@ packages:
 
   lru-queue@0.1.0:
     resolution: {integrity: sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==}
-
-  lucia@3.2.2:
-    resolution: {integrity: sha512-P1FlFBGCMPMXu+EGdVD9W4Mjm0DqsusmKgO7Xc33mI5X1bklmsQb0hfzPhXomQr9waWIBDsiOjvr1e6BTaUqpA==}
 
   magic-string@0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
@@ -5406,11 +5400,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@lucia-auth/adapter-prisma@4.0.1(@prisma/client@6.0.1(prisma@6.0.1))(lucia@3.2.2)':
-    dependencies:
-      '@prisma/client': 6.0.1(prisma@6.0.1)
-      lucia: 3.2.2
-
   '@metascraper/helpers@5.45.25':
     dependencies:
       audio-extensions: 0.0.0
@@ -5442,7 +5431,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@noble/hashes@1.6.1': {}
+  '@noble/hashes@1.7.0': {}
 
   '@node-rs/argon2-android-arm-eabi@1.7.0':
     optional: true
@@ -5613,7 +5602,7 @@ snapshots:
 
   '@paralleldrive/cuid2@2.2.2':
     dependencies:
-      '@noble/hashes': 1.6.1
+      '@noble/hashes': 1.7.0
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -7383,11 +7372,6 @@ snapshots:
   lru-queue@0.1.0:
     dependencies:
       es5-ext: 0.10.64
-
-  lucia@3.2.2:
-    dependencies:
-      '@oslojs/crypto': 1.0.1
-      '@oslojs/encoding': 1.1.0
 
   magic-string@0.25.9:
     dependencies:

@@ -1,13 +1,13 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
-import { auth } from "$lib/server/auth";
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
 import { getLoginSchema } from "$lib/validations";
 import { getConfig } from "$lib/server/config";
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
-import { LegacyScrypt } from "lucia";
 import type { PageServerLoad, Actions } from "./$types";
 import { createUser } from "$lib/server/user";
+import { verifyPasswordHash } from "$lib/server/password";
 
 export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     const config = await getConfig();
@@ -67,12 +67,9 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
                 }
             }
 
-            const session = await auth.createSession(user.id, {});
-            const sessionCookie = auth.createSessionCookie(session.id);
-            cookies.set(sessionCookie.name, sessionCookie.value, {
-                path: "/",
-                ...sessionCookie.attributes
-            });
+            const sessionToken = generateSessionToken();
+            const session = await createSession(sessionToken, user.id);
+            setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
             redirect(302, ref || "/");
         }
     }
@@ -111,17 +108,14 @@ export const actions: Actions = {
                 return fail(400, { username: loginData.data.username, password: "", incorrect: true });
             }
 
-            const isValid = await new LegacyScrypt().verify(maybeUser.hashedPassword, loginData.data.password);
+            const isValid = await verifyPasswordHash(maybeUser.hashedPassword, loginData.data.password);
             if (!isValid) {
                 return fail(400, { username: loginData.data.username, password: "", incorrect: true });
             }
 
-            const session = await auth.createSession(maybeUser.id, {});
-            const sessionCookie = auth.createSessionCookie(session.id);
-            cookies.set(sessionCookie.name, sessionCookie.value, {
-                path: "/",
-                ...sessionCookie.attributes
-            });
+            const sessionToken = generateSessionToken();
+            const session = await createSession(sessionToken, maybeUser.id);
+            setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
         } catch {
             // invalid credentials
             return fail(400, { username: loginData.data.username, password: "", incorrect: true });
