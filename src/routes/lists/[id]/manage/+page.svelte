@@ -7,16 +7,28 @@
     import { page } from "$app/stores";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ClearableInput from "$lib/components/ClearableInput.svelte";
+    import { rgbToHex } from "$lib/util";
 
     interface Props {
         data: PageData;
     }
 
     const { data }: Props = $props();
-    const defaultColor = "#a940bf"; // this is actually dynamic based on the theme, but easier to hardcode the value
     const list = $state(data.list);
-    let colorValue: string = $state(list.iconColor || defaultColor);
+    let colorElement: Element | undefined = $state();
+    let defaultColor: string = $derived.by(() => {
+        if (colorElement) {
+            const rgbColor = getComputedStyle(colorElement).backgroundColor;
+            const rgbValues = rgbColor.match(/\d+/g)?.map(Number.parseFloat);
+            return rgbValues ? rgbToHex(rgbValues[0], rgbValues[1], rgbValues[2]) : "";
+        }
+        return "";
+    });
+    let colorValue: string = $state(list.iconColor || (() => defaultColor)());
 
+    $effect(() => {
+        colorValue = defaultColor;
+    });
     $effect(() => {
         if ($page.form && !$page.form.success && $page.form.errors === null) {
             getToastStore().trigger({
@@ -99,6 +111,8 @@
         </button>
     </div>
 </form>
+
+<div bind:this={colorElement} class="bg-primary-400-500-token hidden"></div>
 
 <svelte:head>
     <title>{$t("wishes.manage-list")}</title>
