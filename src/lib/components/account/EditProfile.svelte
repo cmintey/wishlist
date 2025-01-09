@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { page } from "$app/stores";
-    import type { User } from "lucia";
+    import type { User } from "@prisma/client";
     import { t } from "svelte-i18n";
 
     interface Props {

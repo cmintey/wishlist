@@ -1,4 +1,4 @@
-import { auth } from "$lib/server/auth";
+import { invalidateUserSessions } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { hashToken } from "$lib/server/token";
 import { getResetPasswordSchema } from "$lib/validations";
@@ -6,8 +6,8 @@ import { error, fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import { env } from "$env/dynamic/private";
-import { LegacyScrypt } from "lucia";
 import { getFormatter } from "$lib/i18n";
+import { hashPassword } from "$lib/server/password";
 
 export const load: PageServerLoad = async ({ request }) => {
     const $t = await getFormatter();
@@ -80,8 +80,8 @@ export const actions: Actions = {
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const [_, hashedPassword] = await Promise.all([
-                    await auth.invalidateUserSessions(user.id),
-                    await new LegacyScrypt().hash(pwdData.data.newPassword)
+                    await invalidateUserSessions(user.id),
+                    await hashPassword(pwdData.data.newPassword)
                 ]);
                 await client.user.update({
                     data: {
