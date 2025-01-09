@@ -2,13 +2,13 @@ import { scryptAsync } from "@noble/hashes/scrypt";
 import { constantTimeEqual } from "@oslojs/crypto/subtle";
 import { decodeHex, encodeHexLowerCase } from "@oslojs/encoding";
 
-const generateScryptKey = async (data: string, salt: string) => {
+const generateScryptKey = async (data: string, salt: string, blockSize = 16) => {
     const encodedData = new TextEncoder().encode(data);
     const encodedSalt = new TextEncoder().encode(salt);
 
     const keyUint8Array = await scryptAsync(encodedData, encodedSalt, {
         N: 16384,
-        r: 8,
+        r: blockSize,
         p: 1,
         dkLen: 64
     });
@@ -19,14 +19,22 @@ const generateScryptKey = async (data: string, salt: string) => {
 export const hashPassword = async (password: string) => {
     const salt = encodeHexLowerCase(crypto.getRandomValues(new Uint8Array(16)));
     const key = await generateScryptKey(password.normalize("NFKC"), salt);
-    return `${salt}:${encodeHexLowerCase(key)}`;
+    return `s2:${salt}:${encodeHexLowerCase(key)}`;
 };
 
-export const verifyPasswordHash = async (password: string, hash: string) => {
+export const verifyPasswordHash = async (hash: string, password: string) => {
     const parts = hash.split(":");
-    if (parts.length !== 2) return false;
-
-    const [salt, key] = parts;
-    const targetKey = await generateScryptKey(password.normalize("NFKC"), salt);
-    return constantTimeEqual(targetKey, decodeHex(key));
+    if (parts.length === 2) {
+        const [salt, key] = parts;
+        const targetKey = await generateScryptKey(password.normalize("NFKC"), salt, 8);
+        const result = constantTimeEqual(targetKey, decodeHex(key));
+        return result;
+    }
+    if (parts.length !== 3) return false;
+    const [version, salt, key] = parts;
+    if (version === "s2") {
+        const targetKey = await generateScryptKey(password.normalize("NFKC"), salt);
+        return constantTimeEqual(targetKey, decodeHex(key));
+    }
+    return false;
 };
