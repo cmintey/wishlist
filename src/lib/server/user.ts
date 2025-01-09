@@ -3,6 +3,7 @@ import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 import { LegacyScrypt } from "lucia";
 import type { User } from "@prisma/client";
+import { create } from "./list";
 
 type UserMinimal = Pick<User, "username" | "email" | "name">;
 
@@ -47,13 +48,16 @@ export const createUser = async (user: UserMinimal, role: Role, password: string
     });
 
     if (groupId) {
-        await client.userGroupMembership.create({
-            data: {
-                groupId: groupId,
-                userId: newUser.id,
-                active: true
-            }
-        });
+        await Promise.all([
+            client.userGroupMembership.create({
+                data: {
+                    groupId: groupId,
+                    userId: newUser.id,
+                    active: true
+                }
+            }),
+            create(newUser.id, groupId)
+        ]);
     }
 
     if (signupTokenId) {

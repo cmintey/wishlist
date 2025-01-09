@@ -20,6 +20,11 @@ const config = {
                 custom: [theme]
             }
         })
+    ],
+    safelist: [
+        // The following are classes defined in i18n files and are used
+        "text-secondary-700-200-token",
+        "font-bold"
     ]
 } satisfies Config;
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { page } from "$app/stores";
     import { createEventDispatcher } from "svelte";
     import type { FullItem, PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
@@ -16,10 +15,10 @@
     const dispatch = createEventDispatcher();
 </script>
 
-{#if !onPublicList && user?.username === $page.params?.username}
+{#if !onPublicList && item.userId === user?.id}
     <div></div>
 {:else if item.pledgedBy || item.publicPledgedBy}
-    {#if !onPublicList && item.pledgedBy?.username === user?.username}
+    {#if !onPublicList && item.pledgedBy?.id === user?.id}
         <div class="flex flex-row space-x-2 md:space-x-4">
             <button
                 class="variant-ghost-secondary btn btn-sm md:btn"
@@ -41,7 +40,7 @@
                 <span>{$t("wishes.purchased")}</span>
             </label>
         </div>
-    {:else if showName}
+    {:else if showName && (item.publicPledgedBy?.name || item.pledgedBy?.name)}
         <span>
             {$t("wishes.claimed-by", {
                 values: { name: item.publicPledgedBy ? item.publicPledgedBy?.name : item.pledgedBy?.name }

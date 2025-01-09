@@ -8,54 +8,57 @@ import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
+import { getById } from "$lib/server/list";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, url }) => {
     const $t = await getFormatter();
 
     if (!locals.user) {
-        redirect(302, `/login?ref=/wishlists/${params.username}/new`);
+        redirect(302, `/login?ref=${url.pathname}`);
     }
+
     const activeMembership = await getActiveMembership(locals.user);
+    const list = await getById(params.id);
+    if (!list) {
+        error(404, $t("errors.list-not-found"));
+    }
+    if (list.groupId !== activeMembership.groupId) {
+        error(404, $t("errors.user-not-in-group"));
+    }
+
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && locals.user.username !== params.username) {
+    if (!config.suggestions.enable && locals.user.id !== list?.owner.id) {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
-    const listOwner = await client.user.findFirst({
-        where: {
-            username: params.username,
-            UserGroupMembership: {
-                some: {
-                    group: {
-                        id: activeMembership.groupId
-                    }
-                }
-            }
-        },
-        select: {
-            username: true,
-            name: true
-        }
-    });
-
-    if (!listOwner) error(404, $t("errors.user-not-in-group"));
-
     return {
         owner: {
-            name: listOwner.name,
-            isMe: listOwner.username === locals.user.username
+            name: list.owner.name,
+            isMe: list.owner.id === locals.user.id
         },
-        suggestion: locals.user.username !== params.username,
+        suggestion: list.owner.id !== locals.user.id,
         suggestionMethod: config.suggestions.method
     };
 };
 
 export const actions: Actions = {
     default: async ({ request, locals, params }) => {
-        if (!locals.user) error(401);
+        const $t = await getFormatter();
+
+        if (!locals.user) {
+            return fail(401, { success: false, message: $t("errors.unauthenticated") });
+        }
 
         const activeMembership = await getActiveMembership(locals.user);
+
+        const list = await getById(params.id);
+        if (!list) {
+            return fail(404, { success: false, message: $t("errors.list-not-found") });
+        }
+        if (list.groupId !== activeMembership.groupId) {
+            return fail(404, { success: false, message: $t("errors.user-not-in-group") });
+        }
         const config = await getConfig(activeMembership.groupId);
 
         const form = await request.formData();
@@ -74,12 +77,6 @@ export const actions: Actions = {
 
         const filename = await createImage(locals.user.username, image);
 
-        const user = await client.user.findUniqueOrThrow({
-            where: {
-                username: params.username
-            }
-        });
-
         let itemPriceId = null;
         if (price && currency) {
             await client.itemPrice
@@ -94,33 +91,46 @@ export const actions: Actions = {
 
         const item = await client.item.create({
             data: {
-                userId: user.id,
+                userId: list.owner.id,
                 name,
                 url,
                 note,
                 imageUrl: filename || imageUrl,
                 addedById: locals.user.id,
-                approved: params.username === locals.user.username || config.suggestions.method !== "approval",
+                approved: list.owner.id === locals.user.id || config.suggestions.method !== "approval",
                 groupId: activeMembership.groupId,
-                itemPriceId
+                itemPriceId,
+                lists: {
+                    connect: {
+                        id: list.id
+                    }
+                }
             },
             include: {
                 addedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 pledgedBy: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
                     }
                 },
                 user: {
                     select: {
+                        id: true,
                         username: true,
                         name: true
+                    }
+                },
+                lists: {
+                    select: {
+                        id: true
                     }
                 },
                 itemPrice: true
@@ -129,6 +139,7 @@ export const actions: Actions = {
 
         itemEmitter.emit(SSEvents.item.create, item);
 
-        redirect(302, `/wishlists/${params.username}`);
+        const ref = new URL(request.url).searchParams.get("ref");
+        redirect(302, ref || "/");
     }
 };

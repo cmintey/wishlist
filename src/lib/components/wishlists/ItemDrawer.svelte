@@ -2,7 +2,7 @@
     import { getDrawerStore } from "@skeletonlabs/skeleton";
     import type { FullItem, PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
-    import ApprovalButtons from "./ItemCard/ApprovalButtons.svelte";
+    import ManageButtons from "./ItemCard/ManageButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
     import { t } from "svelte-i18n";
 
@@ -71,7 +71,7 @@
             on:unclaim={() => handleClaim(true)}
             on:purchase={(event) => handlePurchased(event.detail.purchased)}
         />
-        <ApprovalButtons
+        <ManageButtons
             {item}
             {user}
             on:approve={() => handleApproval(true)}

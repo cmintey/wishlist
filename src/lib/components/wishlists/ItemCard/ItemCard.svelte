@@ -2,6 +2,7 @@
     export type PartialUser = {
         username: string;
         name: string;
+        id: string;
     };
     export type PublicUser = {
         username: string;
@@ -26,7 +27,6 @@
     } from "@skeletonlabs/skeleton";
     import type { Item, ItemPrice } from "@prisma/client";
     import { ItemAPI } from "$lib/api/items";
-    import ApprovalButtons from "./ApprovalButtons.svelte";
     import ClaimButtons from "./ClaimButtons.svelte";
     import { goto, invalidateAll } from "$app/navigation";
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
@@ -34,10 +34,11 @@
     import { formatPrice } from "$lib/price-formatter";
     import { page } from "$app/stores";
     import { t } from "svelte-i18n";
+    import ManageButtons from "./ManageButtons.svelte";
 
     interface Props {
         item: FullItem;
-        user?: (PartialUser & { id: string }) | undefined;
+        user?: PartialUser;
         showClaimedName?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
@@ -137,7 +138,7 @@
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
     const handleEdit = () => {
-        goto(`/wishlists/${item.user?.username}/edit/${item.id}?ref=${$page.url}`);
+        goto(`/items/${item.id}/edit?ref=${$page.url.pathname}`);
     };
 
     const handleClaim = async (unclaim = false) => {
@@ -272,7 +273,7 @@
                 on:purchase={(event) => handlePurchased(event.detail.purchased)}
             />
 
-            <ApprovalButtons
+            <ManageButtons
                 {item}
                 {user}
                 on:approve={() => handleApproval(true)}
