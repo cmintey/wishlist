@@ -48,7 +48,10 @@
         "invite-failed-to-send": "Nie udało się wysłać zaproszenia: {errorMessage}",
         "product-information-not-available": "Informacje o produkcie niedostępne",
         "this-instance-is-invite-only": "Aby dołączyć do tej Listy Życzeń musisz uzyskać zaproszenie",
-        "reset-token-not-found": "Błędny link resetowania hasła"
+        "reset-token-not-found": "Błędny link resetowania hasła",
+        "list-not-found": "Nie znaleziono listy",
+        "unable-to-update-list-settings": "Nie udało się zaktualizować ustawień listy",
+        "user-must-be-in-the-correct-group": "Użytkownik musi być w poprawnej grupie"
     },
     "general": {
         "weak": "Słabe",
@@ -100,7 +103,10 @@
         "user-count": "Liczba użytkowników",
         "wishlists-cleared": "Wyczyszczono listy.",
         "processing": "Przetwarzanie…",
-        "smtp-not-enabled-implication": "Skonfigurowanie serwera poczty nie jest wymagane, ale ma to wpływ na niektóre funkcje serwisu. Użytkownicy nie będą mogli samodzielnie resetować hasła, będziesz musiał ręcznie generować i wysyłać im w tym celu linki."
+        "smtp-not-enabled-implication": "Skonfigurowanie serwera poczty nie jest wymagane, ale ma to wpływ na niektóre funkcje serwisu. Użytkownicy nie będą mogli samodzielnie resetować hasła, będziesz musiał ręcznie generować i wysyłać im w tym celu linki.",
+        "icon": "Ikona",
+        "icon-bg-color": "Kolor tła ikony",
+        "loading": "Wczytywanie..."
     },
     "setup": {
         "global-settings-subtext": "Te ustawienia zostaną zastosowane dla wszystkich utworzonych grup. Niektóre ustawienia mogą być nadpisane przez poszczególne grupy.",
@@ -195,7 +201,7 @@
         "my-wishes": "Moje życzenia",
         "note-placeholder": "rozmiar, kolor, itp.",
         "notes": "Uwagi",
-        "nothing-claimed-yet": "Niczego jeszcze nie zaklepano",
+        "nothing-claimed-yet": "Brak rezerwacji",
         "price": "Cena",
         "price-high-to-low": "Cena malejąco",
         "price-low-to-high": "Cena rosnąco",
@@ -212,7 +218,11 @@
         "view-wishes": "Zobacz życzenia",
         "wishes-for": "{listOwner} - lista życzeń",
         "claim": "Zaklep",
-        "create-for": "Dodaj życzenie w imieniu {listOwner}"
+        "create-for": "Dodaj życzenie w imieniu {listOwner}",
+        "manage-list": "Zarządzaj listą",
+        "preview": "Podgląd",
+        "anonymous": "Anonimowy",
+        "manage": "Zarządzaj"
     },
     "a11y": {
         "refresh-item-data": "odśwież dane przedmiotu",
@@ -232,7 +242,10 @@
         "increase-priority": "zwiększ priorytet {name}",
         "menu": "menu",
         "two-people-looking-in-an-empty-box": "Dwie osoby zaglądające do pustego pudełka",
-        "wishlist-logo": "Logo Wishlist"
+        "wishlist-logo": "Logo Wishlist",
+        "clear-color-field": "wyczyść pole koloru",
+        "clear-name-field": "wyczyść pole z imieniem",
+        "clear-icon-field": "wyczyść pole ikony"
     },
     "admin": {
         "password-strength-requirement": "Wymagana siły hasła",
@@ -255,7 +268,7 @@
         "account": "Konto",
         "actions": "Akcje",
         "add-remove-manager-title": "{isManager, select, true {Dodaj} other {Usuń}} Managera",
-        "admin": "Admin",
+        "admin": "Zarządzaj",
         "administration": "Zarządzanie",
         "claims": "Rezerwacje",
         "delete-user": "Usuń Użytkownika",
@@ -286,9 +299,9 @@
         "users": "Użytkownicy",
         "version": "Wersja: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "clear-lists-confirmation": "Czy na pewno chcesz wyczyścić {claimedOnly, select, true {zaklepane przedmioty} other {wszystkie listy}} {groupSpecific, select, true {w tej grupie} other {we <b>wszystkich grupach</b>}}? <b>Ta czynność jest nieodwracalna!</b>",
-        "add-remove-manager-message": "Czy na pewno chcesz {isManager, select, true {dodać} other {usunąć}} tego użytkownika z managerów grupy?",
+        "add-remove-manager-message": "Czy na pewno chcesz {isManager, select, true {nadać} other {odebrać}} uprawnienia managera temu użytkownikowi?",
         "build-date": "Data zbudowania: {buildDate}",
-        "clear-lists": "Wyczyść {groupSpecific, select, true {} other {Wszystko}} {claimedOnly, select, true {zaklepane przedmioty} other {listy}}",
+        "clear-lists": "Wyczyść {groupSpecific, select, true {} other {wszystkie}} {claimedOnly, select, true {zaklepane przedmioty} other {listy}}",
         "registry-mode-alert-text": "Ta grupa działa w <b>trybie pojedynczej listy</b>. Nie można w nim dodawać innych członków. Aby uzyskać link do udostępniania listy przejdź na jej stronę główną upewniając się że odpowiednia grupa jest wybrana w menu.",
         "remove-admin": "Zabierz uprawnienia administratora",
         "smtp-from-name": "Nazwa nadawcy",
@@ -298,5 +311,6 @@
     "app": {
         "home": "Główna",
         "my-claims": "Moje rezerwacje"
-    }
+    },
+    "unable-to-load-icons": "Nie udało się wczytać ikon."
 }
