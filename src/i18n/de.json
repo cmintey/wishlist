@@ -17,7 +17,10 @@
         "refresh-item-data": "Artikeldaten neu laden",
         "toggle-manager": "{isManager, select, true {Entferne} other {Ernenne}} {user} als Leiter",
         "toggle-password-visibility": "Passwort-Sichtbarkeit umschalten",
-        "wishlist-logo": "Wishlist Logo"
+        "wishlist-logo": "Wishlist Logo",
+        "clear-color-field": "entferne ausgwählte Farbe",
+        "clear-icon-field": "entferne ausgewähltes Icon",
+        "clear-name-field": "lösche eigenen Namen"
     },
     "admin": {
         "administration": "Administration",
@@ -133,7 +136,11 @@
         "reorder": "Anordnung bearbeiten",
         "unable-to-update-item-ordering": "Artikelreihenfolge konnte nicht aktualisiert werden",
         "unclaim": "Reservierung aufheben",
-        "unclaimed": "Nicht reserviert"
+        "unclaimed": "Nicht reserviert",
+        "anonymous": "Anonym",
+        "manage": "Bearbeiten",
+        "manage-list": "Bearbeite Liste",
+        "preview": "Vorschau"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -184,7 +191,10 @@
         "username-already-in-use": "{username} bereits in Verwendung",
         "username-must-not-be-blank": "Benutzername darf nicht leer sein",
         "username-not-specified": "Benutzername nicht angegeben",
-        "valid-url-not-provided": "Keine gültige URL angegeben"
+        "valid-url-not-provided": "Keine gültige URL angegeben",
+        "list-not-found": "Liste nicht gefunden",
+        "user-must-be-in-the-correct-group": "Benutzer muss in der korrekten Gruppe sein",
+        "unable-to-update-list-settings": "Konnte die Einstellungen der Liste nicht aktualisieren"
     },
     "auth": {
         "log-in": "Anmelden",
@@ -264,7 +274,10 @@
         "very-weak": "Sehr schwach",
         "weak": "Schwach",
         "wishlists-cleared": "Wunschlisten geleert.",
-        "toggle-dark-mode": "Hellen oder dunklen Modus umschalten"
+        "toggle-dark-mode": "Hellen oder dunklen Modus umschalten",
+        "icon": "Icon",
+        "loading": "Lade...",
+        "icon-bg-color": "Icon Hintergrundfarbe"
     },
     "app": {
         "home": "Start",
@@ -298,5 +311,6 @@
         "pw-reset-body": "Wenn du das Zurücksetzen deines Passworts angefragt hast, klicke auf den folgenden Link um den Prozess abzuschließen. Wenn du die Anfrage nicht gestellt hast, kann du diese E-Mail einfach ignorieren.",
         "invite-body": "Du wurdest eingeladen Wishlist beizutreten! Um die Einladung anzunehmen, klicke auf den untenstehenden Link.",
         "test-body": "Wenn du dies hier liest, dann Glückwunsch! Die E-Mail Einstellungen wurden korrekt konfiguriert!"
-    }
+    },
+    "unable-to-load-icons": "Konnte Icons nicht laden."
 }
