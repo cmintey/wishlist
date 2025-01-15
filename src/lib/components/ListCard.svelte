@@ -19,7 +19,7 @@
 
     let { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
 
-    let listName = $derived(list.name || `${list.owner.name}'s Wishes`);
+    let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
     let iconColor = $derived(list.iconColor);
     let elementTag = $derived(preventNavigate ? "div" : "a");
     let element: HTMLElement | undefined = $state();

@@ -3,7 +3,7 @@
     import type { Item, ItemPrice } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
-    import { getToastStore } from "@skeletonlabs/skeleton";
+    import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { t } from "svelte-i18n";
@@ -25,6 +25,8 @@
     let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
+    let files: FileList | undefined = $state();
+    let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -167,7 +169,21 @@
 
     <label class="col-span-1 md:col-span-2" for="image">
         <span>{$t("wishes.upload-image")}</span>
-        <input id="image" name="image" class="input" accept="image/*" type="file" />
+        <div
+            class="bg-surface-200-700-token border-surface-400-500-token grid grid-cols-[auto_1fr] items-center gap-2 border-token rounded-token"
+        >
+            <FileButton
+                id="image"
+                name="image"
+                class="py-1 pl-1"
+                accept="image/*"
+                button="btn btn-sm variant-filled"
+                bind:files
+            >
+                {$t("general.select-file")}
+            </FileButton>
+            <span>{uploadedImageName}</span>
+        </div>
     </label>
 
     <label class="col-span-1 md:col-span-4" for="image_url">

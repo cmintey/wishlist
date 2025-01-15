@@ -90,5 +90,5 @@
 </form>
 
 {#if form?.success && form?.url}
-    <TokenCopy url={form.url}>Password reset link</TokenCopy>
+    <TokenCopy url={form.url}>{$t("admin.password-reset-link")}</TokenCopy>
 {/if}

@@ -48,7 +48,9 @@
                 else await groupAPI.removeManager(userId);
 
                 await invalidateAll();
-            }
+            },
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextConfirm: $t("general.confirm")
         });
     };
 
