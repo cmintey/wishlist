@@ -106,7 +106,9 @@
         "smtp-not-enabled-implication": "Skonfigurowanie serwera poczty nie jest wymagane, ale ma to wpływ na niektóre funkcje serwisu. Użytkownicy nie będą mogli samodzielnie resetować hasła, będziesz musiał ręcznie generować i wysyłać im w tym celu linki.",
         "icon": "Ikona",
         "icon-bg-color": "Kolor tła ikony",
-        "loading": "Wczytywanie..."
+        "loading": "Wczytywanie...",
+        "select-file": "Wybierz plik",
+        "no-file-selected": "Nie wybrano pliku"
     },
     "setup": {
         "global-settings-subtext": "Te ustawienia zostaną zastosowane dla wszystkich utworzonych grup. Niektóre ustawienia mogą być nadpisane przez poszczególne grupy.",
@@ -306,7 +308,8 @@
         "remove-admin": "Zabierz uprawnienia administratora",
         "smtp-from-name": "Nazwa nadawcy",
         "public-signup": "Otwarta rejestracja",
-        "suggestions-auto-approve": "Potwierdzaj automatycznie"
+        "suggestions-auto-approve": "Potwierdzaj automatycznie",
+        "password-reset-link": "Link do resetu hasła"
     },
     "app": {
         "home": "Główna",
