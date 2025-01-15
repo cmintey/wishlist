@@ -18,7 +18,7 @@
 
     const modalStore = getModalStore();
 
-    type UserData = (typeof data.group.users)[number];
+    type UserData = PageData["group"]["users"][number];
 
     const groupAPI = new GroupAPI($page.params.groupId);
     const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];

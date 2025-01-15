@@ -8,7 +8,7 @@
     interface Props {
         data: PageData;
     }
-    type ListData = (typeof data)["otherLists"][0];
+    type ListData = PageData["otherLists"][0];
 
     let { data }: Props = $props();
 

@@ -5,7 +5,7 @@
     interface Props {
         data: Record<string, unknown>[];
         keys: string[];
-        result: typeof data;
+        result: Record<string, unknown>[];
     }
 
     let { data, keys, result = $bindable() }: Props = $props();
