@@ -14,15 +14,15 @@
     $effect(() => {
         if (page.form && !page.form.success && page.form.errors === null) {
             getToastStore().trigger({
-                message: $t("errors.unable-to-update-list-settings"),
+                message: $t("errors.unable-to-create-list"),
                 background: "variant-filled-error"
             });
         }
     });
 </script>
 
-<ManageListForm {data} persistButtonName={$t("general.save")} />
+<ManageListForm {data} persistButtonName={$t("general.create")} />
 
 <svelte:head>
-    <title>{$t("wishes.manage-list")}</title>
+    <title>{$t("wishes.create-list")}</title>
 </svelte:head>
