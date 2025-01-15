@@ -3,7 +3,7 @@
     import Avatar from "./Avatar.svelte";
     import { t } from "svelte-i18n";
 
-    interface ListWithCounts extends Pick<List, "id" | "name" | "icon" | "iconColor"> {
+    interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor">> {
         owner: Pick<User, "name" | "username" | "picture">;
         itemCount?: number;
         claimedCount?: number;
