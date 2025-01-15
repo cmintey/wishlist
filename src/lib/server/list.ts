@@ -1,6 +1,6 @@
 import { init } from "@paralleldrive/cuid2";
 import { client } from "./prisma";
-import { createFilter, createSorts } from "./sort-filter-util";
+import { createFilter } from "./sort-filter-util";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -11,13 +11,20 @@ export interface GetItemsOptions {
     loggedInUserId: string | null;
 }
 
-export const create = async (ownerId: string, groupId: string) => {
+export interface ListProperties {
+    name?: string | null;
+    icon?: string | null;
+    iconColor?: string | null;
+}
+
+export const create = async (ownerId: string, groupId: string, otherData?: ListProperties) => {
     const cuid2 = init({ length: 10 });
     return await client.list.create({
         data: {
             id: cuid2(),
             ownerId,
-            groupId
+            groupId,
+            ...otherData
         }
     });
 };
@@ -45,13 +52,6 @@ export const getById = async (id: string) => {
 
 export const getItems = async (listId: string, options: GetItemsOptions) => {
     const filter = createFilter(options.filter);
-    const orderBy = createSorts(options.sort, options.sortDir);
-
-    filter.lists = {
-        every: {
-            id: listId
-        }
-    };
 
     // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
     if (
@@ -69,44 +69,63 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
         };
     }
 
-    const items = await client.item.findMany({
-        where: filter,
-        orderBy: orderBy,
+    const list = await client.list.findUnique({
+        where: {
+            id: listId,
+            items: {
+                every: filter
+            }
+        },
         include: {
-            addedBy: {
-                select: {
-                    id: true,
-                    username: true,
-                    name: true
+            items: {
+                include: {
+                    addedBy: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true
+                        }
+                    },
+                    pledgedBy: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true
+                        }
+                    },
+                    publicPledgedBy: {
+                        select: {
+                            username: true,
+                            name: true
+                        }
+                    },
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true
+                        }
+                    },
+                    itemPrice: true
                 }
-            },
-            pledgedBy: {
-                select: {
-                    id: true,
-                    username: true,
-                    name: true
-                }
-            },
-            publicPledgedBy: {
-                select: {
-                    username: true,
-                    name: true
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    username: true,
-                    name: true
-                }
-            },
-            itemPrice: true
+            }
         }
     });
 
-    if (options.sort === "price" && options.sortDir === "asc") {
-        // need to re-sort when descending since Prisma can't order with nulls last
-        items.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+    if (!list) {
+        return [];
+    }
+
+    const items = list?.items;
+
+    if (options.sort === "price") {
+        if (options.sortDir === "desc") {
+            items.sort((a, b) => (b.itemPrice?.value ?? -Infinity) - (a.itemPrice?.value ?? -Infinity));
+        } else {
+            items.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+        }
+    } else {
+        items.sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity));
     }
     return items;
 };
