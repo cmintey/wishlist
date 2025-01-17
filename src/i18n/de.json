@@ -81,7 +81,8 @@
         "wishlist-mode-alert": "In dieser Gruppe sind noch weitere Mitglieder. Der Modus kann nicht geändert werden, bis alle Mitglieder bis auf eins entfernt wurden.",
         "wishlist-mode-registry": "Register",
         "wishlist-mode-wishlist": "Wunschliste",
-        "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann."
+        "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann.",
+        "password-reset-link": "Passwort zurücksetzen Link"
     },
     "wishes": {
         "filter": "Filter",
@@ -277,7 +278,9 @@
         "toggle-dark-mode": "Hellen oder dunklen Modus umschalten",
         "icon": "Icon",
         "loading": "Lade...",
-        "icon-bg-color": "Icon Hintergrundfarbe"
+        "icon-bg-color": "Icon Hintergrundfarbe",
+        "select-file": "Datei auswählen",
+        "no-file-selected": "Keine Datei ausgewählt"
     },
     "app": {
         "home": "Start",
