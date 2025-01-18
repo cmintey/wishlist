@@ -24,6 +24,7 @@ export const initLang = async () => {
     register("ru", () => import("../i18n/ru.json"));
     register("pt", () => import("../i18n/pt.json"));
     register("pl", () => import("../i18n/pl.json"));
+    register("nl", () => import("../i18n/nl.json"));
 
     await init({
         fallbackLocale: defaultLocale,
