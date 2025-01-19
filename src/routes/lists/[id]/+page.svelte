@@ -3,7 +3,7 @@
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
     import { goto, invalidate } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { onDestroy, onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { quintOut } from "svelte/easing";
@@ -101,7 +101,7 @@
     };
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource(`${$page.url.pathname}/events`);
+        eventSource = new EventSource(`${page.url.pathname}/events`);
         eventSource.addEventListener(SSEvents.item.update, (e) => {
             const message = JSON.parse(e.data) as Item;
             updateItem(message);
@@ -211,7 +211,7 @@
     {#if data.list.owner.isMe}
         <div class="flex flex-row flex-wrap space-x-4">
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
-            <ManageListChip onclick={() => goto(`${new URL($page.url).pathname}/manage`)} />
+            <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
         </div>
     {/if}
 </div>
@@ -310,7 +310,7 @@
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
-        onclick={() => goto(`${$page.url.pathname}/create-item?ref=${$page.url.pathname}`)}
+        onclick={() => goto(`${page.url.pathname}/create-item?ref=${page.url.pathname}`)}
     >
         <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>

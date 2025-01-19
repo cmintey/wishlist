@@ -4,6 +4,9 @@
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
     import { t } from "svelte-i18n";
     import ListCard from "$lib/components/ListCard.svelte";
+    import { isInstalled } from "$lib/stores/is-installed";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/state";
 
     interface Props {
         data: PageData;
@@ -34,6 +37,16 @@
         {/await}
     {/each}
 </div>
+
+<button
+    class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
+    class:bottom-24={$isInstalled}
+    class:bottom-4={!$isInstalled}
+    aria-label="add item"
+    onclick={() => goto(`${page.url.pathname}/create`)}
+>
+    <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
+</button>
 
 <svelte:head>
     <title>{$t("wishes.lists")}</title>
