@@ -314,6 +314,6 @@
         "approve": "Одобрить",
         "approval-required": "{listOwner} должен будет одобрить ваше предложение, прежде чем оно будет добавлено в свой список.",
         "hang-tight-gathering-product-data": "Ожидайте, собираем данные о продукте",
-        "unable-to-update-item-ordering": "Невозможно обновить порядок элементов."
+        "unable-to-update-item-ordering": "Невозможно обновить порядок элементов"
     }
 }
