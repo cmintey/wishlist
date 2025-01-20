@@ -2,8 +2,34 @@
     "a11y": {
         "a-person-looking-at-an-empty-board": "Человек, смотрящий на пустую доску",
         "cancel-editing": "отменить редактирование",
-        "close": "Закрыть",
-        "decrease-priority": "Понизить приоритет для {name}",
-        "clear-url-field": "очистить поле URL"
+        "close": "закрыть",
+        "decrease-priority": "понизить приоритет для {name}",
+        "clear-url-field": "очистить поле URL",
+        "clear-color-field": "очистить цвет поля",
+        "clear-icon-field": "очистить поле иконки",
+        "clear-name-field": "очистить поле имени",
+        "upload-profile-image": "загрузить изображение профиля",
+        "increase-priority": "повысить приоритет для {name}",
+        "menu": "меню",
+        "edit-group-name": "редактировать имя группы",
+        "refresh-item-data": "обновить данные элемента",
+        "password-strength": "Надежность пароля",
+        "remove-user-from-group": "удалить {user} из группы",
+        "save-group-name": "сохранить название группы",
+        "toggle-password-visibility": "переключить видимость пароля",
+        "two-people-looking-in-an-empty-box": "Два человека смотрят в пустую коробку",
+        "wishlist-logo": "Логотип списка желаний",
+        "drag-handle": "переместить вручную для {name}"
+    },
+    "admin": {
+        "actions": "Действия",
+        "add-member": "Добавить члена",
+        "about": "О сервисе",
+        "administration": "Администрация",
+        "admin": "Администратор",
+        "claims": "Брони",
+        "build-date": "Дата сборки: {buildDate}",
+        "add-remove-manager-message": "Вы уверены, что хотите {isManager, select, true {add}other {remove}} этого пользователя в качестве менеджера группы?",
+        "account": "Аккаунт"
     }
 }
