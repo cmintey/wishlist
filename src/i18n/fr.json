@@ -40,7 +40,7 @@
         "username-must-not-be-blank": "Le nom d'utilisateur ne peut pas être vide",
         "invalid-currency-code": "Le code pour la devise est invalide. Vous pouvez trouver la liste des codes <a href=\"https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)\" target=\"_blank\" rel=\"noopener noreferrer\">ici</a>",
         "must-specify-asset-id": "Vous devez spécifiez l'identifiant de l'objet",
-        "must-specify-group-name-in-body": "Vous devez spécifiez le nom du groupe dans body",
+        "must-specify-group-name-in-body": "Vous devez spécifier le nom du groupe dans body",
         "must-specify-url-in-query-parameters": "Vous devez spécifiez l'url dans les paramètres de la requête",
         "name-must-not-be-blank": "Le nom ne peut pas être vide",
         "suggestions-are-disabled": "Les suggestions sont désactivées",
@@ -48,7 +48,10 @@
         "this-instance-is-invite-only": "Cette espace est sur invitation uniquement",
         "user-already-exists": "Un utilisateur avec ce nom ou cet email existe déjà",
         "reset-token-not-found": "Le jeton de réinitilisation est introuvable",
-        "something-went-wrong": "Quelque chose n'a pas fonctionné"
+        "something-went-wrong": "Quelque chose n'a pas fonctionné",
+        "list-not-found": "Liste non trouvée",
+        "unable-to-update-list-settings": "Impossible de mettre à jour les paramètres de la liste",
+        "user-must-be-in-the-correct-group": "L'utilisateur doit être dans le bon groupe"
     },
     "admin": {
         "version": "Version : <a href=\"https ://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -109,13 +112,14 @@
         "public-signup": "Inscription publique",
         "registry-mode-alert-text": "Ce groupe est en <b>Registry Mode</b>. Aucun membre supplémentaire ne peut être ajouté dans ce mode. Vous pouvez obtenir un lien public vers votre liste sur la page de celle-ci.",
         "remove-admin": "Retirer l'administrateur",
-        "remove-member-message": "Êtes-vous sûr de vouloir supprimer cet utilisateur du groupe?\","
+        "remove-member-message": "Êtes-vous sûr de vouloir supprimer cet utilisateur du groupe?\",",
+        "password-reset-link": "Lien de réinitialisation du mot de passe"
     },
     "auth": {
         "password": "Mot de passe",
         "name": "Nom",
         "confirm-password": "Confirmez le mot de passe",
-        "contact-admin": "Contactez l'administrateur pour réinitialiser le mot de passe.",
+        "contact-admin": "Contactez l'administrateur pour réinitialiser votre mot de passe.",
         "create-an-account": "Créer un compte",
         "check-your-email": "Vérifiez vos emails et cliquez sur le lien pour réinitialiser votre mot de passe.",
         "click-here-to-login": "Cliquez ici pour vous connecter.",
@@ -157,7 +161,10 @@
         "wishlist-logo": "Wishlist logo",
         "drag-handle": "tirer et maintenir pour {name}",
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} comme administrateur",
-        "a-person-looking-at-an-empty-board": "Quelqu'un regardant une liste vide"
+        "a-person-looking-at-an-empty-board": "Quelqu'un regardant une liste vide",
+        "clear-color-field": "effacer le champ couleur",
+        "clear-icon-field": "effacer le champ icône",
+        "clear-name-field": "effacer le champ nom"
     },
     "app": {
         "my-claims": "Mes réservations",
@@ -226,7 +233,12 @@
         "group-created-successfully": "Groupe créé avec succès !",
         "mode": "Mode",
         "strong": "Fort",
-        "name-optional": "Nom (optionnel)"
+        "name-optional": "Nom (optionnel)",
+        "icon": "Icône",
+        "icon-bg-color": "Couleur de fond de l'icône",
+        "loading": "Chargement...",
+        "no-file-selected": "Aucun fichier sélectionné",
+        "select-file": "Sélectionner un fichier"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -270,6 +282,34 @@
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Avant que vous puissiez réserver l'article, nous avons juste besoin d'une chose.",
         "claim-details": "Détails de la réservation",
         "are-you-sure-you-wish-to-delete-name": "Êtes-vous certain de vouloir supprimer {name} ?",
-        "claim": "Réserver"
-    }
+        "claim": "Réserver",
+        "item-name": "Nom de l'élément",
+        "item-approved": "{name} a été {approved, select, true {approuvé} other {refusé}}",
+        "item-url": "URL de l'élément",
+        "manage": "Gérer",
+        "price-high-to-low": "Prix : plus cher à moins cher",
+        "price-low-to-high": "Prix : moins cher au plus cher",
+        "public-url": "URL publique",
+        "unable-to-update-item-ordering": "Impossible de mettre à jour l'ordre des éléments",
+        "wishes-for": "Souhaits de {listOwner}",
+        "anonymous": "Anonyme",
+        "image-url": "URL de l'image",
+        "item-was-deleted": "{name} a été supprimé",
+        "manage-list": "Gérer la liste",
+        "my-wishes": "Mes souhaits",
+        "no-wishes-yet": "Aucun souhait pour l'instant",
+        "note-placeholder": "c'est-à-dire la taille, la couleur, etc.",
+        "preview": "Aperçu",
+        "price": "Prix",
+        "purchased": "Acheté",
+        "updated-success": "Élément mis à jour avec succès",
+        "upload-image": "Envoyer une image",
+        "url-placeholder": "Entrez une URL pour récupérer les données de l'élément",
+        "view-wishes": "Voir les souhaits",
+        "notes": "Notes",
+        "lists": "Listes",
+        "reorder": "Réorganiser",
+        "share": "Partager la liste"
+    },
+    "unable-to-load-icons": "Impossible de charger les icônes."
 }
