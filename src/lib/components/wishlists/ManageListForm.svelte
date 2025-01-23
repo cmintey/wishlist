@@ -6,6 +6,7 @@
     import ClearableInput from "$lib/components/ClearableInput.svelte";
     import { rgbToHex } from "$lib/util";
     import type { List, User } from "@prisma/client";
+    import { getModalStore } from "@skeletonlabs/skeleton";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name">> {
         owner: Pick<User, "name" | "username" | "picture">;
@@ -16,9 +17,11 @@
             list: ListProps;
         };
         persistButtonName: string;
+        editing?: boolean;
     }
 
-    const { data, persistButtonName }: Props = $props();
+    const { data, persistButtonName, editing = false }: Props = $props();
+    const modalStore = getModalStore();
     let list = $state(data.list);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived.by(() => {
@@ -31,16 +34,39 @@
     });
     let colorValue: string | null = $state((() => defaultColor)());
 
+    const handleDelete = async () => {
+        return new Promise((resolve, reject) => {
+            return modalStore.trigger({
+                type: "confirm",
+                title: $t("general.please-confirm"),
+                body: $t("wishes.delete-list-confirmation"),
+                response(confirmed: boolean) {
+                    if (!confirmed) {
+                        reject();
+                    } else {
+                        resolve(null);
+                    }
+                },
+                buttonTextCancel: $t("general.cancel"),
+                buttonTextConfirm: $t("general.confirm")
+            });
+        });
+    };
+
     $effect(() => {
         if (!colorValue) colorValue = defaultColor;
     });
 </script>
 
 <form
+    action="?/persist"
     method="POST"
-    use:enhance={(e) => {
+    use:enhance={async (e) => {
         if (e.formData.get("iconColor") === defaultColor) {
             e.formData.delete("iconColor");
+        }
+        if (e.action.search === "?/delete") {
+            await handleDelete().catch(() => e.cancel());
         }
     }}
 >
@@ -103,9 +129,16 @@
         <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
             {$t("general.cancel")}
         </button>
-        <button class="variant-filled-primary btn w-min" type="submit">
-            {persistButtonName}
-        </button>
+        <div class="flex flex-row space-x-4">
+            {#if editing}
+                <button class="variant-filled-error btn w-min" formaction="?/delete" type="submit">
+                    {$t("wishes.delete")}
+                </button>
+            {/if}
+            <button class="variant-filled-primary btn w-min" type="submit">
+                {persistButtonName}
+            </button>
+        </div>
     </div>
 </form>
 
