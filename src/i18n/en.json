@@ -189,6 +189,7 @@
     },
     "general": {
         "add-user": "Add User",
+        "all": "All",
         "cancel": "Cancel",
         "cannot-delete-default-group-msg": "You cannot delete the default group. Please change the default group before deleting this group.",
         "change-group": "Change Group",
@@ -284,6 +285,7 @@
         "create-list": "Create List",
         "default-sort": "Default Sort",
         "delete": "Delete",
+        "delete-list-confirmation": "Are you sure you want to delete this list?",
         "deny": "Deny",
         "edit": "Edit",
         "edit-wish": "Edit Wish",
