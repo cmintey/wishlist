@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { User } from "@prisma/client";
     import BaseChip from "./BaseChip.svelte";
-    import { locale } from "svelte-i18n";
+    import { t, locale } from "svelte-i18n";
 
     type PartialUser = Pick<User, "id" | "name">;
 
@@ -15,7 +15,7 @@
     const searchParam = "users";
     const defaultOption: Option = {
         value: "",
-        displayValue: "All"
+        displayValue: $t("general.all")
     };
     const options: Option[] = [
         defaultOption,
