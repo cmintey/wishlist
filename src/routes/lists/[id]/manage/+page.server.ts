@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ request, locals, params }) => {
+    persist: async ({ request, locals, params }) => {
         const $t = await getFormatter();
         if (!locals.user) {
             error(401, $t("errors.unauthenticated"));
@@ -94,5 +94,38 @@ export const actions: Actions = {
         }
 
         return redirect(302, `/lists/${params.id}`);
+    },
+    delete: async ({ locals, params }) => {
+        const $t = await getFormatter();
+        if (!locals.user) {
+            error(401, $t("errors.unauthenticated"));
+        }
+
+        const activeMembership = await getActiveMembership(locals.user);
+        const listOwner = await client.list.findUnique({
+            select: {
+                ownerId: true
+            },
+            where: {
+                id: params.id,
+                groupId: activeMembership.groupId
+            }
+        });
+        if (locals.user.id !== listOwner?.ownerId) {
+            error(401, $t("errors.not-authorized"));
+        }
+
+        try {
+            await client.list.delete({
+                where: {
+                    id: params.id
+                }
+            });
+        } catch (e) {
+            console.log("Unable to delete list", e);
+            return fail(500, { success: false });
+        }
+
+        return redirect(302, `/lists`);
     }
 };
