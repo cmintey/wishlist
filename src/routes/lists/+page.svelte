@@ -7,6 +7,7 @@
     import { isInstalled } from "$lib/stores/is-installed";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
 
     interface Props {
         data: PageData;
@@ -14,6 +15,8 @@
     type ListData = PageData["otherLists"][0];
 
     let { data }: Props = $props();
+
+    const users = $state(data.users);
 
     const hasNewItems = async (list: ListData) => {
         if (!list.items || list.items.length === 0) return false;
@@ -23,6 +26,8 @@
         return currentHash !== viewedHash;
     };
 </script>
+
+<ListFilterChip {users} />
 
 <div class="flex flex-col space-y-4" in:fade>
     {#each data.myLists as list (list.id)}

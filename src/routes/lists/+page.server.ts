@@ -17,6 +17,8 @@ export const load = (async ({ locals, url }) => {
         redirect(302, "/wishlists/me");
     }
 
+    const userIdFilter = url.searchParams.get("users");
+
     const userListsQuery = client.list.findMany({
         where: {
             ownerId: user.id,
@@ -29,6 +31,7 @@ export const load = (async ({ locals, url }) => {
             iconColor: true,
             owner: {
                 select: {
+                    id: true,
                     name: true,
                     username: true,
                     picture: true
@@ -71,6 +74,7 @@ export const load = (async ({ locals, url }) => {
             iconColor: true,
             owner: {
                 select: {
+                    id: true,
                     name: true,
                     username: true,
                     picture: true
@@ -88,33 +92,46 @@ export const load = (async ({ locals, url }) => {
 
     const [myLists, otherLists] = await Promise.all([userListsQuery, otherListsQuery]);
 
+    const users = [
+        {
+            id: user.id,
+            name: user.name
+        },
+        ...new Set(otherLists.map((list) => ({ id: list.owner.id, name: list.owner.name })))
+    ];
+
     return {
-        myLists: myLists.map((list) => {
-            return {
-                id: list.id,
-                name: list.name,
-                icon: list.icon,
-                iconColor: list.iconColor,
-                owner: list.owner,
-                claimedCount: undefined,
-                itemCount: list.items.length,
-                unapprovedCount: list._count.items
-            };
-        }),
-        otherLists: otherLists.map((list) => {
-            const claimedCount = list.items.filter((it) => it.approved && it.pledgedById !== null).length;
-            const itemCount = list.items.filter((it) => it.approved).length;
-            const items = list.items.map((it) => ({ id: it.id }));
-            return {
-                id: list.id,
-                name: list.name,
-                icon: list.icon,
-                iconColor: list.iconColor,
-                owner: list.owner,
-                claimedCount,
-                itemCount,
-                items
-            };
-        })
+        myLists: myLists
+            .filter((list) => userIdFilter === null || userIdFilter === list.owner.id)
+            .map((list) => {
+                return {
+                    id: list.id,
+                    name: list.name,
+                    icon: list.icon,
+                    iconColor: list.iconColor,
+                    owner: list.owner,
+                    claimedCount: undefined,
+                    itemCount: list.items.length,
+                    unapprovedCount: list._count.items
+                };
+            }),
+        otherLists: otherLists
+            .filter((list) => userIdFilter === null || userIdFilter === list.owner.id)
+            .map((list) => {
+                const claimedCount = list.items.filter((it) => it.approved && it.pledgedById !== null).length;
+                const itemCount = list.items.filter((it) => it.approved).length;
+                const items = list.items.map((it) => ({ id: it.id }));
+                return {
+                    id: list.id,
+                    name: list.name,
+                    icon: list.icon,
+                    iconColor: list.iconColor,
+                    owner: list.owner,
+                    claimedCount,
+                    itemCount,
+                    items
+                };
+            }),
+        users
     };
 }) satisfies PageServerLoad;

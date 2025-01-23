@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
 
     interface Props {
@@ -13,8 +13,8 @@
 
     let { options, defaultOption, searchParam, directionParam = undefined, prefix = undefined }: Props = $props();
 
-    let filter = $page.url.searchParams.get(searchParam);
-    let direction = directionParam ? $page.url.searchParams.get(searchParam) : null;
+    let filter = page.url.searchParams.get(searchParam);
+    let direction = directionParam ? page.url.searchParams.get(searchParam) : null;
     let selectedOption: Option = $state(defaultOption);
     if (filter) {
         for (const option of options) {
@@ -42,7 +42,7 @@
 
     const handleClick = (option: Option) => {
         selectedOption = option;
-        const newUrl = new URL($page.url);
+        const newUrl = new URL(page.url);
 
         if (option === defaultOption) {
             newUrl.searchParams.delete(searchParam);
