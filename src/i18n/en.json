@@ -190,6 +190,7 @@
     "general": {
         "add-user": "Add User",
         "all": "All",
+        "apply": "Apply",
         "cancel": "Cancel",
         "cannot-delete-default-group-msg": "You cannot delete the default group. Please change the default group before deleting this group.",
         "change-group": "Change Group",
@@ -302,6 +303,7 @@
         "lists": "Lists",
         "manage": "Manage",
         "manage-list": "Manage List",
+        "my-lists": "My Lists",
         "my-wishes": "My Wishes",
         "no-wishes-yet": "No wishes yet",
         "note-placeholder": "i.e. size, color, etc.",

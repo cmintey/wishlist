@@ -4,6 +4,7 @@ import type { PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
+import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
 
 export const load = (async ({ locals, url }) => {
     const user = locals.user;
@@ -17,7 +18,7 @@ export const load = (async ({ locals, url }) => {
         redirect(302, "/wishlists/me");
     }
 
-    const userIdFilter = url.searchParams.get("users");
+    const userIdFilter = decodeMultiValueFilter(url.searchParams.get("users"));
 
     const userListsQuery = client.list.findMany({
         where: {
@@ -95,14 +96,21 @@ export const load = (async ({ locals, url }) => {
     const users = [
         {
             id: user.id,
-            name: user.name
+            name: user.name,
+            picture: user.picture || null
         },
-        ...new Set(otherLists.map((list) => ({ id: list.owner.id, name: list.owner.name })))
+        ...new Set(
+            otherLists.map((list) => ({
+                id: list.owner.id,
+                name: list.owner.name,
+                picture: list.owner.picture || null
+            }))
+        )
     ];
 
     return {
         myLists: myLists
-            .filter((list) => userIdFilter === null || userIdFilter === list.owner.id)
+            .filter((list) => userIdFilter.length === 0 || userIdFilter.includes(list.owner.id))
             .map((list) => {
                 return {
                     id: list.id,
@@ -116,7 +124,7 @@ export const load = (async ({ locals, url }) => {
                 };
             }),
         otherLists: otherLists
-            .filter((list) => userIdFilter === null || userIdFilter === list.owner.id)
+            .filter((list) => userIdFilter.length === 0 || userIdFilter.includes(list.owner.id))
             .map((list) => {
                 const claimedCount = list.items.filter((it) => it.approved && it.pledgedById !== null).length;
                 const itemCount = list.items.filter((it) => it.approved).length;

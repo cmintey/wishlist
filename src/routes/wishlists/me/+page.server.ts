@@ -6,5 +6,5 @@ export const load: PageServerLoad = async ({ locals }) => {
         redirect(302, "/login?ref=/wishlists/me");
     }
 
-    redirect(302, `/wishlists/${locals.user.username}`);
+    redirect(302, `/lists?users=${locals.user.id}`);
 };

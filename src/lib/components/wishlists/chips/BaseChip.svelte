@@ -2,93 +2,175 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { t } from "svelte-i18n";
 
     interface Props {
         options: Option[];
         defaultOption: Option;
         searchParam: string;
         directionParam?: string | undefined;
-        prefix?: string | undefined;
+        prefix?: string;
+        multiselect?: boolean;
     }
 
-    let { options, defaultOption, searchParam, directionParam = undefined, prefix = undefined }: Props = $props();
+    let {
+        options,
+        defaultOption,
+        searchParam,
+        directionParam = undefined,
+        prefix = undefined,
+        multiselect = false
+    }: Props = $props();
 
-    let filter = page.url.searchParams.get(searchParam);
-    let direction = directionParam ? page.url.searchParams.get(searchParam) : null;
-    let selectedOption: Option = $state(defaultOption);
-    if (filter) {
-        for (const option of options) {
-            if (filter === option.value) {
-                if (option.direction) {
-                    if (direction && option.direction === direction) {
-                        selectedOption = option;
-                        break;
-                    }
-                } else {
-                    selectedOption = option;
-                    break;
+    let filter = $derived(page.url.searchParams.get(searchParam));
+    let direction = $derived(directionParam ? page.url.searchParams.get(searchParam) : null);
+    let selectedOptions: Option[] = $state([defaultOption]);
+    let pendingSelectedOptions: Option[] = $state([defaultOption]);
+    $effect(() => {
+        if (multiselect && filter) {
+            const filters = decodeURIComponent(filter).split(",");
+            const opts = [];
+            for (const option of options) {
+                if (filters.includes(option.value)) {
+                    opts.push(option);
                 }
             }
+            pendingSelectedOptions = opts;
+            selectedOptions = opts;
+        } else if (filter) {
+            for (const option of options) {
+                if (filter === option.value) {
+                    if (direction && option.direction && option.direction === direction) {
+                        selectedOptions = [option];
+                        break;
+                    } else {
+                        selectedOptions = [option];
+                        break;
+                    }
+                }
+            }
+        } else {
+            selectedOptions = [defaultOption];
         }
-    }
+    });
 
     const popupKey = `${searchParam}-options`;
     let menuOpen = $state(false);
     const menuSettings: PopupSettings = {
         event: "click",
         target: popupKey,
-        state: ({ state }) => (menuOpen = state)
+        state: ({ state }) => (menuOpen = state),
+        closeQuery: multiselect ? "#apply, #cancel" : undefined
     };
 
-    const handleClick = (option: Option) => {
-        selectedOption = option;
+    const isOnlyDefaultOptionSelected = (opts: Option[]) => {
+        return opts.length === 1 && opts[0].value === defaultOption.value;
+    };
+    const handleSelectChange = (option: Option, checked: boolean) => {
+        if (checked) {
+            if (isOnlyDefaultOptionSelected(pendingSelectedOptions)) {
+                pendingSelectedOptions = [option];
+            } else if (option.value === defaultOption.value) {
+                pendingSelectedOptions = [defaultOption];
+            } else {
+                pendingSelectedOptions.push(option);
+            }
+        } else {
+            pendingSelectedOptions = pendingSelectedOptions.filter((opt) => opt.value !== option.value);
+        }
+    };
+    const handleApply = (option?: Option) => {
+        if (option) {
+            selectedOptions = [option];
+        } else {
+            selectedOptions = pendingSelectedOptions;
+        }
+
         const newUrl = new URL(page.url);
 
-        if (option === defaultOption) {
+        if (isOnlyDefaultOptionSelected(selectedOptions)) {
             newUrl.searchParams.delete(searchParam);
-            if (directionParam) newUrl.searchParams.delete(directionParam);
+            if (!multiselect && directionParam) newUrl.searchParams.delete(directionParam);
         } else {
-            newUrl.searchParams.set(searchParam, option.value);
-            if (directionParam && option.direction) newUrl.searchParams.set(directionParam, option.direction);
+            const value = selectedOptions.map((opt) => opt.value).join(",");
+            newUrl.searchParams.set(searchParam, encodeURIComponent(value));
+            if (!multiselect && directionParam && selectedOptions[0].direction) {
+                newUrl.searchParams.set(directionParam, selectedOptions[0].direction);
+            }
         }
 
         goto(newUrl, {
             replaceState: true
         });
     };
+    const handleCancel = () => {
+        pendingSelectedOptions = selectedOptions;
+    };
+    const isSelected = (option: Option) => {
+        return pendingSelectedOptions.find((opt) => opt.value === option.value) !== undefined;
+    };
 </script>
 
 <div class="flex flex-row space-x-4 pb-4">
-    <span>
-        <button
-            class="variant-ringed-primary chip"
-            class:variant-ghost-primary={selectedOption.value !== defaultOption.value}
-            use:popup={menuSettings}
-        >
-            {#if selectedOption.direction === "asc"}
-                <iconify-icon icon="ion:arrow-up"></iconify-icon>
-            {:else if selectedOption.direction === "desc"}
-                <iconify-icon icon="ion:arrow-down"></iconify-icon>
-            {:else if prefix}
-                <iconify-icon icon={prefix}></iconify-icon>
+    <button
+        class="variant-ringed-primary chip"
+        class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}
+        use:popup={menuSettings}
+    >
+        {#if selectedOptions[0].direction === "asc"}
+            <iconify-icon icon="ion:arrow-up"></iconify-icon>
+        {:else if selectedOptions[0].direction === "desc"}
+            <iconify-icon icon="ion:arrow-down"></iconify-icon>
+        {:else if prefix}
+            <iconify-icon icon={prefix}></iconify-icon>
+        {/if}
+        <div class="flex space-x-1">
+            <span>
+                {selectedOptions[0].displayValue}
+            </span>
+            {#if multiselect && selectedOptions.length > 1}
+                <span>
+                    +{selectedOptions.length - 1}
+                </span>
             {/if}
-            <span>{selectedOption.displayValue}</span>
-            <iconify-icon
-                class="arrow text-xs duration-300 ease-out"
-                class:rotate-180={menuOpen}
-                icon="ion:caret-down"
-            ></iconify-icon>
-        </button>
-        <nav class="card list-nav p-4 shadow-xl" data-popup={popupKey}>
-            <ul>
-                {#each options as option}
-                    <li>
-                        <button class="list-option w-full" onclick={() => handleClick(option)}>
+        </div>
+        <iconify-icon
+            class="arrow text-xs duration-300 ease-out"
+            class:rotate-180={menuOpen}
+            icon="ion:caret-down"
+        ></iconify-icon>
+    </button>
+    <nav class="card list-nav z-10 p-4 shadow-xl" data-popup={popupKey}>
+        <ul>
+            {#each options as option (option.value + option.direction)}
+                <li>
+                    {#if multiselect}
+                        <label class="unstyled list-option flex flex-row items-center space-x-2">
+                            <input
+                                class="checkbox"
+                                checked={isSelected(option)}
+                                onchange={(e) => handleSelectChange(option, e.currentTarget.checked)}
+                                type="checkbox"
+                            />
+                            <span>{option.displayValue}</span>
+                        </label>
+                    {:else}
+                        <button class="list-option w-full" onclick={() => handleApply(option)}>
                             {option.displayValue}
                         </button>
-                    </li>
-                {/each}
-            </ul>
-        </nav>
-    </span>
+                    {/if}
+                </li>
+            {/each}
+        </ul>
+        {#if multiselect}
+            <div class="flex flex-row space-x-2 pt-2">
+                <button id="cancel" class="variant-ghost-secondary btn btn-sm" onclick={handleCancel}>
+                    {$t("general.cancel")}
+                </button>
+                <button id="apply" class="variant-filled-primary btn btn-sm" onclick={() => handleApply()}>
+                    {$t("general.apply")}
+                </button>
+            </div>
+        {/if}
+    </nav>
 </div>
