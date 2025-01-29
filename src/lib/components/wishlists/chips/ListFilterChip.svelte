@@ -3,7 +3,7 @@
     import BaseChip from "./BaseChip.svelte";
     import { t, locale } from "svelte-i18n";
 
-    type PartialUser = Pick<User, "id" | "name">;
+    type PartialUser = Pick<User, "id" | "name" | "picture">;
 
     interface Props {
         users: PartialUser[];
@@ -12,6 +12,7 @@
     const props: Props = $props();
     const users = $state(props.users);
 
+    const prefix = "ion:people";
     const searchParam = "users";
     const defaultOption: Option = {
         value: "",
@@ -25,4 +26,4 @@
     ];
 </script>
 
-<BaseChip {defaultOption} {options} {searchParam} />
+<BaseChip {defaultOption} multiselect {options} {prefix} {searchParam} />

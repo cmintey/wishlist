@@ -158,7 +158,7 @@
                                 aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
                                 onclick={() => removeMember(user.id)}
                             >
-                                <iconify-icon icon="ion:trash-bin"></iconify-icon>
+                                <iconify-icon icon="ion:person-remove"></iconify-icon>
                             </button>
                         </td>
                     </tr>

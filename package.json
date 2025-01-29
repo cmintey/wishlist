@@ -19,8 +19,8 @@
     "devDependencies": {
         "@eslint/js": "^9.18.0",
         "@floating-ui/dom": "^1.6.13",
-        "@skeletonlabs/skeleton": "^2.10.4",
-        "@skeletonlabs/tw-plugin": "^0.4.0",
+        "@skeletonlabs/skeleton": "^2.11.0",
+        "@skeletonlabs/tw-plugin": "^0.4.1",
         "@sveltejs/adapter-node": "^5.2.11",
         "@sveltejs/kit": "^2.15.2",
         "@sveltejs/vite-plugin-svelte": "^5.0.3",

@@ -27,3 +27,10 @@ export const createFilter = (filter: string | null) => {
     }
     return search;
 };
+
+export const decodeMultiValueFilter = (filter: string | null) => {
+    if (filter === null) {
+        return [] as string[];
+    }
+    return decodeURIComponent(filter).split(",");
+};
