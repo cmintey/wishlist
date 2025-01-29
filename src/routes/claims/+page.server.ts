@@ -18,6 +18,11 @@ export const load: PageServerLoad = async ({ locals }) => {
             },
             groupId: activeMembership.groupId
         },
+        orderBy: {
+            user: {
+                name: "asc"
+            }
+        },
         include: {
             addedBy: {
                 select: {

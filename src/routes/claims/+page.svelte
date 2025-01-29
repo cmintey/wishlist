@@ -3,15 +3,17 @@
     import { crossfade } from "svelte/transition";
     import { flip } from "svelte/animate";
     import type { PageData } from "./$types";
-    import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
+    import ItemCard, { type FullItem } from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
     import { t } from "svelte-i18n";
+    import { groupBy } from "$lib/util";
 
     interface Props {
         data: PageData;
     }
 
     let { data }: Props = $props();
+    let items = $state(data.items);
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -31,7 +33,12 @@
         }
     });
 
-    let items = $derived(data.items);
+    let groupedItems = $derived.by(() => {
+        const unpurchasedItems: FullItem[] = [];
+        const purchasedItems: FullItem[] = [];
+        items.forEach((item) => (item.purchased ? purchasedItems.push(item) : unpurchasedItems.push(item)));
+        return groupBy([...unpurchasedItems, ...purchasedItems], (item) => item.user?.name);
+    });
 </script>
 
 {#if data.items.length === 0}
@@ -41,15 +48,17 @@
     </div>
 {:else}
     <div class="flex flex-col space-y-4">
-        {#each items.filter((item) => !item.purchased) as item (item.id)}
-            <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} showClaimedName showFor user={data.user} />
+        {#each groupedItems.entries() as group (group[0])}
+            {@const items = group[1]}
+            <div class="flex flex-row items-center space-x-2">
+                <p class="text-xl font-bold">{group[0]}</p>
+                <hr class="flex-grow rounded !border-4" />
             </div>
-        {/each}
-        {#each items.filter((item) => item.purchased) as item (item.id)}
-            <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} showClaimedName showFor user={data.user} />
-            </div>
+            {#each items as item (item.id)}
+                <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
+                    <ItemCard {item} showClaimedName showFor user={data.user} />
+                </div>
+            {/each}
         {/each}
     </div>
 {/if}
