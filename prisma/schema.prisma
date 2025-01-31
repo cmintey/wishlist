@@ -22,7 +22,8 @@ model User {
     roleId              Int                   @default(1)
     UserGroupMembership UserGroupMembership[]
     hashedPassword      String
-    lists               List[]
+    lists               List[]                @relation("MyLists")
+    managedLists        List[]                @relation("ManagedLists")
 
     @@map("user")
 }
@@ -84,10 +85,11 @@ model UserGroupMembership {
 model List {
     id        String  @id @unique @default(cuid())
     name      String?
-    owner     User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    owner     User    @relation(name: "MyLists", fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId   String
     group     Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId   String
+    managers  User[]  @relation(name: "ManagedLists")
     public    Boolean @default(false)
     items     Item[]
     icon      String?
