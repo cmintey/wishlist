@@ -140,8 +140,8 @@
             icon="ion:caret-down"
         ></iconify-icon>
     </button>
-    <nav class="card list-nav z-10 p-4 shadow-xl" data-popup={popupKey}>
-        <ul>
+    <nav class="card list-nav z-10 max-h-96 p-4 shadow-xl" data-popup={popupKey}>
+        <ul class="max-h-72 overflow-scroll">
             {#each options as option (option.value + option.direction)}
                 <li>
                     {#if multiselect}
@@ -163,7 +163,7 @@
             {/each}
         </ul>
         {#if multiselect}
-            <div class="flex flex-row space-x-2 pt-2">
+            <div class="flex flex-row justify-between space-x-2 pt-4">
                 <button id="cancel" class="variant-ghost-secondary btn btn-sm" onclick={handleCancel}>
                     {$t("general.cancel")}
                 </button>
