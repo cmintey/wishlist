@@ -8,6 +8,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
+    import empty from "$lib/assets/no_wishes.svg";
 
     interface Props {
         data: PageData;
@@ -29,19 +30,26 @@
 
 <ListFilterChip {users} />
 
-<div class="flex flex-col space-y-4" in:fade>
-    {#each data.myLists as list (list.id)}
-        <ListCard hideCount {list} />
-    {/each}
+{#if data.myLists.length + data.otherLists.length === 0}
+    <div class="flex flex-col items-center justify-center space-y-4 pt-4">
+        <img class="w-3/4 md:w-1/3" alt={$t("a11y.two-people-looking-in-an-empty-box")} src={empty} />
+        <p class="text-2xl">{$t("wishes.no-lists-yet")}</p>
+    </div>
+{:else}
+    <div class="flex flex-col space-y-4" in:fade>
+        {#each data.myLists as list (list.id)}
+            <ListCard hideCount {list} />
+        {/each}
 
-    {#each data.otherLists as list (list.id)}
-        {#await hasNewItems(list)}
-            <ListCard {list} />
-        {:then hasNewItems}
-            <ListCard {hasNewItems} {list} />
-        {/await}
-    {/each}
-</div>
+        {#each data.otherLists as list (list.id)}
+            {#await hasNewItems(list)}
+                <ListCard {list} />
+            {:then hasNewItems}
+                <ListCard {hasNewItems} {list} />
+            {/await}
+        {/each}
+    </div>
+{/if}
 
 <button
     class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
