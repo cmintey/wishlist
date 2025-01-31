@@ -1,10 +1,10 @@
 <script lang="ts">
     import { getToastStore, type ToastSettings, getModalStore } from "@skeletonlabs/skeleton";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
-    import { page } from "$app/stores";
     import type { Group } from "@prisma/client";
     import { fade } from "svelte/transition";
     import { t } from "svelte-i18n";
+    import { page } from "$app/state";
 
     interface Props {
         config: Config;
@@ -18,10 +18,11 @@
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
-    let form = $derived($page.form);
+    let form = $derived(page.form);
 
-    let groupId = $state("");
-    let email = $state("");
+    let groupId = $state();
+    let email = $state();
+    let inviteMethod: InviteMethod = $state("link");
     let submitButton: HTMLButtonElement | undefined = $state();
     let showUrl = $state(true);
 
@@ -63,9 +64,10 @@
                 defaultGroup,
                 smtpEnabled: config.smtp.enable
             },
-            response(data: { group?: string; email?: string }) {
+            response(data: { group?: string; email?: string; method: InviteMethod }) {
                 if (data.group) groupId = data.group;
                 if (data.email) email = data.email;
+                if (data.method) inviteMethod = data.method;
                 if (groupId) setTimeout(() => submitButton?.click(), 200);
                 showUrl = true;
             },
@@ -84,6 +86,7 @@
     {#if config.smtp.enable}
         <input id="invite-email" name="invite-email" class="hidden" value={email} />
     {/if}
+    <input id="invite-method" name="invite-method" class="hidden" value={inviteMethod} />
 
     {#if showUrl && form?.url}
         <div

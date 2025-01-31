@@ -14,13 +14,15 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
     const config = await getConfig();
     if (config.smtp.enable) {
         schema = z.object({
-            "invite-email": z.string().email(),
-            "invite-group": z.string().optional()
+            "invite-email": z.union([z.string().email().nullish(), z.literal("")]),
+            "invite-group": z.string().optional(),
+            "invite-method": z.enum(["link", "email"])
         });
     } else {
         schema = z.object({
             "invite-email": z.string().optional(),
-            "invite-group": z.string().optional()
+            "invite-group": z.string().optional(),
+            "invite-method": z.enum(["link"])
         });
     }
 
@@ -36,7 +38,7 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
         return fail(400, { action: "invite-email", error: true, errors });
     }
 
-    if (!config.smtp.enable) {
+    if (data.data["invite-method"] === "link" || !config.smtp.enable) {
         await client.signupToken.create({
             data: {
                 hashedToken: hashToken(token),
@@ -44,7 +46,7 @@ export const inviteUser = async ({ url, request }: RequestEvent) => {
             }
         });
 
-        return { action: "invite-email", success: true, sent: null, message: null, url: tokenUrl.href };
+        return { action: "invite-email", success: true, sent: undefined, message: null, url: tokenUrl.href };
     }
 
     await client.signupToken.create({
