@@ -14,7 +14,7 @@
     $effect(() => {
         if (page.form && !page.form.success && page.form.errors === null) {
             getToastStore().trigger({
-                message: $t("errors.unable-to-create-list"),
+                message: page.form.error || $t("errors.unable-to-create-list"),
                 background: "variant-filled-error"
             });
         }

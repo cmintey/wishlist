@@ -1,6 +1,5 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-
 import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
@@ -15,7 +14,29 @@ export const load = (async ({ locals, url }) => {
     const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);
     if (config.listMode === "registry") {
-        redirect(302, "/wishlists/me");
+        const list = await client.list.findFirst({
+            select: {
+                id: true
+            },
+            where: {
+                ownerId: user.id,
+                groupId: activeMembership.groupId
+            }
+        });
+        if (list) {
+            redirect(302, `/lists/${list.id}`);
+        }
+        return {
+            myLists: [],
+            otherLists: [],
+            users: [
+                {
+                    id: user.id,
+                    name: user.name,
+                    picture: user.picture || null
+                }
+            ]
+        };
     }
 
     const userIdFilter = decodeMultiValueFilter(url.searchParams.get("users"));
