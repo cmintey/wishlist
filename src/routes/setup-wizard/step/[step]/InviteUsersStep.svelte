@@ -3,6 +3,9 @@
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
     import { t } from "svelte-i18n";
+    import type { Props } from "./steps";
+
+    let props: Props = $props();
 
     let config: Config = $derived($page.data.config);
     const groups: Group[] = $page.data.groups;
