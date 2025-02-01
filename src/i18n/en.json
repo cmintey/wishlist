@@ -156,6 +156,7 @@
         "must-specify-group-name-in-body": "Must specify group name in body",
         "must-specify-url-in-query-parameters": "Must specify url in query parameters",
         "name-must-not-be-blank": "Name must not be blank",
+        "no-email-provided": "No email provided",
         "no-group-friendly-msg": "If you're seeing this page, it's because you aren't in a group yet! Either request a group to join, or create your own.",
         "not-authorized": "Not Authorized",
         "one-or-more-items-missing-an-id": "One or more items missing an id",

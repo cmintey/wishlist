@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { getToastStore, type ToastSettings, getModalStore } from "@skeletonlabs/skeleton";
+    import { getToastStore, getModalStore } from "@skeletonlabs/skeleton";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import type { Group } from "@prisma/client";
     import { fade } from "svelte/transition";
     import { t } from "svelte-i18n";
-    import { page } from "$app/state";
+    import { InviteUsersAPI } from "$lib/api/users";
 
     interface Props {
         config: Config;
@@ -17,43 +17,38 @@
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();
+    const inviteUsersAPI = new InviteUsersAPI();
 
-    let form = $derived(page.form);
+    let url: string | null = $state(null);
 
-    let groupId = $state();
-    let email = $state();
-    let inviteMethod: InviteMethod = $state("link");
-    let submitButton: HTMLButtonElement | undefined = $state();
-    let showUrl = $state(true);
-
-    $effect(() => {
-        if (form?.success && form?.sent !== undefined && config.smtp.enable) {
-            let toastConfig: ToastSettings;
-            if (form?.sent) {
-                toastConfig = {
+    const generateInvite = async (data: { group?: string; email?: string; method: InviteMethod }) => {
+        const response = await inviteUsersAPI.invite(data);
+        if (response.ok) {
+            const data = (await response.json()) as { url?: string };
+            if (data.url) {
+                url = data.url;
+            } else {
+                toastStore.trigger({
                     message: $t("general.invite-sent"),
                     background: "variant-filled-success",
                     autohide: true,
                     timeout: 3000
-                };
-            } else {
-                toastConfig = {
-                    message: $t("errors.invite-failed-to-send", { values: { errorMessage: form?.message } }),
-                    background: "variant-filled-error",
-                    autohide: true,
-                    timeout: 3000
-                };
+                });
             }
-            toastStore.trigger(toastConfig);
+        } else {
+            const data = (await response.json()) as { message: string };
+            toastStore.trigger({
+                message: $t("errors.invite-failed-to-send", { values: { errorMessage: data.message } }),
+                background: "variant-filled-error",
+                autohide: true,
+                timeout: 3000
+            });
         }
-    });
+    };
 
-    const triggerInviteModal = () => {
+    const triggerInviteModal = async () => {
         if (!config.smtp.enable && groups.length === 0 && defaultGroup) {
-            groupId = defaultGroup.id;
-            setTimeout(() => submitButton?.click(), 200);
-            showUrl = true;
-            return;
+            return await generateInvite({ group: defaultGroup.id, method: "link" });
         }
 
         modalStore.trigger({
@@ -64,12 +59,8 @@
                 defaultGroup,
                 smtpEnabled: config.smtp.enable
             },
-            response(data: { group?: string; email?: string; method: InviteMethod }) {
-                if (data.group) groupId = data.group;
-                if (data.email) email = data.email;
-                if (data.method) inviteMethod = data.method;
-                if (groupId) setTimeout(() => submitButton?.click(), 200);
-                showUrl = true;
+            async response(data: { group?: string; email?: string; method: InviteMethod }) {
+                await generateInvite(data);
             },
             buttonTextCancel: $t("general.cancel")
         });
@@ -82,26 +73,17 @@
         <p>{$t("general.invite-user")}</p>
     </button>
 
-    <input id="invite-group" name="invite-group" class="hidden" value={groupId} />
-    {#if config.smtp.enable}
-        <input id="invite-email" name="invite-email" class="hidden" value={email} />
-    {/if}
-    <input id="invite-method" name="invite-method" class="hidden" value={inviteMethod} />
-
-    {#if showUrl && form?.url}
+    {#if url}
         <div
             class="flex flex-col space-y-2 {vertical
                 ? 'items-center'
                 : 'md:flex-row md:items-center md:space-x-2 md:space-y-0'}"
             out:fade
         >
-            <TokenCopy url={form.url} on:copied={() => setTimeout(() => (showUrl = false), 1000)}>
+            <TokenCopy {url} on:copied={() => setTimeout(() => (url = null), 1000)}>
                 {$t("general.invite-link")}
             </TokenCopy>
             <span class="text-sm italic">{$t("general.this-invite-link-is-only-valid-for-one-signup")}</span>
         </div>
     {/if}
-
-    <!-- svelte-ignore a11y_consider_explicit_label -->
-    <button bind:this={submitButton} class="hidden" type="submit"></button>
 </div>
