@@ -144,6 +144,26 @@ You configure this using environment variables.
 
 `HEADER_EMAIL`: The name of the headers that contains the email of the user
 
+## Add items using a Bookmarklet
+
+Wishlist supports adding items via a bookmarklet. Whenever you're on a product page that you want to add to Wishlist, you can click on your bookmarklet to open Wishlist in a new tab and instantly start creating a new item.
+
+To create a bookmarklet, paste the following code into a [bookmarklet generator site](). Change the two variables that have comments, generate, and save the bookmarklet.
+
+```js
+var url = document.URL.endsWith('/') ?
+    document.URL.slice(0, -1) :
+    document.URL;
+var wishlist = "http://localhost:5173"; // host of your wishlist instance
+var listId = "xyz" // this is the id of the list you want to add the item to. You can get the id of the list from the URL
+
+if (wishlist.slice(-1) === "/") {
+    wishlist = wishlist.slice(0, -1)
+}
+var dest = wishlist + "/lists/" + listId + "/create-item?productUrl=" + url;
+window.open(dest, "_blank");
+```
+
 ## Contributing
 
 Code contributions are always welcome! If you have something in mind that you would like to work on, please open an issue or comment on an existing issue indicating your interest to make sure someone else isn't already working on it and to discuss any implementation details. Open a PR when you feel that it is ready. You can also open a draft PR as soon as you start work to help track progress.

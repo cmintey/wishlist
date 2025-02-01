@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
     const $t = await getFormatter();
 
     if (!locals.user) {
-        redirect(302, `/login?ref=${url.pathname}`);
+        redirect(302, `/login?ref=${url.pathname + url.search}`);
     }
 
     const activeMembership = await getActiveMembership(locals.user);
