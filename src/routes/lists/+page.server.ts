@@ -46,6 +46,9 @@ export const load = (async ({ locals, url }) => {
             ownerId: user.id,
             groupId: activeMembership.groupId
         },
+        orderBy: {
+            name: "asc"
+        },
         select: {
             id: true,
             name: true,
@@ -89,6 +92,16 @@ export const load = (async ({ locals, url }) => {
             },
             groupId: activeMembership.groupId
         },
+        orderBy: [
+            {
+                owner: {
+                    name: "asc"
+                }
+            },
+            {
+                name: "asc"
+            }
+        ],
         select: {
             id: true,
             name: true,
