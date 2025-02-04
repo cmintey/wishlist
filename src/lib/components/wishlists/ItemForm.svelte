@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import type { Item, ItemPrice } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
@@ -7,6 +7,7 @@
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { t } from "svelte-i18n";
+    import { onMount } from "svelte";
 
     interface Props {
         data: Partial<Item> & {
@@ -18,7 +19,8 @@
     let { data = $bindable(), buttonText }: Props = $props();
 
     let productData = $state(data);
-    let form = $derived($page.form);
+    let form = $derived(page.form);
+    let url = $derived(page.url);
     let loading = $state(false);
     let urlFetched = $state(false);
     const toastStore = getToastStore();
@@ -88,6 +90,13 @@
             urlFetched = true;
         }
     };
+
+    onMount(async () => {
+        if (url.searchParams.has("productUrl")) {
+            productData.url = url.searchParams.get("productUrl");
+            await getInfo();
+        }
+    });
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-6">
