@@ -18,12 +18,19 @@
         value: "",
         displayValue: $t("general.all")
     };
-    const options: Option[] = [
-        defaultOption,
-        ...users
+    const options: Option[] = [defaultOption, ...getUniqueUsers(users)];
+
+    function getUniqueUsers(users: PartialUser[]) {
+        const uniqueIds = new Set();
+        return users
+            .filter((u) => {
+                const unique = !uniqueIds.has(u.id);
+                if (unique) uniqueIds.add(u.id);
+                return unique;
+            })
             .map((user) => ({ value: user.id, displayValue: user.name }) as Option)
-            .toSorted((a, b) => a.displayValue.localeCompare(b.displayValue, $locale || "en-US"))
-    ];
+            .toSorted((a, b) => a.displayValue.localeCompare(b.displayValue, $locale || "en-US"));
+    }
 </script>
 
 <BaseChip {defaultOption} multiselect {options} {prefix} {searchParam} />
