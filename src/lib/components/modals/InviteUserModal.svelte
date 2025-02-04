@@ -74,7 +74,7 @@
             {/each}
         </ListBox>
         {#if groupError}
-            <span class="text-error-500">Must select a group</span>
+            <span class="text-error-500">{$t("errors.must-select-a-group")}</span>
         {/if}
     {/if}
 
@@ -83,7 +83,7 @@
             {parent.buttonTextCancel}
         </button>
         {#if smtpEnabled}
-            <button class="btn {parent.buttonPositive}" use:popup={inviteViaPopup}>Invite via...</button>
+            <button class="btn {parent.buttonPositive}" use:popup={inviteViaPopup}>{$t("auth.invite-via")}</button>
             <div class="card p-4 shadow-xl" data-popup={inviteViaPopupName}>
                 <div class="flex flex-row space-x-4">
                     <button class="variant-ghost-primary btn" onclick={() => onFormSubmit("link")}>
