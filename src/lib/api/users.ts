@@ -60,6 +60,24 @@ export class UsersAPI {
     };
 }
 
+export class InviteUsersAPI {
+    _makeRequest = async (method: string, body: Record<string, any>) => {
+        const options: RequestInit = {
+            method,
+            headers: {
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        };
+
+        return await fetch("/api/users/invite", options);
+    };
+
+    invite = async (data: { group?: string; email?: string; method: InviteMethod }) => {
+        return await this._makeRequest("POST", data);
+    };
+}
+
 export class SystemUsersAPI {
     _makeRequest = async (method: string, body: Record<string, any>) => {
         const options: RequestInit = {
