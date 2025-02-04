@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 };
 
 export const actions: Actions = {
-    persist: async ({ request, locals, params }) => {
+    default: async ({ request, locals, params }) => {
         const $t = await getFormatter();
 
         if (!locals.user) {

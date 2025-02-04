@@ -64,51 +64,15 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
 
     // In "surprise" mode, only show the items the owner added
     if (options.suggestionMethod === "surprise" && options.loggedInUserId === options.listOwnerId) {
-        filter.addedBy = {
-            id: options.loggedInUserId
-        };
+        filter.addedById = options.loggedInUserId;
     }
 
     const list = await client.list.findUnique({
         where: {
-            id: listId,
-            items: {
-                every: filter
-            }
+            id: listId
         },
-        include: {
-            items: {
-                include: {
-                    addedBy: {
-                        select: {
-                            id: true,
-                            username: true,
-                            name: true
-                        }
-                    },
-                    pledgedBy: {
-                        select: {
-                            id: true,
-                            username: true,
-                            name: true
-                        }
-                    },
-                    publicPledgedBy: {
-                        select: {
-                            username: true,
-                            name: true
-                        }
-                    },
-                    user: {
-                        select: {
-                            id: true,
-                            username: true,
-                            name: true
-                        }
-                    },
-                    itemPrice: true
-                }
-            }
+        select: {
+            id: true
         }
     });
 
@@ -116,7 +80,57 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
         return [];
     }
 
-    const items = list?.items;
+    let items = await client.item.findMany({
+        where: {
+            lists: {
+                every: {
+                    id: list.id
+                }
+            },
+            ...filter
+        },
+        include: {
+            lists: {
+                select: {
+                    id: true
+                },
+                where: {
+                    id: list.id
+                }
+            },
+            addedBy: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true
+                }
+            },
+            pledgedBy: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true
+                }
+            },
+            publicPledgedBy: {
+                select: {
+                    username: true,
+                    name: true
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true
+                }
+            },
+            itemPrice: true
+        }
+    });
+
+    // need to filter out items not on a list because prisma generates a stupid query
+    items = items.filter((item) => item.lists.length > 0);
 
     if (options.sort === "price") {
         if (options.sortDir === "desc") {
