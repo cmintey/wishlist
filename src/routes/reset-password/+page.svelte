@@ -17,7 +17,7 @@
     let confirmPassword = $state("");
 
     onMount(() => {
-        if (data.valid) window.history.replaceState({}, "", "/reset-password");
+        if (data.valid) goto("/reset-password", { replaceState: true, invalidateAll: false });
         else goto("/");
     });
 </script>
