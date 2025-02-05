@@ -195,7 +195,8 @@
         "valid-url-not-provided": "Keine gültige URL angegeben",
         "list-not-found": "Liste nicht gefunden",
         "user-must-be-in-the-correct-group": "Benutzer muss in der korrekten Gruppe sein",
-        "unable-to-update-list-settings": "Konnte die Einstellungen der Liste nicht aktualisieren"
+        "unable-to-update-list-settings": "Konnte die Einstellungen der Liste nicht aktualisieren",
+        "no-email-provided": "Keine E-Mailadresse eingegeben"
     },
     "auth": {
         "log-in": "Anmelden",
