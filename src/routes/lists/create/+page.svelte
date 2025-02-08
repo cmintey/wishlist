@@ -12,7 +12,7 @@
     const { data }: Props = $props();
 
     $effect(() => {
-        if (page.form && !page.form.success && page.form.errors === null) {
+        if (page.form && !page.form.success) {
             getToastStore().trigger({
                 message: page.form.error || $t("errors.unable-to-create-list"),
                 background: "variant-filled-error"

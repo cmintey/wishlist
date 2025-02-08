@@ -10,11 +10,13 @@
     }
 
     const { data }: Props = $props();
+    const toastStore = getToastStore();
 
     $effect(() => {
-        if (page.form && !page.form.success && page.form.errors === null) {
-            getToastStore().trigger({
-                message: $t("errors.unable-to-update-list-settings"),
+        $inspect(page.form);
+        if (page.form && !page.form.success && page.form.message) {
+            toastStore.trigger({
+                message: page.form.message,
                 background: "variant-filled-error"
             });
         }

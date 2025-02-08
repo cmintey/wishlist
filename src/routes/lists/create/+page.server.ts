@@ -88,7 +88,7 @@ export const actions: Actions = {
             };
             list = await create(locals.user.id, activeMembership.groupId, data);
         } catch (e) {
-            console.log("Unable to create list", e);
+            console.log($t("errors.unable-to-create-list"), e);
             return fail(500, { success: false, error: $t("errors.unable-to-create-list") });
         }
 

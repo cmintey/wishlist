@@ -22,6 +22,7 @@
 
     const { data, persistButtonName, editing = false }: Props = $props();
     const modalStore = getModalStore();
+
     let list = $state(data.list);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived.by(() => {
