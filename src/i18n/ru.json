@@ -110,7 +110,8 @@
         "sign-out-of-all-devices": "Выйти со всех устройств?",
         "password-updated-successfully": "Пароль успешно обновлен",
         "reset-password": "Сбросить пароль",
-        "self-service-password-reset-unavailable": "Самостоятельный сброс пароля недоступен."
+        "self-service-password-reset-unavailable": "Самостоятельный сброс пароля недоступен.",
+        "invite-via": "Пригласить через ..."
     },
     "errors": {
         "group-does-not-exist": "Группа не существует",
@@ -164,7 +165,9 @@
         "no-group-friendly-msg": "Если вы видите эту страницу, значит, вы еще не в группе! Либо попросите группу присоединиться, либо создайте свою собственную.",
         "name-must-not-be-blank": "Имя не должно быть пустым",
         "this-instance-is-invite-only": "Этот экземпляр доступен только по приглашению",
-        "password-must-not-be-blank": "Пароль не должен быть пустым"
+        "password-must-not-be-blank": "Пароль не должен быть пустым",
+        "must-select-a-group": "Нужно выбрать группу",
+        "no-email-provided": "Нет электронной почты"
     },
     "general": {
         "icon": "Значок",
