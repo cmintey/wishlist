@@ -13,7 +13,6 @@
     const toastStore = getToastStore();
 
     $effect(() => {
-        $inspect(page.form);
         if (page.form && !page.form.success && page.form.message) {
             toastStore.trigger({
                 message: page.form.message,

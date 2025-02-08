@@ -31,7 +31,7 @@
     });
 </script>
 
-<svelte:element this={elementTag} bind:this={element} class="card">
+<svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
             class="variant-ghost-primary card-header flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
