@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
     }
 
-    if (locals.user.id !== item.user.id) {
+    if (locals.user.id !== item.user.id && locals.user.id !== item.addedBy.id) {
         error(400, $t("errors.item-invalid-ownership", { values: { username: locals.user.username } }));
     }
 

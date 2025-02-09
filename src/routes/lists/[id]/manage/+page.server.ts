@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ request, locals, params }) => {
+    persist: async ({ request, locals, params }) => {
         const $t = await getFormatter();
         if (!locals.user) {
             error(401, $t("errors.unauthenticated"));
@@ -89,10 +89,71 @@ export const actions: Actions = {
                 }
             });
         } catch (e) {
-            console.log("Unable to update list properties", e);
-            return fail(500, { success: false });
+            console.log($t("errors.unable-to-update-list-settings"), e);
+            return fail(500, {
+                action: "persist",
+                success: false,
+                message: $t("errors.unable-to-update-list-settings")
+            });
         }
 
         return redirect(302, `/lists/${params.id}`);
+    },
+    delete: async ({ locals, params }) => {
+        const $t = await getFormatter();
+        if (!locals.user) {
+            error(401, $t("errors.unauthenticated"));
+        }
+
+        const activeMembership = await getActiveMembership(locals.user);
+        const listOwner = await client.list.findUnique({
+            select: {
+                ownerId: true
+            },
+            where: {
+                id: params.id,
+                groupId: activeMembership.groupId
+            }
+        });
+        if (locals.user.id !== listOwner?.ownerId) {
+            error(401, $t("errors.not-authorized"));
+        }
+
+        try {
+            const list = await client.list.delete({
+                select: {
+                    id: true,
+                    items: {
+                        select: {
+                            id: true,
+                            userId: true,
+                            lists: {
+                                select: {
+                                    id: true
+                                }
+                            }
+                        }
+                    }
+                },
+                where: {
+                    id: params.id
+                }
+            });
+            const orphanedItems = list.items
+                .filter((i) => i.lists.filter((l) => l.id !== list.id).length === 0)
+                .map((i) => i.id);
+            await client.item.deleteMany({
+                where: {
+                    id: {
+                        in: orphanedItems
+                    }
+                }
+            });
+        } catch (e) {
+            console.log($t("errors.unable-to-delete-list"), e);
+            return fail(500, { action: "delete", success: false, message: $t("errors.unable-to-delete-list") });
+        }
+
+        return redirect(302, `/lists`);
     }
 };

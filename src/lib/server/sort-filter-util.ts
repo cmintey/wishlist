@@ -28,28 +28,9 @@ export const createFilter = (filter: string | null) => {
     return search;
 };
 
-export const createSorts = (sort: string | null, direction: string | null) => {
-    let orderBy: Prisma.ItemOrderByWithRelationInput[] = [];
-    if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy = [
-            {
-                itemPrice: {
-                    value: direction
-                }
-            }
-        ];
-    } else {
-        orderBy = [
-            {
-                displayOrder: {
-                    sort: "asc",
-                    nulls: "last"
-                }
-            },
-            {
-                id: "asc"
-            }
-        ];
+export const decodeMultiValueFilter = (filter: string | null) => {
+    if (filter === null) {
+        return [] as string[];
     }
-    return orderBy;
+    return decodeURIComponent(filter).split(",");
 };

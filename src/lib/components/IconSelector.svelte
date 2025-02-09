@@ -93,7 +93,7 @@
         }}
         oninput={(e) => (search = e.currentTarget.value)}
         placeholder="gift"
-        showClearButton={() => iconValue !== null || iconValue !== undefined}
+        showClearButton={() => iconValue !== null && iconValue !== undefined}
         type="text"
         value={iconValue}
     >

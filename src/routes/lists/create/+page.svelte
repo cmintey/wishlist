@@ -10,20 +10,19 @@
     }
 
     const { data }: Props = $props();
-    const toastStore = getToastStore();
 
     $effect(() => {
-        if (page.form && !page.form.success && page.form.message) {
-            toastStore.trigger({
-                message: page.form.message,
+        if (page.form && !page.form.success) {
+            getToastStore().trigger({
+                message: page.form.error || $t("errors.unable-to-create-list"),
                 background: "variant-filled-error"
             });
         }
     });
 </script>
 
-<ManageListForm {data} editing persistButtonName={$t("general.save")} />
+<ManageListForm {data} persistButtonName={$t("general.create")} />
 
 <svelte:head>
-    <title>{$t("wishes.manage-list")}</title>
+    <title>{$t("wishes.create-list")}</title>
 </svelte:head>

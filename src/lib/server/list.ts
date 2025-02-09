@@ -1,6 +1,6 @@
 import { init } from "@paralleldrive/cuid2";
 import { client } from "./prisma";
-import { createFilter, createSorts } from "./sort-filter-util";
+import { createFilter } from "./sort-filter-util";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -11,13 +11,20 @@ export interface GetItemsOptions {
     loggedInUserId: string | null;
 }
 
-export const create = async (ownerId: string, groupId: string) => {
+export interface ListProperties {
+    name?: string | null;
+    icon?: string | null;
+    iconColor?: string | null;
+}
+
+export const create = async (ownerId: string, groupId: string, otherData?: ListProperties) => {
     const cuid2 = init({ length: 10 });
     return await client.list.create({
         data: {
             id: cuid2(),
             ownerId,
-            groupId
+            groupId,
+            ...otherData
         }
     });
 };
@@ -45,13 +52,6 @@ export const getById = async (id: string) => {
 
 export const getItems = async (listId: string, options: GetItemsOptions) => {
     const filter = createFilter(options.filter);
-    const orderBy = createSorts(options.sort, options.sortDir);
-
-    filter.lists = {
-        every: {
-            id: listId
-        }
-    };
 
     // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
     if (
@@ -64,15 +64,40 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
 
     // In "surprise" mode, only show the items the owner added
     if (options.suggestionMethod === "surprise" && options.loggedInUserId === options.listOwnerId) {
-        filter.addedBy = {
-            id: options.loggedInUserId
-        };
+        filter.addedById = options.loggedInUserId;
     }
 
-    const items = await client.item.findMany({
-        where: filter,
-        orderBy: orderBy,
+    const list = await client.list.findUnique({
+        where: {
+            id: listId
+        },
+        select: {
+            id: true
+        }
+    });
+
+    if (!list) {
+        return [];
+    }
+
+    let items = await client.item.findMany({
+        where: {
+            lists: {
+                every: {
+                    id: list.id
+                }
+            },
+            ...filter
+        },
         include: {
+            lists: {
+                select: {
+                    id: true
+                },
+                where: {
+                    id: list.id
+                }
+            },
             addedBy: {
                 select: {
                     id: true,
@@ -104,9 +129,17 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
         }
     });
 
-    if (options.sort === "price" && options.sortDir === "asc") {
-        // need to re-sort when descending since Prisma can't order with nulls last
-        items.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+    // need to filter out items not on a list because prisma generates a stupid query
+    items = items.filter((item) => item.lists.length > 0);
+
+    if (options.sort === "price") {
+        if (options.sortDir === "desc") {
+            items.sort((a, b) => (b.itemPrice?.value ?? -Infinity) - (a.itemPrice?.value ?? -Infinity));
+        } else {
+            items.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+        }
+    } else {
+        items.sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity));
     }
     return items;
 };
