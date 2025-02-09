@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto, invalidateAll } from "$app/navigation";
+    import { goto } from "$app/navigation";
     import { GroupsAPI } from "$lib/api/groups";
     import { UserAPI } from "$lib/api/users";
     import type { Group } from "@prisma/client";
