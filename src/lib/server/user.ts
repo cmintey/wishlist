@@ -48,6 +48,8 @@ export const createUser = async (user: UserMinimal, role: Role, password: string
     });
 
     if (groupId) {
+        const groupConfig = await getConfig(groupId);
+        const createList = groupConfig.enableDefaultListCreation ? create(newUser.id, groupId) : Promise.resolve();
         await Promise.all([
             client.userGroupMembership.create({
                 data: {
@@ -56,7 +58,7 @@ export const createUser = async (user: UserMinimal, role: Role, password: string
                     active: true
                 }
             }),
-            create(newUser.id, groupId)
+            createList
         ]);
     }
 

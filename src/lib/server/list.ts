@@ -29,6 +29,84 @@ export const create = async (ownerId: string, groupId: string, otherData?: ListP
     });
 };
 
+export const deleteList = async (id: string) => {
+    return client.$transaction(async (tx) => {
+        const list = await tx.list.delete({
+            select: {
+                id: true,
+                items: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        lists: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                }
+            },
+            where: {
+                id
+            }
+        });
+        const orphanedItems = list.items
+            .filter((i) => i.lists.filter((l) => l.id !== list.id).length === 0)
+            .map((i) => i.id);
+        await tx.item.deleteMany({
+            where: {
+                id: {
+                    in: orphanedItems
+                }
+            }
+        });
+    });
+};
+
+export const deleteLists = async (ownerId: string | undefined, groupId: string) => {
+    return client.$transaction(async (tx) => {
+        const lists = await tx.list.findMany({
+            select: {
+                id: true,
+                items: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        lists: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                }
+            },
+            where: {
+                ownerId,
+                groupId
+            }
+        });
+        await tx.list.deleteMany({
+            where: {
+                id: {
+                    in: lists.map((l) => l.id)
+                }
+            }
+        });
+        const listIds = new Set(lists.map((l) => l.id));
+        const orphanedItems = lists
+            .flatMap((list) => list.items)
+            .filter((i) => i.lists.filter((l) => !listIds.has(l.id)).length === 0)
+            .map((i) => i.id);
+        await tx.item.deleteMany({
+            where: {
+                id: {
+                    in: orphanedItems
+                }
+            }
+        });
+    });
+};
+
 export const getById = async (id: string) => {
     return await client.list.findUnique({
         select: {

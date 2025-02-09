@@ -5,6 +5,7 @@ import { client } from "$lib/server/prisma";
 import { getFormatter } from "$lib/i18n";
 import { getListPropertiesSchema } from "$lib/validations";
 import { trimToNull } from "$lib/util";
+import { deleteList } from "$lib/server/list";
 
 export const load: PageServerLoad = async ({ locals, url, params }) => {
     if (!locals.user) {
@@ -120,35 +121,7 @@ export const actions: Actions = {
         }
 
         try {
-            const list = await client.list.delete({
-                select: {
-                    id: true,
-                    items: {
-                        select: {
-                            id: true,
-                            userId: true,
-                            lists: {
-                                select: {
-                                    id: true
-                                }
-                            }
-                        }
-                    }
-                },
-                where: {
-                    id: params.id
-                }
-            });
-            const orphanedItems = list.items
-                .filter((i) => i.lists.filter((l) => l.id !== list.id).length === 0)
-                .map((i) => i.id);
-            await client.item.deleteMany({
-                where: {
-                    id: {
-                        in: orphanedItems
-                    }
-                }
-            });
+            deleteList(params.id);
         } catch (e) {
             console.log($t("errors.unable-to-delete-list"), e);
             return fail(500, { action: "delete", success: false, message: $t("errors.unable-to-delete-list") });

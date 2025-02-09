@@ -3,7 +3,8 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { _authCheck } from "../../auth";
-import { create } from "$lib/server/list";
+import { create, deleteLists } from "$lib/server/list";
+import { getConfig } from "$lib/server/config";
 
 export const GET: RequestHandler = async ({ locals, params }) => {
     const { authenticated, user } = await _authCheck(locals, params.groupId);
@@ -45,6 +46,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     });
     if (!group) error(404, "group not found");
 
+    const config = await getConfig(group.id);
     const data = await request.json();
 
     const membership = await client.userGroupMembership.findFirst({
@@ -56,8 +58,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 
     if (membership) error(400, "user is already member of the group");
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [newMembership, _list] = await Promise.all([
+    const createList = config.enableDefaultListCreation ? create(params.userId, group.id) : Promise.resolve();
+    const [newMembership] = await Promise.all([
         client.userGroupMembership.create({
             data: {
                 userId: params.userId,
@@ -65,7 +67,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
                 roleId: data.manager ? Role.GROUP_MANAGER : undefined
             }
         }),
-        create(params.userId, group.id)
+        createList
     ]);
 
     return new Response(JSON.stringify({ newMembership }), { status: 201 });
@@ -99,6 +101,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
             id: membership.id
         }
     });
+    deleteLists(params.userId, group.id);
 
     return new Response(JSON.stringify({ membership }), { status: 200 });
 };
