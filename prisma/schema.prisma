@@ -59,7 +59,6 @@ model Group {
     id                  String                @id @unique @default(uuid())
     name                String                @unique
     UserGroupMembership UserGroupMembership[]
-    Item                Item[]
     lists               List[]
 
     @@map("group")
@@ -118,8 +117,6 @@ model Item {
     publicPledgedById String?
     approved          Boolean     @default(true)
     purchased         Boolean     @default(false)
-    group             Group?      @relation(fields: [groupId], references: [id], onDelete: Cascade)
-    groupId           String?
     displayOrder      Int?
     lists             List[]
 
