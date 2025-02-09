@@ -1,6 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import Claims from "$lib/components/admin/SettingsForm/Claims.svelte";
+    import ListCreation from "$lib/components/admin/SettingsForm/ListCreation.svelte";
     import ListMode from "$lib/components/admin/SettingsForm/ListMode.svelte";
     import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
     import type { PageData } from "./$types";
@@ -18,7 +19,11 @@
 
 <form
     method="POST"
-    use:enhance={() => {
+    use:enhance={({ formData }) => {
+        if (!config.enableDefaultListCreation) {
+            formData.append("enableDefaultListCreation", "");
+        }
+
         return ({ result }) => {
             if (result.type === "success") {
                 saved = true;
@@ -35,6 +40,9 @@
         </div>
         <div class="col-span-1">
             <Claims bind:enabled={config.claims.showName} />
+        </div>
+        <div class="col-span-1">
+            <ListCreation bind:enabled={config.enableDefaultListCreation} />
         </div>
     </div>
 

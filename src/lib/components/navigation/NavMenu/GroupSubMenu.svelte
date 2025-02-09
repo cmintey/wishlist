@@ -33,8 +33,7 @@
                     const activeGroup = await userAPI.activeGroup();
                     if (!activeGroup) await userAPI.setActiveGroup(group.id);
                 }
-                await invalidateAll();
-                await goto("/");
+                goto("/", { invalidateAll: true });
             },
             // Optionally override the button text
             buttonTextCancel: $t("general.cancel"),

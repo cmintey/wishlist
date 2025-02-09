@@ -64,6 +64,7 @@ type Config = {
         passwordStrength: number;
     };
     defaultGroup?: string | null;
+    enableDefaultListCreation: boolean;
 };
 
 type Option = {
