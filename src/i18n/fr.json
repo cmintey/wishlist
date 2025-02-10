@@ -51,7 +51,12 @@
         "something-went-wrong": "Quelque chose n'a pas fonctionné",
         "list-not-found": "Liste non trouvée",
         "unable-to-update-list-settings": "Impossible de mettre à jour les paramètres de la liste",
-        "user-must-be-in-the-correct-group": "L'utilisateur doit être dans le bon groupe"
+        "user-must-be-in-the-correct-group": "L'utilisateur doit être dans le bon groupe",
+        "must-select-a-group": "Vous devez sélectionner un groupe",
+        "unable-to-delete-list": "Une erreur s'est produite lors de la suppression de la liste",
+        "in-registry-mode-you-can-only-have-one-list": "En mode enregistrement, vous ne pouvez avoir qu'une liste",
+        "unable-to-create-list": "Impossible de créer une liste",
+        "no-email-provided": "Aucun email fourni"
     },
     "admin": {
         "version": "Version : <a href=\"https ://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -113,7 +118,10 @@
         "registry-mode-alert-text": "Ce groupe est en <b>Registry Mode</b>. Aucun membre supplémentaire ne peut être ajouté dans ce mode. Vous pouvez obtenir un lien public vers votre liste sur la page de celle-ci.",
         "remove-admin": "Retirer l'administrateur",
         "remove-member-message": "Êtes-vous sûr de vouloir supprimer cet utilisateur du groupe?\",",
-        "password-reset-link": "Lien de réinitialisation du mot de passe"
+        "password-reset-link": "Lien de réinitialisation du mot de passe",
+        "list-creation": "Création de liste",
+        "enable-default-list-creation-tooltip": "Activer la création d'une liste lorsqu'un nouvel utilisateur rejoins un groupe. Les utilisateurs pourront toujours créer des listes eux-mêmes",
+        "enable-default-list-creation": "Activer la liste de création par défaut"
     },
     "auth": {
         "password": "Mot de passe",
@@ -141,7 +149,8 @@
         "your-password-was-reset": "Votre mot de passe a été réinitialisé.",
         "forgot-password": "Mot de passe oublié ?",
         "passwords-must-match": "Les mots de passe doivent concorder",
-        "reset-password": "Réinitialiser le mot de passe"
+        "reset-password": "Réinitialiser le mot de passe",
+        "invite-via": "Inviter via..."
     },
     "a11y": {
         "decrease-priority": "diminuer la priorité pour {name}",
@@ -238,7 +247,10 @@
         "icon-bg-color": "Couleur de fond de l'icône",
         "loading": "Chargement...",
         "no-file-selected": "Aucun fichier sélectionné",
-        "select-file": "Sélectionner un fichier"
+        "select-file": "Sélectionner un fichier",
+        "all": "Tout",
+        "apply": "Appliquer",
+        "create": "Créer"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -309,7 +321,14 @@
         "notes": "Notes",
         "lists": "Listes",
         "reorder": "Réorganiser",
-        "share": "Partager la liste"
+        "share": "Partager la liste",
+        "unclaim": "Annuler la récupération",
+        "create-list": "Créer une liste",
+        "delete-list-confirmation": "Êtes-vous sûr de vouloir supprimer cette liste? Tous les éléments qui ne sont pas associés à une autre liste seront aussi supprimés",
+        "my-lists": "Mes listes",
+        "no-lists-yet": "Aucune liste pour le moment",
+        "unclaimed": "Récupération annulé",
+        "nothing-claimed-yet": "Aucune récupération pour le moment"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
