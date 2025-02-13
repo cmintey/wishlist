@@ -82,7 +82,10 @@
         "wishlist-mode-registry": "Register",
         "wishlist-mode-wishlist": "Wunschliste",
         "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann.",
-        "password-reset-link": "Passwort zurücksetzen Link"
+        "password-reset-link": "Passwort zurücksetzen Link",
+        "enable-default-list-creation": "Aktiviere Erstellung einer Standard Liste",
+        "enable-default-list-creation-tooltip": "Aktiviere das Erstellen einer Liste wenn ein Benutzer einer Gruppe beitritt. Benutzer können Listen weiterhin selbst erstellen.",
+        "list-creation": "Liste Erstellen"
     },
     "wishes": {
         "filter": "Filter",
@@ -141,7 +144,11 @@
         "anonymous": "Anonym",
         "manage": "Bearbeiten",
         "manage-list": "Bearbeite Liste",
-        "preview": "Vorschau"
+        "preview": "Vorschau",
+        "create-list": "Erstelle Liste",
+        "delete-list-confirmation": "Soll die Liste wirklich gelöscht werden? Alle Artikel die nicht mit anderen Listen verknüpft sind, werden auch gelöscht.",
+        "no-lists-yet": "Keine Listen bisher",
+        "my-lists": "Meine Listen"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -196,7 +203,11 @@
         "list-not-found": "Liste nicht gefunden",
         "user-must-be-in-the-correct-group": "Benutzer muss in der korrekten Gruppe sein",
         "unable-to-update-list-settings": "Konnte die Einstellungen der Liste nicht aktualisieren",
-        "no-email-provided": "Keine E-Mailadresse eingegeben"
+        "no-email-provided": "Keine E-Mailadresse eingegeben",
+        "in-registry-mode-you-can-only-have-one-list": "Im Register Modus kann man nur eine Liste haben",
+        "must-select-a-group": "Eine Gruppe muss ausgewählt werden",
+        "unable-to-create-list": "Liste konnte nicht erstellt werden",
+        "unable-to-delete-list": "Problem beim Löschen der Liste"
     },
     "auth": {
         "log-in": "Anmelden",
@@ -224,7 +235,8 @@
         "signup": "Registrieren",
         "update-password": "Passwort aktualisieren",
         "username": "Benutzername",
-        "forgot-password": "Passwort vergessen?"
+        "forgot-password": "Passwort vergessen?",
+        "invite-via": "Einladung via..."
     },
     "general": {
         "search": "Suche",
@@ -281,7 +293,10 @@
         "loading": "Lade...",
         "icon-bg-color": "Icon Hintergrundfarbe",
         "select-file": "Datei auswählen",
-        "no-file-selected": "Keine Datei ausgewählt"
+        "no-file-selected": "Keine Datei ausgewählt",
+        "all": "Alle",
+        "apply": "Anwenden",
+        "create": "Erstellen"
     },
     "app": {
         "home": "Start",
