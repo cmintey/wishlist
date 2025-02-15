@@ -59,7 +59,7 @@
         "no-email-provided": "Aucun email fourni"
     },
     "admin": {
-        "version": "Version : <a href=\"https ://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
+        "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "groups": "Groupes",
         "default-group": "Groupe par défaut",
         "wishlist-mode-alert": "Il y a d'autres membres dans ce groupe, vous ne pouvez pas changer de mode tant que vous n'avez pas supprimé tous les membres sauf un.",
@@ -106,7 +106,7 @@
         "clear-lists-confirmation": "Êtes-vous sûr de vouloir effacer {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>tous les groupes</b>}} ? <b>Cette action est irréversible !</b>",
         "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Administrateur",
         "build-date": "Date de déploiement : {buildDate}",
-        "build": "Version : <a href=\"https ://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
+        "build": "Version : <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "clear-lists": "Effacez {groupSpecific, select, true {} other {All}} {claimedOnly, select, true {Claimed Items} other {Lists}}",
         "make-admin": "Promouvoir administrateur",
         "manager": "Administrateur",
