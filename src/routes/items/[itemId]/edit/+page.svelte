@@ -31,7 +31,7 @@
             };
         }}
     >
-        <ItemForm buttonText={$t("general.save")} data={data?.item} />
+        <ItemForm buttonText={$t("general.save")} item={data?.item} />
     </form>
 {/if}
 

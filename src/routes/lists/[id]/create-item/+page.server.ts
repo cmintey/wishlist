@@ -29,15 +29,54 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && locals.user.id !== list?.owner.id) {
+    if (!config.suggestions.enable && locals.user.id !== list.owner.id) {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
+    const lists = await client.userGroupMembership
+        .findMany({
+            select: {
+                groupId: true
+            },
+            where: {
+                userId: locals.user.id
+            }
+        })
+        .then((groups) =>
+            client.list.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    public: true,
+                    owner: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    group: {
+                        select: {
+                            name: true
+                        }
+                    }
+                },
+                where: {
+                    ownerId: list.owner.id,
+                    groupId: {
+                        in: groups.map((g) => g.groupId)
+                    }
+                }
+            })
+        );
+
     return {
-        owner: {
-            name: list.owner.name,
-            isMe: list.owner.id === locals.user.id
+        list: {
+            id: list.id,
+            owner: {
+                name: list.owner.name,
+                isMe: list.owner.id === locals.user.id
+            }
         },
+        lists,
         suggestion: list.owner.id !== locals.user.id,
         suggestionMethod: config.suggestions.method
     };
