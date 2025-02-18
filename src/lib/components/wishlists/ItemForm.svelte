@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import type { Item, ItemPrice } from "@prisma/client";
+    import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
     import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
@@ -9,16 +9,24 @@
     import { t } from "svelte-i18n";
     import { onMount } from "svelte";
 
+    interface ListProps extends Pick<List, "id" | "name" | "public"> {
+        owner: Pick<User, "name">;
+        group: Pick<Group, "name">;
+    }
+
     interface Props {
-        data: Partial<Item> & {
+        item: Partial<Item> & {
             itemPrice?: ItemPrice | null;
+            lists?: Pick<List, "id">[];
         };
+        lists?: ListProps[];
+        currentList?: string;
         buttonText: string;
     }
 
-    let { data = $bindable(), buttonText }: Props = $props();
+    let { item = $bindable(), buttonText, lists: otherLists = [], currentList }: Props = $props();
 
-    let productData = $state(data);
+    let productData = $state(item);
     let form = $derived(page.form);
     let url = $derived(page.url);
     let loading = $state(false);
@@ -29,6 +37,17 @@
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let files: FileList | undefined = $state();
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
+    const lists = $derived(
+        otherLists
+            .map((l) => ({
+                ...l,
+                name: l.name || $t("wishes.wishes-for", { values: { listOwner: l.owner.name } })
+            }))
+            .toSorted((a, b) =>
+                a.id === currentList ? -Infinity : b.id === currentList ? Infinity : a.name?.localeCompare(b.name)
+            )
+    );
+    const listsHavingItem = $derived(new Set(productData.lists?.map((l) => l.id) || [currentList]));
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -223,6 +242,34 @@
             bind:value={productData.note}
         ></textarea>
     </label>
+
+    {#if lists.length > 1}
+        <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-2">
+            <legend>Lists</legend>
+            <div
+                class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+            >
+                {#each lists as list (list.id)}
+                    <label class="flex items-center space-x-2" for={list.id}>
+                        <input
+                            id={list.id}
+                            name="list"
+                            class="checkbox"
+                            checked={listsHavingItem.has(list.id)}
+                            type="checkbox"
+                            value={list.id}
+                        />
+                        <div class="!mt-0 flex flex-row space-x-2">
+                            <span>
+                                {list.name}
+                            </span>
+                            <span class="font-bold italic">({list.group.name})</span>
+                        </div>
+                    </label>
+                {/each}
+            </div>
+        </fieldset>
+    {/if}
 
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
