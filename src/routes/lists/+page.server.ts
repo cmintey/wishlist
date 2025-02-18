@@ -119,7 +119,16 @@ export const load = (async ({ locals, url }) => {
                 select: {
                     id: true,
                     approved: true,
-                    pledgedById: true
+                    itemClaims: {
+                        select: {
+                            id: true
+                        }
+                    },
+                    item: {
+                        select: {
+                            id: true
+                        }
+                    }
                 }
             }
         }
@@ -160,9 +169,9 @@ export const load = (async ({ locals, url }) => {
         otherLists: otherLists
             .filter((list) => userIdFilter.length === 0 || userIdFilter.includes(list.owner.id))
             .map((list) => {
-                const claimedCount = list.items.filter((it) => it.approved && it.pledgedById !== null).length;
+                const claimedCount = list.items.filter((it) => it.approved && it.itemClaims.length > 0).length;
                 const itemCount = list.items.filter((it) => it.approved).length;
-                const items = list.items.map((it) => ({ id: it.id }));
+                const items = list.items.map((it) => ({ id: it.item.id }));
                 return {
                     id: list.id,
                     name: list.name,

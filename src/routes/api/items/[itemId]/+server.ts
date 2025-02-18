@@ -1,10 +1,11 @@
 import { getFormatter } from "$lib/i18n";
-import { SSEvents } from "$lib/schema";
 import { patchItem } from "$lib/server/api-common";
 import { getConfig } from "$lib/server/config";
 import { itemEmitter } from "$lib/server/events/emitters";
+import { ItemEvent } from "$lib/events";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { tryDeleteImage } from "$lib/server/image-util";
+import { getItemInclusions } from "$lib/server/items";
 import { client } from "$lib/server/prisma";
 import type { Prisma } from "@prisma/client";
 import { error, type RequestHandler } from "@sveltejs/kit";
@@ -25,25 +26,21 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
             id: parseInt(itemId)
         },
         select: {
-            addedBy: {
-                select: {
-                    username: true
-                }
-            },
-            user: {
-                select: {
-                    username: true,
-                    id: true
-                }
-            },
-            group: {
-                select: {
-                    id: true
-                }
-            },
+            createdById: true,
+            userId: true,
             lists: {
                 select: {
-                    public: true
+                    list: {
+                        select: {
+                            groupId: true,
+                            public: true
+                        }
+                    },
+                    addedBy: {
+                        select: {
+                            username: true
+                        }
+                    }
                 }
             },
             imageUrl: true
@@ -55,7 +52,7 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
     }
 
     if (checkPublic) {
-        const onPublicList = item.lists.reduce((c, v) => c || v.public, false);
+        const onPublicList = item.lists.map((li) => li.list).reduce((c, v) => c || v.public, false);
         if (!locals.user && onPublicList) {
             return item;
         } else {
@@ -63,7 +60,15 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
         }
     }
 
-    return item;
+    const { lists, ...rest } = item;
+    return {
+        ...rest,
+        lists: lists.map((li) => ({
+            groupId: li.list.groupId,
+            public: li.list.public,
+            addedBy: li.addedBy
+        }))
+    };
 };
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
@@ -77,39 +82,42 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 
     let suggestionDenied = false;
     const suggestionMethod = config.suggestions.method;
-    if (foundItem.user.username === locals.user.username && suggestionMethod !== "surprise") {
+    if (foundItem.userId === locals.user.id && suggestionMethod !== "surprise") {
         suggestionDenied = true;
     }
 
-    if (!suggestionDenied && foundItem.addedBy.username !== locals.user.username) {
+    if (!suggestionDenied && foundItem.createdById !== locals.user.id) {
         error(401, $t("errors.not-authorized"));
     }
 
     try {
-        const item = await client.item.delete({
+        const prismaItem = await client.item.delete({
             where: {
                 id: parseInt(params.itemId)
             },
             select: {
                 id: true,
-                groupId: true,
                 userId: true,
-                addedBy: {
-                    select: {
-                        id: true,
-                        username: true
-                    }
-                },
                 lists: {
                     select: {
-                        id: true
+                        list: {
+                            select: {
+                                id: true
+                            }
+                        }
                     }
                 },
                 imageUrl: true
             }
         });
 
-        itemEmitter.emit(SSEvents.item.delete, item);
+        const { lists, ...rest } = prismaItem;
+        const item = {
+            ...rest,
+            lists: lists.map((li) => ({ ...li.list }))
+        };
+
+        itemEmitter.emit(ItemEvent.ITEM_DELETE, item);
 
         if (item.imageUrl) {
             await tryDeleteImage(item.imageUrl);
@@ -134,42 +142,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             where: {
                 id: parseInt(params.itemId!)
             },
-            include: {
-                addedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                pledgedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                publicPledgedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                user: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                lists: {
-                    select: {
-                        id: true
-                    }
-                },
-                itemPrice: true
-            },
+            include: getItemInclusions(),
             data: data as Prisma.ItemUpdateInput
         });
 
@@ -177,7 +150,7 @@ export const PATCH: RequestHandler = async ({ params, locals, request }) => {
             await tryDeleteImage(item.imageUrl);
         }
 
-        itemEmitter.emit(SSEvents.item.update, updatedItem);
+        itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
 
         return new Response(JSON.stringify(updatedItem), { status: 200 });
     } catch {

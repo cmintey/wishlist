@@ -4,11 +4,11 @@
 
 <script lang="ts">
     import { dragHandle } from "svelte-dnd-action";
-    import type { FullItem } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 
     interface Props {
-        item: FullItem;
+        item: ItemOnListDTO;
         onIncreasePriority?: ItemVoidFunction | undefined;
         onDecreasePriority?: ItemVoidFunction | undefined;
     }

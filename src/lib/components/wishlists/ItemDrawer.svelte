@@ -1,13 +1,14 @@
 <script lang="ts">
     import { getDrawerStore } from "@skeletonlabs/skeleton";
-    import type { FullItem, PartialUser } from "./ItemCard/ItemCard.svelte";
+    import type { PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ManageButtons from "./ItemCard/ManageButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
     import { t } from "svelte-i18n";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 
     const drawerStore = getDrawerStore();
-    const item: FullItem = $drawerStore.meta.item;
+    const item: ItemOnListDTO = $drawerStore.meta.item;
     const user: PartialUser | undefined = $drawerStore.meta.user;
     const showFor: boolean = $drawerStore.meta.showFor;
     const showName: boolean = $drawerStore.meta.showName;

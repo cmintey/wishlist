@@ -1,17 +1,12 @@
-import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { createSSE } from "$lib/server/events/sse";
-import type { Item as DbItem, List } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/i18n";
 import { getById } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
-
-interface Item extends DbItem {
-    lists: List[];
-}
+import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
 
 export const GET = (async ({ locals, params }) => {
     const $t = await getFormatter();
@@ -46,16 +41,12 @@ export const GET = (async ({ locals, params }) => {
         return new Response();
     }
 
-    const predicate = (item: Item) => {
-        return item.lists.map((l) => l.id).includes(params.id);
-    };
+    const { readable, subscribeToEvent } = createSSE();
 
-    const { readable, subscribeToEvent } = createSSE<Item>();
-
-    subscribeToEvent(itemEmitter, SSEvents.item.update, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.item.create, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.item.delete, predicate);
-    subscribeToEvent(itemEmitter, SSEvents.items.update);
+    subscribeToEvent(itemEmitter, new ItemUpdateHandler(params.id));
+    subscribeToEvent(itemEmitter, new ItemCreateHandler(params.id));
+    subscribeToEvent(itemEmitter, new ItemDeleteHandler(params.id));
+    subscribeToEvent(itemEmitter, new ItemsUpdateHandler(params.id));
 
     return new Response(readable, {
         headers: {

@@ -3,16 +3,17 @@
     import { crossfade } from "svelte/transition";
     import { flip } from "svelte/animate";
     import type { PageData } from "./$types";
-    import ItemCard, { type FullItem } from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
+    import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
     import { t } from "svelte-i18n";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 
     interface Props {
         data: PageData;
     }
 
     let { data }: Props = $props();
-    let items: FullItem[] = $state(data.items);
+    let items: ItemOnListDTO[] = $state(data.items);
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -33,9 +34,9 @@
     });
 
     let sortedItems = $derived.by(() => {
-        const unpurchasedItems: FullItem[] = [];
-        const purchasedItems: FullItem[] = [];
-        items.forEach((item) => (item.purchased ? purchasedItems.push(item) : unpurchasedItems.push(item)));
+        const unpurchasedItems: ItemOnListDTO[] = [];
+        const purchasedItems: ItemOnListDTO[] = [];
+        items.forEach((item) => (item.claims[0].purchased ? purchasedItems.push(item) : unpurchasedItems.push(item)));
         return [...unpurchasedItems, ...purchasedItems];
     });
     $inspect(items);
