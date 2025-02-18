@@ -5,9 +5,10 @@ import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
-import { SSEvents } from "$lib/schema";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
+import { ItemEvent } from "$lib/events";
+import { getItemInclusions } from "$lib/server/items";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
@@ -27,19 +28,15 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         item = await client.item.findFirstOrThrow({
             where: {
                 id: parseInt(params.itemId),
-                groupId: activeMembership.groupId
+                lists: {
+                    some: {
+                        list: {
+                            groupId: activeMembership.groupId
+                        }
+                    }
+                }
             },
             include: {
-                addedBy: {
-                    select: {
-                        id: true
-                    }
-                },
-                user: {
-                    select: {
-                        id: true
-                    }
-                },
                 itemPrice: true
             }
         });
@@ -47,11 +44,11 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(404, $t("errors.item-not-found"));
     }
 
-    if (config.suggestions.method === "surprise" && locals.user.id !== item.addedBy.id) {
+    if (config.suggestions.method === "surprise" && locals.user.id !== item.createdById) {
         error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
     }
 
-    if (locals.user.id !== item.user.id && locals.user.id !== item.addedBy.id) {
+    if (locals.user.id !== item.userId && locals.user.id !== item.createdById) {
         error(400, $t("errors.item-invalid-ownership", { values: { username: locals.user.username } }));
     }
 
@@ -108,35 +105,7 @@ export const actions: Actions = {
                 note,
                 itemPriceId
             },
-            include: {
-                addedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                pledgedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                user: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                lists: {
-                    select: {
-                        id: true
-                    }
-                },
-                itemPrice: true
-            }
+            include: getItemInclusions()
         });
 
         if (item.itemPriceId !== null && item.itemPriceId !== itemPriceId) {
@@ -147,7 +116,7 @@ export const actions: Actions = {
             });
         }
 
-        itemEmitter.emit(SSEvents.item.update, updatedItem);
+        itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
 
         if (filename && item.imageUrl && item.imageUrl !== filename) {
             await tryDeleteImage(item.imageUrl);

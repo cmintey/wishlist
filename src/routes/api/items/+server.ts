@@ -1,4 +1,4 @@
-import { Role, SSEvents } from "$lib/schema";
+import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
@@ -8,6 +8,8 @@ import { itemEmitter } from "$lib/server/events/emitters";
 import type { Prisma } from "@prisma/client";
 import { patchItem } from "$lib/server/api-common";
 import { getFormatter } from "$lib/i18n";
+import { getItemInclusions } from "$lib/server/items";
+import { ItemEvent } from "$lib/events";
 
 export const DELETE: RequestHandler = async ({ locals, request }) => {
     const $t = await getFormatter();
@@ -34,13 +36,19 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
                 imageUrl: true,
                 lists: {
                     select: {
-                        id: true
+                        listId: true
                     }
                 }
             },
             where: {
-                groupId: groupId ? groupId : undefined,
-                pledgedById: claimed && Boolean(claimed) ? { not: null } : undefined
+                lists: {
+                    some: {
+                        list: {
+                            groupId: groupId || undefined
+                        },
+                        itemClaims: claimed && Boolean(claimed) ? {} : undefined
+                    }
+                }
             }
         });
 
@@ -48,7 +56,7 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
             if (item.imageUrl) {
                 await tryDeleteImage(item.imageUrl);
             }
-            itemEmitter.emit(SSEvents.item.delete, item);
+            itemEmitter.emit(ItemEvent.ITEM_DELETE, { id: item.id, lists: item.lists.map((l) => ({ id: l.listId })) });
         }
 
         const deletedItems = await client.item.deleteMany({
@@ -108,38 +116,7 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
             where: {
                 id
             },
-            include: {
-                addedBy: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                pledgedBy: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                publicPledgedBy: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                user: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                lists: {
-                    select: {
-                        id: true
-                    }
-                },
-                itemPrice: true
-            },
+            include: getItemInclusions(),
             data: patch.data as Prisma.ItemUpdateInput
         });
     });
@@ -153,7 +130,7 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
             }
         }
 
-        itemEmitter.emit(SSEvents.items.update);
+        itemEmitter.emit(ItemEvent.ITEMS_UPDATE);
 
         return new Response(JSON.stringify(updatedItems), { status: 200 });
     } catch {

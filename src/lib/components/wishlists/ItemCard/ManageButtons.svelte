@@ -1,10 +1,11 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import type { FullItem, PartialUser } from "./ItemCard.svelte";
+    import type { PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 
     interface Props {
-        item: FullItem;
+        item: ItemOnListDTO;
         user: PartialUser | undefined;
     }
 

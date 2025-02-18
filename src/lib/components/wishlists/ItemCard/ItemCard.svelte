@@ -1,20 +1,5 @@
 <script lang="ts" module>
-    export type PartialUser = {
-        username: string;
-        name: string;
-        id: string;
-    };
-    export type PublicUser = {
-        username: string;
-        name: string | null;
-    };
-    export type FullItem = Item & {
-        addedBy: PartialUser | null;
-        pledgedBy: PartialUser | null;
-        publicPledgedBy?: PublicUser | null;
-        user: PartialUser | null;
-        itemPrice: ItemPrice | null;
-    };
+    export type PartialUser = Pick<User, "id" | "name">;
 </script>
 
 <script lang="ts">
@@ -25,7 +10,7 @@
         type DrawerSettings,
         type ModalSettings
     } from "@skeletonlabs/skeleton";
-    import type { Item, ItemPrice } from "@prisma/client";
+    import type { User } from "@prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import ClaimButtons from "./ClaimButtons.svelte";
     import { goto, invalidateAll } from "$app/navigation";
@@ -35,9 +20,12 @@
     import { page } from "$app/stores";
     import { t } from "svelte-i18n";
     import ManageButtons from "./ManageButtons.svelte";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { ListItemAPI } from "$lib/api/lists";
+    import { ClaimAPI } from "$lib/api/claims";
 
     interface Props {
-        item: FullItem;
+        item: ItemOnListDTO;
         user?: PartialUser;
         showClaimedName?: boolean;
         showFor?: boolean;
@@ -73,7 +61,9 @@
         }
     });
 
-    const itemAPI = new ItemAPI(item.id);
+    const itemAPI = $derived(new ItemAPI(item.id));
+    const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
+    const claimAPI = $derived(new ClaimAPI(item.claims[0]?.claimId));
 
     const triggerErrorToast = () => {
         toastStore.trigger({
@@ -91,6 +81,7 @@
         // confirm = TRUE | cancel = FALSE
         response: async (r: boolean) => {
             if (r) {
+                // TODO: handle. Add option to delete from list or delete everywhere
                 const resp = await itemAPI.delete();
 
                 if (resp.ok) {
@@ -117,7 +108,7 @@
         body: $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } }),
         response: async (r: boolean) => {
             if (r) {
-                const resp = await (approve ? itemAPI.approve() : itemAPI.deny());
+                const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
 
                 if (resp.ok) {
                     toastStore.trigger({
@@ -143,7 +134,7 @@
 
     const handleClaim = async (unclaim = false) => {
         if (user?.id) {
-            const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user?.id));
+            const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(user?.id));
 
             if (resp.ok) {
                 toastStore.trigger({
@@ -163,7 +154,7 @@
                         return;
                     }
                     if (data.id) {
-                        const resp = await itemAPI.publicClaim(data.id);
+                        const resp = await listItemAPI.claimPublic(data.id);
 
                         if (resp.ok) {
                             toastStore.trigger({
@@ -183,7 +174,7 @@
     };
 
     const handlePurchased = async (purchased: boolean) => {
-        await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
+        await (purchased ? claimAPI.purchase() : claimAPI.unpurchase());
     };
 
     const drawerSettings: DrawerSettings = $derived({
