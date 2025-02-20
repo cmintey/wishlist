@@ -99,7 +99,6 @@ export const actions: Actions = {
         if (list.groupId !== activeMembership.groupId) {
             return fail(404, { success: false, message: $t("errors.user-not-in-group") });
         }
-        const config = await getConfig(activeMembership.groupId);
 
         const form = await request.formData();
         const url = form.get("url") as string;
@@ -109,10 +108,18 @@ export const actions: Actions = {
         const price = form.get("price") as string;
         const currency = form.get("currency") as string;
         const note = form.get("note") as string;
+        const listIds = form.getAll("list") as string[];
 
         // check for empty values
-        if (!name) {
-            return fail(400, { name, missing: true });
+        if (!name || listIds.length === 0) {
+            const errors: Record<string, string> = {};
+            if (!name) {
+                errors["name"] = $t("errors.item-name-required");
+            }
+            if (listIds.length === 0) {
+                errors["list"] = $t("errors.an-item-must-be-added-to-at-least-one-list");
+            }
+            return fail(400, { errors });
         }
 
         const filename = await createImage(locals.user.username, image);
@@ -129,6 +136,30 @@ export const actions: Actions = {
                 .then((itemPrice) => (itemPriceId = itemPrice.id));
         }
 
+        const lists = await client.list.findMany({
+            select: {
+                id: true,
+                ownerId: true,
+                groupId: true
+            },
+            where: {
+                id: {
+                    in: listIds
+                }
+            }
+        });
+
+        const listItems = await Promise.all(
+            lists.map(async (l) => {
+                const config = await getConfig(l.groupId);
+                return {
+                    listId: l.id,
+                    addedById: locals.user!.id,
+                    approved: l.ownerId === locals.user!.id || config.suggestions.method !== "approval"
+                };
+            })
+        );
+
         const item = await client.item.create({
             data: {
                 userId: list.owner.id,
@@ -139,11 +170,7 @@ export const actions: Actions = {
                 createdById: locals.user.id,
                 itemPriceId,
                 lists: {
-                    create: {
-                        listId: list.id,
-                        addedById: locals.user.id,
-                        approved: list.owner.id === locals.user.id || config.suggestions.method !== "approval"
-                    }
+                    create: listItems
                 }
             },
             include: getItemInclusions(params.id)

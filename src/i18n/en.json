@@ -134,6 +134,7 @@
         "test-subject": "Test from Wishlist"
     },
     "errors": {
+        "an-item-must-be-added-to-at-least-one-list": "An item must be added to at least one list",
         "asset-not-found": "Asset not found",
         "cannot-delete-default-group": "Cannot Delete Default Group",
         "cannot-delete-yourself": "Cannot delete yourself",

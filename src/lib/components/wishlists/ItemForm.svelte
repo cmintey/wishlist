@@ -178,15 +178,15 @@
                 id="name"
                 name="name"
                 class="input"
-                class:input-invalid={form?.missing}
+                class:input-error={form?.errors?.["name"]}
                 autocomplete="off"
                 required
                 type="text"
                 bind:value={productData.name}
             />
         </div>
-        {#if form?.missing}
-            <p class="unstyled pt-2 text-xs text-warning-500">{$t("errors.item-name-required")}</p>
+        {#if form?.errors?.["name"]}
+            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form?.errors?.["name"]}</p>
         {/if}
     </label>
 
@@ -244,10 +244,11 @@
     </label>
 
     {#if lists.length > 1}
-        <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-2">
+        <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-6">
             <legend>Lists</legend>
             <div
                 class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+                class:input-error={form?.errors?.["list"]}
             >
                 {#each lists as list (list.id)}
                     <label class="flex items-center space-x-2" for={list.id}>
@@ -268,6 +269,9 @@
                     </label>
                 {/each}
             </div>
+            {#if form?.errors?.["list"]}
+                <p class="unstyled text-error-500-400-token text-xs">{form?.errors?.["list"]}</p>
+            {/if}
         </fieldset>
     {/if}
 

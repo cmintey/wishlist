@@ -173,10 +173,10 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     const items = await client.item.findMany({
         where: {
             lists: {
-                every: {
-                    listId: list.id,
-                    ...itemListFilter
-                }
+                some: {
+                    listId: list.id
+                },
+                every: itemListFilter
             }
         },
         include: getItemInclusions(list.id)
