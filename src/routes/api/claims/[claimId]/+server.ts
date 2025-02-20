@@ -44,7 +44,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
             where: {
                 id: claim.itemId
             },
-            include: getItemInclusions(claim.listId)
+            include: getItemInclusions()
         });
         if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
 

@@ -77,7 +77,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             where: {
                 id: parseInt(params.itemId)
             },
-            include: getItemInclusions(params.listId)
+            include: getItemInclusions()
         });
         if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
 

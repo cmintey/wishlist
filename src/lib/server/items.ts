@@ -34,9 +34,6 @@ export const getItemInclusions = (listId?: string) => {
                         name: true
                     }
                 }
-            },
-            where: {
-                listId
             }
         },
         user: {

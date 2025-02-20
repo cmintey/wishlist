@@ -173,7 +173,7 @@ export const actions: Actions = {
                     create: listItems
                 }
             },
-            include: getItemInclusions(params.id)
+            include: getItemInclusions()
         });
 
         itemEmitter.emit(ItemEvent.ITEM_CREATE, item);
