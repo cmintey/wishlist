@@ -21,34 +21,6 @@ export class ItemAPI {
     delete = async () => {
         return await this._makeRequest("DELETE");
     };
-
-    approve = async () => {
-        return await this._makeRequest("PATCH", { approved: true });
-    };
-
-    deny = async () => {
-        return await this.delete();
-    };
-
-    claim = async (userId: string) => {
-        return await this._makeRequest("PATCH", { pledgedById: userId });
-    };
-
-    unclaim = async () => {
-        return await this._makeRequest("PATCH", { pledgedById: "0" });
-    };
-
-    publicClaim = async (systemUserId: string) => {
-        return await this._makeRequest("PATCH", { publicPledgedById: systemUserId });
-    };
-
-    purchase = async () => {
-        return await this._makeRequest("PATCH", { purchased: true });
-    };
-
-    unpurchase = async () => {
-        return await this._makeRequest("PATCH", { purchased: false });
-    };
 }
 
 export class ItemsAPI {

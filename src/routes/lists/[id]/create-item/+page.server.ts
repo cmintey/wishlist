@@ -4,11 +4,12 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage } from "$lib/server/image-util";
-import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
 import { getById } from "$lib/server/list";
+import { ItemEvent } from "$lib/events";
+import { getItemInclusions } from "$lib/server/items";
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
     const $t = await getFormatter();
@@ -96,48 +97,20 @@ export const actions: Actions = {
                 url,
                 note,
                 imageUrl: filename || imageUrl,
-                addedById: locals.user.id,
-                approved: list.owner.id === locals.user.id || config.suggestions.method !== "approval",
-                groupId: activeMembership.groupId,
+                createdById: locals.user.id,
                 itemPriceId,
                 lists: {
-                    connect: {
-                        id: list.id
+                    create: {
+                        listId: list.id,
+                        addedById: locals.user.id,
+                        approved: list.owner.id === locals.user.id || config.suggestions.method !== "approval"
                     }
                 }
             },
-            include: {
-                addedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                pledgedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                user: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                lists: {
-                    select: {
-                        id: true
-                    }
-                },
-                itemPrice: true
-            }
+            include: getItemInclusions(params.id)
         });
 
-        itemEmitter.emit(SSEvents.item.create, item);
+        itemEmitter.emit(ItemEvent.ITEM_CREATE, item);
 
         const ref = new URL(request.url).searchParams.get("ref");
         redirect(302, ref || "/");

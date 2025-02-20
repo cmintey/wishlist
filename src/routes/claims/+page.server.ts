@@ -3,6 +3,7 @@ import type { PageServerLoad } from "./$types";
 
 import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { toItemOnListDTO } from "$lib/dtos/item-mapper";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
@@ -11,41 +12,75 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const activeMembership = await getActiveMembership(locals.user);
 
-    const wishlistItems = await client.item.findMany({
+    const claims = await client.itemClaim.findMany({
         where: {
-            pledgedBy: {
-                username: locals.user.username
-            },
-            groupId: activeMembership.groupId
+            claimedById: locals.user.id,
+            listItem: {
+                list: {
+                    groupId: activeMembership.groupId
+                }
+            }
         },
-        include: {
-            addedBy: {
+        select: {
+            id: true,
+            purchased: true,
+            claimedBy: {
                 select: {
                     id: true,
-                    username: true,
                     name: true
                 }
             },
-            pledgedBy: {
+            listItem: {
                 select: {
-                    id: true,
-                    username: true,
-                    name: true
+                    addedBy: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    },
+                    item: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            },
+                            itemPrice: true
+                        }
+                    },
+                    listId: true,
+                    approved: true,
+                    displayOrder: true
                 }
-            },
-            user: {
-                select: {
-                    id: true,
-                    username: true,
-                    name: true
-                }
-            },
-            itemPrice: true
+            }
         }
     });
 
+    const items = claims
+        .map((claim) => {
+            const { item, ...list } = claim.listItem;
+            return {
+                ...item,
+                lists: [
+                    {
+                        ...list,
+                        itemClaims: [
+                            {
+                                id: claim.id,
+                                purchased: claim.purchased,
+                                claimedBy: claim.claimedBy,
+                                publicClaimedBy: null
+                            }
+                        ]
+                    }
+                ]
+            };
+        })
+        .map((i) => toItemOnListDTO(i, i.lists[0].listId));
+
     return {
         user: locals.user,
-        items: wishlistItems
+        items
     };
 };

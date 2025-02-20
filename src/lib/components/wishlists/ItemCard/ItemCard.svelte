@@ -1,20 +1,5 @@
 <script lang="ts" module>
-    export type PartialUser = {
-        username: string;
-        name: string;
-        id: string;
-    };
-    export type PublicUser = {
-        username: string;
-        name: string | null;
-    };
-    export type FullItem = Item & {
-        addedBy: PartialUser | null;
-        pledgedBy: PartialUser | null;
-        publicPledgedBy?: PublicUser | null;
-        user: PartialUser | null;
-        itemPrice: ItemPrice | null;
-    };
+    export type PartialUser = Pick<User, "id" | "name">;
 </script>
 
 <script lang="ts">
@@ -25,19 +10,23 @@
         type DrawerSettings,
         type ModalSettings
     } from "@skeletonlabs/skeleton";
-    import type { Item, ItemPrice } from "@prisma/client";
+    import type { User } from "@prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import ClaimButtons from "./ClaimButtons.svelte";
     import { goto, invalidateAll } from "$app/navigation";
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import ReorderButtons from "./ReorderButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { t } from "svelte-i18n";
     import ManageButtons from "./ManageButtons.svelte";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { ListItemAPI } from "$lib/api/lists";
+    import { ClaimAPI } from "$lib/api/claims";
+    import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
 
     interface Props {
-        item: FullItem;
+        item: ItemOnListDTO;
         user?: PartialUser;
         showClaimedName?: boolean;
         showFor?: boolean;
@@ -73,7 +62,9 @@
         }
     });
 
-    const itemAPI = new ItemAPI(item.id);
+    const itemAPI = $derived(new ItemAPI(item.id));
+    const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
+    const claimAPI = $derived(new ClaimAPI(item.claims[0]?.claimId));
 
     const triggerErrorToast = () => {
         toastStore.trigger({
@@ -84,20 +75,36 @@
         });
     };
 
+    const itemNameShort = item.name.length > 42 ? item.name.substring(0, 42) + "…" : item.name;
     const confirmDeleteModal: ModalSettings = {
-        type: "confirm",
+        type: "component",
+        component: "deleteItem",
         title: $t("general.please-confirm"),
-        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: item.name } }),
-        // confirm = TRUE | cancel = FALSE
-        response: async (r: boolean) => {
-            if (r) {
+        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: itemNameShort } }),
+        response: async (r: DeleteConfirmationResult) => {
+            if (r == DeleteConfirmationResult.DELETE) {
                 const resp = await itemAPI.delete();
 
                 if (resp.ok) {
                     invalidateAll();
 
                     toastStore.trigger({
-                        message: $t("wishes.item-was-deleted", { values: { name: item.name } }),
+                        message: $t("wishes.item-was-deleted", { values: { name: itemNameShort } }),
+                        autohide: true,
+                        timeout: 5000
+                    });
+                    drawerStore.close();
+                } else {
+                    triggerErrorToast();
+                }
+            } else if (r === DeleteConfirmationResult.REMOVE) {
+                const resp = await listItemAPI.delete();
+
+                if (resp.ok) {
+                    invalidateAll();
+
+                    toastStore.trigger({
+                        message: $t("wishes.item-was-removed-from-list", { values: { name: itemNameShort } }),
                         autohide: true,
                         timeout: 5000
                     });
@@ -106,9 +113,7 @@
                     triggerErrorToast();
                 }
             }
-        },
-        buttonTextCancel: $t("general.cancel"),
-        buttonTextConfirm: $t("general.confirm")
+        }
     };
 
     const approvalModal = (approve: boolean): ModalSettings => ({
@@ -117,11 +122,11 @@
         body: $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } }),
         response: async (r: boolean) => {
             if (r) {
-                const resp = await (approve ? itemAPI.approve() : itemAPI.deny());
+                const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
 
                 if (resp.ok) {
                     toastStore.trigger({
-                        message: $t("wishes.item-approved", { values: { name: item.name, approved: approve } }),
+                        message: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } }),
                         autohide: true,
                         timeout: 5000
                     });
@@ -138,12 +143,12 @@
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
     const handleEdit = () => {
-        goto(`/items/${item.id}/edit?ref=${$page.url.pathname}`);
+        goto(`/items/${item.id}/edit?ref=${page.url.pathname}`);
     };
 
     const handleClaim = async (unclaim = false) => {
         if (user?.id) {
-            const resp = await (unclaim ? itemAPI.unclaim() : itemAPI.claim(user?.id));
+            const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(user?.id));
 
             if (resp.ok) {
                 toastStore.trigger({
@@ -163,7 +168,7 @@
                         return;
                     }
                     if (data.id) {
-                        const resp = await itemAPI.publicClaim(data.id);
+                        const resp = await listItemAPI.claimPublic(data.id);
 
                         if (resp.ok) {
                             toastStore.trigger({
@@ -183,7 +188,7 @@
     };
 
     const handlePurchased = async (purchased: boolean) => {
-        await (purchased ? itemAPI.purchase() : itemAPI.unpurchase());
+        await (purchased ? claimAPI.purchase() : claimAPI.unpurchase());
     };
 
     const drawerSettings: DrawerSettings = $derived({
