@@ -14,10 +14,14 @@
         group: Pick<Group, "name">;
     }
 
+    interface ExistingListProps extends Pick<List, "id"> {
+        canModify: boolean;
+    }
+
     interface Props {
         item: Partial<Item> & {
             itemPrice?: ItemPrice | null;
-            lists?: Pick<List, "id">[];
+            lists?: ExistingListProps[];
         };
         lists?: ListProps[];
         currentList?: string;
@@ -37,6 +41,18 @@
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let files: FileList | undefined = $state();
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
+
+    const listsHavingItem = $derived.by(() => {
+        return productData.lists
+            ? productData.lists.reduce(
+                  (accum, list) => {
+                      accum[list.id] = list.canModify;
+                      return accum;
+                  },
+                  {} as Record<string, boolean>
+              )
+            : { [currentList || ""]: true };
+    });
     const lists = $derived(
         otherLists
             .map((l) => ({
@@ -44,10 +60,13 @@
                 name: l.name || $t("wishes.wishes-for", { values: { listOwner: l.owner.name } })
             }))
             .toSorted((a, b) =>
-                a.id === currentList ? -Infinity : b.id === currentList ? Infinity : a.name?.localeCompare(b.name)
+                listsHavingItem[a.id] !== undefined
+                    ? -Infinity
+                    : listsHavingItem[b.id] !== undefined
+                      ? Infinity
+                      : a.name?.localeCompare(b.name)
             )
     );
-    const listsHavingItem = $derived(new Set(productData.lists?.map((l) => l.id) || [currentList]));
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -255,8 +274,9 @@
                         <input
                             id={list.id}
                             name="list"
-                            class="checkbox"
-                            checked={listsHavingItem.has(list.id)}
+                            class="checkbox disabled:checked:bg-surface-400-500-token disabled:cursor-not-allowed"
+                            checked={listsHavingItem[list.id] !== undefined}
+                            disabled={listsHavingItem[list.id] === false}
                             type="checkbox"
                             value={list.id}
                         />

@@ -14,12 +14,11 @@
     const toastStore = getToastStore();
 </script>
 
-{#if data?.item}
+{#if data.item}
     <form
         enctype="multipart/form-data"
         method="POST"
         use:enhance={() => {
-            // loading = true;
             return async ({ update }) => {
                 const c = {
                     message: $t("wishes.updated-success"),
@@ -31,7 +30,7 @@
             };
         }}
     >
-        <ItemForm buttonText={$t("general.save")} item={data?.item} />
+        <ItemForm buttonText={$t("general.save")} item={data.item} lists={data.lists} />
     </form>
 {/if}
 

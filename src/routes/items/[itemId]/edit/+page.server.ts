@@ -23,26 +23,34 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     const activeMembership = await getActiveMembership(locals.user);
     const config = await getConfig(activeMembership.groupId);
 
-    let item;
-    try {
-        item = await client.item.findFirstOrThrow({
-            where: {
-                id: parseInt(params.itemId),
-                lists: {
-                    some: {
-                        list: {
-                            groupId: activeMembership.groupId
+    const item = await client.item.findUnique({
+        where: {
+            id: parseInt(params.itemId),
+            lists: {
+                some: {
+                    list: {
+                        groupId: activeMembership.groupId
+                    }
+                }
+            }
+        },
+        include: {
+            itemPrice: true,
+            lists: {
+                select: {
+                    addedById: true,
+                    list: {
+                        select: {
+                            id: true,
+                            ownerId: true
                         }
                     }
                 }
-            },
-            include: {
-                itemPrice: true
             }
-        });
-    } catch {
-        error(404, $t("errors.item-not-found"));
-    }
+        }
+    });
+
+    if (!item) error(404, $t("errors.item-not-found"));
 
     if (config.suggestions.method === "surprise" && locals.user.id !== item.createdById) {
         error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
@@ -52,13 +60,57 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(400, $t("errors.item-invalid-ownership", { values: { username: locals.user.username } }));
     }
 
+    const lists = await client.userGroupMembership
+        .findMany({
+            select: {
+                groupId: true
+            },
+            where: {
+                userId: locals.user.id
+            }
+        })
+        .then((groups) =>
+            client.list.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    public: true,
+                    owner: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    group: {
+                        select: {
+                            name: true
+                        }
+                    }
+                },
+                where: {
+                    ownerId: item.userId,
+                    groupId: {
+                        in: groups.map((g) => g.groupId)
+                    }
+                }
+            })
+        );
+
     return {
-        item
+        item: {
+            ...item,
+            lists: item.lists.map(({ list, addedById }) => ({
+                id: list.id,
+                canModify: list.ownerId === locals.user!.id || addedById === locals.user!.id
+            }))
+        },
+        lists
     };
 };
 
 export const actions: Actions = {
     default: async ({ locals, request, params }) => {
+        const $t = await getFormatter();
+
         if (!locals.user) error(401, "Not authorized");
         const form = await request.formData();
         const url = form.get("url") as string;
@@ -68,15 +120,37 @@ export const actions: Actions = {
         const price = form.get("price") as string;
         const currency = form.get("currency") as string;
         const note = form.get("note") as string;
+        const listIds = form.getAll("list") as string[];
 
         // check for empty values
-        if (!name) {
-            return fail(400, { name, missing: true });
+        if (!name || listIds.length === 0) {
+            const errors: Record<string, string> = {};
+            if (!name) {
+                errors["name"] = $t("errors.item-name-required");
+            }
+            if (listIds.length === 0) {
+                errors["list"] = $t("errors.an-item-must-be-added-to-at-least-one-list");
+            }
+            return fail(400, { errors });
         }
 
         const filename = await createImage(locals.user.username, image);
 
         const item = await client.item.findUniqueOrThrow({
+            include: {
+                lists: {
+                    select: {
+                        id: true,
+                        addedById: true,
+                        list: {
+                            select: {
+                                id: true,
+                                ownerId: true
+                            }
+                        }
+                    }
+                }
+            },
             where: {
                 id: parseInt(params.itemId)
             }
@@ -94,6 +168,43 @@ export const actions: Actions = {
                 .then((itemPrice) => (itemPriceId = itemPrice.id));
         }
 
+        const desiredLists = await client.list.findMany({
+            select: {
+                id: true,
+                ownerId: true,
+                groupId: true
+            },
+            where: {
+                id: {
+                    in: listIds
+                }
+            }
+        });
+
+        const desiredListIds = new Set(desiredLists.map(({ id }) => id));
+        const listItemsToDelete = item.lists
+            // only the list owner or the person who added the item can remove it from the list
+            .filter(
+                (listItem) =>
+                    !desiredListIds.has(listItem.list.id) &&
+                    (listItem.addedById === locals.user!.id || listItem.list.ownerId === locals.user!.id)
+            )
+            .map(({ id }) => id);
+
+        const listItemsToCreate = await Promise.all(
+            desiredLists
+                // only create list items which are not already existing
+                .filter((l) => item.lists.find(({ list }) => list.id === l.id) === undefined)
+                .map(async (l) => {
+                    const config = await getConfig(l.groupId);
+                    return {
+                        listId: l.id,
+                        addedById: locals.user!.id,
+                        approved: l.ownerId === locals.user!.id || config.suggestions.method !== "approval"
+                    };
+                })
+        );
+
         const updatedItem = await client.item.update({
             where: {
                 id: parseInt(params.itemId)
@@ -103,7 +214,15 @@ export const actions: Actions = {
                 url,
                 imageUrl: filename || imageUrl,
                 note,
-                itemPriceId
+                itemPriceId,
+                lists: {
+                    create: listItemsToCreate,
+                    deleteMany: {
+                        id: {
+                            in: listItemsToDelete
+                        }
+                    }
+                }
             },
             include: getItemInclusions()
         });
