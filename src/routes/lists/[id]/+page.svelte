@@ -15,7 +15,6 @@
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone } from "svelte-dnd-action";
-    import { ItemsAPI } from "$lib/api/items";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import { t } from "svelte-i18n";
@@ -45,7 +44,7 @@
     });
 
     const flipDurationMs = 200;
-    const itemsAPI = new ItemsAPI();
+    const listAPI = new ListAPI(data.list.id);
     const toastStore = getToastStore();
     let eventSource: EventSource;
 
@@ -183,10 +182,10 @@
     const handleReorderFinalize = async () => {
         reordering = false;
         const displayOrderUpdate = allItems.map((item, idx) => ({
-            id: item.id,
+            itemId: item.id,
             displayOrder: idx
         }));
-        const response = await itemsAPI.updateMany(displayOrderUpdate);
+        const response = await listAPI.updateItems(displayOrderUpdate);
         if (!response.ok) {
             toastStore.trigger({
                 message: $t("wishes.unable-to-update-item-ordering"),

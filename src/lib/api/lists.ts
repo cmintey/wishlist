@@ -1,10 +1,12 @@
+import type { listItemsUpdateSchema } from "$lib/validations";
+
 export class ListAPI {
     private listId: string;
     constructor(listId: string) {
         this.listId = listId;
     }
 
-    _makeRequest = async (method: string, data?: Record<string, any>) => {
+    _makeRequest = async (method: string, path: string, data?: Record<string, any>) => {
         const options: RequestInit = {
             method,
             headers: {
@@ -17,12 +19,16 @@ export class ListAPI {
             options.body = JSON.stringify(data);
         }
 
-        const url = `/api/lists/${this.listId}`;
+        const url = `/api/lists/${this.listId}${path}`;
         return await fetch(url, options);
     };
 
     makePublic = async () => {
-        return await this._makeRequest("PATCH", { public: true });
+        return await this._makeRequest("PATCH", "/", { public: true });
+    };
+
+    updateItems = async (data: Zod.infer<typeof listItemsUpdateSchema>[]) => {
+        return await this._makeRequest("PATCH", "/items", data);
     };
 }
 
