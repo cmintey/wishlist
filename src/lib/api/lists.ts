@@ -52,6 +52,10 @@ export class ListItemAPI {
         return await fetch(url, options);
     };
 
+    delete = async () => {
+        return await this._makeRequest("DELETE");
+    };
+
     approve = async () => {
         return await this._makeRequest("PATCH", "/", { approved: true });
     };

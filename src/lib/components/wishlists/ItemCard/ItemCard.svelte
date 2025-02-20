@@ -17,12 +17,13 @@
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import ReorderButtons from "./ReorderButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { t } from "svelte-i18n";
     import ManageButtons from "./ManageButtons.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
+    import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
 
     interface Props {
         item: ItemOnListDTO;
@@ -74,21 +75,36 @@
         });
     };
 
+    const itemNameShort = item.name.length > 42 ? item.name.substring(0, 42) + "…" : item.name;
     const confirmDeleteModal: ModalSettings = {
-        type: "confirm",
+        type: "component",
+        component: "deleteItem",
         title: $t("general.please-confirm"),
-        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: item.name } }),
-        // confirm = TRUE | cancel = FALSE
-        response: async (r: boolean) => {
-            if (r) {
-                // TODO: handle. Add option to delete from list or delete everywhere
+        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: itemNameShort } }),
+        response: async (r: DeleteConfirmationResult) => {
+            if (r == DeleteConfirmationResult.DELETE) {
                 const resp = await itemAPI.delete();
 
                 if (resp.ok) {
                     invalidateAll();
 
                     toastStore.trigger({
-                        message: $t("wishes.item-was-deleted", { values: { name: item.name } }),
+                        message: $t("wishes.item-was-deleted", { values: { name: itemNameShort } }),
+                        autohide: true,
+                        timeout: 5000
+                    });
+                    drawerStore.close();
+                } else {
+                    triggerErrorToast();
+                }
+            } else if (r === DeleteConfirmationResult.REMOVE) {
+                const resp = await listItemAPI.delete();
+
+                if (resp.ok) {
+                    invalidateAll();
+
+                    toastStore.trigger({
+                        message: $t("wishes.item-was-removed-from-list", { values: { name: itemNameShort } }),
                         autohide: true,
                         timeout: 5000
                     });
@@ -97,9 +113,7 @@
                     triggerErrorToast();
                 }
             }
-        },
-        buttonTextCancel: $t("general.cancel"),
-        buttonTextConfirm: $t("general.confirm")
+        }
     };
 
     const approvalModal = (approve: boolean): ModalSettings => ({
@@ -112,7 +126,7 @@
 
                 if (resp.ok) {
                     toastStore.trigger({
-                        message: $t("wishes.item-approved", { values: { name: item.name, approved: approve } }),
+                        message: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } }),
                         autohide: true,
                         timeout: 5000
                     });
@@ -129,7 +143,7 @@
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
     const handleEdit = () => {
-        goto(`/items/${item.id}/edit?ref=${$page.url.pathname}`);
+        goto(`/items/${item.id}/edit?ref=${page.url.pathname}`);
     };
 
     const handleClaim = async (unclaim = false) => {

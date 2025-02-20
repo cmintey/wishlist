@@ -71,32 +71,76 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     const $t = await getFormatter();
     if (!locals.user) error(401, $t("errors.unauthenticated"));
 
-    const list = await client.list.findUnique({
-        select: {
-            ownerId: true
-        },
-        where: {
-            id: params.listId
-        }
-    });
-    if (!list) {
-        error(404, $t("errors.list-not-found"));
-    } else if (list.ownerId !== locals.user.id) {
-        error(401, $t("errors.not-authorized"));
-    }
     if (isNaN(parseInt(params.itemId))) {
         error(400, $t("errors.item-id-must-be-a-number"));
     }
 
-    try {
-        await client.listItem.delete({
+    const [list, item, listItem] = await Promise.all([
+        client.list.findUnique({
+            select: {
+                ownerId: true
+            },
+            where: {
+                id: params.listId
+            }
+        }),
+        client.item.findUnique({
+            select: {
+                id: true,
+                userId: true,
+                createdById: true,
+                lists: {
+                    select: {
+                        id: true
+                    }
+                }
+            },
+            where: {
+                id: parseInt(params.itemId)
+            }
+        }),
+        client.listItem.findUnique({
+            select: {
+                id: true,
+                addedById: true
+            },
             where: {
                 listId_itemId: {
                     listId: params.listId,
                     itemId: parseInt(params.itemId)
                 }
             }
+        })
+    ]);
+
+    if (!listItem) {
+        error(404, $t("errors.item-not-found-on-list"));
+    }
+    if (!list) {
+        error(404, $t("errors.list-not-found"));
+    }
+    if (!item) {
+        error(404, $t("errors.item-not-found"));
+    }
+
+    if (listItem.addedById !== locals.user.id && list.ownerId !== locals.user.id) {
+        error(401, $t("errors.not-authorized"));
+    }
+
+    try {
+        await client.listItem.delete({
+            where: {
+                id: listItem.id
+            }
         });
+        // Item was only on this list, we should delete it
+        if (item.lists.length === 1 && (item.createdById === locals.user.id || item.userId === locals.user.id)) {
+            await client.item.delete({
+                where: {
+                    id: item.id
+                }
+            });
+        }
 
         itemEmitter.emit(ItemEvent.ITEM_DELETE, { id: parseInt(params.itemId), lists: [{ id: params.listId }] });
 
