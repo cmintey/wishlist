@@ -37,18 +37,23 @@
         <article class="modal-body max-h-[200px] overflow-hidden">{@html $modalStore[0].body}</article>
     {/if}
 
-    <!-- Template: Confirm -->
     <footer class="modal-footer flex flex-wrap justify-between gap-y-2">
         <button class="variant-ghost-surface btn btn-sm md:btn-md" type="button" on:click={onClose}>
             {$t("general.cancel")}
         </button>
-        <div class="flex flex-wrap gap-2">
-            <button class="variant-filled-error btn btn-sm md:btn-md" type="button" on:click={onDelete}>
-                {$t("wishes.all-lists")}
+        {#if $modalStore[0].meta.multipleLists}
+            <div class="flex flex-wrap gap-2">
+                <button class="variant-filled-error btn btn-sm md:btn-md" type="button" on:click={onDelete}>
+                    {$t("wishes.all-lists")}
+                </button>
+                <button class="variant-filled-primary btn btn-sm md:btn-md" type="button" on:click={onRemove}>
+                    {$t("wishes.this-list")}
+                </button>
+            </div>
+        {:else}
+            <button class="variant-filled btn btn-sm md:btn-md" type="button" on:click={onDelete}>
+                {$t("general.confirm")}
             </button>
-            <button class="variant-filled-primary btn btn-sm md:btn-md" type="button" on:click={onRemove}>
-                {$t("wishes.this-list")}
-            </button>
-        </div>
+        {/if}
     </footer>
 </div>

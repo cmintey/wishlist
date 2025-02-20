@@ -12,28 +12,28 @@ export const getItemInclusions = (listId?: string) => {
                         id: true,
                         name: true
                     }
-                },
-                itemClaims: {
-                    select: {
-                        id: true,
-                        purchased: true,
-                        claimedBy: {
-                            select: {
-                                id: true,
-                                name: true
-                            }
-                        },
-                        publicClaimedBy: {
-                            select: {
-                                id: true,
-                                name: true
-                            }
-                        }
-                    }
                 }
             },
             where: {
                 listId
+            }
+        },
+        claims: {
+            select: {
+                id: true,
+                purchased: true,
+                claimedBy: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                publicClaimedBy: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                }
             }
         },
         user: {
@@ -42,6 +42,11 @@ export const getItemInclusions = (listId?: string) => {
                 name: true
             }
         },
-        itemPrice: true
+        itemPrice: true,
+        _count: {
+            select: {
+                lists: true
+            }
+        }
     } satisfies Prisma.ItemInclude;
 };

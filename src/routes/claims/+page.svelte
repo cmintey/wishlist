@@ -39,7 +39,6 @@
         items.forEach((item) => (item.claims[0].purchased ? purchasedItems.push(item) : unpurchasedItems.push(item)));
         return [...unpurchasedItems, ...purchasedItems];
     });
-    $inspect(items);
 </script>
 
 {#if data.items.length === 0}

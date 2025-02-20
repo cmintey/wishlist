@@ -1,18 +1,18 @@
 import type { Prisma } from "@prisma/client";
 
 export const createFilter = (filter: string | null) => {
-    const search: Prisma.ListItemWhereInput = {};
+    const search: Prisma.ItemWhereInput = {};
     if (filter === "unclaimed") {
         search.AND = [
             {
-                itemClaims: {
+                claims: {
                     every: {
                         claimedById: null
                     }
                 }
             },
             {
-                itemClaims: {
+                claims: {
                     every: {
                         publicClaimedById: null
                     }
@@ -22,14 +22,14 @@ export const createFilter = (filter: string | null) => {
     } else if (filter === "claimed") {
         search.OR = [
             {
-                itemClaims: {
+                claims: {
                     every: {
                         claimedById: null
                     }
                 }
             },
             {
-                itemClaims: {
+                claims: {
                     every: {
                         publicClaimedById: null
                     }
