@@ -45,9 +45,11 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
                     some: {
                         list: {
                             groupId: groupId || undefined
-                        },
-                        itemClaims: claimed && Boolean(claimed) ? {} : undefined
+                        }
                     }
+                },
+                claims: {
+                    some: claimed && Boolean(claimed) ? {} : undefined
                 }
             }
         });

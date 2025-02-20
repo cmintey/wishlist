@@ -45,12 +45,14 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 
     try {
         const data: Prisma.ItemClaimCreateInput = {
-            listItem: {
+            item: {
                 connect: {
-                    listId_itemId: {
-                        listId: params.listId,
-                        itemId: parseInt(params.itemId)
-                    }
+                    id: parseInt(params.itemId)
+                }
+            },
+            list: {
+                connect: {
+                    id: params.listId
                 }
             }
         };

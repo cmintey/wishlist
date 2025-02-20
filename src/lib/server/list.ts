@@ -3,6 +3,7 @@ import { client } from "./prisma";
 import { createFilter } from "./sort-filter-util";
 import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
+import type { Prisma } from "@prisma/client";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -141,7 +142,8 @@ export const getById = async (id: string) => {
 };
 
 export const getItems = async (listId: string, options: GetItemsOptions) => {
-    const itemListFilter = createFilter(options.filter);
+    const itemFilter = createFilter(options.filter);
+    const itemListFilter: Prisma.ListItemWhereInput = {};
 
     // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
     if (
@@ -177,7 +179,8 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
                     listId: list.id
                 },
                 every: itemListFilter
-            }
+            },
+            ...itemFilter
         },
         include: getItemInclusions(list.id)
     });
