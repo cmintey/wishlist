@@ -19,15 +19,20 @@ interface ListItem extends Pick<PrismaListItem, "listId" | "approved" | "display
     addedBy: MinimalUser;
 }
 
+interface ItemCount {
+    lists: number;
+}
+
 export interface FullItem extends Item {
     itemPrice: ItemPrice | null;
     user: MinimalUser;
     lists: ListItem[];
     claims: ItemClaim[];
+    _count: ItemCount;
 }
 
 export const toItemOnListDTO = (item: FullItem, listId: string) => {
-    const { lists, claims, ...restOfItem } = item;
+    const { lists, claims, _count, ...restOfItem } = item;
     const list = lists.find((l) => l.listId === listId);
     if (!list) {
         throw new Error(`Couldn't find related list with id=${listId} on item with id=${item.id}`);
@@ -39,6 +44,7 @@ export const toItemOnListDTO = (item: FullItem, listId: string) => {
             claim.claimedBy
                 ? { claimId: claim.id, claimedBy: claim.claimedBy, purchased: claim.purchased }
                 : { claimId: claim.id, publicClaimedBy: claim.publicClaimedBy! }
-        )
+        ),
+        listCount: _count.lists
     } satisfies ItemOnListDTO;
 };

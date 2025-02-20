@@ -45,7 +45,7 @@ export const getItemInclusions = (listId?: string) => {
         itemPrice: true,
         _count: {
             select: {
-                claims: true
+                lists: true
             }
         }
     } satisfies Prisma.ItemInclude;

@@ -77,7 +77,12 @@ export const load: PageServerLoad = async ({ locals }) => {
                     name: true
                 }
             },
-            itemPrice: true
+            itemPrice: true,
+            _count: {
+                select: {
+                    lists: true
+                }
+            }
         }
     });
 

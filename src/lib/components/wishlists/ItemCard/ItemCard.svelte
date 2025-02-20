@@ -80,7 +80,15 @@
         type: "component",
         component: "deleteItem",
         title: $t("general.please-confirm"),
-        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: itemNameShort } }),
+        body: $t(
+            item.listCount > 1
+                ? "wishes.are-you-sure-you-wish-to-delete-item-multiple-lists"
+                : "wishes.are-you-sure-you-wish-to-delete-item",
+            { values: { name: itemNameShort } }
+        ),
+        meta: {
+            multipleLists: item.listCount > 1
+        },
         response: async (r: DeleteConfirmationResult) => {
             if (r == DeleteConfirmationResult.DELETE) {
                 const resp = await itemAPI.delete();

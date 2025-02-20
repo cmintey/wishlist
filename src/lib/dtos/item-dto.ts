@@ -29,6 +29,7 @@ interface ListItem {
 export interface ItemOnListDTO extends Item, ListItem {
     itemPrice: ItemPrice | null;
     user: MinimalUser;
+    listCount: number;
 }
 
 export interface ItemDTO extends Item {
