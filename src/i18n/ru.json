@@ -82,7 +82,10 @@
         "group-settings": "Настройки группы",
         "manager": "Редактор",
         "registry-mode-alert-text": "Эта группа находится в <b>режиме реестра</b>. В этом режиме невозможно добавить дополнительных участников. Вы можете получить общедоступную ссылку на свой список на странице списка.",
-        "user-was-deleted": "{username} был удален"
+        "user-was-deleted": "{username} был удален",
+        "enable-default-list-creation": "Включить создание списка по умолчанию",
+        "enable-default-list-creation-tooltip": "Включите создание списка при вступлении нового пользователя в группу. Пользователи по-прежнему смогут создавать списки самостоятельно.",
+        "list-creation": "Создание списка"
     },
     "auth": {
         "update-password": "Обновить пароль",
@@ -167,7 +170,17 @@
         "this-instance-is-invite-only": "Этот экземпляр доступен только по приглашению",
         "password-must-not-be-blank": "Пароль не должен быть пустым",
         "must-select-a-group": "Нужно выбрать группу",
-        "no-email-provided": "Нет электронной почты"
+        "no-email-provided": "Нет электронной почты",
+        "claim-was-not-found": "Заявка не найдена",
+        "unable-to-create-list": "Невозможно создать список",
+        "unable-to-delete-list": "Возникла ошибка при удалении списка",
+        "unable-to-update-claim": "Невозможно обновить заявку",
+        "cannot-update-a-claim-that-is-not-yours": "Невозможно обновить заявку, которая не принадлежит вам",
+        "item-not-found-on-list": "Элемент не найден в списке",
+        "cannot-unclaim-an-item-you-did-not-claim": "Невозможно отозвать элемент, который вы не заявляли",
+        "claimed-by-user-must-be-specified": "Должно быть указано, что заявлено пользователем",
+        "in-registry-mode-you-can-only-have-one-list": "В режиме реестра у вас может быть только один список",
+        "unable-to-unclaim-item": "Невозможно отменить заявку"
     },
     "general": {
         "icon": "Значок",
@@ -224,7 +237,10 @@
         "search": "Поиск",
         "enter-user-email": "Введите адрес электронной почты пользователя и выберите группу, к которой пользователь может присоединиться",
         "select-file": "Выберите файл",
-        "update": "Обновить"
+        "update": "Обновить",
+        "all": "Все",
+        "apply": "Применить",
+        "create": "Создать"
     },
     "setup": {
         "complete": "Готово",
@@ -317,6 +333,13 @@
         "approve": "Одобрить",
         "approval-required": "{listOwner} должен будет одобрить ваше предложение, прежде чем оно будет добавлено в свой список.",
         "hang-tight-gathering-product-data": "Ожидайте, собираем данные о продукте",
-        "unable-to-update-item-ordering": "Невозможно обновить порядок элементов"
+        "unable-to-update-item-ordering": "Невозможно обновить порядок элементов",
+        "all-lists": "Все списки",
+        "my-lists": "Мои списки",
+        "no-lists-yet": "Списков пока нет",
+        "create-list": "Создать список",
+        "delete-list-confirmation": "Вы уверены, что хотите удалить этот список? Все элементы, не связанные с другим списком, также будут удалены.",
+        "item-was-removed-from-list": "{name} был удален из этого списка",
+        "this-list": "Этот список"
     }
 }
