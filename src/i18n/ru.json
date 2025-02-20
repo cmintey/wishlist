@@ -303,7 +303,7 @@
         "approval-needed": "Необходимо одобрение",
         "approvals": "Одобрения",
         "approvals-waiting": "У вас есть {approvalCount, plural, one {# item} other {# items}} ожидающих одобрения",
-        "are-you-sure-you-wish-to-delete-name": "Вы уверены, что хотите удалить {name}?",
+        "are-you-sure-you-wish-to-delete-name": "Вы хотите удалить <b>{name}</b> из этого списка или всех списков?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Прежде чем вы сможете попросить предмет, нам нужно от вас всего лишь одно.",
         "claim-details": "Подробности брони",
         "claim": "Зарезервировать",
