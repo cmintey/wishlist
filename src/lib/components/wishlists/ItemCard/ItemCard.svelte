@@ -220,12 +220,16 @@
 </script>
 
 <div
-    class="card card-hover block w-full text-start"
+    class="card block w-full text-start"
+    class:card-hover={!reorderActions}
     class:variant-ghost-warning={!item.approved}
-    onclick={() => drawerStore.open(drawerSettings)}
-    onkeyup={(e) => (e.key === "Enter" ? drawerStore.open(drawerSettings) : null)}
-    role="button"
-    tabindex="0"
+    onclick={() => {
+        if (!reorderActions) drawerStore.open(drawerSettings);
+    }}
+    onkeyup={(e) => {
+        if (!reorderActions && e.key === "Enter") drawerStore.open(drawerSettings);
+    }}
+    role={reorderActions ? "none" : "button"}
 >
     <header class="card-header">
         <div class="flex w-full">
