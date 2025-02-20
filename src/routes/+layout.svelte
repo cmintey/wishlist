@@ -104,7 +104,7 @@
         <NavBar isProxyUser={data.isProxyUser} {navItems} user={data.user} />
     </header>
 
-    <main id="main" class="h-full px-4 py-4 md:px-12 lg:px-32 xl:px-56">
+    <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
         {#if !$isInstalled && !disabled && documentTitle}
             <h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
         {/if}

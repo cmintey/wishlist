@@ -9,6 +9,7 @@ import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
+import { getAvailableLists } from "$lib/server/list";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
@@ -60,40 +61,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         error(400, $t("errors.item-invalid-ownership", { values: { username: locals.user.username } }));
     }
 
-    const lists = await client.userGroupMembership
-        .findMany({
-            select: {
-                groupId: true
-            },
-            where: {
-                userId: locals.user.id
-            }
-        })
-        .then((groups) =>
-            client.list.findMany({
-                select: {
-                    id: true,
-                    name: true,
-                    public: true,
-                    owner: {
-                        select: {
-                            name: true
-                        }
-                    },
-                    group: {
-                        select: {
-                            name: true
-                        }
-                    }
-                },
-                where: {
-                    ownerId: item.userId,
-                    groupId: {
-                        in: groups.map((g) => g.groupId)
-                    }
-                }
-            })
-        );
+    const lists = await getAvailableLists(item.userId, locals.user.id);
 
     return {
         item: {

@@ -7,7 +7,7 @@ import { createImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
-import { getById } from "$lib/server/list";
+import { getAvailableLists, getById } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 
@@ -33,42 +33,10 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
-    const lists = await client.userGroupMembership
-        .findMany({
-            select: {
-                groupId: true
-            },
-            where: {
-                userId: locals.user.id
-            }
-        })
-        .then((groups) =>
-            client.list.findMany({
-                select: {
-                    id: true,
-                    name: true,
-                    public: true,
-                    owner: {
-                        select: {
-                            name: true
-                        }
-                    },
-                    group: {
-                        select: {
-                            name: true
-                        }
-                    }
-                },
-                where: {
-                    ownerId: list.owner.id,
-                    groupId: {
-                        in: groups.map((g) => g.groupId)
-                    }
-                }
-            })
-        );
+    const lists = await getAvailableLists(list.owner.id, locals.user.id);
 
     return {
+        lists,
         list: {
             id: list.id,
             owner: {
@@ -76,7 +44,6 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
                 isMe: list.owner.id === locals.user.id
             }
         },
-        lists,
         suggestion: list.owner.id !== locals.user.id,
         suggestionMethod: config.suggestions.method
     };
