@@ -5,13 +5,18 @@ import type {
     ItemClaim as PrismaItemClaim,
     ItemPrice,
     User,
-    SystemUser
+    SystemUser,
+    UserGroupMembership
 } from "@prisma/client";
 
 type MinimalUser = Pick<User, "id" | "name">;
 
+interface UserWithGroups extends MinimalUser {
+    UserGroupMembership: Pick<UserGroupMembership, "groupId">[];
+}
+
 interface ItemClaim extends Pick<PrismaItemClaim, "id" | "purchased"> {
-    claimedBy: MinimalUser | null;
+    claimedBy: UserWithGroups | null;
     publicClaimedBy: Pick<SystemUser, "id" | "name"> | null;
 }
 
@@ -40,11 +45,17 @@ export const toItemOnListDTO = (item: FullItem, listId: string) => {
     return {
         ...restOfItem,
         ...list,
-        claims: claims.map((claim) =>
-            claim.claimedBy
-                ? { claimId: claim.id, claimedBy: claim.claimedBy, purchased: claim.purchased }
-                : { claimId: claim.id, publicClaimedBy: claim.publicClaimedBy! }
-        ),
+        claims: claims.map((claim) => {
+            if (claim.claimedBy) {
+                const { UserGroupMembership, ...user } = claim.claimedBy;
+                const claimedBy = {
+                    ...user,
+                    groups: UserGroupMembership.map(({ groupId }) => groupId)
+                };
+                return { claimId: claim.id, claimedBy, purchased: claim.purchased };
+            }
+            return { claimId: claim.id, publicClaimedBy: claim.publicClaimedBy! };
+        }),
         listCount: _count.lists
     } satisfies ItemOnListDTO;
 };

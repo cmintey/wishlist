@@ -1,5 +1,7 @@
 <script lang="ts" module>
-    export type PartialUser = Pick<User, "id" | "name">;
+    export interface PartialUser extends Pick<User, "id" | "name"> {
+        activeGroupId: string;
+    }
 </script>
 
 <script lang="ts">
@@ -27,7 +29,7 @@
 
     interface Props {
         item: ItemOnListDTO;
-        user?: PartialUser;
+        user?: PartialUser; // logged in user
         showClaimedName?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;

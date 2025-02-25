@@ -54,7 +54,12 @@ export const load: PageServerLoad = async ({ locals }) => {
                     claimedBy: {
                         select: {
                             id: true,
-                            name: true
+                            name: true,
+                            UserGroupMembership: {
+                                select: {
+                                    groupId: true
+                                }
+                            }
                         }
                     },
                     publicClaimedBy: {
@@ -92,7 +97,10 @@ export const load: PageServerLoad = async ({ locals }) => {
     });
 
     return {
-        user: locals.user,
+        user: {
+            ...locals.user,
+            activeGroupId: activeMembership.groupId
+        },
         items: itemDTOs
     };
 };

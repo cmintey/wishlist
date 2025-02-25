@@ -25,7 +25,12 @@ export const getItemInclusions = (listId?: string) => {
                 claimedBy: {
                     select: {
                         id: true,
-                        name: true
+                        name: true,
+                        UserGroupMembership: {
+                            select: {
+                                groupId: true
+                            }
+                        }
                     }
                 },
                 publicClaimedBy: {
