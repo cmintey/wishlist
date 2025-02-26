@@ -134,6 +134,7 @@
         "test-subject": "Test from Wishlist"
     },
     "errors": {
+        "an-item-must-be-added-to-at-least-one-list": "An item must be added to at least one list",
         "asset-not-found": "Asset not found",
         "cannot-delete-default-group": "Cannot Delete Default Group",
         "cannot-delete-yourself": "Cannot delete yourself",
@@ -287,7 +288,8 @@
         "approvals": "Approvals",
         "approvals-waiting": "You have {approvalCount, plural, one {# item} other {# items}} awaiting your approval",
         "approve": "Approve",
-        "are-you-sure-you-wish-to-delete-name": "Do you want to delete <b>{name}</b> from this list or all lists?",
+        "are-you-sure-you-wish-to-delete-item": "Are you sure you wish to delete <b>{name}</b>?",
+        "are-you-sure-you-wish-to-delete-item-multiple-lists": "Do you want to delete <b>{name}</b> from this list or all lists?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Before you can claim the item, we just need one thing from you.",
         "claim": "Claim",
         "claim-details": "Claim Details",

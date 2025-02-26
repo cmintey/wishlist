@@ -25,7 +25,7 @@
             // confirm = TRUE | cancel = FALSE
             response: async (r: boolean) => {
                 if (r) {
-                    const resp = await itemsAPI.delete(groupId, claimed);
+                    const resp = await itemsAPI.clearItemsFromLists(groupId, claimed);
 
                     if (resp.ok) {
                         invalidateAll();

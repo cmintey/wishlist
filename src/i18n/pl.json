@@ -189,7 +189,7 @@
         "approval-needed": "Akceptacja wymagana",
         "approval-required": "{listOwner} musi zaakceptować propozycję zanim pojawi się na jej/jego liście życzeń.",
         "approve": "Akceptuj",
-        "are-you-sure-you-wish-to-delete-name": "Na pewno chcesz usunąć {name}?",
+        "are-you-sure-you-wish-to-delete-item": "Na pewno chcesz usunąć {name}?",
         "approvals": "Zatwierdzenia",
         "approvals-waiting": "Masz {approvalCount, plural, zero {# oczekujących zaproszeń} one {# oczekujące zaproszenie} two {# oczekujące zaproszenia} few {# oczekujące zaproszenia} many {# oczekujących zaproszeń} other {# oczekujące zaproszenia}}",
         "claimed": "Zaklepane",

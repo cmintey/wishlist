@@ -38,7 +38,7 @@ export class ItemsAPI {
         return await fetch(`/api/items${path}`, options);
     };
 
-    delete = async (groupId?: string, claimed?: boolean) => {
+    clearItemsFromLists = async (groupId?: string, claimed?: boolean) => {
         const searchParams = new URLSearchParams();
         if (groupId) searchParams.append("groupId", groupId);
         if (claimed) searchParams.append("claimed", `${claimed}`);

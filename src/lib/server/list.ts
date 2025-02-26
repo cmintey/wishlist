@@ -3,6 +3,8 @@ import { client } from "./prisma";
 import { createFilter } from "./sort-filter-util";
 import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
+import type { Prisma } from "@prisma/client";
+import { getConfig } from "./config";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -141,7 +143,8 @@ export const getById = async (id: string) => {
 };
 
 export const getItems = async (listId: string, options: GetItemsOptions) => {
-    const itemListFilter = createFilter(options.filter);
+    const itemFilter = createFilter(options.filter);
+    const itemListFilter: Prisma.ListItemWhereInput = {};
 
     // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
     if (
@@ -173,11 +176,12 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     const items = await client.item.findMany({
         where: {
             lists: {
-                every: {
-                    listId: list.id,
-                    ...itemListFilter
-                }
-            }
+                some: {
+                    listId: list.id
+                },
+                every: itemListFilter
+            },
+            ...itemFilter
         },
         include: getItemInclusions(list.id)
     });
@@ -196,4 +200,64 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     }
 
     return itemDTOs;
+};
+
+export const getAvailableLists = async (ownerId: string, loggedInUserId: string) => {
+    const lists = await client.userGroupMembership
+        .findMany({
+            select: {
+                groupId: true
+            },
+            where: {
+                userId: loggedInUserId
+            }
+        })
+        .then((groups) =>
+            Promise.all(groups.map(async (group) => ({ id: group.groupId, config: await getConfig(group.groupId) })))
+        )
+        .then((groups) =>
+            ownerId === loggedInUserId ? groups : groups.filter(({ config }) => config.suggestions.enable)
+        )
+        .then((groups) =>
+            client.list.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    public: true,
+                    owner: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    group: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    }
+                },
+                where: {
+                    ownerId: ownerId,
+                    OR: [
+                        {
+                            groupId: {
+                                in: groups.map((g) => g.id)
+                            }
+                        },
+                        {
+                            public: true
+                        }
+                    ]
+                }
+            })
+        );
+
+    return Promise.all(
+        lists.filter((list) => list.public).map(async (list) => ({ list, config: await getConfig(list.group.id) }))
+    ).then((publicLists) => {
+        return [
+            ...lists.filter((list) => !list.public),
+            ...publicLists.filter((list) => list.config.suggestions.enable).map(({ list }) => list)
+        ];
+    });
 };

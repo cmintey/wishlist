@@ -30,7 +30,7 @@
                 <div>
                     <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>
                     <p class="text-sm">
-                        {$t("wishes.approval-required", { values: { listOwner: data.owner.name } })}
+                        {$t("wishes.approval-required", { values: { listOwner: data.list.owner.name } })}
                     </p>
                 </div>
             </div>
@@ -44,13 +44,13 @@
 {/if}
 
 <form enctype="multipart/form-data" method="POST" use:enhance>
-    <ItemForm buttonText={$t("wishes.add-item")} data={itemData} />
+    <ItemForm buttonText={$t("wishes.add-item")} currentList={data.list.id} item={itemData} lists={data.lists} />
 </form>
 
 <svelte:head>
-    {#if data.owner.isMe}
+    {#if data.list.owner.isMe}
         <title>{$t("wishes.create")}</title>
     {:else}
-        <title>{$t("wishes.create-for", { values: { listOwner: data.owner.name } })}</title>
+        <title>{$t("wishes.create-for", { values: { listOwner: data.list.owner.name } })}</title>
     {/if}
 </svelte:head>

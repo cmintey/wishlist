@@ -45,12 +45,14 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 
     try {
         const data: Prisma.ItemClaimCreateInput = {
-            listItem: {
+            item: {
                 connect: {
-                    listId_itemId: {
-                        listId: params.listId,
-                        itemId: parseInt(params.itemId)
-                    }
+                    id: parseInt(params.itemId)
+                }
+            },
+            list: {
+                connect: {
+                    id: params.listId
                 }
             }
         };
@@ -75,7 +77,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             where: {
                 id: parseInt(params.itemId)
             },
-            include: getItemInclusions(params.listId)
+            include: getItemInclusions()
         });
         if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
 

@@ -82,16 +82,17 @@ model UserGroupMembership {
 }
 
 model List {
-    id        String     @id @unique @default(cuid())
+    id        String      @id @unique @default(cuid())
     name      String?
-    owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    owner     User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId   String
-    group     Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    group     Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId   String
-    public    Boolean    @default(false)
+    public    Boolean     @default(false)
     icon      String?
     iconColor String?
     items     ListItem[]
+    claims    ItemClaim[]
 
     @@index([ownerId])
     @@index([groupId])
@@ -100,19 +101,20 @@ model List {
 }
 
 model Item {
-    id          Int        @id @unique @default(autoincrement())
+    id          Int         @id @unique @default(autoincrement())
     name        String
     price       String?
     itemPriceId String?
-    itemPrice   ItemPrice? @relation(fields: [itemPriceId], references: [id], onDelete: SetNull)
+    itemPrice   ItemPrice?  @relation(fields: [itemPriceId], references: [id], onDelete: SetNull)
     url         String?
     note        String?
     imageUrl    String?
-    user        User       @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
+    user        User        @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
-    createdBy   User       @relation(name: "CreatedItems", fields: [createdById], references: [id], onDelete: Cascade)
+    createdBy   User        @relation(name: "CreatedItems", fields: [createdById], references: [id], onDelete: Cascade)
     createdById String
     lists       ListItem[]
+    claims      ItemClaim[]
 
     @@index([userId])
     @@map("items")
@@ -128,16 +130,15 @@ model ItemPrice {
 }
 
 model ListItem {
-    id           String      @id @unique @default(uuid())
-    list         List        @relation(fields: [listId], references: [id], onDelete: Cascade)
+    id           String  @id @unique @default(uuid())
+    list         List    @relation(fields: [listId], references: [id], onDelete: Cascade)
     listId       String
-    item         Item        @relation(fields: [itemId], references: [id], onDelete: Cascade)
+    item         Item    @relation(fields: [itemId], references: [id], onDelete: Cascade)
     itemId       Int
-    addedBy      User        @relation(fields: [addedById], references: [id])
+    addedBy      User    @relation(fields: [addedById], references: [id])
     addedById    String
-    approved     Boolean     @default(true)
+    approved     Boolean @default(true)
     displayOrder Int?
-    itemClaims   ItemClaim[]
 
     @@unique([listId, itemId])
     @@index([listId])
@@ -147,15 +148,17 @@ model ListItem {
 
 model ItemClaim {
     id                String      @id @unique @default(uuid())
-    listItem          ListItem    @relation(fields: [listItemId], references: [id], onDelete: Cascade)
-    listItemId        String
+    item              Item        @relation(fields: [itemId], references: [id])
+    itemId            Int
+    list              List        @relation(fields: [listId], references: [id])
+    listId            String
     claimedBy         User?       @relation(fields: [claimedById], references: [id], onDelete: Cascade)
     claimedById       String?
     publicClaimedBy   SystemUser? @relation(fields: [publicClaimedById], references: [id], onDelete: Cascade)
     publicClaimedById String?
     purchased         Boolean     @default(false)
 
-    @@index([listItemId])
+    @@index([itemId])
     @@index([claimedById])
     @@map("list_item_claim")
 }

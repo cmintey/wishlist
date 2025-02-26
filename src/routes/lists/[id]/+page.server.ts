@@ -4,12 +4,14 @@ import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/i18n";
 import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
+import type { UserGroupMembership } from "@prisma/client";
 
 export const load = (async ({ params, url, locals, depends }) => {
     const $t = await getFormatter();
 
     const list = await getById(params.id);
 
+    let activeMembership: UserGroupMembership | undefined;
     if (!locals.user) {
         // Unauthenticated users can only view public lists on groups in "registry" mode
         if (list && list.public) {
@@ -23,7 +25,7 @@ export const load = (async ({ params, url, locals, depends }) => {
         }
     } else {
         // Logged in users must be in the correct group, or viewing a public list
-        const activeMembership = await getActiveMembership(locals.user);
+        activeMembership = await getActiveMembership(locals.user);
         if (!list || (!list.public && list.groupId !== activeMembership.groupId)) {
             error(404, $t("errors.list-not-found"));
         }
@@ -52,7 +54,8 @@ export const load = (async ({ params, url, locals, depends }) => {
             ...list,
             owner: {
                 ...list.owner,
-                isMe: list.owner.id === locals.user?.id
+                isMe: list.owner.id === locals.user?.id,
+                activeGroupId: list.groupId
             },
             items
         },
@@ -60,7 +63,8 @@ export const load = (async ({ params, url, locals, depends }) => {
             ? {
                   id: locals.user.id,
                   username: locals.user.username,
-                  name: locals.user.name
+                  name: locals.user.name,
+                  activeGroupId: activeMembership!.groupId
               }
             : undefined,
         listMode: config.listMode,

@@ -6,6 +6,7 @@ import { error } from "@sveltejs/kit";
 import { listItemUpdateSchema } from "$lib/validations";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
+import { tryDeleteImage } from "$lib/server/image-util";
 
 // Approve an item on a list
 export const PATCH: RequestHandler = async ({ locals, request, params }) => {
@@ -89,6 +90,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
                 id: true,
                 userId: true,
                 createdById: true,
+                imageUrl: true,
                 lists: {
                     select: {
                         id: true
@@ -140,6 +142,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
                     id: item.id
                 }
             });
+            if (item.imageUrl) tryDeleteImage(item.imageUrl);
         }
 
         itemEmitter.emit(ItemEvent.ITEM_DELETE, { id: parseInt(params.itemId), lists: [{ id: params.listId }] });

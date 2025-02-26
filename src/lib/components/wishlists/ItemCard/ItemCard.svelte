@@ -1,5 +1,7 @@
 <script lang="ts" module>
-    export type PartialUser = Pick<User, "id" | "name">;
+    export interface PartialUser extends Pick<User, "id" | "name"> {
+        activeGroupId: string;
+    }
 </script>
 
 <script lang="ts">
@@ -27,7 +29,7 @@
 
     interface Props {
         item: ItemOnListDTO;
-        user?: PartialUser;
+        user?: PartialUser; // logged in user
         showClaimedName?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
@@ -80,7 +82,15 @@
         type: "component",
         component: "deleteItem",
         title: $t("general.please-confirm"),
-        body: $t("wishes.are-you-sure-you-wish-to-delete-name", { values: { name: itemNameShort } }),
+        body: $t(
+            item.listCount > 1
+                ? "wishes.are-you-sure-you-wish-to-delete-item-multiple-lists"
+                : "wishes.are-you-sure-you-wish-to-delete-item",
+            { values: { name: itemNameShort } }
+        ),
+        meta: {
+            multipleLists: item.listCount > 1
+        },
         response: async (r: DeleteConfirmationResult) => {
             if (r == DeleteConfirmationResult.DELETE) {
                 const resp = await itemAPI.delete();
@@ -212,12 +222,16 @@
 </script>
 
 <div
-    class="card card-hover block w-full text-start"
+    class="card block w-full text-start"
+    class:card-hover={!reorderActions}
     class:variant-ghost-warning={!item.approved}
-    onclick={() => drawerStore.open(drawerSettings)}
-    onkeyup={(e) => (e.key === "Enter" ? drawerStore.open(drawerSettings) : null)}
-    role="button"
-    tabindex="0"
+    onclick={() => {
+        if (!reorderActions) drawerStore.open(drawerSettings);
+    }}
+    onkeyup={(e) => {
+        if (!reorderActions && e.key === "Enter") drawerStore.open(drawerSettings);
+    }}
+    role={reorderActions ? "none" : "button"}
 >
     <header class="card-header">
         <div class="flex w-full">
