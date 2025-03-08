@@ -15,14 +15,10 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     const claim = await client.itemClaim.findUnique({
         select: {
             id: true,
+            itemId: true,
+            listId: true,
             claimedById: true,
-            publicClaimedById: true,
-            listItem: {
-                select: {
-                    itemId: true,
-                    listId: true
-                }
-            }
+            publicClaimedById: true
         },
         where: {
             id: params.claimId
@@ -46,9 +42,9 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 
         const item = await client.item.findUnique({
             where: {
-                id: claim.listItem.itemId
+                id: claim.itemId
             },
-            include: getItemInclusions(claim.listItem.listId)
+            include: getItemInclusions()
         });
         if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
 

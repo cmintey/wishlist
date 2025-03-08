@@ -2,9 +2,13 @@ import type { Item, ItemPrice, SystemUser, User } from "@prisma/client";
 
 type MinimalUser = Pick<User, "id" | "name">;
 
+interface UserWithGroups extends MinimalUser {
+    groups: string[];
+}
+
 type Claimed = {
     claimId: string;
-    claimedBy: MinimalUser;
+    claimedBy: UserWithGroups;
     publicClaimedBy: undefined;
     purchased: boolean;
 };
@@ -16,7 +20,7 @@ type PubliclyClaimed = {
     purchased: undefined;
 };
 
-type ClaimDTO = Claimed | PubliclyClaimed;
+export type ClaimDTO = Claimed | PubliclyClaimed;
 
 interface ListItem {
     listId: string;
@@ -29,6 +33,7 @@ interface ListItem {
 export interface ItemOnListDTO extends Item, ListItem {
     itemPrice: ItemPrice | null;
     user: MinimalUser;
+    listCount: number;
 }
 
 export interface ItemDTO extends Item {

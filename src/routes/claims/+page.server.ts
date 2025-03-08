@@ -12,75 +12,95 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const activeMembership = await getActiveMembership(locals.user);
 
-    const claims = await client.itemClaim.findMany({
+    const items = await client.item.findMany({
         where: {
-            claimedById: locals.user.id,
-            listItem: {
-                list: {
-                    groupId: activeMembership.groupId
+            claims: {
+                some: {
+                    claimedById: locals.user.id
+                }
+            },
+            lists: {
+                some: {
+                    list: {
+                        groupId: activeMembership.groupId
+                    }
                 }
             }
         },
-        select: {
-            id: true,
-            purchased: true,
-            claimedBy: {
+        include: {
+            lists: {
                 select: {
-                    id: true,
-                    name: true
-                }
-            },
-            listItem: {
-                select: {
+                    listId: true,
+                    approved: true,
+                    displayOrder: true,
                     addedBy: {
                         select: {
                             id: true,
                             name: true
                         }
-                    },
-                    item: {
-                        include: {
-                            user: {
+                    }
+                },
+                where: {
+                    list: {
+                        groupId: activeMembership.groupId
+                    }
+                }
+            },
+            claims: {
+                select: {
+                    id: true,
+                    listId: true,
+                    purchased: true,
+                    claimedBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            UserGroupMembership: {
                                 select: {
-                                    id: true,
-                                    name: true
+                                    groupId: true
                                 }
-                            },
-                            itemPrice: true
+                            }
                         }
                     },
-                    listId: true,
-                    approved: true,
-                    displayOrder: true
+                    publicClaimedBy: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    }
+                },
+                where: {
+                    claimedById: locals.user.id,
+                    list: {
+                        groupId: activeMembership.groupId
+                    }
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
+            itemPrice: true,
+            _count: {
+                select: {
+                    lists: true
                 }
             }
         }
     });
 
-    const items = claims
-        .map((claim) => {
-            const { item, ...list } = claim.listItem;
-            return {
-                ...item,
-                lists: [
-                    {
-                        ...list,
-                        itemClaims: [
-                            {
-                                id: claim.id,
-                                purchased: claim.purchased,
-                                claimedBy: claim.claimedBy,
-                                publicClaimedBy: null
-                            }
-                        ]
-                    }
-                ]
-            };
-        })
-        .map((i) => toItemOnListDTO(i, i.lists[0].listId));
+    const itemDTOs = items.map((item) => {
+        const claim = item.claims[0];
+        return toItemOnListDTO(item, claim.listId);
+    });
 
     return {
-        user: locals.user,
-        items
+        user: {
+            ...locals.user,
+            activeGroupId: activeMembership.groupId
+        },
+        items: itemDTOs
     };
 };

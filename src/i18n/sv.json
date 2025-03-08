@@ -295,7 +295,7 @@
         "approval-required": "{listOwner} måste godkänna ditt förslag innan det läggs till i deras lista.",
         "approvals-waiting": "Du har {approvalCount, plural, one {# artikel} other {# artiklar}} som väntar på ditt godkännande",
         "updated-success": "Artikel har uppdaterats",
-        "are-you-sure-you-wish-to-delete-name": "Är du säker på att du vill ta bort {name}?",
+        "are-you-sure-you-wish-to-delete-item": "Är du säker på att du vill ta bort {name}?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Innan du kan reservera denna artikel behöver vi bara en sak från dig.",
         "claim": "Reservera",
         "claim-details": "Reservationsdetaljer",

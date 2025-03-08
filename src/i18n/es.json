@@ -277,7 +277,7 @@
         "approvals": "Aprobaciones",
         "approvals-waiting": "Usted tiene {approvalCount, plural, one {# item} other {# items}} esperando su aprobacion",
         "approve": "Aprobar",
-        "are-you-sure-you-wish-to-delete-name": "Esta seguro de eliminar su deseo {name}?",
+        "are-you-sure-you-wish-to-delete-item": "Esta seguro de eliminar su deseo {name}?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Antes de que puedas reclamar el artículo, solo necesitamos una cosa de ti.",
         "claim-details": "Detalles reclamo",
         "claim": "Reclamar",

@@ -29,46 +29,86 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         }
     }
 
-    try {
-        const items = await client.item.findMany({
-            select: {
-                id: true,
-                imageUrl: true,
-                lists: {
-                    select: {
-                        listId: true
+    const items = await client.item.findMany({
+        select: {
+            id: true,
+            imageUrl: true,
+            lists: {
+                select: {
+                    listId: true
+                }
+            }
+        },
+        where: {
+            lists: {
+                some: {
+                    list: {
+                        groupId: groupId || undefined
                     }
                 }
             },
-            where: {
-                lists: {
-                    some: {
-                        list: {
-                            groupId: groupId || undefined
-                        },
-                        itemClaims: claimed && Boolean(claimed) ? {} : undefined
+            claims: {
+                some: claimed && Boolean(claimed) ? {} : undefined
+            }
+        }
+    });
+
+    const listItems = await client.listItem.findMany({
+        select: {
+            id: true,
+            itemId: true,
+            listId: true
+        },
+        where: {
+            list: {
+                groupId: groupId || undefined
+            },
+            itemId: {
+                in: items.map(({ id }) => id)
+            }
+        }
+    });
+
+    try {
+        await client.$transaction(async (tx) => {
+            await tx.listItem.deleteMany({
+                where: {
+                    id: {
+                        in: listItems.map(({ id }) => id)
                     }
                 }
-            }
-        });
+            });
 
-        for (const item of items) {
-            if (item.imageUrl) {
-                await tryDeleteImage(item.imageUrl);
-            }
-            itemEmitter.emit(ItemEvent.ITEM_DELETE, { id: item.id, lists: item.lists.map((l) => ({ id: l.listId })) });
-        }
-
-        const deletedItems = await client.item.deleteMany({
-            where: {
-                id: {
-                    in: items.map((item) => item.id)
+            const itemsWithNoLists = await tx.item.findMany({
+                select: {
+                    id: true,
+                    imageUrl: true
+                },
+                where: {
+                    id: {
+                        in: items.map(({ id }) => id)
+                    },
+                    lists: {
+                        none: {}
+                    }
                 }
-            }
-        });
+            });
 
-        return new Response(JSON.stringify(deletedItems), { status: 200 });
-    } catch {
+            await tx.item.deleteMany({
+                where: {
+                    id: {
+                        in: itemsWithNoLists.map(({ id }) => id)
+                    }
+                }
+            });
+
+            itemsWithNoLists.forEach((item) => {
+                if (item.imageUrl) tryDeleteImage(item.imageUrl);
+            });
+        });
+        return new Response(null, { status: 200 });
+    } catch (e) {
+        console.error(e);
         error(500, $t("errors.unable-to-delete-items"));
     }
 };

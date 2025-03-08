@@ -2,11 +2,11 @@
     import { createEventDispatcher } from "svelte";
     import type { PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
 
     interface Props {
         item: ItemOnListDTO;
-        user: PartialUser | undefined;
+        user: PartialUser | undefined; // logged in user
         showName: boolean;
         onPublicList?: boolean;
     }
@@ -14,6 +14,13 @@
     let { item = $bindable(), user, showName, onPublicList = false }: Props = $props();
 
     const dispatch = createEventDispatcher();
+
+    const shouldShowName = (claim: ClaimDTO) => {
+        return (
+            (showName && onPublicList && claim.publicClaimedBy?.name) ||
+            (user && claim.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name)
+        );
+    };
 </script>
 
 {#if !onPublicList && item.userId === user?.id}
@@ -42,7 +49,7 @@
                 <span>{$t("wishes.purchased")}</span>
             </label>
         </div>
-    {:else if showName && (claim.publicClaimedBy?.name || claim.claimedBy?.name)}
+    {:else if shouldShowName(claim)}
         <span>
             {$t("wishes.claimed-by", {
                 values: { name: claim.publicClaimedBy ? claim.publicClaimedBy.name : claim.claimedBy.name }
