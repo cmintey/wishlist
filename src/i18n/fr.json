@@ -56,7 +56,14 @@
         "unable-to-delete-list": "Une erreur s'est produite lors de la suppression de la liste",
         "in-registry-mode-you-can-only-have-one-list": "En mode enregistrement, vous ne pouvez avoir qu'une liste",
         "unable-to-create-list": "Impossible de créer une liste",
-        "no-email-provided": "Aucun email fourni"
+        "no-email-provided": "Aucun email fourni",
+        "cannot-unclaim-an-item-you-did-not-claim": "Impossible d'annuler une réservation que vous n'avez pas effectuée",
+        "claimed-by-user-must-be-specified": "L'utilisateur ayant réservé doit être spécifié",
+        "claim-was-not-found": "Réservation introuvable",
+        "cannot-update-a-claim-that-is-not-yours": "Vous ne pouvez pas mettre à jour une réservation qui n'est pas la vôtre",
+        "unable-to-unclaim-item": "Impossible de retirer la réservation",
+        "item-not-found-on-list": "Article non trouvé dans la liste",
+        "unable-to-update-claim": "Impossible de mettre à jour la réservation"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -293,7 +300,8 @@
         "approval-required": "{listOwner} doit approuver votre suggestion avant qu'elle soit ajoutée à sa liste.",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Avant que vous puissiez réserver l'article, nous avons juste besoin d'une chose.",
         "claim-details": "Détails de la réservation",
-        "are-you-sure-you-wish-to-delete-item": "Êtes-vous certain de vouloir supprimer {name} ?",
+        "are-you-sure-you-wish-to-delete-item": "Êtes-vous certain de vouloir supprimer <b>{name}</b> ?",
+        "are-you-sure-you-wish-to-delete-item-multiple-lists": "Voulez vous supprimer <b>{name}</b> de cette liste ou de toutes les listes ?",
         "claim": "Réserver",
         "item-name": "Nom de l'élément",
         "item-approved": "{name} a été {approved, select, true {approved} other {denied}}",
@@ -329,7 +337,10 @@
         "no-lists-yet": "Aucune liste pour le moment",
         "unclaimed": "Récupération annulé",
         "nothing-claimed-yet": "Aucune récupération pour le moment",
-        "heads-up": "Attention !"
+        "heads-up": "Attention !",
+        "item-was-removed-from-list": "{name} a été retiré de la liste",
+        "all-lists": "Toutes les listes",
+        "this-list": "Cette liste"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
