@@ -7,7 +7,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./ .
-RUN npm i -g pnpm@latest-9
+RUN npm i -g pnpm@latest-10
 RUN pnpm i --frozen-lockfile
 RUN pnpm prisma generate
 RUN pnpm run build
