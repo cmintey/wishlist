@@ -66,7 +66,7 @@
 
     {#if groups && groups.length > 0}
         <label for="group">{$t("general.group")}</label>
-        <ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
+        <ListBox id="group" class="border-surface-500 rounded-container-token border p-4">
             {#each groups as group}
                 <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
                     {group.name}

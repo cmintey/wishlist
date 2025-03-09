@@ -27,7 +27,7 @@
             };
         }}
     >
-        <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+        <div class="bg-surface-100-800-token ring-outline-token rounded-container-token flex flex-col space-y-4 p-4">
             <label for="username">
                 <span>{$t("auth.username")}</span>
                 <input
@@ -70,7 +70,7 @@
                 </div>
 
                 <div>
-                    <a class="absolute right-0 top-0 text-sm" href="/forgot-password">{$t("auth.forgot-password")}</a>
+                    <a class="absolute top-0 right-0 text-sm" href="/forgot-password">{$t("auth.forgot-password")}</a>
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@
                 <div class="relative m-auto h-full w-full max-w-[150px]">
                     <Avatar user={data.user} width="w-32" />
                     <form
-                        class="absolute bottom-0 right-0 h-12 w-12"
+                        class="absolute right-0 bottom-0 h-12 w-12"
                         action="?/profilePicture"
                         enctype="multipart/form-data"
                         method="POST"

@@ -54,7 +54,7 @@
     {/snippet}
 
     {#if user}
-        <div class="hidden flex-row items-center pl-4 pt-0.5 md:flex">
+        <div class="hidden flex-row items-center pt-0.5 pl-4 md:flex">
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"

@@ -21,7 +21,7 @@
     };
 </script>
 
-<div class="w-100 flex flex-row items-center">
+<div class="flex w-100 flex-row items-center">
     <span class="text-ellipsis">
         <a href={url}>
             {@render children?.()}

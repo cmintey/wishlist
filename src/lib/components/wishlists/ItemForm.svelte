@@ -217,7 +217,7 @@
     <label class="col-span-1 md:col-span-2" for="image">
         <span>{$t("wishes.upload-image")}</span>
         <div
-            class="bg-surface-200-700-token border-surface-400-500-token grid grid-cols-[auto_1fr] items-center gap-2 border-token rounded-token"
+            class="bg-surface-200-700-token border-surface-400-500-token border-token rounded-token grid grid-cols-[auto_1fr] items-center gap-2"
         >
             <FileButton
                 id="image"
@@ -265,7 +265,7 @@
     <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-6" class:hidden={lists.length <= 1}>
         <legend>Lists</legend>
         <div
-            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+            class="border-surface-400-500-token border-token rounded-container-token flex h-36 flex-col space-y-2 overflow-scroll p-2"
             class:input-error={form?.errors?.["list"]}
         >
             {#each lists as list (list.id)}

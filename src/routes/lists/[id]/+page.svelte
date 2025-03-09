@@ -248,7 +248,7 @@
 {:else}
     <!-- items -->
     <div
-        class="flex flex-col space-y-4 p-1 rounded-container-token"
+        class="rounded-container-token flex flex-col space-y-4 p-1"
         onconsider={handleDnd}
         onfinalize={handleDnd}
         use:dragHandleZone={{
@@ -302,7 +302,7 @@
 <!-- Add Item button -->
 {#if data.list.owner.isMe || data.suggestionsEnabled}
     <button
-        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
+        class="variant-ghost-surface btn fixed right-4 z-90 h-16 w-16 rounded-full md:right-10 md:bottom-10 md:h-20 md:w-20"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"

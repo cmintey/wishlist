@@ -16,7 +16,7 @@
     let passwordConfirm = $state("");
 </script>
 
-<div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+<div class="bg-surface-100-800-token ring-outline-token rounded-container-token flex flex-col space-y-4 p-4">
     {#if data.id}
         <input id="tokenId" name="tokenId" class="hidden" value={data.id} />
     {/if}
@@ -25,7 +25,7 @@
         <input id="name" name="name" class="input" autocomplete="name" required type="text" />
     </label>
 
-    <div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
+    <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-2">
         <label for="username">
             <span>{$t("auth.username")}</span>
             <input

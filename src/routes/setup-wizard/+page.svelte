@@ -23,7 +23,7 @@
 
 {#if !getStarted}
     <div
-        class="fixed bottom-0 left-0 right-0 top-0 flex h-screen w-full flex-col items-center justify-center space-y-4 overflow-hidden"
+        class="fixed top-0 right-0 bottom-0 left-0 flex h-screen w-full flex-col items-center justify-center space-y-4 overflow-hidden"
     >
         {#key statements[introStep]}
             <h1 class="h1" in:fade>

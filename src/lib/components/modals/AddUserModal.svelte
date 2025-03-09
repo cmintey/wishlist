@@ -43,7 +43,7 @@
     </label>
 
     {#if users.length > 0}
-        <ListBox class="border border-surface-500 p-4 rounded-container-token">
+        <ListBox class="border-surface-500 rounded-container-token border p-4">
             {#each users as user}
                 <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
                     {user.name}

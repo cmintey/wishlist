@@ -34,7 +34,7 @@
 <svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="variant-ghost-primary card-header flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
+            class="variant-ghost-primary card-header rounded-tl-container-token rounded-tr-container-token flex flex-row items-center space-x-2 px-4 py-2"
         >
             <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
@@ -72,7 +72,9 @@
 </svelte:element>
 
 <style lang="postcss">
+    @reference "../../app.css";
+
     .avatar {
-        @apply flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold text-surface-50 md:w-16;
+        @apply text-surface-50 flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold md:w-16;
     }
 </style>

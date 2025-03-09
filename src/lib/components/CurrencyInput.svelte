@@ -111,7 +111,7 @@
     <div class="input-group-shim">
         <iconify-icon icon="ion:cash"></iconify-icon>
     </div>
-    <div class="border-surface-400-500-token border-r focus:border-surface-400-500-token">
+    <div class="border-surface-400-500-token focus:border-surface-400-500-token border-r">
         <input {id} {name} {disabled} type="hidden" bind:value />
         <input
             bind:this={inputElement}
@@ -131,7 +131,7 @@
     </div>
     <input id="currency" name="currency" type="hidden" bind:value={currency} />
     <input
-        class="border-surface-400-500-token w-[8ch] border-l uppercase focus:border-surface-400-500-token"
+        class="border-surface-400-500-token focus:border-surface-400-500-token w-[8ch] border-l uppercase"
         maxlength="3"
         onchange={validateCurrency}
         value={currency}
