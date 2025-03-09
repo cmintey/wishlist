@@ -18,7 +18,7 @@
 
     const modalStore = getModalStore();
 
-    type UserData = (typeof data.group.users)[number];
+    type UserData = PageData["group"]["users"][number];
 
     const groupAPI = new GroupAPI($page.params.groupId);
     const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];
@@ -48,7 +48,9 @@
                 else await groupAPI.removeManager(userId);
 
                 await invalidateAll();
-            }
+            },
+            buttonTextCancel: $t("general.cancel"),
+            buttonTextConfirm: $t("general.confirm")
         });
     };
 
@@ -156,7 +158,7 @@
                                 aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
                                 onclick={() => removeMember(user.id)}
                             >
-                                <iconify-icon icon="ion:trash-bin"></iconify-icon>
+                                <iconify-icon icon="ion:person-remove"></iconify-icon>
                             </button>
                         </td>
                     </tr>

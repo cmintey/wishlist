@@ -2,8 +2,7 @@ import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { redirect, error } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
-import { inviteUser } from "$lib/server/invite-user";
+import type { PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/i18n";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -52,8 +51,4 @@ export const load: PageServerLoad = async ({ locals }) => {
         config,
         groups
     };
-};
-
-export const actions: Actions = {
-    default: inviteUser
 };

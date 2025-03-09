@@ -59,7 +59,8 @@ export const settingSchema = z.object({
     claimsShowName: z.coerce.boolean().default(false),
     listMode: z.enum(["standard", "registry"]).default("standard"),
     passwordStrength: z.coerce.number().min(-1).max(5).default(2),
-    defaultGroup: z.string().optional()
+    defaultGroup: z.string().optional(),
+    enableDefaultListCreation: z.coerce.boolean().default(true)
 });
 
 export const publicListCreateSchema = z.object({
@@ -73,3 +74,21 @@ export const getListPropertiesSchema = () => {
         iconColor: z.string().trim().nullable()
     });
 };
+
+export const listItemsUpdateSchema = z.object({
+    itemId: z.number(),
+    displayOrder: z.number().nullish()
+});
+
+export const listItemUpdateSchema = z.object({
+    approved: z.boolean().nullish()
+});
+
+export const listItemClaimSchema = z.object({
+    claimedById: z.string().nullish(),
+    publicClaimedById: z.string().nullish()
+});
+
+export const listItemClaimUpdateSchema = z.object({
+    purchased: z.boolean().nullish()
+});

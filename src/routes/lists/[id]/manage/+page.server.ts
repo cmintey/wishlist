@@ -5,6 +5,7 @@ import { client } from "$lib/server/prisma";
 import { getFormatter } from "$lib/i18n";
 import { getListPropertiesSchema } from "$lib/validations";
 import { trimToNull } from "$lib/util";
+import { deleteList } from "$lib/server/list";
 
 export const load: PageServerLoad = async ({ locals, url, params }) => {
     if (!locals.user) {
@@ -43,7 +44,7 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ request, locals, params }) => {
+    persist: async ({ request, locals, params }) => {
         const $t = await getFormatter();
         if (!locals.user) {
             error(401, $t("errors.unauthenticated"));
@@ -89,10 +90,43 @@ export const actions: Actions = {
                 }
             });
         } catch (e) {
-            console.log("Unable to update list properties", e);
-            return fail(500, { success: false });
+            console.log($t("errors.unable-to-update-list-settings"), e);
+            return fail(500, {
+                action: "persist",
+                success: false,
+                message: $t("errors.unable-to-update-list-settings")
+            });
         }
 
         return redirect(302, `/lists/${params.id}`);
+    },
+    delete: async ({ locals, params }) => {
+        const $t = await getFormatter();
+        if (!locals.user) {
+            error(401, $t("errors.unauthenticated"));
+        }
+
+        const activeMembership = await getActiveMembership(locals.user);
+        const listOwner = await client.list.findUnique({
+            select: {
+                ownerId: true
+            },
+            where: {
+                id: params.id,
+                groupId: activeMembership.groupId
+            }
+        });
+        if (locals.user.id !== listOwner?.ownerId) {
+            error(401, $t("errors.not-authorized"));
+        }
+
+        try {
+            deleteList(params.id);
+        } catch (e) {
+            console.log($t("errors.unable-to-delete-list"), e);
+            return fail(500, { action: "delete", success: false, message: $t("errors.unable-to-delete-list") });
+        }
+
+        return redirect(302, `/lists`);
     }
 };

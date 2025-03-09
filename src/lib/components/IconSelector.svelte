@@ -42,8 +42,7 @@
 
         await new Promise((resolve, reject) =>
             IconifyIcon?.loadIcons
-                ? // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  IconifyIcon?.loadIcons(iconsWithPrefix, (loaded, missing, pending, _unsubscribe) => {
+                ? IconifyIcon?.loadIcons(iconsWithPrefix, (loaded, missing, pending, _unsubscribe) => {
                       if (pending.length) {
                           return;
                       }
@@ -93,7 +92,7 @@
         }}
         oninput={(e) => (search = e.currentTarget.value)}
         placeholder="gift"
-        showClearButton={() => iconValue !== null || iconValue !== undefined}
+        showClearButton={() => iconValue !== null && iconValue !== undefined}
         type="text"
         value={iconValue}
     >

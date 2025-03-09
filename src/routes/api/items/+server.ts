@@ -1,4 +1,4 @@
-import { Role, SSEvents } from "$lib/schema";
+import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
@@ -8,6 +8,8 @@ import { itemEmitter } from "$lib/server/events/emitters";
 import type { Prisma } from "@prisma/client";
 import { patchItem } from "$lib/server/api-common";
 import { getFormatter } from "$lib/i18n";
+import { getItemInclusions } from "$lib/server/items";
+import { ItemEvent } from "$lib/events";
 
 export const DELETE: RequestHandler = async ({ locals, request }) => {
     const $t = await getFormatter();
@@ -27,40 +29,86 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
         }
     }
 
-    try {
-        const items = await client.item.findMany({
-            select: {
-                id: true,
-                imageUrl: true,
-                lists: {
-                    select: {
-                        id: true
+    const items = await client.item.findMany({
+        select: {
+            id: true,
+            imageUrl: true,
+            lists: {
+                select: {
+                    listId: true
+                }
+            }
+        },
+        where: {
+            lists: {
+                some: {
+                    list: {
+                        groupId: groupId || undefined
                     }
                 }
             },
-            where: {
-                groupId: groupId ? groupId : undefined,
-                pledgedById: claimed && Boolean(claimed) ? { not: null } : undefined
+            claims: {
+                some: claimed && Boolean(claimed) ? {} : undefined
             }
-        });
-
-        for (const item of items) {
-            if (item.imageUrl) {
-                await tryDeleteImage(item.imageUrl);
-            }
-            itemEmitter.emit(SSEvents.item.delete, item);
         }
+    });
 
-        const deletedItems = await client.item.deleteMany({
-            where: {
-                id: {
-                    in: items.map((item) => item.id)
-                }
+    const listItems = await client.listItem.findMany({
+        select: {
+            id: true,
+            itemId: true,
+            listId: true
+        },
+        where: {
+            list: {
+                groupId: groupId || undefined
+            },
+            itemId: {
+                in: items.map(({ id }) => id)
             }
-        });
+        }
+    });
 
-        return new Response(JSON.stringify(deletedItems), { status: 200 });
-    } catch {
+    try {
+        await client.$transaction(async (tx) => {
+            await tx.listItem.deleteMany({
+                where: {
+                    id: {
+                        in: listItems.map(({ id }) => id)
+                    }
+                }
+            });
+
+            const itemsWithNoLists = await tx.item.findMany({
+                select: {
+                    id: true,
+                    imageUrl: true
+                },
+                where: {
+                    id: {
+                        in: items.map(({ id }) => id)
+                    },
+                    lists: {
+                        none: {}
+                    }
+                }
+            });
+
+            await tx.item.deleteMany({
+                where: {
+                    id: {
+                        in: itemsWithNoLists.map(({ id }) => id)
+                    }
+                }
+            });
+
+            itemsWithNoLists.forEach((item) => {
+                if (item.imageUrl) tryDeleteImage(item.imageUrl);
+            });
+        });
+        return new Response(null, { status: 200 });
+    } catch (e) {
+        console.error(e);
         error(500, $t("errors.unable-to-delete-items"));
     }
 };
@@ -108,38 +156,7 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
             where: {
                 id
             },
-            include: {
-                addedBy: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                pledgedBy: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                publicPledgedBy: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                user: {
-                    select: {
-                        username: true,
-                        name: true
-                    }
-                },
-                lists: {
-                    select: {
-                        id: true
-                    }
-                },
-                itemPrice: true
-            },
+            include: getItemInclusions(),
             data: patch.data as Prisma.ItemUpdateInput
         });
     });
@@ -153,7 +170,7 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
             }
         }
 
-        itemEmitter.emit(SSEvents.items.update);
+        itemEmitter.emit(ItemEvent.ITEMS_UPDATE);
 
         return new Response(JSON.stringify(updatedItems), { status: 200 });
     } catch {

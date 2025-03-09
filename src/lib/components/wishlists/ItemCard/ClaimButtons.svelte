@@ -1,11 +1,12 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import type { FullItem, PartialUser } from "./ItemCard.svelte";
+    import type { PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
+    import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
 
     interface Props {
-        item: FullItem;
-        user: PartialUser | undefined;
+        item: ItemOnListDTO;
+        user: PartialUser | undefined; // logged in user
         showName: boolean;
         onPublicList?: boolean;
     }
@@ -13,12 +14,20 @@
     let { item = $bindable(), user, showName, onPublicList = false }: Props = $props();
 
     const dispatch = createEventDispatcher();
+
+    const shouldShowName = (claim: ClaimDTO) => {
+        return (
+            (showName && onPublicList && claim.publicClaimedBy?.name) ||
+            (user && claim.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name)
+        );
+    };
 </script>
 
 {#if !onPublicList && item.userId === user?.id}
     <div></div>
-{:else if item.pledgedBy || item.publicPledgedBy}
-    {#if !onPublicList && item.pledgedBy?.id === user?.id}
+{:else if item.claims.length > 0}
+    {@const claim = item.claims[0]}
+    {#if !onPublicList && claim.claimedBy?.id === user?.id}
         <div class="flex flex-row space-x-2 md:space-x-4">
             <button
                 class="variant-ghost-secondary btn btn-sm md:btn"
@@ -35,15 +44,15 @@
                     onchange={(event) => dispatch("purchase", { purchased: event.currentTarget?.checked })}
                     onclick={(e) => e.stopPropagation()}
                     type="checkbox"
-                    bind:checked={item.purchased}
+                    bind:checked={claim.purchased}
                 />
                 <span>{$t("wishes.purchased")}</span>
             </label>
         </div>
-    {:else if showName && (item.publicPledgedBy?.name || item.pledgedBy?.name)}
+    {:else if shouldShowName(claim)}
         <span>
             {$t("wishes.claimed-by", {
-                values: { name: item.publicPledgedBy ? item.publicPledgedBy?.name : item.pledgedBy?.name }
+                values: { name: claim.publicClaimedBy ? claim.publicClaimedBy.name : claim.claimedBy.name }
             })}
         </span>
     {:else}

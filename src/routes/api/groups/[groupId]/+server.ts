@@ -3,6 +3,7 @@ import type { RequestHandler } from "./$types";
 import { client } from "$lib/server/prisma";
 import { _authCheck } from "./auth";
 import { getFormatter } from "$lib/i18n";
+import { deleteLists } from "$lib/server/list";
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
     const $t = await getFormatter();
@@ -31,6 +32,8 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
             id: group.id
         }
     });
+
+    await deleteLists(undefined, group.id);
 
     return new Response(JSON.stringify(deletedGroup));
 };

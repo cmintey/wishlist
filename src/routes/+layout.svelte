@@ -19,6 +19,7 @@
     import { navItems } from "$lib/components/navigation/navigation";
     import Drawer from "$lib/components/Drawer.svelte";
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
+    import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
 
     interface Props {
         data: LayoutServerData;
@@ -86,6 +87,9 @@
         },
         createSystemUser: {
             ref: CreateSystemUser
+        },
+        deleteItem: {
+            ref: DeleteItemModal
         }
     };
 </script>

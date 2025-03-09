@@ -6,12 +6,14 @@
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
     import { t } from "svelte-i18n";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 
     interface Props {
         data: PageData;
     }
 
     let { data }: Props = $props();
+    let items: ItemOnListDTO[] = $state(data.items);
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -31,7 +33,12 @@
         }
     });
 
-    let items = $derived(data.items);
+    let sortedItems = $derived.by(() => {
+        const unpurchasedItems: ItemOnListDTO[] = [];
+        const purchasedItems: ItemOnListDTO[] = [];
+        items.forEach((item) => (item.claims[0].purchased ? purchasedItems.push(item) : unpurchasedItems.push(item)));
+        return [...unpurchasedItems, ...purchasedItems];
+    });
 </script>
 
 {#if data.items.length === 0}
@@ -41,12 +48,7 @@
     </div>
 {:else}
     <div class="flex flex-col space-y-4">
-        {#each items.filter((item) => !item.purchased) as item (item.id)}
-            <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} showClaimedName showFor user={data.user} />
-            </div>
-        {/each}
-        {#each items.filter((item) => item.purchased) as item (item.id)}
+        {#each sortedItems as item (item.id)}
             <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                 <ItemCard {item} showClaimedName showFor user={data.user} />
             </div>

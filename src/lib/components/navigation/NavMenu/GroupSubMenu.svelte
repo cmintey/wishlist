@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto, invalidateAll } from "$app/navigation";
+    import { goto } from "$app/navigation";
     import { GroupsAPI } from "$lib/api/groups";
     import { UserAPI } from "$lib/api/users";
     import type { Group, User } from "@prisma/client";
@@ -32,8 +32,7 @@
                     const activeGroup = await userAPI.activeGroup();
                     if (!activeGroup) await userAPI.setActiveGroup(group.id);
                 }
-                await invalidateAll();
-                await goto("/");
+                goto("/", { invalidateAll: true });
             },
             // Optionally override the button text
             buttonTextCancel: $t("general.cancel"),

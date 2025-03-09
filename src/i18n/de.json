@@ -17,7 +17,10 @@
         "refresh-item-data": "Artikeldaten neu laden",
         "toggle-manager": "{isManager, select, true {Entferne} other {Ernenne}} {user} als Leiter",
         "toggle-password-visibility": "Passwort-Sichtbarkeit umschalten",
-        "wishlist-logo": "Wishlist Logo"
+        "wishlist-logo": "Wishlist Logo",
+        "clear-color-field": "entferne ausgwählte Farbe",
+        "clear-icon-field": "entferne ausgewähltes Icon",
+        "clear-name-field": "lösche eigenen Namen"
     },
     "admin": {
         "administration": "Administration",
@@ -78,7 +81,11 @@
         "wishlist-mode-alert": "In dieser Gruppe sind noch weitere Mitglieder. Der Modus kann nicht geändert werden, bis alle Mitglieder bis auf eins entfernt wurden.",
         "wishlist-mode-registry": "Register",
         "wishlist-mode-wishlist": "Wunschliste",
-        "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann."
+        "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann.",
+        "password-reset-link": "Passwort zurücksetzen Link",
+        "enable-default-list-creation": "Aktiviere Erstellung einer Standard Liste",
+        "enable-default-list-creation-tooltip": "Aktiviere das Erstellen einer Liste wenn ein Benutzer einer Gruppe beitritt. Benutzer können Listen weiterhin selbst erstellen.",
+        "list-creation": "Liste Erstellen"
     },
     "wishes": {
         "filter": "Filter",
@@ -113,7 +120,7 @@
         "approvals": "Genehmigungen",
         "approve": "Akzeptieren",
         "approvals-waiting": "Du hast {approvalCount, plural, one {# Artikel} other {# Artikel}} die auf deine Zustimmung warten",
-        "are-you-sure-you-wish-to-delete-name": "Bist du sicher, dass du {name} löschen möchten?",
+        "are-you-sure-you-wish-to-delete-item": "Bist du sicher, dass du {name} löschen möchten?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Bevor du den Artikel reservieren kannst, benötigen wir eine Information von dir.",
         "claim": "Reservieren",
         "claim-details": "Reservierungsdetails",
@@ -133,7 +140,15 @@
         "reorder": "Anordnung bearbeiten",
         "unable-to-update-item-ordering": "Artikelreihenfolge konnte nicht aktualisiert werden",
         "unclaim": "Reservierung aufheben",
-        "unclaimed": "Nicht reserviert"
+        "unclaimed": "Nicht reserviert",
+        "anonymous": "Anonym",
+        "manage": "Bearbeiten",
+        "manage-list": "Bearbeite Liste",
+        "preview": "Vorschau",
+        "create-list": "Erstelle Liste",
+        "delete-list-confirmation": "Soll die Liste wirklich gelöscht werden? Alle Artikel die nicht mit anderen Listen verknüpft sind, werden auch gelöscht.",
+        "no-lists-yet": "Keine Listen bisher",
+        "my-lists": "Meine Listen"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -157,7 +172,6 @@
         "item-name-required": "Artikelname erforderlich",
         "item-not-found": "Artikel nicht gefunden",
         "item-with-id-item-id-not-found": "Artikel mit ID {id} nicht gefunden",
-        "missing-groupid-from-request-parameters": "Gruppen-ID fehlt in den Anfrageparametern",
         "must-specify-an-item-to-delete": "Es muss ein Artikel zum Löschen ausgewählt werden",
         "must-specify-asset-id": "Anhang-ID muss angegeben werden",
         "must-specify-group-name-in-body": "Gruppenname muss in Anfrage angegeben werden",
@@ -169,7 +183,6 @@
         "password-min-strength": "Passwort muss mindestens ''{minStrength}'' sein",
         "password-must-not-be-blank": "Passwort darf nicht leer sein",
         "product-information-not-available": "Produktinformationen nicht verfügbar",
-        "public-list-already-exists-for-the-user-and-group": "Öffentliche Liste existiert bereits für den Benutzer und die Gruppe",
         "public-list-not-found": "Öffentliche Liste nicht gefunden",
         "reset-token-not-found": "Rücksetz-Token nicht gefunden",
         "something-went-wrong": "Etwas ist schief gelaufen",
@@ -186,7 +199,15 @@
         "username-already-in-use": "{username} bereits in Verwendung",
         "username-must-not-be-blank": "Benutzername darf nicht leer sein",
         "username-not-specified": "Benutzername nicht angegeben",
-        "valid-url-not-provided": "Keine gültige URL angegeben"
+        "valid-url-not-provided": "Keine gültige URL angegeben",
+        "list-not-found": "Liste nicht gefunden",
+        "user-must-be-in-the-correct-group": "Benutzer muss in der korrekten Gruppe sein",
+        "unable-to-update-list-settings": "Konnte die Einstellungen der Liste nicht aktualisieren",
+        "no-email-provided": "Keine E-Mailadresse eingegeben",
+        "in-registry-mode-you-can-only-have-one-list": "Im Register Modus kann man nur eine Liste haben",
+        "must-select-a-group": "Eine Gruppe muss ausgewählt werden",
+        "unable-to-create-list": "Liste konnte nicht erstellt werden",
+        "unable-to-delete-list": "Problem beim Löschen der Liste"
     },
     "auth": {
         "log-in": "Anmelden",
@@ -214,7 +235,8 @@
         "signup": "Registrieren",
         "update-password": "Passwort aktualisieren",
         "username": "Benutzername",
-        "forgot-password": "Passwort vergessen?"
+        "forgot-password": "Passwort vergessen?",
+        "invite-via": "Einladung via..."
     },
     "general": {
         "search": "Suche",
@@ -266,7 +288,15 @@
         "very-weak": "Sehr schwach",
         "weak": "Schwach",
         "wishlists-cleared": "Wunschlisten geleert.",
-        "toggle-dark-mode": "Hellen oder dunklen Modus umschalten"
+        "toggle-dark-mode": "Hellen oder dunklen Modus umschalten",
+        "icon": "Icon",
+        "loading": "Lade...",
+        "icon-bg-color": "Icon Hintergrundfarbe",
+        "select-file": "Datei auswählen",
+        "no-file-selected": "Keine Datei ausgewählt",
+        "all": "Alle",
+        "apply": "Anwenden",
+        "create": "Erstellen"
     },
     "app": {
         "home": "Start",
@@ -300,5 +330,6 @@
         "pw-reset-body": "Wenn du das Zurücksetzen deines Passworts angefragt hast, klicke auf den folgenden Link um den Prozess abzuschließen. Wenn du die Anfrage nicht gestellt hast, kann du diese E-Mail einfach ignorieren.",
         "invite-body": "Du wurdest eingeladen Wishlist beizutreten! Um die Einladung anzunehmen, klicke auf den untenstehenden Link.",
         "test-body": "Wenn du dies hier liest, dann Glückwunsch! Die E-Mail Einstellungen wurden korrekt konfiguriert!"
-    }
+    },
+    "unable-to-load-icons": "Konnte Icons nicht laden."
 }

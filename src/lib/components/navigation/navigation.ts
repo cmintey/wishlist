@@ -5,7 +5,7 @@ export const navItems = [
         icon: "ion:home"
     },
     {
-        labelKey: "wishes.my-wishes",
+        labelKey: "wishes.my-lists",
         href: "/wishlists/me",
         icon: "ion:gift"
     },

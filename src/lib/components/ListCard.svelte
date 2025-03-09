@@ -3,7 +3,7 @@
     import Avatar from "./Avatar.svelte";
     import { t } from "svelte-i18n";
 
-    interface ListWithCounts extends Pick<List, "id" | "name" | "icon" | "iconColor"> {
+    interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor">> {
         owner: Pick<User, "name" | "username" | "picture">;
         itemCount?: number;
         claimedCount?: number;
@@ -19,7 +19,7 @@
 
     let { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
 
-    let listName = $derived(list.name || `${list.owner.name}'s Wishes`);
+    let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
     let iconColor = $derived(list.iconColor);
     let elementTag = $derived(preventNavigate ? "div" : "a");
     let element: HTMLElement | undefined = $state();
@@ -31,7 +31,7 @@
     });
 </script>
 
-<svelte:element this={elementTag} bind:this={element} class="card">
+<svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
             class="variant-ghost-primary card-header flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"

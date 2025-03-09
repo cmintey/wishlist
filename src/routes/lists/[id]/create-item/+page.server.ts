@@ -4,17 +4,18 @@ import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage } from "$lib/server/image-util";
-import { SSEvents } from "$lib/schema";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter } from "$lib/i18n";
-import { getById } from "$lib/server/list";
+import { getAvailableLists, getById } from "$lib/server/list";
+import { ItemEvent } from "$lib/events";
+import { getItemInclusions } from "$lib/server/items";
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
     const $t = await getFormatter();
 
     if (!locals.user) {
-        redirect(302, `/login?ref=${url.pathname}`);
+        redirect(302, `/login?ref=${url.pathname + url.search}`);
     }
 
     const activeMembership = await getActiveMembership(locals.user);
@@ -28,14 +29,20 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && locals.user.id !== list?.owner.id) {
+    if (!config.suggestions.enable && locals.user.id !== list.owner.id) {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
+    const lists = await getAvailableLists(list.owner.id, locals.user.id);
+
     return {
-        owner: {
-            name: list.owner.name,
-            isMe: list.owner.id === locals.user.id
+        lists,
+        list: {
+            id: list.id,
+            owner: {
+                name: list.owner.name,
+                isMe: list.owner.id === locals.user.id
+            }
         },
         suggestion: list.owner.id !== locals.user.id,
         suggestionMethod: config.suggestions.method
@@ -59,7 +66,6 @@ export const actions: Actions = {
         if (list.groupId !== activeMembership.groupId) {
             return fail(404, { success: false, message: $t("errors.user-not-in-group") });
         }
-        const config = await getConfig(activeMembership.groupId);
 
         const form = await request.formData();
         const url = form.get("url") as string;
@@ -69,10 +75,18 @@ export const actions: Actions = {
         const price = form.get("price") as string;
         const currency = form.get("currency") as string;
         const note = form.get("note") as string;
+        const listIds = form.getAll("list") as string[];
 
         // check for empty values
-        if (!name) {
-            return fail(400, { name, missing: true });
+        if (!name || listIds.length === 0) {
+            const errors: Record<string, string> = {};
+            if (!name) {
+                errors["name"] = $t("errors.item-name-required");
+            }
+            if (listIds.length === 0) {
+                errors["list"] = $t("errors.an-item-must-be-added-to-at-least-one-list");
+            }
+            return fail(400, { errors });
         }
 
         const filename = await createImage(locals.user.username, image);
@@ -89,6 +103,30 @@ export const actions: Actions = {
                 .then((itemPrice) => (itemPriceId = itemPrice.id));
         }
 
+        const lists = await client.list.findMany({
+            select: {
+                id: true,
+                ownerId: true,
+                groupId: true
+            },
+            where: {
+                id: {
+                    in: listIds
+                }
+            }
+        });
+
+        const listItems = await Promise.all(
+            lists.map(async (l) => {
+                const config = await getConfig(l.groupId);
+                return {
+                    listId: l.id,
+                    addedById: locals.user!.id,
+                    approved: l.ownerId === locals.user!.id || config.suggestions.method !== "approval"
+                };
+            })
+        );
+
         const item = await client.item.create({
             data: {
                 userId: list.owner.id,
@@ -96,48 +134,16 @@ export const actions: Actions = {
                 url,
                 note,
                 imageUrl: filename || imageUrl,
-                addedById: locals.user.id,
-                approved: list.owner.id === locals.user.id || config.suggestions.method !== "approval",
-                groupId: activeMembership.groupId,
+                createdById: locals.user.id,
                 itemPriceId,
                 lists: {
-                    connect: {
-                        id: list.id
-                    }
+                    create: listItems
                 }
             },
-            include: {
-                addedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                pledgedBy: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                user: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true
-                    }
-                },
-                lists: {
-                    select: {
-                        id: true
-                    }
-                },
-                itemPrice: true
-            }
+            include: getItemInclusions()
         });
 
-        itemEmitter.emit(SSEvents.item.create, item);
+        itemEmitter.emit(ItemEvent.ITEM_CREATE, item);
 
         const ref = new URL(request.url).searchParams.get("ref");
         redirect(302, ref || "/");

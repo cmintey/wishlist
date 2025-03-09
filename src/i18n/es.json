@@ -58,7 +58,8 @@
         "wishlist-mode": "Modo Wishlist",
         "wishlist-mode-alert": "Hay otros usuarios en este grupo, usted no puede cambiar el modo hasta que remueva usuarios y quede al menos uno.",
         "wishlist-mode-wishlist": "Wishlist",
-        "wishlist-mode-display-text": "En modo Wishlist, usted puede tener multiples usuarios, listas y reclamar items de otros usuarios. En modo Registry, usted tiene una sola lista que puede publicar y compartir."
+        "wishlist-mode-display-text": "En modo Wishlist, usted puede tener multiples usuarios, listas y reclamar items de otros usuarios. En modo Registry, usted tiene una sola lista que puede publicar y compartir.",
+        "password-reset-link": "Enlace reset de clave"
     },
     "a11y": {
         "cancel-editing": "Cancelar edición",
@@ -78,7 +79,10 @@
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} como administrador",
         "two-people-looking-in-an-empty-box": "Dos personas estan revisando una caja vacia",
         "a-person-looking-at-an-empty-board": "Una persona mirando un tablero vacío",
-        "wishlist-logo": "Wishlist Logo"
+        "wishlist-logo": "Wishlist Logo",
+        "clear-icon-field": "Limpiar campo icono",
+        "clear-name-field": "Limpiar campo nombre",
+        "clear-color-field": "Limipar campo color"
     },
     "auth": {
         "log-in": "Ingresar",
@@ -118,7 +122,6 @@
         "incorrect-password": "Clave incorrecta",
         "invite-code-invalid": "Codifo de invitacion invalido o ya fue usado",
         "invite-failed-to-send": "Envio de invitacion fallido: {errorMessage}",
-        "missing-groupid-from-request-parameters": "groupId faltante en los parametros de la solicitud",
         "item-with-id-item-id-not-found": "Item con id {id} no encontrado",
         "name-must-not-be-blank": "Nombre no puede estar en blanco",
         "must-specify-group-name-in-body": "Debe especifiar un nombre de grupo en el cuerpo",
@@ -130,7 +133,6 @@
         "password-min-strength": "La clave debe tener un minimo de fortaleza clase ''{minStrength}''",
         "password-must-not-be-blank": "La clave no puede estar en blanco",
         "public-list-not-found": "Lista publica no encontrada",
-        "public-list-already-exists-for-the-user-and-group": "Lista publica existe para el usuario y grupo",
         "reset-token-not-found": "Token de reinicio no encontrado",
         "unable-to-find-product-information": "No es posible encontrar informacion del producto. Puede completar los detalles manualmente.",
         "this-instance-is-invite-only": "Esta instancia es de invitacion solamente",
@@ -159,7 +161,10 @@
         "the-page-you-were-looking-for-wasnt-found": "La pagina que esta buscando no fue encontrada",
         "user-is-not-a-member-of-the-group": "Usuario no es miembro de este grupo",
         "username-must-not-be-blank": "Usuario no puede estar en blanco",
-        "username-not-specified": "Usuario no especificado"
+        "username-not-specified": "Usuario no especificado",
+        "list-not-found": "Lista no encontrada",
+        "unable-to-update-list-settings": "No es posible actualizar la configuración",
+        "user-must-be-in-the-correct-group": "El usuario debe estar en el grupo correcto"
     },
     "general": {
         "enter-user-email": "Ingrese el correo del usuario y seleccione el grupo para el usuario",
@@ -211,7 +216,12 @@
         "update": "Actualizar",
         "user": "Usuario",
         "wishlists-cleared": "Wishlists limpiada.",
-        "toggle-dark-mode": "Intercamnbiar el color del tema"
+        "toggle-dark-mode": "Intercamnbiar el color del tema",
+        "icon": "Icono",
+        "icon-bg-color": "Color de fondo del icono",
+        "loading": "Cargando...",
+        "no-file-selected": "Sin archivo selecionado",
+        "select-file": "Seleccione Archivo"
     },
     "setup": {
         "lets-get-started": "Empecemos",
@@ -267,7 +277,7 @@
         "approvals": "Aprobaciones",
         "approvals-waiting": "Usted tiene {approvalCount, plural, one {# item} other {# items}} esperando su aprobacion",
         "approve": "Aprobar",
-        "are-you-sure-you-wish-to-delete-name": "Esta seguro de eliminar su deseo {name}?",
+        "are-you-sure-you-wish-to-delete-item": "Esta seguro de eliminar su deseo {name}?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Antes de que puedas reclamar el artículo, solo necesitamos una cosa de ti.",
         "claim-details": "Detalles reclamo",
         "claim": "Reclamar",
@@ -282,7 +292,11 @@
         "share": "Compartir Lista",
         "nothing-claimed-yet": "Nada reclamado aun",
         "reorder": "Orden Manual",
-        "upload-image": "Cargar Imagen"
+        "upload-image": "Cargar Imagen",
+        "anonymous": "Anonimo",
+        "manage": "Administrar",
+        "manage-list": "Administrar Lista",
+        "preview": "Previsualización"
     },
     "app": {
         "home": "Inicio",
@@ -300,5 +314,6 @@
         "invite-title": "Bienvenido a Wishlist!",
         "test-body": "Si usted esta leyendo esto, Felicitaciones! La configuracion del correo electronico se ha realizado apropiadamente!",
         "pw-reset-body": "Si usted ha solicitado un reinicio de clave, click en el siguiente enlace. Si ustes NO realizo esta solicitud, puede ignorar este correo."
-    }
+    },
+    "unable-to-load-icons": "No es posible cargar los iconos."
 }

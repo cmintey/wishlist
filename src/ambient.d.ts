@@ -64,6 +64,7 @@ type Config = {
         passwordStrength: number;
     };
     defaultGroup?: string | null;
+    enableDefaultListCreation: boolean;
 };
 
 type Option = {
@@ -83,3 +84,5 @@ type DeepPartial<T> = T extends object
           [P in keyof T]?: DeepPartial<T[P]>;
       }
     : T;
+
+type InviteMethod = "email" | "link";

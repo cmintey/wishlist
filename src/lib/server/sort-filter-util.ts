@@ -5,22 +5,34 @@ export const createFilter = (filter: string | null) => {
     if (filter === "unclaimed") {
         search.AND = [
             {
-                pledgedById: null
+                claims: {
+                    every: {
+                        claimedById: null
+                    }
+                }
             },
             {
-                publicPledgedById: null
+                claims: {
+                    every: {
+                        publicClaimedById: null
+                    }
+                }
             }
         ];
     } else if (filter === "claimed") {
         search.OR = [
             {
-                pledgedById: {
-                    not: null
+                claims: {
+                    every: {
+                        claimedById: null
+                    }
                 }
             },
             {
-                publicPledgedById: {
-                    not: null
+                claims: {
+                    every: {
+                        publicClaimedById: null
+                    }
                 }
             }
         ];
@@ -28,28 +40,9 @@ export const createFilter = (filter: string | null) => {
     return search;
 };
 
-export const createSorts = (sort: string | null, direction: string | null) => {
-    let orderBy: Prisma.ItemOrderByWithRelationInput[] = [];
-    if (sort === "price" && direction && (direction === "asc" || direction === "desc")) {
-        orderBy = [
-            {
-                itemPrice: {
-                    value: direction
-                }
-            }
-        ];
-    } else {
-        orderBy = [
-            {
-                displayOrder: {
-                    sort: "asc",
-                    nulls: "last"
-                }
-            },
-            {
-                id: "asc"
-            }
-        ];
+export const decodeMultiValueFilter = (filter: string | null) => {
+    if (filter === null) {
+        return [] as string[];
     }
-    return orderBy;
+    return decodeURIComponent(filter).split(",");
 };

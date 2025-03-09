@@ -3,7 +3,7 @@
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
     import { goto, invalidate } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { onDestroy, onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { quintOut } from "svelte/easing";
@@ -12,24 +12,23 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
-    import { SSEvents } from "$lib/schema";
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone } from "svelte-dnd-action";
-    import { ItemsAPI } from "$lib/api/items";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import { t } from "svelte-i18n";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
 
     interface Props {
         data: PageData;
     }
-    type Item = PageData["list"]["items"][0];
 
     let { data }: Props = $props();
 
-    let allItems = $state(data.list.items);
+    let allItems: ItemOnListDTO[] = $state(data.list.items);
     let reordering = $state(false);
     let publicListUrl: URL | undefined = $state();
     let approvals = $derived(allItems.filter((item) => !item.approved));
@@ -45,7 +44,7 @@
     });
 
     const flipDurationMs = 200;
-    const itemsAPI = new ItemsAPI();
+    const listAPI = new ListAPI(data.list.id);
     const toastStore = getToastStore();
     let eventSource: EventSource;
 
@@ -77,21 +76,21 @@
         allItems = data.list.items;
     });
 
-    const groupItems = (items: Item[]) => {
+    const groupItems = (items: ItemOnListDTO[]) => {
         // When on own list, don't separate out claimed vs un-claimed
         if (data.list.owner.isMe) {
             return [items, []];
         }
         return items.reduce(
             (g, v) => {
-                if (v.pledgedById || v.publicPledgedById) {
+                if (v.claims.length > 0) {
                     g[1].push(v);
                 } else {
                     g[0].push(v);
                 }
                 return g;
             },
-            [[], []] as Item[][]
+            [[], []] as ItemOnListDTO[][]
         );
     };
 
@@ -101,23 +100,20 @@
     };
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource(`${$page.url.pathname}/events`);
-        eventSource.addEventListener(SSEvents.item.update, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            updateItem(message);
+        eventSource = new EventSource(`${page.url.pathname}/events`);
+        ItemUpdateHandler.listen(eventSource, (data) => {
+            updateItem(data);
             updateHash();
         });
-        eventSource.addEventListener(SSEvents.item.delete, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            removeItem(message);
+        ItemCreateHandler.listen(eventSource, (data) => {
+            addItem(data);
             updateHash();
         });
-        eventSource.addEventListener(SSEvents.item.create, (e) => {
-            const message = JSON.parse(e.data) as Item;
-            addItem(message);
+        ItemDeleteHandler.listen(eventSource, (data) => {
+            removeItem(data);
             updateHash();
         });
-        eventSource.addEventListener(SSEvents.items.update, () => {
+        ItemsUpdateHandler.listen(eventSource, () => {
             if (!data.list.owner.isMe) {
                 invalidate("data:items");
                 updateHash();
@@ -125,7 +121,7 @@
         });
     };
 
-    const updateItem = (updatedItem: Item) => {
+    const updateItem = (updatedItem: ItemOnListDTO) => {
         // for when an item gets approved
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);
@@ -138,11 +134,11 @@
         });
     };
 
-    const removeItem = (removedItem: Item) => {
+    const removeItem = (removedItem: { id: number }) => {
         allItems = allItems.filter((item) => item.id !== removedItem.id);
     };
 
-    const addItem = (addedItem: Item) => {
+    const addItem = (addedItem: ItemOnListDTO) => {
         if (!(addedItem.approved || data.list.owner.isMe)) {
             return;
         }
@@ -186,10 +182,10 @@
     const handleReorderFinalize = async () => {
         reordering = false;
         const displayOrderUpdate = allItems.map((item, idx) => ({
-            id: item.id,
+            itemId: item.id,
             displayOrder: idx
         }));
-        const response = await itemsAPI.updateMany(displayOrderUpdate);
+        const response = await listAPI.updateItems(displayOrderUpdate);
         if (!response.ok) {
             toastStore.trigger({
                 message: $t("wishes.unable-to-update-item-ordering"),
@@ -211,7 +207,7 @@
     {#if data.list.owner.isMe}
         <div class="flex flex-row flex-wrap space-x-4">
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
-            <ManageListChip onclick={() => goto(`${new URL($page.url).pathname}/manage`)} />
+            <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
         </div>
     {/if}
 </div>
@@ -310,7 +306,7 @@
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
-        onclick={() => goto(`${$page.url.pathname}/create-item?ref=${$page.url.pathname}`)}
+        onclick={() => goto(`${page.url.pathname}/create-item?ref=${page.url.pathname}`)}
     >
         <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>

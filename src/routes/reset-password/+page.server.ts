@@ -78,7 +78,6 @@ export const actions: Actions = {
 
         if (user) {
             try {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const [_, hashedPassword] = await Promise.all([
                     await invalidateUserSessions(user.id),
                     await hashPassword(pwdData.data.newPassword)
