@@ -1,5 +1,6 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { SvelteKitPWA } from "@vite-pwa/sveltekit";
+import tailwindcss from "@tailwindcss/vite";
 import { exec } from "child_process";
 import { promisify } from "util";
 import type { UserConfig } from "vite";
@@ -12,6 +13,7 @@ const [version, sha] = (
 
 const config: UserConfig = {
     plugins: [
+        tailwindcss(),
         sveltekit(),
         SvelteKitPWA({
             registerType: "autoUpdate",
