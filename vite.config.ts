@@ -58,9 +58,6 @@ const config: UserConfig = {
         __VERSION__: version,
         __COMMIT_SHA__: sha,
         __LASTMOD__: Date.now()
-    },
-    optimizeDeps: {
-        exclude: ["oslo"]
     }
 };
 
