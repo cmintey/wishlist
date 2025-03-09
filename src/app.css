@@ -1,107 +1,128 @@
-@font-face {
-    font-family: "Lato";
+@import 'tailwindcss';
+
+@config '../tailwind.config.ts';
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-Regular.woff2") format("woff2"),
-        url("/fonts/Lato-Regular.woff") format("woff");
+      url('/fonts/Lato-Regular.woff2') format('woff2'),
+      url('/fonts/Lato-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-Light.woff2") format("woff2"),
-        url("/fonts/Lato-Light.woff") format("woff");
+      url('/fonts/Lato-Light.woff2') format('woff2'),
+      url('/fonts/Lato-Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-LightItalic.woff2") format("woff2"),
-        url("/fonts/Lato-LightItalic.woff") format("woff");
+      url('/fonts/Lato-LightItalic.woff2') format('woff2'),
+      url('/fonts/Lato-LightItalic.woff') format('woff');
     font-weight: 300;
     font-style: italic;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato Hairline";
+  @font-face {
+    font-family: 'Lato Hairline';
     src:
-        url("/fonts/Lato-Hairline.woff2") format("woff2"),
-        url("/fonts/Lato-Hairline.woff") format("woff");
+      url('/fonts/Lato-Hairline.woff2') format('woff2'),
+      url('/fonts/Lato-Hairline.woff') format('woff');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-Italic.woff2") format("woff2"),
-        url("/fonts/Lato-Italic.woff") format("woff");
+      url('/fonts/Lato-Italic.woff2') format('woff2'),
+      url('/fonts/Lato-Italic.woff') format('woff');
     font-weight: normal;
     font-style: italic;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-Bold.woff2") format("woff2"),
-        url("/fonts/Lato-Bold.woff") format("woff");
+      url('/fonts/Lato-Bold.woff2') format('woff2'),
+      url('/fonts/Lato-Bold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato Hairline";
+  @font-face {
+    font-family: 'Lato Hairline';
     src:
-        url("/fonts/Lato-HairlineItalic.woff2") format("woff2"),
-        url("/fonts/Lato-HairlineItalic.woff") format("woff");
+      url('/fonts/Lato-HairlineItalic.woff2') format('woff2'),
+      url('/fonts/Lato-HairlineItalic.woff') format('woff');
     font-weight: 300;
     font-style: italic;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-Black.woff2") format("woff2"),
-        url("/fonts/Lato-Black.woff") format("woff");
+      url('/fonts/Lato-Black.woff2') format('woff2'),
+      url('/fonts/Lato-Black.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-BlackItalic.woff2") format("woff2"),
-        url("/fonts/Lato-BlackItalic.woff") format("woff");
+      url('/fonts/Lato-BlackItalic.woff2') format('woff2'),
+      url('/fonts/Lato-BlackItalic.woff') format('woff');
     font-weight: 900;
     font-style: italic;
     font-display: swap;
-}
+  }
 
-@font-face {
-    font-family: "Lato";
+  @font-face {
+    font-family: 'Lato';
     src:
-        url("/fonts/Lato-BoldItalic.woff2") format("woff2"),
-        url("/fonts/Lato-BoldItalic.woff") format("woff");
+      url('/fonts/Lato-BoldItalic.woff2') format('woff2'),
+      url('/fonts/Lato-BoldItalic.woff') format('woff');
     font-weight: bold;
     font-style: italic;
     font-display: swap;
+  }
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind variants;
+@layer utilities {
+}
 
 html,
 body {

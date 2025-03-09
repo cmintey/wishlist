@@ -238,7 +238,7 @@
             <span class="line-clamp-2 text-xl font-bold md:text-2xl">
                 {#if item.url}
                     <a
-                        class="dark:!text-primary-200"
+                        class="dark:text-primary-200!"
                         href={item.url}
                         onclick={(e) => e.stopPropagation()}
                         rel="noreferrer"

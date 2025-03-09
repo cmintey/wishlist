@@ -37,7 +37,7 @@
 
 <div class="flex max-h-[80dvh] flex-col space-y-2 p-4 pb-4">
     <div class="flex w-full justify-center">
-        <hr class="self-c !w-12 !rounded !border-t-4" />
+        <hr class="self-c w-12! rounded-sm! border-t-4!" />
     </div>
     <span class="text-wrap break-words text-xl font-bold md:text-2xl">
         {item.name}
