@@ -11,7 +11,8 @@
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "prettier --check . && eslint .",
         "format": "prettier --write .",
-        "db:patch": "node prisma/patches/index.js"
+        "db:patch": "node prisma/patches/index.js",
+        "test": "echo ${npm_package_name}"
     },
     "prisma": {
         "seed": "node prisma/seed.js"
@@ -82,21 +83,12 @@
         "zod": "^3.24.2"
     },
     "engines": {
-        "node": "^22"
+        "node": "^22",
+        "pnpm": "^9"
     },
     "pnpm": {
         "overrides": {
             "tough-cookie": "5.0.0"
-        },
-        "onlyBuiltDependencies": [
-            "@prisma/client",
-            "@prisma/engines",
-            "es5-ext",
-            "esbuild",
-            "prisma",
-            "re2",
-            "sharp",
-            "svelte-preprocess"
-        ]
+        }
     }
 }
