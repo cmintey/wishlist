@@ -76,6 +76,7 @@
         "metascraper-title": "^5.45.25",
         "metascraper-url": "^5.45.25",
         "nodemailer": "^6.9.16",
+        "openid-client": "^6.3.3",
         "prisma": "^6.4.1",
         "sharp": "^0.33.5",
         "svelte-i18n": "^4.0.1",

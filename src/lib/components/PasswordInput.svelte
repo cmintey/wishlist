@@ -23,7 +23,7 @@
         required = false,
         autocomplete = undefined,
         error = false,
-        value = $bindable(""),
+        value = $bindable(),
         strengthMeter = false,
         ...restProps
     }: Props = $props();
