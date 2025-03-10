@@ -75,7 +75,7 @@
     {#if !hideActions}
         <div class="flex items-center justify-center space-x-4 pb-2">
             <button class="variant-filled-primary btn w-min" disabled={password !== passwordConfirm} type="submit">
-                {$t("auth.sign-up")}
+                {$t("auth.create-account")}
             </button>
             <a href="/login">{$t("auth.sign-in")}</a>
         </div>

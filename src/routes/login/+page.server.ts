@@ -8,10 +8,11 @@ import { client } from "$lib/server/prisma";
 import type { PageServerLoad, Actions } from "./$types";
 import { createUser } from "$lib/server/user";
 import { verifyPasswordHash } from "$lib/server/password";
+import { isOIDCConfigured } from "$lib/server/openid";
 
-export const load: PageServerLoad = async ({ locals, request, cookies }) => {
+export const load: PageServerLoad = async ({ locals, request, cookies, url }) => {
     const config = await getConfig();
-    const ref = new URL(request.url).searchParams.get("ref");
+    const ref = url.searchParams.get("ref");
     if (locals.user) {
         redirect(302, ref || "/");
     }
@@ -75,7 +76,10 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     }
     /* End header authentication */
 
-    return { enableSignup: config.enableSignup };
+    return {
+        enableSignup: config.enableSignup,
+        oidcEnabled: isOIDCConfigured()
+    };
 };
 
 export const actions: Actions = {

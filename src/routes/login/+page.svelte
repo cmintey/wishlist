@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
+    import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import type { ActionData, PageServerData } from "./$types";
     import { t } from "svelte-i18n";
@@ -13,7 +14,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-    <h1 class="h1">{$t("auth.sign-in")}</h1>
+    <h1 class="h1 capitalize">{$t("auth.sign-in")}</h1>
 
     <form
         class="w-80"
@@ -63,20 +64,35 @@
                 {/if}
 
                 <div class="flex items-center justify-center space-x-4">
-                    <button class="variant-filled-primary btn w-min">{$t("auth.log-in")}</button>
+                    <button class="variant-filled-primary btn w-min">{$t("auth.sign-in")}</button>
                     {#if data.enableSignup}
                         <a href="/signup">{$t("auth.create-an-account")}</a>
                     {/if}
                 </div>
 
-                <div>
-                    <a class="absolute right-0 top-0 text-sm" href="/forgot-password">{$t("auth.forgot-password")}</a>
-                </div>
+                <a class="absolute right-0 top-0 !mt-0 pt-0.5 text-sm" href="/forgot-password">
+                    {$t("auth.forgot-password")}
+                </a>
             </div>
+            {#await data.oidcEnabled then oidcEnabled}
+                {#if oidcEnabled}
+                    <div class="flex w-full items-center justify-center">
+                        <hr class="my-2 h-px w-3/4 border-0" />
+                        <span class="bg-surface-100-800-token absolute left-1/2 -translate-x-1/2 px-2">
+                            {$t("auth.or")}
+                        </span>
+                    </div>
+                    <div class="flex justify-center">
+                        <a class="variant-filled-primary btn" href="/login/oidc{page.url.search}">
+                            {$t("auth.sign-in-with", { values: { provider: "OAuth" } })}
+                        </a>
+                    </div>
+                {/if}
+            {/await}
         </div>
     </form>
 </div>
 
 <svelte:head>
-    <title>{$t("auth.log-in")}</title>
+    <title>{$t("auth.sign-in")}</title>
 </svelte:head>
