@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
     import type { PageData } from "./$types";
@@ -20,7 +20,7 @@
 
     type UserData = PageData["group"]["users"][number];
 
-    const groupAPI = new GroupAPI($page.params.groupId);
+    const groupAPI = new GroupAPI(page.params.groupId);
     const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];
     const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
 
@@ -71,7 +71,7 @@
     };
 
     const deleteGroup = () => {
-        if (data.config.defaultGroup === $page.params.groupId) {
+        if (data.config.defaultGroup === page.params.groupId) {
             modalStore.trigger({
                 type: "alert",
                 title: $t("errors.cannot-delete-default-group"),
@@ -168,7 +168,7 @@
     </div>
     <div>
         <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>{$t("admin.delete-group-title")}</button>
-        <ClearListsButton groupId={$page.params.groupId} />
-        <ClearListsButton claimed groupId={$page.params.groupId} />
+        <ClearListsButton groupId={page.params.groupId} />
+        <ClearListsButton claimed groupId={page.params.groupId} />
     </div>
 </div>
