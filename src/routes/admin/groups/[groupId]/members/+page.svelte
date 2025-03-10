@@ -121,7 +121,7 @@
 
 <div class="flex flex-col space-y-2">
     <div class="table-container">
-        <table class="table table-interactive" role="grid">
+        <table class="table-interactive table" role="grid">
             <thead class="table-head">
                 <tr>
                     {#each head as label}

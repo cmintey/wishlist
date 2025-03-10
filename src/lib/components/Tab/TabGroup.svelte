@@ -45,7 +45,7 @@
     setContext("hover", hover);
     setContext("flex", flex);
     setContext("padding", padding);
-    setContext("rounded", rounded);
+    setContext("rounded-sm", rounded);
     setContext("spacing", spacing);
 
     // Classes
