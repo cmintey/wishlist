@@ -3,10 +3,10 @@
     import logo from "$lib/assets/logo.png";
     import { page } from "$app/stores";
     import NavMenu from "./NavMenu/NavMenu.svelte";
-    import type { User } from "lucia";
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
     import { t } from "svelte-i18n";
+    import type { User } from "@prisma/client";
 
     interface Props {
         navItems: NavItem[];
