@@ -8,6 +8,7 @@
     import DefaultGroup from "./DefaultGroup.svelte";
     import Smtp from "./SMTP.svelte";
     import { t } from "svelte-i18n";
+    import Oidc from "./OIDC.svelte";
 
     type Group = {
         id: string;
@@ -62,6 +63,15 @@
             bind:pass={config.smtp.pass}
             bind:from={config.smtp.from}
             bind:fromName={config.smtp.fromName}
+        />
+    </div>
+
+    <div class="col-span-1 md:col-span-2">
+        <Oidc
+            bind:enabled={config.oidc.enable}
+            bind:discoveryUrl={config.oidc.discoveryUrl}
+            bind:clientId={config.oidc.clientId}
+            bind:clientSecret={config.oidc.clientSecret}
         />
     </div>
 </div>
