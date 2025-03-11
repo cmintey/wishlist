@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
     if (!list) {
         error(404, $t("errors.list-not-found"));
     }
-    if (list.groupId !== activeMembership.groupId) {
+    if (!list.public && list.groupId !== activeMembership.groupId) {
         error(404, $t("errors.user-not-in-group"));
     }
 
@@ -63,7 +63,7 @@ export const actions: Actions = {
         if (!list) {
             return fail(404, { success: false, message: $t("errors.list-not-found") });
         }
-        if (list.groupId !== activeMembership.groupId) {
+        if (!list.public && list.groupId !== activeMembership.groupId) {
             return fail(404, { success: false, message: $t("errors.user-not-in-group") });
         }
 

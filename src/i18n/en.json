@@ -280,6 +280,7 @@
     "wishes": {
         "add-item": "Add Item",
         "added-by": "Added by <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "added-by-somebody-else": "Added by <span class=\"text-secondary-700-200-token font-bold\">somebody else</span>",
         "all-lists": "All lists",
         "anonymous": "Anonymous",
         "approval-confirmation": "Are you sure you wish to <b>{approve, select, true {approve} other {deny}}</b> this suggestion from {name}",

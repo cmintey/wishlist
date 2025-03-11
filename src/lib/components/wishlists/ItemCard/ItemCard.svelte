@@ -265,9 +265,13 @@
 
             <span class="text-base md:text-lg">
                 {#if showFor}
-                    {@html $t("wishes.for", { values: { name: item.user?.name } })}
+                    {@html $t("wishes.for", { values: { name: item.user.name } })}
                 {:else if !onPublicList}
-                    {@html $t("wishes.added-by", { values: { name: item.addedBy?.name } })}
+                    {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
+                {:else}
+                    {@html item.addedBy.id === item.user.id
+                        ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
+                        : $t("wishes.added-by-somebody-else")}
                 {/if}
             </span>
             <p class="line-clamp-4 whitespace-pre-wrap">{item.note}</p>
