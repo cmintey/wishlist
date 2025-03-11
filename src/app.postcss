@@ -118,6 +118,10 @@ label:not(.unstyled) {
     @apply space-y-2;
 }
 
+input[type="checkbox"] {
+    @apply disabled:checked:bg-surface-400-500-token disabled:cursor-not-allowed;
+}
+
 /*! purgecss start ignore */
 .ptr--icon,
 .ptr--text {

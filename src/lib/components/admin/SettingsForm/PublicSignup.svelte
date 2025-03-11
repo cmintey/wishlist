@@ -11,7 +11,7 @@
 </script>
 
 <BaseSetting title={$t("admin.public-signup")}>
-    <label class="unstyled flex flex-row space-x-2">
+    <label class="unstyled flex flex-row items-center space-x-2">
         <input id="enableSignup" name="enableSignup" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("general.enable")}</span>
     </label>

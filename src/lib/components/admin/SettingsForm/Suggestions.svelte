@@ -11,7 +11,7 @@
 </script>
 
 <BaseSetting title={$t("admin.suggestions")}>
-    <label class="unstyled flex flex-row space-x-2">
+    <label class="unstyled flex flex-row items-center space-x-2">
         <input
             id="enableSuggestions"
             name="enableSuggestions"
