@@ -13,14 +13,9 @@ export const load = (async ({ params, url, locals, depends }) => {
 
     let activeMembership: UserGroupMembership | undefined;
     if (!locals.user) {
-        // Unauthenticated users can only view public lists on groups in "registry" mode
-        if (list && list.public) {
-            const config = await getConfig(list.groupId);
-            if (config.listMode !== "registry") {
-                error(404, $t("errors.public-list-not-found"));
-            }
-        } else {
-            // List either doesn't exist or isn't public. Redirect to login so we don't expose details
+        // Unauthenticated users can only view public lists
+        if (!list || !list.public) {
+            // Redirect to login so we don't expose details if the list does exist
             redirect(302, `/login?ref=${url.pathname + url.search}`);
         }
     } else {

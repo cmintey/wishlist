@@ -1,7 +1,7 @@
 import { itemEmitter } from "$lib/server/events/emitters";
 import { createSSE } from "$lib/server/events/sse";
 import type { RequestHandler } from "./$types";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/i18n";
 import { getById } from "$lib/server/list";
@@ -14,14 +14,10 @@ export const GET = (async ({ locals, params }) => {
     const list = await getById(params.id);
     const config = await getConfig(list?.groupId);
     if (!locals.user) {
-        // Unauthenticated users can only view public lists on groups in "registry" mode
-        if (list && list.public) {
-            if (config.listMode !== "registry") {
-                error(404, $t("errors.public-list-not-found"));
-            }
-        } else {
-            // List either doesn't exist or isn't public. Redirect to login so we don't expose details
-            redirect(302, `/login?ref=/lists/${params.id}`);
+        // Unauthenticated users can only view public lists
+        if (!list || !list.public) {
+            // Redirect to login so we don't expose details if the list does exist
+            return new Response();
         }
     } else {
         // Logged in users must be in the correct group, or viewing a public list
