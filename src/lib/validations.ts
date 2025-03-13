@@ -72,7 +72,8 @@ export const getListPropertiesSchema = () => {
     return z.object({
         name: z.string().trim().nullable(),
         icon: z.string().trim().nullable(),
-        iconColor: z.string().trim().nullable()
+        iconColor: z.string().trim().nullable(),
+        public: z.coerce.boolean().default(false)
     });
 };
 

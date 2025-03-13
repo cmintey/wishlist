@@ -6,6 +6,7 @@ import { getFormatter } from "$lib/i18n";
 import { getListPropertiesSchema } from "$lib/validations";
 import { trimToNull } from "$lib/util";
 import { deleteList } from "$lib/server/list";
+import { getConfig } from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ locals, url, params }) => {
     if (!locals.user) {
@@ -15,6 +16,7 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
     const $t = await getFormatter();
     const activeMembership = await getActiveMembership(locals.user);
 
+    const config = await getConfig(activeMembership.groupId);
     const list = await client.list
         .findUnique({
             where: {
@@ -39,7 +41,9 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
         .then((list) => list ?? error(404, $t("errors.list-not-found")));
 
     return {
-        list
+        list,
+        listMode: config.listMode,
+        allowsPublicLists: config.allowPublicLists
     };
 };
 
@@ -51,6 +55,7 @@ export const actions: Actions = {
         }
 
         const activeMembership = await getActiveMembership(locals.user);
+        const config = await getConfig(activeMembership.groupId);
         const listOwner = await client.list.findUnique({
             select: {
                 ownerId: true
@@ -69,7 +74,8 @@ export const actions: Actions = {
         const listProperties = listPropertiesSchema.safeParse({
             name: form.get("name"),
             icon: form.get("icon"),
-            iconColor: form.get("iconColor")
+            iconColor: form.get("iconColor"),
+            public: form.get("public")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -77,13 +83,24 @@ export const actions: Actions = {
                 errors: listProperties.error.format()
             });
         }
+        if (listProperties.data.public && !config.allowPublicLists) {
+            return fail(400, {
+                action: "persist",
+                success: false,
+                message: $t("errors.public-lists-not-allowed")
+            });
+        }
+        if (!listProperties.data.public && config.listMode === "registry") {
+            listProperties.data.public = true;
+        }
 
         try {
             await client.list.update({
                 data: {
                     name: trimToNull(listProperties.data.name),
                     icon: trimToNull(listProperties.data.icon),
-                    iconColor: trimToNull(listProperties.data.iconColor)
+                    iconColor: trimToNull(listProperties.data.iconColor),
+                    public: listProperties.data.public
                 },
                 where: {
                     id: params.id
