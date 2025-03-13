@@ -134,6 +134,8 @@
 </div>
 
 <style lang="postcss">
+    @reference "../../app.css";
+
     :global(.vtlist-inner) {
         @apply justify-center;
     }

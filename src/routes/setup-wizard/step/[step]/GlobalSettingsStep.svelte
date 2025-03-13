@@ -26,7 +26,7 @@
 <div class="flex flex-col items-center space-y-4">
     <h1 class="h1">{$t("setup.global-settings")}</h1>
     <span>{$t("setup.global-settings-subtext")}</span>
-    <div class="bg-surface-100-800-token ring-outline-token p-4 rounded-container-token">
+    <div class="bg-surface-100-800-token ring-outline-token rounded-container-token p-4">
         <form
             bind:this={form}
             action="/admin/settings?/settings"

@@ -13,7 +13,7 @@
 </script>
 
 <aside class="alert variant-ghost-{variant} mb-2">
-    <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
+    <div class="alert-message flex flex-row items-center space-y-0 space-x-4">
         <span><iconify-icon class="text-4xl" icon="ion:{icon}"></iconify-icon></span>
         <div>
             {#if title}
