@@ -1,4 +1,10 @@
-import { auth } from "$lib/server/auth";
+import {
+    createSession,
+    generateSessionToken,
+    invalidateSession,
+    invalidateUserSessions,
+    setSessionTokenCookie
+} from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { getResetPasswordSchema } from "$lib/validations";
 import { fail, redirect } from "@sveltejs/kit";
@@ -6,8 +12,8 @@ import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
-import { LegacyScrypt } from "lucia";
 import { getFormatter } from "$lib/i18n";
+import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const user = locals.user;
@@ -131,7 +137,7 @@ export const actions: Actions = {
                 }
             });
 
-            const validPassword = await new LegacyScrypt().verify(user.hashedPassword, pwdData.data.oldPassword);
+            const validPassword = await verifyPasswordHash(user.hashedPassword, pwdData.data.oldPassword);
             if (!validPassword) {
                 return fail(400, {
                     error: true,
@@ -146,7 +152,7 @@ export const actions: Actions = {
         }
 
         try {
-            const newHashedPassword = await new LegacyScrypt().hash(pwdData.data.newPassword);
+            const newHashedPassword = await hashPassword(pwdData.data.newPassword);
             await client.user.update({
                 data: {
                     hashedPassword: newHashedPassword
@@ -155,16 +161,13 @@ export const actions: Actions = {
                     id: locals.user.id
                 }
             });
-            const session = await auth.createSession(locals.user.id, {});
-            const sessionCookie = auth.createSessionCookie(session.id);
+            const sessionToken = generateSessionToken();
+            const session = await createSession(sessionToken, locals.user.id);
             if (pwdData.data.invalidateSessions) {
-                await auth.invalidateUserSessions(locals.user.id);
+                await invalidateUserSessions(locals.user.id);
             } else {
-                await auth.invalidateSession(locals.session.id);
-                cookies.set(sessionCookie.name, sessionCookie.value, {
-                    path: "/",
-                    ...sessionCookie.attributes
-                });
+                await invalidateSession(locals.session.id);
+                setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
             }
         } catch {
             return fail(400, {
