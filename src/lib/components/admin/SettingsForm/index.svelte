@@ -8,6 +8,7 @@
     import DefaultGroup from "./DefaultGroup.svelte";
     import Smtp from "./SMTP.svelte";
     import { t } from "svelte-i18n";
+    import List from "./List.svelte";
 
     type Group = {
         id: string;
@@ -51,6 +52,13 @@
     </div>
     <div class="col-span-1">
         <DefaultGroup {groups} bind:groupId={config.defaultGroup} />
+    </div>
+    <div class="col-span-1">
+        <List
+            listMode={config.listMode}
+            bind:creationEnabled={config.enableDefaultListCreation}
+            bind:allowPublic={config.allowPublicLists}
+        />
     </div>
 
     <div class="col-span-1 md:col-span-2">

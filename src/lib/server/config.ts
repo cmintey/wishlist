@@ -17,7 +17,8 @@ enum ConfigKey {
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
     DEFAULT_GROUP = "defaultGroup",
-    ENABLE_DEFAULT_LIST_CREATION = "enableDefaultListCreation"
+    ENABLE_DEFAULT_LIST_CREATION = "enableDefaultListCreation",
+    ALLOW_PUBLIC_LISTS = "allowPublicLists"
 }
 
 export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
@@ -83,7 +84,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
             passwordStrength: Number(configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] || 2)
         },
         defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!,
-        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false" // do it this way since we want it to be defaulted to true
+        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false", // do it this way since we want it to be defaulted to true
+        allowPublicLists: configMap[ConfigKey.ALLOW_PUBLIC_LISTS] === "true"
     };
 
     return config;
@@ -121,7 +123,8 @@ const createDefaultConfig = async (): Promise<void> => {
         security: {
             passwordStrength: 2
         },
-        enableDefaultListCreation: true
+        enableDefaultListCreation: true,
+        allowPublicLists: false
     };
 
     await writeConfig(defaultConfig);
@@ -148,6 +151,7 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
     configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] = config?.security?.passwordStrength.toString();
     configMap[ConfigKey.DEFAULT_GROUP] = config?.defaultGroup;
     configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] = config?.enableDefaultListCreation?.toString();
+    configMap[ConfigKey.ALLOW_PUBLIC_LISTS] = config?.allowPublicLists?.toString();
 
     for (const [key, value] of Object.entries(configMap)) {
         await client.systemConfig.upsert({

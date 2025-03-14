@@ -212,7 +212,7 @@
     {/if}
 </div>
 
-{#if data.listMode === "registry"}
+{#if data.list.owner.isMe && (data.listMode === "registry" || data.list.public)}
     <div class="flex flex-row space-x-2 pb-4">
         {#if publicListUrl}
             <div class="flex flex-row">

@@ -37,7 +37,9 @@ export const load = (async ({ locals, url }) => {
                 username: user.username,
                 picture: user.picture || null
             }
-        }
+        },
+        listMode: config.listMode,
+        allowsPublicLists: config.allowPublicLists
     };
 }) satisfies PageServerLoad;
 
@@ -70,7 +72,8 @@ export const actions: Actions = {
         const listProperties = listPropertiesSchema.safeParse({
             name: form.get("name"),
             icon: form.get("icon"),
-            iconColor: form.get("iconColor")
+            iconColor: form.get("iconColor"),
+            public: form.get("public")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -78,13 +81,24 @@ export const actions: Actions = {
                 formErrors: listProperties.error.format()
             });
         }
+        if (listProperties.data.public && !config.allowPublicLists) {
+            return fail(400, {
+                action: "create",
+                success: false,
+                message: $t("errors.public-lists-not-allowed")
+            });
+        }
+        if (!listProperties.data.public && config.listMode === "registry") {
+            listProperties.data.public = true;
+        }
 
         let list;
         try {
             const data = {
                 name: trimToNull(listProperties.data.name),
                 icon: trimToNull(listProperties.data.icon),
-                iconColor: trimToNull(listProperties.data.iconColor)
+                iconColor: trimToNull(listProperties.data.iconColor),
+                public: listProperties.data.public
             };
             list = await create(locals.user.id, activeMembership.groupId, data);
         } catch (e) {
