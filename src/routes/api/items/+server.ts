@@ -79,6 +79,17 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
                 }
             });
 
+            await Promise.all(
+                listItems.map((li) =>
+                    tx.itemClaim.deleteMany({
+                        where: {
+                            itemId: li.itemId,
+                            listId: li.listId
+                        }
+                    })
+                )
+            );
+
             const itemsWithNoLists = await tx.item.findMany({
                 select: {
                     id: true,
