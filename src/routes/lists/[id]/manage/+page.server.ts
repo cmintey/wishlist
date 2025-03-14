@@ -29,6 +29,7 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
                 name: true,
                 icon: true,
                 iconColor: true,
+                public: true,
                 owner: {
                     select: {
                         name: true,

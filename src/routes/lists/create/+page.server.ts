@@ -72,7 +72,8 @@ export const actions: Actions = {
         const listProperties = listPropertiesSchema.safeParse({
             name: form.get("name"),
             icon: form.get("icon"),
-            iconColor: form.get("iconColor")
+            iconColor: form.get("iconColor"),
+            public: form.get("public")
         });
         if (listProperties.error) {
             return fail(422, {
