@@ -332,7 +332,7 @@
         "add-remove-manager-message": "Czy na pewno chcesz {isManager, select, true {nadać} other {odebrać}} uprawnienia managera temu użytkownikowi?",
         "build-date": "Data zbudowania: {buildDate}",
         "clear-lists": "Wyczyść {groupSpecific, select, true {} other {wszystkie}} {claimedOnly, select, true {zaklepane przedmioty} other {listy}}",
-        "registry-mode-alert-text": "Ta grupa działa w <b>trybie spisu</b>. Nie można w nim dodawać innych członków. Aby uzyskać link do udostępniania listy przejdź na jej stronę główną upewniając się że odpowiednia grupa jest wybrana w menu.",
+        "registry-mode-alert-text": "Ta grupa działa w trybie <b>spisu</b>. Nie można w nim dodawać innych członków. Aby uzyskać link do udostępniania listy przejdź na jej stronę główną upewniając się że odpowiednia grupa jest wybrana w menu.",
         "remove-admin": "Zabierz uprawnienia administratora",
         "smtp-from-name": "Nazwa nadawcy",
         "public-signup": "Otwarta rejestracja",
@@ -342,7 +342,7 @@
         "allow-public-lists": "Zezwól na listy publiczne",
         "enable-default-list-creation": "Włącz listy domyślne",
         "list-creation": "Ustawienia listy",
-        "allow-public-lists-tooltip": "Pozwól użytkownikom tworzyć listy publiczne. Nie ma efektu jeżeli grupa jest w \"trybie spisu\"."
+        "allow-public-lists-tooltip": "Pozwól użytkownikom tworzyć listy publiczne. Nie ma zastosowania jeżeli grupa jest w trybie \"spisu\"."
     },
     "app": {
         "home": "Główna",
