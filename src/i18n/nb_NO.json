@@ -66,7 +66,7 @@
         "wishlist-mode-wishlist": "Ønskeliste",
         "password-strength-requirement": "Krav til passordstyrke",
         "make-admin": "Gjør til admin",
-        "list-creation": "Opprettelse av liste",
+        "list-creation": "Listeinnstillinger",
         "registry-mode-alert-text": "Denne gruppen er i <b>registermoddus</b>. Ingen andre medlemmer kan legges til i denne modusen. Du kan få en offentlig link til lisen din på siden til listen.",
         "profile": "Profil",
         "remove-admin": "Fjern admin",
@@ -75,7 +75,9 @@
         "add-remove-manager-message": "Er du sikker på at du vil {isManager, select, true {legge til} other {fjerne}} denne brukeren som administrator?",
         "clear-lists": "Clear {groupSpecific, select, true {} other {Alle}} {claimedOnly, select, true {Reserverte ønsker} other {Ønskelister}}",
         "add-remove-manager-title": "{isManager, select, true {Legg til} other {Fjern}} Administrator",
-        "clear-lists-confirmation": "Er du sikker på at du ønsker å fjerne{claimedOnly, select, true {reserverte ønsker} other {alle ønskelister}} {groupSpecific, select, true {i denne gruppen} other {på tvers av <b>alle grupper</b>}}? <b>Denne handlingen kan ikke angres!</b>"
+        "clear-lists-confirmation": "Er du sikker på at du ønsker å fjerne{claimedOnly, select, true {reserverte ønsker} other {alle ønskelister}} {groupSpecific, select, true {i denne gruppen} other {på tvers av <b>alle grupper</b>}}? <b>Denne handlingen kan ikke angres!</b>",
+        "allow-public-lists": "Tillat offentlige ønskelister",
+        "allow-public-lists-tooltip": "Tillat at brukere setter en ønskeliste til offentlig. Denne innstillingen har ingen effekt dersom gruppen er i \"Register\" modus."
     },
     "auth": {
         "update-password": "Oppdater passord",
@@ -171,7 +173,8 @@
         "no-group-friendly-msg": "Hvis du ser denne siden er det fordi du ikke er i en gruppe enda! Send en forespørsel til en gruppe for å bli med, eller lag din egen gruppe.",
         "unable-to-delete-list": "Støtte på en feil under forsøket på å slette ønskelisten",
         "unable-to-update-list-settings": "Kunne ikke oppdatere ønskelistens innstillinger",
-        "reset-token-not-found": "Tilbakestillingstoken ble ikke funnet"
+        "reset-token-not-found": "Tilbakestillingstoken ble ikke funnet",
+        "public-lists-not-allowed": "Offentlige ønskelister er ikke tillatt i denne gruppen"
     },
     "a11y": {
         "a-person-looking-at-an-empty-board": "En person som ser på en tom tavle",
@@ -342,7 +345,8 @@
         "lists": "Ønskelister",
         "approval-confirmation": "Er du sikker på at du ønsker å <b>{approve, select, true {godta} other {avslå}}</b> dette forslaget fra {name}",
         "my-lists": "Mine ønskelister",
-        "manage-list": "Administrer ønskeliste"
+        "manage-list": "Administrer ønskeliste",
+        "public": "Offentlig"
     },
     "unable-to-load-icons": "Kunne ikke laste ikonene."
 }
