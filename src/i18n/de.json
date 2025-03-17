@@ -122,7 +122,7 @@
         "approvals": "Genehmigungen",
         "approve": "Akzeptieren",
         "approvals-waiting": "Du hast {approvalCount, plural, one {# Artikel} other {# Artikel}} die auf deine Zustimmung warten",
-        "are-you-sure-you-wish-to-delete-item": "Bist du sicher, dass du {name} löschen möchten?",
+        "are-you-sure-you-wish-to-delete-item": "Bist du sicher, dass du <b>{name}</b> löschen möchten?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Bevor du den Artikel reservieren kannst, benötigen wir eine Information von dir.",
         "claim": "Reservieren",
         "claim-details": "Reservierungsdetails",
@@ -150,7 +150,13 @@
         "create-list": "Erstelle Liste",
         "delete-list-confirmation": "Soll die Liste wirklich gelöscht werden? Alle Artikel die nicht mit anderen Listen verknüpft sind, werden auch gelöscht.",
         "no-lists-yet": "Keine Listen bisher",
-        "my-lists": "Meine Listen"
+        "my-lists": "Meine Listen",
+        "all-lists": "Alle Listen",
+        "are-you-sure-you-wish-to-delete-item-multiple-lists": "Soll <b>{name}</b> von dieser, oder allen Listen entfernt werden?",
+        "added-by-somebody-else": "Hinzugefügt durch <span class=\"text-secondary-700-200-token font-bold\">jemand anders</span>",
+        "this-list": "Diese Liste",
+        "item-was-removed-from-list": "{name} wurde von dieser Liste entfernt",
+        "public": "Öffentlich"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -210,7 +216,15 @@
         "must-select-a-group": "Eine Gruppe muss ausgewählt werden",
         "unable-to-create-list": "Liste konnte nicht erstellt werden",
         "unable-to-delete-list": "Problem beim Löschen der Liste",
-        "an-item-must-be-added-to-at-least-one-list": "Ein Artikel muss mindest zu einer Liste hinzugefügt werden"
+        "an-item-must-be-added-to-at-least-one-list": "Ein Artikel muss mindest zu einer Liste hinzugefügt werden",
+        "unable-to-unclaim-item": "Reservierung aufheben nicht möglich",
+        "cannot-update-a-claim-that-is-not-yours": "Es können nur eigene Reservierungen geändert werden",
+        "claim-was-not-found": "Reservierung nicht gefunden",
+        "claimed-by-user-must-be-specified": "Benutzer muss für Reservierung angegeben werden",
+        "item-not-found-on-list": "Artikel wurde auf der Liste nicht gefunden",
+        "cannot-unclaim-an-item-you-did-not-claim": "Die Reservierung kann nur für eigene Reservierungen aufgehoben werden",
+        "public-lists-not-allowed": "Öffentliche Listen sind in dieser Gruppe nicht erlaubt",
+        "unable-to-update-claim": "Reservierung ändern nicht möglich"
     },
     "auth": {
         "log-in": "Anmelden",
