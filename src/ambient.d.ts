@@ -49,6 +49,20 @@ type SMTPConfig =
           fromName: string;
       };
 
+type OIDCConfig =
+    | {
+          enable: false;
+          discoveryUrl?: string | null;
+          clientId?: string | null;
+          clientSecret?: string | null;
+      }
+    | {
+          enable: true;
+          discoveryUrl: string;
+          clientId: string;
+          clientSecret: string;
+      };
+
 type Config = {
     enableSignup: boolean;
     suggestions: {
@@ -65,6 +79,7 @@ type Config = {
     };
     defaultGroup?: string | null;
     enableDefaultListCreation: boolean;
+    oidc: OIDCConfig;
 };
 
 type Option = {

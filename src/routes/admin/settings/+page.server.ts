@@ -80,6 +80,20 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               fromName: configData.smtpFromName
           };
 
+    const oidcConfig: OIDCConfig = configData.enableOIDC
+        ? {
+              enable: true,
+              discoveryUrl: configData.oidcDiscoveryUrl!,
+              clientId: configData.oidcClientId!,
+              clientSecret: configData.oidcClientSecret!
+          }
+        : {
+              enable: false,
+              discoveryUrl: configData.oidcDiscoveryUrl,
+              clientId: configData.oidcClientId,
+              clientSecret: configData.oidcClientSecret
+          };
+
     const newConfig: Config = {
         enableSignup: configData.enableSignup,
         suggestions: {
@@ -95,7 +109,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
             passwordStrength: configData.passwordStrength
         },
         defaultGroup: configData.defaultGroup,
-        enableDefaultListCreation: configData.enableDefaultListCreation
+        enableDefaultListCreation: configData.enableDefaultListCreation,
+        oidc: oidcConfig
     };
 
     return newConfig;
