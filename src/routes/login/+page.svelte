@@ -2,6 +2,7 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import { getToastStore } from "@skeletonlabs/skeleton";
     import type { ActionData, PageServerData } from "./$types";
     import { t } from "svelte-i18n";
 
@@ -11,6 +12,8 @@
     }
 
     let { data, form }: Props = $props();
+
+    const toastStore = getToastStore();
 </script>
 
 <div class="flex flex-col items-center space-y-4">
@@ -23,6 +26,11 @@
             return async ({ result, update }) => {
                 if (result.type === "failure") {
                     form.formElement.reset();
+                } else if (result.type === "error") {
+                    toastStore.trigger({
+                        background: "variant-filled-error",
+                        message: result.error
+                    });
                 }
                 await update();
             };

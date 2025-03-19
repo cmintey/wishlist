@@ -1,12 +1,13 @@
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
 import { handleCallback } from "$lib/server/openid";
 import { client } from "$lib/server/prisma";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 
+// TODO: Change this to a load function so we can handle errors and show a loading screen
 export const GET: RequestHandler = async (event) => {
     const userinfo = await handleCallback(event);
 
@@ -56,5 +57,5 @@ export const GET: RequestHandler = async (event) => {
     setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
 
     const redirectTo = event.url.searchParams.get("ref") || "/";
-    return Response.redirect(redirectTo, 302);
+    redirect(302, redirectTo);
 };
