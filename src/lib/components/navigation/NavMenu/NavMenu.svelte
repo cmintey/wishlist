@@ -3,9 +3,9 @@
     import { Role } from "$lib/schema";
     import { LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import Avatar from "../../Avatar.svelte";
-    import type { User } from "lucia";
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { t } from "svelte-i18n";
+    import type { User } from "@prisma/client";
 
     interface Props {
         user: User | null;
