@@ -39,7 +39,7 @@
         "delete-user": "Удалить пользователя",
         "delete-user-confirmation": "Вы уверены, что хотите удалить пользователя {username}? <b>Это действие необратимо!</b>",
         "dev": "разработчик",
-        "delete-group-message": "Вы уверены, что хотите удалить эту группу? Это действие <b>необратимо</b>!",
+        "delete-group-message": "Вы уверены, что хотите удалить эту группу? Это удалит все списки в этой группе и все связанные элементы, не входящие в другую группу. <b>Это действие не обратимо</b>!",
         "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Редактора",
         "build": "Сборка: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "clear-lists": "Очистить {groupSpecific, select, true {} other {Все}} {claimedOnly, select, true {Забронированные} other {Списки}}",
@@ -65,7 +65,7 @@
         "password-reset-link": "Ссылка для сброса пароля",
         "public-signup": "Публичная регистрация",
         "remove-admin": "Удалить Администратора",
-        "remove-member-message": "Вы уверены, что хотите удалить этого пользователя из группы?\",",
+        "remove-member-message": "Вы уверены, что хотите удалить этого пользователя из группы? Это приведет к удалению всех списков пользователя в группе и всех связанных с ними элементов, которые не находятся в другом списке. <b>Это действие необратимо!</b>",
         "remove-member-title": "Удалить члена",
         "security": "Безопасность",
         "smtp-from-email": "Из электронной почты",
@@ -85,7 +85,9 @@
         "user-was-deleted": "{username} был удален",
         "enable-default-list-creation": "Включить создание списка по умолчанию",
         "enable-default-list-creation-tooltip": "Включите создание списка при вступлении нового пользователя в группу. Пользователи по-прежнему смогут создавать списки самостоятельно.",
-        "list-creation": "Создание списка"
+        "list-creation": "Настройки списка",
+        "allow-public-lists": "Разрешить публичные списки",
+        "allow-public-lists-tooltip": "Разрешает пользователям делать список публичным. Не имеет эффекта, если группа находится в режиме \"Зарегистрированы\"."
     },
     "auth": {
         "update-password": "Обновить пароль",
@@ -180,7 +182,9 @@
         "cannot-unclaim-an-item-you-did-not-claim": "Невозможно отозвать элемент, который вы не заявляли",
         "claimed-by-user-must-be-specified": "Должно быть указано, что заявлено пользователем",
         "in-registry-mode-you-can-only-have-one-list": "В режиме реестра у вас может быть только один список",
-        "unable-to-unclaim-item": "Невозможно отменить заявку"
+        "unable-to-unclaim-item": "Невозможно отменить заявку",
+        "public-lists-not-allowed": "Публичные списки в этой группе запрещены",
+        "an-item-must-be-added-to-at-least-one-list": "Элемент должен быть добавлен хотя бы в один список"
     },
     "general": {
         "icon": "Значок",
@@ -303,7 +307,7 @@
         "approval-needed": "Необходимо одобрение",
         "approvals": "Одобрения",
         "approvals-waiting": "У вас есть {approvalCount, plural, one {# item} other {# items}} ожидающих одобрения",
-        "are-you-sure-you-wish-to-delete-item": "Вы уверены, что хотите удалить {name}?",
+        "are-you-sure-you-wish-to-delete-item": "Вы уверены, что хотите удалить <b>{name}</b>?",
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Вы хотите удалить <b>{name}</b> из этого списка или всех списков?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Прежде чем вы сможете попросить предмет, нам нужно от вас всего лишь одно.",
         "claim-details": "Подробности брони",
@@ -341,6 +345,8 @@
         "create-list": "Создать список",
         "delete-list-confirmation": "Вы уверены, что хотите удалить этот список? Все элементы, не связанные с другим списком, также будут удалены.",
         "item-was-removed-from-list": "{name} был удален из этого списка",
-        "this-list": "Этот список"
+        "this-list": "Этот список",
+        "added-by-somebody-else": "Добавлено <span class=\"text-secondary-700-200-token font-bold\">кем-то еще</span>",
+        "public": "Публичный"
     }
 }
