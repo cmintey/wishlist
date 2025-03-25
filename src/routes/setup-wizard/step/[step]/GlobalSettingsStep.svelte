@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from "$app/forms";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import SettingsForm from "$lib/components/admin/SettingsForm/index.svelte";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
@@ -10,8 +10,8 @@
 
     let { onSuccess }: Props = $props();
 
-    let config: Config = $state($page.data.config);
-    let groups: Group[] = $state($page.data.groups);
+    let config: Config = $state(page.data.config);
+    let groups: Group[] = $state(page.data.groups);
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
     let saved = $state(false);

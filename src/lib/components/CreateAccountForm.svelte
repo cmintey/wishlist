@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import { ProgressRadial } from "@skeletonlabs/skeleton";
     import { t } from "svelte-i18n";
 
     interface Props {
@@ -9,11 +10,17 @@
 
     let { hideActions = false }: Props = $props();
 
-    let data = $derived($page.data);
-    let formData = $derived($page.form);
+    let data = $derived(page.data);
+    let formData = $derived(page.form);
 
     let password = $state("");
     let passwordConfirm = $state("");
+
+    let signingIn = $state(false);
+
+    $effect(() => {
+        if (page.error) signingIn = false;
+    });
 </script>
 
 <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
@@ -74,8 +81,16 @@
 
     {#if !hideActions}
         <div class="flex items-center justify-center space-x-4 pb-2">
-            <button class="variant-filled-primary btn w-min" disabled={password !== passwordConfirm} type="submit">
-                {$t("auth.create-account")}
+            <button
+                class="variant-filled-primary btn w-min"
+                disabled={password !== passwordConfirm || signingIn}
+                onclick={() => (signingIn = true)}
+                type="submit"
+            >
+                {#if signingIn}
+                    <ProgressRadial width="w-4" />
+                {/if}
+                <span>{$t("auth.create-account")}</span>
             </button>
             <a href="/login">{$t("auth.sign-in")}</a>
         </div>

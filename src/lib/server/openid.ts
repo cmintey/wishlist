@@ -1,18 +1,25 @@
 import * as client from "openid-client";
 import { getConfig } from "./config";
-import { error, type RequestEvent } from "@sveltejs/kit";
+import { error, redirect, type RequestEvent } from "@sveltejs/kit";
+import { z } from "zod";
+import { getFormatter } from "$lib/i18n";
 
 const SCOPE = "openid profile email";
 const CODE_CHALLENGE_METHOD = "S256";
 const NONCE_COOKIE = "oidc_nonce";
 const STATE_COOKIE = "oidc_state";
 const CODE_VERIFIER_COOKIE = "oidc_code_verifier";
+export const REF_COOKIE = "ref";
 const COOKIE_EXPIRY_SECONDS = 60 * 10; // 10 minutes
 
 let discoveryUrl: string | null = null;
 let clientId: string | null = null;
 let clientSecret: string | null = null;
 let oidcConfig: client.Configuration | null = null;
+
+const callbackSchema = z.object({
+    url: z.string().url()
+});
 
 async function getOIDCConfig() {
     let rediscover = false;
@@ -46,18 +53,20 @@ export async function isOIDCConfigured() {
 }
 
 export async function authorizeRedirect(event: RequestEvent) {
+    const $t = await getFormatter();
     const config = await getOIDCConfig();
     if (!config) {
-        return Response.json({ message: "OIDC client not configured" }, { status: 400 });
+        return Response.json({ message: $t("auth.oidc-client-not-configured") }, { status: 400 });
     }
 
     const codeVerifier = client.randomPKCECodeVerifier();
     const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
     const nonce = client.randomNonce();
     const state = client.randomState();
+    const ref = event.url.searchParams.get("ref");
 
     const parameters: Record<string, string> = {
-        redirect_uri: new URL("/login/oidc/callback", event.url.origin).toString(),
+        redirect_uri: new URL("/login", event.url.origin).toString(),
         scope: SCOPE,
         code_challenge: codeChallenge,
         code_challenge_method: CODE_CHALLENGE_METHOD,
@@ -86,6 +95,15 @@ export async function authorizeRedirect(event: RequestEvent) {
         sameSite: "lax"
     });
 
+    if (ref) {
+        event.cookies.set(REF_COOKIE, ref, {
+            path: "/",
+            httpOnly: true,
+            maxAge: COOKIE_EXPIRY_SECONDS,
+            sameSite: "lax"
+        });
+    }
+
     const redirectTo = client.buildAuthorizationUrl(config, parameters);
     return new Response(null, {
         status: 302,
@@ -96,21 +114,26 @@ export async function authorizeRedirect(event: RequestEvent) {
 }
 
 export async function handleCallback(event: RequestEvent) {
+    const $t = await getFormatter();
     const config = await getOIDCConfig();
     if (!config) {
-        error(400, "OIDC client not configured");
+        error(400, $t("auth.oidc-client-not-configured"));
     }
 
     const expectedNonce = event.cookies.get(NONCE_COOKIE) ?? null;
     const expectedState = event.cookies.get(STATE_COOKIE) ?? null;
     const codeVerifier = event.cookies.get(CODE_VERIFIER_COOKIE) ?? null;
     if (codeVerifier === null || expectedNonce === null || expectedState === null) {
-        error(400, "Couldn't retrieve stored OIDC state");
+        error(400, $t("auth.couldnt-retrieve-stored-oidc-state"));
     }
 
     let tokens;
     try {
-        tokens = await client.authorizationCodeGrant(config, event.request, {
+        const data = await event.request.json().then(callbackSchema.safeParse);
+        if (!data.success) {
+            error(400, $t("auth.no-callback-url-supplied"));
+        }
+        tokens = await client.authorizationCodeGrant(config, new URL(data.data.url), {
             pkceCodeVerifier: codeVerifier,
             expectedNonce,
             expectedState,
@@ -128,13 +151,17 @@ export async function handleCallback(event: RequestEvent) {
         } else if (e instanceof client.ClientError) {
             message = e.message;
         }
-        error(status, message || "Something went wrong");
+        error(status, message || $t("general.oops"));
     }
 
     const claims = tokens.claims();
     if (!claims) {
-        error(400, "No claims found");
+        error(400, $t("auth.no-claims-found"));
     }
 
     return await client.fetchUserInfo(config, tokens.access_token, claims.sub);
+}
+
+export function errorRedirect(message: string): never {
+    redirect(303, "/login?error=" + message);
 }

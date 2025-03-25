@@ -3,9 +3,10 @@
     import { getContext, onMount, setContext } from "svelte";
     import { writable, type Writable } from "svelte/store";
     import { steps } from "./steps";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { goto } from "$app/navigation";
     import { t } from "svelte-i18n";
+    import { ProgressRadial } from "@skeletonlabs/skeleton";
 
     let locked = false;
 
@@ -14,29 +15,40 @@
         total: number;
     }
 
-    const submit = writable(() => {});
-    setContext("submit", submit);
-    const state: Writable<StepperState> = getContext("state");
-    const SvelteComponent = $derived(steps[$state.current]);
+    const submit_ = writable(() => {});
+    setContext("submit", submit_);
+    const stepperState: Writable<StepperState> = getContext("state");
+    const SvelteComponent = $derived(steps[$stepperState.current]);
+    let submitting = $state(false);
 
     onMount(() => {
-        $state.total = steps.length;
-        $state.current = Number.parseInt($page.params.step) - 1;
+        $stepperState.total = steps.length;
+        $stepperState.current = Number.parseInt(page.params.step) - 1;
     });
 
+    const submit = () => {
+        submitting = true;
+        $submit_();
+    };
+
     const next = () => {
-        if ($state.current + 1 < $state.total) {
-            $state.current = $state.current + 1;
-            goto(`/setup-wizard/step/${$state.current + 1}`);
+        submitting = false;
+        if ($stepperState.current + 1 < $stepperState.total) {
+            $stepperState.current = $stepperState.current + 1;
+            goto(`/setup-wizard/step/${$stepperState.current + 1}`);
         }
     };
 
     const onBack = () => {
-        if ($state.current >= 0) {
-            $state.current = $state.current - 1;
-            goto(`/setup-wizard/step/${$state.current + 1}`);
+        if ($stepperState.current >= 0) {
+            $stepperState.current = $stepperState.current - 1;
+            goto(`/setup-wizard/step/${$stepperState.current + 1}`);
         }
     };
+
+    $effect(() => {
+        if (page.error) submitting = false;
+    });
 </script>
 
 <div transition:fade>
@@ -44,15 +56,18 @@
 
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->
-        <button class="variant-ghost btn" disabled={$state.current <= 1} onclick={onBack} type="button">
+        <button class="variant-ghost btn" disabled={$stepperState.current <= 1} onclick={onBack} type="button">
             <iconify-icon icon="ion:arrow-back"></iconify-icon>
             <span>{$t("setup.back")}</span>
         </button>
-        {#if $state.current < $state.total - 1}
+        {#if $stepperState.current < $stepperState.total - 1}
             <!-- Button: Next -->
-            <button class="variant-filled btn" disabled={locked} onclick={$submit} type="submit">
+            <button class="variant-filled btn" disabled={locked} onclick={submit} type="submit">
                 {#if locked}
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
+                {/if}
+                {#if submitting}
+                    <ProgressRadial width="w-4" />
                 {/if}
                 <span>{$t("setup.next")}</span>
                 <iconify-icon icon="ion:arrow-forward"></iconify-icon>

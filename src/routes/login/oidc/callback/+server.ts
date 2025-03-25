@@ -1,21 +1,22 @@
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
-import { handleCallback } from "$lib/server/openid";
+import { handleCallback, REF_COOKIE } from "$lib/server/openid";
 import { client } from "$lib/server/prisma";
-import { error, redirect } from "@sveltejs/kit";
+import { redirect, error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
+import { getFormatter } from "$lib/i18n";
 
-// TODO: Change this to a load function so we can handle errors and show a loading screen
-export const GET: RequestHandler = async (event) => {
+export const POST: RequestHandler = async (event) => {
+    const $t = await getFormatter();
     const userinfo = await handleCallback(event);
 
     if (!userinfo.email) {
-        error(400, "Missing email");
+        error(400, $t("auth.email-was-not-provided-by-the-identity-provider"));
     }
     if (userinfo.email_verified === false) {
-        error(400, "Email is not verified with the Identity Provider");
+        error(400, $t("auth.email-is-not-verified-with-the-identity-provider"));
     }
 
     // Look for existing User
@@ -56,6 +57,6 @@ export const GET: RequestHandler = async (event) => {
     const session = await createSession(sessionToken, user.id);
     setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
 
-    const redirectTo = event.url.searchParams.get("ref") || "/";
+    const redirectTo = event.cookies.get(REF_COOKIE) ?? "/";
     redirect(302, redirectTo);
 };

@@ -78,7 +78,9 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url }) =>
 
     return {
         enableSignup: config.enableSignup,
-        oidcEnabled: isOIDCConfigured()
+        isCallback: url.searchParams.has("state"),
+        error: url.searchParams.get("error"),
+        oidcEnabled: await isOIDCConfigured()
     };
 };
 
