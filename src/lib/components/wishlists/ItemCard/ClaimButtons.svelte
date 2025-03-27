@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import type { PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
     import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
@@ -9,11 +8,12 @@
         user: PartialUser | undefined; // logged in user
         showName: boolean;
         onPublicList?: boolean;
+        onClaim?: VoidFunction;
+        onUnclaim?: VoidFunction;
+        onPurchase?: (purchased: boolean) => void;
     }
 
-    let { item = $bindable(), user, showName, onPublicList = false }: Props = $props();
-
-    const dispatch = createEventDispatcher();
+    let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
 
     const shouldShowName = (claim: ClaimDTO) => {
         return (
@@ -83,21 +83,26 @@
                 class="variant-ghost-secondary btn btn-sm md:btn"
                 onclick={(e) => {
                     e.stopPropagation();
-                    dispatch("unclaim");
+                    onUnclaim?.();
                 }}
             >
                 {$t("wishes.unclaim")}
             </button>
-            <label class="unstyled flex items-center space-x-2 text-sm md:text-base">
-                <input
-                    class="checkbox"
-                    onchange={(event) => dispatch("purchase", { purchased: event.currentTarget?.checked })}
-                    onclick={(e) => e.stopPropagation()}
-                    type="checkbox"
-                    bind:checked={claim.purchased}
-                />
-                <span>{$t("wishes.purchased")}</span>
-            </label>
+            <button
+                class={[
+                    "btn btn-icon btn-icon-sm md:btn-icon-base",
+                    claim.purchased && "variant-soft-secondary",
+                    !claim.purchased && "variant-ringed-secondary"
+                ]}
+                aria-label={claim.purchased ? $t("wishes.purchased") : $t("wishes.purchase")}
+                onclick={(e) => {
+                    e.stopPropagation();
+                    onPurchase?.(!claim.purchased);
+                    // claim.purchased = !claim.purchased;
+                }}
+            >
+                <span><iconify-icon icon={claim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon></span>
+            </button>
         </div>
     {:else if shouldShowName(claim)}
         <span>
@@ -113,7 +118,7 @@
         class="variant-filled-secondary btn btn-sm md:btn"
         onclick={(e) => {
             e.stopPropagation();
-            dispatch("claim");
+            onClaim?.();
         }}
     >
         {$t("wishes.claim")}

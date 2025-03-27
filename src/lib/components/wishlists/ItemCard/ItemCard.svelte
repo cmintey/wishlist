@@ -201,7 +201,13 @@
     };
 
     const handlePurchased = async (purchased: boolean) => {
-        await (purchased ? claimAPI.purchase() : claimAPI.unpurchase());
+        const resp = await (purchased ? claimAPI.purchase() : claimAPI.unpurchase());
+        if (resp.ok) {
+            toastStore.trigger({
+                message: $t("wishes.purchased-toast", { values: { purchased } })
+            });
+            item.claims[0].purchased = purchased;
+        }
     };
 
     const drawerSettings: DrawerSettings = $derived({
@@ -339,21 +345,21 @@
         {:else}
             <ClaimButtons
                 {item}
+                onClaim={handleClaim}
                 {onPublicList}
+                onPurchase={handlePurchased}
+                onUnclaim={() => handleClaim(true)}
                 showName={showClaimedName}
                 {user}
-                on:claim={() => handleClaim()}
-                on:unclaim={() => handleClaim(true)}
-                on:purchase={(event) => handlePurchased(event.detail.purchased)}
             />
 
             <ManageButtons
                 {item}
+                onApprove={() => handleApproval(true)}
+                onDelete={handleDelete}
+                onDeny={() => handleApproval(false)}
+                onEdit={handleEdit}
                 {user}
-                on:approve={() => handleApproval(true)}
-                on:deny={() => handleApproval(false)}
-                on:delete={handleDelete}
-                on:edit={handleEdit}
             />
         {/if}
     </footer>
