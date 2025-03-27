@@ -17,7 +17,14 @@ enum ConfigKey {
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
     DEFAULT_GROUP = "defaultGroup",
-    ENABLE_DEFAULT_LIST_CREATION = "enableDefaultListCreation"
+    ENABLE_DEFAULT_LIST_CREATION = "enableDefaultListCreation",
+    OIDC_ENABLE = "oidc.enable",
+    OIDC_DISCOVERY_URL = "oidc.discoveryUrl",
+    OIDC_CLIENT_ID = "oidc.clientId",
+    OIDC_CLIENT_SECRET = "oidc.clientSecret",
+    OIDC_PROVIDER_NAME = "oidc.providerName",
+    OIDC_AUTO_REDIRECT = "oidc.autoRedirect",
+    OIDC_AUTO_REGISTER = "oidc.autoRegister"
 }
 
 export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
@@ -68,6 +75,29 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
                   fromName: configMap[ConfigKey.SMTP_FROM_NAME]
               };
 
+    const oidcConfig: OIDCConfig =
+        configMap[ConfigKey.OIDC_ENABLE] === "true"
+            ? {
+                  enable: true,
+                  discoveryUrl: configMap[ConfigKey.OIDC_DISCOVERY_URL]!,
+                  clientId: configMap[ConfigKey.OIDC_CLIENT_ID]!,
+                  clientSecret: maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET]!, !includeSensitive),
+                  providerName: configMap[ConfigKey.OIDC_PROVIDER_NAME],
+                  autoRedirect: configMap[ConfigKey.OIDC_AUTO_REDIRECT] === "true",
+                  autoRegister: configMap[ConfigKey.OIDC_AUTO_REGISTER] === "true"
+              }
+            : {
+                  enable: false,
+                  discoveryUrl: configMap[ConfigKey.OIDC_DISCOVERY_URL],
+                  clientId: configMap[ConfigKey.OIDC_CLIENT_ID],
+                  clientSecret: configMap[ConfigKey.OIDC_CLIENT_SECRET]
+                      ? maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET], !includeSensitive)
+                      : undefined,
+                  providerName: configMap[ConfigKey.OIDC_PROVIDER_NAME],
+                  autoRedirect: configMap[ConfigKey.OIDC_AUTO_REDIRECT] === "true",
+                  autoRegister: configMap[ConfigKey.OIDC_AUTO_REGISTER] === "true"
+              };
+
     const config: Config = {
         enableSignup: configMap[ConfigKey.SIGNUP_ENABLE] === "true",
         suggestions: {
@@ -83,7 +113,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
             passwordStrength: Number(configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] || 2)
         },
         defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!,
-        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false" // do it this way since we want it to be defaulted to true
+        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false", // do it this way since we want it to be defaulted to true
+        oidc: oidcConfig
     };
 
     return config;
@@ -121,7 +152,10 @@ const createDefaultConfig = async (): Promise<void> => {
         security: {
             passwordStrength: 2
         },
-        enableDefaultListCreation: true
+        enableDefaultListCreation: true,
+        oidc: {
+            enable: false
+        }
     };
 
     await writeConfig(defaultConfig);
@@ -131,13 +165,23 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
     const configMap: Record<string, string | null | undefined> = {};
 
     if (config.smtp) {
-        configMap[ConfigKey.SMTP_ENABLE] = config?.smtp?.enable.toString();
-        configMap[ConfigKey.SMTP_HOST] = config?.smtp?.host;
-        configMap[ConfigKey.SMTP_PORT] = config?.smtp?.port?.toString();
-        configMap[ConfigKey.SMTP_USER] = config?.smtp?.user;
-        configMap[ConfigKey.SMTP_PASS] = config?.smtp?.pass;
-        configMap[ConfigKey.SMTP_FROM] = config?.smtp?.from;
-        configMap[ConfigKey.SMTP_FROM_NAME] = config?.smtp?.fromName;
+        configMap[ConfigKey.SMTP_ENABLE] = config.smtp.enable.toString();
+        configMap[ConfigKey.SMTP_HOST] = config.smtp.host;
+        configMap[ConfigKey.SMTP_PORT] = config.smtp.port?.toString();
+        configMap[ConfigKey.SMTP_USER] = config.smtp.user;
+        configMap[ConfigKey.SMTP_PASS] = config.smtp.pass;
+        configMap[ConfigKey.SMTP_FROM] = config.smtp.from;
+        configMap[ConfigKey.SMTP_FROM_NAME] = config.smtp.fromName;
+    }
+
+    if (config.oidc) {
+        configMap[ConfigKey.OIDC_ENABLE] = config.oidc.enable.toString();
+        configMap[ConfigKey.OIDC_DISCOVERY_URL] = config.oidc.discoveryUrl;
+        configMap[ConfigKey.OIDC_CLIENT_ID] = config.oidc.clientId;
+        configMap[ConfigKey.OIDC_CLIENT_SECRET] = config.oidc.clientSecret;
+        configMap[ConfigKey.OIDC_PROVIDER_NAME] = config.oidc.providerName;
+        configMap[ConfigKey.OIDC_AUTO_REDIRECT] = config.oidc.autoRedirect?.toString();
+        configMap[ConfigKey.OIDC_AUTO_REGISTER] = config.oidc.autoRegister?.toString();
     }
 
     configMap[ConfigKey.SIGNUP_ENABLE] = config?.enableSignup?.toString();

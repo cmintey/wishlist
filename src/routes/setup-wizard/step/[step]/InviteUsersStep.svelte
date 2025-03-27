@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
     import { t } from "svelte-i18n";
@@ -7,8 +7,8 @@
 
     let props: Props = $props();
 
-    let config: Config = $derived($page.data.config);
-    const groups: Group[] = $page.data.groups;
+    let config: Config = $derived(page.data.config);
+    const groups: Group[] = $derived(page.data.groups);
 </script>
 
 <div class="flex flex-col items-center space-y-4">

@@ -38,7 +38,12 @@ export const actions: Actions = {
         await sendTest(locals.user.email);
         return { action: "send-test", success: true };
     },
-    settings: async ({ request }) => {
+    settings: async ({ locals, request }) => {
+        const $t = await getFormatter();
+        if (!locals.user || locals.user.roleId !== Role.ADMIN) {
+            error(401, $t("errors.not-authorized"));
+        }
+
         const formData = Object.fromEntries(await request.formData());
         const configData = settingSchema.safeParse(formData);
 
@@ -80,6 +85,26 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               fromName: configData.smtpFromName
           };
 
+    const oidcConfig: OIDCConfig = configData.enableOIDC
+        ? {
+              enable: true,
+              discoveryUrl: configData.oidcDiscoveryUrl!,
+              clientId: configData.oidcClientId!,
+              clientSecret: configData.oidcClientSecret!,
+              providerName: configData.oidcProviderName,
+              autoRedirect: configData.oidcAutoRedirect,
+              autoRegister: configData.oidcAutoRegister
+          }
+        : {
+              enable: false,
+              discoveryUrl: configData.oidcDiscoveryUrl,
+              clientId: configData.oidcClientId,
+              clientSecret: configData.oidcClientSecret,
+              providerName: configData.oidcProviderName,
+              autoRedirect: configData.oidcAutoRedirect,
+              autoRegister: configData.oidcAutoRegister
+          };
+
     const newConfig: Config = {
         enableSignup: configData.enableSignup,
         suggestions: {
@@ -95,7 +120,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
             passwordStrength: configData.passwordStrength
         },
         defaultGroup: configData.defaultGroup,
-        enableDefaultListCreation: configData.enableDefaultListCreation
+        enableDefaultListCreation: configData.enableDefaultListCreation,
+        oidc: oidcConfig
     };
 
     return newConfig;

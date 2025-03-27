@@ -17,7 +17,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-    <h1 class="h1">{$t("auth.create-an-account")}</h1>
+    <h1 class="h1 capitalize">{$t("auth.create-account")}</h1>
 
     <form class="w-80 md:w-1/3" method="POST" use:enhance>
         <CreateAccountForm />
@@ -25,5 +25,5 @@
 </div>
 
 <svelte:head>
-    <title>{$t("auth.signup")}</title>
+    <title>{$t("auth.create-an-account")}</title>
 </svelte:head>

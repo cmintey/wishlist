@@ -88,7 +88,7 @@
             />
         </label>
 
-        <label class="col-span-1 flex flex-col" for="name">
+        <label class="col-span-1 flex flex-col" for="iconColor">
             <span>{$t("general.icon-bg-color")}</span>
             <div class="grid grid-cols-[auto_1fr] gap-2">
                 <input

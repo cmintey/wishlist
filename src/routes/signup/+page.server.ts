@@ -31,15 +31,13 @@ export const load: PageServerLoad = async ({ locals, request }) => {
 
         if (!signup) error(400, $t("errors.reset-token-not-found"));
 
-        const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
-        const expiry = signup.createdAt.getTime() + expiresIn;
-        if (Date.now() < expiry) {
+        if (validateToken(signup.createdAt)) {
             return { valid: true, id: signup.id };
         }
         error(400, $t("errors.invite-code-invalid"));
     }
     if (!config.enableSignup) {
-        error(404, $t("errors.this-instance-is-invite-only"));
+        error(401, $t("errors.this-instance-is-invite-only"));
     }
 };
 
@@ -59,6 +57,25 @@ export const actions: Actions = {
                 };
             });
             return fail(400, { error: true, errors });
+        }
+
+        const config = await getConfig();
+        if (!config.enableSignup && !signupData.data.tokenId) {
+            error(401, $t("errors.this-instance-is-invite-only"));
+        }
+
+        const signup = await client.signupToken.findUnique({
+            where: {
+                id: signupData.data.tokenId
+            },
+            select: {
+                createdAt: true,
+                redeemed: true
+            }
+        });
+
+        if (!signup || signup.redeemed || !validateToken(signup.createdAt)) {
+            error(400, $t("errors.invite-code-invalid"));
         }
 
         const userCount = await client.user.count();
@@ -86,3 +103,9 @@ export const actions: Actions = {
         }
     }
 };
+
+function validateToken(createdAt: Date) {
+    const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
+    const expiry = createdAt.getTime() + expiresIn;
+    return Date.now() < expiry;
+}

@@ -78,7 +78,7 @@
     };
 </script>
 
-<label for="name" use:popup={iconSelectorPopup}>
+<label for={id || "name"} use:popup={iconSelectorPopup}>
     <span>{title ?? $t("general.icon")}</span>
     <ClearableInput
         id={id || "name"}
