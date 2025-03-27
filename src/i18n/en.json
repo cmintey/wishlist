@@ -99,6 +99,7 @@
         "my-claims": "My Claims"
     },
     "auth": {
+        "account-is-not-linked-with-oauth": "Your account is not linked with {providerName}. To link your account, sign out and click 'Sign in with {providerName}'.",
         "authenticating": "Authenticating...",
         "check-your-email": "Check your email and follow the link to reset your password.",
         "click-here-to-login": "Click here to sign in.",
@@ -130,8 +131,10 @@
         "sign-in-with": "Sign in with {provider}",
         "sign-out": "Sign out",
         "sign-out-of-all-devices": "Sign out of all devices?",
+        "unlink-oauth": "Unlink {providerName}",
         "update-password": "Update Password",
         "username": "Username",
+        "your-account-is-currently-linked-with-oauth": "Your account is currently linked with {providerName}",
         "your-password-was-reset": "Your password was reset."
     },
     "email": {

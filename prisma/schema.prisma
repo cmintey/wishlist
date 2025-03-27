@@ -9,7 +9,7 @@ generator client {
 }
 
 model User {
-    id                  String                @id @unique @default(cuid())
+    id                  String                @id @unique @default(cuid(2))
     sessions            Session[]
     username            String                @unique
     name                String
@@ -23,6 +23,7 @@ model User {
     roleId              Int                   @default(1)
     UserGroupMembership UserGroupMembership[]
     hashedPassword      String
+    oauthId             String?
     lists               List[]
 
     @@map("user")

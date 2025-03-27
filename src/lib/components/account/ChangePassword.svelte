@@ -36,6 +36,7 @@
     }}
 >
     <div class="flex flex-col items-start space-y-4">
+        <h3 class="h3">Credentials</h3>
         <PasswordInput
             id="oldpassword"
             name="oldPassword"

@@ -1,11 +1,10 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { page } from "$app/stores";
-    import type { User } from "@prisma/client";
+    import { page } from "$app/state";
     import { t } from "svelte-i18n";
 
     interface Props {
-        user: User;
+        user: LocalUser;
     }
 
     let { user = $bindable() }: Props = $props();
@@ -52,9 +51,9 @@
             />
         </label>
 
-        {#if $page.form?.error && $page.form?.errors}
+        {#if page.form?.error && page.form?.errors}
             <ul>
-                {#each $page.form.errors as error}
+                {#each page.form.errors as error}
                     <li class="text-xs text-red-500">{error.message}</li>
                 {/each}
             </ul>

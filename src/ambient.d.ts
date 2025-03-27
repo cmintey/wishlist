@@ -107,3 +107,5 @@ type DeepPartial<T> = T extends object
     : T;
 
 type InviteMethod = "email" | "link";
+
+type LocalUser = Omit<import("@prisma/client").User, "hashedPassword">;

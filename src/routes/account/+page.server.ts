@@ -14,6 +14,7 @@ import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/libra
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { getFormatter } from "$lib/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
+import { getOIDCConfig } from "$lib/server/openid";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const user = locals.user;
@@ -21,9 +22,12 @@ export const load: PageServerLoad = async ({ locals }) => {
         redirect(302, `/login?ref=/account`);
     }
 
+    const oidcConfig = await getOIDCConfig();
+
     return {
         user,
-        isProxyUser: locals.isProxyUser
+        isProxyUser: locals.isProxyUser,
+        oidcConfig
     };
 };
 
@@ -175,5 +179,18 @@ export const actions: Actions = {
                 errors: [{ field: "newPassword", message: $t("setup.unable-to-update-password") }]
             });
         }
+    },
+
+    unlinkoauth: async ({ locals }) => {
+        if (!locals.user) redirect(302, "/login?ref=/account");
+
+        await client.user.update({
+            data: {
+                oauthId: null
+            },
+            where: {
+                id: locals.user.id
+            }
+        });
     }
 };
