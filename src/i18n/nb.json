@@ -16,7 +16,7 @@
         "group-name": "Gruppenavn",
         "password-reset-link": "Link for å resette passordet",
         "password-strength-warning": "Vær varsom når du endrer eller skrur av denne verdien! Hvis skrudd av vil hvilket som helst passord med ett eller flere tegn være tillatt.",
-        "manager": "Leder",
+        "manager": "Administrator",
         "enable-default-list-creation-tooltip": "Slå på at en liste opprettes når en ny bruker blir med i en gruppe. Brukere vil fortsatt være i stand til å opprette egne lister.",
         "public-signup": "Offentlig registrering",
         "about": "Om",
@@ -201,7 +201,7 @@
     },
     "app": {
         "home": "Hjem",
-        "my-claims": "Mine krav"
+        "my-claims": "Mine reservasjoner"
     },
     "general": {
         "add-user": "Legg til bruker",
@@ -313,13 +313,13 @@
         "no-wishes-yet": "Ingen ønsker enda",
         "unable-to-update-item-ordering": "Kunne ikke oppdatere rekkefølgen på ønsker",
         "create-for": "Opprett ønske for {listOwner}",
-        "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Vi trenger en ting fra deg før du kan kreve ønsket.",
+        "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Vi trenger en ting fra deg før du kan reservere ønsket.",
         "unclaim": "Opphev krav",
         "upload-image": "Last opp bilde",
         "approvals-waiting": "DU har {approvalCount, plural, one {# ønske} other {# ønsker}} som venter på din godkjenning",
         "claimed": "Reservert",
         "note-placeholder": "Dvs. størrelse, farge osv.",
-        "claim-details": "Kravdetaljer",
+        "claim-details": "Detaljer om reservasjon",
         "added-by-somebody-else": "Lagt til av <span class=\"text-secondary-700-200-token font-bold\">noen andre</span>",
         "wishes-for": "{listOwner}s ønsker",
         "are-you-sure-you-wish-to-delete-item": "Er du sikker på at du ønsker å slette <b>{name}</b>?",
@@ -327,7 +327,7 @@
         "added-by": "Lagt til av <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "approval-needed": "Godkjennelse trengs",
         "url-placeholder": "Skriv inn en URL for å hente elementdata",
-        "claim": "Krev",
+        "claim": "Reserver",
         "claimed-item": "{claimed, select, true {Reservert} other {Frigjort}} item",
         "manage": "Administrer",
         "approve": "Godkjenn",
