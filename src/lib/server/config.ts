@@ -21,7 +21,10 @@ enum ConfigKey {
     OIDC_ENABLE = "oidc.enable",
     OIDC_DISCOVERY_URL = "oidc.discoveryUrl",
     OIDC_CLIENT_ID = "oidc.clientId",
-    OIDC_CLIENT_SECRET = "oidc.clientSecret"
+    OIDC_CLIENT_SECRET = "oidc.clientSecret",
+    OIDC_PROVIDER_NAME = "oidc.providerName",
+    OIDC_AUTO_REDIRECT = "oidc.autoRedirect",
+    OIDC_AUTO_REGISTER = "oidc.autoRegister"
 }
 
 export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
@@ -78,7 +81,10 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
                   enable: true,
                   discoveryUrl: configMap[ConfigKey.OIDC_DISCOVERY_URL]!,
                   clientId: configMap[ConfigKey.OIDC_CLIENT_ID]!,
-                  clientSecret: maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET]!, !includeSensitive)
+                  clientSecret: maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET]!, !includeSensitive),
+                  providerName: configMap[ConfigKey.OIDC_PROVIDER_NAME],
+                  autoRedirect: configMap[ConfigKey.OIDC_AUTO_REDIRECT] === "true",
+                  autoRegister: configMap[ConfigKey.OIDC_AUTO_REGISTER] === "true"
               }
             : {
                   enable: false,
@@ -86,7 +92,10 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
                   clientId: configMap[ConfigKey.OIDC_CLIENT_ID],
                   clientSecret: configMap[ConfigKey.OIDC_CLIENT_SECRET]
                       ? maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET], !includeSensitive)
-                      : undefined
+                      : undefined,
+                  providerName: configMap[ConfigKey.OIDC_PROVIDER_NAME],
+                  autoRedirect: configMap[ConfigKey.OIDC_AUTO_REDIRECT] === "true",
+                  autoRegister: configMap[ConfigKey.OIDC_AUTO_REGISTER] === "true"
               };
 
     const config: Config = {
@@ -170,6 +179,9 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
         configMap[ConfigKey.OIDC_DISCOVERY_URL] = config.oidc.discoveryUrl;
         configMap[ConfigKey.OIDC_CLIENT_ID] = config.oidc.clientId;
         configMap[ConfigKey.OIDC_CLIENT_SECRET] = config.oidc.clientSecret;
+        configMap[ConfigKey.OIDC_PROVIDER_NAME] = config.oidc.providerName;
+        configMap[ConfigKey.OIDC_AUTO_REDIRECT] = config.oidc.autoRedirect?.toString();
+        configMap[ConfigKey.OIDC_AUTO_REGISTER] = config.oidc.autoRegister?.toString();
     }
 
     configMap[ConfigKey.SIGNUP_ENABLE] = config?.enableSignup?.toString();

@@ -8,13 +8,19 @@
         discoveryUrl: string | undefined | null;
         clientId: string | undefined | null;
         clientSecret: string | undefined | null;
+        providerName: string | undefined | null;
+        autoRedirect: boolean | undefined | null;
+        autoRegister: boolean | undefined | null;
     }
 
     let {
         enabled = $bindable(),
         discoveryUrl = $bindable(),
         clientId = $bindable(),
-        clientSecret = $bindable()
+        clientSecret = $bindable(),
+        providerName = $bindable(),
+        autoRedirect = $bindable(),
+        autoRegister = $bindable()
     }: Props = $props();
 </script>
 
@@ -56,6 +62,38 @@
                 required
                 bind:value={clientSecret}
             />
+            <label for="oidcProviderName">
+                <span>{$t("admin.oidc-provider-name")}</span>
+                <input
+                    id="oidcProviderName"
+                    name="oidcProviderName"
+                    class="input"
+                    autocomplete="off"
+                    placeholder="OAuth"
+                    type="text"
+                    bind:value={providerName}
+                />
+            </label>
+            <label class="unstyled flex flex-row space-x-2">
+                <input
+                    id="oidcAutoRedirect"
+                    name="oidcAutoRedirect"
+                    class="checkbox"
+                    type="checkbox"
+                    bind:checked={autoRedirect}
+                />
+                <span>{$t("admin.oidc-auto-redirect")}</span>
+            </label>
+            <label class="unstyled flex flex-row space-x-2">
+                <input
+                    id="oidcAutoRegister"
+                    name="oidcAutoRegister"
+                    class="checkbox"
+                    type="checkbox"
+                    bind:checked={autoRegister}
+                />
+                <span>{$t("admin.oidc-auto-register")}</span>
+            </label>
         </div>
     {/if}
 </BaseSetting>

@@ -72,6 +72,9 @@
             bind:discoveryUrl={config.oidc.discoveryUrl}
             bind:clientId={config.oidc.clientId}
             bind:clientSecret={config.oidc.clientSecret}
+            bind:providerName={config.oidc.providerName}
+            bind:autoRedirect={config.oidc.autoRedirect}
+            bind:autoRegister={config.oidc.autoRegister}
         />
     </div>
 </div>

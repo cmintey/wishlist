@@ -64,7 +64,10 @@ export const settingSchema = z.object({
     enableOIDC: z.coerce.boolean().default(false),
     oidcDiscoveryUrl: z.string().optional(),
     oidcClientId: z.string().optional(),
-    oidcClientSecret: z.string().optional()
+    oidcClientSecret: z.string().optional(),
+    oidcProviderName: z.string().optional(),
+    oidcAutoRedirect: z.coerce.boolean().default(false),
+    oidcAutoRegister: z.coerce.boolean().default(false)
 });
 
 export const publicListCreateSchema = z.object({

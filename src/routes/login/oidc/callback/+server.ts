@@ -30,6 +30,14 @@ export const POST: RequestHandler = async (event) => {
     });
 
     if (!user) {
+        const config = await getConfig();
+        if (!config.oidc.autoRegister) {
+            console.warn(
+                `Could not register ${userinfo.sub}/${userinfo.email || "(no email)"}. Auto registration is disabled.`
+            );
+            error(400, $t("errors.registration-is-disabled"));
+        }
+
         // create user
         user = await createUser(
             {
@@ -41,7 +49,6 @@ export const POST: RequestHandler = async (event) => {
             ""
         );
 
-        const config = await getConfig();
         if (config.defaultGroup) {
             await client.userGroupMembership.create({
                 data: {

@@ -116,7 +116,7 @@
                         {$t("auth.forgot-password")}
                     </a>
                 </div>
-                {#if data.oidcEnabled}
+                {#if data.oidcConfig?.ready}
                     <div class="flex w-full items-center justify-center">
                         <hr class="my-2 h-px w-3/4 border-0" />
                         <span class="bg-surface-100-800-token absolute left-1/2 -translate-x-1/2 px-2">
@@ -130,7 +130,7 @@
                             onclick={() => window.location.assign(`/login/oidc${page.url.search}`)}
                             type="button"
                         >
-                            {$t("auth.sign-in-with", { values: { provider: "OAuth" } })}
+                            {$t("auth.sign-in-with", { values: { provider: data.oidcConfig.providerName || "OAuth" } })}
                         </button>
                     </div>
                 {/if}

@@ -21,9 +21,11 @@ const callbackSchema = z.object({
     url: z.string().url()
 });
 
-async function getOIDCConfig() {
+async function getClientConfig(config?: Config) {
     let rediscover = false;
-    const config = await getConfig(undefined, true);
+    if (!config) {
+        config = await getConfig(undefined, true);
+    }
     if (!config.oidc.enable) {
         return null;
     }
@@ -49,12 +51,22 @@ async function getOIDCConfig() {
 }
 
 export async function isOIDCConfigured() {
-    return (await getOIDCConfig()) !== null;
+    return (await getClientConfig()) !== null;
+}
+
+export async function getOIDCConfig() {
+    const config = await getConfig();
+    const clientConfig = await getClientConfig(config);
+    return {
+        ready: clientConfig !== null,
+        providerName: config.oidc.providerName,
+        autoRedirect: config.oidc.autoRedirect
+    };
 }
 
 export async function authorizeRedirect(event: RequestEvent) {
     const $t = await getFormatter();
-    const config = await getOIDCConfig();
+    const config = await getClientConfig();
     if (!config) {
         return Response.json({ message: $t("auth.oidc-client-not-configured") }, { status: 400 });
     }
@@ -115,7 +127,7 @@ export async function authorizeRedirect(event: RequestEvent) {
 
 export async function handleCallback(event: RequestEvent) {
     const $t = await getFormatter();
-    const config = await getOIDCConfig();
+    const config = await getClientConfig();
     if (!config) {
         error(400, $t("auth.oidc-client-not-configured"));
     }

@@ -55,12 +55,18 @@ type OIDCConfig =
           discoveryUrl?: string | null;
           clientId?: string | null;
           clientSecret?: string | null;
+          providerName?: string | null;
+          autoRedirect?: boolean | null;
+          autoRegister?: boolean | null;
       }
     | {
           enable: true;
           discoveryUrl: string;
           clientId: string;
           clientSecret: string;
+          providerName?: string | null;
+          autoRedirect: boolean;
+          autoRegister: boolean;
       };
 
 type Config = {

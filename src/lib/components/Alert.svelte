@@ -5,7 +5,7 @@
         type: AlertType;
         children?: import("svelte").Snippet;
         noicon?: boolean;
-        class: string;
+        class?: string;
     }
 
     let { title = null, type, noicon = false, children, class: clazz, ...rest }: Props = $props();
