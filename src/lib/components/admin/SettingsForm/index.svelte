@@ -36,6 +36,9 @@
     let form = $derived($page.form);
 </script>
 
+<!-- Refactor how settings look -->
+<!-- TODO: Add option to disable password login -->
+
 <!-- TODO: Add tooltips explaining the various settings -->
 <div class="grid grid-cols-1 gap-4 gap-y-8 md:grid-cols-2">
     <div class="col-span-1">
