@@ -16,6 +16,7 @@ enum ConfigKey {
     CLAIMS_SHOW_NAME = "claims.showName",
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
+    SECURITY_DISABLE_PASSWORD_LOGIN = "security.disablePasswordLogin",
     DEFAULT_GROUP = "defaultGroup",
     ENABLE_DEFAULT_LIST_CREATION = "enableDefaultListCreation",
     OIDC_ENABLE = "oidc.enable",
@@ -110,7 +111,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
         },
         listMode: (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard",
         security: {
-            passwordStrength: Number(configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] || 2)
+            passwordStrength: Number(configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] || 2),
+            disablePasswordLogin: configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] === "true"
         },
         defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!,
         enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false", // do it this way since we want it to be defaulted to true
@@ -150,7 +152,8 @@ const createDefaultConfig = async (): Promise<void> => {
         },
         listMode: "standard",
         security: {
-            passwordStrength: 2
+            passwordStrength: 2,
+            disablePasswordLogin: false
         },
         enableDefaultListCreation: true,
         oidc: {
@@ -184,14 +187,15 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
         configMap[ConfigKey.OIDC_AUTO_REGISTER] = config.oidc.autoRegister?.toString();
     }
 
-    configMap[ConfigKey.SIGNUP_ENABLE] = config?.enableSignup?.toString();
-    configMap[ConfigKey.SUGGESTIONS_ENABLE] = config?.suggestions?.enable.toString();
-    configMap[ConfigKey.SUGGESTIONS_METHOD] = config?.suggestions?.method;
-    configMap[ConfigKey.CLAIMS_SHOW_NAME] = config?.claims?.showName.toString();
-    configMap[ConfigKey.LIST_MODE] = config?.listMode;
-    configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] = config?.security?.passwordStrength.toString();
-    configMap[ConfigKey.DEFAULT_GROUP] = config?.defaultGroup;
-    configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] = config?.enableDefaultListCreation?.toString();
+    configMap[ConfigKey.SIGNUP_ENABLE] = config.enableSignup?.toString();
+    configMap[ConfigKey.SUGGESTIONS_ENABLE] = config.suggestions?.enable.toString();
+    configMap[ConfigKey.SUGGESTIONS_METHOD] = config.suggestions?.method;
+    configMap[ConfigKey.CLAIMS_SHOW_NAME] = config.claims?.showName.toString();
+    configMap[ConfigKey.LIST_MODE] = config.listMode;
+    configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] = config.security?.passwordStrength.toString();
+    configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] = config.security?.disablePasswordLogin.toString();
+    configMap[ConfigKey.DEFAULT_GROUP] = config.defaultGroup;
+    configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] = config.enableDefaultListCreation?.toString();
 
     for (const [key, value] of Object.entries(configMap)) {
         await client.systemConfig.upsert({

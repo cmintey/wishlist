@@ -42,6 +42,8 @@
         "delete-user": "Delete User",
         "delete-user-confirmation": "Are you sure you wish to delete {username}? <b>This action is irreversible!</b>",
         "dev": "dev",
+        "disable-password-login": "Disable Password Login",
+        "disable-password-login-tooltip": "Disables logging in with a password. Only Header and OAuth authentication will be allowed.",
         "enable-default-list-creation": "Enable Default List Creation",
         "enable-default-list-creation-tooltip": "Enable the creation of a list when a new user joins a group. Users will still be able to create lists themselves.",
         "generate-reset-password-link": "Generate Reset Password Link",

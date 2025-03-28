@@ -117,7 +117,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         },
         listMode: "standard",
         security: {
-            passwordStrength: configData.passwordStrength
+            passwordStrength: configData.passwordStrength,
+            disablePasswordLogin: configData.disablePasswordLogin
         },
         defaultGroup: configData.defaultGroup,
         enableDefaultListCreation: configData.enableDefaultListCreation,

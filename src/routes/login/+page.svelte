@@ -66,63 +66,67 @@
                     <span class="text-lg md:text-xl">{$t("auth.authenticating")}</span>
                 </div>
             {:else}
-                <label for="username">
-                    <span>{$t("auth.username")}</span>
-                    <input
-                        id="username"
-                        name="username"
-                        class="input"
-                        class:input-error={form?.incorrect || form?.error}
-                        autocapitalize="off"
-                        autocomplete="username"
-                        required
-                        type="text"
-                    />
-                </label>
+                {#if data.enableLogin}
+                    <label for="username">
+                        <span>{$t("auth.username")}</span>
+                        <input
+                            id="username"
+                            name="username"
+                            class="input"
+                            class:input-error={form?.incorrect || form?.error}
+                            autocapitalize="off"
+                            autocomplete="username"
+                            required
+                            type="text"
+                        />
+                    </label>
 
-                <div class="relative flex flex-col space-y-4">
-                    <PasswordInput
-                        id="password"
-                        name="password"
-                        error={form?.incorrect || form?.error}
-                        label={$t("auth.password")}
-                        required
-                    />
+                    <div class="relative flex flex-col space-y-4">
+                        <PasswordInput
+                            id="password"
+                            name="password"
+                            error={form?.incorrect || form?.error}
+                            label={$t("auth.password")}
+                            required
+                        />
 
-                    {#if form?.incorrect}<span class="unstyled text-xs text-red-500">
-                            {$t("errors.invalid-credentials")}
-                        </span>{/if}
-                    {#if form?.error}
-                        <ul>
-                            {#each form.errors as error}
-                                <li class="text-xs text-red-500">{error.message}</li>
-                            {/each}
-                        </ul>
-                    {/if}
-
-                    <div class="flex items-center justify-center space-x-4">
-                        <button class="variant-filled-primary btn w-min" disabled={signingIn}>
-                            {#if signingIn}
-                                <ProgressRadial width="w-4" />
-                            {/if}
-                            <span>{$t("auth.sign-in")}</span>
-                        </button>
-                        {#if data.enableSignup}
-                            <a href="/signup">{$t("auth.create-an-account")}</a>
+                        {#if form?.incorrect}<span class="unstyled text-xs text-red-500">
+                                {$t("errors.invalid-credentials")}
+                            </span>{/if}
+                        {#if form?.error}
+                            <ul>
+                                {#each form.errors as error}
+                                    <li class="text-xs text-red-500">{error.message}</li>
+                                {/each}
+                            </ul>
                         {/if}
-                    </div>
 
-                    <a class="absolute right-0 top-0 !mt-0 pt-0.5 text-sm" href="/forgot-password">
-                        {$t("auth.forgot-password")}
-                    </a>
-                </div>
-                {#if data.oidcConfig?.ready}
-                    <div class="flex w-full items-center justify-center">
-                        <hr class="my-2 h-px w-3/4 border-0" />
-                        <span class="bg-surface-100-800-token absolute left-1/2 -translate-x-1/2 px-2">
-                            {$t("auth.or")}
-                        </span>
+                        <div class="flex items-center justify-center space-x-4">
+                            <button class="variant-filled-primary btn w-min" disabled={signingIn}>
+                                {#if signingIn}
+                                    <ProgressRadial width="w-4" />
+                                {/if}
+                                <span>{$t("auth.sign-in")}</span>
+                            </button>
+                            {#if data.enableSignup}
+                                <a href="/signup">{$t("auth.create-an-account")}</a>
+                            {/if}
+                        </div>
+
+                        <a class="absolute right-0 top-0 !mt-0 pt-0.5 text-sm" href="/forgot-password">
+                            {$t("auth.forgot-password")}
+                        </a>
                     </div>
+                {/if}
+                {#if data.oidcConfig?.ready}
+                    {#if data.enableLogin}
+                        <div class="flex w-full items-center justify-center">
+                            <hr class="my-2 h-px w-3/4 border-0" />
+                            <span class="bg-surface-100-800-token absolute left-1/2 -translate-x-1/2 px-2">
+                                {$t("auth.or")}
+                            </span>
+                        </div>
+                    {/if}
                     <div class="flex justify-center">
                         <button
                             class="variant-filled-primary btn"

@@ -1,4 +1,4 @@
-import { fail, redirect, type Cookies } from "@sveltejs/kit";
+import { error, fail, redirect, type Cookies } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
 import { getLoginSchema } from "$lib/validations";
@@ -82,6 +82,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url }) =>
     /* End header authentication */
 
     return {
+        enableLogin: !config.security.disablePasswordLogin,
         enableSignup: config.enableSignup,
         isCallback: url.searchParams.has("state"),
         error: url.searchParams.get("error"),
@@ -91,6 +92,11 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url }) =>
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
+        const config = await getConfig();
+        if (config.security.disablePasswordLogin) {
+            error(400, "Password login is disabled");
+        }
+
         const formData = Object.fromEntries(await request.formData());
         const loginData = (await getLoginSchema()).safeParse(formData);
         // check for empty values

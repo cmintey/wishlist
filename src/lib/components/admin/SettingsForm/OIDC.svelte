@@ -1,5 +1,6 @@
 <script lang="ts">
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import Tooltip from "$lib/components/Tooltip.svelte";
     import BaseSetting from "./BaseSetting.svelte";
     import { t } from "svelte-i18n";
 
@@ -82,7 +83,17 @@
                     type="checkbox"
                     bind:checked={autoRedirect}
                 />
-                <span>{$t("admin.oidc-auto-redirect")}</span>
+                <Tooltip>
+                    {#snippet label()}
+                        <span>{$t("admin.oidc-auto-redirect")}</span>
+                    {/snippet}
+                    {#snippet description()}
+                        <span>
+                            When enabled, the login page will automatically redirect to your Identity Provider's sign in
+                            page. To bypass this, the '?direct=1' can be added to the URL.
+                        </span>
+                    {/snippet}
+                </Tooltip>
             </label>
             <label class="unstyled flex flex-row space-x-2">
                 <input

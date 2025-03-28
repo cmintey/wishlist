@@ -59,6 +59,7 @@ export const settingSchema = z.object({
     claimsShowName: z.coerce.boolean().default(false),
     listMode: z.enum(["standard", "registry"]).default("standard"),
     passwordStrength: z.coerce.number().min(-1).max(5).default(2),
+    disablePasswordLogin: z.coerce.boolean().default(false),
     defaultGroup: z.string().optional(),
     enableDefaultListCreation: z.coerce.boolean().default(true),
     enableOIDC: z.coerce.boolean().default(false),

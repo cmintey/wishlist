@@ -36,9 +36,6 @@
     let form = $derived($page.form);
 </script>
 
-<!-- Refactor how settings look -->
-<!-- TODO: Add option to disable password login -->
-
 <!-- TODO: Add tooltips explaining the various settings -->
 <div class="grid grid-cols-1 gap-4 gap-y-8 md:grid-cols-2">
     <div class="col-span-1">
@@ -51,7 +48,10 @@
         <Claims bind:enabled={config.claims.showName} />
     </div>
     <div class="col-span-1">
-        <Security bind:passwordStrength={config.security.passwordStrength} />
+        <Security
+            disablePasswordLogin={config.security.disablePasswordLogin}
+            bind:passwordStrength={config.security.passwordStrength}
+        />
     </div>
     <div class="col-span-1">
         <DefaultGroup {groups} bind:groupId={config.defaultGroup} />

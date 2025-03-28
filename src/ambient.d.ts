@@ -82,6 +82,7 @@ type Config = {
     listMode: ListMode;
     security: {
         passwordStrength: number;
+        disablePasswordLogin: boolean;
     };
     defaultGroup?: string | null;
     enableDefaultListCreation: boolean;
