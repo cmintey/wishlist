@@ -1,45 +1,95 @@
-import { Lucia, TimeSpan } from "lucia";
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { dev } from "$app/environment";
 import { client } from "./prisma";
 import { env } from "$env/dynamic/private";
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
+import type { Session, User } from "@prisma/client";
+import { sha256 } from "@oslojs/crypto/sha2";
+import type { Cookies } from "@sveltejs/kit";
 
-const adapter = new PrismaAdapter(client.session, client.user);
-
+const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
+const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
 const origin = new URL(env.ORIGIN || "localhost:3280");
-export const auth = new Lucia(adapter, {
-    sessionExpiresIn: new TimeSpan(2, "w"),
-    sessionCookie: {
-        attributes: {
-            secure: !dev && origin.protocol === "https:",
-            path: "/"
+
+export const sessionCookieName = "wishlist_session";
+
+export function generateSessionToken(): string {
+    const bytes = new Uint8Array(20);
+    crypto.getRandomValues(bytes);
+    const token = encodeBase32LowerCaseNoPadding(bytes);
+    return token;
+}
+
+export async function createSession(token: string, userId: string): Promise<Session> {
+    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+    const session: Session = {
+        id: sessionId,
+        userId,
+        expiresAt: new Date(Date.now() + EXPIRES_IN)
+    };
+    await client.session.create({
+        data: session
+    });
+    return session;
+}
+
+export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
+    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+    const result = await client.session.findUnique({
+        where: {
+            id: sessionId
+        },
+        include: {
+            user: true
         }
-    },
-    getUserAttributes: (data) => {
-        return {
-            username: data.username,
-            email: data.email,
-            name: data.name,
-            roleId: data.roleId,
-            picture: data.picture
-        };
+    });
+    if (result === null) {
+        return { session: null, user: null };
     }
-});
-
-declare module "lucia" {
-    interface Register {
-        Lucia: typeof auth;
-        DatabaseSessionAttributes: DatabaseSessionAttributes;
-        DatabaseUserAttributes: DatabaseUserAttributes;
+    const { user, ...session } = result;
+    if (Date.now() >= session.expiresAt.getTime()) {
+        await client.session.delete({ where: { id: sessionId } });
+        return { session: null, user: null };
     }
+    if (Date.now() >= session.expiresAt.getTime() - REFRESH_TIME) {
+        session.expiresAt = new Date(Date.now() + EXPIRES_IN);
+        await client.session.update({
+            where: {
+                id: session.id
+            },
+            data: {
+                expiresAt: session.expiresAt
+            }
+        });
+    }
+    return { session, user };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface DatabaseSessionAttributes {}
-interface DatabaseUserAttributes {
-    username: string;
-    name: string;
-    email: string;
-    roleId: number;
-    picture?: string | null;
+export async function invalidateSession(sessionId: string): Promise<void> {
+    await client.session.delete({ where: { id: sessionId } });
 }
+
+export async function invalidateUserSessions(userId: string): Promise<void> {
+    await client.session.deleteMany({ where: { userId } });
+}
+
+export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt: Date): void {
+    cookies.set(sessionCookieName, token, {
+        httpOnly: true,
+        sameSite: "lax",
+        expires: expiresAt,
+        path: "/",
+        secure: !dev && origin.protocol === "https:"
+    });
+}
+
+export function deleteSessionTokenCookie(cookies: Cookies): void {
+    cookies.set(sessionCookieName, "", {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 0,
+        path: "/",
+        secure: !dev && origin.protocol === "https:"
+    });
+}
+
+export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };

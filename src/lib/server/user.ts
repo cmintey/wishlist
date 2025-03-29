@@ -1,9 +1,9 @@
 import { client } from "$lib/server/prisma";
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
-import { LegacyScrypt } from "lucia";
 import type { User } from "@prisma/client";
 import { create } from "./list";
+import { hashPassword } from "./password";
 
 type UserMinimal = Pick<User, "username" | "email" | "name">;
 
@@ -32,7 +32,7 @@ export const createUser = async (user: UserMinimal, role: Role, password: string
             })
         )?.id;
     }
-    const hashedPassword = await new LegacyScrypt().hash(password);
+    const hashedPassword = await hashPassword(password);
 
     const newUser = await client.user.create({
         select: {
