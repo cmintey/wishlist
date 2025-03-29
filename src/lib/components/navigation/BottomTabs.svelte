@@ -2,7 +2,6 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { isInstalled } from "$lib/stores/is-installed";
-    import type { User } from "@prisma/client";
     import { TabGroup, Tab } from "@skeletonlabs/skeleton";
     import { t } from "svelte-i18n";
 

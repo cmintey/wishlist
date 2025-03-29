@@ -116,7 +116,7 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
             disablePasswordLogin: configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] === "true"
         },
         defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!,
-        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false",, // do it this way since we want it to be defaulted to true
+        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false", // do it this way since we want it to be defaulted to true
         allowPublicLists: configMap[ConfigKey.ALLOW_PUBLIC_LISTS] === "true",
         oidc: oidcConfig
     };

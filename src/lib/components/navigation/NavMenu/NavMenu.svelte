@@ -5,7 +5,6 @@
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { t } from "svelte-i18n";
-    import type { User } from "@prisma/client";
 
     interface Props {
         user: LocalUser | null;
