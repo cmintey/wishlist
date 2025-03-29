@@ -212,7 +212,7 @@
     {/if}
 </div>
 
-{#if data.listMode === "registry"}
+{#if data.list.owner.isMe && (data.listMode === "registry" || data.list.public)}
     <div class="flex flex-row space-x-2 pb-4">
         {#if publicListUrl}
             <div class="flex flex-row">
@@ -300,7 +300,7 @@
 {/if}
 
 <!-- Add Item button -->
-{#if data.list.owner.isMe || data.suggestionsEnabled}
+{#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
         class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
         class:bottom-24={$isInstalled}

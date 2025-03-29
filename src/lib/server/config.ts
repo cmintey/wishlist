@@ -19,6 +19,7 @@ enum ConfigKey {
     SECURITY_DISABLE_PASSWORD_LOGIN = "security.disablePasswordLogin",
     DEFAULT_GROUP = "defaultGroup",
     ENABLE_DEFAULT_LIST_CREATION = "enableDefaultListCreation",
+    ALLOW_PUBLIC_LISTS = "allowPublicLists",
     OIDC_ENABLE = "oidc.enable",
     OIDC_DISCOVERY_URL = "oidc.discoveryUrl",
     OIDC_CLIENT_ID = "oidc.clientId",
@@ -115,7 +116,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
             disablePasswordLogin: configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] === "true"
         },
         defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!,
-        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false", // do it this way since we want it to be defaulted to true
+        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false",, // do it this way since we want it to be defaulted to true
+        allowPublicLists: configMap[ConfigKey.ALLOW_PUBLIC_LISTS] === "true",
         oidc: oidcConfig
     };
 
@@ -156,6 +158,7 @@ const createDefaultConfig = async (): Promise<void> => {
             disablePasswordLogin: false
         },
         enableDefaultListCreation: true,
+        allowPublicLists: false,
         oidc: {
             enable: false
         }
@@ -196,6 +199,7 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
     configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] = config.security?.disablePasswordLogin.toString();
     configMap[ConfigKey.DEFAULT_GROUP] = config.defaultGroup;
     configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] = config.enableDefaultListCreation?.toString();
+    configMap[ConfigKey.ALLOW_PUBLIC_LISTS] = config?.allowPublicLists?.toString();
 
     for (const [key, value] of Object.entries(configMap)) {
         await client.systemConfig.upsert({

@@ -8,7 +8,7 @@
     import type { List, User } from "@prisma/client";
     import { getModalStore } from "@skeletonlabs/skeleton";
 
-    interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name">> {
+    interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public">> {
         owner: Pick<User, "name" | "username" | "picture">;
     }
 
@@ -17,10 +17,12 @@
             list: ListProps;
         };
         persistButtonName: string;
+        listMode: ListMode;
+        allowsPublicLists: boolean;
         editing?: boolean;
     }
 
-    const { data, persistButtonName, editing = false }: Props = $props();
+    const { data, persistButtonName, listMode, allowsPublicLists, editing = false }: Props = $props();
     const modalStore = getModalStore();
 
     let list = $state(data.list);
@@ -71,24 +73,40 @@
         }
     }}
 >
-    <div class="grid grid-cols-1 gap-4 pb-4 md:grid-cols-2">
-        <label class="col-span-1 md:col-span-2" for="name">
-            <span>{$t("auth.name")}</span>
-            <ClearableInput
-                id="name"
-                name="name"
-                class="input"
-                autocomplete="off"
-                clearButtonLabel={$t("a11y.clear-name-field")}
-                onValueClear={() => (list.name = null)}
-                placeholder={$t("wishes.wishes-for", { values: { listOwner: list.owner.name } })}
-                showClearButton={() => list.name !== null}
-                type="text"
-                bind:value={list.name}
-            />
-        </label>
+    <div class="grid grid-cols-12 gap-4 pb-4">
+        <div class="col-span-full flex w-full flex-row flex-wrap gap-4">
+            <label class="flex-grow" for="name">
+                <span>{$t("auth.name")}</span>
+                <ClearableInput
+                    id="name"
+                    name="name"
+                    class="input"
+                    autocomplete="off"
+                    clearButtonLabel={$t("a11y.clear-name-field")}
+                    onValueClear={() => (list.name = null)}
+                    placeholder={$t("wishes.wishes-for", { values: { listOwner: list.owner.name } })}
+                    showClearButton={() => list.name !== null}
+                    type="text"
+                    bind:value={list.name}
+                />
+            </label>
 
-        <label class="col-span-1 flex flex-col" for="iconColor">
+            {#if allowsPublicLists || listMode === "registry"}
+                <label class="unstyled mt-8 flex flex-row items-center space-x-2" for="public">
+                    <input
+                        id="public"
+                        name="public"
+                        class="checkbox"
+                        checked={list.public || listMode === "registry"}
+                        disabled={listMode === "registry"}
+                        type="checkbox"
+                    />
+                    <span>{$t("wishes.public")}</span>
+                </label>
+            {/if}
+        </div>
+
+        <label class="col-span-full flex flex-col md:col-span-4" for="iconColor">
             <span>{$t("general.icon-bg-color")}</span>
             <div class="grid grid-cols-[auto_1fr] gap-2">
                 <input
@@ -114,11 +132,11 @@
                 />
             </div>
         </label>
-        <div class="col-span-1">
+        <div class="col-span-full md:col-span-8">
             <IconSelector id="icon" icon={list.icon} onIconSelected={(icon) => (list.icon = icon)} />
         </div>
 
-        <div class="col-span-1 md:col-span-2">
+        <div class="col-span-full">
             <div class="flex flex-col space-y-2">
                 <span>{$t("wishes.preview")}</span>
                 <ListCard hideCount {list} preventNavigate />
@@ -126,7 +144,7 @@
         </div>
     </div>
 
-    <div class="flex flex-row justify-between">
+    <div class="flex flex-row flex-wrap justify-between gap-4">
         <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
             {$t("general.cancel")}
         </button>

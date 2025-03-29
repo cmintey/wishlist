@@ -62,6 +62,7 @@ export const settingSchema = z.object({
     disablePasswordLogin: z.coerce.boolean().default(false),
     defaultGroup: z.string().optional(),
     enableDefaultListCreation: z.coerce.boolean().default(true),
+    allowPublicLists: z.coerce.boolean().default(false),
     enableOIDC: z.coerce.boolean().default(false),
     oidcDiscoveryUrl: z.string().optional(),
     oidcClientId: z.string().optional(),
@@ -79,7 +80,8 @@ export const getListPropertiesSchema = () => {
     return z.object({
         name: z.string().trim().nullable(),
         icon: z.string().trim().nullable(),
-        iconColor: z.string().trim().nullable()
+        iconColor: z.string().trim().nullable(),
+        public: z.coerce.boolean().default(false)
     });
 };
 

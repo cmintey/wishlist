@@ -25,7 +25,7 @@
 </script>
 
 <BaseSetting title={$t("admin.smtp")}>
-    <label class="unstyled flex flex-row space-x-2">
+    <label class="unstyled flex flex-row items-center space-x-2">
         <input id="enableSMTP" name="enableSMTP" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("general.enable")}</span>
     </label>

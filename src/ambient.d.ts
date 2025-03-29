@@ -86,6 +86,7 @@ type Config = {
     };
     defaultGroup?: string | null;
     enableDefaultListCreation: boolean;
+    allowPublicLists: boolean;
     oidc: OIDCConfig;
 };
 

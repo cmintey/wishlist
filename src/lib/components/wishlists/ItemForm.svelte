@@ -273,7 +273,7 @@
                     <input
                         id={list.id}
                         name="list"
-                        class="checkbox disabled:checked:bg-surface-400-500-token disabled:cursor-not-allowed"
+                        class="checkbox"
                         checked={listsHavingItem[list.id] !== undefined}
                         disabled={listsHavingItem[list.id] === false}
                         type="checkbox"
