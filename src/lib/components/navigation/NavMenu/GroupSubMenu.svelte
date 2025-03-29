@@ -2,7 +2,7 @@
     import { goto } from "$app/navigation";
     import { GroupsAPI } from "$lib/api/groups";
     import { UserAPI } from "$lib/api/users";
-    import type { Group } from "@prisma/client";
+    import type { Group, User } from "@prisma/client";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
     import { t } from "svelte-i18n";
 

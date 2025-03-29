@@ -74,9 +74,12 @@ importers:
       nodemailer:
         specifier: ^6.9.16
         version: 6.10.0
+<<<<<<< HEAD
       openid-client:
         specifier: ^6.3.3
         version: 6.3.3
+=======
+>>>>>>> origin/main
       prisma:
         specifier: ^6.4.1
         version: 6.4.1(typescript@5.8.2)
