@@ -57,29 +57,26 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2
       metascraper:
-        specifier: ^5.45.25
+        specifier: ^5.46.9
         version: 5.46.9
       metascraper-amazon:
-        specifier: ^5.45.25
+        specifier: ^5.46.5
         version: 5.46.5
       metascraper-image:
-        specifier: ^5.45.27
+        specifier: ^5.46.5
         version: 5.46.5
       metascraper-title:
-        specifier: ^5.45.25
+        specifier: ^5.46.5
         version: 5.46.5
       metascraper-url:
-        specifier: ^5.45.25
+        specifier: ^5.46.5
         version: 5.46.5
       nodemailer:
-        specifier: ^6.9.16
+        specifier: ^6.10.0
         version: 6.10.0
-<<<<<<< HEAD
       openid-client:
         specifier: ^6.3.3
         version: 6.3.3
-=======
->>>>>>> origin/main
       prisma:
         specifier: ^6.4.1
         version: 6.4.1(typescript@5.8.2)
