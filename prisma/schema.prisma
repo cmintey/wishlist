@@ -148,9 +148,9 @@ model ListItem {
 
 model ItemClaim {
     id                String      @id @unique @default(uuid())
-    item              Item        @relation(fields: [itemId], references: [id])
+    item              Item        @relation(fields: [itemId], references: [id], onDelete: Cascade)
     itemId            Int
-    list              List        @relation(fields: [listId], references: [id])
+    list              List        @relation(fields: [listId], references: [id], onDelete: Cascade)
     listId            String
     claimedBy         User?       @relation(fields: [claimedById], references: [id], onDelete: Cascade)
     claimedById       String?
