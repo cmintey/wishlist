@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import Claims from "$lib/components/admin/SettingsForm/Claims.svelte";
-    import ListCreation from "$lib/components/admin/SettingsForm/ListCreation.svelte";
+    import List from "$lib/components/admin/SettingsForm/List.svelte";
     import ListMode from "$lib/components/admin/SettingsForm/ListMode.svelte";
     import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
     import type { PageData } from "./$types";
@@ -42,7 +42,11 @@
             <Claims bind:enabled={config.claims.showName} />
         </div>
         <div class="col-span-1">
-            <ListCreation bind:enabled={config.enableDefaultListCreation} />
+            <List
+                listMode={config.listMode}
+                bind:creationEnabled={config.enableDefaultListCreation}
+                bind:allowPublic={config.allowPublicLists}
+            />
         </div>
     </div>
 

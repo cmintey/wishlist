@@ -58,7 +58,8 @@ export const actions: Actions = {
             enableSuggestions: true,
             claimsShowName: true,
             listMode: true,
-            enableDefaultListCreation: true
+            enableDefaultListCreation: true,
+            allowPublicLists: true
         });
 
         const configData = groupSettingSchema.safeParse(formData);
@@ -82,7 +83,8 @@ export const actions: Actions = {
                 showName: configData.data.claimsShowName
             },
             listMode: configData.data.listMode,
-            enableDefaultListCreation: configData.data.enableDefaultListCreation
+            enableDefaultListCreation: configData.data.enableDefaultListCreation,
+            allowPublicLists: configData.data.allowPublicLists
         };
         await writeConfig(newConfig, params.groupId);
 

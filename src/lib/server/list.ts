@@ -19,6 +19,7 @@ export interface ListProperties {
     name?: string | null;
     icon?: string | null;
     iconColor?: string | null;
+    public?: boolean;
 }
 
 export const create = async (ownerId: string, groupId: string, otherData?: ListProperties) => {

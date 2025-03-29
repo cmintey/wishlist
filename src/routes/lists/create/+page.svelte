@@ -21,7 +21,12 @@
     });
 </script>
 
-<ManageListForm {data} persistButtonName={$t("general.create")} />
+<ManageListForm
+    allowsPublicLists={data.allowsPublicLists}
+    {data}
+    listMode={data.listMode}
+    persistButtonName={$t("general.create")}
+/>
 
 <svelte:head>
     <title>{$t("wishes.create-list")}</title>

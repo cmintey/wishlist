@@ -76,7 +76,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
         error(400, $t("errors.item-id-must-be-a-number"));
     }
 
-    const [list, item, listItem] = await Promise.all([
+    const [list, item, listItem, claims] = await Promise.all([
         client.list.findUnique({
             select: {
                 ownerId: true
@@ -112,6 +112,15 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
                     itemId: parseInt(params.itemId)
                 }
             }
+        }),
+        client.itemClaim.findMany({
+            select: {
+                id: true
+            },
+            where: {
+                listId: params.listId,
+                itemId: parseInt(params.itemId)
+            }
         })
     ]);
 
@@ -130,20 +139,33 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     }
 
     try {
-        await client.listItem.delete({
-            where: {
-                id: listItem.id
-            }
-        });
-        // Item was only on this list, we should delete it
-        if (item.lists.length === 1 && (item.createdById === locals.user.id || item.userId === locals.user.id)) {
-            await client.item.delete({
+        await client.$transaction(async (tx) => {
+            await tx.listItem.delete({
                 where: {
-                    id: item.id
+                    id: listItem.id
                 }
             });
-            if (item.imageUrl) tryDeleteImage(item.imageUrl);
-        }
+
+            if (claims.length > 0) {
+                await tx.itemClaim.deleteMany({
+                    where: {
+                        id: {
+                            in: claims.map(({ id }) => id)
+                        }
+                    }
+                });
+            }
+
+            // Item was only on this list, we should delete it
+            if (item.lists.length === 1 && (item.createdById === locals.user?.id || item.userId === locals.user?.id)) {
+                await tx.item.delete({
+                    where: {
+                        id: item.id
+                    }
+                });
+                if (item.imageUrl) tryDeleteImage(item.imageUrl);
+            }
+        });
 
         itemEmitter.emit(ItemEvent.ITEM_DELETE, { id: parseInt(params.itemId), lists: [{ id: params.listId }] });
 

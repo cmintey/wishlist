@@ -10,7 +10,7 @@
 </script>
 
 <BaseSetting title={$t("admin.claims")}>
-    <label class="unstyled flex flex-row space-x-2">
+    <label class="unstyled flex flex-row items-center space-x-2">
         <input id="claimsShowName" name="claimsShowName" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("admin.show-name")}</span>
     </label>
