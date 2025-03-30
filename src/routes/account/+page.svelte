@@ -7,6 +7,7 @@
     import type { PageServerData } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { t } from "svelte-i18n";
+    import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
 
     interface Props {
         data: PageServerData;
@@ -54,7 +55,14 @@
                 <EditProfile user={data.user} />
             </div>
         {:else if tabSet === 1 && !data.isProxyUser}
-            <ChangePassword />
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {#if !data.isProxyUser}
+                    <ChangePassword />
+                {/if}
+                {#if data.oidcConfig.ready}
+                    <LinkOAuth oauthId={data.user.oauthId} providerName={data.oidcConfig.providerName} />
+                {/if}
+            </div>
         {/if}
     {/snippet}
 </TabGroup>

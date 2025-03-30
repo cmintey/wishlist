@@ -49,6 +49,26 @@ type SMTPConfig =
           fromName: string;
       };
 
+type OIDCConfig =
+    | {
+          enable: false;
+          discoveryUrl?: string | null;
+          clientId?: string | null;
+          clientSecret?: string | null;
+          providerName?: string | null;
+          autoRedirect?: boolean | null;
+          autoRegister?: boolean | null;
+      }
+    | {
+          enable: true;
+          discoveryUrl: string;
+          clientId: string;
+          clientSecret: string;
+          providerName?: string | null;
+          autoRedirect: boolean;
+          autoRegister: boolean;
+      };
+
 type Config = {
     enableSignup: boolean;
     suggestions: {
@@ -62,10 +82,12 @@ type Config = {
     listMode: ListMode;
     security: {
         passwordStrength: number;
+        disablePasswordLogin: boolean;
     };
     defaultGroup?: string | null;
     enableDefaultListCreation: boolean;
     allowPublicLists: boolean;
+    oidc: OIDCConfig;
 };
 
 type Option = {
@@ -87,3 +109,5 @@ type DeepPartial<T> = T extends object
     : T;
 
 type InviteMethod = "email" | "link";
+
+type LocalUser = Omit<import("@prisma/client").User, "hashedPassword">;

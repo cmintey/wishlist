@@ -56,7 +56,7 @@
         <span>
             {#if showFor}
                 {@html $t("wishes.for", { values: { name: item.user?.name } })}
-            {:else}
+            {:else if !onPublicList}
                 {@html $t("wishes.added-by", { values: { name: item.addedBy?.name } })}
             {/if}
         </span>

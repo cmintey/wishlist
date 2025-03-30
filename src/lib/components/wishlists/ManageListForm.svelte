@@ -106,7 +106,7 @@
             {/if}
         </div>
 
-        <label class="col-span-full flex flex-col md:col-span-4" for="name">
+        <label class="col-span-full flex flex-col md:col-span-4" for="iconColor">
             <span>{$t("general.icon-bg-color")}</span>
             <div class="grid grid-cols-[auto_1fr] gap-2">
                 <input

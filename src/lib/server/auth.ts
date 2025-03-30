@@ -39,7 +39,17 @@ export async function validateSessionToken(token: string): Promise<SessionValida
             id: sessionId
         },
         include: {
-            user: true
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                    name: true,
+                    roleId: true,
+                    picture: true,
+                    oauthId: true
+                }
+            }
         }
     });
     if (result === null) {
@@ -92,4 +102,6 @@ export function deleteSessionTokenCookie(cookies: Cookies): void {
     });
 }
 
-export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
+export type SessionValidationResult =
+    | { session: Session; user: Omit<User, "hashedPassword"> }
+    | { session: null; user: null };

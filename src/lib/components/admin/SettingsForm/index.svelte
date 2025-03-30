@@ -9,6 +9,7 @@
     import Smtp from "./SMTP.svelte";
     import { t } from "svelte-i18n";
     import List from "./List.svelte";
+    import Oidc from "./OIDC.svelte";
 
     type Group = {
         id: string;
@@ -48,7 +49,10 @@
         <Claims bind:enabled={config.claims.showName} />
     </div>
     <div class="col-span-1">
-        <Security bind:passwordStrength={config.security.passwordStrength} />
+        <Security
+            disablePasswordLogin={config.security.disablePasswordLogin}
+            bind:passwordStrength={config.security.passwordStrength}
+        />
     </div>
     <div class="col-span-1">
         <DefaultGroup {groups} bind:groupId={config.defaultGroup} />
@@ -70,6 +74,18 @@
             bind:pass={config.smtp.pass}
             bind:from={config.smtp.from}
             bind:fromName={config.smtp.fromName}
+        />
+    </div>
+
+    <div class="col-span-1 md:col-span-2">
+        <Oidc
+            bind:enabled={config.oidc.enable}
+            bind:discoveryUrl={config.oidc.discoveryUrl}
+            bind:clientId={config.oidc.clientId}
+            bind:clientSecret={config.oidc.clientSecret}
+            bind:providerName={config.oidc.providerName}
+            bind:autoRedirect={config.oidc.autoRedirect}
+            bind:autoRegister={config.oidc.autoRegister}
         />
     </div>
 </div>

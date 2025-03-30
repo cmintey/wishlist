@@ -1,8 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 import { client } from "./prisma";
-import type { User } from "@prisma/client";
 
-export const getActiveMembership = async (user: User) => {
+export const getActiveMembership = async (user: LocalUser) => {
     let activeMembership = await client.userGroupMembership.findFirst({
         where: {
             userId: user.id,

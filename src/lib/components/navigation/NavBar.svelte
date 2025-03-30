@@ -6,11 +6,10 @@
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
     import { t } from "svelte-i18n";
-    import type { User } from "@prisma/client";
 
     interface Props {
         navItems: NavItem[];
-        user: User | null;
+        user: LocalUser | null;
         isProxyUser: boolean;
     }
 

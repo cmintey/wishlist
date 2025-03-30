@@ -1,4 +1,4 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { error, fail, redirect, type Cookies } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
 import { getLoginSchema } from "$lib/validations";
@@ -8,10 +8,11 @@ import { client } from "$lib/server/prisma";
 import type { PageServerLoad, Actions } from "./$types";
 import { createUser } from "$lib/server/user";
 import { verifyPasswordHash } from "$lib/server/password";
+import { getOIDCConfig } from "$lib/server/openid";
 
-export const load: PageServerLoad = async ({ locals, request, cookies }) => {
+export const load: PageServerLoad = async ({ locals, request, cookies, url }) => {
     const config = await getConfig();
-    const ref = new URL(request.url).searchParams.get("ref");
+    const ref = url.searchParams.get("ref");
     if (locals.user) {
         redirect(302, ref || "/");
     }
@@ -19,6 +20,11 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     const userCount = await client.user.count();
     if (userCount === 0) {
         redirect(302, "/setup-wizard");
+    }
+
+    const oidcConfig = await getOIDCConfig();
+    if (oidcConfig.ready && oidcConfig.autoRedirect && canRedirect(url, cookies)) {
+        redirect(302, "/login/oidc");
     }
 
     /* Header authentication */
@@ -75,11 +81,22 @@ export const load: PageServerLoad = async ({ locals, request, cookies }) => {
     }
     /* End header authentication */
 
-    return { enableSignup: config.enableSignup };
+    return {
+        enableLogin: !config.security.disablePasswordLogin,
+        enableSignup: config.enableSignup,
+        isCallback: url.searchParams.has("state"),
+        error: url.searchParams.get("error"),
+        oidcConfig
+    };
 };
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
+        const config = await getConfig();
+        if (config.security.disablePasswordLogin) {
+            error(400, "Password login is disabled");
+        }
+
         const formData = Object.fromEntries(await request.formData());
         const loginData = (await getLoginSchema()).safeParse(formData);
         // check for empty values
@@ -116,9 +133,19 @@ export const actions: Actions = {
             const sessionToken = generateSessionToken();
             const session = await createSession(sessionToken, maybeUser.id);
             setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
+            cookies.delete("direct", { path: "/" });
         } catch {
             // invalid credentials
             return fail(400, { username: loginData.data.username, password: "", incorrect: true });
         }
     }
 };
+
+function canRedirect(url: URL, cookies: Cookies) {
+    return (
+        !url.searchParams.has("direct") &&
+        !url.searchParams.has("state") &&
+        !url.searchParams.has("error") &&
+        !cookies.get("direct")
+    );
+}
