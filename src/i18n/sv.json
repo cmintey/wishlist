@@ -104,13 +104,10 @@
         "self-service-password-reset-unavailable": "Självbetjäning av lösenordsåterställning är inte tillgänligt.",
         "enter-email": "Ange din e-postadress så skickar vi en länk för återställning av lösenord till dig.",
         "forgot-password": "Glömt lösenordet?",
-        "log-in": "Logga in",
         "name": "Namn",
         "sign-in": "Logga in",
         "sign-out": "Logga ut",
         "sign-out-of-all-devices": "Logga ut från alla enheter?",
-        "signup": "Registrera",
-        "sign-up": "Registrera dig",
         "update-password": "Uppdatera lösenord",
         "username": "Användarnamn",
         "your-password-was-reset": "Ditt lösenord har återställts."
