@@ -227,7 +227,6 @@
         "unable-to-update-claim": "Reservierung ändern nicht möglich"
     },
     "auth": {
-        "log-in": "Anmelden",
         "return-to-login": "Zurück zur Anmeldung",
         "reset-password": "Passwort zurücksetzen",
         "passwords-must-match": "Passwörter müssen übereinstimmen",
@@ -248,8 +247,6 @@
         "sign-in": "Anmeldung",
         "sign-out": "Abmelden",
         "sign-out-of-all-devices": "Von allen Geräten abmelden?",
-        "sign-up": "Registrieren",
-        "signup": "Registrieren",
         "update-password": "Passwort aktualisieren",
         "username": "Benutzername",
         "forgot-password": "Passwort vergessen?",
