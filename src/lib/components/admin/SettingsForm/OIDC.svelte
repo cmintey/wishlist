@@ -44,6 +44,18 @@
                     bind:value={discoveryUrl}
                 />
             </label>
+            <label for="oidcProviderName">
+                <span>{$t("admin.oidc-provider-name")}</span>
+                <input
+                    id="oidcProviderName"
+                    name="oidcProviderName"
+                    class="input"
+                    autocomplete="off"
+                    placeholder="OAuth"
+                    type="text"
+                    bind:value={providerName}
+                />
+            </label>
             <label for="oidcClientId">
                 <span>{$t("admin.oidc-client-id")}</span>
                 <input
@@ -64,18 +76,7 @@
                 required
                 bind:value={clientSecret}
             />
-            <label for="oidcProviderName">
-                <span>{$t("admin.oidc-provider-name")}</span>
-                <input
-                    id="oidcProviderName"
-                    name="oidcProviderName"
-                    class="input"
-                    autocomplete="off"
-                    placeholder="OAuth"
-                    type="text"
-                    bind:value={providerName}
-                />
-            </label>
+
             <label class="unstyled flex flex-row items-center space-x-2">
                 <input
                     id="oidcAutoRedirect"
@@ -89,10 +90,7 @@
                         <span>{$t("admin.oidc-auto-redirect")}</span>
                     {/snippet}
                     {#snippet description()}
-                        <span>
-                            When enabled, the login page will automatically redirect to your Identity Provider's sign in
-                            page. To bypass this, the '?direct=1' can be added to the URL.
-                        </span>
+                        <span>{$t("admin.oidc-auto-redirect-tooltip")}</span>
                     {/snippet}
                 </Tooltip>
             </label>
@@ -104,7 +102,14 @@
                     type="checkbox"
                     bind:checked={autoRegister}
                 />
-                <span>{$t("admin.oidc-auto-register")}</span>
+                <Tooltip>
+                    {#snippet label()}
+                        <span>{$t("admin.oidc-auto-register")}</span>
+                    {/snippet}
+                    {#snippet description()}
+                        <span>{$t("admin.oidc-auto-register-tooltip")}</span>
+                    {/snippet}
+                </Tooltip>
             </label>
         </div>
     {/if}
