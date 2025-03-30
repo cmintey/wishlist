@@ -18,6 +18,7 @@ Wishlist is a self-hosted wishlist application that you can share with your frie
 - [x] PWA Support
 - [x] Multiple groups
 - [x] Registry Mode (single list)
+- [x] OAuth Authentication
 
 <p float="left">
     <img src="./assets/homepage-desktop.png" width="74%" />
@@ -128,7 +129,20 @@ In this mode, the suggested item is automatically approved and added to the wish
 
 SMTP does not need to be configured for the app to function. SMTP enables inviting users via email and the forgot password flow. Without SMTP, you can still manually generate invite links and forgot password links.
 
-### Proxy authentication
+### External Authentication
+
+#### OAuth via OpenID Connect
+
+*since v0.42.0*
+
+Wishlist can be configured to authenticate users against any third-party Identity Provider which support the OpenID Connect specification. This includes providers such as Authelia, Authentik, Keycloak, and Google.
+
+To configure your provider for authentication, navigate to the Wishlist Administration Settings page. You will be required to provide the Issuer URL (the URL of your Identity Provider), the Client ID, and the Client Secret. All other configurations are optional. Any and all role-based access should be handled with your Identity Provider.
+
+> [!NOTE]
+> The first user to be created will need to be created with credentials via the setup wizard.
+
+#### Proxy / Header
 
 > [!WARNING]  
 > When header authentication is enabled, Wishlist makes no assumptions about the validity of the headers. It is up to you to have your proxy properly configured. An improperly configured proxy **could allow anyone** to gain access to the application by forging the headers.
