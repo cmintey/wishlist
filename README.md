@@ -133,7 +133,7 @@ SMTP does not need to be configured for the app to function. SMTP enables inviti
 
 #### OAuth via OpenID Connect
 
-*since v0.42.0*
+_since v0.42.0_
 
 Wishlist can be configured to authenticate users against any third-party Identity Provider which support the OpenID Connect specification. This includes providers such as Authelia, Authentik, Keycloak, and Google.
 
