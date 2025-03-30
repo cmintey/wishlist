@@ -7,7 +7,9 @@
         oauthId?: string | null;
     }
 
-    const { providerName = "OAuth", oauthId }: Props = $props();
+    const { providerName: providerName_, oauthId }: Props = $props();
+
+    const providerName = $derived(providerName_ || "OAuth");
 </script>
 
 <div class="flex flex-col gap-4">

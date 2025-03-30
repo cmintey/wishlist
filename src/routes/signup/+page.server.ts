@@ -60,22 +60,24 @@ export const actions: Actions = {
         }
 
         const config = await getConfig();
-        if (!config.enableSignup && !signupData.data.tokenId) {
-            error(401, $t("errors.this-instance-is-invite-only"));
-        }
 
-        const signup = await client.signupToken.findUnique({
-            where: {
-                id: signupData.data.tokenId
-            },
-            select: {
-                createdAt: true,
-                redeemed: true
+        if (!config.enableSignup) {
+            if (!signupData.data.tokenId) {
+                error(401, $t("errors.this-instance-is-invite-only"));
             }
-        });
+            const signup = await client.signupToken.findUnique({
+                where: {
+                    id: signupData.data.tokenId
+                },
+                select: {
+                    createdAt: true,
+                    redeemed: true
+                }
+            });
 
-        if (!signup || signup.redeemed || !validateToken(signup.createdAt)) {
-            error(400, $t("errors.invite-code-invalid"));
+            if (!signup || signup.redeemed || !validateToken(signup.createdAt)) {
+                error(400, $t("errors.invite-code-invalid"));
+            }
         }
 
         const userCount = await client.user.count();

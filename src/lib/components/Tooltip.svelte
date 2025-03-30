@@ -21,7 +21,7 @@
 
 <div class="flex items-center gap-2">
     {@render props.label()}
-    <button aria-label="tooltip" use:popup={popupSettings}>
+    <button aria-label="tooltip" type="button" use:popup={popupSettings}>
         <span class="flex content-center items-center">
             {#if props.icon}
                 {@render props.icon()}

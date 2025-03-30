@@ -26,7 +26,7 @@
 </script>
 
 <BaseSetting title={$t("admin.oidc")}>
-    <label class="unstyled flex flex-row space-x-2">
+    <label class="unstyled flex flex-row items-center space-x-2">
         <input id="enableOIDC" name="enableOIDC" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("general.enable")}</span>
     </label>
@@ -59,6 +59,7 @@
             <PasswordInput
                 id="oidcClientSecret"
                 name="oidcClientSecret"
+                autocomplete="off"
                 label={$t("admin.oidc-client-secret")}
                 required
                 bind:value={clientSecret}
@@ -75,7 +76,7 @@
                     bind:value={providerName}
                 />
             </label>
-            <label class="unstyled flex flex-row space-x-2">
+            <label class="unstyled flex flex-row items-center space-x-2">
                 <input
                     id="oidcAutoRedirect"
                     name="oidcAutoRedirect"
@@ -95,7 +96,7 @@
                     {/snippet}
                 </Tooltip>
             </label>
-            <label class="unstyled flex flex-row space-x-2">
+            <label class="unstyled flex flex-row items-center space-x-2">
                 <input
                     id="oidcAutoRegister"
                     name="oidcAutoRegister"
