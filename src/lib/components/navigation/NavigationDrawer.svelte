@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getDrawerStore } from "@skeletonlabs/skeleton";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { t } from "svelte-i18n";
 
     interface Props {
@@ -24,7 +24,7 @@
             <li>
                 <a
                     class="list-option space-x-1 font-bold"
-                    class:variant-filled-primary={$page.url.pathname === navItem.href}
+                    class:variant-filled-primary={page.url.pathname === navItem.href}
                     data-sveltekit-preload-data
                     href={navItem.href}
                     onclick={() => drawerStore.close()}

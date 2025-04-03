@@ -1,7 +1,7 @@
 <script lang="ts">
     import { AppBar, getDrawerStore, type DrawerSettings } from "@skeletonlabs/skeleton";
     import logo from "$lib/assets/logo.png";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import NavMenu from "./NavMenu/NavMenu.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
@@ -57,7 +57,7 @@
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"
-                    class:variant-filled-primary={$page.url.pathname === navItem.href}
+                    class:variant-filled-primary={page.url.pathname === navItem.href}
                     data-sveltekit-preload-data
                     href={navItem.href}
                 >

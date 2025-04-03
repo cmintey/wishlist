@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import PasswordInput from "../PasswordInput.svelte";
     import { t } from "svelte-i18n";
@@ -64,9 +64,9 @@
         {#if passwordReset.new !== passwordReset.confirm}
             <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
         {/if}
-        {#if $page.form?.error && $page.form?.errors}
+        {#if page.form?.error && page.form?.errors}
             <ul>
-                {#each $page.form.errors as error}
+                {#each page.form.errors as error}
                     {#if error.field === "newPassword"}
                         {#each error.message.split("\n") as message}
                             <li class="text-xs text-red-500">{message}</li>

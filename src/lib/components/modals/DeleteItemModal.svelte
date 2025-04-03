@@ -38,20 +38,20 @@
     {/if}
 
     <footer class="modal-footer flex flex-wrap justify-between gap-y-2">
-        <button class="variant-ghost-surface btn btn-sm md:btn-md" type="button" on:click={onClose}>
+        <button class="variant-ghost-surface btn btn-sm md:btn-md" onclick={onClose} type="button">
             {$t("general.cancel")}
         </button>
         {#if $modalStore[0].meta.multipleLists}
             <div class="flex flex-wrap gap-2">
-                <button class="variant-filled-error btn btn-sm md:btn-md" type="button" on:click={onDelete}>
+                <button class="variant-filled-error btn btn-sm md:btn-md" onclick={onDelete} type="button">
                     {$t("wishes.all-lists")}
                 </button>
-                <button class="variant-filled-primary btn btn-sm md:btn-md" type="button" on:click={onRemove}>
+                <button class="variant-filled-primary btn btn-sm md:btn-md" onclick={onRemove} type="button">
                     {$t("wishes.this-list")}
                 </button>
             </div>
         {:else}
-            <button class="variant-filled btn btn-sm md:btn-md" type="button" on:click={onDelete}>
+            <button class="variant-filled btn btn-sm md:btn-md" onclick={onDelete} type="button">
                 {$t("general.confirm")}
             </button>
         {/if}

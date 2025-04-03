@@ -1,6 +1,6 @@
 <script lang="ts">
     import { afterNavigate } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import logo from "$lib/assets/logo.png";
     import { t } from "svelte-i18n";
 
@@ -25,7 +25,7 @@
 
     afterNavigate(() => {
         documentTitle = document?.title;
-        disabled = disabledUrls.find((url) => $page.url.pathname.match(url)) !== undefined;
+        disabled = disabledUrls.find((url) => page.url.pathname.match(url)) !== undefined;
     });
 </script>
 
