@@ -2,7 +2,7 @@
     import { goto, invalidateAll } from "$app/navigation";
     import { Tab } from "@skeletonlabs/skeleton";
     import type { LayoutData, Snapshot } from "./$types";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { t } from "svelte-i18n";
@@ -69,7 +69,7 @@
             name={label}
             {value}
             bind:group={selectedTab}
-            on:change={() => goto(`/admin/groups/${$page.params.groupId}${href}`, { replaceState: true })}
+            on:change={() => goto(`/admin/groups/${page.params.groupId}${href}`, { replaceState: true })}
         >
             {label}
         </Tab>

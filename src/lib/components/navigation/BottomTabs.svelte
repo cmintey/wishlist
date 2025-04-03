@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { isInstalled } from "$lib/stores/is-installed";
     import { TabGroup, Tab } from "@skeletonlabs/skeleton";
     import { t } from "svelte-i18n";
@@ -12,7 +12,7 @@
 
     let { navItems, user }: Props = $props();
 
-    let tabsBottomNav: number | undefined = $state(navItems.findIndex((n) => $page.url.pathname.startsWith(n.href)));
+    let tabsBottomNav: number | undefined = $state(navItems.findIndex((n) => page.url.pathname.startsWith(n.href)));
 </script>
 
 {#if user && $isInstalled}

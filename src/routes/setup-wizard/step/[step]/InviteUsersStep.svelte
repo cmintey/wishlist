@@ -5,7 +5,7 @@
     import { t } from "svelte-i18n";
     import type { Props } from "./steps";
 
-    let props: Props = $props();
+    let _props: Props = $props();
 
     let config: Config = $derived(page.data.config);
     const groups: Group[] = $derived(page.data.groups);
