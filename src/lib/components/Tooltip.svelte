@@ -21,12 +21,12 @@
 
 <div class="flex items-center gap-2">
     {@render props.label()}
-    <button aria-label="tooltip" type="button" use:popup={popupSettings}>
+    <button class="mt-0.5" aria-label="tooltip" type="button" use:popup={popupSettings}>
         <span class="flex content-center items-center">
             {#if props.icon}
                 {@render props.icon()}
             {:else}
-                <iconify-icon class="text-secondary-500" icon="ion:information-circle-outline"></iconify-icon>
+                <iconify-icon class="text-secondary-500" icon="ion:help-circle-outline"></iconify-icon>
             {/if}
         </span>
     </button>

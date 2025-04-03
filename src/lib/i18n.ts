@@ -4,6 +4,9 @@ import { get, type Unsubscriber } from "svelte/store";
 
 const defaultLocale = "en";
 
+const _f = ($t: typeof t) => get($t);
+export type MessageFormatter = ReturnType<typeof _f>;
+
 export const getFormatter = async () => {
     let unsubscribe: Unsubscriber | undefined;
     await new Promise((resolve) => {
