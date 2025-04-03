@@ -1,37 +1,25 @@
 <script lang="ts">
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import Tooltip from "$lib/components/Tooltip.svelte";
-    import BaseSetting from "./BaseSetting.svelte";
     import { t } from "svelte-i18n";
+    import Setting from "../Setting.svelte";
+    import SettingsGroup from "../SettingsGroup.svelte";
 
     interface Props {
-        enabled: boolean;
-        discoveryUrl: string | undefined | null;
-        clientId: string | undefined | null;
-        clientSecret: string | undefined | null;
-        providerName: string | undefined | null;
-        autoRedirect: boolean | undefined | null;
-        autoRegister: boolean | undefined | null;
+        config: Pick<Config, "oidc">;
     }
 
-    let {
-        enabled = $bindable(),
-        discoveryUrl = $bindable(),
-        clientId = $bindable(),
-        clientSecret = $bindable(),
-        providerName = $bindable(),
-        autoRedirect = $bindable(),
-        autoRegister = $bindable()
-    }: Props = $props();
+    const { config }: Props = $props();
 </script>
 
-<BaseSetting title={$t("admin.oidc")}>
-    <label class="unstyled flex flex-row items-center space-x-2">
-        <input id="enableOIDC" name="enableOIDC" class="checkbox" type="checkbox" bind:checked={enabled} />
+<SettingsGroup>
+    <h3 class="h3">{$t("admin.oidc")}</h3>
+    <label class="checkbox-label">
+        <input id="enableOIDC" name="enableOIDC" class="checkbox" type="checkbox" bind:checked={config.oidc.enable} />
         <span>{$t("general.enable")}</span>
     </label>
-    {#if enabled}
-        <div class="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+    {#if config.oidc.enable}
+        <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
             <label for="oidcDiscoveryUrl">
                 <span>{$t("admin.oidc-url")}</span>
                 <input
@@ -41,7 +29,7 @@
                     autocomplete="off"
                     required
                     type="url"
-                    bind:value={discoveryUrl}
+                    bind:value={config.oidc.discoveryUrl}
                 />
             </label>
             <label for="oidcProviderName">
@@ -53,7 +41,7 @@
                     autocomplete="off"
                     placeholder="OAuth"
                     type="text"
-                    bind:value={providerName}
+                    bind:value={config.oidc.providerName}
                 />
             </label>
             <label for="oidcClientId">
@@ -65,7 +53,7 @@
                     autocomplete="off"
                     required
                     type="text"
-                    bind:value={clientId}
+                    bind:value={config.oidc.clientId}
                 />
             </label>
             <PasswordInput
@@ -74,33 +62,36 @@
                 autocomplete="off"
                 label={$t("admin.oidc-client-secret")}
                 required
-                bind:value={clientSecret}
+                bind:value={config.oidc.clientSecret}
             />
 
-            <label class="unstyled flex flex-row items-center space-x-2">
-                <input
-                    id="oidcAutoRedirect"
-                    name="oidcAutoRedirect"
-                    class="checkbox"
-                    type="checkbox"
-                    bind:checked={autoRedirect}
-                />
-                <Tooltip>
-                    {#snippet label()}
-                        <span>{$t("admin.oidc-auto-redirect")}</span>
-                    {/snippet}
-                    {#snippet description()}
-                        <span>{$t("admin.oidc-auto-redirect-tooltip")}</span>
-                    {/snippet}
-                </Tooltip>
-            </label>
-            <label class="unstyled flex flex-row items-center space-x-2">
+            <Setting>
+                <label class="checkbox-label">
+                    <input
+                        id="oidcAutoRedirect"
+                        name="oidcAutoRedirect"
+                        class="checkbox"
+                        type="checkbox"
+                        bind:checked={config.oidc.autoRedirect}
+                    />
+                    <Tooltip>
+                        {#snippet label()}
+                            <span>{$t("admin.oidc-auto-redirect")}</span>
+                        {/snippet}
+                        {#snippet description()}
+                            <span>{$t("admin.oidc-auto-redirect-tooltip")}</span>
+                        {/snippet}
+                    </Tooltip>
+                </label>
+            </Setting>
+
+            <label class="checkbox-label">
                 <input
                     id="oidcAutoRegister"
                     name="oidcAutoRegister"
                     class="checkbox"
                     type="checkbox"
-                    bind:checked={autoRegister}
+                    bind:checked={config.oidc.autoRegister}
                 />
                 <Tooltip>
                     {#snippet label()}
@@ -113,4 +104,4 @@
             </label>
         </div>
     {/if}
-</BaseSetting>
+</SettingsGroup>

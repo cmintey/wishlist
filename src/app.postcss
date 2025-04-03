@@ -114,12 +114,16 @@ a:not(.unstyled):is(:not(.prose *)):not(.btn):not(.btn-icon):not(.app-bar a):not
     @apply text-primary-700 underline decoration-primary-500/20 decoration-dotted underline-offset-4 hover:decoration-primary-500 dark:text-primary-500;
 }
 
-label:not(.unstyled) {
-    @apply space-y-2;
+label:not(.checkbox-label) {
+    @apply space-y-1;
 }
 
 input[type="checkbox"] {
     @apply disabled:checked:bg-surface-400-500-token disabled:cursor-not-allowed;
+}
+
+.checkbox-label {
+    @apply flex flex-row items-center space-x-2;
 }
 
 /*! purgecss start ignore */

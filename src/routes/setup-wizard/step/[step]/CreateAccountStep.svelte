@@ -21,7 +21,7 @@
     <span>{$t("setup.first-account-admin")}</span>
     <form
         bind:this={form}
-        class="w-80 md:w-1/3"
+        class="w-80 max-w-lg md:w-2/3 lg:w-1/2 xl:w-2/5"
         action="/signup"
         method="POST"
         use:enhance={() => {

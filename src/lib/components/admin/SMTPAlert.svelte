@@ -20,7 +20,7 @@
                 </p>
             </div>
         </div>
-        <div class="alert-actions">
+        <div class="alert-actions w-full justify-end lg:w-fit">
             <button class="variant-filled-warning btn btn-sm" onclick={() => ($smtpAcknowledged = true)}>
                 {$t("general.dismiss")}
             </button>

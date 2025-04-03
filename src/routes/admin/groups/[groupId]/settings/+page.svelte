@@ -1,9 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import Claims from "$lib/components/admin/SettingsForm/Claims.svelte";
-    import List from "$lib/components/admin/SettingsForm/List.svelte";
-    import ListMode from "$lib/components/admin/SettingsForm/ListMode.svelte";
-    import Suggestions from "$lib/components/admin/SettingsForm/Suggestions.svelte";
+    import { General } from "$lib/components/admin/Settings";
+    import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageData } from "./$types";
     import { t } from "svelte-i18n";
 
@@ -11,10 +9,10 @@
         data: PageData;
     }
 
-    let { data }: Props = $props();
+    const { data }: Props = $props();
 
-    let config = $state(data.config);
-    let saved = $state(false);
+    const config = $state(data.config);
+    const toastStore = getToastStore();
 </script>
 
 <form
@@ -26,36 +24,16 @@
 
         return ({ result }) => {
             if (result.type === "success") {
-                saved = true;
+                toastStore.trigger({ message: $t("admin.settings-saved-toast") });
             }
         };
     }}
 >
-    <div class="grid grid-cols-1 gap-4 pb-2 md:grid-cols-2">
-        <div class="col-span-1">
-            <ListMode disabled={data.membershipCount > 1} bind:mode={config.listMode} />
-        </div>
-        <div class="col-span-1">
-            <Suggestions bind:enabled={config.suggestions.enable} bind:method={config.suggestions.method} />
-        </div>
-        <div class="col-span-1">
-            <Claims bind:enabled={config.claims.showName} />
-        </div>
-        <div class="col-span-1">
-            <List
-                listMode={config.listMode}
-                bind:creationEnabled={config.enableDefaultListCreation}
-                bind:allowPublic={config.allowPublicLists}
-            />
-        </div>
-    </div>
+    <General {config} forGroup groups={[]} hidden={false} />
 
-    <button class="variant-filled-primary btn mt-2" type="submit">
-        {#if saved}
-            <iconify-icon icon="ion:checkmark"></iconify-icon>
-            <p>{$t("general.saved")}</p>
-        {:else}
+    <div class="flex w-full flex-row justify-end pt-6">
+        <button class="variant-filled-primary btn" type="submit">
             {$t("general.save")}
-        {/if}
-    </button>
+        </button>
+    </div>
 </form>
