@@ -92,7 +92,6 @@
         "email": "E-mail",
         "enter-email": "Introduza o seu endereço de correio eletrónico e enviar-lhe-emos uma ligação para redefinir a palavra-passe.",
         "forgot-password": "Esqueceu-se da palavra-passe?",
-        "log-in": "Iniciar sessão",
         "name": "Nome",
         "new-password": "Nova palavra-passe",
         "password": "Palavra-passe",
@@ -102,8 +101,6 @@
         "return-to-login": "Regressar ao início de sessão",
         "sign-in": "Iniciar sessão",
         "self-service-password-reset-unavailable": "A reposição da palavra-passe por autosserviço não está disponível.",
-        "sign-up": "Inscrever-se",
-        "signup": "Registo",
         "update-password": "Atualizar a palavra-passe",
         "username": "Nome de utilizador",
         "your-password-was-reset": "A sua palavra-passe foi reposta."

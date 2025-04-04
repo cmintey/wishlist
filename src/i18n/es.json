@@ -85,7 +85,6 @@
         "clear-color-field": "Limipar campo color"
     },
     "auth": {
-        "log-in": "Ingresar",
         "name": "Nombre",
         "new-password": "Nueva Clave",
         "password": "Clave",
@@ -107,8 +106,6 @@
         "return-to-login": "Regrese al ingreso",
         "self-service-password-reset-unavailable": "Servicio de autogestion para reinicio de claves no disponible.",
         "sign-in": "Ingresar",
-        "sign-up": "Inscribirse",
-        "signup": "Inscribirse",
         "update-password": "Actualizar Clave",
         "username": "Usuario"
     },
