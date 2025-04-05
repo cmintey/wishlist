@@ -9,7 +9,7 @@ const CODE_CHALLENGE_METHOD = "S256";
 const NONCE_COOKIE = "oidc_nonce";
 const STATE_COOKIE = "oidc_state";
 const CODE_VERIFIER_COOKIE = "oidc_code_verifier";
-export const REF_COOKIE = "ref";
+export const REDIRECT_TO_COOKIE = "redirectTo";
 const COOKIE_EXPIRY_SECONDS = 60 * 10; // 10 minutes
 
 let discoveryUrl: string | null = null;
@@ -75,7 +75,7 @@ export async function authorizeRedirect(event: RequestEvent) {
     const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
     const nonce = client.randomNonce();
     const state = client.randomState();
-    const ref = event.url.searchParams.get("ref");
+    const redirect = event.url.searchParams.get("redirectTo");
 
     const parameters: Record<string, string> = {
         redirect_uri: new URL("/login", event.url.origin).toString(),
@@ -107,8 +107,8 @@ export async function authorizeRedirect(event: RequestEvent) {
         sameSite: "lax"
     });
 
-    if (ref) {
-        event.cookies.set(REF_COOKIE, ref, {
+    if (redirect) {
+        event.cookies.set(REDIRECT_TO_COOKIE, redirect, {
             path: "/",
             httpOnly: true,
             maxAge: COOKIE_EXPIRY_SECONDS,

@@ -6,11 +6,12 @@ import { itemEmitter } from "$lib/server/events/emitters";
 import { getItemInclusions } from "$lib/server/items";
 import { listItemClaimUpdateSchema } from "$lib/validations";
 import { ItemEvent } from "$lib/events";
+import { requireLoginOrError } from "$lib/server/auth";
 
 // Unclaim an item on a list
-export const DELETE: RequestHandler = async ({ locals, params }) => {
+export const DELETE: RequestHandler = async ({ params }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     const claim = await client.itemClaim.findUnique({
         select: {
@@ -29,7 +30,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
         error(404, $t("errors.claim-was-not-found"));
     }
 
-    if (claim.claimedById && claim.claimedById !== locals.user.id) {
+    if (claim.claimedById && claim.claimedById !== user.id) {
         error(401, $t("errors.cannot-unclaim-an-item-you-did-not-claim"));
     }
 
@@ -56,9 +57,9 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 };
 
 // Update a claim -- set or unset purchased
-export const PATCH: RequestHandler = async ({ request, locals, params }) => {
+export const PATCH: RequestHandler = async ({ request, params }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     const claim = await client.itemClaim.findUnique({
         select: {
@@ -75,7 +76,7 @@ export const PATCH: RequestHandler = async ({ request, locals, params }) => {
         error(404, $t("errors.claim-was-not-found"));
     }
 
-    if (claim.claimedById && claim.claimedById !== locals.user.id) {
+    if (claim.claimedById && claim.claimedById !== user.id) {
         error(401, $t("errors.cannot-update-a-claim-that-is-not-yours"));
     }
 

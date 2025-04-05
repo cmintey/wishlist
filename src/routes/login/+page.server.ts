@@ -12,9 +12,9 @@ import { getOIDCConfig } from "$lib/server/openid";
 
 export const load: PageServerLoad = async ({ locals, request, cookies, url }) => {
     const config = await getConfig();
-    const ref = url.searchParams.get("ref");
+    const redirectTo = url.searchParams.get("redirectTo");
     if (locals.user) {
-        redirect(302, ref || "/");
+        redirect(302, redirectTo || "/");
     }
 
     const userCount = await client.user.count();
@@ -76,7 +76,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url }) =>
             const sessionToken = generateSessionToken();
             const session = await createSession(sessionToken, user.id);
             setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
-            redirect(302, ref || "/");
+            redirect(302, redirectTo || "/");
         }
     }
     /* End header authentication */

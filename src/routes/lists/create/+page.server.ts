@@ -1,18 +1,16 @@
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/i18n";
 import { trimToNull } from "$lib/util";
 import { getListPropertiesSchema } from "$lib/validations";
 import { create } from "$lib/server/list";
 import { client } from "$lib/server/prisma";
+import { requireLogin } from "$lib/server/auth";
 
-export const load = (async ({ locals, url }) => {
-    const user = locals.user;
-    if (!user) {
-        redirect(302, `/login?ref=${url.pathname + url.search}`);
-    }
+export const load = (async () => {
+    const user = requireLogin();
 
     const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);
@@ -44,18 +42,16 @@ export const load = (async ({ locals, url }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-    persist: async ({ request, locals }) => {
+    persist: async ({ request }) => {
+        const user = requireLogin();
         const $t = await getFormatter();
-        if (!locals.user) {
-            error(401, $t("errors.unauthenticated"));
-        }
 
-        const activeMembership = await getActiveMembership(locals.user);
+        const activeMembership = await getActiveMembership(user);
         const config = await getConfig(activeMembership.groupId);
         if (config.listMode === "registry") {
             const listCount = await client.list.count({
                 where: {
-                    ownerId: locals.user.id,
+                    ownerId: user.id,
                     groupId: activeMembership.groupId
                 }
             });
@@ -100,7 +96,7 @@ export const actions: Actions = {
                 iconColor: trimToNull(listProperties.data.iconColor),
                 public: listProperties.data.public
             };
-            list = await create(locals.user.id, activeMembership.groupId, data);
+            list = await create(user.id, activeMembership.groupId, data);
         } catch (e) {
             console.log($t("errors.unable-to-create-list"), e);
             return fail(500, { success: false, error: $t("errors.unable-to-create-list") });

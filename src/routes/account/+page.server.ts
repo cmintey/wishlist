@@ -3,11 +3,12 @@ import {
     generateSessionToken,
     invalidateSession,
     invalidateUserSessions,
+    requireLogin,
     setSessionTokenCookie
 } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { getResetPasswordSchema } from "$lib/validations";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -17,10 +18,7 @@ import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const user = locals.user;
-    if (!user) {
-        redirect(302, `/login?ref=/account`);
-    }
+    const user = requireLogin();
 
     const oidcConfig = await getOIDCConfig();
 
@@ -32,10 +30,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-    profile: async ({ request, locals }) => {
+    profile: async ({ request }) => {
+        const user = requireLogin();
         const $t = await getFormatter();
-        const user = locals.user;
-        if (!user) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const schema = z.object({
@@ -82,13 +79,13 @@ export const actions: Actions = {
         }
     },
 
-    profilePicture: async ({ request, locals }) => {
-        if (!locals.user) redirect(302, "/login?ref=/account");
+    profilePicture: async ({ request }) => {
+        const authUser = requireLogin();
 
         const form = await request.formData();
         const image = form.get("profilePic") as File;
 
-        const filename = await createImage(locals.user.username, image);
+        const filename = await createImage(authUser.username, image);
 
         if (filename) {
             const user = await client.user.findUniqueOrThrow({
@@ -96,12 +93,12 @@ export const actions: Actions = {
                     picture: true
                 },
                 where: {
-                    id: locals.user.id
+                    id: authUser.id
                 }
             });
             await client.user.update({
                 where: {
-                    id: locals.user.id
+                    id: authUser.id
                 },
                 data: {
                     picture: filename
@@ -113,9 +110,9 @@ export const actions: Actions = {
         }
     },
 
-    passwordchange: async ({ request, locals, cookies }) => {
+    passwordchange: async ({ request, cookies }) => {
+        const authUser = requireLogin();
         const $t = await getFormatter();
-        if (!(locals.user && locals.session)) redirect(302, "/login?ref=/account");
 
         const formData = Object.fromEntries(await request.formData());
         const resetPasswordSchema = await getResetPasswordSchema();
@@ -137,7 +134,7 @@ export const actions: Actions = {
                     hashedPassword: true
                 },
                 where: {
-                    id: locals.user.id
+                    id: authUser.id
                 }
             });
 
@@ -162,15 +159,15 @@ export const actions: Actions = {
                     hashedPassword: newHashedPassword
                 },
                 where: {
-                    id: locals.user.id
+                    id: authUser.id
                 }
             });
             const sessionToken = generateSessionToken();
-            const session = await createSession(sessionToken, locals.user.id);
+            const session = await createSession(sessionToken, authUser.id);
             if (pwdData.data.invalidateSessions) {
-                await invalidateUserSessions(locals.user.id);
+                await invalidateUserSessions(authUser.id);
             } else {
-                await invalidateSession(locals.session.id);
+                await invalidateSession(authUser.id);
                 setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
             }
         } catch {
@@ -181,15 +178,15 @@ export const actions: Actions = {
         }
     },
 
-    unlinkoauth: async ({ locals }) => {
-        if (!locals.user) redirect(302, "/login?ref=/account");
+    unlinkoauth: async () => {
+        const user = requireLogin();
 
         await client.user.update({
             data: {
                 oauthId: null
             },
             where: {
-                id: locals.user.id
+                id: user.id
             }
         });
     }

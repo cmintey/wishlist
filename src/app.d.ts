@@ -11,6 +11,7 @@ declare global {
             user: Omit<import("@prisma/client").User, "hashedPassword"> | null;
             isProxyUser: boolean;
             session: import("@prisma/client").Session | null;
+            locale: string;
         }
     }
 

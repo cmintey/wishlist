@@ -16,7 +16,9 @@ export const load = (async ({ params, url, locals, depends }) => {
         // Unauthenticated users can only view public lists
         if (!list || !list.public) {
             // Redirect to login so we don't expose details if the list does exist
-            redirect(302, `/login?ref=${url.pathname + url.search}`);
+            const redirectTo = url.pathname + url.search;
+            const params = new URLSearchParams({ redirectTo });
+            redirect(307, `/login?${params}`);
         }
     } else {
         // Logged in users must be in the correct group, or viewing a public list

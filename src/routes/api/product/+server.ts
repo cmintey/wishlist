@@ -9,6 +9,7 @@ import metascraperUrl from "metascraper-url";
 import metascraperAmazon from "metascraper-amazon";
 import shopping from "$lib/server/shopping";
 import { getFormatter, parseAcceptLanguageHeader } from "$lib/i18n";
+import { requireLoginOrError } from "$lib/server/auth";
 
 const scraper = metascraper([
     metascraperAmazon(),
@@ -35,6 +36,7 @@ const isCaptchaResponse = (metadata: Metadata) => {
 };
 
 export const GET: RequestHandler = async ({ request }) => {
+    await requireLoginOrError();
     const $t = await getFormatter();
     const url = new URL(request.url).searchParams.get("url");
     const acceptLanguage = request.headers?.get("accept-language");

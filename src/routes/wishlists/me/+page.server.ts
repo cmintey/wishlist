@@ -5,14 +5,13 @@ import { getConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import { getFormatter } from "$lib/i18n";
+import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals }) => {
-    if (!locals.user) {
-        redirect(302, "/login?ref=/wishlists/me");
-    }
+export const load: PageServerLoad = async () => {
+    const user = requireLogin();
     const $t = await getFormatter();
 
-    const activeMembership = await getActiveMembership(locals.user);
+    const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);
     if (config.listMode === "registry") {
         const list = await client.list.findFirst({
@@ -20,7 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
                 id: true
             },
             where: {
-                ownerId: locals.user.id,
+                ownerId: user.id,
                 groupId: activeMembership.groupId
             }
         });
@@ -30,5 +29,5 @@ export const load: PageServerLoad = async ({ locals }) => {
         error(404, $t("errors.list-not-found"));
     }
 
-    redirect(302, `/lists?users=${locals.user.id}`);
+    redirect(302, `/lists?users=${user.id}`);
 };

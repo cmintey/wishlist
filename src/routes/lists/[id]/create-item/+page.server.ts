@@ -10,15 +10,13 @@ import { getFormatter } from "$lib/i18n";
 import { getAvailableLists, getById } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
+import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals, params, url }) => {
+export const load: PageServerLoad = async ({ params }) => {
+    const user = requireLogin();
     const $t = await getFormatter();
 
-    if (!locals.user) {
-        redirect(302, `/login?ref=${url.pathname + url.search}`);
-    }
-
-    const activeMembership = await getActiveMembership(locals.user);
+    const activeMembership = await getActiveMembership(user);
     const list = await getById(params.id);
     if (!list) {
         error(404, $t("errors.list-not-found"));
@@ -29,11 +27,11 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && locals.user.id !== list.owner.id) {
+    if (!config.suggestions.enable && user.id !== list.owner.id) {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
-    const lists = await getAvailableLists(list.owner.id, locals.user.id);
+    const lists = await getAvailableLists(list.owner.id, user.id);
 
     return {
         lists,
@@ -41,23 +39,20 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
             id: list.id,
             owner: {
                 name: list.owner.name,
-                isMe: list.owner.id === locals.user.id
+                isMe: list.owner.id === user.id
             }
         },
-        suggestion: list.owner.id !== locals.user.id,
+        suggestion: list.owner.id !== user.id,
         suggestionMethod: config.suggestions.method
     };
 };
 
 export const actions: Actions = {
-    default: async ({ request, locals, params }) => {
+    default: async ({ request, params, url: requestUrl }) => {
+        const user = requireLogin();
         const $t = await getFormatter();
 
-        if (!locals.user) {
-            return fail(401, { success: false, message: $t("errors.unauthenticated") });
-        }
-
-        const activeMembership = await getActiveMembership(locals.user);
+        const activeMembership = await getActiveMembership(user);
 
         const list = await getById(params.id);
         if (!list) {
@@ -89,7 +84,7 @@ export const actions: Actions = {
             return fail(400, { errors });
         }
 
-        const filename = await createImage(locals.user.username, image);
+        const filename = await createImage(user.username, image);
 
         let itemPriceId = null;
         if (price && currency) {
@@ -121,8 +116,8 @@ export const actions: Actions = {
                 const config = await getConfig(l.groupId);
                 return {
                     listId: l.id,
-                    addedById: locals.user!.id,
-                    approved: l.ownerId === locals.user!.id || config.suggestions.method !== "approval"
+                    addedById: user.id,
+                    approved: l.ownerId === user.id || config.suggestions.method !== "approval"
                 };
             })
         );
@@ -134,7 +129,7 @@ export const actions: Actions = {
                 url,
                 note,
                 imageUrl: filename || imageUrl,
-                createdById: locals.user.id,
+                createdById: user.id,
                 itemPriceId,
                 lists: {
                     create: listItems
@@ -145,7 +140,7 @@ export const actions: Actions = {
 
         itemEmitter.emit(ItemEvent.ITEM_CREATE, item);
 
-        const ref = new URL(request.url).searchParams.get("ref");
+        const ref = requestUrl.searchParams.get("redirectTo");
         redirect(302, ref || "/");
     }
 };

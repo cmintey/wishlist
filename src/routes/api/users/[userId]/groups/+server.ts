@@ -4,11 +4,12 @@ import type { Group, Role as RoleModel } from "@prisma/client";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { getFormatter } from "$lib/i18n";
+import { requireLoginOrError } from "$lib/server/auth";
 
-export const GET: RequestHandler = async ({ params, locals, url }) => {
+export const GET: RequestHandler = async ({ params, url }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
-    if (params.userId !== locals.user.id && locals.user.roleId !== Role.ADMIN) error(401, $t("errors.not-authorized"));
+    if (params.userId !== user.id && user.roleId !== Role.ADMIN) error(401, $t("errors.not-authorized"));
 
     let groups: GroupInformation[];
 

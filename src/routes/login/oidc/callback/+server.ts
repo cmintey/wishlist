@@ -1,5 +1,5 @@
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
-import { handleCallback, REF_COOKIE } from "$lib/server/openid";
+import { handleCallback, REDIRECT_TO_COOKIE } from "$lib/server/openid";
 import { client } from "$lib/server/prisma";
 import { redirect, error } from "@sveltejs/kit";
 import type { RequestEvent, RequestHandler } from "./$types";
@@ -101,6 +101,6 @@ async function authenticate(event: RequestEvent, userId: string): Promise<never>
     const session = await createSession(sessionToken, userId);
     setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
 
-    const redirectTo = event.cookies.get(REF_COOKIE) ?? "/";
+    const redirectTo = event.cookies.get(REDIRECT_TO_COOKIE) ?? "/";
     redirect(302, redirectTo);
 }

@@ -1,30 +1,12 @@
-import { Role } from "$lib/schema";
 import { getConfig, writeConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
-import { redirect, error, fail, type Actions } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { fail } from "@sveltejs/kit";
+import type { PageServerLoad, Actions } from "./$types";
 import { settingSchema } from "$lib/validations";
-import { getFormatter } from "$lib/i18n";
+import { requireAdminOrManager } from "$lib/server/auth";
 
-export const load = (async ({ locals, params }) => {
-    const $t = await getFormatter();
-    if (!locals.user) {
-        redirect(302, `/login?ref=/admin/groups/${params.groupId}`);
-    }
-
-    const userGroupRoleId = await client.userGroupMembership.findFirst({
-        where: {
-            userId: locals.user.id,
-            groupId: params.groupId
-        },
-        select: {
-            roleId: true
-        }
-    });
-
-    if (!(locals.user.roleId === Role.ADMIN || userGroupRoleId?.roleId === Role.GROUP_MANAGER)) {
-        error(401, $t("errors.not-authorized"));
-    }
+export const load = (async ({ params }) => {
+    await requireAdminOrManager(params.groupId);
 
     const group = await client.group.findUniqueOrThrow({
         where: {
@@ -52,6 +34,8 @@ export const load = (async ({ locals, params }) => {
 
 export const actions: Actions = {
     default: async ({ request, params }) => {
+        await requireAdminOrManager(params.groupId);
+
         const formData = Object.fromEntries(await request.formData());
         const groupSettingSchema = settingSchema.pick({
             suggestionMethod: true,

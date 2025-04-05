@@ -10,18 +10,17 @@ import { getFormatter } from "$lib/i18n";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { getAvailableLists } from "$lib/server/list";
+import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
-    if (!locals.user) {
-        redirect(302, `/login?ref=/items/${params.itemId}/edit`);
-    }
+export const load: PageServerLoad = async ({ params }) => {
+    const user = requireLogin();
 
     const $t = await getFormatter();
     if (isNaN(parseInt(params.itemId))) {
         error(400, $t("errors.item-id-must-be-a-number"));
     }
 
-    const activeMembership = await getActiveMembership(locals.user);
+    const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);
 
     const item = await client.item.findUnique({
@@ -53,22 +52,22 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
     if (!item) error(404, $t("errors.item-not-found"));
 
-    if (config.suggestions.method === "surprise" && locals.user.id !== item.createdById) {
+    if (config.suggestions.method === "surprise" && user.id !== item.createdById) {
         error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
     }
 
-    if (locals.user.id !== item.userId && locals.user.id !== item.createdById) {
-        error(400, $t("errors.item-invalid-ownership", { values: { username: locals.user.username } }));
+    if (user.id !== item.userId && user.id !== item.createdById) {
+        error(400, $t("errors.item-invalid-ownership", { values: { username: user.username } }));
     }
 
-    const lists = await getAvailableLists(item.userId, locals.user.id);
+    const lists = await getAvailableLists(item.userId, user.id);
 
     return {
         item: {
             ...item,
             lists: item.lists.map(({ list, addedById }) => ({
                 id: list.id,
-                canModify: list.ownerId === locals.user!.id || addedById === locals.user!.id
+                canModify: list.ownerId === user.id || addedById === user.id
             }))
         },
         lists
@@ -76,10 +75,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ locals, request, params }) => {
+    default: async ({ request, params, url: requestUrl }) => {
+        const user = requireLogin();
         const $t = await getFormatter();
 
-        if (!locals.user) error(401, "Not authorized");
         const form = await request.formData();
         const url = form.get("url") as string;
         const imageUrl = form.get("image_url") as string;
@@ -102,7 +101,7 @@ export const actions: Actions = {
             return fail(400, { errors });
         }
 
-        const filename = await createImage(locals.user.username, image);
+        const filename = await createImage(user.username, image);
 
         const item = await client.item.findUniqueOrThrow({
             include: {
@@ -155,7 +154,7 @@ export const actions: Actions = {
             .filter(
                 (listItem) =>
                     !desiredListIds.has(listItem.list.id) &&
-                    (listItem.addedById === locals.user!.id || listItem.list.ownerId === locals.user!.id)
+                    (listItem.addedById === user.id || listItem.list.ownerId === user.id)
             )
             .map(({ id }) => id);
 
@@ -167,8 +166,8 @@ export const actions: Actions = {
                     const config = await getConfig(l.groupId);
                     return {
                         listId: l.id,
-                        addedById: locals.user!.id,
-                        approved: l.ownerId === locals.user!.id || config.suggestions.method !== "approval"
+                        addedById: user.id,
+                        approved: l.ownerId === user.id || config.suggestions.method !== "approval"
                     };
                 })
         );
@@ -209,7 +208,7 @@ export const actions: Actions = {
             await tryDeleteImage(item.imageUrl);
         }
 
-        const ref = new URL(request.url).searchParams.get("ref");
-        redirect(302, ref || "/");
+        const redirectTo = requestUrl.searchParams.get("redirectTo");
+        redirect(302, redirectTo || "/");
     }
 };

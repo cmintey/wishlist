@@ -10,13 +10,13 @@ import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/i18n";
 
-export const load: PageServerLoad = async ({ locals, request }) => {
-    if (locals.user) redirect(302, "/");
+export const load: PageServerLoad = async ({ locals, url }) => {
+    if (locals.user) redirect(302, url.searchParams.get("redirectTo") ?? "/");
 
     const $t = await getFormatter();
     const config = await getConfig();
 
-    const token = new URL(request.url).searchParams.get("token");
+    const token = url.searchParams.get("token");
     if (token) {
         const signup = await client.signupToken.findFirst({
             where: {

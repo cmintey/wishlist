@@ -2,7 +2,7 @@ import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { _authCheck } from "../groups/[groupId]/auth";
+import { requireAccessToGroup } from "../groups/[groupId]/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import type { Prisma } from "@prisma/client";
@@ -10,21 +10,20 @@ import { patchItem } from "$lib/server/api-common";
 import { getFormatter } from "$lib/i18n";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
+import { requireLoginOrError } from "$lib/server/auth";
 
-export const DELETE: RequestHandler = async ({ locals, request }) => {
+export const DELETE: RequestHandler = async ({ url }) => {
     const $t = await getFormatter();
-    const groupId = new URL(request.url).searchParams.get("groupId");
-    const claimed = new URL(request.url).searchParams.get("claimed");
+    const groupId = url.searchParams.get("groupId");
+    const claimed = url.searchParams.get("claimed");
     if (groupId) {
-        const { authenticated } = await _authCheck(locals, groupId);
+        const { authenticated } = await requireAccessToGroup(groupId);
         if (!authenticated) {
             error(401, $t("errors.not-authorized"));
         }
     } else {
-        if (!locals.user) {
-            error(401, $t("errors.unauthenticated"));
-        }
-        if (locals.user.roleId !== Role.ADMIN) {
+        const user = await requireLoginOrError();
+        if (user.roleId !== Role.ADMIN) {
             error(401, $t("errors.not-authorized"));
         }
     }
@@ -124,9 +123,9 @@ export const DELETE: RequestHandler = async ({ locals, request }) => {
     }
 };
 
-export const PATCH: RequestHandler = async ({ locals, request }) => {
+export const PATCH: RequestHandler = async ({ request }) => {
+    await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     const body = (await request.json()) as Record<string, unknown>[];
     const itemIds = body.map((item) => {

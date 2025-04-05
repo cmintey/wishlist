@@ -1,12 +1,10 @@
-import { getFormatter } from "$lib/i18n";
+import { requireLoginOrError } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import type { User } from "@prisma/client";
-import { type RequestHandler, error } from "@sveltejs/kit";
+import { type RequestHandler } from "@sveltejs/kit";
 
-export const GET: RequestHandler = async ({ locals, url }) => {
-    const $t = await getFormatter();
-
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
+export const GET: RequestHandler = async ({ url }) => {
+    await requireLoginOrError();
 
     let users: User[] = [];
 

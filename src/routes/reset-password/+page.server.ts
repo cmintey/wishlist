@@ -9,9 +9,8 @@ import { env } from "$env/dynamic/private";
 import { getFormatter } from "$lib/i18n";
 import { hashPassword } from "$lib/server/password";
 
-export const load: PageServerLoad = async ({ request }) => {
+export const load: PageServerLoad = async ({ url }) => {
     const $t = await getFormatter();
-    const url = new URL(request.url);
     const token = url.searchParams.get("token");
 
     if (token) {

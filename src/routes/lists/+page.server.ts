@@ -4,12 +4,10 @@ import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
 import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
+import { requireLogin } from "$lib/server/auth";
 
-export const load = (async ({ locals, url }) => {
-    const user = locals.user;
-    if (!user) {
-        redirect(302, `/login?ref=${url.pathname + url.search}`);
-    }
+export const load = (async ({ url }) => {
+    const user = requireLogin();
 
     const activeMembership = await getActiveMembership(user);
     const config = await getConfig(activeMembership.groupId);
