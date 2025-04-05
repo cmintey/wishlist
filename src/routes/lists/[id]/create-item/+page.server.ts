@@ -140,7 +140,7 @@ export const actions: Actions = {
 
         itemEmitter.emit(ItemEvent.ITEM_CREATE, item);
 
-        const ref = requestUrl.searchParams.get("redirectTo");
-        redirect(302, ref || "/");
+        const redirectTo = requestUrl.searchParams.get("redirectTo");
+        redirect(302, redirectTo || "/");
     }
 };
