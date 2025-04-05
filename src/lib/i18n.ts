@@ -1,29 +1,8 @@
 import { browser } from "$app/environment";
-import { getRequestEvent } from "$app/server";
-import { register, init, getLocaleFromNavigator, locale, t, waitLocale, locales, format } from "svelte-i18n";
+import { register, init, getLocaleFromNavigator, locale, locales } from "svelte-i18n";
 import { get } from "svelte/store";
 
 const defaultLocale = "en";
-
-const _f = ($t: typeof t) => get($t);
-export type MessageFormatter = ReturnType<typeof _f>;
-type MessageFormatterParams = Parameters<MessageFormatter>;
-export type MessageObject = Exclude<MessageFormatterParams[0], string>;
-
-export async function getFormatter(locale?: string) {
-    if (!locale) {
-        const evt = getRequestEvent();
-        locale = evt.locals.locale;
-    }
-    await waitLocale(locale);
-    return (id: string, options?: Omit<MessageObject, "id">) => {
-        let options_: Omit<MessageObject, "id"> = { locale };
-        if (options) {
-            options_ = { ...options };
-        }
-        return get(format)(id, options_);
-    };
-}
 
 export const initLang = async () => {
     register("en", () => import("../i18n/en.json"));

@@ -6,7 +6,7 @@ import type { RequestEvent, RequestHandler } from "./$types";
 import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 
 export const POST: RequestHandler = async (event) => {
     const $t = await getFormatter();

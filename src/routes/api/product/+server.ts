@@ -8,7 +8,8 @@ import metascraperImage from "metascraper-image";
 import metascraperUrl from "metascraper-url";
 import metascraperAmazon from "metascraper-amazon";
 import shopping from "$lib/server/shopping";
-import { getFormatter, parseAcceptLanguageHeader } from "$lib/i18n";
+import { parseAcceptLanguageHeader } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
 
 const scraper = metascraper([

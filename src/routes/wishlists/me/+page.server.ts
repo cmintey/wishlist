@@ -4,7 +4,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { requireLogin } from "$lib/server/auth";
 
 export const load: PageServerLoad = async () => {

@@ -4,7 +4,7 @@ import { getConfig, writeConfig } from "$lib/server/config";
 import { fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
-import { settingSchema } from "$lib/validations";
+import { settingSchema } from "$lib/server/validations";
 import type { z } from "zod";
 import { requireRole } from "$lib/server/auth";
 

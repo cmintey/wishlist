@@ -1,4 +1,4 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 

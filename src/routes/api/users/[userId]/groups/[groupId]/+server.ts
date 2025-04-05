@@ -3,7 +3,7 @@ import { client } from "$lib/server/prisma";
 import type { UserGroupMembership } from "@prisma/client";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
 
 export const PATCH: RequestHandler = async ({ params, request }) => {

@@ -3,7 +3,7 @@ import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
 import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { requireRole } from "$lib/server/auth";
 
 export const load: PageServerLoad = async ({ params }) => {

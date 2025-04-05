@@ -6,7 +6,7 @@ import type { Session, User } from "@prisma/client";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days

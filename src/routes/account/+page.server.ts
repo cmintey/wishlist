@@ -7,13 +7,13 @@ import {
     setSessionTokenCookie
 } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { getResetPasswordSchema } from "$lib/validations";
+import { getResetPasswordSchema } from "$lib/server/validations";
 import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 

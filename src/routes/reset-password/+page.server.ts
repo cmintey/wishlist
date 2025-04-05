@@ -1,12 +1,12 @@
 import { invalidateUserSessions } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { hashToken } from "$lib/server/token";
-import { getResetPasswordSchema } from "$lib/validations";
+import { getResetPasswordSchema } from "$lib/server/validations";
 import { error, fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import { env } from "$env/dynamic/private";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { hashPassword } from "$lib/server/password";
 
 export const load: PageServerLoad = async ({ url }) => {

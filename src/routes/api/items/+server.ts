@@ -7,7 +7,7 @@ import { tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import type { Prisma } from "@prisma/client";
 import { patchItem } from "$lib/server/api-common";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";

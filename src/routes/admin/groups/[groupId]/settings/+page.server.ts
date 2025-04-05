@@ -2,7 +2,7 @@ import { getConfig, writeConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
-import { settingSchema } from "$lib/validations";
+import { settingSchema } from "$lib/server/validations";
 import { requireAdminOrManager } from "$lib/server/auth";
 
 export const load = (async ({ params }) => {

@@ -1,4 +1,4 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { readFileSync } from "fs";

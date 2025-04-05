@@ -1,4 +1,4 @@
-import type { listItemsUpdateSchema } from "$lib/validations";
+import type { listItemsUpdateSchema } from "$lib/server/validations";
 
 export class ListAPI {
     private listId: string;

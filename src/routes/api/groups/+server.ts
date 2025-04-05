@@ -2,7 +2,7 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { Role } from "$lib/schema";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { create } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
 import { requireLoginOrError } from "$lib/server/auth";

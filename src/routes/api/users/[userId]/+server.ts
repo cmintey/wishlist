@@ -1,4 +1,4 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
 import { requireLoginOrError } from "$lib/server/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
