@@ -1,12 +1,11 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
+import { requireLoginOrError } from "$lib/server/auth";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { readFileSync } from "fs";
 
-export const GET: RequestHandler = async ({ params, locals }) => {
+export const GET: RequestHandler = async ({ params }) => {
+    await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) {
-        error(401, $t("errors.unauthenticated"));
-    }
 
     if (!params.id) {
         error(400, $t("errors.must-specify-asset-id"));

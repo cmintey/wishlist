@@ -4,7 +4,10 @@ import { env } from "$env/dynamic/private";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import type { Session, User } from "@prisma/client";
 import { sha256 } from "@oslojs/crypto/sha2";
-import type { Cookies } from "@sveltejs/kit";
+import { error, redirect, type Cookies } from "@sveltejs/kit";
+import { getRequestEvent } from "$app/server";
+import { getFormatter } from "$lib/server/i18n";
+import { Role } from "$lib/schema";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
 const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
@@ -105,3 +108,62 @@ export function deleteSessionTokenCookie(cookies: Cookies): void {
 export type SessionValidationResult =
     | { session: Session; user: Omit<User, "hashedPassword"> }
     | { session: null; user: null };
+
+export function requireLogin() {
+    const { locals, url } = getRequestEvent();
+
+    if (!locals.user) {
+        const redirectTo = url.pathname + url.search;
+        const params = new URLSearchParams({ redirectTo });
+
+        redirect(307, `/login?${params}`);
+    }
+
+    return locals.user;
+}
+
+export async function requireLoginOrError() {
+    const { locals } = getRequestEvent();
+
+    if (!locals.user) {
+        const $t = await getFormatter(locals.locale);
+        error(401, $t("errors.unauthenticated"));
+    }
+
+    return locals.user;
+}
+
+export async function requireRole(role: Role) {
+    const user = requireLogin();
+    const { locals } = getRequestEvent();
+    if (user.roleId !== role) {
+        const $t = await getFormatter(locals.locale);
+        error(401, $t("errors.not-authorized"));
+    }
+    return user;
+}
+
+export async function requireAdminOrManager(groupId: string) {
+    const user = requireLogin();
+    if (user.roleId === Role.ADMIN) {
+        return user;
+    }
+
+    const userGroupMembership = await client.userGroupMembership.findFirst({
+        where: {
+            userId: user.id,
+            groupId: groupId
+        },
+        select: {
+            roleId: true
+        }
+    });
+
+    if (userGroupMembership && userGroupMembership.roleId === Role.GROUP_MANAGER) {
+        return user;
+    }
+
+    const { locals } = getRequestEvent();
+    const $t = await getFormatter(locals.locale);
+    error(401, $t("errors.not-authorized"));
+}

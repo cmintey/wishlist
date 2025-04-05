@@ -2,15 +2,14 @@ import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { Role } from "$lib/schema";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { create } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
+import { requireLoginOrError } from "$lib/server/auth";
 
-export const PUT: RequestHandler = async ({ locals, request }) => {
+export const PUT: RequestHandler = async ({ request }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) {
-        error(401, $t("errors.unauthenticated"));
-    }
 
     const data = await request.json();
 
@@ -23,11 +22,11 @@ export const PUT: RequestHandler = async ({ locals, request }) => {
     });
     const config = await getConfig(group.id);
 
-    const createList = config.enableDefaultListCreation ? create(locals.user.id, group.id) : Promise.resolve();
+    const createList = config.enableDefaultListCreation ? create(user.id, group.id) : Promise.resolve();
     await Promise.all([
         client.userGroupMembership.create({
             data: {
-                userId: locals.user.id,
+                userId: user.id,
                 groupId: group.id,
                 roleId: Role.GROUP_MANAGER
             }

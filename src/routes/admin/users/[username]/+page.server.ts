@@ -3,17 +3,14 @@ import { client } from "$lib/server/prisma";
 import generateToken, { hashToken } from "$lib/server/token";
 import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
+import { requireRole } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ params }) => {
+    const user = await requireRole(Role.ADMIN);
     const $t = await getFormatter();
-    if (!locals.user) {
-        redirect(302, `/login?ref=/admin/users/${params.username}`);
-    }
-    if (locals.user.roleId != Role.ADMIN) {
-        error(401, $t("errors.not-authorized"));
-    }
-    if (locals.user.username === params.username) {
+
+    if (user.username === params.username) {
         redirect(303, "/account");
     }
 
@@ -35,12 +32,14 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
     if (!editingUser) error(404, $t("errors.user-not-found"));
 
-    return { editingUser, user: locals.user };
+    return { editingUser, user };
 };
 
 export const actions: Actions = {
     "reset-password": async ({ params, url }) => {
+        await requireRole(Role.ADMIN);
         const $t = await getFormatter();
+
         const user = await client.user.findUnique({
             where: {
                 username: params.username
@@ -66,6 +65,8 @@ export const actions: Actions = {
         }
     },
     "make-admin": async ({ params }) => {
+        await requireRole(Role.ADMIN);
+
         await client.user.update({
             where: {
                 username: params.username
@@ -78,6 +79,8 @@ export const actions: Actions = {
         return { success: true, url: null };
     },
     "remove-admin": async ({ params }) => {
+        await requireRole(Role.ADMIN);
+
         await client.user.update({
             where: {
                 username: params.username

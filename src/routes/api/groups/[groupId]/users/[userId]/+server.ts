@@ -2,12 +2,12 @@ import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { _authCheck } from "../../auth";
+import { requireAccessToGroup } from "../../auth";
 import { create, deleteLists } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
 
-export const GET: RequestHandler = async ({ locals, params }) => {
-    const { authenticated, user } = await _authCheck(locals, params.groupId);
+export const GET: RequestHandler = async ({ params }) => {
+    const { authenticated, user } = await requireAccessToGroup(params.groupId);
 
     if (!authenticated && user.id !== params.userId) {
         error(401, "User is not authorized to view this membership");
@@ -32,8 +32,8 @@ export const GET: RequestHandler = async ({ locals, params }) => {
     return new Response(JSON.stringify({ membership }), { status: 200 });
 };
 
-export const PUT: RequestHandler = async ({ locals, request, params }) => {
-    const { authenticated } = await _authCheck(locals, params.groupId);
+export const PUT: RequestHandler = async ({ request, params }) => {
+    const { authenticated } = await requireAccessToGroup(params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to add a member to this group");
@@ -73,8 +73,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     return new Response(JSON.stringify({ newMembership }), { status: 201 });
 };
 
-export const DELETE: RequestHandler = async ({ locals, params }) => {
-    const { authenticated } = await _authCheck(locals, params.groupId);
+export const DELETE: RequestHandler = async ({ params }) => {
+    const { authenticated } = await requireAccessToGroup(params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to add a member to this group");
@@ -106,8 +106,8 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     return new Response(JSON.stringify({ membership }), { status: 200 });
 };
 
-export const PATCH: RequestHandler = async ({ locals, params, request }) => {
-    const { authenticated } = await _authCheck(locals, params.groupId);
+export const PATCH: RequestHandler = async ({ params, request }) => {
+    const { authenticated } = await requireAccessToGroup(params.groupId);
 
     if (!authenticated) {
         error(401, "User is not authorized to add a member to this group");

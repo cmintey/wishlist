@@ -1,22 +1,8 @@
 import { browser } from "$app/environment";
-import { register, init, getLocaleFromNavigator, locale, t, waitLocale, locales } from "svelte-i18n";
-import { get, type Unsubscriber } from "svelte/store";
+import { register, init, getLocaleFromNavigator, locale, locales } from "svelte-i18n";
+import { get } from "svelte/store";
 
 const defaultLocale = "en";
-
-const _f = ($t: typeof t) => get($t);
-export type MessageFormatter = ReturnType<typeof _f>;
-
-export const getFormatter = async () => {
-    let unsubscribe: Unsubscriber | undefined;
-    await new Promise((resolve) => {
-        unsubscribe = locale.subscribe((value) => value && resolve(value));
-    });
-    unsubscribe?.();
-
-    await waitLocale();
-    return get(t);
-};
 
 export const initLang = async () => {
     register("en", () => import("../i18n/en.json"));

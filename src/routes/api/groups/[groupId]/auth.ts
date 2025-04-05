@@ -1,17 +1,13 @@
-import { getFormatter } from "$lib/i18n";
 import { Role } from "$lib/schema";
+import { requireLoginOrError } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { error } from "@sveltejs/kit";
 
-export const _authCheck = async (locals: App.Locals, groupId: string) => {
-    const $t = await getFormatter();
-    if (!locals.user) {
-        error(401, $t("errors.unauthenticated"));
-    }
+export const requireAccessToGroup = async (groupId: string) => {
+    const authUser = await requireLoginOrError();
 
     const user = await client.user.findFirstOrThrow({
         where: {
-            id: locals.user.id
+            id: authUser.id
         },
         select: {
             id: true,

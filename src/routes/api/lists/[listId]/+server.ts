@@ -1,17 +1,16 @@
 import { client } from "$lib/server/prisma";
-import { publicListCreateSchema } from "$lib/validations";
+import { publicListCreateSchema } from "$lib/server/validations";
 import { error } from "@sveltejs/kit";
 import { getConfig } from "$lib/server/config";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { getById } from "$lib/server/list";
 import type { Prisma } from "@prisma/client";
 import type { RequestHandler } from "./$types";
+import { requireLoginOrError } from "$lib/server/auth";
 
-export const PATCH: RequestHandler = async ({ request, locals, params }) => {
+export const PATCH: RequestHandler = async ({ request, params }) => {
+    await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) {
-        error(401, $t("errors.unauthenticated"));
-    }
 
     const list = await getById(params.listId);
     if (!list) {

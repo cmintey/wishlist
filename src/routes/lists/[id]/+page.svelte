@@ -306,7 +306,7 @@
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
-        onclick={() => goto(`${page.url.pathname}/create-item?ref=${page.url.pathname}`)}
+        onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`)}
     >
         <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>

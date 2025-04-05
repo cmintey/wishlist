@@ -1,21 +1,15 @@
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { getConfig, writeConfig } from "$lib/server/config";
-import { redirect, error, fail, type Actions } from "@sveltejs/kit";
+import { fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
-import { settingSchema } from "$lib/validations";
+import { settingSchema } from "$lib/server/validations";
 import type { z } from "zod";
-import { getFormatter } from "$lib/i18n";
+import { requireRole } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals }) => {
-    const $t = await getFormatter();
-    if (!locals.user) {
-        redirect(302, `/login?ref=/admin`);
-    }
-    if (locals.user.roleId !== Role.ADMIN) {
-        error(401, $t("errors.not-authorized"));
-    }
+export const load: PageServerLoad = async () => {
+    await requireRole(Role.ADMIN);
 
     const config = await getConfig(undefined, true);
 
@@ -33,16 +27,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-    "send-test": async ({ locals }) => {
-        if (!locals.user) return fail(400);
-        await sendTest(locals.user.email);
+    "send-test": async () => {
+        const user = await requireRole(Role.ADMIN);
+
+        await sendTest(user.email);
         return { action: "send-test", success: true };
     },
-    settings: async ({ locals, request }) => {
-        const $t = await getFormatter();
-        if (!locals.user || locals.user.roleId !== Role.ADMIN) {
-            error(401, $t("errors.not-authorized"));
-        }
+    settings: async ({ request }) => {
+        await requireRole(Role.ADMIN);
 
         const formData = Object.fromEntries(await request.formData());
         const configData = settingSchema.safeParse(formData);

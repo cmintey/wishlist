@@ -4,7 +4,7 @@ import { readFile } from "fs";
 import type Mail from "nodemailer/lib/mailer";
 import { getConfig } from "$lib/server/config";
 import { env } from "$env/dynamic/private";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 
 type InviteTemplateData = {
     url: string;

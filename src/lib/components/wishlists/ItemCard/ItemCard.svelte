@@ -153,7 +153,7 @@
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
     const handleEdit = () => {
-        goto(`/items/${item.id}/edit?ref=${page.url.pathname}`);
+        goto(`/items/${item.id}/edit?redirectTo=${page.url.pathname}`);
     };
 
     const handleClaim = async (unclaim = false) => {

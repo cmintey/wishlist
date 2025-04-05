@@ -2,15 +2,14 @@ import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
+import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals, url, params }) => {
+export const load: PageServerLoad = async ({ params }) => {
+    const user = requireLogin();
     const $t = await getFormatter();
-    if (!locals.user) {
-        redirect(302, `/login?ref=${url.pathname}`);
-    }
 
-    const activeMembership = await getActiveMembership(locals.user);
+    const activeMembership = await getActiveMembership(user);
     const list = await client.list.findFirst({
         select: {
             id: true

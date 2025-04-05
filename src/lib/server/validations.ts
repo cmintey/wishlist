@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { loadOptions, meterLabel } from "$lib/zxcvbn";
-import { getConfig } from "./server/config";
+import { getConfig } from "./config";
 import { getFormatter } from "./i18n";
 
 await loadOptions().then((options) => zxcvbnOptions.setOptions(options));

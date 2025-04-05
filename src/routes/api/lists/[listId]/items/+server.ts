@@ -1,14 +1,15 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { client } from "$lib/server/prisma";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
-import { listItemsUpdateSchema } from "$lib/validations";
+import { listItemsUpdateSchema } from "$lib/server/validations";
 import { ItemEvent } from "$lib/events";
+import { requireLoginOrError } from "$lib/server/auth";
 
-export const PATCH: RequestHandler = async ({ locals, request, params }) => {
+export const PATCH: RequestHandler = async ({ request, params }) => {
+    await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     const body = (await request.json()) as Record<string, unknown>[];
     const updateData = listItemsUpdateSchema.array().safeParse(body);

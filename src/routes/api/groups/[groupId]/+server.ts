@@ -1,13 +1,13 @@
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { client } from "$lib/server/prisma";
-import { _authCheck } from "./auth";
-import { getFormatter } from "$lib/i18n";
+import { requireAccessToGroup } from "./auth";
+import { getFormatter } from "$lib/server/i18n";
 import { deleteLists } from "$lib/server/list";
 
-export const DELETE: RequestHandler = async ({ locals, params }) => {
+export const DELETE: RequestHandler = async ({ params }) => {
     const $t = await getFormatter();
-    const { authenticated } = await _authCheck(locals, params.groupId);
+    const { authenticated } = await requireAccessToGroup(params.groupId);
 
     if (!authenticated) {
         error(401, $t("errors.not-authorized"));
@@ -38,9 +38,9 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
     return new Response(JSON.stringify(deletedGroup));
 };
 
-export const PATCH: RequestHandler = async ({ locals, params, request }) => {
+export const PATCH: RequestHandler = async ({ params, request }) => {
     const $t = await getFormatter();
-    const { authenticated } = await _authCheck(locals, params.groupId);
+    const { authenticated } = await requireAccessToGroup(params.groupId);
 
     if (!authenticated) {
         error(401, $t("errors.not-authorized"));

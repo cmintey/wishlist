@@ -1,22 +1,19 @@
-import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-
 import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { toItemOnListDTO } from "$lib/dtos/item-mapper";
+import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals }) => {
-    if (!locals.user) {
-        redirect(302, `/login?ref=/claims`);
-    }
+export const load: PageServerLoad = async () => {
+    const user = requireLogin();
 
-    const activeMembership = await getActiveMembership(locals.user);
+    const activeMembership = await getActiveMembership(user);
 
     const items = await client.item.findMany({
         where: {
             claims: {
                 some: {
-                    claimedById: locals.user.id
+                    claimedById: user.id
                 }
             },
             lists: {
@@ -70,7 +67,7 @@ export const load: PageServerLoad = async ({ locals }) => {
                     }
                 },
                 where: {
-                    claimedById: locals.user.id,
+                    claimedById: user.id,
                     list: {
                         groupId: activeMembership.groupId
                     }
@@ -98,7 +95,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     return {
         user: {
-            ...locals.user,
+            ...user,
             activeGroupId: activeMembership.groupId
         },
         items: itemDTOs

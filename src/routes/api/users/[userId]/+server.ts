@@ -1,13 +1,14 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
+import { requireLoginOrError } from "$lib/server/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
-export const DELETE: RequestHandler = async ({ params, locals }) => {
+export const DELETE: RequestHandler = async ({ params }) => {
+    const authUser = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
-    if (!(locals.user.roleId === Role.ADMIN)) error(401, $t("errors.not-authorized"));
+    if (authUser.roleId !== Role.ADMIN) error(401, $t("errors.not-authorized"));
 
     if (!params.userId) {
         error(400, $t("errors.must-specify-an-item-to-delete"));
@@ -26,7 +27,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
         error(404, $t("errors.user-not-found"));
     }
 
-    if (user.id === locals.user.id) {
+    if (user.id === authUser.id) {
         error(400, $t("errors.cannot-delete-yourself"));
     }
 

@@ -1,7 +1,7 @@
 import Email from "./Email";
 import General from "./General";
 import Security from "./Security";
-import type { MessageFormatter } from "$lib/i18n";
+import type { MessageFormatter } from "$lib/server/i18n";
 
 const options = [
     { label: ($t: MessageFormatter) => $t("admin.general"), hash: "#general" },

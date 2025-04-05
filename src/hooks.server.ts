@@ -38,5 +38,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.isProxyUser = isProxyUser;
     event.locals.user = user;
     event.locals.session = session;
+    event.locals.locale = lang || "en";
     return resolve(event);
 };

@@ -1,17 +1,18 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { client } from "$lib/server/prisma";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
-import { listItemUpdateSchema } from "$lib/validations";
+import { listItemUpdateSchema } from "$lib/server/validations";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { tryDeleteImage } from "$lib/server/image-util";
+import { requireLoginOrError } from "$lib/server/auth";
 
 // Approve an item on a list
-export const PATCH: RequestHandler = async ({ locals, request, params }) => {
+export const PATCH: RequestHandler = async ({ request, params }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     const list = await client.list.findUnique({
         select: {
@@ -23,7 +24,7 @@ export const PATCH: RequestHandler = async ({ locals, request, params }) => {
     });
     if (!list) {
         error(404, $t("errors.list-not-found"));
-    } else if (list.ownerId !== locals.user.id) {
+    } else if (list.ownerId !== user.id) {
         error(401, $t("errors.not-authorized"));
     }
     if (isNaN(parseInt(params.itemId))) {
@@ -68,9 +69,9 @@ export const PATCH: RequestHandler = async ({ locals, request, params }) => {
 };
 
 // Delete an item on a list
-export const DELETE: RequestHandler = async ({ locals, params }) => {
+export const DELETE: RequestHandler = async ({ params }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
 
     if (isNaN(parseInt(params.itemId))) {
         error(400, $t("errors.item-id-must-be-a-number"));
@@ -134,7 +135,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
         error(404, $t("errors.item-not-found"));
     }
 
-    if (listItem.addedById !== locals.user.id && list.ownerId !== locals.user.id) {
+    if (listItem.addedById !== user.id && list.ownerId !== user.id) {
         error(401, $t("errors.not-authorized"));
     }
 
@@ -157,7 +158,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
             }
 
             // Item was only on this list, we should delete it
-            if (item.lists.length === 1 && (item.createdById === locals.user?.id || item.userId === locals.user?.id)) {
+            if (item.lists.length === 1 && (item.createdById === user.id || item.userId === user.id)) {
                 await tx.item.delete({
                     where: {
                         id: item.id

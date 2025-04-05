@@ -1,5 +1,6 @@
-import { getFormatter } from "$lib/i18n";
+import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
+import { requireLoginOrError } from "$lib/server/auth";
 import { getConfig } from "$lib/server/config";
 import { sendSignupLink } from "$lib/server/email";
 import { client } from "$lib/server/prisma";
@@ -7,11 +8,11 @@ import generateToken, { hashToken } from "$lib/server/token";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { z } from "zod";
 
-export const POST: RequestHandler = async ({ locals, url, request }) => {
+export const POST: RequestHandler = async ({ url, request }) => {
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
 
-    if (!locals.user) error(401, $t("errors.unauthenticated"));
-    if (locals.user.roleId === Role.USER) error(401, $t("errors.not-authorized"));
+    if (user.roleId === Role.USER) error(401, $t("errors.not-authorized"));
 
     const config = await getConfig();
     let schema;
@@ -36,13 +37,13 @@ export const POST: RequestHandler = async ({ locals, url, request }) => {
         error(400, data.error.format()._errors[0]);
     }
 
-    if (data.data.group && locals.user.roleId !== Role.ADMIN) {
+    if (data.data.group && user.roleId !== Role.ADMIN) {
         const membership = await client.userGroupMembership.findFirst({
             select: {
                 roleId: true
             },
             where: {
-                userId: locals.user.id,
+                userId: user.id,
                 groupId: data.data.group
             }
         });

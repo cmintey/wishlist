@@ -2,26 +2,25 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { client } from "$lib/server/prisma";
-import { getFormatter } from "$lib/i18n";
-import { getListPropertiesSchema } from "$lib/validations";
+import { getFormatter } from "$lib/server/i18n";
+import { getListPropertiesSchema } from "$lib/server/validations";
 import { trimToNull } from "$lib/util";
 import { deleteList } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
+import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals, url, params }) => {
-    if (!locals.user) {
-        redirect(302, `/login?ref=${url.pathname + url.search}`);
-    }
+export const load: PageServerLoad = async ({ params }) => {
+    const user = requireLogin();
 
     const $t = await getFormatter();
-    const activeMembership = await getActiveMembership(locals.user);
+    const activeMembership = await getActiveMembership(user);
 
     const config = await getConfig(activeMembership.groupId);
     const list = await client.list
         .findUnique({
             where: {
                 id: params.id,
-                ownerId: locals.user.id,
+                ownerId: user.id,
                 groupId: activeMembership.groupId
             },
             select: {
@@ -49,13 +48,11 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 };
 
 export const actions: Actions = {
-    persist: async ({ request, locals, params }) => {
+    persist: async ({ request, params }) => {
+        const user = requireLogin();
         const $t = await getFormatter();
-        if (!locals.user) {
-            error(401, $t("errors.unauthenticated"));
-        }
 
-        const activeMembership = await getActiveMembership(locals.user);
+        const activeMembership = await getActiveMembership(user);
         const config = await getConfig(activeMembership.groupId);
         const listOwner = await client.list.findUnique({
             select: {
@@ -66,7 +63,7 @@ export const actions: Actions = {
                 groupId: activeMembership.groupId
             }
         });
-        if (locals.user.id !== listOwner?.ownerId) {
+        if (user.id !== listOwner?.ownerId) {
             error(401, $t("errors.not-authorized"));
         }
 
@@ -118,13 +115,11 @@ export const actions: Actions = {
 
         return redirect(302, `/lists/${params.id}`);
     },
-    delete: async ({ locals, params }) => {
+    delete: async ({ params }) => {
+        const user = requireLogin();
         const $t = await getFormatter();
-        if (!locals.user) {
-            error(401, $t("errors.unauthenticated"));
-        }
 
-        const activeMembership = await getActiveMembership(locals.user);
+        const activeMembership = await getActiveMembership(user);
         const listOwner = await client.list.findUnique({
             select: {
                 ownerId: true
@@ -134,7 +129,7 @@ export const actions: Actions = {
                 groupId: activeMembership.groupId
             }
         });
-        if (locals.user.id !== listOwner?.ownerId) {
+        if (user.id !== listOwner?.ownerId) {
             error(401, $t("errors.not-authorized"));
         }
 

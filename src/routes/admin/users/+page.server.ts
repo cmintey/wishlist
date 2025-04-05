@@ -1,18 +1,11 @@
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 import { client } from "$lib/server/prisma";
-import { redirect, error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/i18n";
+import { requireRole } from "$lib/server/auth";
 
-export const load: PageServerLoad = async ({ locals }) => {
-    const $t = await getFormatter();
-    if (!locals.user) {
-        redirect(302, `/login?ref=/admin/users`);
-    }
-    if (locals.user.roleId !== Role.ADMIN) {
-        error(401, $t("errors.not-authorized"));
-    }
+export const load: PageServerLoad = async () => {
+    const user = await requireRole(Role.ADMIN);
 
     const usersQuery = client.user.findMany({
         select: {
@@ -41,7 +34,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     return {
         user: {
             isAdmin: true,
-            ...locals.user
+            ...user
         },
         users: users.map((user) => ({
             isAdmin: user.role.id === Role.ADMIN,
