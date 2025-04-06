@@ -2,9 +2,10 @@
     import "../app.postcss";
 
     import { afterNavigate, beforeNavigate } from "$app/navigation";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
     import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
+    import { pwaInfo } from "virtual:pwa-info";
 
     import NavBar from "$lib/components/navigation/NavBar.svelte";
     import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
@@ -49,7 +50,7 @@
     afterNavigate((params) => {
         showNavigationLoadingBar = false;
         documentTitle = document?.title;
-        disabled = titleDisabledUrls.find((url) => $page.url.pathname.match(url)) !== undefined;
+        disabled = titleDisabledUrls.find((url) => page.url.pathname.match(url)) !== undefined;
         if (params.type !== "popstate" && params.to?.url.pathname !== params.from?.url.pathname) {
             const elemPage = document.querySelector("#page");
             if (elemPage) elemPage.scrollTop = 0;
@@ -73,6 +74,21 @@
         }
     });
 
+    onMount(async () => {
+        if (pwaInfo) {
+            const { registerSW } = await import("virtual:pwa-register");
+            registerSW({
+                immediate: true,
+                onRegistered(r) {
+                    console.log(`SW Registered: ${r}`);
+                },
+                onRegisterError(error) {
+                    console.log("SW registration error", error);
+                }
+            });
+        }
+    });
+
     storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
     const modalComponentRegistry: Record<string, ModalComponent> = {
@@ -92,6 +108,8 @@
             ref: DeleteItemModal
         }
     };
+
+    const webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
 </script>
 
 <Drawer />
@@ -118,3 +136,7 @@
 
 <Toast />
 <Modal components={modalComponentRegistry} />
+
+<svelte:head>
+    {@html webManifestLink}
+</svelte:head>

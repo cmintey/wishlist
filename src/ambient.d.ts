@@ -2,6 +2,14 @@ declare module "@samirrayani/metascraper-shopping" {
     export default function rules(): import("metascraper").Rule;
 }
 
+declare module "virtual:pwa-register" {
+    import type { RegisterSWOptions } from "vite-plugin-pwa/types";
+
+    export type { RegisterSWOptions };
+
+    export function registerSW(options?: RegisterSWOptions): (reloadPage?: boolean) => Promise<void>;
+}
+
 type NavItem = {
     labelKey: string;
     href: string;

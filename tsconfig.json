@@ -8,7 +8,11 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "sourceMap": true,
-        "strict": true
+        "strict": true,
+        "types": [
+            "vite-plugin-pwa/info",
+            "vite-plugin-pwa/svelte",
+        ]
     }
     // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
     //
