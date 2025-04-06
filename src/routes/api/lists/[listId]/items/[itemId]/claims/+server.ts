@@ -7,6 +7,7 @@ import { listItemClaimSchema } from "$lib/server/validations";
 import type { Prisma } from "@prisma/client";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
+import { logger } from "$lib/server/logger";
 
 // Claim an item on a list
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
@@ -82,8 +83,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
 
         return new Response(null, { status: 200 });
-    } catch (e) {
-        console.log("Error patching list item", e);
+    } catch (err) {
+        logger.error({ err }, "Error patching list item");
         error(404, $t("errors.item-not-found"));
     }
 };

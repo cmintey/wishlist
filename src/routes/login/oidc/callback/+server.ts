@@ -7,6 +7,7 @@ import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
+import { logger } from "$lib/server/logger";
 
 export const POST: RequestHandler = async (event) => {
     const $t = await getFormatter();
@@ -58,7 +59,7 @@ export const POST: RequestHandler = async (event) => {
     // No existing user was found
     const config = await getConfig();
     if (!config.oidc.autoRegister) {
-        console.warn(
+        logger.warn(
             `Could not register ${userinfo.sub}/${userinfo.email || "(no email)"}. Auto registration is disabled.`
         );
         error(400, $t("errors.registration-is-disabled"));

@@ -3,6 +3,7 @@ import { getConfig } from "./config";
 import { error, redirect, type RequestEvent } from "@sveltejs/kit";
 import { z } from "zod";
 import { getFormatter } from "$lib/server/i18n";
+import { logger } from "./logger";
 
 const SCOPE = "openid profile email";
 const CODE_CHALLENGE_METHOD = "S256";
@@ -151,17 +152,17 @@ export async function handleCallback(event: RequestEvent) {
             expectedState,
             idTokenExpected: true
         });
-    } catch (e) {
-        console.error(e);
+    } catch (err) {
+        logger.error({ err }, "Exception while handling callback");
         let status = 400;
         let message: string | undefined;
-        if (e instanceof client.ResponseBodyError) {
-            status = e.status;
-            message = e.error_description || e.message;
-        } else if (e instanceof client.AuthorizationResponseError) {
-            message = e.error_description || e.message;
-        } else if (e instanceof client.ClientError) {
-            message = e.message;
+        if (err instanceof client.ResponseBodyError) {
+            status = err.status;
+            message = err.error_description || err.message;
+        } else if (err instanceof client.AuthorizationResponseError) {
+            message = err.error_description || err.message;
+        } else if (err instanceof client.ClientError) {
+            message = err.message;
         }
         error(status, message || $t("general.oops"));
     }

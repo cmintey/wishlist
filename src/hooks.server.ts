@@ -21,15 +21,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (!sessionToken) {
         event.locals.user = null;
         event.locals.session = null;
-
-        const response = await resolve(event);
-        logger.info({
-            status: response.status,
-            method: event.request.method,
-            uri: event.url.pathname + event.url.search + event.url.hash,
-            hasSession: false
-        });
-        return response;
+        return resolve(event);
     }
 
     const { session, user } = await validateSessionToken(sessionToken);
@@ -49,25 +41,16 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.session = session;
     event.locals.locale = lang || "en";
 
-    const response = await resolve(event);
-
-    logger.info({
-        status: response.status,
-        method: event.request.method,
-        uri: event.url.pathname + event.url.search + event.url.hash,
-        hasSession: true,
-        isProxyUser
-    });
-    return response;
+    return resolve(event);
 };
 
-export const handleError: HandleServerError = async ({ error, event, status, message }) => {
+export const handleError: HandleServerError = async ({ error: err, event, status, message }) => {
     logger.error(
         {
             status,
             method: event.request.method,
             uri: event.url.pathname + event.url.search + event.url.hash,
-            err: error
+            err
         },
         message
     );

@@ -11,6 +11,7 @@ import { getFormatter } from "$lib/server/i18n";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 
 export const DELETE: RequestHandler = async ({ url }) => {
     const $t = await getFormatter();
@@ -117,8 +118,8 @@ export const DELETE: RequestHandler = async ({ url }) => {
             });
         });
         return new Response(null, { status: 200 });
-    } catch (e) {
-        console.error(e);
+    } catch (err) {
+        logger.error({ err }, "Unable to delete items");
         error(500, $t("errors.unable-to-delete-items"));
     }
 };
