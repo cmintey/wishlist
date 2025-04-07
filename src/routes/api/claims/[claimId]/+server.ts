@@ -7,6 +7,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { listItemClaimUpdateSchema } from "$lib/server/validations";
 import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 
 // Unclaim an item on a list
 export const DELETE: RequestHandler = async ({ params }) => {
@@ -50,8 +51,8 @@ export const DELETE: RequestHandler = async ({ params }) => {
         if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
 
         return new Response();
-    } catch (e) {
-        console.error(e);
+    } catch (err) {
+        logger.error({ err }, "Unable to claim item");
         error(500, $t("errors.unable-to-unclaim-item"));
     }
 };
@@ -98,8 +99,8 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
             });
         }
         return new Response();
-    } catch (e) {
-        console.error(e);
+    } catch (err) {
+        logger.error({ err }, "Unable to update claim");
         error(500, $t("errors.unable-to-update-claim"));
     }
 };

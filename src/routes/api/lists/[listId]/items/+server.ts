@@ -6,6 +6,7 @@ import { error } from "@sveltejs/kit";
 import { listItemsUpdateSchema } from "$lib/server/validations";
 import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 
 export const PATCH: RequestHandler = async ({ request, params }) => {
     await requireLoginOrError();
@@ -38,8 +39,8 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
         itemEmitter.emit(ItemEvent.ITEMS_UPDATE);
 
         return new Response(null, { status: 200 });
-    } catch (e) {
-        console.log("Error patching list items", e);
+    } catch (err) {
+        logger.error({ err }, "Error patching list items");
         error(404, $t("errors.item-not-found"));
     }
 };

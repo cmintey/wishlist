@@ -6,7 +6,8 @@ import {
     setSessionTokenCookie,
     validateSessionToken
 } from "$lib/server/auth";
-import type { Handle } from "@sveltejs/kit";
+import { logger } from "$lib/server/logger";
+import type { Handle, HandleServerError } from "@sveltejs/kit";
 import { locale } from "svelte-i18n";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -39,5 +40,18 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = user;
     event.locals.session = session;
     event.locals.locale = lang || "en";
+
     return resolve(event);
+};
+
+export const handleError: HandleServerError = async ({ error: err, event, status, message }) => {
+    logger.error(
+        {
+            status,
+            method: event.request.method,
+            uri: event.url.pathname + event.url.search + event.url.hash,
+            err
+        },
+        message
+    );
 };

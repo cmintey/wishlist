@@ -8,6 +8,7 @@ import { getListPropertiesSchema } from "$lib/server/validations";
 import { create } from "$lib/server/list";
 import { client } from "$lib/server/prisma";
 import { requireLogin } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 
 export const load = (async () => {
     const user = requireLogin();
@@ -97,8 +98,8 @@ export const actions: Actions = {
                 public: listProperties.data.public
             };
             list = await create(user.id, activeMembership.groupId, data);
-        } catch (e) {
-            console.log($t("errors.unable-to-create-list"), e);
+        } catch (err) {
+            logger.error({ err }, "Unable to create list");
             return fail(500, { success: false, error: $t("errors.unable-to-create-list") });
         }
 

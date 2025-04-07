@@ -8,6 +8,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { requireLoginOrError } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 
 // Approve an item on a list
 export const PATCH: RequestHandler = async ({ request, params }) => {
@@ -62,8 +63,8 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
         }
 
         return new Response(null, { status: 200 });
-    } catch (e) {
-        console.log("Error patching list item", e);
+    } catch (err) {
+        logger.error({ err }, "Error patching list item");
         error(404, $t("errors.item-not-found"));
     }
 };
@@ -171,8 +172,8 @@ export const DELETE: RequestHandler = async ({ params }) => {
         itemEmitter.emit(ItemEvent.ITEM_DELETE, { id: parseInt(params.itemId), lists: [{ id: params.listId }] });
 
         return new Response(null, { status: 200 });
-    } catch (e) {
-        console.log("Error deleting list item", e);
+    } catch (err) {
+        logger.error({ err }, "Error deleting list item");
         error(404, $t("errors.item-not-found"));
     }
 };

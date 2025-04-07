@@ -8,6 +8,7 @@ import { trimToNull } from "$lib/util";
 import { deleteList } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
 import { requireLogin } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -104,8 +105,8 @@ export const actions: Actions = {
                     id: params.id
                 }
             });
-        } catch (e) {
-            console.log($t("errors.unable-to-update-list-settings"), e);
+        } catch (err) {
+            logger.error({ err }, "Unable to update list settings");
             return fail(500, {
                 action: "persist",
                 success: false,
@@ -135,8 +136,8 @@ export const actions: Actions = {
 
         try {
             deleteList(params.id);
-        } catch (e) {
-            console.log($t("errors.unable-to-delete-list"), e);
+        } catch (err) {
+            logger.error({ err }, "Unable to delete list");
             return fail(500, { action: "delete", success: false, message: $t("errors.unable-to-delete-list") });
         }
 

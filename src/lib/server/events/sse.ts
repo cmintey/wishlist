@@ -30,9 +30,7 @@ export function createSSE(retry = 0) {
                 }
             }
             emitter.on(handler.getEventId(), listener);
-            await writer.closed.catch((e) => {
-                if (e) console.error(e);
-            });
+            await writer.closed;
             emitter.off(handler.getEventId(), listener);
         }
     };
