@@ -2,7 +2,7 @@
     import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         url: string;
@@ -12,6 +12,7 @@
 
     let { url, btnStyle = "btn-icon", children }: Props = $props();
     const dispatch = createEventDispatcher();
+    const t = getFormatter();
 
     let copiedVisible = $state(false);
 

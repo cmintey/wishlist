@@ -1,15 +1,16 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { t } from "svelte-i18n";
     import notFoundAsset from "$lib/assets/not_found.svg";
     import errorAsset from "$lib/assets/error.svg";
     import unauthorizedAsset from "$lib/assets/unauthorized.svg";
+    import { getFormatter } from "$lib/i18n";
 
     type ErrorInfo = {
         image: string;
         message: string;
     };
 
+    const t = getFormatter();
     const errors: Record<number, ErrorInfo> = {
         401: {
             image: unauthorizedAsset,

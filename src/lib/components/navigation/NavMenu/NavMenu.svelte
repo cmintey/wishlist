@@ -4,14 +4,15 @@
     import { LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         user: LocalUser | null;
         isProxyUser: boolean;
     }
 
-    let { user, isProxyUser }: Props = $props();
+    const { user, isProxyUser }: Props = $props();
+    const t = getFormatter();
 
     const menuSettings: PopupSettings = {
         event: "click",

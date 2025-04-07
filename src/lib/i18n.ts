@@ -1,8 +1,39 @@
+import { register, init, locale, locales, format, waitLocale, getLocaleFromNavigator } from "svelte-i18n";
+import { derived, get, type Readable } from "svelte/store";
+import type { MessageObject, MessageFormatter } from "./server/i18n";
+import { getContext, setContext } from "svelte";
 import { browser } from "$app/environment";
-import { register, init, getLocaleFromNavigator, locale, locales } from "svelte-i18n";
-import { get } from "svelte/store";
 
-const defaultLocale = "en";
+export const defaultLocale = "en";
+
+export async function initFormatter(locale: string) {
+    await waitLocale(locale);
+    return derived(format, ($format) => {
+        return (id: string, options?: Omit<MessageObject, "id">) => {
+            let options_: Omit<MessageObject, "id"> = { locale };
+            if (options) {
+                options_ = { ...options };
+            }
+            return $format(id, options_);
+        };
+    });
+}
+
+export function setFormatter(t: Readable<MessageFormatter>) {
+    setContext("translator", t);
+}
+
+export function getFormatter() {
+    return getContext("translator") as Readable<MessageFormatter>;
+}
+
+export function setLocale(locale: string) {
+    setContext("locale", locale);
+}
+
+export function getLocale() {
+    return (getContext("locale") as string) || defaultLocale;
+}
 
 export const initLang = async () => {
     register("en", () => import("../i18n/en.json"));

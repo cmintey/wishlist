@@ -4,8 +4,8 @@
 
 <script lang="ts">
     import { dragHandle } from "svelte-dnd-action";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
@@ -13,7 +13,8 @@
         onDecreasePriority?: ItemVoidFunction | undefined;
     }
 
-    let { item, onIncreasePriority = undefined, onDecreasePriority = undefined }: Props = $props();
+    const { item, onIncreasePriority = undefined, onDecreasePriority = undefined }: Props = $props();
+    const t = getFormatter();
 
     let messageObj = $derived({ values: { name: item.name } });
 </script>

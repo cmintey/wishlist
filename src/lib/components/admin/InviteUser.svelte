@@ -3,8 +3,8 @@
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import type { Group } from "@prisma/client";
     import { fade } from "svelte/transition";
-    import { t } from "svelte-i18n";
     import { InviteUsersAPI } from "$lib/api/users";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Config;
@@ -13,7 +13,8 @@
         vertical?: boolean;
     }
 
-    let { config, groups = [], defaultGroup = undefined, vertical = false }: Props = $props();
+    const { config, groups = [], defaultGroup = undefined, vertical = false }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();

@@ -1,15 +1,12 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { onMount } from "svelte";
-    import { t } from "svelte-i18n";
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import CreateAccountForm from "$lib/components/CreateAccountForm.svelte";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     onMount(() => {
         if (data.valid) window.history.replaceState({}, "", "/signup");

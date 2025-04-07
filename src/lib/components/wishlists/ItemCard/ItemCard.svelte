@@ -20,12 +20,12 @@
     import ReorderButtons from "./ReorderButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
     import { page } from "$app/state";
-    import { t } from "svelte-i18n";
     import ManageButtons from "./ManageButtons.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
     import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
@@ -38,7 +38,7 @@
         onDecreasePriority?: ItemVoidFunction | undefined;
     }
 
-    let {
+    const {
         item,
         user = undefined,
         showClaimedName = false,
@@ -48,6 +48,7 @@
         onIncreasePriority = undefined,
         onDecreasePriority = undefined
     }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();

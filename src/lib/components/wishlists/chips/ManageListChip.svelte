@@ -1,12 +1,13 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
     import type { MouseEventHandler } from "svelte/elements";
 
     interface Props {
         onclick?: MouseEventHandler<HTMLButtonElement>;
     }
 
-    let { onclick }: Props = $props();
+    const { onclick }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <div>

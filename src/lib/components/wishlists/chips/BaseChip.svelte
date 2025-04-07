@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import { getFormatter } from "$lib/i18n";
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         options: Option[];
@@ -13,7 +13,7 @@
         multiselect?: boolean;
     }
 
-    let {
+    const {
         options,
         defaultOption,
         searchParam,
@@ -21,6 +21,7 @@
         prefix = undefined,
         multiselect = false
     }: Props = $props();
+    const t = getFormatter();
 
     let filter = $derived(page.url.searchParams.get(searchParam));
     let direction = $derived(directionParam ? page.url.searchParams.get(searchParam) : null);

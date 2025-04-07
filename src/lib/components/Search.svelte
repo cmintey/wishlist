@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { getFormatter } from "$lib/i18n";
     import fuzzysort from "fuzzysort";
-    import { t } from "svelte-i18n";
 
     interface Props {
         data: Record<string, unknown>[];
@@ -9,6 +9,8 @@
     }
 
     let { data, keys, result = $bindable() }: Props = $props();
+    const t = getFormatter();
+
     let search = $state("");
 
     $effect(() => {

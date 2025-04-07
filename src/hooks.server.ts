@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/private";
-import { getClosestAvailableLocaleFromHeader } from "$lib/i18n";
+import { defaultLocale, getClosestAvailableLocaleFromHeader } from "$lib/i18n";
 import {
     deleteSessionTokenCookie,
     sessionCookieName,
@@ -8,14 +8,9 @@ import {
 } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
 import type { Handle, HandleServerError } from "@sveltejs/kit";
-import { locale } from "svelte-i18n";
 
 export const handle: Handle = async ({ event, resolve }) => {
     const lang = getClosestAvailableLocaleFromHeader(event.request.headers.get("accept-language"));
-
-    if (lang) {
-        locale.set(lang);
-    }
 
     const sessionToken = event.cookies.get(sessionCookieName);
     if (!sessionToken) {
@@ -39,7 +34,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.isProxyUser = isProxyUser;
     event.locals.user = user;
     event.locals.session = session;
-    event.locals.locale = lang || "en";
+    event.locals.locale = lang || defaultLocale;
 
     return resolve(event);
 };

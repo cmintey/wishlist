@@ -1,15 +1,11 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import type { ActionData, PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
+    import type { PageProps } from "./$types";
 
-    interface Props {
-        data: PageData;
-        form: ActionData;
-    }
-
-    let { data, form }: Props = $props();
+    const { data, form }: PageProps = $props();
+    const t = getFormatter();
 
     let loading = $state(false);
 </script>

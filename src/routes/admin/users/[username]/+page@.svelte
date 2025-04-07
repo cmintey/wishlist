@@ -3,15 +3,11 @@
     import { goto, invalidateAll } from "$app/navigation";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
-    import type { ActionData, PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-        form: ActionData;
-    }
-
-    let { data, form }: Props = $props();
+    const { data, form }: PageProps = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();

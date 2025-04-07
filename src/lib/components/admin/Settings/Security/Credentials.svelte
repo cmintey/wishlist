@@ -1,7 +1,7 @@
 <script lang="ts">
     import Tooltip from "$lib/components/Tooltip.svelte";
+    import { getFormatter } from "$lib/i18n";
     import { strengthOptions } from "$lib/zxcvbn";
-    import { t } from "svelte-i18n";
     import Setting from "../Setting.svelte";
     import SettingsGroup from "../SettingsGroup.svelte";
 
@@ -10,6 +10,7 @@
     }
 
     const { config }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <SettingsGroup>

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import type { PartialUser } from "./ItemCard.svelte";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
@@ -12,6 +12,7 @@
     }
 
     let { item = $bindable(), user, showName, onPublicList = false }: Props = $props();
+    const t = getFormatter();
 
     const dispatch = createEventDispatcher();
 

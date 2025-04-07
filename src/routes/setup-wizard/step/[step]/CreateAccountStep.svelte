@@ -4,9 +4,10 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
-    let { onSuccess }: Props = $props();
+    const { onSuccess }: Props = $props();
+    const t = getFormatter();
 
     let form: HTMLFormElement | undefined = $state();
 

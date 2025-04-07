@@ -1,13 +1,19 @@
-import { locale, waitLocale } from "svelte-i18n";
 import type { LayoutLoad } from "./$types";
-import { getClosestAvailableLocale, initLang } from "$lib/i18n";
+import { defaultLocale, getClosestAvailableLocale, initFormatter, initLang } from "$lib/i18n";
 import { browser } from "$app/environment";
 
-export const load = (async () => {
+export const load = (async ({ data }) => {
     await initLang();
+    let locale;
     if (browser) {
-        const lang = getClosestAvailableLocale(window.navigator.languages);
-        if (lang) locale.set(lang);
+        locale = getClosestAvailableLocale(window.navigator.languages) || defaultLocale;
+    } else {
+        locale = data.locale;
     }
-    await waitLocale();
+
+    return {
+        t: await initFormatter(locale),
+        ...data,
+        locale
+    };
 }) satisfies LayoutLoad;

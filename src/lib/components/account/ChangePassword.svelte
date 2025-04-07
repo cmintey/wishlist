@@ -3,8 +3,9 @@
     import { page } from "$app/state";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import PasswordInput from "../PasswordInput.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
+    const t = getFormatter();
     const toastStore = getToastStore();
 
     let passwordReset = $state({

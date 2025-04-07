@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
     import { goto, invalidate } from "$app/navigation";
@@ -17,16 +17,13 @@
     import { dragHandleZone } from "svelte-dnd-action";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
-    import { t } from "svelte-i18n";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     let allItems: ItemOnListDTO[] = $state(data.list.items);
     let reordering = $state(false);

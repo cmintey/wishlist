@@ -1,13 +1,14 @@
 <script lang="ts">
     import { SystemUsersAPI } from "$lib/api/users";
+    import { getFormatter } from "$lib/i18n";
     import { getModalStore } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
     }
 
-    let { parent }: Props = $props();
+    const { parent }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     const systemUsersAPI = new SystemUsersAPI();

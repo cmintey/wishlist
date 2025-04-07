@@ -5,8 +5,8 @@
     import { steps } from "./steps";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
-    import { t } from "svelte-i18n";
     import { ProgressRadial } from "@skeletonlabs/skeleton";
+    import { getFormatter } from "$lib/i18n";
 
     let locked = false;
 
@@ -15,6 +15,7 @@
         total: number;
     }
 
+    const t = getFormatter();
     const submit_ = writable(() => {});
     setContext("submit", submit_);
     const stepperState: Writable<StepperState> = getContext("state");

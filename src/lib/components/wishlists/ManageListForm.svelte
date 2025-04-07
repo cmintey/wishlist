@@ -1,12 +1,12 @@
 <script lang="ts">
     import ListCard from "$lib/components/ListCard.svelte";
-    import { t } from "svelte-i18n";
     import IconSelector from "$lib/components/IconSelector.svelte";
     import { enhance } from "$app/forms";
     import ClearableInput from "$lib/components/ClearableInput.svelte";
     import { rgbToHex } from "$lib/util";
     import type { List, User } from "@prisma/client";
     import { getModalStore } from "@skeletonlabs/skeleton";
+    import { getFormatter } from "$lib/i18n";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public">> {
         owner: Pick<User, "name" | "username" | "picture">;
@@ -23,6 +23,7 @@
     }
 
     const { data, persistButtonName, listMode, allowsPublicLists, editing = false }: Props = $props();
+    const t = getFormatter();
     const modalStore = getModalStore();
 
     let list = $state(data.list);

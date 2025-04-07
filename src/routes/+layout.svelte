@@ -12,7 +12,7 @@
     import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
     import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
     import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
-    import type { LayoutServerData } from "./$types";
+    import type { LayoutProps } from "./$types";
     import { onMount } from "svelte";
     import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
@@ -21,13 +21,9 @@
     import Drawer from "$lib/components/Drawer.svelte";
     import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
     import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
+    import { setFormatter, setLocale } from "$lib/i18n";
 
-    interface Props {
-        data: LayoutServerData;
-        children?: import("svelte").Snippet;
-    }
-
-    let { data, children }: Props = $props();
+    const { data, children }: LayoutProps = $props();
 
     let showNavigationLoadingBar = $state(false);
     let documentTitle: string | undefined = $state();
@@ -42,6 +38,9 @@
         "/group-error",
         /\/setup-wizard\/?.*/
     ];
+
+    setFormatter(data.t);
+    setLocale(data.locale);
 
     beforeNavigate(() => {
         showNavigationLoadingBar = true;

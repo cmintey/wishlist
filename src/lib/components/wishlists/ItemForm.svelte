@@ -6,8 +6,8 @@
     import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
-    import { t } from "svelte-i18n";
     import { onMount } from "svelte";
+    import { getFormatter } from "$lib/i18n";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -29,6 +29,7 @@
     }
 
     let { item = $bindable(), buttonText, lists: otherLists = [], currentList }: Props = $props();
+    const t = getFormatter();
 
     let productData = $state(item);
     let form = $derived(page.form);

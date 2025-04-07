@@ -2,14 +2,11 @@
     import { enhance } from "$app/forms";
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import type { Item } from "@prisma/client";
-    import type { PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
         name: "",

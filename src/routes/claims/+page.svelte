@@ -2,17 +2,15 @@
     import { quintOut } from "svelte/easing";
     import { crossfade } from "svelte/transition";
     import { flip } from "svelte/animate";
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
-    let { data }: Props = $props();
     let items: ItemOnListDTO[] = $state(data.items);
 
     const [send, receive] = crossfade({

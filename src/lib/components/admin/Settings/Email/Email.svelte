@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
     import SettingsGroup from "../SettingsGroup.svelte";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
     import { ProgressRadial } from "@skeletonlabs/skeleton";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Pick<Config, "smtp">;
@@ -13,6 +13,7 @@
     }
 
     const { config, saved, sending, hidden = false }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <div class={{ hidden, "flex flex-col gap-4": !hidden }}>

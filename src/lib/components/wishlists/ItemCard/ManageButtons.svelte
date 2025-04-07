@@ -1,15 +1,16 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import type { PartialUser } from "./ItemCard.svelte";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
         user: PartialUser | undefined;
     }
 
-    let { item, user }: Props = $props();
+    const { item, user }: Props = $props();
+    const t = getFormatter();
 
     const dispatch = createEventDispatcher();
 </script>

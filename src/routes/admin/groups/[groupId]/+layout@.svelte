@@ -1,18 +1,14 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
     import { Tab } from "@skeletonlabs/skeleton";
-    import type { LayoutData, Snapshot } from "./$types";
+    import type { LayoutProps, Snapshot } from "./$types";
     import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: LayoutData;
-        children?: import("svelte").Snippet;
-    }
-
-    let { data, children }: Props = $props();
+    const { data, children }: LayoutProps = $props();
+    const t = getFormatter();
 
     const groupAPI = new GroupAPI(data.group.id);
     let editing = $state(false);

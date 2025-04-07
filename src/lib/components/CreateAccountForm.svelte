@@ -1,15 +1,16 @@
 <script lang="ts">
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import { getFormatter } from "$lib/i18n";
     import { ProgressRadial } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         hideActions?: boolean;
         signingIn?: boolean;
     }
 
-    let { hideActions = false, signingIn = false }: Props = $props();
+    const { hideActions = false, signingIn = false }: Props = $props();
+    const t = getFormatter();
 
     let data = $derived(page.data);
     let formData = $derived(page.form);
