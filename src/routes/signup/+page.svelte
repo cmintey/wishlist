@@ -14,13 +14,25 @@
     onMount(() => {
         if (data.valid) window.history.replaceState({}, "", "/signup");
     });
+
+    let signingIn = $state(false);
 </script>
 
 <div class="flex flex-col items-center space-y-4">
     <h1 class="h1 capitalize">{$t("auth.create-account")}</h1>
 
-    <form class="w-80 md:w-1/3" method="POST" use:enhance>
-        <CreateAccountForm />
+    <form
+        class="min-w-80 max-w-lg md:w-1/2 lg:w-2/3"
+        method="POST"
+        use:enhance={() => {
+            signingIn = true;
+            return async ({ update }) => {
+                signingIn = false;
+                return update();
+            };
+        }}
+    >
+        <CreateAccountForm {signingIn} />
     </form>
 </div>
 
