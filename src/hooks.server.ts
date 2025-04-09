@@ -16,7 +16,13 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (!sessionToken) {
         event.locals.user = null;
         event.locals.session = null;
-        return resolve(event);
+        event.locals.isProxyUser = false;
+        event.locals.locale = lang || defaultLocale;
+        return resolve(event, {
+            transformPageChunk({ html }) {
+                return html.replace("%lang%", event.locals.locale);
+            }
+        });
     }
 
     const { session, user } = await validateSessionToken(sessionToken);
@@ -36,7 +42,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.session = session;
     event.locals.locale = lang || defaultLocale;
 
-    return resolve(event);
+    return resolve(event, {
+        transformPageChunk({ html }) {
+            return html.replace("%lang%", event.locals.locale);
+        }
+    });
 };
 
 export const handleError: HandleServerError = async ({ error: err, event, status, message }) => {

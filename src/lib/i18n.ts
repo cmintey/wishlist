@@ -1,8 +1,23 @@
-import { register, init, locale, locales, format, waitLocale, getLocaleFromNavigator } from "svelte-i18n";
-import { derived, get, type Readable } from "svelte/store";
+import { register, init, format, waitLocale } from "svelte-i18n";
+import { derived, type Readable } from "svelte/store";
 import type { MessageObject, MessageFormatter } from "./server/i18n";
 import { getContext, setContext } from "svelte";
-import { browser } from "$app/environment";
+
+const supportedLangs = {
+    en: () => import("../i18n/en.json"),
+    es: () => import("../i18n/es.json"),
+    fr: () => import("../i18n/fr.json"),
+    sv: () => import("../i18n/sv.json"),
+    de: () => import("../i18n/de.json"),
+    ru: () => import("../i18n/ru.json"),
+    pt: () => import("../i18n/pt.json"),
+    pl: () => import("../i18n/pl.json"),
+    nl: () => import("../i18n/nl.json"),
+    vi: () => import("../i18n/vi.json"),
+    no: () => import("../i18n/nb.json"),
+    nb: () => import("../i18n/nb.json"),
+    nn: () => import("../i18n/nb.json")
+};
 
 export const defaultLocale = "en";
 
@@ -35,24 +50,12 @@ export function getLocale() {
     return (getContext("locale") as string) || defaultLocale;
 }
 
-export const initLang = async () => {
-    register("en", () => import("../i18n/en.json"));
-    register("es", () => import("../i18n/es.json"));
-    register("fr", () => import("../i18n/fr.json"));
-    register("sv", () => import("../i18n/sv.json"));
-    register("de", () => import("../i18n/de.json"));
-    register("ru", () => import("../i18n/ru.json"));
-    register("pt", () => import("../i18n/pt.json"));
-    register("pl", () => import("../i18n/pl.json"));
-    register("nl", () => import("../i18n/nl.json"));
-    register("vi", () => import("../i18n/vi.json"));
-    register("no", () => import("../i18n/nb.json"));
-    register("nb", () => import("../i18n/nb.json"));
-    register("nn", () => import("../i18n/nb.json"));
+export const initLang = async (locale: string) => {
+    Object.entries(supportedLangs).forEach(([lang, loader]) => register(lang, loader));
 
     await init({
         fallbackLocale: defaultLocale,
-        initialLocale: browser ? getLocaleFromNavigator() : defaultLocale
+        initialLocale: locale
     });
 };
 
@@ -76,11 +79,9 @@ export const getClosestAvailableLocaleFromHeader = (acceptLanguage: string | und
 };
 
 export const getClosestAvailableLocale = (langs: readonly string[]) => {
-    const $locales = get(locales);
-    return langs.find((lang) => $locales.find(($locale) => $locale === lang));
+    return langs.find((lang) => Object.keys(supportedLangs).find((supportedLang) => supportedLang === lang));
 };
 
-export const getPrimaryLang = () => {
-    const lang = get(locale);
-    return lang?.toLowerCase().split("-")[0];
+export const getPrimaryLang = (locale: string) => {
+    return locale?.toLowerCase().split("-")[0];
 };

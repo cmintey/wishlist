@@ -3,13 +3,13 @@ import { defaultLocale, getClosestAvailableLocale, initFormatter, initLang } fro
 import { browser } from "$app/environment";
 
 export const load = (async ({ data }) => {
-    await initLang();
     let locale;
     if (browser) {
         locale = getClosestAvailableLocale(window.navigator.languages) || defaultLocale;
     } else {
         locale = data.locale;
     }
+    await initLang(locale);
 
     return {
         t: await initFormatter(locale),

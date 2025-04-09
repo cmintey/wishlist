@@ -9,9 +9,9 @@ export const loadOptions = async (locale?: string) => {
     let langUser: any;
     if (locale_.toLowerCase() === "es-es") {
         langUser = await import("@zxcvbn-ts/language-es-es");
-    } else if (getPrimaryLang() === "fr") {
+    } else if (getPrimaryLang(locale_) === "fr") {
         langUser = await import("@zxcvbn-ts/language-fr");
-    } else if (getPrimaryLang() === "de") {
+    } else if (getPrimaryLang(locale_) === "de") {
         langUser = await import("@zxcvbn-ts/language-de");
     }
 

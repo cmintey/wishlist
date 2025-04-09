@@ -4,7 +4,7 @@
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
     import { goto, invalidate } from "$app/navigation";
     import { page } from "$app/state";
-    import { onDestroy, onMount } from "svelte";
+    import { onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { quintOut } from "svelte/easing";
     import { crossfade } from "svelte/transition";
@@ -43,7 +43,6 @@
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
     const toastStore = getToastStore();
-    let eventSource: EventSource;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -65,9 +64,11 @@
 
     onMount(async () => {
         await updateHash();
-        subscribeToEvents();
     });
-    onDestroy(() => eventSource?.close());
+    onMount(() => {
+        const eventSource = subscribeToEvents();
+        return () => eventSource.close();
+    });
 
     $effect(() => {
         allItems = data.list.items;
@@ -97,7 +98,7 @@
     };
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource(`${page.url.pathname}/events`);
+        const eventSource = new EventSource(`${page.url.pathname}/events`);
         ItemUpdateHandler.listen(eventSource, (data) => {
             updateItem(data);
             updateHash();
@@ -116,6 +117,7 @@
                 updateHash();
             }
         });
+        return eventSource;
     };
 
     const updateItem = (updatedItem: ItemOnListDTO) => {
