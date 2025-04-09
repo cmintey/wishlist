@@ -9,6 +9,7 @@ import { env } from "$env/dynamic/private";
 import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/server/i18n";
+import { logger } from "$lib/server/logger";
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (locals.user) redirect(302, url.searchParams.get("redirectTo") ?? "/");
@@ -97,7 +98,8 @@ export const actions: Actions = {
             const session = await createSession(sessionToken, user.id);
             setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
             return { success: true };
-        } catch {
+        } catch (err) {
+            logger.error({ err }, "User with username or email already exists");
             return fail(400, {
                 error: true,
                 errors: [{ field: "username", message: $t("errors.user-already-exists") }]

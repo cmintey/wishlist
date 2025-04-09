@@ -6,21 +6,16 @@
 
     interface Props {
         hideActions?: boolean;
+        signingIn?: boolean;
     }
 
-    let { hideActions = false }: Props = $props();
+    let { hideActions = false, signingIn = false }: Props = $props();
 
     let data = $derived(page.data);
     let formData = $derived(page.form);
 
     let password = $state("");
     let passwordConfirm = $state("");
-
-    let signingIn = $state(false);
-
-    $effect(() => {
-        if (page.error) signingIn = false;
-    });
 </script>
 
 <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
@@ -84,7 +79,6 @@
             <button
                 class="variant-filled-primary btn w-min"
                 disabled={password !== passwordConfirm || signingIn}
-                onclick={() => (signingIn = true)}
                 type="submit"
             >
                 {#if signingIn}
