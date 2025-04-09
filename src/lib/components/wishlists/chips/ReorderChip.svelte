@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         reordering: boolean;
@@ -7,6 +7,7 @@
     }
 
     let { reordering = $bindable(), onFinalize }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <div>

@@ -2,12 +2,13 @@
     import { page } from "$app/state";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import type { Group } from "@prisma/client";
-    import { t } from "svelte-i18n";
     import type { Props } from "./steps";
+    import { getFormatter } from "$lib/i18n";
 
-    let _props: Props = $props();
+    const _props: Props = $props();
+    const t = getFormatter();
 
-    let config: Config = $derived(page.data.config);
+    const config: Config = $derived(page.data.config);
     const groups: Group[] = $derived(page.data.groups);
 </script>
 

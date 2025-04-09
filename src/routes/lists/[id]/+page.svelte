@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
     import { goto, invalidate } from "$app/navigation";
     import { page } from "$app/state";
-    import { onDestroy, onMount } from "svelte";
+    import { onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { quintOut } from "svelte/easing";
     import { crossfade } from "svelte/transition";
@@ -17,16 +17,13 @@
     import { dragHandleZone } from "svelte-dnd-action";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
-    import { t } from "svelte-i18n";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     let allItems: ItemOnListDTO[] = $state(data.list.items);
     let reordering = $state(false);
@@ -46,7 +43,6 @@
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
     const toastStore = getToastStore();
-    let eventSource: EventSource;
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -68,9 +64,11 @@
 
     onMount(async () => {
         await updateHash();
-        subscribeToEvents();
     });
-    onDestroy(() => eventSource?.close());
+    onMount(() => {
+        const eventSource = subscribeToEvents();
+        return () => eventSource.close();
+    });
 
     $effect(() => {
         allItems = data.list.items;
@@ -100,7 +98,7 @@
     };
 
     const subscribeToEvents = () => {
-        eventSource = new EventSource(`${page.url.pathname}/events`);
+        const eventSource = new EventSource(`${page.url.pathname}/events`);
         ItemUpdateHandler.listen(eventSource, (data) => {
             updateItem(data);
             updateHash();
@@ -119,6 +117,7 @@
                 updateHash();
             }
         });
+        return eventSource;
     };
 
     const updateItem = (updatedItem: ItemOnListDTO) => {

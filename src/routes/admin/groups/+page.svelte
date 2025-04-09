@@ -1,12 +1,8 @@
 <script lang="ts">
     import Groups from "$lib/components/admin/Groups.svelte";
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
 </script>
 
 <Groups groups={data.groups} />

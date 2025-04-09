@@ -11,7 +11,7 @@
     } from "@skeletonlabs/skeleton";
     import Search from "../Search.svelte";
     import { GroupsAPI } from "$lib/api/groups";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     type Group = {
         id: string;
@@ -23,7 +23,8 @@
         groups: Group[];
     }
 
-    let { groups }: Props = $props();
+    const { groups }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();

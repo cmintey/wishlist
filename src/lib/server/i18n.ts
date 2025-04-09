@@ -3,9 +3,10 @@ import { t, waitLocale, format } from "svelte-i18n";
 import { get } from "svelte/store";
 
 const _f = ($t: typeof t) => get($t);
-export type MessageFormatter = ReturnType<typeof _f>;
-type MessageFormatterParams = Parameters<MessageFormatter>;
+type MessageFormatter_ = ReturnType<typeof _f>;
+type MessageFormatterParams = Parameters<MessageFormatter_>;
 export type MessageObject = Exclude<MessageFormatterParams[0], string>;
+export type MessageFormatter = Awaited<ReturnType<typeof getFormatter>>;
 
 export async function getFormatter(locale?: string) {
     if (!locale) {

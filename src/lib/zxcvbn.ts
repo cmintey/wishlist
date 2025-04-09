@@ -1,16 +1,17 @@
-import { get } from "svelte/store";
-import { locale } from "svelte-i18n";
-import { getPrimaryLang } from "./i18n";
+import { browser } from "$app/environment";
+import { getPrimaryLang, getLocale, defaultLocale } from "./i18n";
 
-export const loadOptions = async () => {
+export const loadOptions = async (locale?: string) => {
+    const locale_ = locale ? locale : browser ? getLocale() : defaultLocale;
+
     const langCommon = await import("@zxcvbn-ts/language-common");
     const langEn = await import("@zxcvbn-ts/language-en");
     let langUser: any;
-    if (get(locale)?.toLowerCase() === "es-es") {
+    if (locale_.toLowerCase() === "es-es") {
         langUser = await import("@zxcvbn-ts/language-es-es");
-    } else if (getPrimaryLang() === "fr") {
+    } else if (getPrimaryLang(locale_) === "fr") {
         langUser = await import("@zxcvbn-ts/language-fr");
-    } else if (getPrimaryLang() === "de") {
+    } else if (getPrimaryLang(locale_) === "de") {
         langUser = await import("@zxcvbn-ts/language-de");
     }
 

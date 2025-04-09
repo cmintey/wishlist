@@ -2,13 +2,14 @@
     import { afterNavigate } from "$app/navigation";
     import { page } from "$app/state";
     import logo from "$lib/assets/logo.png";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         label?: string;
     }
 
-    let { label = $t("setup.back") }: Props = $props();
+    const t = getFormatter();
+    const { label = $t("setup.back") }: Props = $props();
     const disabledUrls = [
         "/login",
         "/signup",

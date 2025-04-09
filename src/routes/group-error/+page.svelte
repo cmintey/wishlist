@@ -1,6 +1,8 @@
 <script lang="ts">
     import noGroup from "$lib/assets/no_group.svg";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
+
+    const t = getFormatter();
 </script>
 
 <div class="flex flex-col items-center justify-center space-y-4 pt-4">

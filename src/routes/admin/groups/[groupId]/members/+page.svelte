@@ -3,18 +3,15 @@
     import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
-    import type { PageData } from "./$types";
+    import type { PageData, PageProps } from "./$types";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
 

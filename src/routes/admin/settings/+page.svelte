@@ -4,15 +4,12 @@
     import { page } from "$app/state";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { onMount } from "svelte";
-    import type { PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    const { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     const toastStore = getToastStore();
 

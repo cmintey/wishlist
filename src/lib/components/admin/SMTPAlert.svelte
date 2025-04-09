@@ -1,12 +1,13 @@
 <script lang="ts">
+    import { getFormatter } from "$lib/i18n";
     import { smtpAcknowledged } from "$lib/stores/smtp-acknowledge";
-    import { t } from "svelte-i18n";
 
     interface Props {
         smtpEnable: boolean;
     }
 
-    let { smtpEnable }: Props = $props();
+    const { smtpEnable }: Props = $props();
+    const t = getFormatter();
 </script>
 
 {#if !$smtpAcknowledged && !smtpEnable}

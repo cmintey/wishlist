@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { getFormatter, getLocaleConfig } from "$lib/price-formatter";
+    import { getFormatter as getPriceFormatter, getLocaleConfig } from "$lib/price-formatter";
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
     import { getToastStore } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         value?: number | null;
@@ -14,9 +14,10 @@
     }
 
     let { value = $bindable(null), currency = $bindable("USD"), name, id, disabled = false }: Props = $props();
+    const t = getFormatter();
 
     const toastStore = getToastStore();
-    let formatter = $derived(getFormatter(currency));
+    let formatter = $derived(getPriceFormatter(currency));
     let localeConfig = $derived(getLocaleConfig(formatter));
     let maximumFractionDigits = $derived(formatter.resolvedOptions().maximumFractionDigits || 2);
     let inputtedValue = value !== null ? value.toString() : "";

@@ -3,18 +3,14 @@
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import { getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
-    import type { ActionData, PageServerData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
     import Alert from "$lib/components/Alert.svelte";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageServerData;
-        form: ActionData;
-    }
-
-    let { data, form }: Props = $props();
+    const { data, form }: PageProps = $props();
+    const t = getFormatter();
 
     const toastStore = getToastStore();
 

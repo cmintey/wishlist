@@ -111,7 +111,7 @@ export const actions: Actions = {
         }
     },
 
-    passwordchange: async ({ request, cookies }) => {
+    passwordchange: async ({ request, cookies, locals }) => {
         const authUser = requireLogin();
         const $t = await getFormatter();
 
@@ -168,7 +168,7 @@ export const actions: Actions = {
             if (pwdData.data.invalidateSessions) {
                 await invalidateUserSessions(authUser.id);
             } else {
-                await invalidateSession(authUser.id);
+                await invalidateSession(locals.session!.id);
                 setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
             }
         } catch {

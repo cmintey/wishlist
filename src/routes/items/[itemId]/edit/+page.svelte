@@ -2,15 +2,12 @@
     import { enhance } from "$app/forms";
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import { getToastStore } from "@skeletonlabs/skeleton";
-    import type { PageServerData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageServerData;
-    }
+    const { data }: PageProps = $props();
 
-    let { data }: Props = $props();
-
+    const t = getFormatter();
     const toastStore = getToastStore();
 </script>
 

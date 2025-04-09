@@ -5,12 +5,13 @@
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
     import type { Group } from "@prisma/client";
-    import { t } from "svelte-i18n";
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { getFormatter } from "$lib/i18n";
 
-    let { onSuccess }: Props = $props();
+    const { onSuccess }: Props = $props();
+    const t = getFormatter();
 
     let config: Config = $state(page.data.config);
     let groups: Group[] = $state(page.data.groups);

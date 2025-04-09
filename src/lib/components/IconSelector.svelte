@@ -3,9 +3,9 @@
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
     import { VirtualList } from "svelte-virtuallists";
-    import { t } from "svelte-i18n";
     import fuzzysort from "fuzzysort";
     import ClearableInput from "./ClearableInput.svelte";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         id?: string;
@@ -14,7 +14,8 @@
         onIconSelected?: (icon: string) => any;
     }
 
-    let { id, title, icon, onIconSelected }: Props = $props();
+    const { id, title, icon, onIconSelected }: Props = $props();
+    const t = getFormatter();
 
     let IconifyIcon: IconifyIconHTMLElement | undefined;
     let availableIcons: string[] = $state([]);

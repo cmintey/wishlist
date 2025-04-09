@@ -2,15 +2,16 @@
     import { goto } from "$app/navigation";
     import { GroupsAPI } from "$lib/api/groups";
     import { UserAPI } from "$lib/api/users";
+    import { getFormatter } from "$lib/i18n";
     import type { Group } from "@prisma/client";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         user: LocalUser | undefined;
     }
 
-    let { user }: Props = $props();
+    const { user }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
 

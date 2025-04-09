@@ -1,22 +1,20 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageData, PageProps } from "./$types";
     import { fade } from "svelte/transition";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
-    import { t } from "svelte-i18n";
     import ListCard from "$lib/components/ListCard.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
     import empty from "$lib/assets/no_wishes.svg";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
     type ListData = PageData["otherLists"][0];
 
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
+    const t = getFormatter();
     const users = $state(data.users);
 
     const hasNewItems = async (list: ListData) => {

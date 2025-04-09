@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         providerName?: string | null;
@@ -8,6 +8,7 @@
     }
 
     const { providerName: providerName_, oauthId }: Props = $props();
+    const t = getFormatter();
 
     const providerName = $derived(providerName_ || "OAuth");
 </script>

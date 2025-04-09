@@ -3,15 +3,11 @@
     import { goto } from "$app/navigation";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import { onMount } from "svelte";
-    import type { ActionData, PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-        form: ActionData;
-    }
-
-    let { data, form }: Props = $props();
+    const { data, form }: PageProps = $props();
+    const t = getFormatter();
 
     let newPassword = $state("");
     let confirmPassword = $state("");

@@ -1,16 +1,17 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import { getFormatter } from "$lib/i18n";
     import { isInstalled } from "$lib/stores/is-installed";
     import { TabGroup, Tab } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         navItems: NavItem[];
         user: LocalUser | null;
     }
 
-    let { navItems, user }: Props = $props();
+    const { navItems, user }: Props = $props();
+    const t = getFormatter();
 
     let tabsBottomNav: number | undefined = $state(navItems.findIndex((n) => page.url.pathname.startsWith(n.href)));
 </script>
