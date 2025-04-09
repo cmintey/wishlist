@@ -78,7 +78,7 @@
                 {/each}
             </ul>
         {/if}
-        <label class="unstyled flex flex-row space-x-2">
+        <label class="checkbox-label">
             <input id="invalidateSessions" name="invalidateSessions" class="checkbox" type="checkbox" />
             <span>{$t("auth.sign-out-of-all-devices")}</span>
         </label>
