@@ -48,6 +48,7 @@ export const load: PageServerLoad = async () => {
                     id: true,
                     listId: true,
                     purchased: true,
+                    quantity: true,
                     claimedBy: {
                         select: {
                             id: true,
