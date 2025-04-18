@@ -6,19 +6,22 @@ interface UserWithGroups extends MinimalUser {
     groups: string[];
 }
 
-type Claimed = {
+type BaseClaim = {
     claimId: string;
+    quantity: number;
+};
+
+interface Claimed extends BaseClaim {
     claimedBy: UserWithGroups;
     publicClaimedBy: undefined;
     purchased: boolean;
-};
+}
 
-type PubliclyClaimed = {
-    claimId: string;
+interface PubliclyClaimed extends BaseClaim {
     claimedBy: undefined;
     publicClaimedBy: Pick<SystemUser, "id" | "name">;
     purchased: undefined;
-};
+}
 
 export type ClaimDTO = Claimed | PubliclyClaimed;
 
@@ -34,6 +37,8 @@ export interface ItemOnListDTO extends Item, ListItem {
     itemPrice: ItemPrice | null;
     user: MinimalUser;
     listCount: number;
+    readonly claimedQuantity: number;
+    readonly isClaimable: boolean;
 }
 
 export interface ItemDTO extends Item {
