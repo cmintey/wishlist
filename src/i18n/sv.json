@@ -115,7 +115,6 @@
     },
     "auth": {
         "check-your-email": "Kontrollera din e-post och följ länken för att återställa ditt lösenord.",
-        "click-here-to-login": "Klicka här för att logga in.",
         "confirm-password": "Bekräfta lösenord",
         "current-password": "Nuvarande lösenord",
         "email": "E-post",
