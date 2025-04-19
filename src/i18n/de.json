@@ -74,7 +74,7 @@
         "remove-member-title": "Entferne Mitglied",
         "select-a-group-option": "Wähle eine Gruppe",
         "show-name": "Zeige Name",
-        "suggestions-method": "Methode",
+        "suggestions-method": "Vorschlagsmethode",
         "username-field": "Benutzername: {username}",
         "version": "Version: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "wishlist-mode": "Wunschlisten-Modus",
@@ -87,7 +87,33 @@
         "enable-default-list-creation-tooltip": "Aktiviere das Erstellen einer Liste wenn ein Benutzer einer Gruppe beitritt. Benutzer können Listen weiterhin selbst erstellen.",
         "list-creation": "Listeneinstellungen",
         "allow-public-lists-tooltip": "Erlaube den Benutzern die Liste öffentlich verfügbar zu machen. Dies hat keinen Einfluss, wenn die Gruppe im \"Register-Modus\" ist.",
-        "allow-public-lists": "Erlaube öffentliche Listen"
+        "allow-public-lists": "Erlaube öffentliche Listen",
+        "claims-name-tooltip": "Zeige den Namen der Person, die den Artikel reserviert, hat auf der Detailseite an.",
+        "credentials": "Zugangsdaten",
+        "default-group-tooltip": "Neue Benutzer werden automatisch zu dieser Gruppe hinzugefügt wenn sie keinen spezifischen Anmeldetoken erhalten haben.",
+        "enable-signup": "Aktiviere Registrierung",
+        "general": "Allgemein",
+        "oidc": "OpenID Connect (OIDC)",
+        "oidc-client-secret": "Client Secret",
+        "oidc-provider-name": "Provider Name",
+        "oidc-url": "Issuer URL",
+        "password-strength-requirement-tooltip": "Die minimale Passwortstärke für ein Benutzerpasswort.",
+        "settings-saved-toast": "Einstellungen erfolgreich gespeichert",
+        "suggestions-approval-required-tooltip": "Der Artikel benötigt eine Überprüfung durch den Besitzer der Liste. Wenn akzeptiert, kann der Beistzer den Artikel sehen, bearbeiten und löschen.",
+        "suggestions-auto-approve-tooltip": "Der Artikel wird automatisch der Liste hinzugefügt, jedoch kann der Besitzer ihn sehen, bearbeiten und löschen.",
+        "suggestions-surprise-me-tooltip": "Der Artikel wir automatisch zur Liste hinzugefügt, ohne das der Besitzer es weiß.",
+        "suggestions-tooltip": "Erlaube es Benutzern der selben Gruppe sich gegenseitig Vorschläge für Ihre Listen zu machen.",
+        "test-email": "Teste E-Mail",
+        "test-email-sent-toast": "Test E-Mail gesendet",
+        "wishlist-mode-registry-tooltip": "Ein Benutzer mit einer öffentlichen Liste. Benutzer von anderen Gruppen können, wenn erlaubt, Vorschläge machen und anonyme Benutzer können Artikel reservieren.",
+        "wishlist-mode-wishlist-tooltip": "Mehrere Benutzer und mehrere Listen mit Reservierungen und Vorschlägen. Listen können öffentlich gemacht werden, wenn die Gruppe es zulässt.",
+        "disable-password-login": "Deaktiviere Login per Passwort",
+        "disable-password-login-tooltip": "Deaktiviert das Einloggen per Passwort. Nur Header- und OAuth-Authentifizierung sind dann zugelassen.",
+        "oidc-auto-redirect": "Automatische Weiterleitung",
+        "oidc-auto-redirect-tooltip": "Wenn aktiviert, wird der Nutzer automatisch von der Login Seite auf die Login Seite des Identity Providers umgeleitet. Dies kann umgangen werden, indem '?direct=1' der URL hinzugefügt wird.",
+        "oidc-auto-register": "Automatische Registrierung",
+        "oidc-auto-register-tooltip": "Erstelle automatisch einen neuen Account für OAuth Nutzer, die sich zum ersten Mal einloggen.",
+        "oidc-client-id": "Client Id"
     },
     "wishes": {
         "filter": "Filter",
@@ -224,7 +250,8 @@
         "item-not-found-on-list": "Artikel wurde auf der Liste nicht gefunden",
         "cannot-unclaim-an-item-you-did-not-claim": "Die Reservierung kann nur für eigene Reservierungen aufgehoben werden",
         "public-lists-not-allowed": "Öffentliche Listen sind in dieser Gruppe nicht erlaubt",
-        "unable-to-update-claim": "Reservierung ändern nicht möglich"
+        "unable-to-update-claim": "Reservierung ändern nicht möglich",
+        "registration-is-disabled": "Registrierung ist deaktiviert"
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
@@ -249,7 +276,20 @@
         "update-password": "Passwort aktualisieren",
         "username": "Benutzername",
         "forgot-password": "Passwort vergessen?",
-        "invite-via": "Einladung via..."
+        "invite-via": "Einladung via...",
+        "email-was-not-provided-by-the-identity-provider": "E-Mail wurde nicht vom Identity Provider übermittelt",
+        "account-is-not-linked-with-oauth": "Dein Konto ist nicht mit {providerName} verknüpft. Um Deinen Konto zu verknüpfen, logge Dich aus und Klicke auf 'Login mit {providerName}'.",
+        "email-is-not-verified-with-the-identity-provider": "E-Mail wurde nicht mit dem Identity Provider verifiziert",
+        "or": "oder",
+        "authenticating": "Authentifiziere...",
+        "couldnt-retrieve-stored-oidc-state": "Abruf des OIDC Status fehlgeschlagen",
+        "create-account": "Account erstellen",
+        "no-callback-url-supplied": "Keine Callback-URL bereitgestellt",
+        "no-claims-found": "Keine Reservierungen gefunden",
+        "oidc-client-not-configured": "OIDC Client nicht konfiguriert",
+        "sign-in-with": "Login mit {provider}",
+        "unlink-oauth": "Verknüpfung mit {providerName} aufheben",
+        "your-account-is-currently-linked-with-oauth": "Dein Account ist momentan mit {providerName} verknüpft"
     },
     "general": {
         "search": "Suche",
@@ -309,7 +349,8 @@
         "no-file-selected": "Keine Datei ausgewählt",
         "all": "Alle",
         "apply": "Anwenden",
-        "create": "Erstellen"
+        "create": "Erstellen",
+        "return-home": "Zurück zur Startseite"
     },
     "app": {
         "home": "Start",
