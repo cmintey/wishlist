@@ -46,8 +46,13 @@
                 <option {disabled} value="registry">{$t("admin.wishlist-mode-registry")}</option>
             </select>
         </label>
-        {#snippet description()}
-            {$t("admin.wishlist-mode-alert", { values: { memberCount: groupUserCount, listCount: listCount } })}
-        {/snippet}
+        {#if disabled}
+            <div class="flex flex-row items-center space-x-1">
+                <iconify-icon class="text-warning-800 dark:text-warning-500" icon="ion:warning"></iconify-icon>
+                <span class="text-sm text-warning-800 dark:text-warning-500">
+                    {$t("admin.wishlist-mode-alert", { values: { memberCount: groupUserCount, listCount: listCount } })}
+                </span>
+            </div>
+        {/if}
     </Setting>
 </SettingsGroup>
