@@ -108,7 +108,7 @@
         "users": "Users",
         "version": "Version: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "wishlist-mode": "Wishlist Mode",
-        "wishlist-mode-alert": "There are other members in this group, you cannot switch the mode until you remove all but one member.",
+        "wishlist-mode-alert": "There are {memberCount} members and {listCount} lists in this group, you cannot switch the mode until you remove all but one member and one list.",
         "wishlist-mode-display-text": "In 'Wishlist' mode, you can have multiple users and lists and claim items from other users. In 'Registry' mode, you have a single list which you can publicly share.",
         "wishlist-mode-registry": "Registry",
         "wishlist-mode-registry-tooltip": "One user with one public list. Users from other groups can make suggestions if permitted and anonymous users can claim items.",

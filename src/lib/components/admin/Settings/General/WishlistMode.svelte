@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Alert from "$lib/components/Alert.svelte";
     import Tooltip from "$lib/components/Tooltip.svelte";
     import { t } from "svelte-i18n";
     import Setting from "../Setting.svelte";
@@ -8,20 +7,16 @@
     interface Props {
         config: Pick<Config, "listMode">;
         groupUserCount: number;
+        listCount: number;
     }
 
-    const { config, groupUserCount }: Props = $props();
+    const { config, groupUserCount, listCount }: Props = $props();
 </script>
 
 <SettingsGroup>
     <h3 class="h3">{$t("admin.wishlist-mode")}</h3>
     <Setting>
-        {@const disabled = groupUserCount > 1}
-
-        {#if disabled}
-            <Alert type="info">{$t("admin.wishlist-mode-alert")}</Alert>
-        {/if}
-
+        {@const disabled = groupUserCount > 1 || listCount > 1}
         <label class="flex flex-col" for="listMode">
             <Tooltip>
                 {#snippet label()}
@@ -48,10 +43,11 @@
             </Tooltip>
             <select id="listMode" name="listMode" class="select w-fit min-w-64" bind:value={config.listMode}>
                 <option value="standard">{$t("admin.wishlist-mode-wishlist")}</option>
-                {#if !disabled}
-                    <option value="registry">{$t("admin.wishlist-mode-registry")}</option>
-                {/if}
+                <option {disabled} value="registry">{$t("admin.wishlist-mode-registry")}</option>
             </select>
         </label>
+        {#snippet description()}
+            {$t("admin.wishlist-mode-alert", { values: { memberCount: groupUserCount, listCount: listCount } })}
+        {/snippet}
     </Setting>
 </SettingsGroup>
