@@ -30,8 +30,8 @@
             {/if}
         </span>
     </button>
-    <div class="card variant-filled z-20 w-80 p-4" data-popup={popupId}>
+    <div class="card variant-filled-surface z-20 w-80 p-4" data-popup={popupId}>
         {@render props.description()}
-        <div class="variant-filled arrow"></div>
+        <div class="variant-filled-surface arrow"></div>
     </div>
 </div>

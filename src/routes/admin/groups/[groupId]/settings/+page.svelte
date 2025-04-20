@@ -25,11 +25,20 @@
         return ({ result }) => {
             if (result.type === "success") {
                 toastStore.trigger({ message: $t("admin.settings-saved-toast") });
+            } else if (result.type === "failure" && result.data?.error && typeof result.data.error === "string") {
+                toastStore.trigger({ message: result.data.error, background: "variant-filled-error" });
             }
         };
     }}
 >
-    <General {config} forGroup groups={[]} hidden={false} />
+    <General
+        {config}
+        forGroup
+        groupUserCount={data.membershipCount}
+        groups={[]}
+        hidden={false}
+        listCount={data.listCount}
+    />
 
     <div class="flex w-full flex-row justify-end pt-6">
         <button class="variant-filled-primary btn" type="submit">
