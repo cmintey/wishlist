@@ -28,4 +28,20 @@
             {$t("admin.claims-name-tooltip")}
         {/snippet}
     </Setting>
+    <Setting>
+        <label class="checkbox-label">
+            <input
+                id="claimsRequireEmail"
+                name="claimsRequireEmail"
+                class="checkbox"
+                type="checkbox"
+                bind:checked={config.claims.requireEmail}
+            />
+            <span>{$t("admin.claims-require-email")}</span>
+        </label>
+
+        {#snippet description()}
+            {$t("admin.claims-require-email-tooltip")}
+        {/snippet}
+    </Setting>
 </SettingsGroup>
