@@ -14,12 +14,18 @@ npm install
 ```
 docker build . --tag wishlist-dev:latest
 ```
+Specific platform, current linux/amd64 and linux/arm64 are confirmed supported 
+```
+docker build . --tag kylek1782/wishlist:amd64  --platform linux/amd64
+docker build . --tag kylek1782/wishlist:amd64  --platform linux/arm64
+```
 
 ## Running Locally
 
 ### Build
 ```
-npm run build 
+source .env.development
+pnpm run build 
 ```
 
 ### First Time Run
@@ -35,5 +41,5 @@ pnpm db:patch
 pnpm start
 
 # Recompile and run
-npm run build; pnpm start
+pnpm build; pnpm start
 ```
