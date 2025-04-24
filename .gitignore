@@ -3,11 +3,9 @@ node_modules
 /build
 /.svelte-kit
 /package
-package-lock.json
 .env
 .env.*
 !.env.example
-!.env.development
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 /dev-dist
