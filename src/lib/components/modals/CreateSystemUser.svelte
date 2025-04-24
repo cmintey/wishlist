@@ -36,9 +36,9 @@
 <div class="card w-modal space-y-4 p-4 shadow-xl">
     <header class="text-2xl font-bold">{$t("wishes.claim-details")}</header>
     <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
-    <!-- TODO: <span>{$t("general.name-optional")}</span> name optional should be labeled in emails. -->
     {#if requireClaimEmail}
-        <label class="w-fit"><span>{$t("auth.email")}</span>
+        <label class="w-fit">
+            <span>{$t("auth.email")}</span>
             <div class="input-group grid-cols-[auto_1fr_auto]">
                 <div class="input-group-shim">
                     <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
@@ -48,7 +48,11 @@
         </label>
     {/if}
     <label class="w-fit">
-        <span>{$t("auth.name")}</span>
+        {#if requireClaimEmail}
+            <span>{$t("general.name-optional")}</span>
+        {:else}
+            <span>{$t("auth.name")}</span>
+        {/if}
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
