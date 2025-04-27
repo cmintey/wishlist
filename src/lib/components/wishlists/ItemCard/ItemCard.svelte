@@ -27,6 +27,8 @@
     import { ClaimAPI } from "$lib/api/claims";
     import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
     import Image from "$lib/components/Image.svelte";
+    import type { ClassValue } from "svelte/elements";
+    import type { MessageFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
@@ -217,14 +219,26 @@
             handleDelete,
             handlePurchased,
             handleApproval,
-            handleEdit
+            handleEdit,
+            defaultImage
         }
     });
 </script>
 
-{#snippet defaultImage()}
-    <div class="bg-surface-300-600-token grid h-36 w-36 place-items-center rounded md:h-40 md:w-40">
-        <iconify-icon icon="ion:gift" width="4rem"></iconify-icon>
+{#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "md:w-40"])}
+    <div
+        class={[
+            "flex-none",
+            "bg-surface-300-600-token",
+            "grid",
+            "place-items-center",
+            "rounded",
+            "aspect-square",
+            sizeClasses
+        ]}
+        aria-label={t("a11y.default-item-image")}
+    >
+        <iconify-icon class="w-8 md:w-16" height="none" icon="ion:gift"></iconify-icon>
     </div>
 {/snippet}
 
@@ -261,18 +275,14 @@
     </header>
 
     <div class="flex flex-row space-x-4 p-4">
-        {#if imageUrl}
-            <Image
-                class=" h-36 w-36 rounded object-contain md:h-40 md:w-40"
-                alt={item.name}
-                referrerpolicy="no-referrer"
-                src={imageUrl}
-            >
-                {@render defaultImage()}
-            </Image>
-        {:else}
-            {@render defaultImage()}
-        {/if}
+        <Image
+            class="aspect-square w-24 rounded object-contain md:w-40"
+            alt={item.name}
+            referrerpolicy="no-referrer"
+            src={imageUrl}
+        >
+            {@render defaultImage($t)}
+        </Image>
 
         <div class="flex flex-col">
             {#if item.price || item.itemPrice}
@@ -283,19 +293,21 @@
             {/if}
 
             {#if item.quantity}
-                <div class="flex items-center space-x-2 text-base md:text-lg">
+                <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg">
                     <iconify-icon icon="ion:gift"></iconify-icon>
-                    <span>{item.quantity} desired</span>
-                    <!-- <span>|</span> -->
-                    <span>·</span>
-                    <!-- <iconify-icon icon="ion:hand-left"></iconify-icon> -->
-                    <span class="text-secondary-700-200-token font-bold">{item.claimedQuantity} claimed</span>
+                    <div class="flex flex-row flex-wrap gap-x-2">
+                        <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
+                        <span>·</span>
+                        <span class="text-secondary-700-200-token font-bold">
+                            {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
+                        </span>
+                    </div>
                 </div>
             {/if}
 
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <iconify-icon icon="ion:person"></iconify-icon>
-                <span class="text-base md:text-lg">
+                <span class="text-wrap text-base md:text-lg">
                     {#if showFor}
                         {@html $t("wishes.for", { values: { name: item.user.name } })}
                     {:else if !onPublicList}
@@ -308,7 +320,12 @@
                 </span>
             </div>
 
-            <p class="line-clamp-3 whitespace-pre-wrap">{item.note}</p>
+            {#if item.note}
+                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
+                    <iconify-icon icon="ion:reader"></iconify-icon>
+                    <p class="line-clamp-2 whitespace-pre-wrap">{item.note}</p>
+                </div>
+            {/if}
         </div>
     </div>
 

@@ -1,8 +1,11 @@
 import { browser } from "$app/environment";
-import { register, init, getLocaleFromNavigator, locale, locales } from "svelte-i18n";
+import { register, init, getLocaleFromNavigator, locale, locales, t } from "svelte-i18n";
 import { get } from "svelte/store";
 
 const defaultLocale = "en";
+
+const _f = ($t: typeof t) => get($t);
+export type MessageFormatter = ReturnType<typeof _f>;
 
 export const initLang = async () => {
     register("en", () => import("../i18n/en.json"));

@@ -6,13 +6,13 @@
         children?: Snippet;
     }
 
-    const { children, ...rest }: Props = $props();
+    const { children, src, ...rest }: Props = $props();
 
     let imgError = $state(false);
 </script>
 
-{#if imgError}
+{#if imgError || !src}
     {@render children?.()}
 {:else}
-    <img {...rest} onerror={() => (imgError = true)} />
+    <img {...rest} onerror={() => (imgError = true)} {src} />
 {/if}
