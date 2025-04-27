@@ -139,6 +139,8 @@ Wishlist can be configured to authenticate users against any third-party Identit
 
 To configure your provider for authentication, navigate to the Wishlist Administration Settings page. You will be required to provide the Issuer URL (the URL of your Identity Provider), the Client ID, and the Client Secret. All other configurations are optional. Any and all role-based access should be handled with your Identity Provider.
 
+The redirect URL to specify within your IdP will look like `https://<my_wishlist_domain>/login`
+
 > [!NOTE]
 > The first user to be created will need to be created with credentials via the setup wizard.
 
