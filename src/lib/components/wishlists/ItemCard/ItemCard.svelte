@@ -26,6 +26,7 @@
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
     import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
+    import Image from "$lib/components/Image.svelte";
 
     interface Props {
         item: ItemOnListDTO;
@@ -221,6 +222,12 @@
     });
 </script>
 
+{#snippet defaultImage()}
+    <div class="bg-surface-300-600-token grid h-36 w-36 place-items-center rounded md:h-40 md:w-40">
+        <iconify-icon icon="ion:gift" width="4rem"></iconify-icon>
+    </div>
+{/snippet}
+
 <div
     class="card block w-full text-start"
     class:card-hover={!reorderActions}
@@ -253,28 +260,55 @@
         </div>
     </header>
 
-    <div class="flex flex-row space-x-2 p-4">
+    <div class="flex flex-row space-x-4 p-4">
         {#if imageUrl}
-            <img class="h-36 w-36 object-contain" alt={item.name} referrerpolicy="no-referrer" src={imageUrl} />
+            <Image
+                class=" h-36 w-36 rounded object-contain md:h-40 md:w-40"
+                alt={item.name}
+                referrerpolicy="no-referrer"
+                src={imageUrl}
+            >
+                {@render defaultImage()}
+            </Image>
+        {:else}
+            {@render defaultImage()}
         {/if}
 
         <div class="flex flex-col">
             {#if item.price || item.itemPrice}
-                <span class="text-lg font-semibold">{formatPrice(item)}</span>
+                <div class="flex items-center space-x-2">
+                    <iconify-icon icon="ion:pricetag"></iconify-icon>
+                    <span class="text-lg font-semibold">{formatPrice(item)}</span>
+                </div>
             {/if}
 
-            <span class="text-base md:text-lg">
-                {#if showFor}
-                    {@html $t("wishes.for", { values: { name: item.user.name } })}
-                {:else if !onPublicList}
-                    {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
-                {:else}
-                    {@html item.addedBy.id === item.user.id
-                        ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                        : $t("wishes.added-by-somebody-else")}
-                {/if}
-            </span>
-            <p class="line-clamp-4 whitespace-pre-wrap">{item.note}</p>
+            {#if item.quantity}
+                <div class="flex items-center space-x-2 text-base md:text-lg">
+                    <iconify-icon icon="ion:gift"></iconify-icon>
+                    <span>{item.quantity} desired</span>
+                    <!-- <span>|</span> -->
+                    <span>·</span>
+                    <!-- <iconify-icon icon="ion:hand-left"></iconify-icon> -->
+                    <span class="text-secondary-700-200-token font-bold">{item.claimedQuantity} claimed</span>
+                </div>
+            {/if}
+
+            <div class="flex items-center space-x-2">
+                <iconify-icon icon="ion:person"></iconify-icon>
+                <span class="text-base md:text-lg">
+                    {#if showFor}
+                        {@html $t("wishes.for", { values: { name: item.user.name } })}
+                    {:else if !onPublicList}
+                        {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
+                    {:else}
+                        {@html item.addedBy.id === item.user.id
+                            ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
+                            : $t("wishes.added-by-somebody-else")}
+                    {/if}
+                </span>
+            </div>
+
+            <p class="line-clamp-3 whitespace-pre-wrap">{item.note}</p>
         </div>
     </div>
 
