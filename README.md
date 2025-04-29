@@ -37,7 +37,10 @@ Create a wish from a URL, or manually fill in the details
 
 ## Getting Started
 
-Getting started is simple with Docker Compose
+Getting started is simple with Docker Compose.
+
+> [!NOTE]
+> A [Helm chart is available](https://github.com/mddeff/wishlist-charts) via a community contributor
 
 Create a `docker-compose.yaml` file:
 
@@ -61,8 +64,7 @@ Then simply run `docker compose up -d`.
 
 You can now connect to your application at `http://<host>:3280`.
 
-> **Note**
->
+> [!NOTE]
 > Set the `ORIGIN` environment variable to the url you will be connecting to, otherwise you will experience issues
 
 ### Environment Variables
