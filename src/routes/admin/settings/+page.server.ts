@@ -105,7 +105,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         },
         smtp: smtpConfig,
         claims: {
-            showName: configData.claimsShowName
+            showName: configData.claimsShowName,
+            requireEmail: configData.claimsRequireEmail
         },
         listMode: "standard",
         security: {
