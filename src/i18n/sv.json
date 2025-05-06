@@ -29,7 +29,7 @@
         "smtp-host": "Värd",
         "smtp-port": "Port",
         "suggestions-auto-approve": "Auto-godkänn",
-        "suggestions-method": "Metod",
+        "suggestions-method": "Förslagsmetod",
         "suggestions-surprise-me": "Överraska mig",
         "unknown": "okänd",
         "username-field": "Användarnamn: {username}",
@@ -50,7 +50,7 @@
         "default-group": "Standardgrupp",
         "clear-lists": "Rensa {groupSpecific, select, true {} other {alla}} {claimedOnly, select, true {reserverade artiklar} other {Listor}}",
         "delete-user": "Ta bort användare",
-        "delete-group-message": "Är du säker på att du vill ta bort den här gruppen? Denna åtgärd är <b>oåterkallelig</b>!",
+        "delete-group-message": "Är du säker på att du vill ta bort den här gruppen? Detta kommer att ta bort alla listor i denna gruppen samt alla kopplade artiklar i andra grupper. <b>Denna åtgärd är oåterkallelig</b>!",
         "delete-group-title": "Ta bort grupp",
         "delete-user-confirmation": "Är du säker på att du vill ta bort {username}? <b>Denna åtgärd är oåterkallelig!</b>",
         "generate-reset-password-link": "Generera länk för återställning av lösenord",
@@ -60,7 +60,7 @@
         "smtp-from-email": "Från e-post",
         "smtp-from-name": "Från namn",
         "suggestions": "Förslag",
-        "wishlist-mode-alert": "Det finns andra medlemmar i den här gruppen, du kan inte byta läge förrän du tar bort alla utom en medlem.",
+        "wishlist-mode-alert": "Det finns {memberCount} medlemmar och {listCount} listor i denna gruppen, du kan inte byta läge förrän du tar bort alla utom en medlem och en lista.",
         "wishlist-mode-display-text": "I läget \"Önskelista\" kan du ha flera användare och listor och göra reservationer på artiklar från andra användare. I \"Register\"-läge har du en enda lista som du kan dela offentligt.",
         "wishlist-mode-wishlist": "Önskelista",
         "add-remove-manager-title": "{isManager, select, true {Lägg till} other {Ta bort}} Ledare",
@@ -75,7 +75,7 @@
         "add-remove-manager-message": "Är du säker på att du vill {isManager, select, true {lägga till} other {ta bort}} denna användare som gruppansvarig?",
         "registry-mode-alert-text": "Den här gruppen är i <b>Registerläge</b>. Inga ytterligare medlemmar kan läggas till i detta läge. Du kan få en offentlig länk till din lista på din listsida.",
         "remove-admin": "Ta bort admin",
-        "remove-member-message": "Är du säker på att du vill ta bort den här användaren från gruppen?\",",
+        "remove-member-message": "Är du säker på att du vill ta bort den här användaren från gruppen? Detta kommer att radera användarens alla listor i gruppen samt relaterade artiklar som inte finns i andra listor. <b>Denna åtgärd är oåterkallelig!</b>",
         "password-strength-requirement": "Krav på lösenordsstyrka",
         "password-strength-warning": "Var försiktig när du ändrar eller inaktiverar detta värde! Om det är inaktiverat kommer alla lösenord på 1 tecken eller mer att tillåtas.",
         "profile": "Profil",
@@ -107,7 +107,13 @@
         "allow-public-lists-tooltip": "Tillåt användare att göra listor publika. Har ingen effekt om gruppen är i \"Registrerings\"-läge.",
         "oidc-auto-redirect-tooltip": "När det är aktiverat omdirigeras inloggningssidan automatiskt till din identitetsleverantörs inloggningssida. För att kringgå detta kan '?direct=1' läggas till i URL:en.",
         "suggestions-auto-approve-tooltip": "Objekt läggs automatiskt till i listan, men listägaren kan se, ändra och ta bort objektet.",
-        "wishlist-mode-wishlist-tooltip": "Flera användare och flera listor med anspråk och förslag på objekt. Listor kan offentliggöras om gruppen tillåter det."
+        "wishlist-mode-wishlist-tooltip": "Flera användare och flera listor med anspråk och förslag på objekt. Listor kan offentliggöras om gruppen tillåter det.",
+        "enable-signup": "Aktivera Registrering",
+        "disable-password-login-tooltip": "Inaktiverar användandet av lösenord vid inloggning. Endast Header och OAuth authentisering kommer vara tillåten.",
+        "enable-default-list-creation-tooltip": "Aktivera skapandet av en lista när en ny användare går med i en grupp. Användare kommer fortfarande kunna skapa listor själva.",
+        "general": "Allmänt",
+        "enable-default-list-creation": "Aktivera Standardlistgrupp",
+        "list-creation": "Listinställningar"
     },
     "app": {
         "my-claims": "Mina reservationer",
@@ -222,7 +228,16 @@
         "claim-was-not-found": "Anspråk hittades inte",
         "an-item-must-be-added-to-at-least-one-list": "Ett objekt måste läggas till i minst en lista",
         "cannot-unclaim-an-item-you-did-not-claim": "Det går inte att ta bort en vara som du inte gjort anspråk på",
-        "in-registry-mode-you-can-only-have-one-list": "I registerläge kan du bara ha en lista"
+        "in-registry-mode-you-can-only-have-one-list": "I registerläge kan du bara ha en lista",
+        "unable-to-create-list": "Det gick inte att skapa listan",
+        "unable-to-unclaim-item": "Det gick inte att avreservera artikeln",
+        "unable-to-update-claim": "Det gick inte att uppdatera reservationen",
+        "item-not-found-on-list": "Artikeln finns inte i listan",
+        "must-select-a-group": "Du måste välja en grupp",
+        "public-lists-not-allowed": "Publika listor är inte tillåtna i denna gruppen",
+        "registration-is-disabled": "Registrering är inaktiverad",
+        "unable-to-delete-list": "Ett fel uppstod när listan skulle tas bort",
+        "no-email-provided": "Ingen e-postadress tillhandahållen"
     },
     "general": {
         "enable": "Aktivera",
@@ -277,7 +292,13 @@
         "wishlists-cleared": "Önskelistor rensade.",
         "user-count": "Antal användare",
         "very-strong": "Mycket stark",
-        "weak": "Svagt"
+        "weak": "Svagt",
+        "select-file": "Välj Fil",
+        "return-home": "Återgå till Hem",
+        "all": "Alla",
+        "apply": "Verkställ",
+        "no-file-selected": "Ingen fil är vald",
+        "create": "Skapa"
     },
     "setup": {
         "complete": "Färdigt",
@@ -337,7 +358,7 @@
         "approval-required": "{listOwner} måste godkänna ditt förslag innan det läggs till i deras lista.",
         "approvals-waiting": "Du har {approvalCount, plural, one {# artikel} other {# artiklar}} som väntar på ditt godkännande",
         "updated-success": "Artikel har uppdaterats",
-        "are-you-sure-you-wish-to-delete-item": "Är du säker på att du vill ta bort {name}?",
+        "are-you-sure-you-wish-to-delete-item": "Är du säker på att du vill ta bort <b>{name}</b>?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Innan du kan reservera denna artikel behöver vi bara en sak från dig.",
         "claim": "Reservera",
         "claim-details": "Reservationsdetaljer",
@@ -352,7 +373,17 @@
         "reorder": "Ordna om",
         "price-low-to-high": "Pris: Lågt till Högt",
         "public-url": "Offentlig URL",
-        "purchased": "Köpt"
+        "purchased": "Köpt",
+        "are-you-sure-you-wish-to-delete-item-multiple-lists": "Vill du ta bort <b>{name}</b> från denna listan eller alla listor?",
+        "my-lists": "Mina Listor",
+        "this-list": "Denna listan",
+        "all-lists": "Alla listor",
+        "no-lists-yet": "Inga listor än",
+        "create-list": "Skapa lista",
+        "public": "Publik",
+        "delete-list-confirmation": "Är du säker på att du vill ta bort denna listan? Artiklar som inte hör samman med en annan lista kommer också att tas bort.",
+        "added-by-somebody-else": "Tillagd av <span class=\"text-secondary-700-200-token font-bold\">någon annan</span>",
+        "item-was-removed-from-list": "{name} togs bort från denna listan"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
