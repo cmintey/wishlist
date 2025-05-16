@@ -95,10 +95,12 @@ export const listItemUpdateSchema = z.object({
 });
 
 export const listItemClaimSchema = z.object({
+    quantity: z.number(),
     claimedById: z.string().nullish(),
     publicClaimedById: z.string().nullish()
 });
 
 export const listItemClaimUpdateSchema = z.object({
-    purchased: z.boolean().nullish()
+    purchased: z.boolean().nullish(),
+    quantity: z.number().optional()
 });

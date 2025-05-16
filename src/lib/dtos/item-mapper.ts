@@ -60,6 +60,9 @@ export const toItemOnListDTO = (item: FullItem, listId: string) => {
         get claimedQuantity(): number {
             return this.claims.map(({ quantity }) => quantity).reduce((a, b) => a + b, 0);
         },
+        get remainingQuantity(): number {
+            return this.quantity - this.claimedQuantity;
+        },
         get isClaimable(): boolean {
             return this.quantity > this.claimedQuantity;
         }

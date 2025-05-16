@@ -10,6 +10,8 @@
     import Image from "../Image.svelte";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/i18n";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/state";
 
     const drawerStore = getDrawerStore();
     const item: ItemOnListDTO = $drawerStore.meta.item;
@@ -25,6 +27,7 @@
     const defaultImage: Snippet<[MessageFormatter, ClassValue]> = $drawerStore.meta.defaultImage;
 
     const onEdit = () => {
+        goto(page.url.pathname, { replaceState: true, noScroll: true });
         drawerStore.close();
         handleEdit();
     };
@@ -40,15 +43,18 @@
     }
 </script>
 
-<div class="flex max-h-[80dvh] flex-col space-y-2 p-4 pb-4">
-    <div class="grid grid-cols-[1fr_auto] justify-between gap-2">
+<div class="flex max-h-[80dvh] flex-col gap-2 p-4 pb-4">
+    <div class="grid grid-cols-[1fr_auto] justify-between gap-2 pb-2">
         <span class="text-wrap break-words text-xl font-bold md:text-2xl">
             {item.name}
         </span>
         <button
             class="variant-ghost-surface btn btn-icon"
             aria-label={$t("a11y.close")}
-            onclick={() => drawerStore.close()}
+            onclick={() => {
+                goto(page.url.pathname, { replaceState: true, noScroll: true });
+                drawerStore.close();
+            }}
         >
             <iconify-icon icon="ion:close"></iconify-icon>
         </button>
@@ -61,7 +67,7 @@
     </div>
 
     {#if item.url}
-        <a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">View Item</a>
+        <a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">{$t("wishes.view-item")}</a>
     {/if}
 
     {#if item.price || item.itemPrice}
@@ -109,20 +115,21 @@
     <div class="flex flex-row justify-between pb-4">
         <ClaimButtons
             {item}
+            onClaim={handleClaim}
             {onPublicList}
+            onPurchase={handlePurchased}
+            onUnclaim={() => handleClaim(true)}
             {showName}
             {user}
-            on:claim={() => handleClaim()}
-            on:unclaim={() => handleClaim(true)}
-            on:purchase={(event) => handlePurchased(event.detail.purchased)}
         />
+
         <ManageButtons
             {item}
+            onApprove={() => handleApproval(true)}
+            onDelete={handleDelete}
+            onDeny={() => handleApproval(false)}
+            {onEdit}
             {user}
-            on:approve={() => handleApproval(true)}
-            on:deny={() => handleApproval(false)}
-            on:delete={handleDelete}
-            on:edit={onEdit}
         />
     </div>
 </div>

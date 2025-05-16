@@ -37,22 +37,24 @@
         </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
-            class="variant-ghost-primary btn btn-sm md:btn"
+            class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
+            aria-label={$t("wishes.edit")}
             onclick={(e) => {
                 e.stopPropagation();
                 props.onEdit?.();
             }}
         >
-            {$t("wishes.edit")}
+            <span><iconify-icon icon="ion:edit"></iconify-icon></span>
         </button>
         <button
-            class="variant-filled-error btn btn-sm md:btn"
+            class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
+            aria-label={$t("wishes.delete")}
             onclick={(e) => {
                 e.stopPropagation();
                 props.onDelete?.();
             }}
         >
-            {$t("wishes.delete")}
+            <span><iconify-icon icon="ion:trash"></iconify-icon></span>
         </button>
     {/if}
 </div>

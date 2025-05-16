@@ -38,6 +38,7 @@ export interface ItemOnListDTO extends Item, ListItem {
     user: MinimalUser;
     listCount: number;
     readonly claimedQuantity: number;
+    readonly remainingQuantity: number;
     readonly isClaimable: boolean;
 }
 

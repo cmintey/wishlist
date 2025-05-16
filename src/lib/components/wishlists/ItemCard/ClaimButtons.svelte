@@ -33,22 +33,25 @@
             class="variant-ghost-secondary btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
-                dispatch("unclaim");
+                onUnclaim?.();
             }}
         >
-            <!-- {$t("wishes.unclaim")} -->
-            Update claim
+            {item.quantity === 1 && userClaim.quantity === 1 ? $t("wishes.unclaim") : $t("wishes.update-claim")}
         </button>
-        <label class="checkbox-label text-sm md:text-base">
-            <input
-                class="checkbox"
-                onchange={(event) => dispatch("purchase", { purchased: event.currentTarget?.checked })}
-                onclick={(e) => e.stopPropagation()}
-                type="checkbox"
-                bind:checked={userClaim.purchased}
-            />
-            <span>{$t("wishes.purchased")}</span>
-        </label>
+        <button
+            class={[
+                "btn btn-icon btn-icon-sm md:btn-icon-base",
+                userClaim.purchased && "variant-soft-secondary",
+                !userClaim.purchased && "variant-ringed-secondary"
+            ]}
+            aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
+            onclick={(e) => {
+                e.stopPropagation();
+                onPurchase?.(!userClaim.purchased);
+            }}
+        >
+            <span><iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon></span>
+        </button>
     </div>
 {:else if item.isClaimable}
     <div class="flex flex-row items-center space-x-2 md:space-x-4">
@@ -56,7 +59,7 @@
             class="variant-filled-secondary btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
-                dispatch("claim");
+                onClaim?.();
             }}
         >
             {$t("wishes.claim")}
@@ -66,61 +69,11 @@
     {@const { claimedBy, publicClaimedBy } = item.claims[0]}
     <span>
         {$t("wishes.claimed-by", {
-            values: { name: claimedBy ? claimedBy.name : publicClaimedBy.name || "Anonymous" } // TODO translate
+            values: { name: claimedBy ? claimedBy.name : publicClaimedBy.name || $t("wishes.anonymous") }
         })}
     </span>
 {:else if item.claims.length > 1}
-    <span>Claimed by multiple users</span>
+    <span>{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span>{$t("wishes.claimed")}</span>
 {/if}
-
-<!-- {:else if item.claims.length > 0}
-    {@const claim = item.claims[0]}
-    {#if !onPublicList && claim.claimedBy?.id === user?.id}
-        <div class="flex flex-row space-x-2 md:space-x-4">
-            <button
-                class="variant-ghost-secondary btn btn-sm md:btn"
-                onclick={(e) => {
-                    e.stopPropagation();
-                    onUnclaim?.();
-                }}
-            >
-                {$t("wishes.unclaim")}
-            </button>
-            <button
-                class={[
-                    "btn btn-icon btn-icon-sm md:btn-icon-base",
-                    claim.purchased && "variant-soft-secondary",
-                    !claim.purchased && "variant-ringed-secondary"
-                ]}
-                aria-label={claim.purchased ? $t("wishes.purchased") : $t("wishes.purchase")}
-                onclick={(e) => {
-                    e.stopPropagation();
-                    onPurchase?.(!claim.purchased);
-                    // claim.purchased = !claim.purchased;
-                }}
-            >
-                <span><iconify-icon icon={claim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon></span>
-            </button>
-        </div>
-    {:else if shouldShowName(claim)}
-        <span>
-            {$t("wishes.claimed-by", {
-                values: { name: claim.publicClaimedBy ? claim.publicClaimedBy.name : claim.claimedBy.name }
-            })}
-        </span>
-    {:else}
-        <span>{$t("wishes.claimed")}</span>
-    {/if}
-{:else}
-    <button
-        class="variant-filled-secondary btn btn-sm md:btn"
-        onclick={(e) => {
-            e.stopPropagation();
-            onClaim?.();
-        }}
-    >
-        {$t("wishes.claim")}
-    </button>
-{/if} -->

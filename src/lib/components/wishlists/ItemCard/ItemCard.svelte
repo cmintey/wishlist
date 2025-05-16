@@ -29,6 +29,7 @@
     import Image from "$lib/components/Image.svelte";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/i18n";
+    import { errorToast } from "$lib/components/toasts";
 
     interface Props {
         item: ItemOnListDTO;
@@ -56,7 +57,13 @@
     const toastStore = getToastStore();
     const drawerStore = getDrawerStore();
 
-    let imageUrl: string | undefined = $derived.by(() => {
+    $effect(() => {
+        if (page.url.searchParams.get("item-id") === item.id.toString()) {
+            openDrawer();
+        }
+    });
+
+    const imageUrl: string | undefined = $derived.by(() => {
         if (item.imageUrl) {
             try {
                 new URL(item.imageUrl);
@@ -67,18 +74,11 @@
         }
     });
 
+    const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
+
     const itemAPI = $derived(new ItemAPI(item.id));
     const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
     const claimAPI = $derived(new ClaimAPI(item.claims[0]?.claimId));
-
-    const triggerErrorToast = () => {
-        toastStore.trigger({
-            message: $t("general.oops"),
-            background: "variant-filled-warning",
-            autohide: true,
-            timeout: 5000
-        });
-    };
 
     const itemNameShort = item.name.length > 42 ? item.name.substring(0, 42) + "…" : item.name;
     const confirmDeleteModal: ModalSettings = {
@@ -108,7 +108,7 @@
                     });
                     drawerStore.close();
                 } else {
-                    triggerErrorToast();
+                    errorToast(toastStore);
                 }
             } else if (r === DeleteConfirmationResult.REMOVE) {
                 const resp = await listItemAPI.delete();
@@ -123,7 +123,7 @@
                     });
                     drawerStore.close();
                 } else {
-                    triggerErrorToast();
+                    errorToast(toastStore);
                 }
             }
         }
@@ -145,7 +145,7 @@
                     });
                     drawerStore.close();
                 } else {
-                    triggerErrorToast();
+                    errorToast(toastStore);
                 }
             }
         },
@@ -159,45 +159,62 @@
         goto(`/items/${item.id}/edit?redirectTo=${page.url.pathname}`);
     };
 
-    const handleClaim = async (unclaim = false) => {
-        if (user?.id) {
-            const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(user?.id));
+    const doClaim = async (userId: string, quantity = 1, unclaim = false) => {
+        // TODO update API to allow claiming multiple
+        const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(userId, quantity));
 
-            if (resp.ok) {
-                toastStore.trigger({
-                    message: $t("wishes.claimed-item", { values: { claimed: !unclaim } }),
-                    autohide: true,
-                    timeout: 5000
-                });
-            } else {
-                triggerErrorToast();
-            }
-        } else {
-            modalStore.trigger({
-                type: "component",
-                component: "createSystemUser",
-                async response(data: { id?: string }) {
-                    if (unclaim) {
-                        return;
-                    }
-                    if (data.id) {
-                        const resp = await listItemAPI.claimPublic(data.id);
-
-                        if (resp.ok) {
-                            toastStore.trigger({
-                                message: $t("wishes.claimed-item", { values: { claimed: true } }),
-                                autohide: true,
-                                timeout: 5000
-                            });
-                        } else {
-                            triggerErrorToast();
-                        }
-                    }
-                },
-                buttonTextCancel: $t("general.cancel")
+        if (resp.ok) {
+            toastStore.trigger({
+                message: $t("wishes.claimed-item", { values: { claimed: !unclaim } }),
+                autohide: true,
+                timeout: 5000
             });
+        } else {
+            errorToast(toastStore);
         }
-        drawerStore.close();
+    };
+
+    const handleClaim = async () => {
+        if (item.remainingQuantity === 1 && user?.id) {
+            await doClaim(user.id);
+            drawerStore.close();
+            return;
+        }
+        modalStore.trigger({
+            type: "component",
+            component: "claimItemModal",
+            meta: {
+                item,
+                userId: user?.id,
+                claimId: undefined
+            },
+            async response(r: boolean) {
+                if (r) drawerStore.close();
+            }
+        });
+    };
+
+    const handleUnclaim = async () => {
+        if (!(user?.id && userClaim)) {
+            return;
+        }
+        if (item.quantity === 1 && userClaim.quantity === 1) {
+            await doClaim(user.id, 1, true);
+            drawerStore.close();
+            return;
+        }
+        modalStore.trigger({
+            type: "component",
+            component: "claimItemModal",
+            meta: {
+                item,
+                userId: user.id,
+                claimId: userClaim.claimId
+            },
+            async response(r: boolean) {
+                if (r) drawerStore.close();
+            }
+        });
     };
 
     const handlePurchased = async (purchased: boolean) => {
@@ -229,9 +246,16 @@
             defaultImage
         }
     });
+
+    function launchDrawer() {
+        goto(`?item-id=${item.id}`, { replaceState: true, noScroll: true });
+    }
+    function openDrawer() {
+        drawerStore.open(drawerSettings);
+    }
 </script>
 
-{#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "md:w-40"])}
+{#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
     <div
         class={[
             "flex-none",
@@ -253,10 +277,10 @@
     class:card-hover={!reorderActions}
     class:variant-ghost-warning={!item.approved}
     onclick={() => {
-        if (!reorderActions) drawerStore.open(drawerSettings);
+        if (!reorderActions) launchDrawer();
     }}
     onkeyup={(e) => {
-        if (!reorderActions && e.key === "Enter") drawerStore.open(drawerSettings);
+        if (!reorderActions && e.key === "Enter") launchDrawer();
     }}
     role={reorderActions ? "none" : "button"}
 >
@@ -282,7 +306,7 @@
 
     <div class="flex flex-row space-x-4 p-4">
         <Image
-            class="aspect-square w-24 rounded object-contain md:w-40"
+            class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
             alt={item.name}
             referrerpolicy="no-referrer"
             src={imageUrl}
@@ -348,7 +372,7 @@
                 onClaim={handleClaim}
                 {onPublicList}
                 onPurchase={handlePurchased}
-                onUnclaim={() => handleClaim(true)}
+                onUnclaim={handleUnclaim}
                 showName={showClaimedName}
                 {user}
             />
