@@ -37,6 +37,8 @@
         "build-date": "Build Date: {buildDate}",
         "claims": "Claims",
         "claims-name-tooltip": "Show the name of the user who claimed the item on the item card.",
+        "claims-require-email": "Claims Require Email",
+        "claims-require-email-tooltip": "When someone claims a wish, should an email be required? ",
         "clear-lists": "Clear {groupSpecific, select, true {} other {All}} {claimedOnly, select, true {Claimed Items} other {Lists}}",
         "clear-lists-confirmation": "Are you sure you wish to clear {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}? <b>This action is irreversible!</b>",
         "credentials": "Credentials",
