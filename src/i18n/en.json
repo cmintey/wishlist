@@ -381,6 +381,7 @@
         "purchase": "Purchase",
         "purchased": "Purchased",
         "purchased-toast": "Marked item as {purchased, select, true {purchased} other {not purchased}}",
+        "quantity": "Quantity",
         "quantity-claimed": "{quantity} claimed",
         "quantity-desired": "{quantity} desired",
         "reorder": "Reorder",
