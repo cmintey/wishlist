@@ -29,6 +29,10 @@ export class ClaimAPI {
         return await this._makeRequest("PATCH", { purchased: false });
     };
 
+    updateQuantity = async (quantity: number) => {
+        return await this._makeRequest("PATCH", { quantity });
+    };
+
     unclaim = async () => {
         return await this._makeRequest("DELETE");
     };

@@ -70,11 +70,11 @@ export class ListItemAPI {
         return await this._makeRequest("DELETE");
     };
 
-    claim = async (claimedById: string) => {
-        return await this._makeRequest("PUT", "/claims", { claimedById });
+    claim = async (claimedById: string, quantity: number) => {
+        return await this._makeRequest("PUT", "/claims", { claimedById, quantity });
     };
 
-    claimPublic = async (publicClaimedById: string) => {
-        return await this._makeRequest("PUT", "/claims", { publicClaimedById });
+    claimPublic = async (publicClaimedById: string, quantity: number) => {
+        return await this._makeRequest("PUT", "/claims", { publicClaimedById, quantity });
     };
 }

@@ -120,9 +120,11 @@ export const load = (async ({ url }) => {
                     item: {
                         select: {
                             id: true,
+                            quantity: true,
                             claims: {
                                 select: {
-                                    id: true
+                                    id: true,
+                                    quantity: true
                                 }
                             }
                         }
@@ -167,7 +169,12 @@ export const load = (async ({ url }) => {
         otherLists: otherLists
             .filter((list) => userIdFilter.length === 0 || userIdFilter.includes(list.owner.id))
             .map((list) => {
-                const claimedCount = list.items.filter((it) => it.approved && it.item.claims.length > 0).length;
+                const claimedCount = list.items
+                    .filter((it) => it.approved)
+                    .filter(({ item }) => {
+                        const claimedCount = item.claims.map(({ quantity }) => quantity).reduce((a, b) => a + b, 0);
+                        return claimedCount === item.quantity;
+                    }).length;
                 const itemCount = list.items.filter((it) => it.approved).length;
                 const items = list.items.map((it) => ({ id: it.item.id }));
                 return {

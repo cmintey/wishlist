@@ -11,6 +11,7 @@ import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { getAvailableLists } from "$lib/server/list";
 import { requireLogin } from "$lib/server/auth";
+import { extractFormData, getItemFormSchema } from "$lib/server/validations";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -77,29 +78,15 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
     default: async ({ request, params, url: requestUrl }) => {
         const user = requireLogin();
-        const $t = await getFormatter();
 
-        const form = await request.formData();
-        const url = form.get("url") as string;
-        const imageUrl = form.get("image_url") as string;
-        const image = form.get("image") as File;
-        const name = form.get("name") as string;
-        const price = form.get("price") as string;
-        const currency = form.get("currency") as string;
-        const note = form.get("note") as string;
-        const listIds = form.getAll("list") as string[];
+        const itemFormSchema = await getItemFormSchema();
+        const form = await request.formData().then(extractFormData).then(itemFormSchema.safeParse);
 
-        // check for empty values
-        if (!name || listIds.length === 0) {
-            const errors: Record<string, string> = {};
-            if (!name) {
-                errors["name"] = $t("errors.item-name-required");
-            }
-            if (listIds.length === 0) {
-                errors["list"] = $t("errors.an-item-must-be-added-to-at-least-one-list");
-            }
-            return fail(400, { errors });
+        if (!form.success) {
+            form.error.format();
+            return fail(400, { errors: form.error.format() });
         }
+        const { url, imageUrl, image, name, price, currency, quantity, note, lists } = form.data;
 
         const filename = await createImage(user.username, image);
 
@@ -143,7 +130,7 @@ export const actions: Actions = {
             },
             where: {
                 id: {
-                    in: listIds
+                    in: lists
                 }
             }
         });
@@ -182,6 +169,7 @@ export const actions: Actions = {
                 imageUrl: filename || imageUrl,
                 note,
                 itemPriceId,
+                quantity,
                 lists: {
                     create: listItemsToCreate,
                     deleteMany: {

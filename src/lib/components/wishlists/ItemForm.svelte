@@ -136,13 +136,13 @@
     });
 </script>
 
-<div class="grid grid-cols-1 gap-4 md:grid-cols-6">
-    <label class="col-span-1 md:col-span-6" for="url">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-7">
+    <label class="col-span-1 md:col-span-full" for="url">
         <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row space-x-4">
             <div class="input-group grid-cols-[auto_1fr_auto]">
                 <div class="input-group-shim">
-                    <iconify-icon icon="ion:bag-handle"></iconify-icon>
+                    <iconify-icon icon="ion:link"></iconify-icon>
                 </div>
                 <input
                     id="url"
@@ -186,34 +186,55 @@
         </div>
     </label>
 
-    <label class="col-span-1 row-start-2 md:col-span-4" for="name">
+    <label class="col-span-1 md:col-span-full xl:col-span-4" for="name">
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
-                <iconify-icon icon="ion:gift"></iconify-icon>
+                <iconify-icon icon="ion:bag-handle"></iconify-icon>
             </div>
             <input
                 id="name"
                 name="name"
                 class="input"
-                class:input-error={form?.errors?.["name"]}
+                class:input-error={form?.errors?.name?._errors}
                 autocomplete="off"
                 required
                 type="text"
                 bind:value={productData.name}
             />
         </div>
-        {#if form?.errors?.["name"]}
-            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form?.errors?.["name"]}</p>
+        {#if form?.errors?.name?._errors}
+            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form.errors.name._errors[0]}</p>
         {/if}
     </label>
 
-    <label class="col-span-1 row-start-3 md:col-span-2 md:row-start-2" for="price">
+    <label class="col-span-1 md:col-span-5 xl:col-span-2" for="price">
         <span>{$t("wishes.price")}</span>
         <CurrencyInput id="price" name="price" currency={userCurrency} bind:value={price} />
     </label>
 
-    <label class="col-span-1 md:col-span-2" for="image">
+    <label class="col-span-1 md:col-span-2 xl:col-span-1" for="quantity">
+        <span>{$t("wishes.quantity")}</span>
+        <div class="input-group grid-cols-[auto_1fr]">
+            <div class="input-group-shim">
+                <iconify-icon icon="ion:gift"></iconify-icon>
+            </div>
+            <input
+                id="quantity"
+                name="quantity"
+                class="input"
+                autocomplete="off"
+                defaultValue="1"
+                min="1"
+                placeholder="1"
+                step="1"
+                type="number"
+                bind:value={item.quantity}
+            />
+        </div>
+    </label>
+
+    <label class="col-span-1 md:col-span-3" for="image">
         <span>{$t("wishes.upload-image")}</span>
         <div
             class="bg-surface-200-700-token border-surface-400-500-token grid grid-cols-[auto_1fr] items-center gap-2 border-token rounded-token"
@@ -232,15 +253,15 @@
         </div>
     </label>
 
-    <label class="col-span-1 md:col-span-4" for="image_url">
+    <label class="col-span-1 md:col-span-4" for="imageUrl">
         <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
                 <iconify-icon icon="ion:image"></iconify-icon>
             </div>
             <input
-                id="image_url"
-                name="image_url"
+                id="imageUrl"
+                name="imageUrl"
                 class="input"
                 autocomplete="off"
                 type="text"
@@ -249,7 +270,7 @@
         </div>
     </label>
 
-    <label class="col-span-1 md:col-span-6" for="note">
+    <label class="col-span-full" for="note">
         <span>{$t("wishes.notes")}</span>
         <textarea
             id="note"
@@ -261,17 +282,17 @@
         ></textarea>
     </label>
 
-    <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-6" class:hidden={lists.length <= 1}>
-        <legend>Lists</legend>
+    <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
+        <legend>{$t("wishes.lists")}</legend>
         <div
             class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
-            class:input-error={form?.errors?.["list"]}
+            class:input-error={form?.errors?.lists?._errors}
         >
             {#each lists as list (list.id)}
                 <label class="flex items-center space-x-2" for={list.id}>
                     <input
                         id={list.id}
-                        name="list"
+                        name="lists"
                         class="checkbox"
                         checked={listsHavingItem[list.id] !== undefined}
                         disabled={listsHavingItem[list.id] === false}
@@ -287,8 +308,8 @@
                 </label>
             {/each}
         </div>
-        {#if form?.errors?.["list"]}
-            <p class="unstyled text-error-500-400-token text-xs">{form?.errors?.["list"]}</p>
+        {#if form?.errors?.lists?._errors}
+            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists._errors[0]}</p>
         {/if}
     </fieldset>
 

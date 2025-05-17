@@ -1,6 +1,5 @@
 <script lang="ts">
     import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
-    import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
     import { t } from "svelte-i18n";
 
@@ -8,10 +7,10 @@
         url: string;
         btnStyle?: string;
         children?: import("svelte").Snippet;
+        onCopied?: VoidFunction;
     }
 
-    let { url, btnStyle = "btn-icon", children }: Props = $props();
-    const dispatch = createEventDispatcher();
+    let { url, btnStyle = "btn-icon", children, onCopied }: Props = $props();
 
     let copiedVisible = $state(false);
 
@@ -33,7 +32,7 @@
             class="btn {btnStyle}"
             aria-label={$t("general.copy-to-clipboard")}
             onclick={() => {
-                dispatch("copied");
+                onCopied?.();
                 copiedVisible = true;
                 setTimeout(() => (copiedVisible = false), 1000);
             }}

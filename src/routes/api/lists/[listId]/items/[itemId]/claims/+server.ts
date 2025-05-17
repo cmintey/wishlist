@@ -22,6 +22,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
 
     const list = await client.list.findUnique({
         select: {
+            id: true,
             public: true
         },
         where: {
@@ -33,10 +34,6 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         error(404, $t("errors.list-not-found"));
     }
 
-    if (isNaN(parseInt(params.itemId))) {
-        error(400, $t("errors.item-id-must-be-a-number"));
-    }
-
     if (updateData.data.claimedById !== undefined && updateData.data.claimedById !== null) {
         if (!locals.user) error(401, $t("errors.unauthenticated"));
     }
@@ -44,18 +41,57 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         error(404, $t("errors.list-not-found"));
     }
 
+    if (isNaN(parseInt(params.itemId))) {
+        error(400, $t("errors.item-id-must-be-a-number"));
+    }
+
+    const item = await client.item.findUnique({
+        select: {
+            id: true,
+            quantity: true,
+            claims: {
+                select: {
+                    quantity: true
+                }
+            }
+        },
+        where: {
+            id: parseInt(params.itemId),
+            lists: {
+                some: {
+                    listId: list.id
+                }
+            }
+        }
+    });
+
+    if (!item) {
+        error(404, $t("errors.item-not-found-on-list"));
+    }
+
+    const claimedQuantity = item.claims.reduce((a, { quantity }) => a + quantity, 0);
+    if (claimedQuantity + updateData.data.quantity > item.quantity) {
+        error(
+            422,
+            $t("errors.could-not-claim-quantity-items", {
+                values: { quantity: updateData.data.quantity, availableQuantity: item.quantity - claimedQuantity }
+            })
+        );
+    }
+
     try {
         const data: Prisma.ItemClaimCreateInput = {
             item: {
                 connect: {
-                    id: parseInt(params.itemId)
+                    id: item.id
                 }
             },
             list: {
                 connect: {
-                    id: params.listId
+                    id: list.id
                 }
-            }
+            },
+            quantity: updateData.data.quantity
         };
         if (updateData.data.claimedById) {
             data.claimedBy = {
@@ -74,17 +110,17 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         }
 
         await client.itemClaim.create({ data });
-        const item = await client.item.findUnique({
+        const updatedItem = await client.item.findUnique({
             where: {
-                id: parseInt(params.itemId)
+                id: item.id
             },
             include: getItemInclusions()
         });
-        if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
+        if (updatedItem) itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
 
         return new Response(null, { status: 200 });
     } catch (err) {
-        logger.error({ err }, "Error patching list item");
+        logger.error({ err }, "Error claiming item");
         error(404, $t("errors.item-not-found"));
     }
 };
