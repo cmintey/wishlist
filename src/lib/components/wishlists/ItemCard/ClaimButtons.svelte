@@ -49,6 +49,7 @@
                 e.stopPropagation();
                 onPurchase?.(!userClaim.purchased);
             }}
+            title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
         >
             <span><iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon></span>
         </button>

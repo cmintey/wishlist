@@ -225,6 +225,7 @@
                 class="input"
                 autocomplete="off"
                 defaultValue="1"
+                max="999"
                 min="1"
                 placeholder="1"
                 step="1"

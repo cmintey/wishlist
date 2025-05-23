@@ -43,6 +43,7 @@
                 e.stopPropagation();
                 props.onEdit?.();
             }}
+            title={$t("wishes.edit")}
         >
             <span><iconify-icon icon="ion:edit"></iconify-icon></span>
         </button>
@@ -53,6 +54,7 @@
                 e.stopPropagation();
                 props.onDelete?.();
             }}
+            title={$t("wishes.delete")}
         >
             <span><iconify-icon icon="ion:trash"></iconify-icon></span>
         </button>

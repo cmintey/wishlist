@@ -20,7 +20,7 @@
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} as manager",
         "toggle-password-visibility": "toggle password visibility",
         "two-people-looking-in-an-empty-box": "Two people looking in an empty box",
-        "unpurchase": "unpurchase",
+        "unpurchase": "Mark item as not purchased",
         "upload-profile-image": "upload profile image",
         "wishlist-logo": "Wishlist Logo"
     },
@@ -378,7 +378,7 @@
         "price-low-to-high": "Price: Low to High",
         "public": "Public",
         "public-url": "Public URL",
-        "purchase": "Purchase",
+        "purchase": "Mark item as purchased",
         "purchased": "Purchased",
         "purchased-toast": "Marked item as {purchased, select, true {purchased} other {not purchased}}",
         "quantity": "Quantity",

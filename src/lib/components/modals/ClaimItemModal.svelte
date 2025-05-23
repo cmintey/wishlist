@@ -31,6 +31,11 @@
     let name: string | undefined = $state();
     let quantity = $state(claim?.quantity || 1);
 
+    async function onUnclaim() {
+        quantity = 0;
+        return onFormSubmit();
+    }
+
     async function onFormSubmit() {
         if (quantity > item.remainingQuantity + (claim?.quantity || 0)) {
             errorToast(
@@ -164,10 +169,11 @@
         </label>
     {/if}
 
-    <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
-            {parent.buttonTextCancel}
-        </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("wishes.claim")}</button>
+    <footer class="flex justify-between gap-2">
+        <button class="variant-filled-error btn" onclick={onUnclaim}>{$t("wishes.unclaim")}</button>
+        <div class="flex gap-2">
+            <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>{$t("general.cancel")}</button>
+            <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("wishes.claim")}</button>
+        </div>
     </footer>
 </div>
