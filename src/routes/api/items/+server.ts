@@ -29,13 +29,20 @@ export const DELETE: RequestHandler = async ({ url }) => {
         }
     }
 
-    const items = await client.item.findMany({
+    let items = await client.item.findMany({
         select: {
             id: true,
             imageUrl: true,
+            quantity: true,
             lists: {
                 select: {
                     listId: true
+                }
+            },
+            claims: {
+                select: {
+                    id: true,
+                    quantity: true
                 }
             }
         },
@@ -46,14 +53,25 @@ export const DELETE: RequestHandler = async ({ url }) => {
                         groupId: groupId || undefined
                     }
                 }
-            },
-            claims: {
-                some: claimed && Boolean(claimed) ? {} : undefined
             }
         }
     });
 
-    const listItems = await client.listItem.findMany({
+    const partiallyClaimedItems: typeof items = [];
+    if (claimed && Boolean(claimed)) {
+        const fullyClaimedItems: typeof items = [];
+        items.forEach((item) => {
+            const claimedQty = item.claims.reduce((accum, claim) => accum + claim.quantity, 0);
+            if (claimedQty < item.quantity) {
+                partiallyClaimedItems.push(item);
+            } else {
+                fullyClaimedItems.push(item);
+            }
+        });
+        items = fullyClaimedItems;
+    }
+
+    const fullyClaimedListItems = await client.listItem.findMany({
         select: {
             id: true,
             itemId: true,
@@ -74,13 +92,13 @@ export const DELETE: RequestHandler = async ({ url }) => {
             await tx.listItem.deleteMany({
                 where: {
                     id: {
-                        in: listItems.map(({ id }) => id)
+                        in: fullyClaimedListItems.map(({ id }) => id)
                     }
                 }
             });
 
             await Promise.all(
-                listItems.map((li) =>
+                fullyClaimedListItems.map((li) =>
                     tx.itemClaim.deleteMany({
                         where: {
                             itemId: li.itemId,
@@ -117,6 +135,38 @@ export const DELETE: RequestHandler = async ({ url }) => {
                 if (item.imageUrl) tryDeleteImage(item.imageUrl);
             });
         });
+
+        if (partiallyClaimedItems.length > 0) {
+            const itemsToUpdate: { id: number; quantity: number }[] = [];
+            let claimsToDelete: string[] = [];
+            partiallyClaimedItems.forEach((item) => {
+                const claimedQty = item.claims.reduce((accum, claim) => accum + claim.quantity, 0);
+                itemsToUpdate.push({ id: item.id, quantity: item.quantity - claimedQty });
+                claimsToDelete = [...claimsToDelete, ...item.claims.map(({ id }) => id)];
+            });
+            await client.$transaction(async (tx) => {
+                await tx.itemClaim.deleteMany({
+                    where: {
+                        id: {
+                            in: claimsToDelete
+                        }
+                    }
+                });
+                await Promise.all(
+                    itemsToUpdate.map(({ id, quantity }) =>
+                        tx.item.update({
+                            data: {
+                                quantity
+                            },
+                            where: {
+                                id
+                            }
+                        })
+                    )
+                );
+            });
+        }
+
         return new Response(null, { status: 200 });
     } catch (err) {
         logger.error({ err }, "Unable to delete items");

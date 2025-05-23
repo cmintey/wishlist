@@ -19,7 +19,7 @@
     import PullToRefresh from "pulltorefreshjs";
     import { navItems } from "$lib/components/navigation/navigation";
     import Drawer from "$lib/components/Drawer.svelte";
-    import CreateSystemUser from "$lib/components/modals/CreateSystemUser.svelte";
+    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
     import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
 
     interface Props {
@@ -101,8 +101,8 @@
         inviteUser: {
             ref: InviteUserModal
         },
-        createSystemUser: {
-            ref: CreateSystemUser
+        claimItemModal: {
+            ref: ClaimItemModal
         },
         deleteItem: {
             ref: DeleteItemModal
