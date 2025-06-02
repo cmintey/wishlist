@@ -14,6 +14,7 @@ enum ConfigKey {
     SMTP_FROM = "smtp.from",
     SMTP_FROM_NAME = "smtp.fromName",
     CLAIMS_SHOW_NAME = "claims.showName",
+    CLAIMS_REQUIRE_EMAIL = "claims.requireEmail",
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
     SECURITY_DISABLE_PASSWORD_LOGIN = "security.disablePasswordLogin",
@@ -108,7 +109,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
         },
         smtp: smtpConfig,
         claims: {
-            showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true"
+            showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true",
+            requireEmail: configMap[ConfigKey.CLAIMS_REQUIRE_EMAIL] === "true"
         },
         listMode: (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard",
         security: {
@@ -150,7 +152,8 @@ const createDefaultConfig = async (): Promise<void> => {
             enable: false
         },
         claims: {
-            showName: true
+            showName: true,
+            requireEmail: true
         },
         listMode: "standard",
         security: {
@@ -194,6 +197,7 @@ export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => 
     configMap[ConfigKey.SUGGESTIONS_ENABLE] = config.suggestions?.enable.toString();
     configMap[ConfigKey.SUGGESTIONS_METHOD] = config.suggestions?.method;
     configMap[ConfigKey.CLAIMS_SHOW_NAME] = config.claims?.showName.toString();
+    configMap[ConfigKey.CLAIMS_REQUIRE_EMAIL] = config.claims?.requireEmail.toString();
     configMap[ConfigKey.LIST_MODE] = config.listMode;
     configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] = config.security?.passwordStrength.toString();
     configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] = config.security?.disablePasswordLogin.toString();
