@@ -2,7 +2,10 @@ import sharp from "sharp";
 import { unlink } from "fs/promises";
 import { logger } from "$lib/server/logger";
 
-export const createImage = async (username: string, image: File): Promise<string | null> => {
+export const createImage = async (username: string, image?: File): Promise<string | null> => {
+    if (!image) {
+        return null;
+    }
     let filename = null;
 
     const create_image = image.size > 0 && image.size <= 5000000;

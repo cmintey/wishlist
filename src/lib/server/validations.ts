@@ -95,10 +95,45 @@ export const listItemUpdateSchema = z.object({
 });
 
 export const listItemClaimSchema = z.object({
+    quantity: z.number(),
     claimedById: z.string().nullish(),
     publicClaimedById: z.string().nullish()
 });
 
 export const listItemClaimUpdateSchema = z.object({
-    purchased: z.boolean().nullish()
+    purchased: z.boolean().nullish(),
+    quantity: z.number().optional()
 });
+
+export const getItemFormSchema = async () => {
+    const $t = await getFormatter();
+
+    return z.object({
+        url: z.string().url().optional(),
+        name: z.string(),
+        price: z.string().optional(),
+        currency: z.string().optional(),
+        quantity: z.coerce.number().default(1),
+        imageUrl: z.string().optional(),
+        image: z.instanceof(File).optional(),
+        note: z.string().optional(),
+        lists: z
+            .union([
+                z.string(),
+                z.array(z.string()).nonempty({ message: $t("errors.an-item-must-be-added-to-at-least-one-list") })
+            ])
+            .transform((v) => (typeof v === "string" ? [v] : v))
+    });
+};
+
+export const extractFormData = (formData: FormData) => {
+    return [...formData.entries().filter(([_k, v]) => v.toString())].reduce<
+        Record<string, FormDataEntryValue | FormDataEntryValue[]>
+    >(
+        (data, [key, value]) => ({
+            ...data,
+            [key]: key in data ? (Array.isArray(data[key]) ? [...data[key], value] : [data[key], value]) : value
+        }),
+        {}
+    );
+};

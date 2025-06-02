@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import type { PartialUser } from "./ItemCard.svelte";
     import { t } from "svelte-i18n";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
@@ -7,11 +6,13 @@
     interface Props {
         item: ItemOnListDTO;
         user: PartialUser | undefined;
+        onApprove?: VoidFunction;
+        onDeny?: VoidFunction;
+        onDelete?: VoidFunction;
+        onEdit?: VoidFunction;
     }
 
-    let { item, user }: Props = $props();
-
-    const dispatch = createEventDispatcher();
+    let { item, user, ...props }: Props = $props();
 </script>
 
 <div class="flex flex-row space-x-2 md:space-x-4">
@@ -20,7 +21,7 @@
             class="variant-filled-success btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
-                dispatch("approve");
+                props.onApprove?.();
             }}
         >
             {$t("wishes.approve")}
@@ -29,29 +30,33 @@
             class="variant-filled-error btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
-                dispatch("deny");
+                props.onDeny?.();
             }}
         >
             {$t("wishes.deny")}
         </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
-            class="variant-ghost-primary btn btn-sm md:btn"
+            class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
+            aria-label={$t("wishes.edit")}
             onclick={(e) => {
                 e.stopPropagation();
-                dispatch("edit");
+                props.onEdit?.();
             }}
+            title={$t("wishes.edit")}
         >
-            {$t("wishes.edit")}
+            <span><iconify-icon icon="ion:edit"></iconify-icon></span>
         </button>
         <button
-            class="variant-filled-error btn btn-sm md:btn"
+            class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
+            aria-label={$t("wishes.delete")}
             onclick={(e) => {
                 e.stopPropagation();
-                dispatch("delete");
+                props.onDelete?.();
             }}
+            title={$t("wishes.delete")}
         >
-            {$t("wishes.delete")}
+            <span><iconify-icon icon="ion:trash"></iconify-icon></span>
         </button>
     {/if}
 </div>
