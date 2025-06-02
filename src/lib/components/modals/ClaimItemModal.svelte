@@ -30,6 +30,7 @@
     let username: string | undefined = $state();
     let name: string | undefined = $state();
     let quantity = $state(claim?.quantity || 1);
+    let error: string | undefined = $state();
 
     async function onUnclaim() {
         quantity = 0;
@@ -38,14 +39,10 @@
 
     async function onFormSubmit() {
         if (quantity > item.remainingQuantity + (claim?.quantity || 0)) {
-            errorToast(
-                toastStore,
-                $t("errors.could-not-claim-quantity-items", {
-                    values: { quantity, availableQuantity: item.remainingQuantity }
-                })
-            );
-            $modalStore[0].response?.(false);
-            return modalStore.close();
+            error = $t("errors.could-not-claim-quantity-items", {
+                values: { quantity, availableQuantity: item.remainingQuantity }
+            });
+            return;
         }
 
         if (userId) {
@@ -75,10 +72,10 @@
                 timeout: 5000
             });
             $modalStore[0].response?.(true);
+            return modalStore.close();
         } else {
             errorToast(toastStore);
         }
-        return modalStore.close();
     }
 
     async function handleUserClaim(userId: string) {
@@ -92,12 +89,10 @@
                 timeout: 5000
             });
             $modalStore[0].response?.(true);
+            return modalStore.close();
         } else {
             errorToast(toastStore);
-            $modalStore[0].response?.(false);
         }
-
-        return modalStore.close();
     }
 
     async function handlePublicClaim(username: string) {
@@ -105,8 +100,7 @@
         const userResp = await systemUsersAPI.create(username, name === "" ? $t("wishes.anonymous") : name);
         if (!userResp.ok) {
             errorToast(toastStore);
-            $modalStore[0].response?.(false);
-            return modalStore.close();
+            return;
         }
         const { publicUserId } = await userResp.json();
 
@@ -120,12 +114,10 @@
                 timeout: 5000
             });
             $modalStore[0].response?.(true);
+            return modalStore.close();
         } else {
-            $modalStore[0].response?.(false);
             errorToast(toastStore);
         }
-
-        return modalStore.close();
     }
 </script>
 
@@ -155,25 +147,49 @@
     {/if}
 
     {#if item.remainingQuantity > 1 || claim}
-        <label class="w-fit">
-            <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
-            <input
-                class="input"
-                max={item.remainingQuantity + (claim?.quantity || 0)}
-                min={claim ? 0 : 1}
-                required
-                step="1"
-                type="number"
-                bind:value={quantity}
-            />
-        </label>
+        <div class="flex flex-col gap-1">
+            <label class="w-fit">
+                <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
+                <input
+                    class={["input", error && "input-error"]}
+                    inputmode="numeric"
+                    max={item.remainingQuantity + (claim?.quantity || 0)}
+                    min={claim ? 0 : 1}
+                    required
+                    step="1"
+                    type="number"
+                    bind:value={quantity}
+                />
+            </label>
+            {#if error}
+                <span class="text-error-500-400-token text-sm">{error}</span>
+            {/if}
+            {#if claim}
+                <span class="text-sm text-surface-900/70 dark:text-surface-50/50">
+                    {$t("wishes.claimed-info-text", {
+                        values: { claimedQuantity: claim.quantity }
+                    })}
+                    {$t("wishes.additional-items-requested", {
+                        values: { remainingQuantity: item.remainingQuantity }
+                    })}
+                </span>
+            {/if}
+        </div>
     {/if}
 
-    <footer class="flex justify-between gap-2">
-        <button class="variant-filled-error btn" onclick={onUnclaim}>{$t("wishes.unclaim")}</button>
-        <div class="flex gap-2">
-            <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>{$t("general.cancel")}</button>
-            <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("wishes.claim")}</button>
+    <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
+        {#if claim}
+            <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim}>
+                {$t("wishes.unclaim")}
+            </button>
+        {/if}
+        <div class="flex flex-wrap gap-2">
+            <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose}>
+                {$t("general.cancel")}
+            </button>
+            <button class="btn btn-sm md:btn-base {parent.buttonPositive}" onclick={onFormSubmit}>
+                {$t("wishes.claim")}
+            </button>
         </div>
     </footer>
 </div>
