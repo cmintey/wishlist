@@ -56,7 +56,7 @@
         "wishlist-mode-registry": "Registro",
         "version": "Version: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "wishlist-mode": "Modo Wishlist",
-        "wishlist-mode-alert": "Hay otros usuarios en este grupo, usted no puede cambiar el modo hasta que remueva usuarios y quede al menos uno.",
+        "wishlist-mode-alert": "Hay otros {memberCount} usuarios y {listCount} listas en este grupo, usted no puede cambiar el modo hasta que elimine todos los usuarios y listas, y quede uno de cada.",
         "wishlist-mode-wishlist": "Wishlist",
         "wishlist-mode-display-text": "En modo Wishlist, usted puede tener multiples usuarios, listas y reclamar items de otros usuarios. En modo Registry, usted tiene una sola lista que puede publicar y compartir.",
         "password-reset-link": "Enlace de reestablecimiento de contraseña",
@@ -78,7 +78,19 @@
         "list-creation": "Configuración de Listas",
         "enable-default-list-creation-tooltip": "Habilita la creación de una lista cuando un nuevo usuario se une a un grupo. Los usuarios aún podrán crear listas por su cuenta.",
         "allow-public-lists": "Permitir Listas Públicas",
-        "allow-public-lists-tooltip": "Permite a los usuarios crear una lista pública. No tiene efecto si el grupo está en modo 'Registro'."
+        "allow-public-lists-tooltip": "Permite a los usuarios crear una lista pública. No tiene efecto si el grupo está en modo 'Registro'.",
+        "oidc-auto-register-tooltip": "Habilita la creación de nuevas cuentas para usuarios OAuth para el primer inicio de sesión.",
+        "password-strength-requirement-tooltip": "La fuerza mínima de la contraseña para un usuario.",
+        "suggestions-approval-required-tooltip": "El objeto requiere la aprobación del dueño de la lista. Si se aprueba, el dueño de la lista puede ver, modificar y eliminar el objeto.",
+        "suggestions-auto-approve-tooltip": "El objeto se añade automáticamente a la lista, pero el dueño de la misma puede ver, modificar y eliminar el objeto.",
+        "suggestions-surprise-me-tooltip": "El objeto se añade automáticamente a la lista sin conocimiento para el dueño de la misma.",
+        "suggestions-tooltip": "Permite a usuarios del mismo grupo sugerir objetos en listas de otros usuarios.",
+        "test-email": "Correo electrónico de prueba",
+        "test-email-sent-toast": "Correo electrónico de prueba enviado",
+        "wishlist-mode-registry-tooltip": "Un usuario con una lista pública. Usuarios de otros grupos pueden hacer sugerencias si están habilitadas, y usuarios anónimos pueden reclamar objetos.",
+        "wishlist-mode-wishlist-tooltip": "Múltiples usuarios y listas, con opción de reclamar y sugerir objetos. Las listas pueden hacerse públicas si el grupo lo permite.",
+        "oidc-auto-register": "Auto Registro",
+        "oidc-auto-redirect-tooltip": "Al habilitarlo, la página de inicio de sesión redirigirá automáticamente a la de tu Proveedor de Identidad. Para saltarlo, se puede añadir '?direct=1' a la URL."
     },
     "a11y": {
         "cancel-editing": "Cancelar edición",
@@ -107,7 +119,7 @@
         "name": "Nombre",
         "new-password": "Nueva Clave",
         "password": "Clave",
-        "sign-out": "Salir",
+        "sign-out": "Cerrar sesión",
         "sign-out-of-all-devices": "Salir en todos los dispositivos?",
         "your-password-was-reset": "Su clave fue reiniciada.",
         "email": "Correo",
@@ -125,7 +137,21 @@
         "self-service-password-reset-unavailable": "Servicio de autogestion para reinicio de claves no disponible.",
         "sign-in": "Ingresar",
         "update-password": "Actualizar Clave",
-        "username": "Usuario"
+        "username": "Usuario",
+        "account-is-not-linked-with-oauth": "Su cuenta no está vinculada a {providerName}. Para vincular su cuenta, cierre sesión y haga click en 'Iniciar sesión con {providerName}'.",
+        "authenticating": "Autenticando...",
+        "couldnt-retrieve-stored-oidc-state": "No se pudo obtener el estado OIDC almacenado",
+        "create-account": "Crear cuenta",
+        "email-is-not-verified-with-the-identity-provider": "El correo electrónico no está verificado con el Proveedor de Identidad",
+        "email-was-not-provided-by-the-identity-provider": "El Proveedor de Identidad no proporcionó el correo electrónico",
+        "invite-via": "Invitar mediante...",
+        "no-callback-url-supplied": "No se ha proporcionado una callback url",
+        "no-claims-found": "No hay reclamaciones",
+        "oidc-client-not-configured": "El cliente OIDC no está configurado",
+        "or": "o",
+        "your-account-is-currently-linked-with-oauth": "Su cuenta está actualmente vinculada con {providerName}",
+        "sign-in-with": "Iniciar sesión con {provider}",
+        "unlink-oauth": "Desvincular {providerName}"
     },
     "errors": {
         "asset-not-found": "Activos no encontrados",
@@ -179,7 +205,22 @@
         "username-not-specified": "Usuario no especificado",
         "list-not-found": "Lista no encontrada",
         "unable-to-update-list-settings": "No es posible actualizar la configuración",
-        "user-must-be-in-the-correct-group": "El usuario debe estar en el grupo correcto"
+        "user-must-be-in-the-correct-group": "El usuario debe estar en el grupo correcto",
+        "no-email-provided": "Falta introducir el correo electrónico",
+        "unable-to-create-list": "No se puede crear la lista",
+        "claim-was-not-found": "No se encuentra la reclamación",
+        "item-not-found-on-list": "No se encuentra el objeto en la lista",
+        "unable-to-unclaim-item": "No se puede reclamar el objeto",
+        "claimed-by-user-must-be-specified": "Se debe especificar el usuario de la reclamación",
+        "unable-to-delete-list": "Se encontró un error al eliminar la lista",
+        "cannot-unclaim-an-item-you-did-not-claim": "No se puede quitar una reclamación no realizada por usted",
+        "an-item-must-be-added-to-at-least-one-list": "El objeto debe estar añadido al menos a una lista",
+        "in-registry-mode-you-can-only-have-one-list": "En modo registro sólo puede tener una lista",
+        "cannot-update-a-claim-that-is-not-yours": "No se puede actualizar una reclamación no realizada por usted",
+        "unable-to-update-claim": "No se puede actualizar la reclamación",
+        "must-select-a-group": "Debe seleccionar un grupo",
+        "public-lists-not-allowed": "Este grupo no admite listas públicas",
+        "registration-is-disabled": "El registro está deshabilitado"
     },
     "general": {
         "enter-user-email": "Ingrese el correo del usuario y seleccione el grupo para el usuario",
@@ -236,7 +277,11 @@
         "icon-bg-color": "Color de fondo del icono",
         "loading": "Cargando...",
         "no-file-selected": "Sin archivo selecionado",
-        "select-file": "Seleccione Archivo"
+        "select-file": "Seleccione Archivo",
+        "all": "Todo",
+        "apply": "Aplicar",
+        "return-home": "Volver a Inicio",
+        "create": "Crear"
     },
     "setup": {
         "lets-get-started": "Empecemos",
@@ -292,7 +337,7 @@
         "approvals": "Aprobaciones",
         "approvals-waiting": "Usted tiene {approvalCount, plural, one {# item} other {# items}} esperando su aprobacion",
         "approve": "Aprobar",
-        "are-you-sure-you-wish-to-delete-item": "Esta seguro de eliminar su deseo {name}?",
+        "are-you-sure-you-wish-to-delete-item": "¿Está seguro de querer eliminar a <b>{name}</b>?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Antes de que puedas reclamar el artículo, solo necesitamos una cosa de ti.",
         "claim-details": "Detalles reclamo",
         "claim": "Reclamar",
@@ -311,7 +356,17 @@
         "anonymous": "Anonimo",
         "manage": "Administrar",
         "manage-list": "Administrar Lista",
-        "preview": "Previsualización"
+        "preview": "Previsualización",
+        "are-you-sure-you-wish-to-delete-item-multiple-lists": "¿Quiere eliminar a <b>{name}</b> de esta lista o de todas?",
+        "create-list": "Crear lista",
+        "this-list": "Esta lista",
+        "item-was-removed-from-list": "{name} ha sido eliminado de esta lista",
+        "all-lists": "Todas las listas",
+        "added-by-somebody-else": "Añadido por <span class=\"text-secondary-700-200-token font-bold\">otra persona</span>",
+        "delete-list-confirmation": "¿Está seguro de querer eliminar esta lista? Cualquier objeto no asociado con otra lista también será eliminado.",
+        "my-lists": "Mis listas",
+        "no-lists-yet": "No hay listas aún",
+        "public": "Públicas"
     },
     "app": {
         "home": "Inicio",
@@ -328,7 +383,7 @@
         "invite-subject": "Invitacion a Wishlist",
         "invite-title": "Bienvenido a Wishlist!",
         "test-body": "Si usted esta leyendo esto, Felicitaciones! La configuracion del correo electronico se ha realizado apropiadamente!",
-        "pw-reset-body": "Si usted ha solicitado un reinicio de clave, click en el siguiente enlace. Si ustes NO realizo esta solicitud, puede ignorar este correo."
+        "pw-reset-body": "Si usted ha solicitado un reinicio de clave, haga click en el siguiente enlace. Si usted no realizó esta solicitud, puede ignorar este correo."
     },
     "unable-to-load-icons": "No es posible cargar los iconos."
 }
