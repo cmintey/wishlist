@@ -5,7 +5,7 @@
     import Claims from "./Claims.svelte";
     import Lists from "./Lists.svelte";
     import Groups from "./Groups.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Pick<
@@ -20,6 +20,7 @@
     }
 
     const { config, groups, hidden = false, forGroup = false, groupUserCount = 0, listCount = 0 }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <div class={{ hidden, "flex flex-col gap-4": !hidden }}>

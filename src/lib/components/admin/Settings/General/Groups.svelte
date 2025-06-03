@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
     import type { Group } from "@prisma/client";
     import SettingsGroup from "../SettingsGroup.svelte";
     import Setting from "../Setting.svelte";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Pick<Config, "defaultGroup">;
@@ -10,6 +10,7 @@
     }
 
     const { config, groups }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <SettingsGroup>

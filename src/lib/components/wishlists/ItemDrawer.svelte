@@ -4,15 +4,16 @@
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ManageButtons from "./ItemCard/ManageButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import type { Snippet } from "svelte";
     import Image from "../Image.svelte";
     import type { ClassValue } from "svelte/elements";
-    import type { MessageFormatter } from "$lib/i18n";
+    import type { MessageFormatter } from "$lib/server/i18n";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import { getFormatter } from "$lib/i18n";
 
+    const t = getFormatter();
     const drawerStore = getDrawerStore();
     const item: ItemOnListDTO = $drawerStore.meta.item;
     const user: PartialUser | undefined = $drawerStore.meta.user;

@@ -1,13 +1,14 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         user: LocalUser;
     }
 
     let { user = $bindable() }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <form method="POST" use:enhance>

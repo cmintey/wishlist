@@ -1,15 +1,12 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
     import ManageListForm from "$lib/components/wishlists/ManageListForm.svelte";
     import { page } from "$app/state";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    const { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     $effect(() => {
         if (page.form && !page.form.success) {

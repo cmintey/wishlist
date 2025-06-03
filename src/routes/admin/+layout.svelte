@@ -1,15 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { Tab } from "@skeletonlabs/skeleton";
-    import type { Snapshot } from "./$types";
+    import type { LayoutProps, Snapshot } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        children?: import("svelte").Snippet;
-    }
-
-    let { children }: Props = $props();
+    const { children }: LayoutProps = $props();
+    const t = getFormatter();
 
     const tabs = [
         { href: "/users", label: $t("admin.users") },

@@ -1,5 +1,12 @@
 <script lang="ts">
-    import { t, date } from "svelte-i18n";
+    import { getFormatter, getLocale } from "$lib/i18n";
+    import { getDateFormatter } from "svelte-i18n";
+
+    const t = getFormatter();
+    const date = getDateFormatter({
+        locale: getLocale(),
+        format: "medium"
+    });
     const version: string = __VERSION__;
     const sha: string = __COMMIT_SHA__;
     const builtAt: Date = new Date(__LASTMOD__);
@@ -15,7 +22,7 @@
     </span>
     <span>
         {$t("admin.build-date", {
-            values: { buildDate: builtAt ? $date(builtAt, { format: "medium" }) : $t("admin.unknown") }
+            values: { buildDate: builtAt ? date.format(builtAt) : $t("admin.unknown") }
         })}
     </span>
 </div>

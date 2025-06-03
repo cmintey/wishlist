@@ -2,8 +2,9 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
+    const t = getFormatter();
     let introStep = $state(0);
     let getStarted = false;
     let statements = [$t("setup.hi"), $t("setup.welcome-to-wishlist"), $t("setup.lets-get-started")];

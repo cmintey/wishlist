@@ -4,16 +4,13 @@
     import EditProfile from "$lib/components/account/EditProfile.svelte";
     import Avatar from "$lib/components/Avatar.svelte";
     import { FileButton, Tab } from "@skeletonlabs/skeleton";
-    import type { PageServerData } from "./$types";
+    import type { PageProps } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
-    import { t } from "svelte-i18n";
     import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageServerData;
-    }
-
-    let { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     let submitButton: HTMLElement | undefined = $state();
 

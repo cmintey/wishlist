@@ -1,7 +1,7 @@
 <script lang="ts">
     import Oidc from "./OIDC.svelte";
     import Credentials from "./Credentials.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Pick<Config, "oidc" | "security" | "enableSignup">;
@@ -9,6 +9,7 @@
     }
 
     const { config, hidden = false }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <div class={{ hidden, "flex flex-col gap-4": !hidden }}>

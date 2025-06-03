@@ -1,6 +1,6 @@
 <script lang="ts">
     import Tooltip from "$lib/components/Tooltip.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
     import Setting from "../Setting.svelte";
     import SettingsGroup from "../SettingsGroup.svelte";
 
@@ -11,6 +11,7 @@
     }
 
     const { config, groupUserCount, listCount }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <SettingsGroup>

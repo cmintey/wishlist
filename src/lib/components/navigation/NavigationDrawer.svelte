@@ -1,13 +1,14 @@
 <script lang="ts">
     import { getDrawerStore } from "@skeletonlabs/skeleton";
     import { page } from "$app/state";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         navItems: NavItem[];
     }
 
-    let { navItems }: Props = $props();
+    const { navItems }: Props = $props();
+    const t = getFormatter();
 
     const drawerStore = getDrawerStore();
 </script>

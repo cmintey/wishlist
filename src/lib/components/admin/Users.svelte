@@ -5,7 +5,7 @@
     import InviteUser from "./InviteUser.svelte";
     import type { Group } from "@prisma/client";
     import { enhance } from "$app/forms";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     type User = {
         username: string;
@@ -21,7 +21,8 @@
         groups: Group[];
     }
 
-    let { users, currentUser, config, groups }: Props = $props();
+    const { users, currentUser, config, groups }: Props = $props();
+    const t = getFormatter();
 
     let usersFiltered: (User & { groups?: string[] })[] = $state(users);
 

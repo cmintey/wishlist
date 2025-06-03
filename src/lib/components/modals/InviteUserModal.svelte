@@ -1,12 +1,13 @@
 <script lang="ts">
+    import { getFormatter } from "$lib/i18n";
     import { ListBox, ListBoxItem, getModalStore, popup, type PopupSettings } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
     }
 
-    let { parent }: Props = $props();
+    const { parent }: Props = $props();
+    const t = getFormatter();
     const modalStore = getModalStore();
 
     // passed in via meta

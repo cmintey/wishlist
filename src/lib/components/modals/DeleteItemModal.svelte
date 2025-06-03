@@ -7,9 +7,11 @@
 </script>
 
 <script lang="ts">
-    import { getModalStore } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
+    import { getModalStore } from "@skeletonlabs/skeleton";
+
+    const t = getFormatter();
     const modalStore = getModalStore();
 
     function onClose(): void {

@@ -3,8 +3,9 @@
     import { page } from "$app/state";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import PasswordInput from "../PasswordInput.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
+    const t = getFormatter();
     const toastStore = getToastStore();
 
     let passwordReset = $state({
@@ -77,7 +78,7 @@
                 {/each}
             </ul>
         {/if}
-        <label class="unstyled flex flex-row space-x-2">
+        <label class="checkbox-label">
             <input id="invalidateSessions" name="invalidateSessions" class="checkbox" type="checkbox" />
             <span>{$t("auth.sign-out-of-all-devices")}</span>
         </label>

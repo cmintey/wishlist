@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PartialUser } from "./ItemCard.svelte";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
@@ -14,6 +14,7 @@
     }
 
     let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
+    const t = getFormatter();
 
     const shouldShowName = (claim: ClaimDTO) => {
         return (

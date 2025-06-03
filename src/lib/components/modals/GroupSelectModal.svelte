@@ -1,12 +1,13 @@
 <script lang="ts">
+    import { getFormatter } from "$lib/i18n";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
     }
 
-    let { parent }: Props = $props();
+    const { parent }: Props = $props();
+    const t = getFormatter();
     const modalStore = getModalStore();
     let selectedGroup: string | undefined = $state();
     let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];

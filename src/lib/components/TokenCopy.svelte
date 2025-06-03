@@ -1,7 +1,7 @@
 <script lang="ts">
     import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import { fade } from "svelte/transition";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         url: string;
@@ -11,6 +11,7 @@
     }
 
     let { url, btnStyle = "btn-icon", children, onCopied }: Props = $props();
+    const t = getFormatter();
 
     let copiedVisible = $state(false);
 

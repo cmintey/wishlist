@@ -1,14 +1,15 @@
 <script lang="ts">
     import { UsersAPI } from "$lib/api/users";
+    import { getFormatter } from "$lib/i18n";
     import type { User } from "@prisma/client";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         parent: any;
     }
 
-    let { parent }: Props = $props();
+    const { parent }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     let selectedUser: string | undefined = $state();

@@ -3,7 +3,7 @@
     import { loadOptions, meterLabel } from "$lib/zxcvbn";
     import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         id: string;
@@ -27,6 +27,7 @@
         strengthMeter = false,
         ...restProps
     }: Props = $props();
+    const t = getFormatter();
 
     onMount(async () => {
         if (strengthMeter) {

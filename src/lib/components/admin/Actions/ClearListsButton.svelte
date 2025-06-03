@@ -1,15 +1,16 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
     import { ItemsAPI } from "$lib/api/items";
+    import { getFormatter } from "$lib/i18n";
     import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
 
     interface Props {
         groupId?: string | undefined;
         claimed?: boolean;
     }
 
-    let { groupId = undefined, claimed = false }: Props = $props();
+    const { groupId = undefined, claimed = false }: Props = $props();
+    const t = getFormatter();
 
     const modalStore = getModalStore();
     const toastStore = getToastStore();

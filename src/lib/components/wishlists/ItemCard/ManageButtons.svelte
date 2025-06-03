@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PartialUser } from "./ItemCard.svelte";
-    import { t } from "svelte-i18n";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         item: ItemOnListDTO;
@@ -12,7 +12,8 @@
         onEdit?: VoidFunction;
     }
 
-    let { item, user, ...props }: Props = $props();
+    const { item, user, ...props }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <div class="flex flex-row space-x-2 md:space-x-4">

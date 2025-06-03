@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { getFormatter } from "$lib/i18n";
     import BaseChip from "./BaseChip.svelte";
-    import { t } from "svelte-i18n";
 
+    const t = getFormatter();
     const options: Option[] = [
         {
             value: "all",

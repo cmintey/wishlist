@@ -2,14 +2,11 @@
     import { enhance } from "$app/forms";
     import { General } from "$lib/components/admin/Settings";
     import { getToastStore } from "@skeletonlabs/skeleton";
-    import type { PageData } from "./$types";
-    import { t } from "svelte-i18n";
+    import type { PageProps } from "./$types";
+    import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        data: PageData;
-    }
-
-    const { data }: Props = $props();
+    const { data }: PageProps = $props();
+    const t = getFormatter();
 
     const config = $state(data.config);
     const toastStore = getToastStore();

@@ -5,7 +5,7 @@
     import NavMenu from "./NavMenu/NavMenu.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         navItems: NavItem[];
@@ -13,7 +13,8 @@
         isProxyUser: boolean;
     }
 
-    let { navItems, user, isProxyUser }: Props = $props();
+    const { navItems, user, isProxyUser }: Props = $props();
+    const t = getFormatter();
 
     const drawerStore = getDrawerStore();
     const drawerSettings: DrawerSettings = {

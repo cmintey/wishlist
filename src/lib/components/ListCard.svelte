@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { List, User } from "@prisma/client";
     import Avatar from "./Avatar.svelte";
-    import { t } from "svelte-i18n";
+    import { getFormatter } from "$lib/i18n";
 
     interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor">> {
         owner: Pick<User, "name" | "username" | "picture">;
@@ -17,7 +17,8 @@
         preventNavigate?: boolean;
     }
 
-    let { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
+    const { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
+    const t = getFormatter();
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
     let iconColor = $derived(list.iconColor);

@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
     import SettingsGroup from "../SettingsGroup.svelte";
     import Setting from "../Setting.svelte";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Pick<Config, "enableDefaultListCreation" | "allowPublicLists" | "listMode">;
     }
 
     const { config }: Props = $props();
+    const t = getFormatter();
 </script>
 
 <SettingsGroup>
