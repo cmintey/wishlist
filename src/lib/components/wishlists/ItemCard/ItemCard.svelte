@@ -27,7 +27,7 @@
     import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
     import Image from "$lib/components/Image.svelte";
     import type { ClassValue } from "svelte/elements";
-    import type { MessageFormatter } from "$lib/i18n";
+    import type { MessageFormatter } from "$lib/server/i18n";
     import { errorToast } from "$lib/components/toasts";
     import { getFormatter } from "$lib/i18n";
 

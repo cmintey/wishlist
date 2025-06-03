@@ -8,7 +8,7 @@
     import type { Snippet } from "svelte";
     import Image from "../Image.svelte";
     import type { ClassValue } from "svelte/elements";
-    import type { MessageFormatter } from "$lib/i18n";
+    import type { MessageFormatter } from "$lib/server/i18n";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";

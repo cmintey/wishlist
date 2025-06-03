@@ -2,10 +2,10 @@
     import { SystemUsersAPI } from "$lib/api/users";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton";
-    import { t } from "svelte-i18n";
     import { errorToast } from "../toasts";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
+    import { getFormatter } from "$lib/i18n";
 
     interface Props {
         parent: any;
@@ -20,6 +20,7 @@
 
     let { parent }: Props = $props();
 
+    const t = getFormatter();
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
