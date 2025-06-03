@@ -49,23 +49,28 @@
             <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
-            <span class="text-primary-700-200-token text-2xl font-bold md:text-4xl">{listName}</span>
-            <div class="flex flex-row items-center space-x-2 text-lg">
-                <Avatar user={list.owner} width="w-6" />
-                <span class="text-primary-700-200-token">{list.owner.name}</span>
+            <span class="text-primary-700-200-token line-clamp-2 text-2xl font-bold md:text-4xl">{listName}</span>
+            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
+                <div class="flex flex-row items-center gap-2">
+                    <Avatar user={list.owner} width="w-6" />
+                    <span class="text-primary-700-200-token">{list.owner.name}</span>
+                </div>
+
                 {#if list.itemCount !== undefined}
                     <span>·</span>
-                    <iconify-icon icon="ion:gift"></iconify-icon>
-                    <span>
-                        {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
-                    </span>
-                {/if}
-                {#if hasNewItems}
-                    <iconify-icon
-                        class="text-primary-700-200-token opacity-40"
-                        icon="ion:ellipse-sharp"
-                        width="0.5rem"
-                    ></iconify-icon>
+                    <div class="flex flex-row items-center space-x-2">
+                        <iconify-icon icon="ion:gift"></iconify-icon>
+                        <span>
+                            {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
+                        </span>
+                        {#if hasNewItems}
+                            <iconify-icon
+                                class="text-primary-700-200-token opacity-40"
+                                icon="ion:ellipse-sharp"
+                                width="0.5rem"
+                            ></iconify-icon>
+                        {/if}
+                    </div>
                 {/if}
             </div>
         </div>

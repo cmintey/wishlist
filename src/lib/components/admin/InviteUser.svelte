@@ -81,7 +81,7 @@
                 : 'md:flex-row md:items-center md:space-x-2 md:space-y-0'}"
             out:fade
         >
-            <TokenCopy {url} on:copied={() => setTimeout(() => (url = null), 1000)}>
+            <TokenCopy onCopied={() => setTimeout(() => (url = null), 1000)} {url}>
                 {$t("general.invite-link")}
             </TokenCopy>
             <span class="text-sm italic">{$t("general.this-invite-link-is-only-valid-for-one-signup")}</span>

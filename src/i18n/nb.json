@@ -82,7 +82,6 @@
     "auth": {
         "update-password": "Oppdater passord",
         "check-your-email": "Sjekk din e-post og følg linken for å resette passordet ditt.",
-        "click-here-to-login": "Klikk her for å logge inn.",
         "confirm-password": "Bekreft passord",
         "create-an-account": "Opprett en konto",
         "email": "E-postadresse",

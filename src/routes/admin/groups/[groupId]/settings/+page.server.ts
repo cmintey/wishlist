@@ -17,8 +17,13 @@ export const load = (async ({ params }) => {
         }
     });
 
-    const [membershipCount, config] = await Promise.all([
-        await client.userGroupMembership.count({
+    const [membershipCount, listCount, config] = await Promise.all([
+        client.userGroupMembership.count({
+            where: {
+                groupId: group.id
+            }
+        }),
+        client.list.count({
             where: {
                 groupId: group.id
             }
@@ -28,7 +33,8 @@ export const load = (async ({ params }) => {
 
     return {
         config,
-        membershipCount
+        membershipCount,
+        listCount
     };
 }) satisfies PageServerLoad;
 
@@ -55,10 +61,14 @@ export const actions: Actions = {
                     message: error.message
                 };
             });
-            return fail(400, { action: "settings", error: true, errors });
+            return fail(400, { action: "settings", error: "Validation failed", errors });
         }
 
-        const newConfig: Partial<Config> = {
+        const existingConfig = await getConfig(params.groupId);
+        const newConfig: Pick<
+            Config,
+            "suggestions" | "claims" | "listMode" | "enableDefaultListCreation" | "allowPublicLists"
+        > = {
             suggestions: {
                 enable: configData.data.enableSuggestions,
                 method: configData.data.suggestionMethod
@@ -70,7 +80,44 @@ export const actions: Actions = {
             enableDefaultListCreation: configData.data.enableDefaultListCreation,
             allowPublicLists: configData.data.allowPublicLists
         };
+
+        let changingToRegistry = false;
+        if (existingConfig.listMode !== newConfig.listMode && newConfig.listMode === "registry") {
+            changingToRegistry = true;
+            const [membershipCount, listCount] = await Promise.all([
+                client.userGroupMembership.count({
+                    where: {
+                        groupId: params.groupId
+                    }
+                }),
+                client.list.count({
+                    where: {
+                        groupId: params.groupId
+                    }
+                })
+            ]);
+            if (membershipCount > 1 || listCount > 1) {
+                fail(422, {
+                    action: "settings",
+                    error: "Unable to switch list mode",
+                    errors: [{ field: "listMode", message: "" }]
+                });
+            }
+        }
+
         await writeConfig(newConfig, params.groupId);
+
+        if (changingToRegistry) {
+            // make all lists public in the group (should only be one)
+            await client.list.updateMany({
+                data: {
+                    public: true
+                },
+                where: {
+                    groupId: params.groupId
+                }
+            });
+        }
 
         return { success: true };
     }

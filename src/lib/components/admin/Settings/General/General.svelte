@@ -16,9 +16,10 @@
         hidden?: boolean;
         forGroup?: boolean;
         groupUserCount?: number;
+        listCount?: number;
     }
 
-    const { config, groups, hidden = false, forGroup = false, groupUserCount = 0 }: Props = $props();
+    const { config, groups, hidden = false, forGroup = false, groupUserCount = 0, listCount = 0 }: Props = $props();
     const t = getFormatter();
 </script>
 
@@ -26,7 +27,7 @@
     <h2 class="h2">{$t("admin.general")}</h2>
 
     {#if forGroup}
-        <WishlistMode {config} {groupUserCount} />
+        <WishlistMode {config} {groupUserCount} {listCount} />
     {/if}
 
     <Suggestions {config} />

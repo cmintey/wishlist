@@ -196,7 +196,7 @@
 </script>
 
 <!-- chips -->
-<div class="flex justify-between">
+<div class="flex flex-wrap justify-between pb-2">
     <div class="flex flex-row flex-wrap space-x-4">
         {#if !data.list.owner.isMe}
             <ClaimFilterChip />
@@ -240,14 +240,14 @@
 {/if}
 
 {#if items.length === 0}
-    <div class="flex flex-col items-center justify-center space-y-4 pt-4">
+    <div class="flex flex-col items-center justify-center space-y-4 pt-2">
         <img class="w-3/4 md:w-1/3" alt={$t("a11y.two-people-looking-in-an-empty-box")} src={empty} />
         <p class="text-2xl">{$t("wishes.no-wishes-yet")}</p>
     </div>
 {:else}
     <!-- items -->
     <div
-        class="flex flex-col space-y-4 p-1 rounded-container-token"
+        class="flex flex-col space-y-4 rounded-container-token"
         onconsider={handleDnd}
         onfinalize={handleDnd}
         use:dragHandleZone={{

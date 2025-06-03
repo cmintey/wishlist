@@ -37,7 +37,10 @@ Create a wish from a URL, or manually fill in the details
 
 ## Getting Started
 
-Getting started is simple with Docker Compose
+Getting started is simple with Docker Compose.
+
+> [!NOTE]
+> A [Helm chart is available](https://github.com/mddeff/wishlist-charts) via a community contributor
 
 Create a `docker-compose.yaml` file:
 
@@ -61,8 +64,7 @@ Then simply run `docker compose up -d`.
 
 You can now connect to your application at `http://<host>:3280`.
 
-> **Note**
->
+> [!NOTE]
 > Set the `ORIGIN` environment variable to the url you will be connecting to, otherwise you will experience issues
 
 ### Environment Variables
@@ -138,6 +140,8 @@ _since v0.42.0_
 Wishlist can be configured to authenticate users against any third-party Identity Provider which support the OpenID Connect specification. This includes providers such as Authelia, Authentik, Keycloak, and Google.
 
 To configure your provider for authentication, navigate to the Wishlist Administration Settings page. You will be required to provide the Issuer URL (the URL of your Identity Provider), the Client ID, and the Client Secret. All other configurations are optional. Any and all role-based access should be handled with your Identity Provider.
+
+The redirect URL to specify within your IdP will look like `https://<my_wishlist_domain>/login`
 
 > [!NOTE]
 > The first user to be created will need to be created with credentials via the setup wizard.

@@ -203,9 +203,48 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     return itemDTOs;
 };
 
+const availableListSelection: Prisma.ListFindManyArgs["select"] = {
+    id: true,
+    name: true,
+    public: true,
+    owner: {
+        select: {
+            name: true
+        }
+    },
+    group: {
+        select: {
+            id: true,
+            name: true
+        }
+    }
+};
+
+/**
+ * Returns all lists that are owned by ownerId that can be accessed by loggedInUserId.
+ * Accessed in this context means the logged in user is either in the same group as the list
+ * or the list is public. In both scenarios, suggestions must be enabled for the group
+ */
 export const getAvailableLists = async (ownerId: string, loggedInUserId: string) => {
-    const lists = await client.userGroupMembership
-        .findMany({
+    if (ownerId === loggedInUserId) {
+        return await client.list.findMany({
+            select: availableListSelection,
+            where: {
+                ownerId
+            }
+        });
+    }
+
+    const overlappingGroups = await Promise.all([
+        client.userGroupMembership.findMany({
+            select: {
+                groupId: true
+            },
+            where: {
+                userId: ownerId
+            }
+        }),
+        client.userGroupMembership.findMany({
             select: {
                 groupId: true
             },
@@ -213,52 +252,40 @@ export const getAvailableLists = async (ownerId: string, loggedInUserId: string)
                 userId: loggedInUserId
             }
         })
-        .then((groups) =>
-            Promise.all(groups.map(async (group) => ({ id: group.groupId, config: await getConfig(group.groupId) })))
-        )
-        .then((groups) =>
-            ownerId === loggedInUserId ? groups : groups.filter(({ config }) => config.suggestions.enable)
-        )
-        .then((groups) =>
-            client.list.findMany({
-                select: {
-                    id: true,
-                    name: true,
-                    public: true,
-                    owner: {
-                        select: {
-                            name: true
-                        }
-                    },
-                    group: {
-                        select: {
-                            id: true,
-                            name: true
-                        }
-                    }
-                },
-                where: {
-                    ownerId: ownerId,
-                    OR: [
-                        {
-                            groupId: {
-                                in: groups.map((g) => g.id)
-                            }
-                        },
-                        {
-                            public: true
-                        }
-                    ]
-                }
-            })
-        );
-
-    return Promise.all(
-        lists.filter((list) => list.public).map(async (list) => ({ list, config: await getConfig(list.group.id) }))
-    ).then((publicLists) => {
-        return [
-            ...lists.filter((list) => !list.public),
-            ...publicLists.filter((list) => list.config.suggestions.enable).map(({ list }) => list)
-        ];
+    ]).then(([ownersGroups, loggedInUsersGroups]) => {
+        const ownersGroupIds = new Set(ownersGroups.map(({ groupId }) => groupId));
+        const loggedInUserGroupIds = new Set(loggedInUsersGroups.map(({ groupId }) => groupId));
+        return ownersGroupIds.intersection(loggedInUserGroupIds);
     });
+
+    const ownersListsInCommonGroups = await client.list.findMany({
+        select: availableListSelection,
+        where: {
+            ownerId,
+            groupId: {
+                in: [...overlappingGroups]
+            }
+        }
+    });
+
+    const ownersPublicLists = await client.list.findMany({
+        select: availableListSelection,
+        where: {
+            ownerId,
+            public: true,
+            id: {
+                notIn: ownersListsInCommonGroups.map(({ id }) => id)
+            }
+        }
+    });
+
+    const listsAvailable = [];
+    for (const list of [...ownersListsInCommonGroups, ...ownersPublicLists]) {
+        const groupConfig = await getConfig(list.group.id);
+        if (groupConfig.suggestions.enable) {
+            listsAvailable.push(list);
+        }
+    }
+
+    return listsAvailable;
 };

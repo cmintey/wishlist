@@ -110,7 +110,7 @@
 
 <div class="input-group grid-cols-[auto_1fr_auto]">
     <div class="input-group-shim">
-        <iconify-icon icon="ion:cash"></iconify-icon>
+        <iconify-icon icon="ion:pricetag"></iconify-icon>
     </div>
     <div class="border-surface-400-500-token border-r focus:border-surface-400-500-token">
         <input {id} {name} {disabled} type="hidden" bind:value />

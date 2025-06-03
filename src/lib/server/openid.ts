@@ -3,7 +3,7 @@ import { getConfig } from "./config";
 import { error, redirect, type RequestEvent } from "@sveltejs/kit";
 import { z } from "zod";
 import { getFormatter } from "$lib/server/i18n";
-import { logger } from "./logger";
+import { oidcLogger as logger } from "./logger";
 
 const SCOPE = "openid profile email";
 const CODE_CHALLENGE_METHOD = "S256";
@@ -127,9 +127,11 @@ export async function authorizeRedirect(event: RequestEvent) {
 }
 
 export async function handleCallback(event: RequestEvent) {
+    logger.debug("Initiating callback");
     const $t = await getFormatter();
     const config = await getClientConfig();
     if (!config) {
+        logger.error("OIDC not configured");
         error(400, $t("auth.oidc-client-not-configured"));
     }
 
@@ -137,6 +139,10 @@ export async function handleCallback(event: RequestEvent) {
     const expectedState = event.cookies.get(STATE_COOKIE) ?? null;
     const codeVerifier = event.cookies.get(CODE_VERIFIER_COOKIE) ?? null;
     if (codeVerifier === null || expectedNonce === null || expectedState === null) {
+        logger.error(
+            { expectedNonce, expectedState, codeVerifier },
+            "Couldn't retrieve stored one or more required OIDC state variables"
+        );
         error(400, $t("auth.couldnt-retrieve-stored-oidc-state"));
     }
 
@@ -144,6 +150,7 @@ export async function handleCallback(event: RequestEvent) {
     try {
         const data = await event.request.json().then(callbackSchema.safeParse);
         if (!data.success) {
+            logger.error("Request did not contain the callback url");
             error(400, $t("auth.no-callback-url-supplied"));
         }
         tokens = await client.authorizationCodeGrant(config, new URL(data.data.url), {
@@ -169,8 +176,11 @@ export async function handleCallback(event: RequestEvent) {
 
     const claims = tokens.claims();
     if (!claims) {
+        logger.error("Claims were not found");
         error(400, $t("auth.no-claims-found"));
     }
+    logger.debug("Successfully authorized callback for %s", claims.sub);
+    logger.debug("Fetching user info for %s", claims.sub);
 
     return await client.fetchUserInfo(config, tokens.access_token, claims.sub);
 }

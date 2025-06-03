@@ -11,6 +11,7 @@ import { getAvailableLists, getById } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
+import { extractFormData, getItemFormSchema } from "$lib/server/validations";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -62,27 +63,15 @@ export const actions: Actions = {
             return fail(404, { success: false, message: $t("errors.user-not-in-group") });
         }
 
-        const form = await request.formData();
-        const url = form.get("url") as string;
-        const imageUrl = form.get("image_url") as string;
-        const image = form.get("image") as File;
-        const name = form.get("name") as string;
-        const price = form.get("price") as string;
-        const currency = form.get("currency") as string;
-        const note = form.get("note") as string;
-        const listIds = form.getAll("list") as string[];
+        const itemFormSchema = await getItemFormSchema();
+        const form = await request.formData().then(extractFormData).then(itemFormSchema.safeParse);
 
-        // check for empty values
-        if (!name || listIds.length === 0) {
-            const errors: Record<string, string> = {};
-            if (!name) {
-                errors["name"] = $t("errors.item-name-required");
-            }
-            if (listIds.length === 0) {
-                errors["list"] = $t("errors.an-item-must-be-added-to-at-least-one-list");
-            }
-            return fail(400, { errors });
+        if (!form.success) {
+            console.log(form.error.format());
+            form.error.format();
+            return fail(400, { errors: form.error.format() });
         }
+        const { url, imageUrl, image, name, price, currency, quantity, note, lists: listIds } = form.data;
 
         const filename = await createImage(user.username, image);
 
@@ -131,6 +120,7 @@ export const actions: Actions = {
                 imageUrl: filename || imageUrl,
                 createdById: user.id,
                 itemPriceId,
+                quantity,
                 lists: {
                     create: listItems
                 }
