@@ -20,6 +20,8 @@
         "@eslint/js": "^9.29.0",
         "@floating-ui/dom": "^1.7.1",
         "@humanspeak/svelte-markdown": "^0.8.7",
+        "@melt-ui/pp": "^0.3.2",
+        "@melt-ui/svelte": "^0.86.6",
         "@skeletonlabs/skeleton": "^2.11.0",
         "@skeletonlabs/tw-plugin": "^0.4.1",
         "@sveltejs/adapter-node": "^5.2.12",
