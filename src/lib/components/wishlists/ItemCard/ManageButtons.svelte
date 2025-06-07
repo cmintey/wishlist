@@ -46,7 +46,7 @@
             }}
             title={$t("wishes.edit")}
         >
-            <span><iconify-icon icon="ion:edit"></iconify-icon></span>
+            <iconify-icon icon="ion:edit"></iconify-icon>
         </button>
         <button
             class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
@@ -57,7 +57,7 @@
             }}
             title={$t("wishes.delete")}
         >
-            <span><iconify-icon icon="ion:trash"></iconify-icon></span>
+            <iconify-icon icon="ion:trash"></iconify-icon>
         </button>
     {/if}
 </div>

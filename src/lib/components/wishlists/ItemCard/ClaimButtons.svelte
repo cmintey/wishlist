@@ -52,7 +52,7 @@
             }}
             title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
         >
-            <span><iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon></span>
+            <iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon>
         </button>
     </div>
 {:else if item.isClaimable}
