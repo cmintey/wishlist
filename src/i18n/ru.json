@@ -20,7 +20,9 @@
         "two-people-looking-in-an-empty-box": "Два человека смотрят в пустую коробку",
         "wishlist-logo": "Логотип списка желаний",
         "drag-handle": "переместить вручную для {name}",
-        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} с ролью редактора"
+        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} с ролью редактора",
+        "default-item-image": "значок пункта по умолчанию",
+        "unpurchase": "Отменить пункт как купленный"
     },
     "admin": {
         "actions": "Действия",
