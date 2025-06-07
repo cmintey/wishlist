@@ -62,7 +62,12 @@ export const load = (async ({ url }) => {
             },
             items: {
                 select: {
-                    id: true
+                    id: true,
+                    item: {
+                        select: {
+                            quantity: true
+                        }
+                    }
                 },
                 where: {
                     addedBy:
@@ -162,7 +167,7 @@ export const load = (async ({ url }) => {
                     iconColor: list.iconColor,
                     owner: list.owner,
                     claimedCount: undefined,
-                    itemCount: list.items.length,
+                    itemCount: list.items.reduce((accum, { item }) => accum + item.quantity, 0),
                     unapprovedCount: list._count.items
                 };
             }),
@@ -175,7 +180,9 @@ export const load = (async ({ url }) => {
                         const claimedCount = item.claims.map(({ quantity }) => quantity).reduce((a, b) => a + b, 0);
                         return claimedCount === item.quantity;
                     }).length;
-                const itemCount = list.items.filter((it) => it.approved).length;
+                const itemCount = list.items
+                    .filter((it) => it.approved)
+                    .reduce((accum, { item }) => accum + item.quantity, 0);
                 const items = list.items.map((it) => ({ id: it.item.id }));
                 return {
                     id: list.id,
