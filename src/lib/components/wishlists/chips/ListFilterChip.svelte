@@ -2,11 +2,13 @@
     import type { User } from "@prisma/client";
     import BaseChip from "./BaseChip.svelte";
     import { getFormatter, getLocale } from "$lib/i18n";
+    import type { ClassValue } from "svelte/elements";
 
     type PartialUser = Pick<User, "id" | "name" | "picture">;
 
     interface Props {
         users: PartialUser[];
+        class?: ClassValue;
     }
 
     const props: Props = $props();
@@ -36,4 +38,4 @@
     }
 </script>
 
-<BaseChip {defaultOption} multiselect {options} {prefix} {searchParam} />
+<BaseChip class={props.class} {defaultOption} multiselect {options} {prefix} {searchParam} />

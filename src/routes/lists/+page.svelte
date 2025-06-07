@@ -26,7 +26,7 @@
     };
 </script>
 
-<ListFilterChip {users} />
+<ListFilterChip class="pb-4" {users} />
 
 {#if data.myLists.length + data.otherLists.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
