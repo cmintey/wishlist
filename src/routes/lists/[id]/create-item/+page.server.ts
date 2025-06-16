@@ -6,7 +6,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
-import { getFormatter } from "$lib/server/i18n";
+import { getFormatter, getLocale } from "$lib/server/i18n";
 import { getAvailableLists, getById } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
@@ -80,7 +80,7 @@ export const actions: Actions = {
             await client.itemPrice
                 .create({
                     data: {
-                        value: getMinorUnits(parseFloat(price), currency),
+                        value: getMinorUnits(parseFloat(price), currency, getLocale()),
                         currency
                     }
                 })

@@ -3,10 +3,10 @@ import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { loadOptions, meterLabel } from "$lib/zxcvbn";
 import { getConfig } from "./config";
 import { getFormatter } from "./i18n";
-import { getRequestEvent } from "$app/server";
+import { getLocale } from "$lib/server/i18n";
 
 const passwordZxcvbn = async (minScore: number) => {
-    await loadOptions(getRequestEvent().locals.locale).then((options) => zxcvbnOptions.setOptions(options));
+    await loadOptions(getLocale()).then((options) => zxcvbnOptions.setOptions(options));
     const $t = await getFormatter();
     const minStrength = $t(meterLabel[minScore]);
     const message = $t("errors.password-min-strength", { values: { minStrength } });

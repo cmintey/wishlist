@@ -1,7 +1,8 @@
 import { env } from "$env/dynamic/public";
 import type { ItemPrice } from "@prisma/client";
 import { getNumberFormatter } from "svelte-i18n";
-import { getLocale } from "./i18n";
+import { defaultLocale, getLocale } from "./i18n";
+import { browser } from "$app/environment";
 
 type ItemWithPrice = {
     price?: string | null;
@@ -16,45 +17,41 @@ export type LocaleConfig = {
     suffix: string;
 };
 
-const getMaximumFractionDigits = (currency: string) => {
-    return getFormatter(currency).resolvedOptions().maximumFractionDigits || 2;
+const getMaximumFractionDigits = (currency: string, locale?: string) => {
+    return getFormatter(currency, locale).resolvedOptions().maximumFractionDigits || 2;
 };
 
-export const getFormatter = (currency: string | null) => {
+export const getFormatter = (currency: string | null, locale?: string) => {
     return getNumberFormatter({
-        locale: getLocale(),
+        locale: locale ?? (browser ? getLocale() : defaultLocale),
         style: "currency",
         currency: currency || env.PUBLIC_DEFAULT_CURRENCY,
         currencyDisplay: "narrowSymbol"
     });
 };
 
-export const formatPrice = (item: ItemWithPrice) => {
+export const formatPrice = (item: ItemWithPrice, locale?: string) => {
     if (!item.itemPrice) {
         return item.price;
     }
 
-    const formatter = getFormatter(item.itemPrice.currency);
-    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency);
+    const formatter = getFormatter(item.itemPrice.currency, locale);
+    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency, locale);
 
     const value = item.itemPrice.value / Math.pow(10, maxFracDigits);
     return formatter.format(value);
 };
 
-export const formatNumberAsPrice = (price: number) => {
-    return getFormatter(null).format(price);
-};
-
-export const getPriceValue = (item: ItemWithPrice) => {
+export const getPriceValue = (item: ItemWithPrice, locale?: string) => {
     if (!item.itemPrice) {
         return null;
     }
-    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency);
+    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency, locale);
     return item.itemPrice.value / Math.pow(10, maxFracDigits);
 };
 
-export const getMinorUnits = (value: number, currency: string) => {
-    const maxFracDigits = getMaximumFractionDigits(currency);
+export const getMinorUnits = (value: number, currency: string, locale?: string) => {
+    const maxFracDigits = getMaximumFractionDigits(currency, locale);
     return value * Math.pow(10, maxFracDigits);
 };
 
