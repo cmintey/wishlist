@@ -23,7 +23,7 @@ const getMaximumFractionDigits = (currency: string, locale?: string) => {
 
 export const getFormatter = (currency: string | null, locale?: string) => {
     return getNumberFormatter({
-        locale: locale ? locale : browser ? getLocale() : defaultLocale,
+        locale: locale ?? (browser ? getLocale() : defaultLocale),
         style: "currency",
         currency: currency || env.PUBLIC_DEFAULT_CURRENCY,
         currencyDisplay: "narrowSymbol"
