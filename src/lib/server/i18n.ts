@@ -10,8 +10,7 @@ export type MessageFormatter = Awaited<ReturnType<typeof getFormatter>>;
 
 export async function getFormatter(locale?: string) {
     if (!locale) {
-        const evt = getRequestEvent();
-        locale = evt.locals.locale;
+        locale = getLocale();
     }
     await waitLocale(locale);
     return (id: string, options?: Omit<MessageObject, "id">) => {
@@ -21,4 +20,8 @@ export async function getFormatter(locale?: string) {
         }
         return get(format)(id, options_);
     };
+}
+
+export function getLocale() {
+    return getRequestEvent().locals.locale;
 }

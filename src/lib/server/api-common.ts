@@ -1,3 +1,4 @@
+import { getLocale } from "$lib/server/i18n";
 import { getMinorUnits } from "$lib/price-formatter";
 import type { Prisma } from "@prisma/client";
 
@@ -17,7 +18,7 @@ export const patchItem = (body: Record<string, unknown>) => {
     if (body.price && typeof body.price === "number" && body.currency && typeof body.currency === "string") {
         data.itemPrice = {
             create: {
-                value: getMinorUnits(body.price, body.currency),
+                value: getMinorUnits(body.price, body.currency, getLocale()),
                 currency: body.currency
             },
             delete: true
