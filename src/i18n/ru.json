@@ -20,7 +20,9 @@
         "two-people-looking-in-an-empty-box": "Два человека смотрят в пустую коробку",
         "wishlist-logo": "Логотип списка желаний",
         "drag-handle": "переместить вручную для {name}",
-        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} с ролью редактора"
+        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} с ролью редактора",
+        "default-item-image": "значок пункта по умолчанию",
+        "unpurchase": "Отменить пункт как купленный"
     },
     "admin": {
         "actions": "Действия",
@@ -220,7 +222,8 @@
         "unable-to-unclaim-item": "Невозможно отменить заявку",
         "public-lists-not-allowed": "Публичные списки в этой группе запрещены",
         "an-item-must-be-added-to-at-least-one-list": "Элемент должен быть добавлен хотя бы в один список",
-        "registration-is-disabled": "Регистрация отключена"
+        "registration-is-disabled": "Регистрация отключена",
+        "could-not-claim-quantity-items": "Не удалось заявить {quantity} предметов. Доступно для заявки только {availableQuantity}."
     },
     "general": {
         "icon": "Значок",
@@ -384,6 +387,15 @@
         "item-was-removed-from-list": "{name} был удален из этого списка",
         "this-list": "Этот список",
         "added-by-somebody-else": "Добавлено <span class=\"text-secondary-700-200-token font-bold\">кем-то еще</span>",
-        "public": "Публичный"
+        "public": "Публичный",
+        "purchase": "Отметить товар как купленный",
+        "claimed-by-multiple-users": "Заявлено несколькими пользователями",
+        "enter-the-quantity-to-claim": "Введите количество, которое необходимо заявить.",
+        "quantity": "Количество",
+        "quantity-claimed": "{quantity} заявлено",
+        "quantity-desired": "{quantity} желаемых покупок",
+        "update-claim": "Обновление требований",
+        "updated-claim": "Обновлённые требования",
+        "view-item": "Просмотреть элементы"
     }
 }
