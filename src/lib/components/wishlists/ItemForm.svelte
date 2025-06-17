@@ -3,11 +3,13 @@
     import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
-    import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
+    import { FileButton, getToastStore, Tab } from "@skeletonlabs/skeleton";
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
+    import TabGroup from "../Tab/TabGroup.svelte";
+    import Markdown from "../Markdown.svelte";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -42,6 +44,7 @@
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let files: FileList | undefined = $state();
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
+    let previewNote = $state(false);
 
     const listsHavingItem = $derived.by(() => {
         return productData.lists
@@ -274,14 +277,34 @@
 
     <label class="col-span-full" for="note">
         <span>{$t("wishes.notes")}</span>
-        <textarea
-            id="note"
-            name="note"
-            class="textarea"
-            placeholder={$t("wishes.note-placeholder")}
-            rows="4"
-            bind:value={productData.note}
-        ></textarea>
+        <div class="card p-2">
+            <TabGroup border="border-none">
+                <Tab name={$t("wishes.write")} value={false} bind:group={previewNote}>{$t("wishes.write")}</Tab>
+                <Tab name={$t("wishes.preview")} value={true} bind:group={previewNote}>{$t("wishes.preview")}</Tab>
+            </TabGroup>
+            <textarea
+                id="note"
+                name="note"
+                class="textarea"
+                class:hidden={previewNote}
+                placeholder={$t("wishes.note-placeholder")}
+                rows="4"
+                bind:value={productData.note}
+            ></textarea>
+            {#if previewNote}
+                {#if productData.note}
+                    <div
+                        class="variant-ringed-surface h-28 max-w-none overflow-scroll whitespace-pre-wrap px-3 py-2 rounded-container-token"
+                    >
+                        <Markdown source={productData.note} />
+                    </div>
+                {/if}
+            {/if}
+            <a class="variant-soft btn btn-sm mt-1" href="https://www.markdownguide.org/basic-syntax/" target="_blank">
+                <iconify-icon icon="ion:logo-markdown"></iconify-icon>
+                <span>{$t("wishes.supports-markdown")}</span>
+            </a>
+        </div>
     </label>
 
     <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>

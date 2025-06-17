@@ -12,6 +12,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
+    import Markdown from "../Markdown.svelte";
 
     const t = getFormatter();
     const drawerStore = getDrawerStore();
@@ -109,7 +110,9 @@
     {#if item.note}
         <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
             <iconify-icon icon="ion:reader"></iconify-icon>
-            <p class="whitespace-pre-wrap">{item.note}</p>
+            <p class="whitespace-pre-wrap">
+                <Markdown source={item.note} />
+            </p>
         </div>
     {/if}
 

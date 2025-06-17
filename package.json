@@ -19,6 +19,7 @@
     "devDependencies": {
         "@eslint/js": "^9.23.0",
         "@floating-ui/dom": "^1.6.13",
+        "@humanspeak/svelte-markdown": "^0.8.7",
         "@skeletonlabs/skeleton": "^2.11.0",
         "@skeletonlabs/tw-plugin": "^0.4.1",
         "@sveltejs/adapter-node": "^5.2.12",
