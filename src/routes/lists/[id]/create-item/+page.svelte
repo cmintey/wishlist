@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
+    import { applyAction, enhance } from "$app/forms";
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import type { Item } from "@prisma/client";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { getToastStore } from "@skeletonlabs/skeleton";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
+    const toastStore = getToastStore();
 
     let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
         name: "",
@@ -17,6 +19,23 @@
     };
 
     let warningHidden = $state(false);
+
+    const successToast = () =>
+        toastStore.trigger({
+            message: "Item created",
+            autohide: true,
+            timeout: 5000
+        });
+
+    const clearFields = () => {
+        const fieldIds = ["url", "name", "price", "formatted-price", "quantity", "image", "imageUrl", "note"];
+        fieldIds.forEach((id) => {
+            const field = document.getElementById(id) as HTMLInputElement;
+            if (field) {
+                field.value = "";
+            }
+        });
+    };
 </script>
 
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
@@ -40,7 +59,23 @@
     </div>
 {/if}
 
-<form enctype="multipart/form-data" method="POST" use:enhance>
+<form
+    enctype="multipart/form-data"
+    method="POST"
+    use:enhance={({ submitter }) => {
+        return async ({ result }) => {
+            if (result.type === "success" || result.type === "redirect") {
+                successToast();
+            }
+            if (result.type === "redirect" && submitter?.id === "submit-stay") {
+                clearFields();
+                window.scrollTo({ top: 0 });
+                return;
+            }
+            await applyAction(result);
+        };
+    }}
+>
     <ItemForm buttonText={$t("wishes.add-item")} currentList={data.list.id} item={itemData} lists={data.lists} />
 </form>
 
