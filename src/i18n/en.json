@@ -371,7 +371,7 @@
         "my-wishes": "My Wishes",
         "no-lists-yet": "No lists yet",
         "no-wishes-yet": "No wishes yet",
-        "note-placeholder": "i.e. size, color, etc.",
+        "note-placeholder": "size, color, etc.\n[supports markdown]",
         "notes": "Notes",
         "nothing-claimed-yet": "Nothing claimed yet",
         "preview": "Preview",

@@ -30,6 +30,7 @@
     import type { MessageFormatter } from "$lib/server/i18n";
     import { errorToast } from "$lib/components/toasts";
     import { getFormatter } from "$lib/i18n";
+    import Markdown from "$lib/components/Markdown.svelte";
 
     interface Props {
         item: ItemOnListDTO;
@@ -356,7 +357,9 @@
             {#if item.note}
                 <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
                     <iconify-icon icon="ion:reader"></iconify-icon>
-                    <p class="line-clamp-2 whitespace-pre-wrap">{item.note}</p>
+                    <p class="line-clamp-2 whitespace-pre-wrap">
+                        <Markdown source={item.note} />
+                    </p>
                 </div>
             {/if}
         </div>
