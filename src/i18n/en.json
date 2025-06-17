@@ -388,6 +388,7 @@
         "quantity-desired": "{quantity} desired",
         "reorder": "Reorder",
         "share": "Share List",
+        "supports-markdown": "Supports Markdown",
         "this-list": "This list",
         "unable-to-update-item-ordering": "Unable to update item ordering",
         "unclaim": "Unclaim",
@@ -399,6 +400,7 @@
         "url-placeholder": "Enter a URL to fetch the item data",
         "view-item": "View Item",
         "view-wishes": "View Wishes",
-        "wishes-for": "{listOwner}'s Wishes"
+        "wishes-for": "{listOwner}'s Wishes",
+        "write": "Write"
     }
 }

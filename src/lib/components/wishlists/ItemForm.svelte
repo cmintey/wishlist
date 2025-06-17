@@ -276,26 +276,35 @@
     </label>
 
     <label class="col-span-full" for="note">
-        <TabGroup>
-            <Tab name={$t("wishes.notes")} value={false} bind:group={previewNote}>{$t("wishes.notes")}</Tab>
-            <Tab name={$t("wishes.preview")} value={true} bind:group={previewNote}>{$t("wishes.preview")}</Tab>
-        </TabGroup>
-        <textarea
-            id="note"
-            name="note"
-            class="textarea"
-            class:hidden={previewNote}
-            placeholder={$t("wishes.note-placeholder")}
-            rows="4"
-            bind:value={productData.note}
-        ></textarea>
-        {#if previewNote}
-            {#if productData.note}
-                <div class="card h-28 max-w-none overflow-scroll whitespace-pre-wrap px-3 py-2">
-                    <Markdown source={productData.note} />
-                </div>
+        <span>{$t("wishes.notes")}</span>
+        <div class="card p-2">
+            <TabGroup border="border-none">
+                <Tab name={$t("wishes.write")} value={false} bind:group={previewNote}>{$t("wishes.write")}</Tab>
+                <Tab name={$t("wishes.preview")} value={true} bind:group={previewNote}>{$t("wishes.preview")}</Tab>
+            </TabGroup>
+            <textarea
+                id="note"
+                name="note"
+                class="textarea"
+                class:hidden={previewNote}
+                placeholder={$t("wishes.note-placeholder")}
+                rows="4"
+                bind:value={productData.note}
+            ></textarea>
+            {#if previewNote}
+                {#if productData.note}
+                    <div
+                        class="variant-ringed-surface h-28 max-w-none overflow-scroll whitespace-pre-wrap px-3 py-2 rounded-container-token"
+                    >
+                        <Markdown source={productData.note} />
+                    </div>
+                {/if}
             {/if}
-        {/if}
+            <a class="variant-soft btn btn-sm mt-1" href="https://www.markdownguide.org/basic-syntax/" target="_blank">
+                <iconify-icon icon="ion:logo-markdown"></iconify-icon>
+                <span>{$t("wishes.supports-markdown")}</span>
+            </a>
+        </div>
     </label>
 
     <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
