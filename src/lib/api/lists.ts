@@ -1,4 +1,5 @@
 import type { listItemsUpdateSchema } from "$lib/server/validations";
+import { z } from "zod";
 
 export class ListAPI {
     private listId: string;
@@ -27,7 +28,7 @@ export class ListAPI {
         return await this._makeRequest("PATCH", "/", { public: true });
     };
 
-    updateItems = async (data: Zod.infer<typeof listItemsUpdateSchema>[]) => {
+    updateItems = async (data: z.infer<typeof listItemsUpdateSchema>[]) => {
         return await this._makeRequest("PATCH", "/items", data);
     };
 }
