@@ -1,8 +1,9 @@
 /* eslint @typescript-eslint/ban-ts-comment: 0 */
 //@ts-nocheck
 import type { Check, CheckOptions, RuleSet } from "metascraper";
-import { $jsonld, memoizeOne } from "@metascraper/helpers";
 import { toPriceFormat, getHostname } from "./helpers";
+import pkg from "@metascraper/helpers";
+const { memoizeOne, $jsonld } = pkg;
 
 interface ShoppingMetadata {
     brand: string;
