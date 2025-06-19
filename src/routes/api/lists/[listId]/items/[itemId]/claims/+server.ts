@@ -19,6 +19,9 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     if (updateData.error) {
         error(422, JSON.stringify(updateData.error.format()));
     }
+    if (!updateData.data.claimedById && !updateData.data.publicClaimedById) {
+        error(400, $t("errors.claimed-by-user-must-be-specified"));
+    }
 
     const list = await client.list.findUnique({
         select: {
@@ -105,8 +108,6 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
                     id: updateData.data.publicClaimedById
                 }
             };
-        } else {
-            error(400, $t("errors.claimed-by-user-must-be-specified"));
         }
 
         await client.itemClaim.create({ data });
