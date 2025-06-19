@@ -75,7 +75,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
-            errorToast(toastStore);
+            errorToast(toastStore, $t("general.oops"));
         }
     }
 
@@ -92,7 +92,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
-            errorToast(toastStore);
+            errorToast(toastStore, $t("general.oops"));
         }
     }
 
@@ -100,10 +100,10 @@
         const systemUsersAPI = new SystemUsersAPI();
         const userResp = await systemUsersAPI.create(username, name === "" ? $t("wishes.anonymous") : name);
         if (!userResp.ok) {
-            errorToast(toastStore);
+            errorToast(toastStore, $t("general.oops"));
             return;
         }
-        const { publicUserId } = await userResp.json();
+        const { id: publicUserId } = await userResp.json();
 
         const listItemAPI = new ListItemAPI(item.listId, item.id);
         const resp = await listItemAPI.claimPublic(publicUserId, quantity);
@@ -117,7 +117,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
-            errorToast(toastStore);
+            errorToast(toastStore, $t("general.oops"));
         }
     }
 </script>

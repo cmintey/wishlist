@@ -110,7 +110,7 @@
                     });
                     drawerStore.close();
                 } else {
-                    errorToast(toastStore);
+                    errorToast(toastStore, $t("general.oops"));
                 }
             } else if (r === DeleteConfirmationResult.REMOVE) {
                 const resp = await listItemAPI.delete();
@@ -125,7 +125,7 @@
                     });
                     drawerStore.close();
                 } else {
-                    errorToast(toastStore);
+                    errorToast(toastStore, $t("general.oops"));
                 }
             }
         }
@@ -147,7 +147,7 @@
                     });
                     drawerStore.close();
                 } else {
-                    errorToast(toastStore);
+                    errorToast(toastStore, $t("general.oops"));
                 }
             }
         },
@@ -172,7 +172,7 @@
                 timeout: 5000
             });
         } else {
-            errorToast(toastStore);
+            errorToast(toastStore, $t("general.oops"));
         }
     };
 
