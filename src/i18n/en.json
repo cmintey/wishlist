@@ -321,7 +321,7 @@
     },
     "unable-to-load-icons": "Unable to load icons.",
     "wishes": {
-        "add-item": "Add Item",
+        "add-item": "Create item",
         "added-by": "Added by <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "added-by-somebody-else": "Added by <span class=\"text-secondary-700-200-token font-bold\">somebody else</span>",
         "additional-items-requested": "{remainingQuantity, plural, =0 {There are no additional items available.} one {There is # additional item available.} other {There are # additional items available.}}",
@@ -344,6 +344,7 @@
         "claimed-info-text": "{claimedQuantity, plural, one {You've claimed # item.} other {You've claimed # items.}}",
         "claimed-item": "{claimed, select, true {Claimed} other {Unclaimed}} item",
         "create": "Create Wish",
+        "create-and-add-another": "Create and add another",
         "create-for": "Create Wish for {listOwner}",
         "create-list": "Create List",
         "default-sort": "Default Sort",

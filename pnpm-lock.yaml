@@ -93,6 +93,9 @@ importers:
         specifier: ^3.25.67
         version: 3.25.67
     devDependencies:
+      '@eslint/js':
+        specifier: ^9.29.0
+        version: 9.29.0
       '@floating-ui/dom':
         specifier: ^1.7.1
         version: 1.7.1
