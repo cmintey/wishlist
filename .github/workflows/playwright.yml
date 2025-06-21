@@ -1,0 +1,103 @@
+name: Playwright Tests
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Web
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: false
+          tags: wishlist:test
+          outputs: type=docker,dest=${{ runner.temp }}/wishlist.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wishlist-image
+          path: ${{ runner.temp }}/wishlist.tar
+
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: wishlist-image
+          path: ${{ runner.temp }}
+
+      - name: Load image
+        run: |
+          docker load --input ${{ runner.temp }}/wishlist.tar
+          docker image ls -a
+
+      - name: Start container
+        run: docker compose -f tests/docker-compose.test.yaml up -d
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 10
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm test
+
+      - name: Stop container
+        if: always()
+        run: docker compose -f tests/docker-compose.test.yaml down -v
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/playwright
+          retention-days: 30
