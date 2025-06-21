@@ -1,0 +1,15 @@
+services:
+    app:
+        container_name: wishlist
+        image: wishlist:test
+        ports:
+            - 3280:3280
+        volumes:
+            - uploads:/usr/src/app/uploads
+            - data:/usr/src/app/data
+        environment:
+            ORIGIN: http://localhost:3280
+
+volumes:
+    uploads:
+    data:
