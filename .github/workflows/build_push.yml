@@ -55,7 +55,7 @@ jobs:
           tags: ${{ steps.tags.outputs.tags }}
           labels: ${{ steps.tags.outputs.labels }}
           build-args: |
-            SHA=${github.sha}
-            VERSION=${github.ref_name}
+            SHA=${{github.sha}}
+            VERSION=${{github.ref_name}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
