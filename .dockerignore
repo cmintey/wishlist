@@ -5,10 +5,11 @@ node_modules/
 .prettier*
 README.md
 
+Dockerfile
 templates/*.mjml
 uploads/
 data/
-prisma/dev.db
+prisma/*.db
 tests/
 test-results/
 playwright*
