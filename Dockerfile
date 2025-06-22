@@ -37,7 +37,7 @@ COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
-RUN npm i -g pnpm@latest-9
+RUN npm i -g pnpm@latest-10
 RUN chmod +x entrypoint.sh
 
 VOLUME /usr/src/app/uploads
