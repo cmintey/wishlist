@@ -48,6 +48,20 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: wishlist:test
+          build-args: |
+            SHA=${github.sha}
+            VERSION=${github.ref_name}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
       - name: Run Playwright tests
         run: pnpm test
 
