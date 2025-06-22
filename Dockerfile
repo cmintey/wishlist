@@ -6,10 +6,12 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./ .
 RUN npm i -g pnpm@latest-10
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm i --frozen-lockfile
+COPY prisma/ ./
 RUN pnpm prisma generate
+COPY ./ ./
 RUN pnpm run build
 RUN pnpm prune --prod
 
@@ -31,14 +33,14 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends caddy \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/src/app/build ./build/
-COPY --from=build /usr/src/app/node_modules ./node_modules/
-COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
-COPY ./templates/ ./templates
-COPY ./prisma/ ./prisma/
-
+COPY package.json pnpm-lock.yaml entrypoint.sh Caddyfile ./
 RUN npm i -g pnpm@latest-10
 RUN chmod +x entrypoint.sh
+
+COPY --from=build /usr/src/app/build ./
+COPY --from=build /usr/src/app/node_modules ./
+COPY templates ./ 
+COPY prisma ./
 
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data
