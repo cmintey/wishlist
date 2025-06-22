@@ -1,5 +1,9 @@
 name: Build and Lint
-
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  actions: write
 on:
   pull_request:
   push:
