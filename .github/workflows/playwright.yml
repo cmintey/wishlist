@@ -48,10 +48,6 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Build image
-        run: docker compose build
-        working-directory: ./tests
-
       - name: Run Playwright tests
         run: pnpm test
 
