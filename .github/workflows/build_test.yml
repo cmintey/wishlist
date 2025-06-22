@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Build and Test
 permissions:
   contents: read
   pull-requests: write
