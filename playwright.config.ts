@@ -88,9 +88,7 @@ export default defineConfig({
             signal: "SIGTERM",
             timeout: 15000
         },
-        // port: 3280,
-        // command: "pnpm dev",
-        // url: "http://localhost:5173",
+        timeout: 60000 * 5,
         stdout: "pipe",
         stderr: "pipe",
         reuseExistingServer: false
