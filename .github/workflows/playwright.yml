@@ -16,10 +16,6 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image
-        run: docker compose build
-        working-directory: ./tests
-
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
@@ -51,6 +47,10 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
+
+      - name: Build image
+        run: docker compose build
+        working-directory: ./tests
 
       - name: Run Playwright tests
         run: pnpm test
