@@ -56,9 +56,6 @@ jobs:
           platforms: linux/amd64
           push: false
           tags: wishlist:test
-          build-args: |
-            SHA=${{github.sha}}
-            VERSION=${{github.ref_name}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
