@@ -2,13 +2,8 @@ services:
     app:
         container_name: wishlist
         image: wishlist:test
+        build:
+            context: ../
         network_mode: host
-        volumes:
-            - uploads:/usr/src/app/uploads
-            - data:/usr/src/app/data
         environment:
             ORIGIN: http://localhost:3280
-
-volumes:
-    uploads:
-    data:

@@ -9,3 +9,9 @@ templates/*.mjml
 uploads/
 data/
 prisma/dev.db
+tests/
+test-results/
+playwright*
+.github
+.vscode
+dev-dist
