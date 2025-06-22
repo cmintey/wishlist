@@ -77,12 +77,22 @@ export default defineConfig({
         //   name: 'Google Chrome',
         //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
         // },
-    ]
+    ],
 
     /* Run your local dev server before starting the tests */
-    // webServer: {
-    //   command: 'npm run start',
-    //   url: 'http://localhost:3000',
-    //   reuseExistingServer: !process.env.CI,
-    // },
+    webServer: {
+        command:
+            "docker compose -f tests/docker-compose.yaml up --remove-orphans --renew-anon-volumes --force-recreate --build",
+        url: "http://localhost:3280",
+        gracefulShutdown: {
+            signal: "SIGTERM",
+            timeout: 15000
+        },
+        // port: 3280,
+        // command: "pnpm dev",
+        // url: "http://localhost:5173",
+        stdout: "pipe",
+        stderr: "pipe",
+        reuseExistingServer: false
+    }
 });
