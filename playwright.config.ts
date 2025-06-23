@@ -39,23 +39,19 @@ export default defineConfig({
             testMatch: /global\.setup\.ts/
         },
         {
-            name: "ci:chromium",
+            name: "chromium",
             use: { ...devices["Desktop Chrome"] },
             dependencies: ["setup"]
         },
         {
-            name: "ci:firefox",
+            name: "firefox",
             use: { ...devices["Desktop Firefox"] },
             dependencies: ["setup"]
         },
         {
-            name: "ci:webkit",
+            name: "webkit",
             use: { ...devices["Desktop Safari"] },
             dependencies: ["setup"]
-        },
-        {
-            name: "local",
-            use: { ...devices["Desktop Chrome"] }
         }
 
         /* Test against mobile viewports. */

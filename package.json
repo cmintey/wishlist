@@ -12,8 +12,7 @@
         "lint": "prettier --check . && eslint .",
         "format": "prettier --write .",
         "db:patch": "node prisma/patches/index.js",
-        "test": "playwright test --project ci:*",
-        "test:local": "playwright test --project local"
+        "test": "playwright test"
     },
     "prisma": {
         "seed": "node prisma/seed.js"

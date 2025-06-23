@@ -1,6 +1,6 @@
 import { expect, test as setup } from "@playwright/test";
 import { SetupWizardPage } from "./pageObjects/setup-wizard.page";
-import { testUtil } from "./util";
+import { adminAuthFile } from "./constants";
 
 setup("setup wizard", async ({ page }) => {
     await page.goto("/");
@@ -13,5 +13,5 @@ setup("setup wizard", async ({ page }) => {
 
     await expect(page.getByRole("heading", { name: "Lists" })).toBeVisible();
 
-    await testUtil.saveAdminAuth(page);
+    await page.context().storageState({ path: adminAuthFile });
 });
