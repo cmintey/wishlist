@@ -1,43 +1,15 @@
-import type { Prisma } from "@prisma/client";
+import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 
-export const createFilter = (filter: string | null) => {
-    const search: Prisma.ItemWhereInput = {};
+export const claimFilter = (filter: string | null, userId: string | null) => {
     if (filter === "unclaimed") {
-        search.AND = [
-            {
-                claims: {
-                    every: {
-                        claimedById: null
-                    }
-                }
-            },
-            {
-                claims: {
-                    every: {
-                        publicClaimedById: null
-                    }
-                }
-            }
-        ];
+        return (item: ItemOnListDTO) => item.isClaimable;
     } else if (filter === "claimed") {
-        search.OR = [
-            {
-                claims: {
-                    every: {
-                        claimedById: null
-                    }
-                }
-            },
-            {
-                claims: {
-                    every: {
-                        publicClaimedById: null
-                    }
-                }
-            }
-        ];
+        return (item: ItemOnListDTO) => {
+            const userHasClaimed = item.claims.find((c) => userId && c.claimedBy?.id === userId);
+            return !item.isClaimable || userHasClaimed;
+        };
     }
-    return search;
+    return (_item: ItemOnListDTO) => true;
 };
 
 export const decodeMultiValueFilter = (filter: string | null) => {

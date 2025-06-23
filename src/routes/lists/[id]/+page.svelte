@@ -81,10 +81,11 @@
         }
         return items.reduce(
             (g, v) => {
-                if (v.claims.length > 0) {
-                    g[1].push(v);
-                } else {
+                const userHasClaimed = v.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
+                if (v.isClaimable && !userHasClaimed) {
                     g[0].push(v);
+                } else {
+                    g[1].push(v);
                 }
                 return g;
             },

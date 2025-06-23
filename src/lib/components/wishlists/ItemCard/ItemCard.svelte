@@ -357,9 +357,9 @@
             {#if item.note}
                 <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
                     <iconify-icon icon="ion:reader"></iconify-icon>
-                    <p class="line-clamp-2 whitespace-pre-wrap">
+                    <div class="line-clamp-2 whitespace-pre-wrap">
                         <Markdown source={item.note} />
-                    </p>
+                    </div>
                 </div>
             {/if}
         </div>
