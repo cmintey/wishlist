@@ -144,7 +144,6 @@ export const getById = async (id: string) => {
 };
 
 export const getItems = async (listId: string, options: GetItemsOptions) => {
-    // const itemFilter = createFilter(options.filter);
     const itemListFilter: Prisma.ListItemWhereInput = {};
 
     // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
