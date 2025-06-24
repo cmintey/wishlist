@@ -20,7 +20,9 @@
         "wishlist-logo": "Wishlist Logo",
         "clear-color-field": "entferne ausgwählte Farbe",
         "clear-icon-field": "entferne ausgewähltes Icon",
-        "clear-name-field": "lösche eigenen Namen"
+        "clear-name-field": "lösche eigenen Namen",
+        "default-item-image": "Standard Artikelbild",
+        "unpurchase": "Markiere Artikel als nicht gekauft"
     },
     "admin": {
         "administration": "Administration",
@@ -182,7 +184,21 @@
         "added-by-somebody-else": "Hinzugefügt durch <span class=\"text-secondary-700-200-token font-bold\">jemand anders</span>",
         "this-list": "Diese Liste",
         "item-was-removed-from-list": "{name} wurde von dieser Liste entfernt",
-        "public": "Öffentlich"
+        "public": "Öffentlich",
+        "supports-markdown": "Unterstützt Markdown",
+        "write": "Schreibe",
+        "claimed-by-multiple-users": "Von mehreren Benutzern reserviert",
+        "enter-the-quantity-to-claim": "Gibt die zu reservierende Anzahl ein.",
+        "purchase": "Markiere Artikel als gekauft",
+        "quantity-claimed": "{quantity} reserviert",
+        "quantity-desired": "{quantity} gewünscht",
+        "update-claim": "Aktualisiere Reservierung",
+        "updated-claim": "Reservierung aktualisiert",
+        "view-item": "Zeige Artikel",
+        "claimed-info-text": "{claimedQuantity, plural, one {Du hast # Artikel reserviert.} other {Du hast # Artikel reserviert.}}",
+        "additional-items-requested": "{remainingQuantity, plural, =0 {Es sind keine weiteren Artikel verfügbar.} one {Es ist # weiterer Artikel verfügbar.} other {Es sind # weitere Artikel verfügbar.}}",
+        "purchased-toast": "Markiere Artikel als {purchased, select, true {gekauft} other {nicht gekauft}}",
+        "quantity": "Anzahl"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -251,7 +267,8 @@
         "cannot-unclaim-an-item-you-did-not-claim": "Die Reservierung kann nur für eigene Reservierungen aufgehoben werden",
         "public-lists-not-allowed": "Öffentliche Listen sind in dieser Gruppe nicht erlaubt",
         "unable-to-update-claim": "Reservierung ändern nicht möglich",
-        "registration-is-disabled": "Registrierung ist deaktiviert"
+        "registration-is-disabled": "Registrierung ist deaktiviert",
+        "could-not-claim-quantity-items": "Konnte {quantity} Artikel nicht reservieren. Es sind nur {availableQuantity} verfügbar."
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
