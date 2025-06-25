@@ -113,7 +113,11 @@ export const getItemFormSchema = async () => {
         name: z.string(),
         price: z.string().optional(),
         currency: z.string().optional(),
-        quantity: z.coerce.number().default(1),
+        quantity: z.coerce
+            .number()
+            .max(999)
+            .optional()
+            .transform((v) => (v === undefined ? null : v)),
         imageUrl: z.string().optional(),
         image: z.instanceof(File).optional(),
         note: z.string().optional(),
@@ -127,7 +131,8 @@ export const getItemFormSchema = async () => {
 };
 
 export const extractFormData = (formData: FormData) => {
-    return [...formData.entries().filter(([_k, v]) => v.toString())].reduce<
+    console.log(formData);
+    const data = [...formData.entries().filter(([_k, v]) => v.toString())].reduce<
         Record<string, FormDataEntryValue | FormDataEntryValue[]>
     >(
         (data, [key, value]) => ({
@@ -136,4 +141,6 @@ export const extractFormData = (formData: FormData) => {
         }),
         {}
     );
+    console.log(data);
+    return data;
 };

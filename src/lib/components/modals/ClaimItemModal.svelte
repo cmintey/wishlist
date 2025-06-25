@@ -170,9 +170,11 @@
                     {$t("wishes.claimed-info-text", {
                         values: { claimedQuantity: claim.quantity }
                     })}
-                    {$t("wishes.additional-items-requested", {
-                        values: { remainingQuantity: item.remainingQuantity }
-                    })}
+                    {#if item.quantity}
+                        {$t("wishes.additional-items-requested", {
+                            values: { remainingQuantity: item.remainingQuantity }
+                        })}
+                    {/if}
                 </span>
             {/if}
         </div>

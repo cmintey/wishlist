@@ -110,7 +110,7 @@ model Item {
     url         String?
     note        String?
     imageUrl    String?
-    quantity    Int         @default(1)
+    quantity    Int?
     user        User        @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     createdBy   User        @relation(name: "CreatedItems", fields: [createdById], references: [id], onDelete: Cascade)
