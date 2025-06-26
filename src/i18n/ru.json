@@ -396,6 +396,8 @@
         "quantity-desired": "{quantity} желаемых покупок",
         "update-claim": "Обновление требований",
         "updated-claim": "Обновлённые требования",
-        "view-item": "Просмотреть элементы"
+        "view-item": "Просмотреть элементы",
+        "supports-markdown": "Поддержка Markdown",
+        "write": "Написать"
     }
 }
