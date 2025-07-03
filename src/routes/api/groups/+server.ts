@@ -22,13 +22,22 @@ export const PUT: RequestHandler = async ({ request }) => {
     });
     const config = await getConfig(group.id);
 
+    const hasActiveMembership =
+        (await client.userGroupMembership.findFirst({
+            where: {
+                userId: user.id,
+                active: true
+            }
+        })) !== null;
+
     const createList = config.enableDefaultListCreation ? create(user.id, group.id) : Promise.resolve();
     await Promise.all([
         client.userGroupMembership.create({
             data: {
                 userId: user.id,
                 groupId: group.id,
-                roleId: Role.GROUP_MANAGER
+                roleId: Role.GROUP_MANAGER,
+                active: !hasActiveMembership
             }
         }),
         createList
