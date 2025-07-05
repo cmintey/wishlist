@@ -1,4 +1,4 @@
-FROM node:lts-slim AS build
+FROM node:22-slim AS build
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,7 @@ RUN pnpm prisma generate
 RUN pnpm run build
 RUN pnpm prune --prod
 
-FROM node:lts-slim AS app
+FROM node:22-slim AS app
 
 ENV NODE_ENV=production
 ENV BODY_SIZE_LIMIT=5000000
@@ -37,7 +37,7 @@ COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
-RUN npm i -g pnpm@latest-9
+RUN npm i -g pnpm@latest-10
 RUN chmod +x entrypoint.sh
 
 VOLUME /usr/src/app/uploads
