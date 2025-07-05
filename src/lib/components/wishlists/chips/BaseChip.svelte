@@ -146,7 +146,7 @@
             {#each options as option (option.value + option.direction)}
                 <li>
                     {#if multiselect}
-                        <label class="unstyled list-option flex flex-row items-center space-x-2">
+                        <label class="checkbox-label list-option">
                             <input
                                 class="checkbox"
                                 checked={isSelected(option)}

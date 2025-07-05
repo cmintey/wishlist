@@ -1,6 +1,6 @@
 import { init } from "@paralleldrive/cuid2";
 import { client } from "./prisma";
-import { createFilter } from "./sort-filter-util";
+import { claimFilter } from "./sort-filter-util";
 import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
 import type { Prisma } from "@prisma/client";
@@ -144,7 +144,6 @@ export const getById = async (id: string) => {
 };
 
 export const getItems = async (listId: string, options: GetItemsOptions) => {
-    const itemFilter = createFilter(options.filter);
     const itemListFilter: Prisma.ListItemWhereInput = {};
 
     // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
@@ -181,14 +180,16 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
                     listId: list.id
                 },
                 every: itemListFilter
-            },
-            ...itemFilter
+            }
         },
         include: getItemInclusions(list.id)
     });
 
-    // need to filter out items not on a list because prisma generates a stupid query
-    const itemDTOs = items.filter((item) => item.lists.length > 0).map((i) => toItemOnListDTO(i, list.id));
+    const itemDTOs = items
+        // need to filter out items not on a list because prisma generates a stupid query
+        .filter((item) => item.lists.length > 0)
+        .map((i) => toItemOnListDTO(i, list.id))
+        .filter(claimFilter(options.filter, options.loggedInUserId));
 
     if (options.sort === "price") {
         if (options.sortDir === "desc") {

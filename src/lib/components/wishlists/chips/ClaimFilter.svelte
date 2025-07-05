@@ -6,7 +6,7 @@
     const options: Option[] = [
         {
             value: "all",
-            displayValue: $t("wishes.filter")
+            displayValue: $t("general.all")
         },
         {
             value: "claimed",
