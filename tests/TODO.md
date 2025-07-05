@@ -4,10 +4,11 @@ Features to test
 - [ ] Signup with invite code
 - [ ] Password reset flow
 - [ ] List operations
-  - [ ] Create
-  - [ ] Edit
+  - [x] Create
+  - [x] Edit
   - [ ] Delete
   - [ ] Filtering / Sorting
+  - [ ] Manage list only visible by owner
 - [ ] Create item
   - [ ] Invalid form
   - [ ] Valid form
