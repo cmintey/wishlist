@@ -10,6 +10,7 @@
     import { getFormatter } from "$lib/i18n";
     import TabGroup from "../Tab/TabGroup.svelte";
     import Markdown from "../Markdown.svelte";
+    import { goto } from "$app/navigation";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -138,6 +139,14 @@
             await getInfo();
         }
     });
+
+    const onCancel = () => {
+        if (page.url.searchParams.has("redirectTo")) {
+            goto(page.url.searchParams.get("redirectTo")!);
+        } else {
+            history.back();
+        }
+    };
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-7">
@@ -340,13 +349,20 @@
 
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
-    <div class="col-span-full flex flex-row justify-between">
-        <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
+    <div class="col-span-full flex w-full flex-col-reverse gap-2 sm:w-full sm:flex-row sm:justify-between">
+        <button class="variant-ghost-secondary btn" onclick={onCancel} type="button">
             {$t("general.cancel")}
         </button>
-        <button class="variant-filled-primary btn w-min" disabled={loading} type="submit">
-            {buttonText}
-        </button>
+        <div class="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2">
+            {#if !item.id}
+                <button id="submit-stay" class="variant-outline-primary btn" disabled={loading} type="submit">
+                    {$t("wishes.create-and-add-another")}
+                </button>
+            {/if}
+            <button id="submit" class="variant-filled-primary btn" disabled={loading} type="submit">
+                {buttonText}
+            </button>
+        </div>
     </div>
 </div>
 
