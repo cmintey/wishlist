@@ -62,7 +62,7 @@ export const DELETE: RequestHandler = async ({ url }) => {
         const fullyClaimedItems: typeof items = [];
         items.forEach((item) => {
             const claimedQty = item.claims.reduce((accum, claim) => accum + claim.quantity, 0);
-            if (claimedQty < item.quantity) {
+            if (item.quantity === null || claimedQty < item.quantity) {
                 partiallyClaimedItems.push(item);
             } else {
                 fullyClaimedItems.push(item);
@@ -141,7 +141,9 @@ export const DELETE: RequestHandler = async ({ url }) => {
             let claimsToDelete: string[] = [];
             partiallyClaimedItems.forEach((item) => {
                 const claimedQty = item.claims.reduce((accum, claim) => accum + claim.quantity, 0);
-                itemsToUpdate.push({ id: item.id, quantity: item.quantity - claimedQty });
+                if (item.quantity) {
+                    itemsToUpdate.push({ id: item.id, quantity: item.quantity - claimedQty });
+                }
                 claimsToDelete = [...claimsToDelete, ...item.claims.map(({ id }) => id)];
             });
             await client.$transaction(async (tx) => {

@@ -46,6 +46,8 @@
     let files: FileList | undefined = $state();
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
     let previewNote = $state(false);
+    let quantity = $state(item.quantity || 1);
+    let unlimited = $state(item.quantity === null);
 
     const listsHavingItem = $derived.by(() => {
         return productData.lists
@@ -149,8 +151,8 @@
     };
 </script>
 
-<div class="grid grid-cols-1 gap-4 md:grid-cols-7">
-    <label class="col-span-1 md:col-span-full" for="url">
+<div class="grid grid-cols-7 gap-4">
+    <label class="col-span-full" for="url">
         <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row space-x-4">
             <div class="input-group grid-cols-[auto_1fr_auto]">
@@ -199,7 +201,7 @@
         </div>
     </label>
 
-    <label class="col-span-1 md:col-span-full xl:col-span-4" for="name">
+    <label class="col-span-full xl:col-span-3" for="name">
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
@@ -221,34 +223,54 @@
         {/if}
     </label>
 
-    <label class="col-span-1 md:col-span-5 xl:col-span-2" for="price">
+    <label class="col-span-full sm:col-span-4 xl:col-span-2" for="price">
         <span>{$t("wishes.price")}</span>
         <CurrencyInput id="price" name="price" currency={userCurrency} bind:value={price} />
     </label>
 
-    <label class="col-span-1 md:col-span-2 xl:col-span-1" for="quantity">
-        <span>{$t("wishes.quantity")}</span>
-        <div class="input-group grid-cols-[auto_1fr]">
-            <div class="input-group-shim">
-                <iconify-icon icon="ion:gift"></iconify-icon>
+    <div class="col-span-full sm:col-span-3 xl:col-span-2">
+        <label class="pb-1" for="quantity">
+            <span>{$t("wishes.quantity")}</span>
+        </label>
+        <div class="flex flex-row items-center gap-2">
+            <div class="grow">
+                <div class="input-group grid-cols-[auto_1fr]">
+                    <div class="input-group-shim">
+                        <iconify-icon icon="ion:gift"></iconify-icon>
+                    </div>
+                    <input
+                        id="quantity"
+                        name="quantity"
+                        class="input w-0 min-w-full"
+                        autocomplete="off"
+                        defaultValue={1}
+                        disabled={unlimited}
+                        inputmode="numeric"
+                        max="999"
+                        min="1"
+                        onchange={(e) => {
+                            if (!isNaN(e.currentTarget.valueAsNumber)) {
+                                quantity = e.currentTarget.valueAsNumber;
+                            }
+                        }}
+                        required={unlimited ? false : true}
+                        step="1"
+                        type={unlimited ? "text" : "number"}
+                        value={unlimited ? $t("general.na") : quantity}
+                    />
+                </div>
             </div>
-            <input
-                id="quantity"
-                name="quantity"
-                class="input"
-                autocomplete="off"
-                defaultValue="1"
-                max="999"
-                min="1"
-                placeholder="1"
-                step="1"
-                type="number"
-                bind:value={item.quantity}
-            />
+            <label class="checkbox-label w-fit" for="unlimited">
+                <input id="unlimited" class="checkbox" type="checkbox" bind:checked={unlimited} />
+                <span>{$t("wishes.no-limit")}</span>
+            </label>
         </div>
-    </label>
+        {#if form?.errors?.quantity?._errors}
+            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists._errors[0]}</p>
+        {/if}
+    </div>
 
-    <label class="col-span-1 md:col-span-3" for="image">
+    <label class="col-span-full md:col-span-3" for="image">
         <span>{$t("wishes.upload-image")}</span>
         <div
             class="bg-surface-200-700-token border-surface-400-500-token grid grid-cols-[auto_1fr] items-center gap-2 border-token rounded-token"
@@ -267,7 +289,7 @@
         </div>
     </label>
 
-    <label class="col-span-1 md:col-span-4" for="imageUrl">
+    <label class="col-span-full md:col-span-4" for="imageUrl">
         <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
@@ -316,7 +338,7 @@
         </div>
     </label>
 
-    <fieldset class="col-span-1 flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
+    <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
         <legend>{$t("wishes.lists")}</legend>
         <div
             class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"

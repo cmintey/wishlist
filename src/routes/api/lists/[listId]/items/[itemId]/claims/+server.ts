@@ -73,7 +73,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     }
 
     const claimedQuantity = item.claims.reduce((a, { quantity }) => a + quantity, 0);
-    if (claimedQuantity + updateData.data.quantity > item.quantity) {
+    if (item.quantity !== null && claimedQuantity + updateData.data.quantity > item.quantity) {
         error(
             422,
             $t("errors.could-not-claim-quantity-items", {
