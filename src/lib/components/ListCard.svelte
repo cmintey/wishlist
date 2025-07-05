@@ -49,18 +49,23 @@
             <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
-            <span class="text-primary-700-200-token line-clamp-2 text-2xl font-bold md:text-4xl">{listName}</span>
+            <span
+                class="text-primary-700-200-token line-clamp-2 text-2xl font-bold md:text-4xl"
+                data-testid="list-name"
+            >
+                {listName}
+            </span>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 <div class="flex flex-row items-center gap-2">
                     <Avatar user={list.owner} width="w-6" />
-                    <span class="text-primary-700-200-token">{list.owner.name}</span>
+                    <span class="text-primary-700-200-token" data-testid="list-owner">{list.owner.name}</span>
                 </div>
 
                 {#if list.itemCount !== undefined}
                     <span>·</span>
                     <div class="flex flex-row items-center gap-x-2">
                         <iconify-icon icon="ion:gift"></iconify-icon>
-                        <span>
+                        <span data-testid="item-count">
                             {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
                         </span>
                         {#if hasNewItems}

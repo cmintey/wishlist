@@ -78,7 +78,7 @@ export default defineConfig({
     /* Run your local dev server before starting the tests */
     webServer: {
         command:
-            "docker compose -f tests/docker-compose.yaml up --remove-orphans --renew-anon-volumes --force-recreate --build",
+            "docker compose -f tests/docker/docker-compose.yaml up --remove-orphans --renew-anon-volumes --force-recreate --build",
         url: "http://localhost:3280",
         gracefulShutdown: {
             signal: "SIGTERM",
