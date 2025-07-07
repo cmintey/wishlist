@@ -1,33 +1,34 @@
 Features to test
-- [ ] Login
-- [ ] Signup
+
+- [x] Login
+- [x] Signup
 - [ ] Signup with invite code
 - [ ] Password reset flow
 - [ ] List operations
-  - [x] Create
-  - [x] Edit
-  - [ ] Delete
-  - [ ] Filtering / Sorting
-  - [ ] Manage list only visible by owner
+    - [x] Create
+    - [x] Edit
+    - [x] Delete
+    - [x] Filtering / Sorting
+    - [ ] Manage list only visible by owner
 - [ ] Create item
-  - [ ] Invalid form
-  - [ ] Valid form
-  - [ ] Add to multiple lists
+    - [ ] Invalid form
+    - [ ] Valid form
+    - [ ] Add to multiple lists
 - [ ] Item operations
-  - [ ] Edit
-  - [ ] Delete
-  - [ ] Claim
-    - [ ] Validate claimed name text
-    - [ ] Claim multiple
-    - [ ] Claim partial
-  - [ ] Purchase
+    - [ ] Edit
+    - [ ] Delete
+    - [ ] Claim
+        - [ ] Validate claimed name text
+        - [ ] Claim multiple
+        - [ ] Claim partial
+    - [ ] Purchase
 - [ ] Item reactivity
-  - [ ] Create
-  - [ ] Update Delete
+    - [ ] Create
+    - [ ] Update Delete
 - [ ] Admin operations
-  - [ ] Generate password reset link
-  - [ ] Invite user
-  - [ ] Add user to group
-  - [ ] Remove user from group
-  - [ ] Group manager
+    - [ ] Generate password reset link
+    - [ ] Invite user
+    - [x] Add user to group
+    - [ ] Remove user from group
+    - [ ] Group manager
 - [ ] Group operations

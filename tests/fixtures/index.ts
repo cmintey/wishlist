@@ -1,13 +1,18 @@
-import { test as base, expect, type Page } from "@playwright/test";
+import { test as base, expect, type Page as BasePage } from "@playwright/test";
 import { adminAuthFile } from "../constants";
 import { UserMenu } from "../modules/user-menu";
 import { SignupPage } from "../pageObjects/signup.page";
 import type { UserData } from "../types";
 import { SigninPage } from "../pageObjects/signin.page";
 
+interface UserPage extends BasePage {
+    groupName: string;
+}
+
 interface Fixtures {
-    adminPage: Page;
-    anonymousPage: Page;
+    adminPage: BasePage;
+    anonymousPage: BasePage;
+    page: UserPage;
     userData: UserData;
 }
 
@@ -33,8 +38,9 @@ export const test = base.extend<Fixtures>({
         await loginPage.goto();
         await loginPage.login(userData);
         const userMenu = new UserMenu(page);
-        await userMenu.createGroup();
+        const groupName = await userMenu.createGroup();
         await expect(page.getByRole("heading", { name: "Lists" })).toBeVisible();
+        Object.assign(page, { groupName });
         await use(page);
     }
 });
