@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { CreateAccountForm } from "../modules/create-account-form";
+import { randomString } from "../util";
 
 export class SetupWizardPage {
     private readonly page: Page;
@@ -31,7 +32,7 @@ export class SetupWizardPage {
 
     async createAdminAccount() {
         await expect(this.createAccountHeader).toBeVisible();
-        await this.createAccountForm.fill("Carter", "cmintey", "cmintey8@gmail.com", "Really-Strong-Test-Pwd");
+        await this.createAccountForm.fill("Admin", "admin", "admin@example.com", randomString());
         await this.nextButton.click();
         await expect(this.createAccountHeader).not.toBeVisible();
     }

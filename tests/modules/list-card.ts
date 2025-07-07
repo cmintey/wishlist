@@ -21,9 +21,13 @@ export class ListCard {
     }
 
     async click() {
-        const name = await this.name.textContent();
+        const name = await this.getName();
         expect(name).not.toBeNull();
         await this.card.click();
         return new ListPage(this.card.page(), { name: name! });
+    }
+
+    async getName() {
+        return this.name.textContent();
     }
 }

@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { CreateGroupModal } from "./create-group-modal";
+import { GroupSettingsPage } from "../pageObjects/group-settings.page";
 
 export class UserMenu {
     private readonly page: Page;
@@ -17,7 +18,7 @@ export class UserMenu {
         this.avatarButton = page.getByRole("button", { name: "User Menu" });
         this.navList = page.getByTestId("user menu navigation");
         this.accountButton = page.getByRole("link", { name: "Account" });
-        this.adminButton = page.getByRole("link", { name: "Admin" });
+        this.adminButton = page.getByRole("link", { name: "Admin", exact: true });
         this.manageGroupButton = page.getByRole("button", { name: "Manage Group" });
         this.createGroupButton = page.getByRole("button", { name: "Create Group" });
         this.signOutButton = page.getByRole("button", { name: "Sign Out" });
@@ -48,13 +49,14 @@ export class UserMenu {
     async manageGroup() {
         await this.open();
         await this.manageGroupButton.click();
+        return new GroupSettingsPage(this.page);
     }
 
     async createGroup(name?: string) {
         await this.open();
         await this.createGroupButton.click();
         const createGroupModal = new CreateGroupModal(this.page);
-        await createGroupModal.createGroup(name);
+        return await createGroupModal.createGroup(name);
     }
 
     async signOut() {

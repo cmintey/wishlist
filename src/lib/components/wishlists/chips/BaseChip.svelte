@@ -13,6 +13,7 @@
         prefix?: string;
         multiselect?: boolean;
         class?: ClassValue;
+        testId?: string;
     }
 
     const {
@@ -22,7 +23,8 @@
         directionParam = undefined,
         prefix = undefined,
         multiselect = false,
-        class: clazz
+        class: clazz,
+        testId
     }: Props = $props();
     const t = getFormatter();
 
@@ -115,7 +117,7 @@
     };
 </script>
 
-<div class={["flex flex-row gap-x-4", clazz]}>
+<div class={["flex flex-row gap-x-4", clazz]} data-testid={testId}>
     <button
         class="variant-ringed-primary chip"
         class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}

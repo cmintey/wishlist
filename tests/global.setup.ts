@@ -5,6 +5,10 @@ import { adminAuthFile } from "./constants";
 setup("setup wizard", async ({ page }) => {
     await page.goto("/");
 
+    if (new URL(page.url()).pathname === "/login") {
+        return;
+    }
+
     const setupWizardPage = new SetupWizardPage(page);
 
     await setupWizardPage.getStarted();

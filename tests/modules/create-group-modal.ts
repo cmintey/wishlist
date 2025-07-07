@@ -11,10 +11,12 @@ export class CreateGroupModal extends Modal {
     }
 
     async createGroup(name?: string) {
+        const groupName = name ?? randomString();
         await expect(this.modal).toBeVisible();
-        await this.input.fill(name ?? randomString());
+        await this.input.fill(groupName);
         await this.submit();
         await expect(this.modal).not.toBeVisible();
         await this.page.reload();
+        return groupName;
     }
 }

@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import { ListForm } from "../modules/list-form";
+import { Modal } from "../modules/modal";
 
 interface Props {
     id?: string;
@@ -37,6 +38,8 @@ export class ManageListPage extends BasePage {
     }
 
     async delete() {
-        return this.listForm.delete();
+        await this.listForm.delete();
+        const modal = new Modal(this.page, { modalName: "Please Confirm", submitButtonText: "Confirm" });
+        await modal.submit();
     }
 }
