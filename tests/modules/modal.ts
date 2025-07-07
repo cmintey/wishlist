@@ -1,5 +1,11 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+interface Props {
+    modalName?: string;
+    submitButtonText?: string;
+    cancelButtonText?: string;
+}
+
 export class Modal {
     protected readonly page: Page;
     protected readonly modal: Locator;
@@ -7,12 +13,12 @@ export class Modal {
     private readonly cancelButton: Locator;
     private readonly submitButton: Locator;
 
-    constructor(page: Page) {
+    constructor(page: Page, props?: Props) {
         this.page = page;
         this.modal = page.getByRole("dialog");
-        this.modalHeader = this.modal.getByRole("heading");
-        this.cancelButton = this.modal.getByRole("button", { name: "Cancel" });
-        this.submitButton = this.modal.getByRole("button", { name: "Submit" });
+        this.modalHeader = this.modal.getByRole("heading", { name: props?.modalName });
+        this.cancelButton = this.modal.getByRole("button", { name: props?.cancelButtonText ?? "Cancel" });
+        this.submitButton = this.modal.getByRole("button", { name: props?.submitButtonText ?? "Submit" });
     }
 
     async assertTitle(title: string) {

@@ -38,4 +38,4 @@
     }
 </script>
 
-<BaseChip class={props.class} {defaultOption} multiselect {options} {prefix} {searchParam} />
+<BaseChip class={props.class} {defaultOption} multiselect {options} {prefix} {searchParam} testId="list-filter" />
