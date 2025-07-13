@@ -1,13 +1,14 @@
 import { dev } from "$app/environment";
-import { client } from "./prisma";
 import { env } from "$env/dynamic/private";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import type { Session, User } from "@prisma/client";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
+import { db, type Session, type User } from "./db";
+import type { Insertable } from "kysely";
+import { logger } from "./logger";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
 const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
@@ -24,66 +25,49 @@ export function generateSessionToken(): string {
 
 export async function createSession(token: string, userId: string): Promise<Session> {
     const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-    const session: Session = {
+    const session: Insertable<Session> = {
         id: sessionId,
         userId,
         expiresAt: new Date(Date.now() + EXPIRES_IN)
     };
-    await client.session.create({
-        data: session
-    });
+    await db.insertInto("session").values(session).execute();
     return session;
 }
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
     const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-    const result = await client.session.findUnique({
-        where: {
-            id: sessionId
-        },
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    username: true,
-                    email: true,
-                    name: true,
-                    roleId: true,
-                    picture: true,
-                    oauthId: true,
-                    preferredLanguage: true
-                }
-            }
-        }
-    });
-    if (result === null) {
+    const session = await db.selectFrom("session").selectAll().where("id", "=", sessionId).executeTakeFirst();
+    if (!session) {
         return { session: null, user: null };
     }
-    const { user, ...session } = result;
+
+    const user = await db
+        .selectFrom("user")
+        .select(["id", "username", "email", "name", "roleId", "picture", "oauthId", "preferredLanguage"])
+        .where("id", "=", session.userId)
+        .executeTakeFirst();
+    if (!user) {
+        logger.warn({ userId: session.userId }, "No user found for session");
+        return { session: null, user: null };
+    }
+
     if (Date.now() >= session.expiresAt.getTime()) {
-        await client.session.delete({ where: { id: sessionId } });
+        await db.deleteFrom("session").where("id", "=", session.id).execute();
         return { session: null, user: null };
     }
     if (Date.now() >= session.expiresAt.getTime() - REFRESH_TIME) {
         session.expiresAt = new Date(Date.now() + EXPIRES_IN);
-        await client.session.update({
-            where: {
-                id: session.id
-            },
-            data: {
-                expiresAt: session.expiresAt
-            }
-        });
+        await db.updateTable("session").set({ expiresAt: session.expiresAt }).where("id", "=", session.id).execute();
     }
     return { session, user };
 }
 
 export async function invalidateSession(sessionId: string): Promise<void> {
-    await client.session.delete({ where: { id: sessionId } });
+    await db.deleteFrom("session").where("id", "=", sessionId).execute();
 }
 
 export async function invalidateUserSessions(userId: string): Promise<void> {
-    await client.session.deleteMany({ where: { userId } });
+    await db.deleteFrom("session").where("userId", "=", userId).execute();
 }
 
 export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt: Date): void {
@@ -150,15 +134,12 @@ export async function requireAdminOrManager(groupId: string) {
         return user;
     }
 
-    const userGroupMembership = await client.userGroupMembership.findFirst({
-        where: {
-            userId: user.id,
-            groupId: groupId
-        },
-        select: {
-            roleId: true
-        }
-    });
+    const userGroupMembership = await db
+        .selectFrom("user_group_membership")
+        .select("roleId")
+        .where("userId", "=", user.id)
+        .where("groupId", "=", groupId)
+        .executeTakeFirst();
 
     if (userGroupMembership && userGroupMembership.roleId === Role.GROUP_MANAGER) {
         return user;

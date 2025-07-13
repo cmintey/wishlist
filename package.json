@@ -29,6 +29,7 @@
         "@sveltejs/kit": "^2.33.0",
         "@sveltejs/vite-plugin-svelte": "^6.1.2",
         "@tailwindcss/forms": "^0.5.10",
+        "@types/better-sqlite3": "^7.6.13",
         "@types/eslint": "^9.6.1",
         "@types/node": "^24.10.1",
         "@types/nodemailer": "^7.0.0",
@@ -76,8 +77,11 @@
         "@zxcvbn-ts/language-en": "^3.0.2",
         "@zxcvbn-ts/language-es-es": "^3.0.2",
         "@zxcvbn-ts/language-fr": "^3.0.2",
+        "better-sqlite3": "^12.2.0",
         "got-scraping": "^4.1.2",
         "handlebars": "^4.7.8",
+        "kysely": "^0.28.2",
+        "kysely-plugin-serialize": "^0.8.2",
         "metascraper": "^5.49.1",
         "metascraper-image": "^5.49.1",
         "metascraper-title": "^5.49.1",
@@ -105,7 +109,8 @@
             "esbuild",
             "prisma",
             "re2",
-            "svelte-preprocess"
+            "svelte-preprocess",
+            "better-sqlite3"
         ]
     }
 }

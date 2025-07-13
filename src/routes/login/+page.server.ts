@@ -11,6 +11,7 @@ import { verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 import { logger } from "$lib/server/logger";
 import z from "zod";
+import { db } from "$lib/server/db";
 
 export const load: PageServerLoad = async ({ locals, request, cookies, url, fetch }) => {
     const config = await getConfig();
@@ -33,14 +34,16 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url, fetc
     if ((env.HEADER_AUTH_ENABLED ?? "false") == "true" && !!env.HEADER_USERNAME) {
         const username = request.headers.get(env.HEADER_USERNAME);
         if (username) {
-            let user = await client.user.findUnique({
-                select: {
-                    id: true
-                },
-                where: {
-                    username: username
-                }
-            });
+            let user = await db.selectFrom("user").select("id").where("username", "=", username).executeTakeFirst();
+
+            // let user = await client.user.findUnique({
+            //     select: {
+            //         id: true
+            //     },
+            //     where: {
+            //         username: username
+            //     }
+            // });
 
             if (!user) {
                 if (!env.HEADER_EMAIL || !env.HEADER_NAME) {
@@ -107,15 +110,11 @@ export const actions: Actions = {
         }
 
         try {
-            const maybeUser = await client.user.findUnique({
-                select: {
-                    id: true,
-                    hashedPassword: true
-                },
-                where: {
-                    username: loginData.data.username
-                }
-            });
+            const maybeUser = await db
+                .selectFrom("user")
+                .select(["id", "hashedPassword"])
+                .where("username", "=", loginData.data.username)
+                .executeTakeFirst();
 
             if (!maybeUser) {
                 return fail(400, { username: loginData.data.username, password: "", incorrect: true });
