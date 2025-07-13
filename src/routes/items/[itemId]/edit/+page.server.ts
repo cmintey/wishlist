@@ -11,7 +11,7 @@ import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { getAvailableLists } from "$lib/server/list";
 import { requireLogin } from "$lib/server/auth";
-import { extractFormData, getItemFormSchema } from "$lib/server/validations";
+import { extractFormData, getItemUpdateSchema } from "$lib/server/validations";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -79,7 +79,7 @@ export const actions: Actions = {
     default: async ({ request, params, url: requestUrl }) => {
         const user = requireLogin();
 
-        const itemFormSchema = await getItemFormSchema();
+        const itemFormSchema = await getItemUpdateSchema();
         const form = await request.formData().then(extractFormData).then(itemFormSchema.safeParse);
 
         if (!form.success) {
