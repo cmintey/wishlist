@@ -11,7 +11,7 @@ import { getAvailableLists, getById } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
-import { extractFormData, getItemFormSchema } from "$lib/server/validations";
+import { extractFormData, getItemCreateSchema } from "$lib/server/validations";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -63,11 +63,10 @@ export const actions: Actions = {
             return fail(404, { success: false, message: $t("errors.user-not-in-group") });
         }
 
-        const itemFormSchema = await getItemFormSchema();
+        const itemFormSchema = await getItemCreateSchema();
         const form = await request.formData().then(extractFormData).then(itemFormSchema.safeParse);
 
         if (!form.success) {
-            console.log(form.error.format());
             form.error.format();
             return fail(400, { errors: form.error.format() });
         }

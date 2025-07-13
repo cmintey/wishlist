@@ -105,7 +105,7 @@ export const listItemClaimUpdateSchema = z.object({
     quantity: z.number().optional()
 });
 
-export const getItemFormSchema = async () => {
+export const getItemCreateSchema = async () => {
     const $t = await getFormatter();
 
     return z.object({
@@ -130,8 +130,19 @@ export const getItemFormSchema = async () => {
     });
 };
 
+export const getItemUpdateSchema = async () => {
+    return getItemCreateSchema().then((itemCreateSchema) =>
+        itemCreateSchema.merge(
+            z.object({
+                url: z.string().nullish().default(null),
+                imageUrl: z.string().nullish().default(null),
+                note: z.string().nullish().default(null)
+            })
+        )
+    );
+};
+
 export const extractFormData = (formData: FormData) => {
-    console.log(formData);
     const data = [...formData.entries().filter(([_k, v]) => v.toString())].reduce<
         Record<string, FormDataEntryValue | FormDataEntryValue[]>
     >(
@@ -141,6 +152,5 @@ export const extractFormData = (formData: FormData) => {
         }),
         {}
     );
-    console.log(data);
     return data;
 };
