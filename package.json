@@ -26,6 +26,7 @@
         "@sveltejs/kit": "^2.21.5",
         "@sveltejs/vite-plugin-svelte": "^5.1.0",
         "@tailwindcss/forms": "^0.5.10",
+        "@types/better-sqlite3": "^7.6.13",
         "@types/eslint": "^9.6.1",
         "@types/node": "^22.15.32",
         "@types/nodemailer": "^6.4.17",
@@ -71,8 +72,11 @@
         "@zxcvbn-ts/language-en": "^3.0.2",
         "@zxcvbn-ts/language-es-es": "^3.0.2",
         "@zxcvbn-ts/language-fr": "^3.0.2",
+        "better-sqlite3": "^12.2.0",
         "got-scraping": "^4.1.1",
         "handlebars": "^4.7.8",
+        "kysely": "^0.28.2",
+        "kysely-plugin-serialize": "^0.8.2",
         "metascraper": "^5.47.1",
         "metascraper-amazon": "^5.47.1",
         "metascraper-image": "^5.47.1",
@@ -103,7 +107,8 @@
             "prisma",
             "re2",
             "sharp",
-            "svelte-preprocess"
+            "svelte-preprocess",
+            "better-sqlite3"
         ]
     }
 }
