@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { createImage } from "$lib/server/image-util";
+import { createImage, isValidImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter, getLocale } from "$lib/server/i18n";
@@ -72,7 +72,12 @@ export const actions: Actions = {
         }
         const { url, imageUrl, image, name, price, currency, quantity, note, lists: listIds } = form.data;
 
-        const filename = await createImage(user.username, image);
+        let newImageFile: string | undefined | null;
+        if (image && isValidImage(image)) {
+            newImageFile = await createImage(name, image);
+        } else if (imageUrl) {
+            newImageFile = await createImage(name, imageUrl);
+        }
 
         let itemPriceId = null;
         if (price && currency) {
@@ -116,7 +121,7 @@ export const actions: Actions = {
                 name,
                 url,
                 note,
-                imageUrl: filename || imageUrl,
+                imageUrl: newImageFile,
                 createdById: user.id,
                 itemPriceId,
                 quantity,

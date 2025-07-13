@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
 import { getActiveMembership } from "$lib/server/group-membership";
-import { createImage, tryDeleteImage } from "$lib/server/image-util";
+import { createImage, isValidImage, tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter, getLocale } from "$lib/server/i18n";
@@ -88,8 +88,6 @@ export const actions: Actions = {
         }
         const { url, imageUrl, image, name, price, currency, quantity, note, lists } = form.data;
 
-        const filename = await createImage(user.username, image);
-
         const item = await client.item.findUniqueOrThrow({
             include: {
                 lists: {
@@ -109,6 +107,13 @@ export const actions: Actions = {
                 id: parseInt(params.itemId)
             }
         });
+
+        let newImageFile: string | undefined | null;
+        if (image && isValidImage(image)) {
+            newImageFile = await createImage(name, image);
+        } else if (imageUrl && item.imageUrl !== imageUrl) {
+            newImageFile = await createImage(name, imageUrl);
+        }
 
         let itemPriceId = null;
         if (price && currency) {
@@ -166,7 +171,7 @@ export const actions: Actions = {
             data: {
                 name,
                 url,
-                imageUrl: filename || imageUrl,
+                imageUrl: newImageFile,
                 note,
                 itemPriceId,
                 quantity,
@@ -192,7 +197,8 @@ export const actions: Actions = {
 
         itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
 
-        if (filename && item.imageUrl && item.imageUrl !== filename) {
+        // if the image is not undefined, then it either was just created or it's null, which indicates the user removed it
+        if (newImageFile !== undefined && item.imageUrl) {
             await tryDeleteImage(item.imageUrl);
         }
 
