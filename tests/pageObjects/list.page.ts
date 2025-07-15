@@ -12,6 +12,9 @@ export class ListPage extends BasePage {
     private readonly name: string;
     private readonly header: Locator;
     private readonly manageButton: Locator;
+    private readonly shareListButton: Locator;
+    private readonly copyToClipboardButton: Locator;
+    private readonly publicUrlLink: Locator;
 
     constructor(page: Page, props: Props) {
         const id = props.id ?? new URL(page.url()).pathname.split("/").at(-1);
@@ -20,14 +23,32 @@ export class ListPage extends BasePage {
         this.name = props.name;
         this.header = page.getByRole("heading", { name: props.name });
         this.manageButton = page.getByRole("button", { name: "Manage" });
+        this.shareListButton = page.getByRole("button", { name: "Share List" });
+        this.copyToClipboardButton = page.getByRole("button", { name: "Copy to clipboard" });
+        this.publicUrlLink = page.getByRole("link", { name: "Public URL" });
     }
 
     async at() {
         await expect(this.header).toBeVisible();
     }
 
+    getUrl() {
+        return `/lists/${this.id}`;
+    }
+
     async manage() {
         await this.manageButton.click();
         return new ManageListPage(this.page);
+    }
+
+    async getShareListButton() {
+        return this.shareListButton;
+    }
+
+    async assertShareFunctionality() {
+        await this.shareListButton.click();
+        await expect(this.publicUrlLink).toBeVisible();
+        await expect(this.copyToClipboardButton).toBeVisible();
+        expect(await this.publicUrlLink.getAttribute("href")).toContain(this.getUrl());
     }
 }

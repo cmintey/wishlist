@@ -6,6 +6,7 @@ export class ListForm {
     private readonly deleteButton: Locator;
     private readonly cancelButton: Locator;
     private readonly nameField: Locator;
+    private readonly publicCheckbox: Locator;
     // TODO: Add the other list options
 
     constructor(page: Page) {
@@ -14,6 +15,7 @@ export class ListForm {
         this.deleteButton = page.getByRole("button", { name: "Delete" });
         this.cancelButton = page.getByRole("button", { name: "Cancel" });
         this.nameField = page.getByLabel("Name", { exact: true });
+        this.publicCheckbox = page.getByLabel("Public", { exact: true });
     }
 
     async setName(name: string) {
@@ -27,6 +29,11 @@ export class ListForm {
     async create(name?: string) {
         if (name) await this.setName(name);
         await this.createButton.click();
+    }
+
+    async makePublic() {
+        await this.publicCheckbox.check();
+        await this.save();
     }
 
     async save() {
