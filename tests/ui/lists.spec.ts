@@ -46,10 +46,10 @@ test("change list name", async ({ page }) => {
     const listCount = await listsPage.getListCount();
     const list = await listsPage.getListAt(0);
 
-    const manageListPage = await (await list.click()).manage();
+    const manageListPage = await list.click().then((list) => list.manage());
     await manageListPage.at();
     const newListName = randomString();
-    await (await manageListPage.setName(newListName)).save();
+    await manageListPage.setName(newListName).then((p) => p.save());
 
     await listsPage.goto();
     expect(await listsPage.getListCount()).toEqual(listCount);
@@ -70,7 +70,7 @@ test("delete list", async ({ page }) => {
     await listsPage.expectListCount(countBefore + 1);
 
     const newList = await listsPage.getListAt(countBefore);
-    const manageListPage = await (await newList.click()).manage();
+    const manageListPage = await newList.click().then((list) => list.manage());
     await manageListPage.delete();
 
     await listsPage.at();
@@ -96,9 +96,9 @@ test("multiple users and list filter", async ({ page: user1Page, browser, userDa
     await user2ListsPage.expectListCount(2);
 
     // Assert second list from User 1's perspective is User 2's list
-    (await user1ListsPage.getListAt(1)).assertOwner(user2.getUserData().name);
+    await user1ListsPage.getListAt(1).then((list) => list.assertOwner(user2.getUserData().name));
     // Assert second list from User 2's perspective is User 1's list
-    (await user2ListsPage.getListAt(1)).assertOwner(userData.name);
+    await user2ListsPage.getListAt(1).then((list) => list.assertOwner(userData.name));
 
     // Filter by user 1 lists
     await user1ListsPage.filterLists(userData.name);

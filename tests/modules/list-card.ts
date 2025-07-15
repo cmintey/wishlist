@@ -23,8 +23,11 @@ export class ListCard {
     async click() {
         const name = await this.getName();
         expect(name).not.toBeNull();
+        const owner = await this.owner.textContent();
+        const listPageName = name === `${owner}'s Wishes` ? "My Wishes" : name!;
         await this.card.click();
-        return new ListPage(this.card.page(), { name: name! });
+        await this.card.page().waitForURL(/\/lists\/.*/);
+        return new ListPage(this.card.page(), { name: listPageName });
     }
 
     async getName() {
