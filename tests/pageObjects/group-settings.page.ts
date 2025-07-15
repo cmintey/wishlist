@@ -1,6 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import { AddMemberModal } from "../modules/add-member-modal";
+import { ListSettings } from "../modules/list-settings";
+import { Toast } from "../modules/toast";
 
 interface Props {
     name: string;
@@ -18,6 +20,7 @@ export class GroupSettingsPage extends BasePage {
     private readonly deleteButton: Locator;
     private readonly clearListsButton: Locator;
     private readonly clearClaimedItemsButton: Locator;
+    private readonly saveSettingsButton: Locator;
 
     constructor(page: Page, props?: Props) {
         const id = props?.id ?? new URL(page.url()).pathname.split("/").at(-1);
@@ -32,6 +35,7 @@ export class GroupSettingsPage extends BasePage {
         this.deleteButton = page.getByRole("button", { name: "Delete Group" });
         this.clearListsButton = page.getByRole("button", { name: "Clear Lists" });
         this.clearClaimedItemsButton = page.getByRole("button", { name: "Clear Claimed Items" });
+        this.saveSettingsButton = page.getByRole("button", { name: "Save", exact: true });
     }
 
     async at() {
@@ -44,6 +48,14 @@ export class GroupSettingsPage extends BasePage {
 
     async clickSettingsTab() {
         await this.settingsTab.click();
+    }
+
+    async allowPublicLists() {
+        await this.clickSettingsTab();
+        const listSettings = new ListSettings(this.page);
+        await listSettings.allowPublicLists();
+        await this.saveSettingsButton.click();
+        await new Toast(this.page).waitForToastWithText("Settings saved successfully");
     }
 
     async addMember(name: string) {

@@ -33,6 +33,10 @@ export class ManageListPage extends BasePage {
         return this;
     }
 
+    async makePublic() {
+        await this.listForm.makePublic();
+    }
+
     async cancel() {
         return this.listForm.cancel();
     }
