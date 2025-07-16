@@ -61,6 +61,8 @@ const jsonLdLastBreadcrumb = memoizeOne(($: CheckOptions["htmlDom"]) => {
     return null;
 });
 
+const SKIP_URLS = ["dacor.com", "8bitdo.com"];
+
 /**
  * A set of rules we want to declare under the `metascraper-shopping` namespace.
  *
@@ -94,13 +96,10 @@ export default () => {
             ({ htmlDom: $ }) => $('[property="og:title"]').attr("content")
         ],
         url: [
-            ({ htmlDom: $, url }) => {
-                // dacor.com canonical points to homepage
-                if (url.includes("dacor.com")) {
+            ({ url }) => {
+                // canonical points to homepage, don't use it
+                if (SKIP_URLS.find((s) => url.includes(s))) {
                     return url;
-                }
-                if (url.includes("bedrosian")) {
-                    return $('link[rel="canonical"]').attr("href");
                 }
             }
         ],
@@ -232,5 +231,6 @@ export default () => {
         hostname: [({ url }) => getHostname(url)],
         retailer: [({ htmlDom: $ }) => $('[property="og:site_name"]').attr("content")]
     };
+    rules.pkgName = "metascraper-shopping";
     return rules;
 };
