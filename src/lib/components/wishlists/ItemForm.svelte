@@ -79,7 +79,7 @@
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
         const matches = url.match(urlRegex);
         if (matches) {
-            return matches[0];
+            return encodeURIComponent(matches[0]);
         }
         return null;
     };
@@ -326,6 +326,7 @@
                 {#if productData.note}
                     <div
                         class="variant-ringed-surface h-28 max-w-none overflow-scroll whitespace-pre-wrap px-3 py-2 rounded-container-token"
+                        data-testid="markdown-preview"
                     >
                         <Markdown source={productData.note} />
                     </div>
