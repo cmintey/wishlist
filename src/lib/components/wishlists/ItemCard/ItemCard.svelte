@@ -279,6 +279,7 @@
             sizeClasses
         ]}
         aria-label={t("a11y.default-item-image")}
+        role="img"
     >
         <iconify-icon class="w-8 md:w-16" height="none" icon="ion:gift"></iconify-icon>
     </div>
@@ -296,24 +297,22 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    <header class="card-header">
-        <div class="flex w-full">
+    <header class="card-header flex w-full">
+        {#if item.url}
+            <a
+                class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl"
+                href={item.url}
+                onclick={(e) => e.stopPropagation()}
+                rel="noreferrer"
+                target="_blank"
+            >
+                {item.name}
+            </a>
+        {:else}
             <span class="line-clamp-2 text-xl font-bold md:text-2xl">
-                {#if item.url}
-                    <a
-                        class="dark:!text-primary-200"
-                        href={item.url}
-                        onclick={(e) => e.stopPropagation()}
-                        rel="noreferrer"
-                        target="_blank"
-                    >
-                        {item.name}
-                    </a>
-                {:else}
-                    {item.name}
-                {/if}
+                {item.name}
             </span>
-        </div>
+        {/if}
     </header>
 
     <div class="flex flex-row gap-x-4 p-4">
@@ -328,20 +327,22 @@
 
         <div class="flex flex-col">
             {#if item.price || item.itemPrice}
-                <div class="flex items-center gap-x-2">
+                <div class="flex items-center gap-x-2" data-testid="price">
                     <iconify-icon icon="ion:pricetag"></iconify-icon>
                     <span class="text-lg font-semibold">{formatPrice(item)}</span>
                 </div>
             {/if}
 
             {#if item.quantity}
-                <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg">
+                <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
                     <iconify-icon icon="ion:gift"></iconify-icon>
                     <div class="flex flex-row flex-wrap gap-x-2">
-                        <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
+                        <span data-testid="quantity-desired">
+                            {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
+                        </span>
                         {#if user?.id !== item.userId}
                             <span>·</span>
-                            <span class="text-secondary-700-200-token font-bold">
+                            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
                                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
                             </span>
                         {/if}
@@ -351,7 +352,7 @@
 
             <div class="flex items-center gap-2">
                 <iconify-icon icon="ion:person"></iconify-icon>
-                <span class="text-wrap text-base md:text-lg">
+                <span class="text-wrap text-base md:text-lg" data-testid="added-by">
                     {#if showFor}
                         {@html $t("wishes.for", { values: { name: item.user.name } })}
                     {:else if !onPublicList}
@@ -365,7 +366,7 @@
             </div>
 
             {#if item.note}
-                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
+                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2" data-testid="notes">
                     <iconify-icon icon="ion:reader"></iconify-icon>
                     <div class="line-clamp-2 whitespace-pre-wrap">
                         <Markdown source={item.note} />

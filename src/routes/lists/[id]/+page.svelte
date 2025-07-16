@@ -255,7 +255,7 @@
 {#if data.list.owner.isMe && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
-        <div class="flex flex-col space-y-4">
+        <div class="flex flex-col space-y-4" data-testid="approvals-container">
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
@@ -281,6 +281,7 @@
     <!-- items -->
     <div
         class="flex flex-col space-y-4 rounded-container-token"
+        data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}
         use:dragHandleZone={{

@@ -31,3 +31,21 @@ test("public non-registry list", async ({ page, userData, anonymousPage }) => {
     await anonymousPage.goto(listPage.getUrl());
     await new ListPage(anonymousPage, { name: `${userData.name}'s Wishes` }).at();
 });
+
+test("create item via url", async ({ page }) => {
+    const listsPage = new ListsPage(page);
+    await listsPage.goto();
+
+    const list = await listsPage.getListAt(0);
+    const listPage = await list.click();
+    await listPage.assertNoItems();
+
+    const createItemPage = await listPage.createItem();
+    await createItemPage
+        .getForm()
+        .then((f) => f.fillViaUrl("https://www.amazon.com/crocs-Unisex-Classic-Black-Women/dp/B0014C0LSY/"));
+    await createItemPage.create();
+
+    await listPage.at();
+    const item = listPage.getItemAt(0);
+});

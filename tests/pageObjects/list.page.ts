@@ -1,6 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import { ManageListPage } from "./manage-list.page";
+import { CreateItemPage } from "./create-item.page";
+import { ItemCard } from "../modules/item-card";
 
 interface Props {
     id?: string;
@@ -15,6 +17,10 @@ export class ListPage extends BasePage {
     private readonly shareListButton: Locator;
     private readonly copyToClipboardButton: Locator;
     private readonly publicUrlLink: Locator;
+    private readonly createItemButton: Locator;
+    private readonly approvalsContainer: Locator;
+    private readonly itemsContainer: Locator;
+    private readonly noItemsText: Locator;
 
     constructor(page: Page, props: Props) {
         const id = props.id ?? new URL(page.url()).pathname.split("/").at(-1);
@@ -26,6 +32,10 @@ export class ListPage extends BasePage {
         this.shareListButton = page.getByRole("button", { name: "Share List" });
         this.copyToClipboardButton = page.getByRole("button", { name: "Copy to clipboard" });
         this.publicUrlLink = page.getByRole("link", { name: "Public URL" });
+        this.createItemButton = page.getByRole("button", { name: "add item" });
+        this.noItemsText = page.getByText("No wishes yet");
+        this.approvalsContainer = page.getByTestId("approvals-container");
+        this.itemsContainer = page.getByTestId("items-container");
     }
 
     async at() {
@@ -50,5 +60,19 @@ export class ListPage extends BasePage {
         await expect(this.publicUrlLink).toBeVisible();
         await expect(this.copyToClipboardButton).toBeVisible();
         expect(await this.publicUrlLink.getAttribute("href")).toContain(this.getUrl());
+    }
+
+    async assertNoItems() {
+        await expect(this.noItemsText).toBeVisible();
+        await expect(this.itemsContainer).not.toBeVisible();
+    }
+
+    async createItem() {
+        await this.createItemButton.click();
+        return new CreateItemPage(this.page, { listId: this.id });
+    }
+
+    async getItemAt(index: number) {
+        return new ItemCard(this.itemsContainer.locator("div.card").nth(index));
     }
 }

@@ -133,6 +133,7 @@
     <input id="currency" name="currency" type="hidden" bind:value={currency} />
     <input
         class="border-surface-400-500-token w-[8ch] border-l uppercase focus:border-surface-400-500-token"
+        data-testid="currency"
         maxlength="3"
         onchange={validateCurrency}
         value={currency}
