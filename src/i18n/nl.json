@@ -30,6 +30,9 @@
         "actions": "Acties",
         "add-member": "Lid toevoegen",
         "add-remove-manager-message": "Ben je zeker dat je deze gebruiker als groepsmanager wilt {isManager, select, true {toevoegen} other {verwijderen}}?",
-        "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Manager"
+        "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Beheerder",
+        "admin": "Admin",
+        "administration": "Administration",
+        "allow-public-lists": "Openbare Lijsten Toestaan"
     }
 }
