@@ -14,6 +14,7 @@ Features to test
     - [ ] Invalid form
     - [ ] Valid form
     - [ ] Add to multiple lists
+    - [ ] Suggestions
 - [ ] Item operations
     - [ ] Edit
     - [ ] Delete
