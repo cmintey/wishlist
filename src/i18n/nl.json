@@ -1,1 +1,38 @@
-{}
+{
+    "a11y": {
+        "a-person-looking-at-an-empty-board": "Een persoon die naar een leeg bord kijkt",
+        "cancel-editing": "bewerken annuleren",
+        "clear-color-field": "kleurveld wissen",
+        "clear-icon-field": "pictogramveld wissen",
+        "clear-name-field": "Naamveld wissen",
+        "clear-url-field": "URL-veld wissen",
+        "close": "sluiten",
+        "decrease-priority": "Minder prioriteit voor {name}",
+        "default-item-image": "Standaard item afbeelding",
+        "drag-handle": "Sleep handvat voor {name}",
+        "edit-group-name": "Groepsnaam bewerken",
+        "increase-priority": "Verhoog de prioriteit voor {name}",
+        "menu": "menu",
+        "password-strength": "sterk wachtwoord",
+        "refresh-item-data": "vernieuw itemgegevens",
+        "remove-user-from-group": "verwijder {user} uit de groep",
+        "save-group-name": "Groepsnaam opslaan",
+        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} als beheerder",
+        "toggle-password-visibility": "Zichtbaarheid van wachtwoord wijzigen",
+        "two-people-looking-in-an-empty-box": "Twee mensen kijken in een lege doos",
+        "unpurchase": "Markeer artikel als niet gekocht",
+        "upload-profile-image": "Profielfoto uploaden",
+        "wishlist-logo": "Wishlist Logo"
+    },
+    "admin": {
+        "about": "Over",
+        "account": "Account",
+        "actions": "Acties",
+        "add-member": "Lid toevoegen",
+        "add-remove-manager-message": "Ben je zeker dat je deze gebruiker als groepsmanager wilt {isManager, select, true {toevoegen} other {verwijderen}}?",
+        "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Beheerder",
+        "admin": "Admin",
+        "administration": "Administration",
+        "allow-public-lists": "Openbare Lijsten Toestaan"
+    }
+}
