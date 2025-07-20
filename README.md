@@ -173,10 +173,10 @@ var url = document.URL.endsWith("/") ? document.URL.slice(0, -1) : document.URL;
 var wishlist = "http://localhost:5173"; // host of your wishlist instance
 var listId = "xyz"; // this is the id of the list you want to add the item to. You can get the id of the list from the URL
 
-var list = "/lists/" + listId
-var dest = new URL(list + "/create-item", wishlist)
-dest.searchParams.append("redirectTo", list)
-dest.searchParams.append("productUrl", url)
+var list = "/lists/" + listId;
+var dest = new URL(list + "/create-item", wishlist);
+dest.searchParams.append("redirectTo", list);
+dest.searchParams.append("productUrl", url);
 window.open(dest, "_blank");
 ```
 
