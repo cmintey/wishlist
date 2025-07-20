@@ -83,17 +83,6 @@ export const POST: RequestHandler = async (event) => {
     logger.debug(userData, "Registering a new user");
     user = await createUser(userData, Role.USER, "");
 
-    if (config.defaultGroup) {
-        logger.debug("Assigning user to the default group: %s", config.defaultGroup);
-        await client.userGroupMembership.create({
-            data: {
-                groupId: config.defaultGroup,
-                userId: user.id,
-                active: true
-            }
-        });
-    }
-
     await authenticate(event, user.id);
 
     // never
