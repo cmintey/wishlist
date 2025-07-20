@@ -5,20 +5,12 @@ import { gotScraping } from "got-scraping";
 import metascraper, { type Metadata } from "metascraper";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
-import metascraperUrl from "metascraper-url";
-import metascraperAmazon from "metascraper-amazon";
 import shopping from "$lib/server/shopping";
 import { parseAcceptLanguageHeader } from "$lib/i18n";
 import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
 
-const scraper = metascraper([
-    metascraperAmazon(),
-    shopping(),
-    metascraperTitle(),
-    metascraperImage(),
-    metascraperUrl()
-]);
+const scraper = metascraper([shopping(), metascraperTitle(), metascraperImage()]);
 
 const goShopping = async (targetUrl: string, locales: string[]) => {
     const resp = await gotScraping({
