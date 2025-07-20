@@ -166,7 +166,7 @@ You configure this using environment variables.
 
 Wishlist supports adding items via a bookmarklet. Whenever you're on a product page that you want to add to Wishlist, you can click on your bookmarklet to open Wishlist in a new tab and instantly start creating a new item.
 
-To create a bookmarklet, paste the following code into a [bookmarklet generator site](). Change the two variables that have comments, generate, and save the bookmarklet.
+To create a bookmarklet, paste the following code into a [bookmarklet generator site](https://caiorss.github.io/bookmarklet-maker/). Change the two variables that have comments, generate, and save the bookmarklet.
 
 ```js
 var url = document.URL.endsWith("/") ? document.URL.slice(0, -1) : document.URL;
