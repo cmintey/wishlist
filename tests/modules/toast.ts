@@ -10,7 +10,6 @@ export class Toast {
     }
 
     async waitForToastWithText(text: string) {
-        await expect(this.toast).toBeVisible();
-        await expect(this.toast).toHaveText(new RegExp(text));
+        await expect(this.toast.filter({ hasText: new RegExp(text) })).toBeVisible();
     }
 }
