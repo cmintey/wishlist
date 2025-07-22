@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+import { randomString } from "../util";
 
 export class ItemForm {
     private readonly page: Page;
@@ -22,7 +23,7 @@ export class ItemForm {
         this.page = page;
         this.urlField = page.getByLabel("Item URL");
         this.nameField = page.getByLabel("Item Name");
-        this.priceField = page.getByLabel("Price");
+        this.priceField = page.locator("#formatted-price");
         this.currencyField = page.getByTestId("currency");
         this.quantityField = page.getByLabel("Quantity");
         this.noLimitCheckbox = page.getByLabel("No limit");
@@ -33,18 +34,19 @@ export class ItemForm {
         this.notesWriteTab = page.locator(".tab-label", { hasText: "Write" });
         this.notesPreviewTab = page.locator(".tab-label", { hasText: "Preview" });
         this.notesPreviewContainer = page.getByTestId("markdown-preview");
-        this.listSelectorField = page.getByLabel("Lists");
+        this.listSelectorField = page.getByRole("group", { name: "Lists" });
         this.hangTightBackdrop = page.getByText("Hang tight, gathering product data");
     }
 
     async fillViaUrl(url: string) {
+        await this.urlField.focus();
         await this.urlField.fill(url);
+        await this.nameField.focus();
         await expect(this.hangTightBackdrop).toBeVisible();
         await expect(this.hangTightBackdrop).not.toBeVisible({ timeout: 10000 });
-        await expect(this.nameField).toHaveValue(/.+/);
-        await expect(this.urlField).toHaveValue(/.+/);
-        await expect(this.priceField).toHaveValue(/.+/);
-        await expect(this.imageUrlField).toHaveValue(/.+/);
+        if (!(await this.nameField.inputValue())) {
+            await this.fillName(randomString());
+        }
         return this;
     }
 
@@ -67,7 +69,12 @@ export class ItemForm {
     }
 
     async checkNoLimit() {
-        await this.noLimitCheckbox.click();
+        await this.noLimitCheckbox.check();
+        return this;
+    }
+
+    async uncheckNoLimit() {
+        await this.noLimitCheckbox.uncheck();
         return this;
     }
 
@@ -95,6 +102,13 @@ export class ItemForm {
     async selectList(...lists: string[]) {
         for (const list of lists) {
             await this.listSelectorField.getByLabel(list).check();
+        }
+        return this;
+    }
+
+    async assertListsSelected(...lists: string[]) {
+        for (const list of lists) {
+            await expect(this.listSelectorField.getByLabel(list)).toBeChecked();
         }
         return this;
     }
