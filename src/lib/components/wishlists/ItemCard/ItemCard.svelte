@@ -53,6 +53,7 @@
         onIncreasePriority = undefined,
         onDecreasePriority = undefined
     }: Props = $props();
+    const id = $props.id();
     const t = getFormatter();
 
     const modalStore = getModalStore();
@@ -269,6 +270,7 @@
             sizeClasses
         ]}
         aria-label={t("a11y.default-item-image")}
+        data-testid="image"
         role="img"
     >
         <iconify-icon class="w-8 md:w-16" height="none" icon="ion:gift"></iconify-icon>
@@ -279,6 +281,7 @@
     class="card block w-full text-start"
     class:card-hover={!reorderActions}
     class:variant-ghost-warning={!item.approved}
+    aria-labelledby={`${id}-name`}
     onclick={() => {
         if (!reorderActions) launchDrawer();
     }}
@@ -290,7 +293,9 @@
     <header class="card-header flex w-full">
         {#if item.url}
             <a
+                id={`${id}-name`}
                 class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl"
+                data-testid="name"
                 href={item.url}
                 onclick={(e) => e.stopPropagation()}
                 rel="noreferrer"
@@ -299,7 +304,7 @@
                 {item.name}
             </a>
         {:else}
-            <span class="line-clamp-2 text-xl font-bold md:text-2xl">
+            <span id={`${id}-name`} class="line-clamp-2 text-xl font-bold md:text-2xl" data-testid="name">
                 {item.name}
             </span>
         {/if}
@@ -309,6 +314,7 @@
         <Image
             class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
             alt={item.name}
+            data-testid="image"
             referrerpolicy="no-referrer"
             src={imageUrl}
         >
@@ -317,9 +323,9 @@
 
         <div class="flex flex-col">
             {#if item.price || item.itemPrice}
-                <div class="flex items-center space-x-2" data-testid="price">
+                <div class="flex items-center space-x-2">
                     <iconify-icon icon="ion:pricetag"></iconify-icon>
-                    <span class="text-lg font-semibold">{formatPrice(item)}</span>
+                    <span class="text-lg font-semibold" data-testid="price">{formatPrice(item)}</span>
                 </div>
             {/if}
 
@@ -356,9 +362,9 @@
             </div>
 
             {#if item.note}
-                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2" data-testid="notes">
+                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
                     <iconify-icon icon="ion:reader"></iconify-icon>
-                    <div class="line-clamp-2 whitespace-pre-wrap">
+                    <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
                         <Markdown source={item.note} />
                     </div>
                 </div>
