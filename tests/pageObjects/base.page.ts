@@ -14,5 +14,6 @@ export abstract class BasePage {
     async goto() {
         await this.page.goto(this.urlPath);
         await this.at();
+        return this;
     }
 }

@@ -55,13 +55,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=caddy /caddy /usr/bin/caddy
-COPY --from=build /usr/src/app/build ./build/
-COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
 RUN chmod +x entrypoint.sh && chmod +x /usr/bin/caddy
+
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/build ./build/
 
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data
