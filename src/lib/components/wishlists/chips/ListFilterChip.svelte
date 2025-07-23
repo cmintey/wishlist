@@ -36,4 +36,4 @@
     }
 </script>
 
-<BaseChip {defaultOption} multiselect {options} {prefix} {searchParam} />
+<BaseChip {defaultOption} multiselect {options} {prefix} {searchParam} testId="list-filter" />

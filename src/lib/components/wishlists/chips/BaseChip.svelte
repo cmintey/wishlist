@@ -11,6 +11,7 @@
         directionParam?: string | undefined;
         prefix?: string;
         multiselect?: boolean;
+        testId?: string;
     }
 
     const {
@@ -19,7 +20,8 @@
         searchParam,
         directionParam = undefined,
         prefix = undefined,
-        multiselect = false
+        multiselect = false,
+        testId
     }: Props = $props();
     const t = getFormatter();
 
@@ -112,7 +114,7 @@
     };
 </script>
 
-<div class="flex flex-row space-x-4 pb-4">
+<div class="flex flex-row space-x-4 pb-4" data-testid={testId}>
     <button
         class="variant-ringed-primary chip"
         class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}

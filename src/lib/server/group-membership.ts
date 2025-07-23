@@ -2,7 +2,7 @@ import { redirect } from "@sveltejs/kit";
 import { client } from "./prisma";
 
 export const getActiveMembership = async (user: LocalUser) => {
-    let activeMembership = await client.userGroupMembership.findFirst({
+    const activeMembership = await client.userGroupMembership.findFirst({
         where: {
             userId: user.id,
             active: true
@@ -18,7 +18,7 @@ export const getActiveMembership = async (user: LocalUser) => {
         if (!membership) {
             redirect(302, "/group-error");
         }
-        await client.userGroupMembership.update({
+        return await client.userGroupMembership.update({
             where: {
                 id: membership.id
             },
@@ -26,7 +26,6 @@ export const getActiveMembership = async (user: LocalUser) => {
                 active: true
             }
         });
-        activeMembership = membership;
     }
 
     return activeMembership;

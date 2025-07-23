@@ -1,0 +1,3 @@
+engineStrict: true
+autoInstallPeers: false
+strictPeerDependencies: true
