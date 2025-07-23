@@ -101,6 +101,7 @@ export class ItemCard {
 
     async edit() {
         await this.editButton.click();
+        await this.card.page().waitForURL(/\/items\/\d+\/edit/);
         return new EditItemPage(this.card.page());
     }
 

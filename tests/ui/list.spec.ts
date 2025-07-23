@@ -259,8 +259,8 @@ test("list shows item count correctly", async ({ page }) => {
         .then((ep) => ep.getForm())
         .then((f) => f.fillQuantity(8));
     await editItemPage.save();
-    await listPage.at();
     await new Toast(page).waitForToastWithText("Item updated successfully");
+    await listPage.goto();
     await listPage
         .getItemAt(0)
         .then((item) => item.assertNoLink())
