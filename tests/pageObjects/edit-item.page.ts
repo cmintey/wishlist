@@ -12,7 +12,7 @@ export class EditItemPage extends BasePage {
     private readonly saveButton: Locator;
 
     constructor(page: Page, props?: Props) {
-        const itemId = props?.itemId ?? new URL(page.url()).pathname.split("/").at(-1);
+        const itemId = props?.itemId ?? new URL(page.url()).pathname.split("/").at(-2);
         super(page, `/items/${itemId}/edit`);
         this.header = page.getByRole("heading", { name: "Edit Wish" });
         this.itemForm = new ItemForm(page);
