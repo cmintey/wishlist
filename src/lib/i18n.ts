@@ -4,19 +4,20 @@ import type { MessageObject, MessageFormatter } from "./server/i18n";
 import { getContext, setContext } from "svelte";
 
 const supportedLangs = {
+    de: () => import("../i18n/de.json"),
     en: () => import("../i18n/en.json"),
     es: () => import("../i18n/es.json"),
+    fa: () => import("../i18n/fa.json"),
     fr: () => import("../i18n/fr.json"),
-    sv: () => import("../i18n/sv.json"),
-    de: () => import("../i18n/de.json"),
-    ru: () => import("../i18n/ru.json"),
-    pt: () => import("../i18n/pt.json"),
-    pl: () => import("../i18n/pl.json"),
-    nl: () => import("../i18n/nl.json"),
-    vi: () => import("../i18n/vi.json"),
-    no: () => import("../i18n/nb.json"),
     nb: () => import("../i18n/nb.json"),
-    nn: () => import("../i18n/nb.json")
+    nl: () => import("../i18n/nl.json"),
+    nn: () => import("../i18n/nb.json"),
+    no: () => import("../i18n/nb.json"),
+    pl: () => import("../i18n/pl.json"),
+    pt: () => import("../i18n/pt.json"),
+    ru: () => import("../i18n/ru.json"),
+    sv: () => import("../i18n/sv.json"),
+    vi: () => import("../i18n/vi.json")
 };
 
 export const defaultLocale = "en";
