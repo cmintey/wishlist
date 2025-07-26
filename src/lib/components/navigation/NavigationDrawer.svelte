@@ -24,7 +24,7 @@
         {#each navItems as navItem}
             <li>
                 <a
-                    class="list-option space-x-1 font-bold"
+                    class="list-option gap-x-1 font-bold"
                     class:variant-filled-primary={page.url.pathname === navItem.href}
                     data-sveltekit-preload-data
                     href={navItem.href}

@@ -62,7 +62,7 @@
 </div>
 
 <form method="POST" use:enhance>
-    <div class="mt-4 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+    <div class="mt-4 flex flex-col space-y-4 md:flex-row md:gap-x-4 md:space-y-0">
         <button class="variant-filled-primary btn w-fit" formaction="?/reset-password">
             {$t("admin.generate-reset-password-link")}
         </button>

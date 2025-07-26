@@ -97,7 +97,7 @@
 </script>
 
 {#if data.config.listMode !== "registry"}
-    <div class="flex space-x-4 py-4">
+    <div class="flex gap-x-4 py-4">
         <button
             class="variant-filled-primary btn"
             onclick={() => modalStore.trigger(addUserModalSettings)}

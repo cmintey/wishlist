@@ -82,7 +82,7 @@
 </label>
 
 {#if strengthMeter && value !== "" && strength}
-    <div class="flex flex-row items-center space-x-1 pt-1">
+    <div class="flex flex-row items-center gap-x-1 pt-1">
         <ProgressBar
             label={$t("a11y.password-strength")}
             max={5}
@@ -100,7 +100,7 @@
 
     <div class="card variant-filled p-4" data-popup="suggestions">
         {#if strength.feedback.warning}
-            <div class="flex flex-row items-center space-x-4 pb-1">
+            <div class="flex flex-row items-center gap-x-4 pb-1">
                 <iconify-icon icon="ion:alert-circle"></iconify-icon>
                 <p>{strength.feedback.warning}</p>
             </div>

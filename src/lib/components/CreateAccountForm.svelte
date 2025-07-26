@@ -28,7 +28,7 @@
         <input id="name" name="name" class="input" autocomplete="name" required type="text" />
     </label>
 
-    <div class="flex flex-col space-y-4 md:flex-row md:space-x-2 md:space-y-0">
+    <div class="flex flex-col space-y-4 md:flex-row md:gap-x-2 md:space-y-0">
         <label for="username">
             <span>{$t("auth.username")}</span>
             <input
@@ -76,7 +76,7 @@
     {/if}
 
     {#if !hideActions}
-        <div class="flex items-center justify-center space-x-4 pb-2">
+        <div class="flex items-center justify-center gap-x-4 pb-2">
             <button
                 class="variant-filled-primary btn w-min"
                 disabled={password !== passwordConfirm || signingIn}

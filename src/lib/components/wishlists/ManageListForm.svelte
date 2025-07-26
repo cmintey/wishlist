@@ -93,7 +93,7 @@
             </label>
 
             {#if allowsPublicLists || listMode === "registry"}
-                <label class="unstyled mt-8 flex flex-row items-center space-x-2" for="public">
+                <label class="unstyled mt-8 flex flex-row items-center gap-x-2" for="public">
                     <input
                         id="public"
                         name="public"
@@ -149,7 +149,7 @@
         <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
             {$t("general.cancel")}
         </button>
-        <div class="flex flex-row space-x-4">
+        <div class="flex flex-row gap-x-4">
             {#if editing}
                 <button class="variant-filled-error btn w-min" formaction="?/delete" type="submit">
                     {$t("wishes.delete")}

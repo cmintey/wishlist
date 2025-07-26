@@ -97,7 +97,7 @@
                             </ul>
                         {/if}
 
-                        <div class="flex items-center justify-center space-x-4">
+                        <div class="flex items-center justify-center gap-x-4">
                             <button class="variant-filled-primary btn w-min" disabled={signingIn}>
                                 {#if signingIn}
                                     <ProgressRadial width="w-4" />
@@ -109,7 +109,7 @@
                             {/if}
                         </div>
 
-                        <a class="absolute right-0 top-0 !mt-0 pt-0.5 text-sm" href="/forgot-password">
+                        <a class="absolute top-0 !mt-0 pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
                             {$t("auth.forgot-password")}
                         </a>
                     </div>

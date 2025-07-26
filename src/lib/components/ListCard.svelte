@@ -35,7 +35,7 @@
 <svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="variant-ghost-primary card-header flex flex-row items-center space-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
+            class="variant-ghost-primary card-header flex flex-row items-center gap-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
         >
             <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
@@ -58,7 +58,7 @@
 
                 {#if list.itemCount !== undefined}
                     <span>·</span>
-                    <div class="flex flex-row items-center space-x-2">
+                    <div class="flex flex-row items-center gap-x-2">
                         <iconify-icon icon="ion:gift"></iconify-icon>
                         <span>
                             {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}

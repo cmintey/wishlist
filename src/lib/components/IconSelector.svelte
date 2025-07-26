@@ -111,7 +111,7 @@
         {@const items = partition(searchedIcons!, 7)}
         <VirtualList style="height:16rem" {items}>
             {#snippet vl_slot({ item: iconSet })}
-                <div class="items flex flex-row flex-wrap space-x-2">
+                <div class="items flex flex-row flex-wrap gap-x-2">
                     {#each iconSet as icon}
                         <button
                             class="btn btn-icon-sm"

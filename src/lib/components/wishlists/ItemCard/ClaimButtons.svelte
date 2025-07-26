@@ -29,7 +29,7 @@
 {#if !onPublicList && item.userId === user?.id}
     <div></div>
 {:else if userClaim}
-    <div class="flex flex-row space-x-2 md:space-x-4">
+    <div class="flex flex-row gap-x-2 md:gap-x-4">
         <button
             class="variant-ghost-secondary btn btn-sm md:btn"
             onclick={(e) => {
@@ -56,7 +56,7 @@
         </button>
     </div>
 {:else if item.isClaimable}
-    <div class="flex flex-row items-center space-x-2 md:space-x-4">
+    <div class="flex flex-row items-center gap-x-2 md:gap-x-4">
         <button
             class="variant-filled-secondary btn btn-sm md:btn"
             onclick={(e) => {

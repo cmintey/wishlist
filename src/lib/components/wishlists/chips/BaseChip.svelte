@@ -112,7 +112,7 @@
     };
 </script>
 
-<div class="flex flex-row space-x-4 pb-4">
+<div class="flex flex-row gap-x-4 pb-4">
     <button
         class="variant-ringed-primary chip"
         class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}
@@ -125,7 +125,7 @@
         {:else if prefix}
             <iconify-icon icon={prefix}></iconify-icon>
         {/if}
-        <div class="flex space-x-1">
+        <div class="flex gap-x-1">
             <span>
                 {selectedOptions[0].displayValue}
             </span>
@@ -164,7 +164,7 @@
             {/each}
         </ul>
         {#if multiselect}
-            <div class="flex flex-row justify-between space-x-2 pt-4">
+            <div class="flex flex-row justify-between gap-x-2 pt-4">
                 <button id="cancel" class="variant-ghost-secondary btn btn-sm" onclick={handleCancel}>
                     {$t("general.cancel")}
                 </button>

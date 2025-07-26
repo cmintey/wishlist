@@ -41,7 +41,7 @@
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
     <div class="pb-4">
         <aside class="alert variant-ghost-warning">
-            <div class="alert-message flex flex-row items-center space-x-4 space-y-0">
+            <div class="alert-message flex flex-row items-center gap-x-4 space-y-0">
                 <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
                 <div>
                     <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>

@@ -2,7 +2,7 @@
     import ClearListsButton from "./Actions/ClearListsButton.svelte";
 </script>
 
-<div class="flex space-x-2">
+<div class="flex gap-x-2">
     <ClearListsButton />
     <ClearListsButton claimed />
 </div>

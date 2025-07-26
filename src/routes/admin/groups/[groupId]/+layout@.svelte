@@ -34,7 +34,7 @@
     };
 </script>
 
-<div class="flex flex-row items-center space-x-2">
+<div class="flex flex-row items-center gap-x-2">
     {#if editing}
         <input
             class="input w-fit"
@@ -43,7 +43,7 @@
             type="text"
             bind:value={newGroupName}
         />
-        <div class="flex flex-row items-center -space-x-2">
+        <div class="-gap-x-2 flex flex-row items-center">
             <button class="btn-icon pr-0" aria-label={$t("a11y.save-group-name")} onclick={() => saveGroupName()}>
                 <iconify-icon icon="ion:save" width="24px"></iconify-icon>
             </button>
