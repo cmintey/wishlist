@@ -401,6 +401,9 @@
         "supports-markdown": "Поддержка Markdown",
         "write": "Написать",
         "create-and-add-another": "Создать и добавить ещё",
-        "no-limit": "Без ограничений"
+        "no-limit": "Без ограничений",
+        "additional-items-requested": "{remainingQuantity, plural, =0 {В наличии нет дополнительных пунктов.} one { Доступен # дополнительный пункт.} other { Доступно # дополнительных пунктов.}}",
+        "claimed-info-text": "{claimedQuantity, plural, one {Вы выполнили # пункт.} other {Вы выполнили # пунктов.}}",
+        "purchased-toast": "Помечено пункт {purchased, select, true {купленный} other {не купленный}}"
     }
 }

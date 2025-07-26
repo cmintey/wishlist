@@ -63,13 +63,17 @@
         "cannot-update-a-claim-that-is-not-yours": "Vous ne pouvez pas mettre à jour une réservation qui n'est pas la vôtre",
         "unable-to-unclaim-item": "Impossible de retirer la réservation",
         "item-not-found-on-list": "Article non trouvé dans la liste",
-        "unable-to-update-claim": "Impossible de mettre à jour la réservation"
+        "unable-to-update-claim": "Impossible de mettre à jour la réservation",
+        "an-item-must-be-added-to-at-least-one-list": "Un élément doit être ajouté à au moins une liste",
+        "could-not-claim-quantity-items": "Impossible de demander {quantity} exemplaires. Seulement {availableQuantity} exemplaires sont disponibles.",
+        "public-lists-not-allowed": "Les listes publiques ne sont pas autorisées dans ce groupe",
+        "registration-is-disabled": "L'enregistrement est desactivé"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
         "groups": "Groupes",
         "default-group": "Groupe par défaut",
-        "wishlist-mode-alert": "Il y a d'autres membres dans ce groupe, vous ne pouvez pas changer de mode tant que vous n'avez pas supprimé tous les membres sauf un.",
+        "wishlist-mode-alert": "Il y a {memberCount} membres et {listCount} listes dans ce groupe, vous ne pouvez pas changer de mode tant que vous n'avez pas supprimé tous les membres et listes sauf un.",
         "about": "À propos",
         "account": "Compte",
         "actions": "Actions",
@@ -151,7 +155,12 @@
         "oidc-auto-register-tooltip": "Autorise la création de nouveau compte pour les utilisateurs OAuth qui se connectent pour la première fois.",
         "oidc-client-id": "Client Id",
         "allow-public-lists": "Autoriser les listes publiques",
-        "allow-public-lists-tooltip": "Autorise les utilisateurs à rendre une liste publiques. N'a pas d'effet si le groupe est en mode \"Registry\"."
+        "allow-public-lists-tooltip": "Autorise les utilisateurs à rendre une liste publiques. N'a pas d'effet si le groupe est en mode \"Registry\".",
+        "suggestions-auto-approve-tooltip": "L'élément est ajouté automatiquement à la liste, mais le propriétaire de la liste peut le voir, le modifier et le supprimer.",
+        "suggestions-surprise-me-tooltip": "L'élément est automatiquement ajouté à la liste du propriétaire sans qu'il ne le sache.",
+        "suggestions-tooltip": "Autoriser les utilisateurs d'un même groupe à suggérer des éléments à la liste d'un autre utilisateur.",
+        "test-email": "E-mail de test",
+        "test-email-sent-toast": "E-mail de test envoyé"
     },
     "auth": {
         "password": "Mot de passe",
@@ -177,7 +186,19 @@
         "passwords-must-match": "Les mots de passe doivent concorder",
         "reset-password": "Réinitialiser le mot de passe",
         "invite-via": "Inviter via...",
-        "no-claims-found": "Aucune réservation trouvée"
+        "no-claims-found": "Aucune réservation trouvée",
+        "account-is-not-linked-with-oauth": "Votre compte n'est pas associé avec {providerName}. Pour associer votre compte, déconnectez-vous et cliquez sur 'Se connecter avec {providerName}'.",
+        "authenticating": "Authentification...",
+        "couldnt-retrieve-stored-oidc-state": "Impossible de récupérer l'état de l'OIDC",
+        "create-account": "Créer un compte",
+        "email-is-not-verified-with-the-identity-provider": "L'e-mail n'est pas vérifié avec le fournisseur d'identité",
+        "email-was-not-provided-by-the-identity-provider": "L'e-mail n'a pas été fourni par le fournisseur d'identité",
+        "no-callback-url-supplied": "Aucune url de retour n'a été renseignée",
+        "oidc-client-not-configured": "Le client OIDC n'a pas été configuré",
+        "or": "ou",
+        "sign-in-with": "Se connecter avec {provider}",
+        "unlink-oauth": "Délier {providerName}",
+        "your-account-is-currently-linked-with-oauth": "Votre compte est actuellement lié avec {providerName}"
     },
     "a11y": {
         "decrease-priority": "diminuer la priorité pour {name}",
@@ -200,7 +221,9 @@
         "a-person-looking-at-an-empty-board": "Quelqu'un regardant une liste vide",
         "clear-color-field": "effacer le champ couleur",
         "clear-icon-field": "effacer le champ icône",
-        "clear-name-field": "effacer le champ nom"
+        "clear-name-field": "effacer le champ nom",
+        "default-item-image": "image de l'élément par défaut",
+        "unpurchase": "Marquer l'élément comme non acheté"
     },
     "app": {
         "my-claims": "Mes réservations",
@@ -277,7 +300,9 @@
         "select-file": "Sélectionner un fichier",
         "all": "Tout",
         "apply": "Appliquer",
-        "create": "Créer"
+        "create": "Créer",
+        "na": "N/D",
+        "return-home": "Retourner à l'accueil"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -360,7 +385,9 @@
         "heads-up": "Attention !",
         "item-was-removed-from-list": "{name} a été retiré de la liste",
         "all-lists": "Toutes les listes",
-        "this-list": "Cette liste"
+        "this-list": "Cette liste",
+        "added-by-somebody-else": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">quelqu'un d'autre</span>",
+        "claimed-by-multiple-users": "Réservé par plusieurs utilisateurs"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
