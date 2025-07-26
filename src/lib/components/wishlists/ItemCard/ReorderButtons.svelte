@@ -19,7 +19,7 @@
     let messageObj = $derived({ values: { name: item.name } });
 </script>
 
-<div class="w-max space-x-4">
+<div class="w-max gap-x-4">
     <button
         class="variant-outline-primary btn btn-icon btn-icon-sm md:btn-icon"
         aria-label={$t("a11y.decrease-priority", messageObj)}

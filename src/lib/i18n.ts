@@ -2,25 +2,59 @@ import { register, init, format, waitLocale } from "svelte-i18n";
 import { derived, type Readable } from "svelte/store";
 import type { MessageObject, MessageFormatter } from "./server/i18n";
 import { getContext, setContext } from "svelte";
+import { dev } from "$app/environment";
 
-const supportedLangs = {
-    de: () => import("../i18n/de.json"),
-    en: () => import("../i18n/en.json"),
-    es: () => import("../i18n/es.json"),
-    fa: () => import("../i18n/fa.json"),
-    fr: () => import("../i18n/fr.json"),
-    nb: () => import("../i18n/nb.json"),
-    nl: () => import("../i18n/nl.json"),
-    nn: () => import("../i18n/nb.json"),
-    no: () => import("../i18n/nb.json"),
-    pl: () => import("../i18n/pl.json"),
-    pt: () => import("../i18n/pt.json"),
-    ru: () => import("../i18n/ru.json"),
-    sv: () => import("../i18n/sv.json"),
-    vi: () => import("../i18n/vi.json")
+export interface Lang {
+    name: string;
+    endonym: string;
+    code: string;
+    loader: () => Promise<object>;
+    rtl?: boolean;
+    display?: boolean;
+}
+
+export const defaultLang: Lang = {
+    name: "English",
+    endonym: "English",
+    code: "en",
+    loader: () => import("../i18n/en.json")
 };
 
-export const defaultLocale = "en";
+const supportedLangs: Lang[] = [
+    defaultLang,
+    { name: "German", endonym: "Deutsch", code: "de", loader: () => import("../i18n/de.json") },
+    { name: "Spanish", endonym: "Español", code: "es", loader: () => import("../i18n/es.json") },
+    { name: "Persian", endonym: "فارسی", code: "fa", loader: () => import("../i18n/fa.json"), rtl: true },
+    { name: "French", endonym: "Français", code: "fr", loader: () => import("../i18n/fr.json") },
+    { name: "Dutch", endonym: "Nederlands", code: "nl", loader: () => import("../i18n/nl.json") },
+    { name: "Norwegian", endonym: "Norsk", code: "no", loader: () => import("../i18n/nb.json") },
+    {
+        name: "Norwegian Bokmål",
+        endonym: "Norsk Bokmål",
+        code: "nb",
+        loader: () => import("../i18n/nb.json"),
+        display: false
+    },
+    {
+        name: "Norwegian Nynorsk",
+        endonym: "Norsk Nynorsk",
+        code: "nn",
+        loader: () => import("../i18n/nb.json"),
+        display: false
+    },
+    { name: "Polish", endonym: "Polski", code: "pl", loader: () => import("../i18n/pl.json") },
+    { name: "Portuguese", endonym: "Português", code: "pt", loader: () => import("../i18n/pt.json") },
+    { name: "Russian", endonym: "Русский язык", code: "ru", loader: () => import("../i18n/ru.json") },
+    { name: "Swedish", endonym: "Svenska", code: "sv", loader: () => import("../i18n/sv.json") },
+    { name: "Vietnamese", endonym: "tiếng Việt", code: "vi", loader: () => import("../i18n/vi.json") },
+    {
+        name: "Development (keys only)",
+        endonym: "Development (keys only)",
+        code: "dev",
+        loader: () => Promise.resolve({}),
+        display: dev
+    }
+];
 
 export async function initFormatter(locale: string) {
     await waitLocale(locale);
@@ -48,14 +82,14 @@ export function setLocale(locale: string) {
 }
 
 export function getLocale() {
-    return (getContext("locale") as string) || defaultLocale;
+    return (getContext("locale") as string) || defaultLang.code;
 }
 
 export const initLang = async (locale: string) => {
-    Object.entries(supportedLangs).forEach(([lang, loader]) => register(lang, loader));
+    supportedLangs.forEach((lang) => register(lang.code, lang.loader));
 
     await init({
-        fallbackLocale: defaultLocale,
+        fallbackLocale: dev ? "dev" : defaultLang.code,
         initialLocale: locale
     });
 };
@@ -79,8 +113,11 @@ export const getClosestAvailableLocaleFromHeader = (acceptLanguage: string | und
     return getClosestAvailableLocale(langs);
 };
 
-export const getClosestAvailableLocale = (langs: readonly string[]) => {
-    return langs.find((lang) => Object.keys(supportedLangs).find((supportedLang) => supportedLang === lang));
+export const getClosestAvailableLocale = (langs: readonly string[]): Lang => {
+    const availableLangs = langs
+        .map((lang) => supportedLangs.find((supportedLang) => supportedLang.code === lang))
+        .filter((lang) => lang !== undefined);
+    return availableLangs.length > 0 ? availableLangs[0] : defaultLang;
 };
 
 export const getPrimaryLang = (locale: string) => {

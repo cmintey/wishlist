@@ -68,7 +68,7 @@
     };
 </script>
 
-<div class="flex flex-col space-y-4 {vertical ? 'items-center' : 'md:flex-row md:items-end md:space-x-4 md:space-y-0'}">
+<div class="flex flex-col space-y-4 {vertical ? 'items-center' : 'md:flex-row md:items-end md:gap-x-4 md:space-y-0'}">
     <button class="variant-filled-primary btn w-fit" onclick={triggerInviteModal} type="button">
         <iconify-icon icon="ion:person-add"></iconify-icon>
         <p>{$t("general.invite-user")}</p>
@@ -78,7 +78,7 @@
         <div
             class="flex flex-col space-y-2 {vertical
                 ? 'items-center'
-                : 'md:flex-row md:items-center md:space-x-2 md:space-y-0'}"
+                : 'md:flex-row md:items-center md:gap-x-2 md:space-y-0'}"
             out:fade
         >
             <TokenCopy onCopied={() => setTimeout(() => (url = null), 1000)} {url}>

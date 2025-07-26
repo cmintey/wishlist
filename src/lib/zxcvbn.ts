@@ -1,8 +1,8 @@
 import { browser } from "$app/environment";
-import { getPrimaryLang, getLocale, defaultLocale } from "./i18n";
+import { getPrimaryLang, getLocale, defaultLang } from "./i18n";
 
 export const loadOptions = async (locale?: string) => {
-    const locale_ = locale ? locale : browser ? getLocale() : defaultLocale;
+    const locale_ = locale ? locale : browser ? getLocale() : defaultLang.code;
 
     const langCommon = await import("@zxcvbn-ts/language-common");
     const langEn = await import("@zxcvbn-ts/language-en");

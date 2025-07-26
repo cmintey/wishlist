@@ -198,14 +198,14 @@
 
 <!-- chips -->
 <div class="flex flex-wrap justify-between pb-2">
-    <div class="flex flex-row flex-wrap space-x-4">
+    <div class="flex flex-row flex-wrap gap-x-4">
         {#if !data.list.owner.isMe}
             <ClaimFilterChip />
         {/if}
         <SortBy />
     </div>
     {#if data.list.owner.isMe}
-        <div class="flex flex-row flex-wrap space-x-4">
+        <div class="flex flex-row flex-wrap gap-x-4">
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
         </div>
@@ -213,7 +213,7 @@
 </div>
 
 {#if data.list.owner.isMe && (data.listMode === "registry" || data.list.public)}
-    <div class="flex flex-row space-x-2 pb-4">
+    <div class="flex flex-row gap-x-2 pb-4">
         {#if publicListUrl}
             <div class="flex flex-row">
                 <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>{$t("wishes.public-url")}</TokenCopy>

@@ -16,7 +16,7 @@
     const t = getFormatter();
 </script>
 
-<div class="flex flex-row space-x-2 md:space-x-4">
+<div class="flex flex-row gap-x-2 md:gap-x-4">
     {#if !item.approved}
         <button
             class="variant-filled-success btn btn-sm md:btn"

@@ -306,7 +306,7 @@
         </div>
     </header>
 
-    <div class="flex flex-row space-x-4 p-4">
+    <div class="flex flex-row gap-x-4 p-4">
         <Image
             class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
             alt={item.name}
@@ -318,7 +318,7 @@
 
         <div class="flex flex-col">
             {#if item.price || item.itemPrice}
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center gap-x-2">
                     <iconify-icon icon="ion:pricetag"></iconify-icon>
                     <span class="text-lg font-semibold">{formatPrice(item)}</span>
                 </div>

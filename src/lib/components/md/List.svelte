@@ -11,7 +11,7 @@
 </script>
 
 {#if ordered}
-    <ol class="list-decimal pl-4" {start}>{@render children?.()}</ol>
+    <ol class="list-decimal pl-4 rtl:pr-4" {start}>{@render children?.()}</ol>
 {:else}
-    <ul class="list-disc pl-4">{@render children?.()}</ul>
+    <ul class="list-disc pl-4 rtl:pr-4">{@render children?.()}</ul>
 {/if}

@@ -86,7 +86,7 @@
         {#if smtpEnabled}
             <button class="btn {parent.buttonPositive}" use:popup={inviteViaPopup}>{$t("auth.invite-via")}</button>
             <div class="card p-4 shadow-xl" data-popup={inviteViaPopupName}>
-                <div class="flex flex-row space-x-4">
+                <div class="flex flex-row gap-x-4">
                     <button class="variant-ghost-primary btn" onclick={() => onFormSubmit("link")}>
                         {$t("general.invite-link")}
                     </button>

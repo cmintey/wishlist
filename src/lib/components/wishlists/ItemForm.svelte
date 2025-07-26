@@ -154,7 +154,7 @@
 <div class="grid grid-cols-7 gap-4">
     <label class="col-span-full" for="url">
         <span>{$t("wishes.item-url")}</span>
-        <div class="flex flex-row space-x-4">
+        <div class="flex flex-row gap-x-4">
             <div class="input-group grid-cols-[auto_1fr_auto]">
                 <div class="input-group-shim">
                     <iconify-icon icon="ion:link"></iconify-icon>
@@ -346,7 +346,7 @@
             class:input-error={form?.errors?.lists?._errors}
         >
             {#each lists as list (list.id)}
-                <label class="flex items-center space-x-2" for={list.id}>
+                <label class="flex items-center gap-x-2" for={list.id}>
                     <input
                         id={list.id}
                         name="lists"
@@ -356,7 +356,7 @@
                         type="checkbox"
                         value={list.id}
                     />
-                    <div class="!mt-0 flex flex-row space-x-2">
+                    <div class="!mt-0 flex flex-row gap-x-2">
                         <span>
                             {list.name}
                         </span>

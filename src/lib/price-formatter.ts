@@ -1,7 +1,7 @@
 import { env } from "$env/dynamic/public";
 import type { ItemPrice } from "@prisma/client";
 import { getNumberFormatter } from "svelte-i18n";
-import { defaultLocale, getLocale } from "./i18n";
+import { defaultLang, getLocale } from "./i18n";
 import { browser } from "$app/environment";
 
 type ItemWithPrice = {
@@ -23,7 +23,7 @@ const getMaximumFractionDigits = (currency: string, locale?: string) => {
 
 export const getFormatter = (currency: string | null, locale?: string) => {
     return getNumberFormatter({
-        locale: locale ?? (browser ? getLocale() : defaultLocale),
+        locale: locale ?? (browser ? getLocale() : defaultLang.code),
         style: "currency",
         currency: currency || env.PUBLIC_DEFAULT_CURRENCY,
         currencyDisplay: "narrowSymbol"

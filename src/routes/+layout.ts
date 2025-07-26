@@ -1,11 +1,11 @@
 import type { LayoutLoad } from "./$types";
-import { defaultLocale, getClosestAvailableLocale, initFormatter, initLang } from "$lib/i18n";
+import { getClosestAvailableLocale, initFormatter, initLang } from "$lib/i18n";
 import { browser } from "$app/environment";
 
 export const load = (async ({ data }) => {
-    let locale;
+    let locale: string;
     if (browser) {
-        locale = getClosestAvailableLocale(window.navigator.languages) || defaultLocale;
+        locale = getClosestAvailableLocale(window.navigator.languages).code;
     } else {
         locale = data.locale;
     }

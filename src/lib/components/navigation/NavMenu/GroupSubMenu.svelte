@@ -68,7 +68,7 @@
             {#if group.active}
                 {#if groups.length > 1}
                     <li>
-                        <div class="flex w-fit flex-row items-center space-x-4 px-4 py-2">
+                        <div class="flex w-fit flex-row items-center gap-x-4 px-4 py-2">
                             <iconify-icon icon="ion:people"></iconify-icon>
                             <span>{group.name}</span>
                         </div>

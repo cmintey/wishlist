@@ -73,7 +73,7 @@
     {/if}
 
     {#if item.price || item.itemPrice}
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center gap-x-2">
             <iconify-icon icon="ion:pricetag"></iconify-icon>
             <span class="text-lg font-semibold">{formatPrice(item)}</span>
         </div>
@@ -92,7 +92,7 @@
         </div>
     {/if}
 
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center gap-x-2">
         <iconify-icon icon="ion:person"></iconify-icon>
         <span class="text-base md:text-lg">
             {#if showFor}

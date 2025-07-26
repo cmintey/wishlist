@@ -48,7 +48,7 @@
             </select>
         </label>
         {#if disabled}
-            <div class="flex flex-row items-center space-x-1">
+            <div class="flex flex-row items-center gap-x-1">
                 <iconify-icon class="text-warning-800 dark:text-warning-500" icon="ion:warning"></iconify-icon>
                 <span class="text-sm text-warning-800 dark:text-warning-500">
                     {$t("admin.wishlist-mode-alert", { values: { memberCount: groupUserCount, listCount: listCount } })}
