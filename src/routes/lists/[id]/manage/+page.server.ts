@@ -36,7 +36,8 @@ export const load: PageServerLoad = async ({ params }) => {
                         username: true,
                         picture: true
                     }
-                }
+                },
+                description: true
             }
         })
         .then((list) => list ?? error(404, $t("errors.list-not-found")));
@@ -74,7 +75,8 @@ export const actions: Actions = {
             name: form.get("name"),
             icon: form.get("icon"),
             iconColor: form.get("iconColor"),
-            public: form.get("public")
+            public: form.get("public"),
+            description: form.get("description")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -99,7 +101,8 @@ export const actions: Actions = {
                     name: trimToNull(listProperties.data.name),
                     icon: trimToNull(listProperties.data.icon),
                     iconColor: trimToNull(listProperties.data.iconColor),
-                    public: listProperties.data.public
+                    public: listProperties.data.public,
+                    description: trimToNull(listProperties.data.description)
                 },
                 where: {
                     id: params.id

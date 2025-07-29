@@ -245,6 +245,7 @@
         "valid-url-not-provided": "Valid url not provided"
     },
     "general": {
+        "add-a-description": "Add a description",
         "add-user": "Add User",
         "all": "All",
         "apply": "Apply",
@@ -258,6 +259,7 @@
         "copy-to-clipboard": "Copy to clipboard",
         "create": "Create",
         "create-group": "Create Group",
+        "description": "Description",
         "dismiss": "Dismiss",
         "dont-see-language": "Don't see your language here or notice a missing or improper translation? <a href=\"{href}\" target=\"_blank\" > See the docs on how to contribute.</a>",
         "enable": "Enable",
@@ -367,6 +369,7 @@
         "for": "For <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "hang-tight-gathering-product-data": "Hang tight, gathering product data",
         "heads-up": "Heads up!",
+        "hide-description": "Hide description",
         "image-url": "Image URL",
         "item-approved": "{name} was {approved, select, true {approved} other {denied}}",
         "item-name": "Item Name",
@@ -398,6 +401,7 @@
         "quantity-desired": "{quantity} desired",
         "reorder": "Reorder",
         "share": "Share List",
+        "show-description": "Show description",
         "supports-markdown": "Supports Markdown",
         "this-list": "This list",
         "unable-to-update-item-ordering": "Unable to update item ordering",

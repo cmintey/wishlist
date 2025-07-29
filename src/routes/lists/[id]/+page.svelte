@@ -21,6 +21,7 @@
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
     import { getFormatter } from "$lib/i18n";
+    import Markdown from "$lib/components/Markdown.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -39,6 +40,7 @@
             return $t("wishes.wishes-for", { values: { listOwner: data.list.owner.name } });
         }
     });
+    let hideDescription = $state(false);
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -195,6 +197,20 @@
         }
     };
 </script>
+
+{#if data.list.description}
+    <div class="w-full pb-4">
+        {#if !hideDescription}
+            <Markdown source={data.list.description} />
+        {/if}
+        <button
+            class="text-sm text-primary-700 dark:text-primary-500"
+            onclick={() => (hideDescription = !hideDescription)}
+        >
+            {hideDescription ? $t("wishes.show-description") : $t("wishes.hide-description")}
+        </button>
+    </div>
+{/if}
 
 <!-- chips -->
 <div class="flex flex-wrap justify-between pb-2">

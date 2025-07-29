@@ -7,8 +7,9 @@
     import type { List, User } from "@prisma/client";
     import { getModalStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
+    import MarkdownEditor from "../MarkdownEditor.svelte";
 
-    interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public">> {
+    interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
     }
 
@@ -135,6 +136,18 @@
         </label>
         <div class="col-span-full md:col-span-8">
             <IconSelector id="icon" icon={list.icon} onIconSelected={(icon) => (list.icon = icon)} />
+        </div>
+
+        <div class="col-span-full">
+            <label>
+                <span>{$t("general.description")}</span>
+                <MarkdownEditor
+                    id="description"
+                    name="description"
+                    placeholder={$t("general.add-a-description")}
+                    value={list.description}
+                />
+            </label>
         </div>
 
         <div class="col-span-full">
