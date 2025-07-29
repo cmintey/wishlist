@@ -50,7 +50,8 @@ export async function validateSessionToken(token: string): Promise<SessionValida
                     name: true,
                     roleId: true,
                     picture: true,
-                    oauthId: true
+                    oauthId: true,
+                    preferredLanguage: true
                 }
             }
         }
