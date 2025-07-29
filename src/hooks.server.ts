@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/private";
-import { getClosestAvailableLocaleFromHeader, type Lang } from "$lib/i18n";
+import { getClosestAvailableLocaleFromHeader, getClosestAvailablePreferredLanguage, type Lang } from "$lib/i18n";
 import {
     deleteSessionTokenCookie,
     sessionCookieName,
@@ -10,7 +10,7 @@ import { logger } from "$lib/server/logger";
 import type { Handle, HandleServerError } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
-    const lang = getClosestAvailableLocaleFromHeader(event.request.headers.get("accept-language"));
+    let lang = getClosestAvailableLocaleFromHeader(event.request.headers.get("accept-language"));
 
     const sessionToken = event.cookies.get(sessionCookieName);
     if (!sessionToken) {
@@ -26,6 +26,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     const { session, user } = await validateSessionToken(sessionToken);
+    lang = getClosestAvailablePreferredLanguage(user?.preferredLanguage);
     if (session !== null) {
         setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
     } else {

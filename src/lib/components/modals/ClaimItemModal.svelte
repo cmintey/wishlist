@@ -166,7 +166,7 @@
                 <span class="text-error-500-400-token text-sm">{error}</span>
             {/if}
             {#if claim}
-                <span class="text-sm text-surface-900/70 dark:text-surface-50/50">
+                <span class="subtext">
                     {$t("wishes.claimed-info-text", {
                         values: { claimedQuantity: claim.quantity }
                     })}

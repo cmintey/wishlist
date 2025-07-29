@@ -10,7 +10,7 @@ export interface Lang {
     code: string;
     loader: () => Promise<object>;
     rtl?: boolean;
-    display?: boolean;
+    hidden?: boolean;
 }
 
 export const defaultLang: Lang = {
@@ -20,31 +20,31 @@ export const defaultLang: Lang = {
     loader: () => import("../i18n/en.json")
 };
 
-const supportedLangs: Lang[] = [
-    defaultLang,
-    { name: "German", endonym: "Deutsch", code: "de", loader: () => import("../i18n/de.json") },
-    { name: "Spanish", endonym: "Español", code: "es", loader: () => import("../i18n/es.json") },
-    { name: "Persian", endonym: "فارسی", code: "fa", loader: () => import("../i18n/fa.json"), rtl: true },
-    { name: "French", endonym: "Français", code: "fr", loader: () => import("../i18n/fr.json") },
+export const supportedLangs: Lang[] = [
     { name: "Dutch", endonym: "Nederlands", code: "nl", loader: () => import("../i18n/nl.json") },
+    defaultLang,
+    { name: "French", endonym: "Français", code: "fr", loader: () => import("../i18n/fr.json") },
+    { name: "German", endonym: "Deutsch", code: "de", loader: () => import("../i18n/de.json") },
     { name: "Norwegian", endonym: "Norsk", code: "no", loader: () => import("../i18n/nb.json") },
     {
         name: "Norwegian Bokmål",
         endonym: "Norsk Bokmål",
         code: "nb",
         loader: () => import("../i18n/nb.json"),
-        display: false
+        hidden: true
     },
     {
         name: "Norwegian Nynorsk",
         endonym: "Norsk Nynorsk",
         code: "nn",
         loader: () => import("../i18n/nb.json"),
-        display: false
+        hidden: true
     },
+    { name: "Persian", endonym: "فارسی", code: "fa", loader: () => import("../i18n/fa.json"), rtl: true },
     { name: "Polish", endonym: "Polski", code: "pl", loader: () => import("../i18n/pl.json") },
     { name: "Portuguese", endonym: "Português", code: "pt", loader: () => import("../i18n/pt.json") },
     { name: "Russian", endonym: "Русский язык", code: "ru", loader: () => import("../i18n/ru.json") },
+    { name: "Spanish", endonym: "Español", code: "es", loader: () => import("../i18n/es.json") },
     { name: "Swedish", endonym: "Svenska", code: "sv", loader: () => import("../i18n/sv.json") },
     { name: "Vietnamese", endonym: "tiếng Việt", code: "vi", loader: () => import("../i18n/vi.json") },
     {
@@ -52,7 +52,7 @@ const supportedLangs: Lang[] = [
         endonym: "Development (keys only)",
         code: "dev",
         loader: () => Promise.resolve({}),
-        display: dev
+        hidden: !dev
     }
 ];
 
@@ -111,6 +111,10 @@ export const parseAcceptLanguageHeader = (acceptLanguage: string | undefined | n
 export const getClosestAvailableLocaleFromHeader = (acceptLanguage: string | undefined | null) => {
     const langs = parseAcceptLanguageHeader(acceptLanguage);
     return getClosestAvailableLocale(langs);
+};
+
+export const getClosestAvailablePreferredLanguage = (preferredLanguage: string | undefined | null) => {
+    return preferredLanguage ? getClosestAvailableLocale([preferredLanguage]) : defaultLang;
 };
 
 export const getClosestAvailableLocale = (langs: readonly string[]): Lang => {

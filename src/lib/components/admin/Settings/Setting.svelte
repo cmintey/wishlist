@@ -12,7 +12,7 @@
 <div>
     {@render children()}
     {#if description}
-        <span class="text-sm text-surface-900/70 dark:text-surface-50/50">
+        <span class="subtext">
             {@render description()}
         </span>
     {/if}

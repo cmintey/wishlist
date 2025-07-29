@@ -21,6 +21,7 @@
     import Drawer from "$lib/components/Drawer.svelte";
     import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
     import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
+    import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
     import { setFormatter, setLocale } from "$lib/i18n";
 
     const { data, children }: LayoutProps = $props();
@@ -105,6 +106,9 @@
         },
         deleteItem: {
             ref: DeleteItemModal
+        },
+        chooseLanguage: {
+            ref: ChangeLanguageModal
         }
     };
 

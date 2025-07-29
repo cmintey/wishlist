@@ -25,6 +25,7 @@ model User {
     hashedPassword      String
     oauthId             String?
     lists               List[]
+    preferredLanguage   String?
 
     @@map("user")
 }

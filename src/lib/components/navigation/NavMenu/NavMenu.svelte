@@ -1,7 +1,7 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
     import { Role } from "$lib/schema";
-    import { LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { getModalStore, LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { getFormatter } from "$lib/i18n";
@@ -13,10 +13,21 @@
 
     const { user, isProxyUser }: Props = $props();
     const t = getFormatter();
+    const modalStore = getModalStore();
 
     const menuSettings: PopupSettings = {
         event: "click",
         target: "user"
+    };
+
+    const chooseLanguage = () => {
+        modalStore.trigger({
+            type: "component",
+            component: "chooseLanguage",
+            meta: {
+                currentLanguage: user?.preferredLanguage
+            }
+        });
     };
 </script>
 
@@ -62,7 +73,13 @@
                     {/if}
                     <hr class="pb-1" />
                     <li>
-                        <div class="flex w-full justify-around">
+                        <button class="list-option w-full" onclick={chooseLanguage} type="button">
+                            <iconify-icon icon="ion:language"></iconify-icon>
+                            <p>{$t("general.language")}</p>
+                        </button>
+                    </li>
+                    <li>
+                        <div class="flex w-full justify-around pt-1">
                             <p>{$t("general.mode")}</p>
                             <LightSwitch title={$t("general.toggle-dark-mode")} />
                         </div>
