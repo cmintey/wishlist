@@ -4,7 +4,6 @@ import { requireLogin, requireLoginOrError } from "$lib/server/auth";
 import { z } from "zod";
 import { client } from "$lib/server/prisma";
 import { logger } from "$lib/server/logger";
-import { extractFormData } from "$lib/server/validations";
 import { getFormatter } from "$lib/server/i18n";
 
 export const load = (async () => {

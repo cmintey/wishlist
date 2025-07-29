@@ -135,7 +135,8 @@ export const getById = async (id: string) => {
                 }
             },
             groupId: true,
-            public: true
+            public: true,
+            description: true
         },
         where: {
             id

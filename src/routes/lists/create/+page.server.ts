@@ -35,7 +35,8 @@ export const load = (async () => {
                 name: user.name,
                 username: user.username,
                 picture: user.picture || null
-            }
+            },
+            description: null
         },
         listMode: config.listMode,
         allowsPublicLists: config.allowPublicLists
@@ -70,7 +71,8 @@ export const actions: Actions = {
             name: form.get("name"),
             icon: form.get("icon"),
             iconColor: form.get("iconColor"),
-            public: form.get("public")
+            public: form.get("public"),
+            description: form.get("description")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -95,7 +97,8 @@ export const actions: Actions = {
                 name: trimToNull(listProperties.data.name),
                 icon: trimToNull(listProperties.data.icon),
                 iconColor: trimToNull(listProperties.data.iconColor),
-                public: listProperties.data.public
+                public: listProperties.data.public,
+                description: trimToNull(listProperties.data.description)
             };
             list = await create(user.id, activeMembership.groupId, data);
         } catch (err) {

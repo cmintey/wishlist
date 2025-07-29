@@ -84,17 +84,18 @@ model UserGroupMembership {
 }
 
 model List {
-    id        String      @id @unique @default(cuid())
-    name      String?
-    owner     User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-    ownerId   String
-    group     Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
-    groupId   String
-    public    Boolean     @default(false)
-    icon      String?
-    iconColor String?
-    items     ListItem[]
-    claims    ItemClaim[]
+    id          String      @id @unique @default(cuid())
+    name        String?
+    owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    ownerId     String
+    group       Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    groupId     String
+    public      Boolean     @default(false)
+    icon        String?
+    iconColor   String?
+    items       ListItem[]
+    claims      ItemClaim[]
+    description String?
 
     @@index([ownerId])
     @@index([groupId])
