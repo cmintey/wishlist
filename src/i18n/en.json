@@ -243,7 +243,6 @@
         "user-not-in-group": "User is not part of this group",
         "username-already-in-use": "{username} already in use",
         "username-must-not-be-blank": "Username must not be blank",
-        "username-not-specified": "Username not specified",
         "valid-url-not-provided": "Valid url not provided"
     },
     "general": {
