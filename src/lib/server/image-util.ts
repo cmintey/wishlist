@@ -4,7 +4,7 @@ import { logger } from "$lib/server/logger";
 import { getRequestEvent } from "$app/server";
 import { Readable } from "stream";
 import { finished } from "stream/promises";
-import { ReadableStream } from "stream/web";
+import type { ReadableStream } from "stream/web";
 import { createWriteStream } from "node:fs";
 
 const slugify = (str: string) => {
