@@ -39,18 +39,11 @@ export const actions: Actions = {
         const schema = z.object({
             name: z.string().trim().min(1, $t("errors.name-must-not-be-blank")),
             username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
-            email: z.string().email()
+            email: z.email()
         });
         const nameData = schema.safeParse(formData);
-        // check for empty values
         if (!nameData.success) {
-            const errors = nameData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { error: true, errors });
+            return fail(400, { error: true, errors: z.flattenError(nameData.error).fieldErrors });
         }
 
         try {
@@ -66,16 +59,13 @@ export const actions: Actions = {
             });
         } catch (e) {
             const err = e as PrismaClientKnownRequestError;
-            logger.error(e);
+            logger.error({ err: e });
             const targets = err.meta?.target as string[];
             return fail(400, {
                 error: true,
-                errors: [
-                    {
-                        field: "username",
-                        message: $t("errors.username-already-in-use", { values: { username: targets[0] } })
-                    }
-                ]
+                errors: {
+                    username: [$t("errors.username-already-in-use", { values: { username: targets[0] } })]
+                }
             });
         }
     },
@@ -120,13 +110,7 @@ export const actions: Actions = {
         const pwdData = resetPasswordSchema.safeParse(formData);
 
         if (!pwdData.success) {
-            const errors = pwdData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { error: true, errors });
+            return fail(400, { error: true, errors: z.flattenError(pwdData.error).fieldErrors });
         }
 
         try {
@@ -143,13 +127,17 @@ export const actions: Actions = {
             if (!validPassword) {
                 return fail(400, {
                     error: true,
-                    errors: [{ field: "currentPassword", message: $t("errors.incorrect-password") }]
+                    errors: {
+                        currentPassword: [$t("errors.incorrect-password")]
+                    }
                 });
             }
         } catch {
             return fail(400, {
                 error: true,
-                errors: [{ field: "currentPassword", message: $t("errors.incorrect-password") }]
+                errors: {
+                    currentPassword: [$t("errors.incorrect-password")]
+                }
             });
         }
 
@@ -174,7 +162,9 @@ export const actions: Actions = {
         } catch {
             return fail(400, {
                 error: true,
-                errors: [{ field: "newPassword", message: $t("setup.unable-to-update-password") }]
+                errors: {
+                    newPassword: $t("setup.unable-to-update-password")
+                }
             });
         }
     },

@@ -5,6 +5,15 @@ import { getConfig } from "./config";
 import { getFormatter } from "./i18n";
 import { getLocale } from "$lib/server/i18n";
 
+export const loadLocale = async (locale_: string) => {
+    try {
+        const { default: locale } = await import(`zod/locales/${locale_}.js`);
+        z.config(locale());
+    } catch {
+        // do nothing
+    }
+};
+
 const passwordZxcvbn = async (minScore: number) => {
     await loadOptions(getLocale()).then((options) => zxcvbnOptions.setOptions(options));
     const $t = await getFormatter();
@@ -39,7 +48,7 @@ export const getSignupSchema = async () => {
     return z.object({
         name: z.string().trim().min(1, $t("errors.name-must-not-be-blank")),
         username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
-        email: z.string().email(),
+        email: z.email(),
         password: await passwordZxcvbn(security.passwordStrength),
         tokenId: z.string().optional()
     });
@@ -110,7 +119,7 @@ export const getItemCreateSchema = async () => {
     const $t = await getFormatter();
 
     return z.object({
-        url: z.string().url().optional(),
+        url: z.url().optional(),
         name: z.string(),
         price: z.string().optional(),
         currency: z.string().optional(),
@@ -123,22 +132,21 @@ export const getItemCreateSchema = async () => {
         image: z.instanceof(File).optional(),
         note: z.string().optional(),
         lists: z
-            .union([
-                z.string(),
-                z.array(z.string()).nonempty({ message: $t("errors.an-item-must-be-added-to-at-least-one-list") })
-            ])
+            .union([z.string(), z.tuple([z.string()], z.string())], {
+                error: $t("errors.an-item-must-be-added-to-at-least-one-list")
+            })
             .transform((v) => (typeof v === "string" ? [v] : v))
     });
 };
 
 export const getItemUpdateSchema = async () => {
     return getItemCreateSchema().then((itemCreateSchema) =>
-        itemCreateSchema.merge(
+        itemCreateSchema.extend(
             z.object({
                 url: z.string().nullish().default(null),
                 imageUrl: z.string().nullish().default(null),
                 note: z.string().nullish().default(null)
-            })
+            }).shape
         )
     );
 };

@@ -4,6 +4,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { page } from "$app/state";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -22,8 +23,6 @@
         return ({ result }) => {
             if (result.type === "success") {
                 toastStore.trigger({ message: $t("admin.settings-saved-toast") });
-            } else if (result.type === "failure" && result.data?.error && typeof result.data.error === "string") {
-                toastStore.trigger({ message: result.data.error, background: "variant-filled-error" });
             }
         };
     }}
@@ -36,6 +35,10 @@
         hidden={false}
         listCount={data.listCount}
     />
+
+    {#if page.form?.error}
+        <span>{page.form.error}</span>
+    {/if}
 
     <div class="flex w-full flex-row justify-end pt-6">
         <button class="variant-filled-primary btn" type="submit">
