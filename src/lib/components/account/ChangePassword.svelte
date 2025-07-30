@@ -38,13 +38,19 @@
 >
     <div class="flex flex-col items-start space-y-4">
         <h3 class="h3">Credentials</h3>
-        <PasswordInput
-            id="oldpassword"
-            name="oldPassword"
-            autocomplete="current-password"
-            label={$t("auth.current-password")}
-            bind:value={passwordReset.current}
-        />
+        <div class="flex space-y-1">
+            <PasswordInput
+                id="oldpassword"
+                name="oldPassword"
+                autocomplete="current-password"
+                label={$t("auth.current-password")}
+                bind:value={passwordReset.current}
+            />
+            {#if page.form?.errors?.oldPassword}
+                <span class="text-xs text-red-500">{page.form?.errors?.oldPassword[0]}</span>
+            {/if}
+        </div>
+
         <div>
             <PasswordInput
                 id="newpassword"
@@ -65,23 +71,15 @@
         {#if passwordReset.new !== passwordReset.confirm}
             <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
         {/if}
-        {#if page.form?.error && page.form?.errors}
-            <ul>
-                {#each page.form.errors as error}
-                    {#if error.field === "newPassword"}
-                        {#each error.message.split("\n") as message}
-                            <li class="text-xs text-red-500">{message}</li>
-                        {/each}
-                    {:else}
-                        <li class="text-xs text-red-500">{error.message}</li>
-                    {/if}
-                {/each}
-            </ul>
+        {#if page.form?.errors?.newPassword}
+            <span class="text-xs text-red-500">{page.form?.errors?.newPassword[0]}</span>
         {/if}
+
         <label class="checkbox-label">
             <input id="invalidateSessions" name="invalidateSessions" class="checkbox" type="checkbox" />
             <span>{$t("auth.sign-out-of-all-devices")}</span>
         </label>
+
         <button
             class="variant-filled-primary btn w-fit"
             disabled={passwordReset.current === "" ||

@@ -63,20 +63,10 @@
             {#if newPassword !== confirmPassword}
                 <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
             {/if}
-
-            {#if form?.error}
-                <ul>
-                    {#each form.errors as error}
-                        {#if error.field === "newPassword"}
-                            {#each error.message.split("\n") as message}
-                                <li class="text-xs text-red-500">{message}</li>
-                            {/each}
-                        {:else}
-                            <li class="text-xs text-red-500">{error.message}</li>
-                        {/if}
-                    {/each}
-                </ul>
+            {#if form?.errors?.newPassword}
+                <span class="text-xs text-red-500">{form?.errors?.newPassword[0]}</span>
             {/if}
+
             <button
                 class="variant-filled-primary btn w-fit"
                 disabled={newPassword === "" || newPassword !== confirmPassword}

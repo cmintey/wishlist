@@ -12,6 +12,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { getAvailableLists } from "$lib/server/list";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemUpdateSchema } from "$lib/server/validations";
+import z from "zod";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -83,8 +84,7 @@ export const actions: Actions = {
         const form = await request.formData().then(extractFormData).then(itemFormSchema.safeParse);
 
         if (!form.success) {
-            form.error.format();
-            return fail(400, { errors: form.error.format() });
+            return fail(400, { errors: z.flattenError(form.error).fieldErrors });
         }
         const { url, imageUrl, image, name, price, currency, quantity, note, lists } = form.data;
 

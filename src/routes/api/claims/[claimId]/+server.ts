@@ -8,6 +8,7 @@ import { listItemClaimUpdateSchema } from "$lib/server/validations";
 import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 // Unclaim an item on a list
 export const DELETE: RequestHandler = async ({ params }) => {
@@ -43,7 +44,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     const updateData = await request.json().then((d) => listItemClaimUpdateSchema.safeParse(d));
 
     if (updateData.error) {
-        error(422, JSON.stringify(updateData.error.format()));
+        error(422, JSON.stringify(z.flattenError(updateData.error).fieldErrors));
     }
 
     try {

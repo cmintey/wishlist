@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ url, request }) => {
 
     if (config.smtp.enable) {
         schema = z.object({
-            email: z.union([z.string().email().nullish(), z.literal("")]),
+            email: z.union([z.email().nullish(), z.literal("")]),
             group: z.string().optional(),
             method: z.enum(["link", "email"])
         });
@@ -34,7 +34,7 @@ export const POST: RequestHandler = async ({ url, request }) => {
     const data = schema.safeParse(await request.json());
 
     if (!data.success) {
-        error(400, data.error.format()._errors[0]);
+        error(400, z.prettifyError(data.error));
     }
 
     if (data.data.group && user.roleId !== Role.ADMIN) {

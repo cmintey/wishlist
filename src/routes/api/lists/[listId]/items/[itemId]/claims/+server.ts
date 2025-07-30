@@ -8,6 +8,7 @@ import type { Prisma } from "@prisma/client";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 // Claim an item on a list
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
@@ -17,7 +18,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const updateData = listItemClaimSchema.safeParse(body);
 
     if (updateData.error) {
-        error(422, JSON.stringify(updateData.error.format()));
+        error(422, JSON.stringify(z.flattenError(updateData.error).fieldErrors));
     }
     if (!updateData.data.claimedById && !updateData.data.publicClaimedById) {
         error(400, $t("errors.claimed-by-user-must-be-specified"));
