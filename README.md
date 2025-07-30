@@ -83,7 +83,7 @@ It is recommended to run Wishlist behind a reverse proxy. Currently, Wishlist do
 
 There is a [known issue](https://github.com/cmintey/wishlist/issues/170) when running behind Nginx. It is recommended to set the following properties in your Nginx configuration:
 
-```
+```Text
 proxy_buffer_size   128k;
 proxy_buffers   4 256k;
 proxy_busy_buffers_size   256k;
@@ -148,7 +148,7 @@ The redirect URL to specify within your IdP will look like `https://<my_wishlist
 
 #### Proxy / Header
 
-> [!WARNING]  
+> [!WARNING]
 > When header authentication is enabled, Wishlist makes no assumptions about the validity of the headers. It is up to you to have your proxy properly configured. An improperly configured proxy **could allow anyone** to gain access to the application by forging the headers.
 
 If you have a reverse proxy you want to use to login your users, you do it via our proxy authentication method. To configure this method, your proxy must send HTTP headers containing the name, username and email for the logged in user.
