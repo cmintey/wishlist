@@ -26,6 +26,9 @@
     <label for="name">
         <span>{$t("auth.name")}</span>
         <input id="name" name="name" class="input" autocomplete="name" required type="text" />
+        {#if formData?.errors?.name}
+            <span class="unstyled text-xs text-red-500">{formData.errors.name[0]}</span>
+        {/if}
     </label>
 
     <div class="flex flex-col space-y-4 md:flex-row md:gap-x-2 md:space-y-0">
@@ -40,10 +43,16 @@
                 required
                 type="text"
             />
+            {#if formData?.errors?.username}
+                <span class="unstyled text-xs text-red-500">{formData.errors.username[0]}</span>
+            {/if}
         </label>
         <label for="email">
             <span>{$t("auth.email")}</span>
             <input id="email" name="email" class="input" autocomplete="email" required type="email" />
+            {#if formData?.errors?.email}
+                <span class="unstyled text-xs text-red-500">{formData.errors.email[0]}</span>
+            {/if}
         </label>
     </div>
 
@@ -60,19 +69,8 @@
     {#if password !== passwordConfirm}
         <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
     {/if}
-
-    {#if formData?.error}
-        <ul>
-            {#each formData.errors as error}
-                {#if error.field === "password"}
-                    {#each error.message.split("\n") as message}
-                        <li class="text-xs text-red-500">{message}</li>
-                    {/each}
-                {:else}
-                    <li class="text-xs text-red-500">{error.message}</li>
-                {/if}
-            {/each}
-        </ul>
+    {#if formData?.errors?.password}
+        <span class="unstyled text-xs text-red-500">{formData.errors.password[0]}</span>
     {/if}
 
     {#if !hideActions}
