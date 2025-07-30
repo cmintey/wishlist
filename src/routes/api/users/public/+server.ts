@@ -1,22 +1,29 @@
-import { getFormatter } from "$lib/server/i18n";
 import { client } from "$lib/server/prisma";
-import { error, type RequestHandler } from "@sveltejs/kit";
+import { type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ request }) => {
-    const $t = await getFormatter();
     const data = await request.json();
-    if (!data.username) {
-        error(422, $t("errors.username-not-specified"));
-    }
-    const user = await client.systemUser.create({
+    let user = await client.systemUser.findFirst({
+        where: {
+            username: data.username,
+            name: data?.name || "Anonymous"
+        },
         select: {
             id: true
-        },
-        data: {
-            username: data.username,
-            name: data?.name
         }
     });
+
+    if (!user) {
+        user = await client.systemUser.create({
+            select: {
+                id: true
+            },
+            data: {
+                username: data.username,
+                name: data?.name
+            }
+        });
+    }
 
     return new Response(JSON.stringify(user));
 };

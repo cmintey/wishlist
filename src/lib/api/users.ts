@@ -92,7 +92,7 @@ export class SystemUsersAPI {
         return await fetch(`/api/users/public`, options);
     };
 
-    create = async (username: string, name?: string) => {
+    create = async (username?: string, name?: string) => {
         return await this._makeRequest("POST", { username, name });
     };
 }
