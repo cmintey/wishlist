@@ -6,7 +6,7 @@ export const POST: RequestHandler = async ({ request }) => {
     let user = await client.systemUser.findFirst({
         where: {
             username: data.username,
-            name: data?.name || "Anonymous"
+            name: data.name
         },
         select: {
             id: true
