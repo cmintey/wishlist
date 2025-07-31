@@ -243,7 +243,8 @@
         "user-not-in-group": "User is not part of this group",
         "username-already-in-use": "{username} already in use",
         "username-must-not-be-blank": "Username must not be blank",
-        "valid-url-not-provided": "Valid url not provided"
+        "valid-url-not-provided": "Valid url not provided",
+        "email-is-required-for-public-claims": "Email is required for public claims"
     },
     "general": {
         "add-a-description": "Add a description",

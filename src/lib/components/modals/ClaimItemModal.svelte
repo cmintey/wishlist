@@ -103,8 +103,10 @@
         const systemUsersAPI = new SystemUsersAPI();
         const userResp = await systemUsersAPI.create(username, name);
         if (!userResp.ok) {
+            const responseData = await userResp.json();
+
             parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            errorToast(toastStore, responseData.message || $t("general.oops"));
             return;
         }
         const { id: publicUserId } = await userResp.json();
@@ -121,10 +123,8 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
-            const responseData = await resp.json();
-
             parent.onClose();
-            errorToast(toastStore, responseData.message || $t("general.oops"));
+            errorToast(toastStore, $t("general.oops"));
         }
     }
 </script>
@@ -151,7 +151,7 @@
                         <div class="input-group-shim">
                             <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                         </div>
-                        <input class="input" type="email" bind:value={username} />
+                        <input class="input" required type="email" bind:value={username} />
                     </div>
                 </label>
             {/if}
