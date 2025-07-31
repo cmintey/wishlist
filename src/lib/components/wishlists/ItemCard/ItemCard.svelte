@@ -194,7 +194,8 @@
             meta: {
                 item,
                 userId: user?.id,
-                claimId: undefined
+                claimId: undefined,
+                requireClaimEmail: requireClaimEmail
             },
             async response(r: boolean) {
                 if (r) drawerStore.close();

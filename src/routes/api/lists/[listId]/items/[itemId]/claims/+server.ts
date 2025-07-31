@@ -9,6 +9,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { logger } from "$lib/server/logger";
 import z from "zod";
+import { getConfig } from "$lib/server/config";
 
 // Claim an item on a list
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
@@ -22,6 +23,23 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     }
     if (!updateData.data.claimedById && !updateData.data.publicClaimedById) {
         error(400, $t("errors.claimed-by-user-must-be-specified"));
+    }
+
+    // Validate email requirement for public claims
+    if (updateData.data.publicClaimedById) {
+        const config = await getConfig();
+        if (config.claims.requireEmail) {
+            // Find the system user to check if username is an email
+            const systemUser = await client.systemUser.findUnique({
+                where: {
+                    id: updateData.data.publicClaimedById
+                }
+            });
+
+            if (!systemUser || !systemUser.username.includes("@")) {
+                error(422, $t("errors.email-is-required-for-public-claims"));
+            }
+        }
     }
 
     const list = await client.list.findUnique({
