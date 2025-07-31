@@ -250,8 +250,8 @@
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
                         {item}
-                        showClaimedName={data.showClaimedName}
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimedName={data.showClaimedName}
                         user={data.list.owner}
                     />
                 </div>
@@ -289,8 +289,8 @@
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
                         reorderActions
-                        showClaimedName={data.showClaimedName}
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                     />
                 </div>
@@ -306,8 +306,8 @@
                         <ItemCard
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
-                            showClaimedName={data.showClaimedName}
                             requireClaimEmail={data.requireClaimEmail}
+                            showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
                         />
                     </div>

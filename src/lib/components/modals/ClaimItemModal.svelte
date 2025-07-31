@@ -76,6 +76,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
+            parent.onClose();
             errorToast(toastStore, $t("general.oops"));
         }
     }
@@ -93,6 +94,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
+            parent.onClose();
             errorToast(toastStore, $t("general.oops"));
         }
     }
@@ -101,6 +103,7 @@
         const systemUsersAPI = new SystemUsersAPI();
         const userResp = await systemUsersAPI.create(username, name);
         if (!userResp.ok) {
+            parent.onClose();
             errorToast(toastStore, $t("general.oops"));
             return;
         }
@@ -118,22 +121,21 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
-            errorToast(toastStore, $t("general.oops"));
+            const responseData = await resp.json();
+
+            parent.onClose();
+            errorToast(toastStore, responseData.message || $t("general.oops"));
         }
     }
 </script>
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
     <header class="text-2xl font-bold">{$t("wishes.claim-details")}</header>
-    <form>
+    <form onsubmit={onFormSubmit}>
         {#if !userId}
             <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
             <label class="w-fit">
-                {#if requireClaimEmail}
-                    <span>{$t("general.name-optional")}</span>
-                {:else}
-                    <span>{$t("auth.name")}</span>
-                {/if}
+                <span>{$t("auth.name")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="input-group-shim">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
@@ -149,7 +151,7 @@
                         <div class="input-group-shim">
                             <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                         </div>
-                        <input class="input" required type="text" bind:value={username} />
+                        <input class="input" type="email" bind:value={username} />
                     </div>
                 </label>
             {/if}
@@ -190,15 +192,15 @@
 
         <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
             {#if claim}
-                <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim}>
+                <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
                     {$t("wishes.unclaim")}
                 </button>
             {/if}
             <div class="flex flex-wrap gap-2">
-                <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose}>
+                <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose} type="button">
                     {$t("general.cancel")}
                 </button>
-                <button class="btn btn-sm md:btn-base {parent.buttonPositive}" onclick={onFormSubmit}>
+                <button class="btn btn-sm md:btn-base {parent.buttonPositive}" type="submit">
                     {$t("wishes.claim")}
                 </button>
             </div>
