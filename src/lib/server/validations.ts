@@ -156,3 +156,8 @@ export const extractFormData = (formData: FormData) => {
     );
     return data;
 };
+
+export const publicUserSchema = z.object({
+    username: z.string().email().optional(),
+    name: z.string().min(1).optional()
+});

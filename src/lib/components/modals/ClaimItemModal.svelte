@@ -135,7 +135,7 @@
         {#if !userId}
             <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
             <label class="w-fit">
-                <span>{$t("auth.name")}</span>
+                <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="input-group-shim">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
