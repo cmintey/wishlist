@@ -5,6 +5,7 @@
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { getToastStore } from "@skeletonlabs/skeleton";
+    import { errorToast } from "$lib/components/toasts";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -64,6 +65,10 @@
     method="POST"
     use:enhance={({ submitter }) => {
         return async ({ result }) => {
+            if (result.type === "error") {
+                errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                return;
+            }
             if (result.type === "success" || result.type === "redirect") {
                 successToast();
             }
