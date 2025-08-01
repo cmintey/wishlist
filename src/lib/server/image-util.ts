@@ -6,6 +6,7 @@ import { Readable } from "stream";
 import { finished } from "stream/promises";
 import { ReadableStream } from "stream/web";
 import { createWriteStream } from "node:fs";
+import { error } from "@sveltejs/kit";
 
 const slugify = (str: string) => {
     return str
@@ -57,17 +58,25 @@ export const createImage = async (filename: string, image: File | string | null 
     }
 
     try {
+        let failure = false;
         const fname = slugify(filename) + "-" + Date.now().toString() + ".webp";
         const writeStream = createWriteStream(`uploads/${fname}`);
-        const transformer = sharp().rotate().resize(300).webp();
+        const transformer = sharp()
+            .rotate()
+            .resize(300)
+            .webp()
+            .on("error", (err) => {
+                logger.error({ err }, "Unable to transform image");
+                failure = true;
+            });
         await finished(dataStream.pipe(transformer).pipe(writeStream));
 
-        return fname;
+        if (!failure) return fname;
     } catch (err) {
         logger.error({ err }, "Unable to write image to file");
     }
 
-    return null;
+    error(422, "Unable to process image");
 };
 
 export const deleteImage = async (filename: string): Promise<void> => {

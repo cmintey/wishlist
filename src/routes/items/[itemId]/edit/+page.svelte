@@ -4,6 +4,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { errorToast } from "$lib/components/toasts";
 
     const { data }: PageProps = $props();
 
@@ -16,14 +17,18 @@
         enctype="multipart/form-data"
         method="POST"
         use:enhance={() => {
-            return async ({ update }) => {
-                const c = {
-                    message: $t("wishes.updated-success"),
-                    autohide: true,
-                    timeout: 5000
-                };
-                toastStore.trigger(c);
-                update();
+            return async ({ result, update }) => {
+                if (result.type === "error") {
+                    errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                    return;
+                } else {
+                    toastStore.trigger({
+                        message: $t("wishes.updated-success"),
+                        autohide: true,
+                        timeout: 5000
+                    });
+                    update();
+                }
             };
         }}
     >
