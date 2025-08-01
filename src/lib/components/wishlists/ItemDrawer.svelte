@@ -44,8 +44,9 @@
         const claimMap = new Map<string, GroupedClaim>();
 
         for (const claim of item.claims) {
-            const userId = claim.claimedBy?.id || claim.publicClaimedBy?.id;
-            const userName = claim.claimedBy?.name || claim.publicClaimedBy?.name;
+            const { claimedBy, publicClaimedBy } = claim
+            const userId = claimedBy?.id || publicClaimedBy?.id;
+            const userName = claimedBy ? claimedBy.name : (publicClaimedBy.name === "ANONYMOUS_NAME" ? $t("wishes.anonymous") : publicClaimedBy.name);
 
             if (!userId || !userName) continue;
 
