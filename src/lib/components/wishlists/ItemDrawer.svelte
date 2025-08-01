@@ -28,6 +28,46 @@
     const handleEdit: () => void = $drawerStore.meta.handleEdit;
     const defaultImage: Snippet<[MessageFormatter, ClassValue]> = $drawerStore.meta.defaultImage;
 
+    let showClaims = $state(false);
+
+    interface GroupedClaim {
+        userId: string;
+        userName: string;
+        count: number;
+        claims: any[];
+    }
+
+    // Group claims by user and count them
+    const groupedClaims = $derived(() => {
+        if (!item.claims) return [];
+
+        const claimMap = new Map<string, GroupedClaim>();
+
+        for (const claim of item.claims) {
+            const userId = claim.publicClaimedBy?.id;
+            const userName = claim.publicClaimedBy?.name;
+
+            if (!userId || !userName) continue;
+
+            if (!claimMap.has(userId)) {
+                claimMap.set(userId, {
+                    userId,
+                    userName,
+                    count: 0,
+                    claims: []
+                });
+            }
+
+            const userClaims = claimMap.get(userId);
+            if (userClaims) {
+                userClaims.count += 1;
+                userClaims.claims.push(claim);
+            }
+        }
+
+        return Array.from(claimMap.values());
+    });
+
     const onEdit = () => {
         goto(page.url.pathname, { replaceState: true, noScroll: true });
         drawerStore.close();
@@ -90,6 +130,29 @@
                 </span>
             </div>
         </div>
+        {#if item.claims && item.claims.length > 0}
+            <div class="rounded-lg bg-surface-100 p-2 text-sm border border-surface-300">
+
+                <button
+                    class="flex w-full items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                    onclick={() => (showClaims = !showClaims)}
+                >
+                    <iconify-icon icon={showClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
+                    {showClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}
+                </button>
+
+                {#if showClaims}
+                    <div class="p-2">
+                        {#each groupedClaims() as claimGroup}
+                            <div class="flex items-center justify-between py-1">
+                                <span>{claimGroup.userName}</span>
+                                <span>{claimGroup.count} {$t("wishes.claims")}</span>
+                            </div>
+                        {/each}
+                    </div>
+                {/if}
+            </div>
+        {/if}
     {/if}
 
     <div class="flex items-center gap-x-2">
