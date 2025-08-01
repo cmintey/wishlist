@@ -45,8 +45,8 @@
         const claimMap = new Map<string, GroupedClaim>();
 
         for (const claim of item.claims) {
-            const userId = claim.publicClaimedBy?.id;
-            const userName = claim.publicClaimedBy?.name;
+            const userId = claim.claimedBy?.id || claim.publicClaimedBy?.id;
+            const userName = claim.claimedBy?.name || claim.publicClaimedBy?.name;
 
             if (!userId || !userName) continue;
 
