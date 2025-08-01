@@ -223,7 +223,9 @@
         "public-lists-not-allowed": "Публичные списки в этой группе запрещены",
         "an-item-must-be-added-to-at-least-one-list": "Элемент должен быть добавлен хотя бы в один список",
         "registration-is-disabled": "Регистрация отключена",
-        "could-not-claim-quantity-items": "Не удалось заявить {quantity} предметов. Доступно для заявки только {availableQuantity}."
+        "could-not-claim-quantity-items": "Не удалось заявить {quantity} предметов. Доступно для заявки только {availableQuantity}.",
+        "language-is-required": "Язык обязателен",
+        "unable-to-update-preferred-language": "Не удалось обновить предпочтительный язык"
     },
     "general": {
         "icon": "Значок",
@@ -285,7 +287,14 @@
         "apply": "Применить",
         "create": "Создать",
         "return-home": "Вернуться домой",
-        "na": "Недоступно"
+        "na": "Недоступно",
+        "add-a-description": "Добавить описание",
+        "choose-a-language": "Выберите язык",
+        "choose-language-description": "Выберите предпочтительный язык для пользовательского интерфейса. Эта настройка применима только к вам и сохраняется во всех браузерах.",
+        "description": "Описание",
+        "dont-see-language": "Не видите свой язык здесь или заметили пропущенный или неправильный перевод? <a href=\"{href}\" target=\"_blank\">Узнайте в документации, как можно внести вклад.</a>",
+        "language": "Язык",
+        "use-system-language": "Использовать язык системы"
     },
     "setup": {
         "complete": "Готово",
@@ -404,6 +413,8 @@
         "no-limit": "Без ограничений",
         "additional-items-requested": "{remainingQuantity, plural, =0 {В наличии нет дополнительных пунктов.} one { Доступен # дополнительный пункт.} other { Доступно # дополнительных пунктов.}}",
         "claimed-info-text": "{claimedQuantity, plural, one {Вы выполнили # пункт.} other {Вы выполнили # пунктов.}}",
-        "purchased-toast": "Помечено пункт {purchased, select, true {купленный} other {не купленный}}"
+        "purchased-toast": "Помечено пункт {purchased, select, true {купленный} other {не купленный}}",
+        "hide-description": "Скрыть описание",
+        "show-description": "Показать описание"
     }
 }
