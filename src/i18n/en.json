@@ -353,7 +353,6 @@
         "claimed-by-multiple-users": "Claimed by multiple users",
         "claimed-info-text": "{claimedQuantity, plural, one {You've claimed # item.} other {You've claimed # items.}}",
         "claimed-item": "{claimed, select, true {Claimed} other {Unclaimed}} item",
-        "claim-id": "Claim ID",
         "claims": "claims",
         "create": "Create Wish",
         "create-and-add-another": "Create and add another",
