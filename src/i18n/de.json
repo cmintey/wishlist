@@ -198,7 +198,11 @@
         "claimed-info-text": "{claimedQuantity, plural, one {Du hast # Artikel reserviert.} other {Du hast # Artikel reserviert.}}",
         "additional-items-requested": "{remainingQuantity, plural, =0 {Es sind keine weiteren Artikel verfügbar.} one {Es ist # weiterer Artikel verfügbar.} other {Es sind # weitere Artikel verfügbar.}}",
         "purchased-toast": "Markiere Artikel als {purchased, select, true {gekauft} other {nicht gekauft}}",
-        "quantity": "Anzahl"
+        "quantity": "Anzahl",
+        "create-and-add-another": "Erstellen und ein weiteres hinzufügen",
+        "hide-description": "Beschreibung ausblenden",
+        "no-limit": "Keine Begrenzung",
+        "show-description": "Zeige Beschreibung"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -268,7 +272,9 @@
         "public-lists-not-allowed": "Öffentliche Listen sind in dieser Gruppe nicht erlaubt",
         "unable-to-update-claim": "Reservierung ändern nicht möglich",
         "registration-is-disabled": "Registrierung ist deaktiviert",
-        "could-not-claim-quantity-items": "Konnte {quantity} Artikel nicht reservieren. Es sind nur {availableQuantity} verfügbar."
+        "could-not-claim-quantity-items": "Konnte {quantity} Artikel nicht reservieren. Es sind nur {availableQuantity} verfügbar.",
+        "language-is-required": "Sprache wird benötigt",
+        "unable-to-update-preferred-language": "Ändern der bevorzugten Sprache nicht möglich"
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
@@ -367,7 +373,15 @@
         "all": "Alle",
         "apply": "Anwenden",
         "create": "Erstellen",
-        "return-home": "Zurück zur Startseite"
+        "return-home": "Zurück zur Startseite",
+        "add-a-description": "Beschreibung hinzufügen",
+        "choose-a-language": "Sprache auswählen",
+        "choose-language-description": "Wähle deine bevorzugte Sprache für die Benutzeroberfläche. Diese Einstellung gilt nur für dich und bleibt über alle Browser hinweg erhalten.",
+        "description": "Beschreibung",
+        "dont-see-language": "Ist deine Sprache hier nicht aufgeführt oder hast du eine fehlende oder falsche Übersetzung entdeckt? <a href=\"{href}\" target=\"_blank\"> Lies in der Dokumentation nach, wie du einen Beitrag leisten kannst.</a>",
+        "language": "Sprache",
+        "na": "N/V",
+        "use-system-language": "Benutze Systemsprache"
     },
     "app": {
         "home": "Start",
