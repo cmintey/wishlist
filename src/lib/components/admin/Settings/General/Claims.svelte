@@ -11,8 +11,7 @@
     const t = getFormatter();
 </script>
 
-<SettingsGroup>
-    <h3 class="h3">{$t("admin.claims")}</h3>
+<SettingsGroup title={$t("admin.claims")}>
     <Setting>
         <label class="checkbox-label">
             <input

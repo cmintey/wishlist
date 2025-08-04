@@ -1,6 +1,7 @@
 import { expect, type Locator } from "@playwright/test";
 import { EditItemPage } from "../pageObjects/edit-item.page";
 import { Modal } from "./modal";
+import { Toast } from "./toast";
 
 export class ItemCard {
     private readonly card: Locator;
@@ -14,6 +15,8 @@ export class ItemCard {
     private readonly notes: Locator;
     private readonly editButton: Locator;
     private readonly deleteButton: Locator;
+    private readonly approveButton: Locator;
+    private readonly denyButton: Locator;
 
     constructor(card: Locator) {
         this.card = card;
@@ -27,6 +30,8 @@ export class ItemCard {
         this.notes = card.getByTestId("notes");
         this.editButton = card.getByRole("button", { name: "Edit" });
         this.deleteButton = card.getByRole("button", { name: "Delete" });
+        this.approveButton = card.getByRole("button", { name: "Approve" });
+        this.denyButton = card.getByRole("button", { name: "Deny" });
     }
 
     async assertDefaultImage() {
@@ -109,5 +114,23 @@ export class ItemCard {
         await this.deleteButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
+    }
+
+    async approve() {
+        await this.approveButton.click();
+        const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
+        await modal.submit();
+        const name = await this.name.textContent();
+        new Toast(this.card.page()).waitForToastWithText(`${name} was approved`);
+        return this;
+    }
+
+    async deny() {
+        await this.denyButton.click();
+        const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
+        await modal.submit();
+        const name = await this.name.textContent();
+        new Toast(this.card.page()).waitForToastWithText(`${name} was denied`);
+        return this;
     }
 }
