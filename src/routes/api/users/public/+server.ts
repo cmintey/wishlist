@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const $t = await getFormatter();
 
     // Validate email requirement for public users
-    const config = await getConfig();
+    const config = await getConfig(data.groupId);
     if (config.claims.requireEmail && !data.username) {
         error(422, $t("errors.email-is-required-for-public-claims"));
     }
