@@ -12,11 +12,11 @@ Features to test
     - [ ] Manage list only visible by owner
 - [ ] Create item
     - [ ] Invalid form
-    - [ ] Valid form
-    - [ ] Add to multiple lists
-    - [ ] Suggestions
+    - [x] Valid form
+    - [x] Add to multiple lists
+    - [x] Suggestions
 - [ ] Item operations
-    - [ ] Edit
+    - [x] Edit
     - [ ] Delete
     - [ ] Claim
         - [ ] Validate claimed name text

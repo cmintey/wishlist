@@ -11,6 +11,7 @@ export class CreateItemPage extends BasePage {
     private readonly itemForm: ItemForm;
     private readonly createButton: Locator;
     private readonly createAndStayButton: Locator;
+    private readonly approvalRequiredAlert: Locator;
 
     constructor(page: Page, props?: Props) {
         const listId = props?.listId ?? new URL(page.url()).pathname.split("/").at(-2);
@@ -19,6 +20,7 @@ export class CreateItemPage extends BasePage {
         this.itemForm = new ItemForm(page);
         this.createButton = page.getByRole("button", { name: "Create item" });
         this.createAndStayButton = page.getByRole("button", { name: "Create and add another" });
+        this.approvalRequiredAlert = page.getByText("Heads up!");
     }
 
     async at() {
@@ -35,5 +37,9 @@ export class CreateItemPage extends BasePage {
 
     async createAndStay() {
         await this.createAndStayButton.click();
+    }
+
+    async assertApprovalRequiredAlert() {
+        await expect(this.approvalRequiredAlert).toBeVisible();
     }
 }
