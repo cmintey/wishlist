@@ -11,9 +11,9 @@ export abstract class BasePage {
 
     abstract at(): Promise<void>;
 
-    async goto() {
+    async goto(opts?: { skipAssert: boolean }) {
         await this.page.goto(this.urlPath);
-        await this.at();
+        if (!opts?.skipAssert) await this.at();
         return this;
     }
 }

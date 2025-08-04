@@ -13,8 +13,7 @@
     const t = getFormatter();
 </script>
 
-<SettingsGroup>
-    <h3 class="h3">{$t("admin.credentials")}</h3>
+<SettingsGroup title={$t("admin.credentials")}>
     <Setting>
         <label class="checkbox-label">
             <input

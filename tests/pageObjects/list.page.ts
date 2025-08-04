@@ -46,6 +46,10 @@ export class ListPage extends BasePage {
         return `/lists/${this.id}`;
     }
 
+    getId() {
+        return this.id;
+    }
+
     async manage() {
         await this.manageButton.click();
         return new ManageListPage(this.page);
@@ -72,7 +76,15 @@ export class ListPage extends BasePage {
         return new CreateItemPage(this.page, { listId: this.id });
     }
 
+    async assertCreateItemNotAvailable() {
+        await expect(this.createItemButton).not.toBeVisible();
+    }
+
     async getItemAt(index: number) {
         return new ItemCard(this.itemsContainer.locator("div.card").nth(index));
+    }
+
+    async getItemForApprovalAt(index: number) {
+        return new ItemCard(this.approvalsContainer.locator("div.card").nth(index));
     }
 }

@@ -13,8 +13,7 @@
     const t = getFormatter();
 </script>
 
-<SettingsGroup>
-    <h3 class="h3">{$t("admin.groups")}</h3>
+<SettingsGroup title={$t("admin.groups")}>
     <Setting>
         <label class="flex flex-col" for="defaultGroup">
             <span>{$t("admin.default-group")}</span>

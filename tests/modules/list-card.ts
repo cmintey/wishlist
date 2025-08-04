@@ -44,4 +44,9 @@ export class ListCard {
         expect(name).not.toBeNull();
         return name!;
     }
+
+    async assertApprovalBanner() {
+        this.card.locator("p", { hasText: /You have \d items? awaiting your approval/ });
+        return this;
+    }
 }
