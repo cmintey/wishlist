@@ -14,6 +14,7 @@
     interface Meta {
         item: ItemOnListDTO;
         userId: string | undefined;
+        groupId: string | undefined;
         claimId: string | undefined;
         requireClaimEmail: boolean;
         maxQuantity: number;
@@ -25,7 +26,7 @@
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
-    const { item, userId, claimId, requireClaimEmail }: Meta = $modalStore[0].meta;
+    const { item, userId, groupId, claimId, requireClaimEmail }: Meta = $modalStore[0].meta;
 
     const claim = item.claims.find((claim) => claim.claimId === claimId);
 
@@ -100,7 +101,7 @@
     }
 
     async function handlePublicClaim() {
-        const systemUsersAPI = new SystemUsersAPI();
+        const systemUsersAPI = new SystemUsersAPI(groupId);
         const userResp = await systemUsersAPI.create(username, name);
         if (!userResp.ok) {
             const responseData = await userResp.json();

@@ -79,6 +79,11 @@ export class InviteUsersAPI {
 }
 
 export class SystemUsersAPI {
+    groupId?: string;
+    constructor(groupId?: string) {
+        this.groupId = groupId;
+    }
+
     _makeRequest = async (method: string, body: Record<string, any>) => {
         const options: RequestInit = {
             method,
@@ -93,6 +98,6 @@ export class SystemUsersAPI {
     };
 
     create = async (username?: string, name?: string) => {
-        return await this._makeRequest("POST", { username, name });
+        return await this._makeRequest("POST", { username, name, groupId: this.groupId });
     };
 }
