@@ -35,10 +35,14 @@ export const formatPrice = (item: ItemWithPrice, locale?: string) => {
         return item.price;
     }
 
-    const formatter = getFormatter(item.itemPrice.currency, locale);
-    const maxFracDigits = getMaximumFractionDigits(item.itemPrice.currency, locale);
+    return formatNumberAsPrice(item.itemPrice.currency, item.itemPrice.value, locale);
+};
 
-    const value = item.itemPrice.value / Math.pow(10, maxFracDigits);
+export const formatNumberAsPrice = (currency: string, price: number, locale?: string) => {
+    const formatter = getFormatter(currency, locale);
+    const maxFracDigits = getMaximumFractionDigits(currency, locale);
+
+    const value = price / Math.pow(10, maxFracDigits);
     return formatter.format(value);
 };
 

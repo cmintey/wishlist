@@ -3,6 +3,7 @@
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import type { ClassValue } from "svelte/elements";
 
     interface Props {
         options: Option[];
@@ -11,6 +12,7 @@
         directionParam?: string | undefined;
         prefix?: string;
         multiselect?: boolean;
+        class?: ClassValue;
     }
 
     const {
@@ -19,7 +21,8 @@
         searchParam,
         directionParam = undefined,
         prefix = undefined,
-        multiselect = false
+        multiselect = false,
+        class: clazz
     }: Props = $props();
     const t = getFormatter();
 
@@ -112,7 +115,7 @@
     };
 </script>
 
-<div class="flex flex-row gap-x-4 pb-4">
+<div class={["flex flex-row gap-x-4", clazz]}>
     <button
         class="variant-ringed-primary chip"
         class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}
