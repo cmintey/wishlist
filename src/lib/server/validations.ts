@@ -7,7 +7,7 @@ import { getLocale } from "$lib/server/i18n";
 
 export const loadLocale = async (locale_: string) => {
     try {
-        const { default: locale } = await import(`zod/locales/${locale_}.js`);
+        const { default: locale } = await import(/* @vite-ignore */ `zod/v4/locales/${locale_}.js`);
         z.config(locale());
     } catch {
         // do nothing
