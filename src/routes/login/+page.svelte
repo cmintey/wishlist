@@ -75,6 +75,11 @@
                             required
                             type="text"
                         />
+                        {#if form?.errors?.username}
+                            <span class="unstyled text-xs text-red-500">
+                                {form.errors.username[0]}
+                            </span>
+                        {/if}
                     </label>
 
                     <div class="relative flex flex-col space-y-4">
@@ -86,15 +91,15 @@
                             required
                         />
 
-                        {#if form?.incorrect}<span class="unstyled text-xs text-red-500">
+                        {#if form?.incorrect}
+                            <span class="unstyled text-xs text-red-500">
                                 {$t("errors.invalid-credentials")}
-                            </span>{/if}
-                        {#if form?.error}
-                            <ul>
-                                {#each form.errors as error}
-                                    <li class="text-xs text-red-500">{error.message}</li>
-                                {/each}
-                            </ul>
+                            </span>
+                        {/if}
+                        {#if form?.errors?.password}
+                            <span class="unstyled text-xs text-red-500">
+                                {form.errors.password[0]}
+                            </span>
                         {/if}
 
                         <div class="flex items-center justify-center gap-x-4">

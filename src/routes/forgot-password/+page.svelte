@@ -41,12 +41,12 @@
                             id="email"
                             name="email"
                             class="input"
-                            class:input-invalid={form?.error}
+                            class:input-invalid={form?.errors?.email}
                             required
                             type="email"
                         />
                     </label>
-                    {#if form?.error}
+                    {#if form?.errors?.email}
                         <span class="text-error-700-200-token text-xs">{$t("errors.invalid-email")}</span>
                     {/if}
 

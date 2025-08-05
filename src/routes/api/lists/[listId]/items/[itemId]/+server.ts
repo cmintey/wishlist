@@ -9,6 +9,7 @@ import { ItemEvent } from "$lib/events";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { requireLoginOrError } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 // Approve an item on a list
 export const PATCH: RequestHandler = async ({ request, params }) => {
@@ -36,7 +37,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     const updateData = listItemUpdateSchema.safeParse(body);
 
     if (updateData.error) {
-        error(422, JSON.stringify(updateData.error.format()));
+        error(422, JSON.stringify(z.flattenError(updateData.error).fieldErrors));
     }
 
     try {

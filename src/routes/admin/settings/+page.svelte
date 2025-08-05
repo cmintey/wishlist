@@ -74,6 +74,11 @@
             <General {config} {groups} hidden={currentHash !== options[0].hash} />
             <Email {config} hidden={currentHash !== options[1].hash} {saved} {sending} />
             <Security {config} hidden={currentHash !== options[2].hash} />
+
+            {#if page.form?.error}
+                <span>{page.form.error}</span>
+            {/if}
+
             <!-- Save buttons -->
             <div class="flex w-full flex-row justify-end pt-5">
                 <button class="variant-filled-primary btn" type="submit">

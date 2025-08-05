@@ -9,6 +9,7 @@ import { create } from "$lib/server/list";
 import { client } from "$lib/server/prisma";
 import { requireLogin } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 export const load = (async () => {
     const user = requireLogin();
@@ -77,7 +78,7 @@ export const actions: Actions = {
         if (listProperties.error) {
             return fail(422, {
                 success: false,
-                formErrors: listProperties.error.format()
+                formErrors: z.flattenError(listProperties.error).fieldErrors
             });
         }
         if (listProperties.data.public && !config.allowPublicLists) {

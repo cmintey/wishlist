@@ -47,7 +47,7 @@ export const actions: Actions = {
         const schema = resetPasswordSchema.and(
             z.object({
                 userId: z.string(),
-                id: z.string().uuid()
+                id: z.uuid()
             })
         );
         const pwdData = schema.safeParse({
@@ -57,13 +57,7 @@ export const actions: Actions = {
         });
 
         if (!pwdData.success) {
-            const errors = pwdData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { error: true, errors });
+            return fail(400, { error: true, errors: z.flattenError(pwdData.error).fieldErrors });
         }
 
         const user = await client.user.findUnique({

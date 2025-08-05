@@ -4,6 +4,7 @@ import { fail } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
 import { settingSchema } from "$lib/server/validations";
 import { requireAdminOrManager } from "$lib/server/auth";
+import z from "zod";
 
 export const load = (async ({ params }) => {
     await requireAdminOrManager(params.groupId);
@@ -55,13 +56,7 @@ export const actions: Actions = {
         const configData = groupSettingSchema.safeParse(formData);
 
         if (!configData.success) {
-            const errors = configData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { action: "settings", error: "Validation failed", errors });
+            return fail(400, { action: "settings", error: z.prettifyError(configData.error) });
         }
 
         const existingConfig = await getConfig(params.groupId);

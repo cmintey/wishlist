@@ -209,15 +209,15 @@
                 id="name"
                 name="name"
                 class="input"
-                class:input-error={form?.errors?.name?._errors}
+                class:input-error={form?.errors?.name}
                 autocomplete="off"
                 required
                 type="text"
                 bind:value={productData.name}
             />
         </div>
-        {#if form?.errors?.name?._errors}
-            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form.errors.name._errors[0]}</p>
+        {#if form?.errors?.name}
+            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form.errors.name[0]}</p>
         {/if}
     </label>
 
@@ -263,8 +263,8 @@
                 <span>{$t("wishes.no-limit")}</span>
             </label>
         </div>
-        {#if form?.errors?.quantity?._errors}
-            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists._errors[0]}</p>
+        {#if form?.errors?.quantity}
+            <p class="unstyled text-error-500-400-token text-xs">{form.errors.quantity[0]}</p>
         {/if}
     </div>
 
@@ -313,7 +313,7 @@
         <legend>{$t("wishes.lists")}</legend>
         <div
             class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
-            class:input-error={form?.errors?.lists?._errors}
+            class:input-error={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
                 <label class="flex items-center gap-x-2" for={list.id}>
@@ -335,8 +335,8 @@
                 </label>
             {/each}
         </div>
-        {#if form?.errors?.lists?._errors}
-            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists._errors[0]}</p>
+        {#if form?.errors?.lists}
+            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists[0]}</p>
         {/if}
     </fieldset>
 

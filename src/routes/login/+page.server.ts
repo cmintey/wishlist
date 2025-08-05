@@ -10,6 +10,7 @@ import { createUser } from "$lib/server/user";
 import { verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 export const load: PageServerLoad = async ({ locals, request, cookies, url }) => {
     const config = await getConfig();
@@ -102,13 +103,7 @@ export const actions: Actions = {
         const loginData = (await getLoginSchema()).safeParse(formData);
         // check for empty values
         if (!loginData.success) {
-            const errors = loginData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { error: true, errors });
+            return fail(400, { error: true, errors: z.flattenError(loginData.error).fieldErrors });
         }
 
         try {

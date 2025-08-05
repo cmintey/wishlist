@@ -9,6 +9,7 @@ import { deleteList } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
 import { requireLogin } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -81,7 +82,7 @@ export const actions: Actions = {
         if (listProperties.error) {
             return fail(422, {
                 success: false,
-                errors: listProperties.error.format()
+                errors: z.flattenError(listProperties.error).fieldErrors
             });
         }
         if (listProperties.data.public && !config.allowPublicLists) {
