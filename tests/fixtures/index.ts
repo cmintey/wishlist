@@ -1,19 +1,15 @@
-import { test as base, expect, type Page as BasePage } from "@playwright/test";
+import { test as base, type Page as BasePage } from "@playwright/test";
 import { adminAuthFile } from "../constants";
-import { UserMenu } from "../modules/user-menu";
-import { SignupPage } from "../pageObjects/signup.page";
 import type { UserData } from "../types";
-import { SigninPage } from "../pageObjects/signin.page";
-
-interface UserPage extends BasePage {
-    groupName: string;
-}
+import { createUser } from "../util";
 
 interface Fixtures {
     adminPage: BasePage;
     anonymousPage: BasePage;
-    page: UserPage;
+    page: BasePage;
     userData: UserData;
+    additionalUserData: UserData;
+    additionalPage: BasePage;
 }
 
 export const test = base.extend<Fixtures>({
@@ -23,25 +19,40 @@ export const test = base.extend<Fixtures>({
         await context.close();
     },
     anonymousPage: async ({ browser }, use) => {
-        await use(await browser.newPage());
-    },
-    userData: async ({ browser }, use) => {
         const page = await browser.newPage();
-        const signupPage = new SignupPage(page);
-        await signupPage.goto();
-        const userData = await signupPage.createAccount();
+        await use(page);
         await page.close();
+    },
+    userData: async ({ adminPage }, use) => {
+        const userData = await createUser(adminPage.request);
         await use(userData);
     },
-    page: async ({ page, userData }, use) => {
-        const loginPage = new SigninPage(page);
-        await loginPage.goto();
-        await loginPage.login(userData);
-        const userMenu = new UserMenu(page);
-        const groupName = await userMenu.createGroup();
-        await expect(page.getByRole("heading", { name: "Lists" })).toBeVisible();
-        Object.assign(page, { groupName });
+    page: async ({ page, userData, baseURL }, use) => {
+        await page.request.post("/login", {
+            form: { username: userData.username, password: userData.password },
+            headers: {
+                Origin: baseURL!
+            }
+        });
+        await page.goto("/");
         await use(page);
+    },
+    additionalUserData: async ({ adminPage, userData }, use) => {
+        const additionalUserData = await createUser(adminPage.request, userData.groups[0]);
+        await use(additionalUserData);
+    },
+    additionalPage: async ({ browser, additionalUserData: userData, baseURL }, use) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.request.post("/login", {
+            form: { username: userData.username, password: userData.password },
+            headers: {
+                Origin: baseURL!
+            }
+        });
+        await page.goto("/");
+        await use(page);
+        await context.close();
     }
 });
 export { expect } from "@playwright/test";

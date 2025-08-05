@@ -20,28 +20,31 @@ export const PUT: RequestHandler = async ({ request }) => {
             name: data.name
         }
     });
-    const config = await getConfig(group.id);
 
-    const hasActiveMembership =
-        (await client.userGroupMembership.findFirst({
-            where: {
-                userId: user.id,
-                active: true
-            }
-        })) !== null;
+    if (!data.createOnly) {
+        const config = await getConfig(group.id);
 
-    const createList = config.enableDefaultListCreation ? create(user.id, group.id) : Promise.resolve();
-    await Promise.all([
-        client.userGroupMembership.create({
-            data: {
-                userId: user.id,
-                groupId: group.id,
-                roleId: Role.GROUP_MANAGER,
-                active: !hasActiveMembership
-            }
-        }),
-        createList
-    ]);
+        const hasActiveMembership =
+            (await client.userGroupMembership.findFirst({
+                where: {
+                    userId: user.id,
+                    active: true
+                }
+            })) !== null;
+
+        const createList = config.enableDefaultListCreation ? create(user.id, group.id) : Promise.resolve();
+        await Promise.all([
+            client.userGroupMembership.create({
+                data: {
+                    userId: user.id,
+                    groupId: group.id,
+                    roleId: Role.GROUP_MANAGER,
+                    active: !hasActiveMembership
+                }
+            }),
+            createList
+        ]);
+    }
 
     return new Response(JSON.stringify({ group }), { status: 201 });
 };
