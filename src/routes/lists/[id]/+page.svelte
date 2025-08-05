@@ -22,8 +22,7 @@
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
     import { getFormatter } from "$lib/i18n";
     import Markdown from "$lib/components/Markdown.svelte";
-    import StatsChip from "$lib/components/wishlists/chips/StatsChip.svelte";
-    import { formatNumberAsPrice } from "$lib/price-formatter";
+    import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -43,19 +42,6 @@
         }
     });
     let hideDescription = $state(false);
-    const totalCostByCurrency = $derived(
-        items
-            .filter((i) => i.itemPrice !== null)
-            .reduce(
-                (accum, item) => {
-                    accum[item.itemPrice!.currency] = (accum[item.itemPrice!.currency] ||= 0) + item.itemPrice!.value;
-                    return accum;
-                },
-                {} as Record<string, number>
-            )
-    );
-
-    let seePrices = $state(false);
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -239,55 +225,32 @@
         <div class="flex flex-row flex-wrap items-center gap-2">
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
-            <StatsChip {items} />
         </div>
     {/if}
 </div>
 
-{#if data.list.owner.isMe && (data.listMode === "registry" || data.list.public)}
-    <div class="flex flex-row gap-x-2 pb-4">
-        {#if publicListUrl}
-            <div class="flex flex-row">
-                <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>{$t("wishes.public-url")}</TokenCopy>
+{#if data.list.owner.isMe}
+    <div class="flex flex-wrap-reverse justify-between gap-2 pb-4">
+        <ListStatistics {items} />
+        {#if data.listMode === "registry" || data.list.public}
+            <div class="flex h-fit flex-row gap-x-2">
+                {#if publicListUrl}
+                    <div class="flex flex-row">
+                        <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>
+                            {$t("wishes.public-url")}
+                        </TokenCopy>
+                    </div>
+                {:else}
+                    <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>
+                        {$t("wishes.share")}
+                    </button>
+                {/if}
             </div>
-        {:else}
-            <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>
-                {$t("wishes.share")}
-            </button>
         {/if}
     </div>
 {/if}
 
-{#if data.list.owner.isMe}
-    <div class="pb-1">
-        <div class="flex flex-row items-baseline gap-1">
-            <span>{items.length} items</span>
-            {#if !seePrices}
-                <button onclick={() => (seePrices = !seePrices)}>
-                    <span class="text-xs text-surface-900/70 dark:text-surface-50/50">show more...</span>
-                </button>
-            {/if}
-        </div>
-        {#if seePrices}
-            <div class="flex flex-col gap-1">
-                <span>Cost of list</span>
-                <ul class="list">
-                    {#each Object.entries(totalCostByCurrency) as [currency, total]}
-                        <li>
-                            <span class="variant-ghost-primary w-12 px-2 py-1 text-center text-sm rounded-token">
-                                {currency}
-                            </span>
-                            <span>{formatNumberAsPrice(currency, total)}</span>
-                        </li>
-                    {/each}
-                </ul>
-                <button class="w-fit" onclick={() => (seePrices = !seePrices)}>
-                    <span class="text-xs text-surface-900/70 dark:text-surface-50/50">show less...</span>
-                </button>
-            </div>
-        {/if}
-    </div>
-{/if}
+{#if data.list.owner.isMe}{/if}
 
 {#if data.list.owner.isMe && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
