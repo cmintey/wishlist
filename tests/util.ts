@@ -1,9 +1,8 @@
 import { init } from "@paralleldrive/cuid2";
-import type { Browser, BrowserContext, Page } from "@playwright/test";
+import type { APIRequestContext, BrowserContext, Page } from "@playwright/test";
 import { AdminPage } from "./pageObjects/admin.page";
 import { UserMenu } from "./modules/user-menu";
-import type { UserData } from "./types";
-import { SignupPage } from "./pageObjects/signup.page";
+import type { GroupData, UserData } from "./types";
 
 export class ExtraUser {
     private readonly context: BrowserContext;
@@ -49,11 +48,36 @@ export const addUserToGroup = async (pageWithGroupManagerContext: Page, userName
     await pageWithGroupManagerContext.goto(previousUrl);
 };
 
-export const createUser = async (browser: Browser) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    const signupPage = new SignupPage(page);
-    await signupPage.goto();
-    const userData = await signupPage.createAccount();
-    return new ExtraUser(context, page, userData);
+export const createUser = async (request: APIRequestContext, existingGroup?: GroupData): Promise<UserData> => {
+    const name = randomString();
+    const username = randomString();
+    const email = username + "@example.com";
+    const password = randomString(12);
+
+    const userId = await request
+        .put("/api/users", { data: { name, username, email, password } })
+        .then((response) => response.json())
+        .then(({ id }) => id as string);
+
+    let group: GroupData;
+    if (existingGroup) {
+        group = existingGroup;
+    } else {
+        group = await request
+            .put("/api/groups", { data: { name: randomString(), createOnly: true } })
+            .then((response) => response.json())
+            .then(({ group }) => group);
+    }
+
+    await request.put(`/api/groups/${group.id}/users/${userId}`, { data: { manager: true } });
+    await request.patch(`/api/users/${userId}/groups/${group.id}`, { data: { active: true } });
+
+    return {
+        id: userId,
+        name,
+        username,
+        email,
+        password,
+        groups: [group]
+    };
 };

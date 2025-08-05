@@ -4,10 +4,10 @@ import { UserMenu } from "../modules/user-menu";
 import { CreateItemPage } from "../pageObjects/create-item.page";
 import { ListPage } from "../pageObjects/list.page";
 import { ListsPage } from "../pageObjects/lists.page";
-import { addUserToGroup, createUser, randomString } from "../util";
+import { randomString } from "../util";
 import type { Method } from "../modules/suggestions-settings";
 
-test("add item to another users list - disabled", async ({ page: user1Page, browser, userData }) => {
+test("add item to another users list - disabled", async ({ page: user1Page, userData, additionalPage: user2Page }) => {
     // setup -- disable suggestions
     await new UserMenu(user1Page)
         .manageGroup()
@@ -24,10 +24,6 @@ test("add item to another users list - disabled", async ({ page: user1Page, brow
     const user1List = await user1ListsPage.getListAt(0);
     const user1ListPage = await user1List.click();
 
-    const user2 = await createUser(browser);
-    await addUserToGroup(user1Page, user2.getUserData().name);
-    const user2Page = user2.getPage();
-
     const user1ListWithUser2 = new ListPage(user2Page, {
         id: user1ListPage.getId(),
         name: `${userData.name}'s Wishes`
@@ -38,7 +34,12 @@ test("add item to another users list - disabled", async ({ page: user1Page, brow
     await expect(user2Page.getByText("Suggestions are disabled")).toBeVisible();
 });
 
-test("add item to another users list - surprise", async ({ page: user1Page, browser, userData }) => {
+test("add item to another users list - surprise", async ({
+    page: user1Page,
+    userData,
+    additionalPage: user2Page,
+    additionalUserData: user2
+}) => {
     await enableMethod(user1Page, "surprise");
 
     const user1ListsPage = new ListsPage(user1Page);
@@ -50,10 +51,6 @@ test("add item to another users list - surprise", async ({ page: user1Page, brow
     const user1ListPage = await user1List.click();
     await user1ListPage.assertNoItems();
 
-    const user2 = await createUser(browser);
-    await addUserToGroup(user1Page, user2.getUserData().name);
-    const user2Page = user2.getPage();
-
     // create new item on user 1's list
     const user1ListWithUser2 = new ListPage(user2Page, {
         id: user1ListPage.getId(),
@@ -66,7 +63,7 @@ test("add item to another users list - surprise", async ({ page: user1Page, brow
     await user1ListWithUser2
         .getItemAt(0)
         .then((i) => i.assertName(itemName))
-        .then((i) => i.assertAddedBy(user2.getUserData().name));
+        .then((i) => i.assertAddedBy(user2.name));
 
     // assert list has no items from user 1 perspective
     await user1ListPage.assertNoItems();
@@ -74,7 +71,12 @@ test("add item to another users list - surprise", async ({ page: user1Page, brow
     await user1ListPage.assertNoItems();
 });
 
-test("add item to another users list - auto-approval", async ({ page: user1Page, browser, userData }) => {
+test("add item to another users list - auto-approval", async ({
+    page: user1Page,
+    userData,
+    additionalPage: user2Page,
+    additionalUserData: user2
+}) => {
     await enableMethod(user1Page, "auto-approval");
 
     const user1ListsPage = new ListsPage(user1Page);
@@ -86,10 +88,6 @@ test("add item to another users list - auto-approval", async ({ page: user1Page,
     const user1ListPage = await user1List.click();
     await user1ListPage.assertNoItems();
 
-    const user2 = await createUser(browser);
-    await addUserToGroup(user1Page, user2.getUserData().name);
-    const user2Page = user2.getPage();
-
     // create new item on user 1's list
     const user1ListWithUser2 = new ListPage(user2Page, {
         id: user1ListPage.getId(),
@@ -102,17 +100,22 @@ test("add item to another users list - auto-approval", async ({ page: user1Page,
     await user1ListWithUser2
         .getItemAt(0)
         .then((i) => i.assertName(itemName))
-        .then((i) => i.assertAddedBy(user2.getUserData().name));
+        .then((i) => i.assertAddedBy(user2.name));
 
     // assert list has item added by user 2
     await user1ListPage
         .getItemAt(0)
         .then((i) => i.assertName(itemName))
-        .then((i) => i.assertAddedBy(user2.getUserData().name));
+        .then((i) => i.assertAddedBy(user2.name));
 });
 
 ["approved", "denied"].forEach((result) =>
-    test(`add item to another users list - approval ${result}`, async ({ page: user1Page, browser, userData }) => {
+    test(`add item to another users list - approval ${result}`, async ({
+        page: user1Page,
+        userData,
+        additionalPage: user2Page,
+        additionalUserData: user2
+    }) => {
         await enableMethod(user1Page, "approval");
 
         const user1ListsPage = new ListsPage(user1Page);
@@ -123,10 +126,6 @@ test("add item to another users list - auto-approval", async ({ page: user1Page,
         await user1List.assertOwner(userData.name);
         const user1ListPage = await user1List.click();
         await user1ListPage.assertNoItems();
-
-        const user2 = await createUser(browser);
-        await addUserToGroup(user1Page, user2.getUserData().name);
-        const user2Page = user2.getPage();
 
         // create new item on user 1's list
         const user1ListWithUser2 = new ListPage(user2Page, {
@@ -146,7 +145,7 @@ test("add item to another users list - auto-approval", async ({ page: user1Page,
         await user1ListPage
             .getItemForApprovalAt(0)
             .then((i) => i.assertName(itemName))
-            .then((i) => i.assertAddedBy(user2.getUserData().name))
+            .then((i) => i.assertAddedBy(user2.name))
             .then((i) => (result === "approved" ? i.approve() : i.deny()));
 
         if (result === "approved") {
@@ -154,11 +153,11 @@ test("add item to another users list - auto-approval", async ({ page: user1Page,
             await user1ListPage
                 .getItemAt(0)
                 .then((i) => i.assertName(itemName))
-                .then((i) => i.assertAddedBy(user2.getUserData().name));
+                .then((i) => i.assertAddedBy(user2.name));
             await user1ListWithUser2
                 .getItemAt(0)
                 .then((i) => i.assertName(itemName))
-                .then((i) => i.assertAddedBy(user2.getUserData().name));
+                .then((i) => i.assertAddedBy(user2.name));
         } else {
             // item is fully gone
             await user1ListPage.assertNoItems();
