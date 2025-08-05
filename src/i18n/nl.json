@@ -33,6 +33,7 @@
         "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Beheerder",
         "admin": "Admin",
         "administration": "Administration",
-        "allow-public-lists": "Openbare Lijsten Toestaan"
+        "allow-public-lists": "Openbare Lijsten Toestaan",
+        "allow-public-lists-tooltip": "Gebruikers toestaan een lijst openbaar te maken. Heeft geen effect als de groep zich in de 'registermodus' bevindt."
     }
 }
