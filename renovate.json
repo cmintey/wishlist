@@ -1,53 +1,33 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "docker:pinDigests"
-  ],
-  "minimumReleaseAge": "5 days",
-  "schedule": "before 9am on sunday",
-  "ignorePaths": [ "**/docker-compose.yaml" ],
-  "packageRules": [
-    {
-      "matchManagers": ["github-actions"],
-      "groupName": "github-actions"
-    },
-    {
-      "matchDatasources": [
-        "npm"
-      ],
-      "rangeStrategy": "bump",
-      "groupName": "node",
-      "versioning": "node",
-      "matchPackageNames": [
-        "node",
-        "@types/node"
-      ]
-    },
-    {
-      "groupName": "node",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchPackageNames": [
-        "node"
-      ],
-      "versionCompatibility": "^(?<version>[^-]+)(?<compatibility>-.*)?$",
-      "versioning": "node"
-    },
-    {
-      "groupName": "packages",
-      "matchDatasources": [
-        "npm"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchPackageNames": [
-        "!node",
-        "!@types/node"
-      ]
-    }
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended", "docker:pinDigests"],
+    "minimumReleaseAge": "5 days",
+    "schedule": "before 9am on sunday",
+    "ignorePaths": ["**/docker-compose.yaml"],
+    "packageRules": [
+        {
+            "matchManagers": ["github-actions"],
+            "groupName": "github-actions"
+        },
+        {
+            "matchDatasources": ["npm"],
+            "rangeStrategy": "bump",
+            "groupName": "node",
+            "versioning": "node",
+            "matchPackageNames": ["node", "@types/node"]
+        },
+        {
+            "groupName": "node",
+            "matchDatasources": ["docker"],
+            "matchPackageNames": ["node"],
+            "versionCompatibility": "^(?<version>[^-]+)(?<compatibility>-.*)?$",
+            "versioning": "node"
+        },
+        {
+            "groupName": "packages",
+            "matchDatasources": ["npm"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchPackageNames": ["!node", "!@types/node"]
+        }
+    ]
 }
