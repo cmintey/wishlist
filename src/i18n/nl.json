@@ -1,28 +1,28 @@
 {
     "a11y": {
         "a-person-looking-at-an-empty-board": "Een persoon die naar een leeg bord kijkt",
-        "cancel-editing": "Annuleer de bewerking",
-        "clear-color-field": "Leeg kleurenveld",
-        "clear-icon-field": "Leeg icoon Field",
-        "clear-name-field": "Veld voor de naam wissen",
-        "clear-url-field": "Wissen URL -veld",
-        "close": "sluit",
-        "decrease-priority": "Verminder prioriteit voor {name}",
-        "default-item-image": "Standaarditemafbeelding",
-        "drag-handle": "Draggreep voor {name}",
+        "cancel-editing": "bewerken annuleren",
+        "clear-color-field": "kleurveld wissen",
+        "clear-icon-field": "pictogramveld wissen",
+        "clear-name-field": "Naamveld wissen",
+        "clear-url-field": "URL-veld wissen",
+        "close": "sluiten",
+        "decrease-priority": "Minder prioriteit voor {name}",
+        "default-item-image": "Standaard item afbeelding",
+        "drag-handle": "Sleep handvat voor {name}",
         "edit-group-name": "Groepsnaam bewerken",
-        "increase-priority": "Verhoog prioriteit voor {name}",
+        "increase-priority": "Verhoog de prioriteit voor {name}",
         "menu": "menu",
-        "password-strength": "Wachtwoordsterkte",
-        "refresh-item-data": "Vernieuw itemgegevens",
+        "password-strength": "sterk wachtwoord",
+        "refresh-item-data": "vernieuw itemgegevens",
         "remove-user-from-group": "verwijder {user} uit de groep",
-        "save-group-name": "Bewaar groepsnaam",
-        "toggle-manager": "{isManager, select, true {remove} andere {add}} {user} als manager",
-        "toggle-password-visibility": "Wachtwoord zichtbaarheid schakelen",
-        "two-people-looking-in-an-empty-box": "Twee mensen die in een lege doos kijken",
-        "unpurchase": "Markeer item als niet gekocht",
-        "upload-profile-image": "Upload profielafbeelding",
-        "wishlist-logo": "Verlangslijstlogo"
+        "save-group-name": "Groepsnaam opslaan",
+        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} als beheerder",
+        "toggle-password-visibility": "Zichtbaarheid van wachtwoord wijzigen",
+        "two-people-looking-in-an-empty-box": "Twee mensen kijken in een lege doos",
+        "unpurchase": "Markeer artikel als niet gekocht",
+        "upload-profile-image": "Profielfoto uploaden",
+        "wishlist-logo": "Wenslijst Logo"
     },
     "admin": {
         "about": "Over",
@@ -111,7 +111,7 @@
         "version": "Versie: <a href = \"https://github.com/cmintey/wishlist/releases/tag/ {version}\"> {version} </a>",
         "wishlist-mode": "WISSLIST -modus",
         "wishlist-mode-alert": "Er zijn {memberCount} leden en {listCount} lijsten in deze groep, u kunt de modus niet schakelen totdat u alle behalve één lid en één lijst verwijdert.",
-        "wishlist-mode-display-text": "In de 'Wenslijst' -modus kunt u meerdere gebruikers en lijsten hebben en items van andere gebruikers claimen. In de modus 'Registry' hebt u een enkele lijst die u publiekelijk kunt delen.",
+        "wishlist-mode-display-text": "In de 'Wishlist' -modus kunt u meerdere gebruikers en lijsten hebben en items van andere gebruikers claimen. In de modus 'Registry' hebt u een enkele lijst die u publiekelijk kunt delen.",
         "wishlist-mode-registry": "Register",
         "wishlist-mode-registry-tooltip": "Eén gebruiker met één openbare lijst. Gebruikers van andere groepen kunnen suggesties doen als toegestane en anonieme gebruikers items kunnen claimen.",
         "wishlist-mode-wishlist": "Verlanglijst",
@@ -160,17 +160,17 @@
         "your-password-was-reset": "Uw wachtwoord is gereset."
     },
     "email": {
-        "invite-body": "Je bent uitgenodigd om lid te worden van Wenslijst! Klik op de onderstaande link om de uitnodiging te accepteren.",
+        "invite-body": "Je bent uitgenodigd om lid te worden van Wishlist! Klik op de onderstaande link om de uitnodiging te accepteren.",
         "invite-button": "Word lid van de verlanglijst",
         "invite-fallback-text": "Iemand heeft je uitgenodigd om lid te worden van hun verlanglijst! Volg de link naar aanmelding: {url}",
         "invite-footer": "Als u niet wilt meedoen of gelooft dat deze e -mail in de fout wordt verzonden, kunt u deze e -mail negeren.",
         "invite-subject": "WISKLIST INVITTE",
-        "invite-title": "Welkom bij Wenslijst!",
+        "invite-title": "Welkom bij Wishlist!",
         "pw-reset-body": "Als u om een wachtwoord opnieuw instelt, klikt u op de onderstaande link om het proces te voltooien. Als u dit verzoek niet hebt ingediend, kunt u deze e -mail veilig negeren.",
         "pw-reset-fallback-text": "Volg de link om uw wachtwoord te resetten {resetUrl}",
         "pw-reset-title": "Reset wachtwoord",
         "test-body": "Als je dit leest, gefeliciteerd! E -mailconfiguratie lijkt goed te zijn ingesteld!",
-        "test-subject": "Test van Wenslijst"
+        "test-subject": "Test van Wishlist"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "Een item moet worden toegevoegd aan ten minste één lijst",
@@ -311,7 +311,7 @@
         "very-strong": "Erg sterk",
         "very-weak": "Erg zwak",
         "weak": "Zwak",
-        "wishlists-cleared": "Wenslijsten zijn opgeruimd."
+        "wishlists-cleared": "Wenlijsten zijn opgeruimd."
     },
     "setup": {
         "back": "Rug",
@@ -327,7 +327,7 @@
         "lets-get-started": "Laten we beginnen",
         "next": "Volgende",
         "unable-to-update-password": "Niet in staat om het wachtwoord bij te werken",
-        "welcome-to-wishlist": "Welkom bij Wenslijst"
+        "welcome-to-wishlist": "Welkom bij Wishlist"
     },
     "unable-to-load-icons": "Kan pictogrammen niet laden.",
     "wishes": {
