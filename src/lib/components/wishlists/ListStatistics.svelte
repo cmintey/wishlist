@@ -33,14 +33,16 @@
 <div>
     <div class="flex flex-row items-baseline gap-1">
         <span>{$t("wishes.count-items", { values: { itemCount } })}</span>
-        <span>·</span>
-        <span>{formatNumberAsPrice(highestTotal.currency, highestTotal.total)}</span>
-        {#if totalCostByCurrency.length > 1 && !seePrices}
-            <button onclick={() => (seePrices = !seePrices)}>
-                <span class="text-xs text-surface-900/70 dark:text-surface-50/50">
-                    {$t("wishes.show-all-currencies")}
-                </span>
-            </button>
+        {#if totalCostByCurrency.length > 0}
+            <span>·</span>
+            <span>{formatNumberAsPrice(highestTotal.currency, highestTotal.total)}</span>
+            {#if totalCostByCurrency.length > 1 && !seePrices}
+                <button onclick={() => (seePrices = !seePrices)}>
+                    <span class="text-xs text-surface-900/70 dark:text-surface-50/50">
+                        {$t("wishes.show-all-currencies")}
+                    </span>
+                </button>
+            {/if}
         {/if}
     </div>
     {#if seePrices}
