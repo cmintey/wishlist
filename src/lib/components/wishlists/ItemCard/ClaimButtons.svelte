@@ -76,7 +76,13 @@
     {@const { claimedBy, publicClaimedBy } = item.claims[0]}
     <span>
         {$t("wishes.claimed-by", {
-            values: { name: claimedBy ? claimedBy.name : (publicClaimedBy.name === "ANONYMOUS_NAME" ? $t("wishes.anonymous") : publicClaimedBy.name) }
+            values: {
+                name: claimedBy
+                    ? claimedBy.name
+                    : publicClaimedBy.name === "ANONYMOUS_NAME"
+                      ? $t("wishes.anonymous")
+                      : publicClaimedBy.name
+            }
         })}
     </span>
 {:else if item.claims.length > 1 && shouldShowName()}
