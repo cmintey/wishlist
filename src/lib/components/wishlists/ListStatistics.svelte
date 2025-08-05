@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { getFormatter } from "$lib/i18n";
     import { formatNumberAsPrice } from "$lib/price-formatter";
 
     interface Props {
@@ -7,6 +8,7 @@
     }
 
     const { items }: Props = $props();
+    const t = getFormatter();
 
     const itemCount = $derived(items.reduce((accum, item) => accum + (item.quantity || 1), 0));
     const totalCostByCurrency = $derived.by(() => {
@@ -30,12 +32,14 @@
 
 <div>
     <div class="flex flex-row items-baseline gap-1">
-        <span>{itemCount} items</span>
+        <span>{$t("wishes.count-items", { values: { itemCount } })}</span>
         <span>·</span>
         <span>{formatNumberAsPrice(highestTotal.currency, highestTotal.total)}</span>
         {#if totalCostByCurrency.length > 1 && !seePrices}
             <button onclick={() => (seePrices = !seePrices)}>
-                <span class="text-xs text-surface-900/70 dark:text-surface-50/50">show all currencies...</span>
+                <span class="text-xs text-surface-900/70 dark:text-surface-50/50">
+                    {$t("wishes.show-all-currencies")}
+                </span>
             </button>
         {/if}
     </div>
@@ -54,7 +58,9 @@
                 {/each}
             </ul>
             <button class="w-fit" onclick={() => (seePrices = !seePrices)}>
-                <span class="text-xs text-surface-900/70 dark:text-surface-50/50">hide all currencies...</span>
+                <span class="text-xs text-surface-900/70 dark:text-surface-50/50">
+                    {$t("wishes.hide-all-currencies")}
+                </span>
             </button>
         </div>
     {/if}
