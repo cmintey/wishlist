@@ -22,3 +22,12 @@ test("user authenticated", async ({ page }) => {
     const userMenu = new UserMenu(page);
     await userMenu.assertAdminButtonNotVisible();
 });
+
+// TODO
+test.fixme("user signup", async () => {});
+
+// TODO
+test.fixme("user login", async () => {});
+
+// TODO
+test.fixme("add user to a group", async () => {});
