@@ -2,7 +2,7 @@
     "errors": {
         "invite-code-invalid": "Le code d'invitation n'est pas valide ou a déjà été utilisé",
         "item-name-required": "Nom de l'article requis",
-        "item-id-must-be-a-number": "L'identifiant doit être un numéro",
+        "item-id-must-be-a-number": "L'identifiant doit être un nombre",
         "incorrect-password": "Mot de passe incorrect",
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Le groupe n'est pas en mode registre. Impossible d'obtenir un lien public",
         "invite-failed-to-send": "L'envoi de l'invitation a échoué : {errorMessage}",
@@ -67,7 +67,9 @@
         "an-item-must-be-added-to-at-least-one-list": "Un élément doit être ajouté à au moins une liste",
         "could-not-claim-quantity-items": "Impossible de demander {quantity} exemplaires. Seulement {availableQuantity} exemplaires sont disponibles.",
         "public-lists-not-allowed": "Les listes publiques ne sont pas autorisées dans ce groupe",
-        "registration-is-disabled": "L'enregistrement est desactivé"
+        "registration-is-disabled": "L'enregistrement est desactivé",
+        "unable-to-update-preferred-language": "Impossible de mettre à jour la langue préférée",
+        "language-is-required": "La langue est requise"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -98,7 +100,7 @@
         "smtp-from-name": "Nom de l'expéditeur",
         "suggestions": "Suggestions",
         "suggestions-auto-approve": "Approbation automatique",
-        "suggestions-method": "Méthode",
+        "suggestions-method": "Méthode de suggestion",
         "suggestions-surprise-me": "Gardez-moi la surprise",
         "unknown": "inconnu",
         "username-field": "Nom d'utilisateur : {username}",
@@ -232,7 +234,7 @@
     "email": {
         "invite-fallback-text": "Quelqu'un vous a invité à rejoindre sa Wishlist ! Cliquez sur le lien pour vous enregistrer : {url}",
         "invite-footer": "Si vous ne souhaitez par rejoindre ou que vous pensez avoir reçu cet email par erreur, vous pouvez l'ignorer.",
-        "test-body": "Si vous lisez cei, félicitations! La configuration des notifications par email est configurée correctement!",
+        "test-body": "Si vous lisez ceci, félicitations ! La configuration des notifications par email est configurée correctement !",
         "invite-subject": "Invitation à Wishlist",
         "pw-reset-body": "Si vous avez demandé une réinitialisation du mot de passe, cliquez sur le lien ci-dessous. Si ce n'est pas le cas, vous pouvez ignorer cet email.",
         "invite-button": "Rejoindre Wishlist",
@@ -302,7 +304,14 @@
         "apply": "Appliquer",
         "create": "Créer",
         "na": "N/D",
-        "return-home": "Retourner à l'accueil"
+        "return-home": "Retourner à l'accueil",
+        "add-a-description": "Ajouter une description",
+        "choose-a-language": "Choisir une langue",
+        "choose-language-description": "Choisissez votre langue préférée pour l'interface utilisateur. Ce paramètre est seulement appliqué pour vous et est persisté entre les différents navigateurs.",
+        "description": "Description",
+        "dont-see-language": "Vous ne voyez pas votre langue ici ou vous constatez une traduction mauvaise ou absente ? <a href=\"{href}\" target=\"_blank\"> Allez voir la documentation sur comment contribuer.</a>",
+        "language": "Langue",
+        "use-system-language": "Utiliser la langue du système"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -387,7 +396,28 @@
         "all-lists": "Toutes les listes",
         "this-list": "Cette liste",
         "added-by-somebody-else": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">quelqu'un d'autre</span>",
-        "claimed-by-multiple-users": "Réservé par plusieurs utilisateurs"
+        "claimed-by-multiple-users": "Réservé par plusieurs utilisateurs",
+        "additional-items-requested": "{remainingQuantity, plural, =0 {Il n'y a pas d'objets supplémentaires disponibles.} one {Il y a # objet disponible.} other {Il y a # objets supplémentaires disponibles.}}",
+        "claimed-info-text": "{claimedQuantity, plural, one {Vous avez revendiqué # objet.} other {Vous avez revendiqué # objets.}}",
+        "count-items": "{itemCount} objets",
+        "create-and-add-another": "Créer et en ajouter un autre",
+        "enter-the-quantity-to-claim": "Entrer la quantité à revendiquer.",
+        "hide-all-currencies": "Cacher toutes les devises…",
+        "hide-description": "Cacher la description",
+        "no-limit": "Pas de limite",
+        "public": "Publique",
+        "purchase": "Marquer l'objet comme étant acheté",
+        "purchased-toast": "Objet marqué comme étant {purchased, select, true {acheté} other {non acheté}}",
+        "quantity": "Quantité",
+        "quantity-claimed": "{quantity} revendiqué(s)",
+        "quantity-desired": "{quantity} souhaité(s)",
+        "show-all-currencies": "Afficher toutes les devises…",
+        "show-description": "Afficher la description",
+        "supports-markdown": "Supporte le Markdown",
+        "update-claim": "Mettre à jour la revendication",
+        "updated-claim": "Revendication mise à jour",
+        "view-item": "Voir l'objet",
+        "write": "Écrire"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
