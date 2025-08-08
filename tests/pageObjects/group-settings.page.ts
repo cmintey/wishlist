@@ -10,6 +10,8 @@ interface Props {
     id?: string;
 }
 
+type WishlistMode = "standard" | "registry";
+
 export class GroupSettingsPage extends BasePage {
     private readonly header: Locator;
     private readonly groupNameHeader: Locator;
@@ -22,6 +24,7 @@ export class GroupSettingsPage extends BasePage {
     private readonly clearListsButton: Locator;
     private readonly clearClaimedItemsButton: Locator;
     private readonly suggestionsSettings: SuggestionsSettings;
+    private readonly wishlistModeDropdown: Locator;
     private readonly saveSettingsButton: Locator;
 
     constructor(page: Page, props?: Props) {
@@ -38,6 +41,7 @@ export class GroupSettingsPage extends BasePage {
         this.clearListsButton = page.getByRole("button", { name: "Clear Lists" });
         this.clearClaimedItemsButton = page.getByRole("button", { name: "Clear Claimed Items" });
         this.suggestionsSettings = new SuggestionsSettings(page);
+        this.wishlistModeDropdown = page.getByLabel("Wishlist Mode");
         this.saveSettingsButton = page.getByRole("button", { name: "Save", exact: true });
     }
 
@@ -71,6 +75,12 @@ export class GroupSettingsPage extends BasePage {
 
     async getSuggestionsSettings() {
         return this.suggestionsSettings;
+    }
+
+    async changeWishlistMode(mode: WishlistMode) {
+        await this.wishlistModeDropdown.selectOption(mode);
+        await this.saveSettings();
+        return this;
     }
 
     async saveSettings() {
