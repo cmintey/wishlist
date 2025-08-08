@@ -46,6 +46,7 @@ export const supportedLangs: Lang[] = [
     { name: "Russian", endonym: "Русский язык", code: "ru", loader: () => import("../i18n/ru.json") },
     { name: "Spanish", endonym: "Español", code: "es", loader: () => import("../i18n/es.json") },
     { name: "Swedish", endonym: "Svenska", code: "sv", loader: () => import("../i18n/sv.json") },
+    { name: "Ukrainian", endonym: "Українська", code: "uk", loader: () => import("../i18n/uk.json") },
     { name: "Vietnamese", endonym: "tiếng Việt", code: "vi", loader: () => import("../i18n/vi.json") },
     {
         name: "Development (keys only)",
