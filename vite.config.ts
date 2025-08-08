@@ -1,6 +1,7 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { SvelteKitPWA } from "@vite-pwa/sveltekit";
 import { exec } from "child_process";
+import { env } from "process";
 import { promisify } from "util";
 import type { UserConfig } from "vite";
 import { purgeCss } from "vite-plugin-tailwind-purgecss";
@@ -8,8 +9,11 @@ import { purgeCss } from "vite-plugin-tailwind-purgecss";
 // Get current tag/commit and last commit date from git
 const pexec = promisify(exec);
 const [version, sha] = (
-    await Promise.all([pexec("git describe --tags || git rev-parse --short HEAD"), pexec("git rev-parse --short HEAD")])
-).map((v) => JSON.stringify(v?.stdout.trim()));
+    await Promise.all([
+        env.VERSION ?? pexec("git describe --tags || git rev-parse --short HEAD").then((v) => v.stdout.trim()),
+        env.SHA ?? pexec("git rev-parse --short HEAD").then((v) => v.stdout.trim())
+    ])
+).map((v) => JSON.stringify(v));
 
 const config: UserConfig = {
     plugins: [
