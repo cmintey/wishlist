@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { CreateGroupModal } from "./create-group-modal";
 import { GroupSettingsPage } from "../pageObjects/group-settings.page";
+import { ChangeGroupModal } from "./change-group-modal";
 
 export class UserMenu {
     private readonly page: Page;
@@ -9,6 +10,7 @@ export class UserMenu {
     private readonly accountButton: Locator;
     private readonly adminButton: Locator;
     private readonly manageGroupButton: Locator;
+    private readonly changeGroupButton: Locator;
     private readonly createGroupButton: Locator;
     private readonly signOutButton: Locator;
     private readonly lightSwitch: Locator;
@@ -20,6 +22,7 @@ export class UserMenu {
         this.accountButton = page.getByRole("link", { name: "Account" });
         this.adminButton = page.getByRole("link", { name: "Admin", exact: true });
         this.manageGroupButton = page.getByRole("button", { name: "Manage Group" });
+        this.changeGroupButton = page.getByRole("button", { name: "Change Group" });
         this.createGroupButton = page.getByRole("button", { name: "Create Group" });
         this.signOutButton = page.getByRole("button", { name: "Sign Out" });
         this.lightSwitch = page.getByRole("switch", { name: "Light Switch" });
@@ -50,6 +53,13 @@ export class UserMenu {
         await this.open();
         await this.manageGroupButton.click();
         return new GroupSettingsPage(this.page);
+    }
+
+    async changeGroup(name: string) {
+        await this.open();
+        await this.changeGroupButton.click();
+        const changeGroupModal = new ChangeGroupModal(this.page);
+        await changeGroupModal.selectGroup(name);
     }
 
     async createGroup(name?: string) {

@@ -20,7 +20,7 @@ export class SignupPage extends BasePage {
         await expect(this.header).toBeVisible();
     }
 
-    async createAccount(): Promise<UserData> {
+    async createAccount(): Promise<Omit<UserData, "id" | "groups">> {
         const name = randomString();
         const username = randomString();
         const email = username + "@example.com";
