@@ -14,7 +14,9 @@
     interface Meta {
         item: ItemOnListDTO;
         userId: string | undefined;
+        groupId: string | undefined;
         claimId: string | undefined;
+        requireClaimEmail: boolean;
         maxQuantity: number;
     }
 
@@ -24,7 +26,7 @@
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
-    const { item, userId, claimId }: Meta = $modalStore[0].meta;
+    const { item, userId, groupId, claimId, requireClaimEmail }: Meta = $modalStore[0].meta;
 
     const claim = item.claims.find((claim) => claim.claimId === claimId);
 
@@ -52,8 +54,8 @@
             } else {
                 handleUserClaim(userId);
             }
-        } else if (username) {
-            handlePublicClaim(username);
+        } else {
+            handlePublicClaim();
         }
     }
 
@@ -75,6 +77,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
+            parent.onClose();
             errorToast(toastStore, $t("general.oops"));
         }
     }
@@ -92,15 +95,19 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
+            parent.onClose();
             errorToast(toastStore, $t("general.oops"));
         }
     }
 
-    async function handlePublicClaim(username: string) {
-        const systemUsersAPI = new SystemUsersAPI();
-        const userResp = await systemUsersAPI.create(username, name === "" ? $t("wishes.anonymous") : name);
+    async function handlePublicClaim() {
+        const systemUsersAPI = new SystemUsersAPI(groupId);
+        const userResp = await systemUsersAPI.create(username, name);
         if (!userResp.ok) {
-            errorToast(toastStore, $t("general.oops"));
+            const responseData = await userResp.json();
+
+            parent.onClose();
+            errorToast(toastStore, responseData.message || $t("general.oops"));
             return;
         }
         const { id: publicUserId } = await userResp.json();
@@ -117,6 +124,7 @@
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
+            parent.onClose();
             errorToast(toastStore, $t("general.oops"));
         }
     }
@@ -124,75 +132,79 @@
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
     <header class="text-2xl font-bold">{$t("wishes.claim-details")}</header>
-    {#if !userId}
-        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
-        <label class="w-fit">
-            <span>{$t("auth.email")}</span>
-            <div class="input-group grid-cols-[auto_1fr_auto]">
-                <div class="input-group-shim">
-                    <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
-                </div>
-                <input class="input" type="text" bind:value={username} />
-            </div>
-        </label>
-
-        <label class="w-fit">
-            <span>{$t("general.name-optional")}</span>
-            <div class="input-group grid-cols-[auto_1fr_auto]">
-                <div class="input-group-shim">
-                    <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
-                </div>
-                <input class="input" type="text" bind:value={name} />
-            </div>
-        </label>
-    {/if}
-
-    {#if item.remainingQuantity > 1 || claim}
-        <div class="flex flex-col gap-1">
+    <form onsubmit={onFormSubmit}>
+        {#if !userId}
+            <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
             <label class="w-fit">
-                <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
-                <input
-                    class={["input", error && "input-error"]}
-                    inputmode="numeric"
-                    max={item.remainingQuantity + (claim?.quantity || 0)}
-                    min={claim ? 0 : 1}
-                    required
-                    step="1"
-                    type="number"
-                    bind:value={quantity}
-                />
+                <span>{$t("general.name-optional")}</span>
+                <div class="input-group grid-cols-[auto_1fr_auto]">
+                    <div class="input-group-shim">
+                        <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                    </div>
+                    <input class="input" type="text" bind:value={name} />
+                </div>
             </label>
-            {#if error}
-                <span class="text-error-500-400-token text-sm">{error}</span>
-            {/if}
-            {#if claim}
-                <span class="subtext">
-                    {$t("wishes.claimed-info-text", {
-                        values: { claimedQuantity: claim.quantity }
-                    })}
-                    {#if item.quantity}
-                        {$t("wishes.additional-items-requested", {
-                            values: { remainingQuantity: item.remainingQuantity }
-                        })}
-                    {/if}
-                </span>
-            {/if}
-        </div>
-    {/if}
 
-    <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
-        {#if claim}
-            <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim}>
-                {$t("wishes.unclaim")}
-            </button>
+            {#if requireClaimEmail}
+                <label class="w-fit">
+                    <span>{$t("auth.email")}</span>
+                    <div class="input-group grid-cols-[auto_1fr_auto]">
+                        <div class="input-group-shim">
+                            <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                        </div>
+                        <input class="input" required type="email" bind:value={username} />
+                    </div>
+                </label>
+            {/if}
         {/if}
-        <div class="flex flex-wrap gap-2">
-            <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose}>
-                {$t("general.cancel")}
-            </button>
-            <button class="btn btn-sm md:btn-base {parent.buttonPositive}" onclick={onFormSubmit}>
-                {$t("wishes.claim")}
-            </button>
-        </div>
-    </footer>
+
+        {#if item.remainingQuantity > 1 || claim}
+            <div class="flex flex-col gap-1">
+                <label class="w-fit">
+                    <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
+                    <input
+                        class={["input", error && "input-error"]}
+                        inputmode="numeric"
+                        max={item.remainingQuantity + (claim?.quantity || 0)}
+                        min={claim ? 0 : 1}
+                        required
+                        step="1"
+                        type="number"
+                        bind:value={quantity}
+                    />
+                </label>
+                {#if error}
+                    <span class="text-error-500-400-token text-sm">{error}</span>
+                {/if}
+                {#if claim}
+                    <span class="subtext">
+                        {$t("wishes.claimed-info-text", {
+                            values: { claimedQuantity: claim.quantity }
+                        })}
+                        {#if item.quantity}
+                            {$t("wishes.additional-items-requested", {
+                                values: { remainingQuantity: item.remainingQuantity }
+                            })}
+                        {/if}
+                    </span>
+                {/if}
+            </div>
+        {/if}
+
+        <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
+            {#if claim}
+                <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
+                    {$t("wishes.unclaim")}
+                </button>
+            {/if}
+            <div class="flex flex-wrap gap-2">
+                <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose} type="button">
+                    {$t("general.cancel")}
+                </button>
+                <button class="btn btn-sm md:btn-base {parent.buttonPositive}" type="submit">
+                    {$t("wishes.claim")}
+                </button>
+            </div>
+        </footer>
+    </form>
 </div>

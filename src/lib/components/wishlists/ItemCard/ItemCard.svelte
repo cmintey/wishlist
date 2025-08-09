@@ -36,6 +36,7 @@
         item: ItemOnListDTO;
         user?: PartialUser; // logged in user
         showClaimedName?: boolean;
+        requireClaimEmail?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -47,6 +48,7 @@
         item,
         user = undefined,
         showClaimedName = false,
+        requireClaimEmail = true,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -188,7 +190,8 @@
             meta: {
                 item,
                 userId: user?.id,
-                claimId: undefined
+                claimId: undefined,
+                requireClaimEmail: requireClaimEmail
             },
             async response(r: boolean) {
                 if (r) drawerStore.close();
@@ -239,6 +242,7 @@
             showFor,
             user,
             showClaimedName,
+            requireClaimEmail,
             onPublicList,
             handleClaim,
             handleDelete,
