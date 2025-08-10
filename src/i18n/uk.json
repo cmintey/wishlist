@@ -1,1 +1,43 @@
-{}
+{
+    "a11y": {
+        "cancel-editing": "скасувати редагування",
+        "clear-color-field": "очистити поле кольору",
+        "clear-icon-field": "очистити поле іконки",
+        "clear-name-field": "очистити поле імені",
+        "clear-url-field": "очистити поле посилання",
+        "close": "закрити",
+        "decrease-priority": "зменшити пріоритет для {name}",
+        "default-item-image": "зображення за замовчуванням",
+        "a-person-looking-at-an-empty-board": "Людина що дивиться на порожню дошку",
+        "drag-handle": "перемістити вручну для {name}",
+        "edit-group-name": "редагувати назву групи",
+        "increase-priority": "збільшити пріоритет для {name}",
+        "menu": "меню",
+        "password-strength": "Надійність паролю",
+        "refresh-item-data": "оновити дані предмету",
+        "remove-user-from-group": "видалити {user} із групи",
+        "save-group-name": "зберегти назву групи",
+        "toggle-manager": "{isManager, select, true {remove} other {add}} {user} в ролі менеджера",
+        "toggle-password-visibility": "показувати пароль",
+        "two-people-looking-in-an-empty-box": "Дві людини дивляться на порожню коробку",
+        "unpurchase": "Позначити річ як не куплену",
+        "upload-profile-image": "завантажити фото профілю",
+        "wishlist-logo": "Логотип списку бажань"
+    },
+    "admin": {
+        "about": "Про сервіс",
+        "account": "Акаунт",
+        "actions": "Дії",
+        "add-member": "Додати члена",
+        "add-remove-manager-message": "Ви впевнені, що хочете {isManager, select, true {add} other {remove}} користувача в якості менеджера групи?",
+        "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Менеджер",
+        "admin": "Адміністратор",
+        "administration": "Адміністрація",
+        "allow-public-lists": "Дозволити публічні списки",
+        "allow-public-lists-tooltip": "Дозволити користувачам робити список публічним. Не має ефекту якщо група в режимі \"Реєстр\".",
+        "build": "Збірка: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
+        "build-date": "Дата збірки: {buildDate}",
+        "claims": "Бронювання",
+        "claims-name-tooltip": "Відображати ім'я користувача, який забронював річ."
+    }
+}
