@@ -415,6 +415,9 @@
         "claimed-info-text": "{claimedQuantity, plural, one {Вы выполнили # пункт.} other {Вы выполнили # пунктов.}}",
         "purchased-toast": "Помечено пункт {purchased, select, true {купленный} other {не купленный}}",
         "hide-description": "Скрыть описание",
-        "show-description": "Показать описание"
+        "show-description": "Показать описание",
+        "count-items": "Всего записей - {itemCount} шт.",
+        "hide-all-currencies": "скрыть все валюты...",
+        "show-all-currencies": "показать все валюты..."
     }
 }
