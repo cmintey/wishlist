@@ -118,7 +118,7 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       '@types/node':
-        specifier: ^22.17.0
+        specifier: ^22.17.1
         version: 22.17.1
       '@types/nodemailer':
         specifier: ^6.4.17
