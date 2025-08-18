@@ -91,7 +91,7 @@
     },
     "pnpm": {
         "overrides": {
-            "tough-cookie": "5.0.0"
+            "tough-cookie": "5.1.2"
         },
         "onlyBuiltDependencies": [
             "@prisma/client",
