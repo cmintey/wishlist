@@ -31,6 +31,7 @@
     import { errorToast } from "$lib/components/toasts";
     import { getFormatter } from "$lib/i18n";
     import Markdown from "$lib/components/Markdown.svelte";
+    import { resolve } from "$app/paths";
 
     interface Props {
         item: ItemOnListDTO;
@@ -71,7 +72,7 @@
                 new URL(item.imageUrl);
                 return item.imageUrl;
             } catch {
-                return `/api/assets/${item.imageUrl}`;
+                return resolve("/api/assets/[id]", { id: item.imageUrl });
             }
         }
     });
@@ -158,7 +159,7 @@
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
     const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
     const handleEdit = () => {
-        goto(`/items/${item.id}/edit?redirectTo=${page.url.pathname}`);
+        goto(resolve("/items/[itemId]/edit", { itemId: item.id.toString() }) + `?redirectTo=${page.url.pathname}`);
     };
 
     const doClaim = async (userId: string, quantity = 1, unclaim = false) => {
