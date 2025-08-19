@@ -16,7 +16,6 @@
     let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
     const t = getFormatter();
 
-    $inspect(showName);
     const shouldShowName = (claim?: ClaimDTO) => {
         if (showName) {
             if (onPublicList && claim?.publicClaimedBy?.name) {
