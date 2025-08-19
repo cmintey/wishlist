@@ -1,4 +1,4 @@
-FROM node:22-slim@sha256:88f44fbb06cc98e1451e4e015c122f84030ec55c603f753ed97b889db0bb8d4d AS build
+FROM node:22-slim@sha256:752ea8a2f758c34002a0461bd9f1cee4f9a3c36d48494586f60ffce1fc708e0e AS build
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,7 @@ RUN pnpm prisma generate
 RUN pnpm run build
 RUN pnpm prune --prod
 
-FROM node:22-slim@sha256:88f44fbb06cc98e1451e4e015c122f84030ec55c603f753ed97b889db0bb8d4d AS app
+FROM node:22-slim@sha256:752ea8a2f758c34002a0461bd9f1cee4f9a3c36d48494586f60ffce1fc708e0e AS app
 
 ENV NODE_ENV=production
 ENV BODY_SIZE_LIMIT=5000000
