@@ -1,5 +1,10 @@
 name: Build and Push Docker Image
-
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  packages: write
+  actions: write
 on:
   workflow_dispatch:
   push:
@@ -46,7 +51,7 @@ jobs:
             type=ref,event=tag
 
       - name: Build and Push Web
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./
           file: ./Dockerfile
@@ -54,5 +59,8 @@ jobs:
           push: true
           tags: ${{ steps.tags.outputs.tags }}
           labels: ${{ steps.tags.outputs.labels }}
+          build-args: |
+            SHA=${{github.sha}}
+            VERSION=${{github.ref_name}}
           cache-from: type=gha
           cache-to: type=gha,mode=max

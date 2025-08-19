@@ -21,8 +21,7 @@
 
     <SmtpAlert smtpEnable={config.smtp.enable} />
 
-    <SettingsGroup>
-        <h3 class="h3">{$t("admin.smtp")}</h3>
+    <SettingsGroup title={$t("admin.smtp")}>
         <label class="checkbox-label">
             <input
                 id="enableSMTP"

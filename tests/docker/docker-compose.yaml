@@ -1,0 +1,11 @@
+services:
+    app:
+        container_name: wishlist
+        image: wishlist:test
+        build:
+            context: ../../
+        network_mode: host
+        environment:
+            ORIGIN: http://localhost:3280
+        volumes:
+            - ./entrypoint.sh:/usr/src/app/entrypoint.sh
