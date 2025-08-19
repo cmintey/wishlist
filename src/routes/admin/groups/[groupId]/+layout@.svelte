@@ -2,10 +2,10 @@
     import { goto, invalidateAll } from "$app/navigation";
     import { Tab } from "@skeletonlabs/skeleton";
     import type { LayoutProps, Snapshot } from "./$types";
-    import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     const { data, children }: LayoutProps = $props();
     const t = getFormatter();
@@ -21,9 +21,10 @@
         }
     };
 
+    const groupId = $derived(data.group.id);
     const tabs = [
-        { href: "/members", label: $t("admin.members") },
-        { href: "/settings", label: $t("admin.settings") }
+        { href: () => resolve("/admin/groups/[groupId]/members", { groupId }), label: $t("admin.members") },
+        { href: () => resolve("/admin/groups/[groupId]/settings", { groupId }), label: $t("admin.settings") }
     ];
 
     let selectedTab = $state(0);
@@ -61,12 +62,7 @@
 
 <TabGroup>
     {#each tabs as { label, href }, value}
-        <Tab
-            name={label}
-            {value}
-            bind:group={selectedTab}
-            on:change={() => goto(`/admin/groups/${page.params.groupId}${href}`, { replaceState: true })}
-        >
+        <Tab name={label} {value} bind:group={selectedTab} on:change={() => goto(href(), { replaceState: true })}>
             {label}
         </Tab>
     {/each}
