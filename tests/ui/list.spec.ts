@@ -36,7 +36,10 @@ test("public non-registry list", async ({ page, userData, anonymousPage }) => {
 
 test("public registry list", async ({ page, userData, anonymousPage }) => {
     // Set group to registry mode
-    await new UserMenu(page).manageGroup().then((p) => p.changeWishlistMode("registry"));
+    await new UserMenu(page)
+        .manageGroup()
+        .then((p) => p.clickSettingsTab())
+        .then((p) => p.changeWishlistMode("registry"));
 
     const listsPage = new ListsPage(page);
     await listsPage.goto({ skipAssert: true });
@@ -46,7 +49,7 @@ test("public registry list", async ({ page, userData, anonymousPage }) => {
     await listPage.assertShareFunctionality();
 
     // Navigate to the list in a private window
-    await anonymousPage.goto(page.url());
+    await anonymousPage.goto("/");
     await expect(anonymousPage.getByRole("heading", { name: "Sign in" })).toBeVisible();
 
     // Navigate to the list in a private window

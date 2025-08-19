@@ -41,7 +41,7 @@ export class GroupSettingsPage extends BasePage {
         this.clearListsButton = page.getByRole("button", { name: "Clear Lists" });
         this.clearClaimedItemsButton = page.getByRole("button", { name: "Clear Claimed Items" });
         this.suggestionsSettings = new SuggestionsSettings(page);
-        this.wishlistModeDropdown = page.getByLabel("Wishlist Mode");
+        this.wishlistModeDropdown = page.getByLabel("Wishlist Mode").locator("select");
         this.saveSettingsButton = page.getByRole("button", { name: "Save", exact: true });
     }
 
