@@ -52,6 +52,7 @@ export class UserMenu {
     async manageGroup() {
         await this.open();
         await this.manageGroupButton.click();
+        await this.page.waitForURL(/admin\/groups\/.*/);
         return new GroupSettingsPage(this.page);
     }
 
