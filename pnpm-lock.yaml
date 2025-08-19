@@ -97,8 +97,8 @@ importers:
         specifier: ^0.8.10
         version: 0.8.10(svelte@5.38.2)
       '@skeletonlabs/skeleton':
-        specifier: ^2.11.0
-        version: 2.11.0(svelte@5.38.2)
+        specifier: ^3.0.0
+        version: 3.1.8(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.17.2)(typescript@5.9.2)))
       '@skeletonlabs/tw-plugin':
         specifier: ^0.4.1
         version: 0.4.1(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.17.2)(typescript@5.9.2)))
@@ -1683,10 +1683,10 @@ packages:
     resolution: {integrity: sha512-d9xRovfKNz1SKieM0qJdO+PQonjnnIfSNWfHYnBSJ9hkjm0ZPw6HlxscDXYstp3z+7V2GOFHc+J0CYrYTjqCJw==}
     engines: {node: '>=18'}
 
-  '@skeletonlabs/skeleton@2.11.0':
-    resolution: {integrity: sha512-ORMZYACsIlfKyBx2ZIHBy7zE877t99fxU7LzcY1dveVmn2//+OeqnbQb5RryNILsMR62Tuu1VLnCu01/ByHlbQ==}
+  '@skeletonlabs/skeleton@3.1.8':
+    resolution: {integrity: sha512-hPSGfXLJUzdN7l/VqXJKYkswu6MO45C3RnqWXZnlvtnnrH0nCGvvw4gh+DDIfD7I85aDr8Z29HJWwuInH+e3tg==}
     peerDependencies:
-      svelte: ^3.56.0 || ^4.0.0 || ^5.0.0
+      tailwindcss: ^4.0.0
 
   '@skeletonlabs/tw-plugin@0.4.1':
     resolution: {integrity: sha512-crrC8BGKis0GNTp7V2HF6mk1ECLUvAxgTTV26LMgt/rV3U6Xd7N7dL5qIL8fE4MTHvpKa1SBsdqsnMbEvATeEg==}
@@ -2656,9 +2656,6 @@ packages:
     peerDependenciesMeta:
       jiti:
         optional: true
-
-  esm-env@1.0.0:
-    resolution: {integrity: sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==}
 
   esm-env@1.2.2:
     resolution: {integrity: sha512-Epxrv+Nr/CaL4ZcFGPJIYLWFom+YeV1DqMLHJoEd9SYRxNbaFruBwfEX/kkHUJf55j2+TUbmDcmuilbP1TmXHA==}
@@ -6538,10 +6535,9 @@ snapshots:
 
   '@sindresorhus/is@7.0.2': {}
 
-  '@skeletonlabs/skeleton@2.11.0(svelte@5.38.2)':
+  '@skeletonlabs/skeleton@3.1.8(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.17.2)(typescript@5.9.2)))':
     dependencies:
-      esm-env: 1.0.0
-      svelte: 5.38.2
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.17.2)(typescript@5.9.2))
 
   '@skeletonlabs/tw-plugin@0.4.1(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.17.2)(typescript@5.9.2)))':
     dependencies:
@@ -7819,8 +7815,6 @@ snapshots:
       jiti: 2.5.1
     transitivePeerDependencies:
       - supports-color
-
-  esm-env@1.0.0: {}
 
   esm-env@1.2.2: {}
 
