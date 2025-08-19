@@ -16,11 +16,17 @@
     let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
     const t = getFormatter();
 
-    const shouldShowName = (claim: ClaimDTO) => {
-        return (
-            (showName && onPublicList && claim.publicClaimedBy?.name) ||
-            (user && claim.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name)
-        );
+    $inspect(showName);
+    const shouldShowName = (claim?: ClaimDTO) => {
+        if (showName) {
+            if (onPublicList && claim?.publicClaimedBy?.name) {
+                return true;
+            }
+            if (user && claim?.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name) {
+                return true;
+            }
+        }
+        return false;
     };
 
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
@@ -74,7 +80,7 @@
             values: { name: claimedBy ? claimedBy.name : publicClaimedBy.name || $t("wishes.anonymous") }
         })}
     </span>
-{:else if item.claims.length > 1}
+{:else if item.claims.length > 1 && shouldShowName()}
     <span>{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span>{$t("wishes.claimed")}</span>
