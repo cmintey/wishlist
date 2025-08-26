@@ -16,19 +16,13 @@ export const actions: Actions = {
         const config = await getConfig();
         const formData = Object.fromEntries(await request.formData());
         const emailSchema = z.object({
-            email: z.string().email()
+            email: z.email()
         });
 
         const emailData = emailSchema.safeParse(formData);
         // check for empty values
         if (!emailData.success) {
-            const errors = emailData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { error: true, errors });
+            return fail(400, { error: true, errors: z.flattenError(emailData.error).fieldErrors });
         }
 
         const user = await client.user.findUnique({

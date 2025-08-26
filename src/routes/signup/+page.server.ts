@@ -10,6 +10,7 @@ import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/server/i18n";
 import { logger } from "$lib/server/logger";
+import z from "zod";
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (locals.user) redirect(302, url.searchParams.get("redirectTo") ?? "/");
@@ -51,13 +52,7 @@ export const actions: Actions = {
 
         // check for empty values
         if (!signupData.success) {
-            const errors = signupData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { error: true, errors });
+            return fail(400, { error: true, errors: z.flattenError(signupData.error).fieldErrors });
         }
 
         const config = await getConfig();

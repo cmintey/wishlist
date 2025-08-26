@@ -19,7 +19,7 @@ let clientSecret: string | null = null;
 let oidcConfig: client.Configuration | null = null;
 
 const callbackSchema = z.object({
-    url: z.string().url()
+    url: z.url()
 });
 
 async function getClientConfig(config?: Config) {

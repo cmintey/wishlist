@@ -5,7 +5,7 @@ import { fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
 import { settingSchema } from "$lib/server/validations";
-import type { z } from "zod";
+import { z } from "zod";
 import { requireRole } from "$lib/server/auth";
 
 export const load: PageServerLoad = async () => {
@@ -40,13 +40,7 @@ export const actions: Actions = {
         const configData = settingSchema.safeParse(formData);
 
         if (!configData.success) {
-            const errors = configData.error.errors.map((error) => {
-                return {
-                    field: error.path[0],
-                    message: error.message
-                };
-            });
-            return fail(400, { action: "settings", error: true, errors });
+            return fail(400, { action: "settings", error: z.prettifyError(configData.error) });
         }
 
         const newConfig = generateConfig(configData.data);

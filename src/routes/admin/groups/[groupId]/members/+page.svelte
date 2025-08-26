@@ -17,7 +17,7 @@
 
     type UserData = PageData["group"]["users"][number];
 
-    const groupAPI = new GroupAPI(page.params.groupId);
+    const groupAPI = new GroupAPI(data.group.id);
     const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];
     const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
 

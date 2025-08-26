@@ -84,10 +84,12 @@
             <iconify-icon icon="ion:gift"></iconify-icon>
             <div class="flex flex-row flex-wrap gap-x-2">
                 <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
-                <span>·</span>
-                <span class="text-secondary-700-200-token font-bold">
-                    {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                </span>
+                {#if user?.id !== item.userId}
+                    <span>·</span>
+                    <span class="text-secondary-700-200-token font-bold">
+                        {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
+                    </span>
+                {/if}
             </div>
         </div>
     {/if}

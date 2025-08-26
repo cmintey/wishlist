@@ -3,14 +3,16 @@
     import ChangePassword from "$lib/components/account/ChangePassword.svelte";
     import EditProfile from "$lib/components/account/EditProfile.svelte";
     import Avatar from "$lib/components/Avatar.svelte";
-    import { FileButton, Tab } from "@skeletonlabs/skeleton";
+    import { FileButton, getToastStore, Tab } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { errorToast } from "$lib/components/toasts";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
+    const toastStore = getToastStore();
 
     let submitButton: HTMLElement | undefined = $state();
 
@@ -32,7 +34,14 @@
                         action="?/profilePicture"
                         enctype="multipart/form-data"
                         method="POST"
-                        use:enhance
+                        use:enhance={() => {
+                            return async ({ result }) => {
+                                if (result.type === "error") {
+                                    errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                                    return;
+                                }
+                            };
+                        }}
                     >
                         <FileButton
                             id="profilePic"

@@ -7,6 +7,7 @@ import {
     validateSessionToken
 } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
+import { loadLocale } from "$lib/server/validations";
 import type { Handle, HandleServerError } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -27,6 +28,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
     const { session, user } = await validateSessionToken(sessionToken);
     lang = getClosestAvailablePreferredLanguage(user?.preferredLanguage);
+    await loadLocale(lang.code);
     if (session !== null) {
         setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
     } else {

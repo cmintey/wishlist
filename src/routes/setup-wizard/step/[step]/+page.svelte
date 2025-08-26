@@ -7,6 +7,7 @@
     import { goto } from "$app/navigation";
     import { ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
+    import type { RouteParams } from "./$types";
 
     let locked = false;
 
@@ -24,7 +25,7 @@
 
     onMount(() => {
         $stepperState.total = steps.length;
-        $stepperState.current = Number.parseInt(page.params.step) - 1;
+        $stepperState.current = Number.parseInt((page.params as RouteParams).step) - 1;
     });
 
     const submit = () => {
