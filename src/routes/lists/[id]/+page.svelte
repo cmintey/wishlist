@@ -259,6 +259,7 @@
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
+                        groupId={data.list.groupId}
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}

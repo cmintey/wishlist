@@ -38,6 +38,7 @@
         user?: PartialUser; // logged in user
         showClaimedName?: boolean;
         requireClaimEmail?: boolean;
+        groupId?: string;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -47,6 +48,7 @@
 
     const {
         item,
+        groupId,
         user = undefined,
         showClaimedName = false,
         requireClaimEmail = true,
@@ -194,6 +196,7 @@
             meta: {
                 item,
                 userId: user?.id,
+                groupId: groupId,
                 claimId: undefined,
                 requireClaimEmail: requireClaimEmail
             },
