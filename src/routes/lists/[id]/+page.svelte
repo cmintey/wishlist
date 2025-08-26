@@ -258,7 +258,13 @@
         <div class="flex flex-col space-y-4">
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                    <ItemCard {item} showClaimedName={data.showClaimedName} user={data.list.owner} />
+                    <ItemCard
+                        groupId={data.list.groupId}
+                        {item}
+                        requireClaimEmail={data.requireClaimEmail}
+                        showClaimedName={data.showClaimedName}
+                        user={data.list.owner}
+                    />
                 </div>
             {/each}
         </div>
@@ -294,6 +300,7 @@
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
                         reorderActions
+                        requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                     />
@@ -310,6 +317,7 @@
                         <ItemCard
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
+                            requireClaimEmail={data.requireClaimEmail}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
                         />
