@@ -72,6 +72,9 @@
                 new URL(item.imageUrl);
                 return item.imageUrl;
             } catch {
+                if (item.imageUrl.startsWith("/") || item.imageUrl.endsWith("/")) {
+                    return;
+                }
                 return resolve("/api/assets/[id]", { id: item.imageUrl });
             }
         }
