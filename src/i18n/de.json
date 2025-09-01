@@ -203,7 +203,7 @@
         "hide-description": "Beschreibung ausblenden",
         "no-limit": "Keine Begrenzung",
         "show-description": "Zeige Beschreibung",
-        "count-items": "{itemCount} Artikel",
+        "count-items": "{itemCount, plural, one {# Artikel} other {# Artikel}}",
         "hide-all-currencies": "verberge alle Währungen...",
         "show-all-currencies": "zeige alle Währungen..."
     },
