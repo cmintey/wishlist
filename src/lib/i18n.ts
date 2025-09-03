@@ -40,6 +40,7 @@ export const supportedLangs: Lang[] = [
         loader: () => import("../i18n/nb.json"),
         hidden: true
     },
+    { name: "Mongolian", endonym: "Монгол хэл", code: "mn", loader: () => import("../i18n/mn.json") },
     { name: "Persian", endonym: "فارسی", code: "fa", loader: () => import("../i18n/fa.json"), rtl: true },
     { name: "Polish", endonym: "Polski", code: "pl", loader: () => import("../i18n/pl.json") },
     { name: "Portuguese", endonym: "Português", code: "pt", loader: () => import("../i18n/pt.json") },
