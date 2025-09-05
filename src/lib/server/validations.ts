@@ -165,7 +165,8 @@ export const extractFormData = (formData: FormData) => {
     return data;
 };
 
-export const publicUserSchema = z.object({
-    username: z.string().email().optional(),
+export const createPublicUserSchema = z.object({
+    groupId: z.string(),
+    username: z.email().optional(),
     name: z.string().min(1).optional()
 });

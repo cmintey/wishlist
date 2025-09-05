@@ -32,11 +32,10 @@ model User {
 
 model SystemUser {
     id           String      @id @unique @default(cuid())
-    username     String?     @default("ANONYMOUS_USERNAME")
+    username     String?
     name         String?     @default("ANONYMOUS_NAME")
     claimedItems ItemClaim[]
 
-    @@unique([username, name])
     @@map("system_user")
 }
 
