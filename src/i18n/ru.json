@@ -115,7 +115,9 @@
         "credentials": "Учетные данные",
         "disable-password-login-tooltip": "Отключает вход в систему с помощью пароля. Будут разрешены только аутентификация по заголовку и OAuth.",
         "suggestions-surprise-me-tooltip": "Элемент автоматически добавляется в список без ведома владельца списка.",
-        "wishlist-mode-wishlist-tooltip": "Несколько пользователей и несколько списков с утверждениями и предложениями предметов. Списки можно сделать публичными, если это разрешено группой."
+        "wishlist-mode-wishlist-tooltip": "Несколько пользователей и несколько списков с утверждениями и предложениями предметов. Списки можно сделать публичными, если это разрешено группой.",
+        "claims-require-email": "Требовать эл. почту",
+        "claims-require-email-tooltip": "Требовать адрес электронной почты, чтобы запрашивать элемент."
     },
     "auth": {
         "update-password": "Обновить пароль",
@@ -224,7 +226,8 @@
         "registration-is-disabled": "Регистрация отключена",
         "could-not-claim-quantity-items": "Не удалось заявить {quantity} предметов. Доступно для заявки только {availableQuantity}.",
         "language-is-required": "Язык обязателен",
-        "unable-to-update-preferred-language": "Не удалось обновить предпочтительный язык"
+        "unable-to-update-preferred-language": "Не удалось обновить предпочтительный язык",
+        "email-is-required-for-public-claims": "Эл. почта требуется для публичных запросов"
     },
     "general": {
         "icon": "Значок",
@@ -415,7 +418,7 @@
         "purchased-toast": "Помечено пункт {purchased, select, true {купленный} other {не купленный}}",
         "hide-description": "Скрыть описание",
         "show-description": "Показать описание",
-        "count-items": "Всего записей - {itemCount} шт.",
+        "count-items": "{itemCount, plural, one {# предмет other {# предметов}}",
         "hide-all-currencies": "скрыть все валюты...",
         "show-all-currencies": "показать все валюты..."
     }
