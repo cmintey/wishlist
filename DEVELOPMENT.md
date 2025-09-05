@@ -7,19 +7,19 @@
 
 ## Install dependencies
 
-```Shell
+```sh
 pnpm install
 ```
 
 ## Building Docker
 
-```Shell
+```sh
 docker build . --tag wishlist-dev:latest
 ```
 
 Specific platform, current linux/amd64 and linux/arm64 are confirmed supported
 
-```Shell
+```sh
 docker build . --tag wishlist-dev:amd64  --platform linux/amd64
 docker build . --tag wishlist-dev:amd64  --platform linux/arm64
 ```
@@ -30,7 +30,7 @@ docker build . --tag wishlist-dev:amd64  --platform linux/arm64
 
 An example env file for local development. You might want to customize the database URL to your needs:
 
-```Shell
+```sh
 #.env.development
 
 export ORIGIN=http://localhost:3000
@@ -39,7 +39,7 @@ export DATABASE_URL="file:$(pwd)//prod.db?connection_limit=1"
 
 ### First Time Run
 
-```Shell
+```sh
 source .env.development
 pnpm prisma migrate deploy
 pnpm prisma db seed
@@ -48,13 +48,13 @@ pnpm db:patch
 
 ### Start dev server
 
-```Shell
+```sh
 pnpm dev
 ```
 
 ### Build
 
-```Shell
+```sh
 source .env.development
 pnpm run build
 ```
