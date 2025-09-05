@@ -66,6 +66,7 @@ export const load = (async ({ params, url, locals, depends }) => {
             : undefined,
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
+        requireClaimEmail: config.claims.requireEmail,
         suggestionsEnabled: config.suggestions.enable
     };
 }) satisfies PageServerLoad;

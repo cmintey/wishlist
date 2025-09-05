@@ -86,6 +86,7 @@ type Config = {
     smtp: SMTPConfig;
     claims: {
         showName: boolean;
+        requireEmail: boolean;
     };
     listMode: ListMode;
     security: {

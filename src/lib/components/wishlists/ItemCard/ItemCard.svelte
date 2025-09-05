@@ -37,6 +37,8 @@
         item: ItemOnListDTO;
         user?: PartialUser; // logged in user
         showClaimedName?: boolean;
+        requireClaimEmail?: boolean;
+        groupId?: string;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -46,8 +48,10 @@
 
     const {
         item,
+        groupId,
         user = undefined,
         showClaimedName = false,
+        requireClaimEmail = true,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -166,7 +170,6 @@
     };
 
     const doClaim = async (userId: string, quantity = 1, unclaim = false) => {
-        // TODO update API to allow claiming multiple
         const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(userId, quantity));
 
         if (resp.ok) {
@@ -192,7 +195,9 @@
             meta: {
                 item,
                 userId: user?.id,
-                claimId: undefined
+                groupId: groupId,
+                claimId: undefined,
+                requireClaimEmail: requireClaimEmail
             },
             async response(r: boolean) {
                 if (r) drawerStore.close();
@@ -243,6 +248,7 @@
             showFor,
             user,
             showClaimedName,
+            requireClaimEmail,
             onPublicList,
             handleClaim,
             handleDelete,
