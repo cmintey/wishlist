@@ -222,7 +222,6 @@
         "user-is-not-a-member-of-the-group": "Användaren är inte medlem i gruppen",
         "username-already-in-use": "{username} används redan",
         "username-must-not-be-blank": "Användarnamn får inte vara tomt",
-        "username-not-specified": "Användarnamn ej angivet",
         "claimed-by-user-must-be-specified": "Anspråk på användaren måste anges",
         "cannot-update-a-claim-that-is-not-yours": "Det går inte att uppdatera ett anspråk som inte är ditt",
         "claim-was-not-found": "Anspråk hittades inte",

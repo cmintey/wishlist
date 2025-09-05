@@ -163,7 +163,6 @@
         "user-already-exists": "O utilizador com nome de utilizador ou e-mail já existe",
         "user-is-not-a-member-of-the-group": "O utilizador não é membro do grupo",
         "username-must-not-be-blank": "O nome de utilizador não pode estar em branco",
-        "username-not-specified": "Nome de utilizador não especificado",
         "valid-url-not-provided": "Url válido não fornecido",
         "unable-to-delete-items": "Não é possível eliminar itens",
         "must-specify-group-name-in-body": "Deve especificar o nome do grupo no corpo",

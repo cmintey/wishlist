@@ -241,7 +241,6 @@
         "user-not-in-group": "Gebruiker maakt geen deel uit van deze groep",
         "username-already-in-use": "{username} al in gebruik",
         "username-must-not-be-blank": "Gebruikersnaam mag niet leeg zijn",
-        "username-not-specified": "Gebruikersnaam niet gespecificeerd",
         "valid-url-not-provided": "Geldige URL niet verstrekt"
     },
     "general": {

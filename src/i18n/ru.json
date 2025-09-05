@@ -176,7 +176,6 @@
         "user-not-in-group": "Пользователь не входит в эту группу",
         "username-already-in-use": "{username} уже используется",
         "username-must-not-be-blank": "Имя пользователя не должно быть пустым",
-        "username-not-specified": "Имя пользователя не указано",
         "valid-url-not-provided": "Действительный URL не указан",
         "cannot-delete-default-group": "Невозможно удалить группу по умолчанию",
         "cannot-delete-yourself": "Не могу удалить себя",

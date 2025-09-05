@@ -35,7 +35,6 @@
         "unable-to-delete-items": "Impossible de supprimer les objets",
         "unable-to-find-product-information": "Impossible de trouver les informations de l'article. Vous pouvez toujours les encoder manuellement.",
         "unauthenticated": "Vous devez d'abord vous authentifier",
-        "username-not-specified": "Nom d'utilisateur non spécifié",
         "valid-url-not-provided": "Lien valide non fourni",
         "username-must-not-be-blank": "Le nom d'utilisateur ne peut pas être vide",
         "invalid-currency-code": "Le code pour la devise est invalide. Vous pouvez trouver la liste des codes <a href=\"https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)\" target=\"_blank\" rel=\"noopener noreferrer\">ici</a>",
