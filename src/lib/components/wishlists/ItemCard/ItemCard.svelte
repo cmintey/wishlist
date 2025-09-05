@@ -170,7 +170,6 @@
     };
 
     const doClaim = async (userId: string, quantity = 1, unclaim = false) => {
-        // TODO update API to allow claiming multiple
         const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(userId, quantity));
 
         if (resp.ok) {

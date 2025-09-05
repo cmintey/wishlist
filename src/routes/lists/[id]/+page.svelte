@@ -296,6 +296,7 @@
             {#each items as item (item.id)}
                 <div animate:flip={{ duration: flipDurationMs }}>
                     <ItemCard
+                        groupId={data.list.groupId}
                         {item}
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
@@ -315,6 +316,7 @@
                         animate:flip={{ duration: flipDurationMs }}
                     >
                         <ItemCard
+                            groupId={data.list.groupId}
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}
