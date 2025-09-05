@@ -200,7 +200,6 @@
         "user-not-in-group": "Brukeren er ikke en del av denne gruppen",
         "username-already-in-use": "{username} er allerede i bruk",
         "username-must-not-be-blank": "Brukernavn kan ikke være tomt",
-        "username-not-specified": "Brukernavn er ikke spesifisert",
         "valid-url-not-provided": "Gyldig url ble ikke oppgitt",
         "invalid-email": "Oppgi en gyldig e-postadresse.",
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppen er ikke i Registermodus. Kan derfor ikke opprette en offentlig link",

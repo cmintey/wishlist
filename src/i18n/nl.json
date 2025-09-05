@@ -13,7 +13,7 @@
         "edit-group-name": "groepsnaam bewerken",
         "increase-priority": "verhoog de prioriteit voor {name}",
         "menu": "menu",
-        "password-strength": "sterk wachtwoord",
+        "password-strength": "wachtwoordsterkte",
         "refresh-item-data": "vernieuw itemgegevens",
         "remove-user-from-group": "verwijder {user} uit de groep",
         "save-group-name": "groepsnaam opslaan",
@@ -46,11 +46,11 @@
         "default-group-tooltip": "Nieuwe gebruikers worden toegevoegd aan deze groep als ze geen specifieke aanmeldtoken hebben ontvangen.",
         "delete-group-message": "Weet u zeker dat u deze groep wilt verwijderen? Dit zal alle lijsten in deze groep verwijderen en alle bijbehorende items die niet in een andere groep zijn. <b> Deze actie is onomkeerbaar </b>!",
         "delete-group-title": "Verwijder groep",
-        "delete-user": "Verwijder de gebruiker",
+        "delete-user": "Verwijder gebruiker",
         "delete-user-confirmation": "Weet u zeker dat u {username} wilt verwijderen? <b> Deze actie is onomkeerbaar! </b>",
         "dev": "dev",
-        "disable-password-login": "Schakel wachtwoord inloggen uit",
-        "disable-password-login-tooltip": "Schakelt inloggen uit met een wachtwoord. Alleen header- en oAuth -authenticatie zijn toegestaan.",
+        "disable-password-login": "Schakel inloggen met wachtwoord uit",
+        "disable-password-login-tooltip": "Schakelt inloggen met een wachtwoord uit. Alleen header- en oAuth-authenticatie zijn toegestaan.",
         "enable-default-list-creation": "Schakel standaardlijst maken in",
         "enable-default-list-creation-tooltip": "Schakel het maken van een lijst in wanneer een nieuwe gebruiker lid wordt van een groep. Gebruikers kunnen zelf nog steeds lijsten maken.",
         "enable-signup": "Schakel registratie in",
@@ -118,7 +118,7 @@
         "wishlist-mode-wishlist-tooltip": "Meerdere gebruikers en meerdere lijsten met claim- en itemsuggesties. Lijsten kunnen openbaar worden gemaakt indien toegestaan door de groep."
     },
     "app": {
-        "home": "Thuis",
+        "home": "Start",
         "my-claims": "Mijn claims"
     },
     "auth": {
@@ -148,23 +148,23 @@
         "passwords-must-match": "Wachtwoorden moeten overeenkomen",
         "reset-password": "Reset wachtwoord",
         "return-to-login": "Keer terug naar login",
-        "self-service-password-reset-unavailable": "Zelfbedieningswachtwoord reset niet beschikbaar.",
+        "self-service-password-reset-unavailable": "Self-service wachtwoordherstel niet beschikbaar.",
         "sign-in": "Inloggen",
         "sign-in-with": "Log in met {provider}",
-        "sign-out": "Uitmelden",
-        "sign-out-of-all-devices": "Meld u uit bij alle apparaten?",
-        "unlink-oauth": "Unkink {providerName}",
+        "sign-out": "Afmelden",
+        "sign-out-of-all-devices": "Meld u af bij alle apparaten?",
+        "unlink-oauth": "Ontkoppel {providerName}",
         "update-password": "Wachtwoord bijwerken",
         "username": "Gebruikersnaam",
         "your-account-is-currently-linked-with-oauth": "Uw account is momenteel gekoppeld aan {providerName}",
         "your-password-was-reset": "Uw wachtwoord is gereset."
     },
     "email": {
-        "invite-body": "Je bent uitgenodigd om lid te worden van Wishlist! Klik op de onderstaande link om de uitnodiging te accepteren.",
+        "invite-body": "U bent uitgenodigd om lid te worden van Wishlist! Klik op de onderstaande link om de uitnodiging te accepteren.",
         "invite-button": "Word lid van de verlanglijst",
         "invite-fallback-text": "Iemand heeft je uitgenodigd om lid te worden van hun verlanglijst! Volg de link naar aanmelding: {url}",
         "invite-footer": "Als u niet wilt meedoen of gelooft dat deze e -mail in de fout wordt verzonden, kunt u deze e -mail negeren.",
-        "invite-subject": "WISKLIST INVITTE",
+        "invite-subject": "Wishlist-uitnodiging",
         "invite-title": "Welkom bij Wishlist!",
         "pw-reset-body": "Als u om een wachtwoord opnieuw instelt, klikt u op de onderstaande link om het proces te voltooien. Als u dit verzoek niet hebt ingediend, kunt u deze e -mail veilig negeren.",
         "pw-reset-fallback-text": "Volg de link om uw wachtwoord te resetten {resetUrl}",
@@ -241,7 +241,6 @@
         "user-not-in-group": "Gebruiker maakt geen deel uit van deze groep",
         "username-already-in-use": "{username} al in gebruik",
         "username-must-not-be-blank": "Gebruikersnaam mag niet leeg zijn",
-        "username-not-specified": "Gebruikersnaam niet gespecificeerd",
         "valid-url-not-provided": "Geldige URL niet verstrekt"
     },
     "general": {
@@ -314,7 +313,7 @@
         "wishlists-cleared": "Wenlijsten zijn opgeruimd."
     },
     "setup": {
-        "back": "Rug",
+        "back": "Terug",
         "complete": "Compleet",
         "create-your-account": "Maak uw account aan",
         "first-account-admin": "Uw eerste account is de beheerder. U kunt later altijd meer beheerders toevoegen.",
@@ -367,7 +366,7 @@
         "filter": "Filter",
         "finish": "Afronden",
         "for": "Voor <span class=\"text-secondary-700-200-token font-bold\"> {name} </span>",
-        "hang-tight-gathering-product-data": "Hang strak, verzamel productgegevens",
+        "hang-tight-gathering-product-data": "Hou je vast, productgegevens worden verzameld",
         "heads-up": "Heads Up!",
         "hide-description": "Beschrijving verbergen",
         "image-url": "Afbeelding URL",
@@ -389,13 +388,13 @@
         "nothing-claimed-yet": "Nog niets geclaimd",
         "preview": "Voorbeeld",
         "price": "Prijs",
-        "price-high-to-low": "Prijs: hoog tot laag",
-        "price-low-to-high": "Prijs: laag tot hoog",
+        "price-high-to-low": "Prijs: hoog naar laag",
+        "price-low-to-high": "Prijs: laag naar hoog",
         "public": "Openbaar",
         "public-url": "Openbare URL",
         "purchase": "Markeer item zoals gekocht",
         "purchased": "Gekocht",
-        "purchased-toast": "Gemarkeerd item als {purchased, select, true {purchased} other {not purchased}}",
+        "purchased-toast": "Item gemarkeerd als {purchased, select, true {gekocht} other {niet gekocht}}",
         "quantity": "Hoeveelheid",
         "quantity-claimed": "{quantity} geclaimd",
         "quantity-desired": "{quantity} gewenst",
@@ -416,8 +415,8 @@
         "view-wishes": "Bekijk wensen",
         "wishes-for": "{listOwner} 's wensen",
         "write": "Schrijven",
-        "count-items": "{itemCount} items",
+        "count-items": "{itemCount, plural, one {# item} other {# items}}",
         "hide-all-currencies": "verberg alle eenheden...",
-        "show-all-currencies": "Toon alle eenheden..."
+        "show-all-currencies": "Toon alle valuta's..."
     }
 }

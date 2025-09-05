@@ -4,7 +4,6 @@
         "group-is-already-active": "Grupa jest już aktywna",
         "invalid-email": "Wprowadź poprawny adres email.",
         "user-not-found": "Nie znaleziono użytkownika",
-        "username-not-specified": "Nie podano nazwy użytkownika",
         "username-already-in-use": "nazwa \"{username}\" jest już zajęta",
         "must-specify-an-item-to-delete": "Należy wybrać przedmiot do usunięcia",
         "no-group-friendly-msg": "Jeżeli widzisz tę stronę, oznacza to że nie należysz jeszcze do żadnej grupy! Poproś o zaproszenie do istniejącej lub stwórz swoją własną.",

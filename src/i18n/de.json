@@ -203,7 +203,7 @@
         "hide-description": "Beschreibung ausblenden",
         "no-limit": "Keine Begrenzung",
         "show-description": "Zeige Beschreibung",
-        "count-items": "{itemCount} Artikel",
+        "count-items": "{itemCount, plural, one {# Artikel} other {# Artikel}}",
         "hide-all-currencies": "verberge alle Währungen...",
         "show-all-currencies": "zeige alle Währungen..."
     },
@@ -255,7 +255,6 @@
         "user-not-in-group": "Benutzer ist nicht Teil dieser Gruppe",
         "username-already-in-use": "{username} bereits in Verwendung",
         "username-must-not-be-blank": "Benutzername darf nicht leer sein",
-        "username-not-specified": "Benutzername nicht angegeben",
         "valid-url-not-provided": "Keine gültige URL angegeben",
         "list-not-found": "Liste nicht gefunden",
         "user-must-be-in-the-correct-group": "Benutzer muss in der korrekten Gruppe sein",
