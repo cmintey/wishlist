@@ -30,20 +30,129 @@ enum ConfigKey {
     OIDC_AUTO_REGISTER = "oidc.autoRegister"
 }
 
+type Transformer<T> = (val: string | null, shouldMask?: boolean) => T;
+
+const isDefined = (val: string | null | undefined) => val !== null && val !== undefined;
+const booleanTransformer: Transformer<boolean | undefined> = (val) =>
+    val === "true" ? true : val === "false" ? false : undefined;
+const stringTransformer: Transformer<string | undefined> = (val) => val ?? undefined;
+const maskableStringTransformer: Transformer<string | undefined> = (val, shouldMask = false) =>
+    isDefined(val) ? maskable(val, shouldMask) : undefined;
+const numberTransformer: Transformer<number | undefined> = (val) => (isDefined(val) ? Number(val) : undefined);
+
+const transformers: Record<ConfigKey, Transformer<unknown>> = {
+    enableSignup: booleanTransformer,
+    "suggestions.enable": booleanTransformer,
+    "suggestions.method": stringTransformer,
+    "smtp.enable": booleanTransformer,
+    "smtp.host": stringTransformer,
+    "smtp.port": numberTransformer,
+    "smtp.user": stringTransformer,
+    "smtp.pass": maskableStringTransformer,
+    "smtp.from": stringTransformer,
+    "smtp.fromName": stringTransformer,
+    "claims.showName": booleanTransformer,
+    "claims.requireEmail": booleanTransformer,
+    listMode: stringTransformer,
+    "security.passwordStrength": numberTransformer,
+    "security.disablePasswordLogin": booleanTransformer,
+    defaultGroup: stringTransformer,
+    enableDefaultListCreation: booleanTransformer,
+    allowPublicLists: booleanTransformer,
+    "oidc.enable": booleanTransformer,
+    "oidc.clientId": stringTransformer,
+    "oidc.clientSecret": maskableStringTransformer,
+    "oidc.discoveryUrl": stringTransformer,
+    "oidc.providerName": stringTransformer,
+    "oidc.autoRedirect": booleanTransformer,
+    "oidc.autoRegister": booleanTransformer
+};
+
+const defaultConfig: Config = {
+    enableSignup: true,
+    suggestions: {
+        enable: true,
+        method: "approval"
+    },
+    smtp: {
+        enable: false
+    },
+    claims: {
+        showName: true,
+        requireEmail: true
+    },
+    listMode: "standard",
+    security: {
+        passwordStrength: 2,
+        disablePasswordLogin: false
+    },
+    enableDefaultListCreation: true,
+    allowPublicLists: false,
+    oidc: {
+        enable: false
+    }
+};
+
+function buildConfig(configMap: Record<string, string | null>, includeSensitive = false): Config {
+    const config: Partial<Config> = {};
+
+    for (const [key, value] of Object.entries(configMap)) {
+        const transformer: Transformer<unknown> = transformers[key as ConfigKey];
+        const path = key.split(".");
+        setDeep(config, path, transformer(value, !includeSensitive));
+    }
+
+    return deepMerge(defaultConfig, config) as Config;
+}
+
+function setDeep(obj: Record<string, any>, path: string[], value: any) {
+    let current = obj;
+    for (let i = 0; i < path.length - 1; i++) {
+        if (!(path[i] in current)) current[path[i]] = {};
+        current = current[path[i]];
+    }
+    current[path[path.length - 1]] = value;
+}
+
+function deepMerge(target: Record<string, any>, source: Record<string, any>): Record<string, unknown> {
+    for (const key in source) {
+        if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+            if (!target[key]) target[key] = {};
+            deepMerge(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+
+function flatten(
+    obj: Record<string, any>,
+    prefix = "",
+    result: Record<string, string | null | undefined> = {}
+): Record<string, string | null | undefined> {
+    for (const [key, value] of Object.entries(obj)) {
+        const fullKey = prefix ? `${prefix}.${key}` : key;
+
+        if (value === null || value === undefined) {
+            result[fullKey] = value;
+        } else if (typeof value === "object" && !Array.isArray(value)) {
+            flatten(value, fullKey, result);
+        } else if (typeof value === "number" || typeof value === "boolean") {
+            result[fullKey] = value.toString();
+        } else {
+            result[fullKey] = value;
+        }
+    }
+    return result;
+}
+
 export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
-    let configItems = await client.systemConfig.findMany({
+    const configItems = await client.systemConfig.findMany({
         where: {
             groupId: "global"
         }
     });
-    if (configItems.length === 0) {
-        await createDefaultConfig();
-        configItems = await client.systemConfig.findMany({
-            where: {
-                groupId: "global"
-            }
-        });
-    }
 
     let configMap: Record<string, string | null> = {};
     for (const { key, value } of configItems) {
@@ -57,73 +166,7 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
         ...groupConfigMap
     };
 
-    const smtpConfig: SMTPConfig =
-        configMap[ConfigKey.SMTP_ENABLE] === "true"
-            ? {
-                  enable: true,
-                  host: configMap[ConfigKey.SMTP_HOST]!,
-                  port: Number(configMap[ConfigKey.SMTP_PORT])!,
-                  user: configMap[ConfigKey.SMTP_USER]!,
-                  pass: maskable(configMap[ConfigKey.SMTP_PASS]!, !includeSensitive),
-                  from: configMap[ConfigKey.SMTP_FROM]!,
-                  fromName: configMap[ConfigKey.SMTP_FROM_NAME]!
-              }
-            : {
-                  enable: false,
-                  host: configMap[ConfigKey.SMTP_HOST],
-                  port: Number(configMap[ConfigKey.SMTP_PORT]),
-                  user: configMap[ConfigKey.SMTP_USER],
-                  pass: maskable(configMap[ConfigKey.SMTP_PASS]!, !includeSensitive),
-                  from: configMap[ConfigKey.SMTP_FROM],
-                  fromName: configMap[ConfigKey.SMTP_FROM_NAME]
-              };
-
-    const oidcConfig: OIDCConfig =
-        configMap[ConfigKey.OIDC_ENABLE] === "true"
-            ? {
-                  enable: true,
-                  discoveryUrl: configMap[ConfigKey.OIDC_DISCOVERY_URL]!,
-                  clientId: configMap[ConfigKey.OIDC_CLIENT_ID]!,
-                  clientSecret: maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET]!, !includeSensitive),
-                  providerName: configMap[ConfigKey.OIDC_PROVIDER_NAME],
-                  autoRedirect: configMap[ConfigKey.OIDC_AUTO_REDIRECT] === "true",
-                  autoRegister: configMap[ConfigKey.OIDC_AUTO_REGISTER] === "true"
-              }
-            : {
-                  enable: false,
-                  discoveryUrl: configMap[ConfigKey.OIDC_DISCOVERY_URL],
-                  clientId: configMap[ConfigKey.OIDC_CLIENT_ID],
-                  clientSecret: configMap[ConfigKey.OIDC_CLIENT_SECRET]
-                      ? maskable(configMap[ConfigKey.OIDC_CLIENT_SECRET], !includeSensitive)
-                      : undefined,
-                  providerName: configMap[ConfigKey.OIDC_PROVIDER_NAME],
-                  autoRedirect: configMap[ConfigKey.OIDC_AUTO_REDIRECT] === "true",
-                  autoRegister: configMap[ConfigKey.OIDC_AUTO_REGISTER] === "true"
-              };
-
-    const config: Config = {
-        enableSignup: configMap[ConfigKey.SIGNUP_ENABLE] === "true",
-        suggestions: {
-            enable: configMap[ConfigKey.SUGGESTIONS_ENABLE] === "true",
-            method: (configMap[ConfigKey.SUGGESTIONS_METHOD] as SuggestionMethod) || "approval"
-        },
-        smtp: smtpConfig,
-        claims: {
-            showName: configMap[ConfigKey.CLAIMS_SHOW_NAME] === "true",
-            requireEmail: configMap[ConfigKey.CLAIMS_REQUIRE_EMAIL] === "true"
-        },
-        listMode: (configMap[ConfigKey.LIST_MODE] as ListMode) || "standard",
-        security: {
-            passwordStrength: Number(configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] || 2),
-            disablePasswordLogin: configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] === "true"
-        },
-        defaultGroup: configMap[ConfigKey.DEFAULT_GROUP]!,
-        enableDefaultListCreation: configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] !== "false", // do it this way since we want it to be defaulted to true
-        allowPublicLists: configMap[ConfigKey.ALLOW_PUBLIC_LISTS] === "true",
-        oidc: oidcConfig
-    };
-
-    return config;
+    return buildConfig(configMap, includeSensitive);
 };
 
 const getGroupConfig = async (groupId: string): Promise<Record<string, string | null>> => {
@@ -141,88 +184,29 @@ const getGroupConfig = async (groupId: string): Promise<Record<string, string | 
     return configMap;
 };
 
-const createDefaultConfig = async (): Promise<void> => {
-    const defaultConfig: Config = {
-        enableSignup: true,
-        suggestions: {
-            enable: true,
-            method: "approval"
-        },
-        smtp: {
-            enable: false
-        },
-        claims: {
-            showName: true,
-            requireEmail: true
-        },
-        listMode: "standard",
-        security: {
-            passwordStrength: 2,
-            disablePasswordLogin: false
-        },
-        enableDefaultListCreation: true,
-        allowPublicLists: false,
-        oidc: {
-            enable: false
-        }
-    };
-
-    await writeConfig(defaultConfig);
-};
-
 export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => {
-    const configMap: Record<string, string | null | undefined> = {};
+    const configMap: Record<string, string | null | undefined> = flatten(config);
 
-    if (config.smtp) {
-        configMap[ConfigKey.SMTP_ENABLE] = config.smtp.enable.toString();
-        configMap[ConfigKey.SMTP_HOST] = config.smtp.host;
-        configMap[ConfigKey.SMTP_PORT] = config.smtp.port?.toString();
-        configMap[ConfigKey.SMTP_USER] = config.smtp.user;
-        configMap[ConfigKey.SMTP_PASS] = config.smtp.pass;
-        configMap[ConfigKey.SMTP_FROM] = config.smtp.from;
-        configMap[ConfigKey.SMTP_FROM_NAME] = config.smtp.fromName;
-    }
-
-    if (config.oidc) {
-        configMap[ConfigKey.OIDC_ENABLE] = config.oidc.enable.toString();
-        configMap[ConfigKey.OIDC_DISCOVERY_URL] = config.oidc.discoveryUrl;
-        configMap[ConfigKey.OIDC_CLIENT_ID] = config.oidc.clientId;
-        configMap[ConfigKey.OIDC_CLIENT_SECRET] = config.oidc.clientSecret;
-        configMap[ConfigKey.OIDC_PROVIDER_NAME] = config.oidc.providerName;
-        configMap[ConfigKey.OIDC_AUTO_REDIRECT] = config.oidc.autoRedirect?.toString();
-        configMap[ConfigKey.OIDC_AUTO_REGISTER] = config.oidc.autoRegister?.toString();
-    }
-
-    configMap[ConfigKey.SIGNUP_ENABLE] = config.enableSignup?.toString();
-    configMap[ConfigKey.SUGGESTIONS_ENABLE] = config.suggestions?.enable.toString();
-    configMap[ConfigKey.SUGGESTIONS_METHOD] = config.suggestions?.method;
-    configMap[ConfigKey.CLAIMS_SHOW_NAME] = config.claims?.showName.toString();
-    configMap[ConfigKey.CLAIMS_REQUIRE_EMAIL] = config.claims?.requireEmail.toString();
-    configMap[ConfigKey.LIST_MODE] = config.listMode;
-    configMap[ConfigKey.SECURITY_PASSWORD_STRENGTH] = config.security?.passwordStrength.toString();
-    configMap[ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN] = config.security?.disablePasswordLogin.toString();
-    configMap[ConfigKey.DEFAULT_GROUP] = config.defaultGroup;
-    configMap[ConfigKey.ENABLE_DEFAULT_LIST_CREATION] = config.enableDefaultListCreation?.toString();
-    configMap[ConfigKey.ALLOW_PUBLIC_LISTS] = config?.allowPublicLists?.toString();
-
-    for (const [key, value] of Object.entries(configMap)) {
-        await client.systemConfig.upsert({
-            where: {
-                key_groupId: {
+    await client.$transaction(
+        Object.entries(configMap).map(([key, value]) =>
+            client.systemConfig.upsert({
+                where: {
+                    key_groupId: {
+                        key,
+                        groupId
+                    }
+                },
+                create: {
                     key,
-                    groupId
+                    groupId,
+                    value
+                },
+                update: {
+                    value
                 }
-            },
-            create: {
-                key,
-                groupId,
-                value
-            },
-            update: {
-                value
-            }
-        });
-    }
+            })
+        )
+    );
 };
 
 const maskable = (value: string, mask: boolean) => {
