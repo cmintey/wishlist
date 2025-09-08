@@ -115,7 +115,9 @@
         "wishlist-mode-registry": "Register",
         "wishlist-mode-registry-tooltip": "Eén gebruiker met één openbare lijst. Gebruikers van andere groepen kunnen suggesties doen als toegestane en anonieme gebruikers items kunnen claimen.",
         "wishlist-mode-wishlist": "Verlanglijst",
-        "wishlist-mode-wishlist-tooltip": "Meerdere gebruikers en meerdere lijsten met claim- en itemsuggesties. Lijsten kunnen openbaar worden gemaakt indien toegestaan door de groep."
+        "wishlist-mode-wishlist-tooltip": "Meerdere gebruikers en meerdere lijsten met claim- en itemsuggesties. Lijsten kunnen openbaar worden gemaakt indien toegestaan door de groep.",
+        "claims-require-email": "Email vereist",
+        "claims-require-email-tooltip": "Vereis een emailadres om anoniem een item te claimen."
     },
     "app": {
         "home": "Start",
@@ -241,7 +243,8 @@
         "user-not-in-group": "Gebruiker maakt geen deel uit van deze groep",
         "username-already-in-use": "{username} al in gebruik",
         "username-must-not-be-blank": "Gebruikersnaam mag niet leeg zijn",
-        "valid-url-not-provided": "Geldige URL niet verstrekt"
+        "valid-url-not-provided": "Geldige URL niet verstrekt",
+        "email-is-required-for-public-claims": "Email is vereist voor publieke claims"
     },
     "general": {
         "add-a-description": "Voeg een beschrijving toe",
