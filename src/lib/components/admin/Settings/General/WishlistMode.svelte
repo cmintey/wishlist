@@ -14,8 +14,7 @@
     const t = getFormatter();
 </script>
 
-<SettingsGroup>
-    <h3 class="h3">{$t("admin.wishlist-mode")}</h3>
+<SettingsGroup title={$t("admin.wishlist-mode")}>
     <Setting>
         {@const disabled = groupUserCount > 1 || listCount > 1}
         <label class="flex flex-col" for="listMode">

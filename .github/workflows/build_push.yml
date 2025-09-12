@@ -1,5 +1,10 @@
 name: Build and Push Docker Image
-
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  packages: write
+  actions: write
 on:
   workflow_dispatch:
   push:
@@ -54,5 +59,8 @@ jobs:
           push: true
           tags: ${{ steps.tags.outputs.tags }}
           labels: ${{ steps.tags.outputs.labels }}
+          build-args: |
+            SHA=${{github.sha}}
+            VERSION=${{github.ref_name}}
           cache-from: type=gha
           cache-to: type=gha,mode=max

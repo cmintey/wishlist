@@ -35,9 +35,10 @@
     <div class="flex md:pr-4">
         <button class="h-10 md:h-12" use:popup={menuSettings}>
             <Avatar {user} width="h-10 md:h-12" />
+            <span class="sr-only">User Menu</span>
         </button>
         <div>
-            <nav class="card list-nav p-4 shadow-xl" data-popup="user">
+            <nav class="card list-nav p-4 shadow-xl" data-popup="user" data-testid="user menu navigation">
                 <ul>
                     <li>
                         <a href="/account">
