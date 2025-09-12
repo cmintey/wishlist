@@ -12,7 +12,8 @@
         "lint": "prettier --check . && eslint .",
         "format": "prettier --write .",
         "db:patch": "node prisma/patches/index.js",
-        "test": "playwright test"
+        "test": "playwright test",
+        "test:build": "docker compose -f tests/docker/docker-compose.yaml build"
     },
     "prisma": {
         "seed": "node prisma/seed.js"
