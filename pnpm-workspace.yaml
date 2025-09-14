@@ -2,10 +2,10 @@ engineStrict: true
 autoInstallPeers: true
 nodeLinker: hoisted
 ignoredBuiltDependencies:
-  - sharp
+    - sharp
 supportedArchitectures:
-  os:
-    - linux
-  cpu:
-    - x64
-    - arm64
+    os:
+        - linux
+    cpu:
+        - x64
+        - arm64
