@@ -17,8 +17,6 @@
 
     let password = $state("");
     let passwordConfirm = $state("");
-
-    $inspect(formData);
 </script>
 
 <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
