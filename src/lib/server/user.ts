@@ -5,7 +5,9 @@ import type { User } from "@prisma/client";
 import { create } from "./list";
 import { hashPassword } from "./password";
 
-type UserMinimal = Pick<User, "username" | "email" | "name">;
+interface UserMinimal extends Pick<User, "username" | "email" | "name"> {
+    oauthId?: string | null;
+}
 
 export const createUser = async (user: UserMinimal, role: Role, password: string, signupTokenId?: string) => {
     const config = await getConfig();
@@ -43,7 +45,8 @@ export const createUser = async (user: UserMinimal, role: Role, password: string
             name: user.name,
             email: user.email,
             roleId: role,
-            hashedPassword
+            hashedPassword,
+            oauthId: user.oauthId
         }
     });
 

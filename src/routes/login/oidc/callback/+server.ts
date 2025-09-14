@@ -78,7 +78,8 @@ export const POST: RequestHandler = async (event) => {
     const userData = {
         name: userinfo.name ?? userinfo.email,
         username: userinfo.preferred_username ?? userinfo.email,
-        email: userinfo.email
+        email: userinfo.email,
+        oauthId: userinfo.sub
     };
     logger.debug(userData, "Registering a new user");
     user = await createUser(userData, Role.USER, "");
