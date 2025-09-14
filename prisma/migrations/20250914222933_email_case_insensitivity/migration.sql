@@ -1,7 +1,7 @@
 PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_user" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "username" TEXT NOT NULL,
+    "username" TEXT NOT NULL COLLATE NOCASE,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL DEFAULT 'changeme@email.com' COLLATE NOCASE,
     "picture" TEXT,
