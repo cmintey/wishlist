@@ -61,11 +61,16 @@ export const actions: Actions = {
             const err = e as PrismaClientKnownRequestError;
             logger.error({ err: e });
             const targets = err.meta?.target as string[];
+            const errors = targets.reduce(
+                (prev, target) => ({
+                    ...prev,
+                    [target]: [$t("errors.username-already-in-use", { values: { username: target } })]
+                }),
+                {}
+            );
             return fail(400, {
                 error: true,
-                errors: {
-                    username: [$t("errors.username-already-in-use", { values: { username: targets[0] } })]
-                }
+                errors
             });
         }
     },

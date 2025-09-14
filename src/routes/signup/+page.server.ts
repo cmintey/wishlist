@@ -97,7 +97,7 @@ export const actions: Actions = {
             logger.error({ err }, "User with username or email already exists");
             return fail(400, {
                 error: true,
-                errors: [{ field: "username", message: $t("errors.user-already-exists") }]
+                message: $t("errors.user-already-exists")
             });
         }
     }

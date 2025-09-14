@@ -9,6 +9,8 @@
 
     let { user = $bindable() }: Props = $props();
     const t = getFormatter();
+
+    $inspect(page.form);
 </script>
 
 <form method="POST" use:enhance>

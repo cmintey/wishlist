@@ -17,6 +17,8 @@
 
     let password = $state("");
     let passwordConfirm = $state("");
+
+    $inspect(formData);
 </script>
 
 <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
@@ -71,6 +73,10 @@
     {/if}
     {#if formData?.errors?.password}
         <span class="unstyled text-xs text-red-500">{formData.errors.password[0]}</span>
+    {/if}
+
+    {#if formData?.error && formData?.message}
+        <span class="unstyled text-xs text-red-500">{formData.message}</span>
     {/if}
 
     {#if !hideActions}
