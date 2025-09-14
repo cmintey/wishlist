@@ -73,6 +73,10 @@
         <span class="unstyled text-xs text-red-500">{formData.errors.password[0]}</span>
     {/if}
 
+    {#if formData?.error && formData?.message}
+        <span class="unstyled text-xs text-red-500">{formData.message}</span>
+    {/if}
+
     {#if !hideActions}
         <div class="flex items-center justify-center gap-x-4 pb-2">
             <button
