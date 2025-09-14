@@ -1,0 +1,11 @@
+engineStrict: true
+autoInstallPeers: true
+nodeLinker: hoisted
+ignoredBuiltDependencies:
+    - sharp
+supportedArchitectures:
+    os:
+        - linux
+    cpu:
+        - x64
+        - arm64
