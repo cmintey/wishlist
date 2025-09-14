@@ -60,7 +60,7 @@
     "type": "module",
     "dependencies": {
         "@metascraper/helpers": "^5.49.1",
-        "@noble/hashes": "^1.8.0",
+        "@noble/hashes": "^2.0.0",
         "@oslojs/crypto": "^1.0.1",
         "@oslojs/encoding": "^1.1.0",
         "@paralleldrive/cuid2": "^2.2.2",

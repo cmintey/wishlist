@@ -1,4 +1,4 @@
-import { scryptAsync } from "@noble/hashes/scrypt";
+import { scryptAsync } from "@noble/hashes/scrypt.js";
 import { constantTimeEqual } from "@oslojs/crypto/subtle";
 import { decodeHex, encodeHexLowerCase } from "@oslojs/encoding";
 
