@@ -139,32 +139,21 @@
         }
     };
 
-    const approvalModal = (approve: boolean): ModalSettings => ({
-        type: "confirm",
-        title: $t("general.please-confirm"),
-        body: $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } }),
-        response: async (r: boolean) => {
-            if (r) {
-                const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
-
-                if (resp.ok) {
-                    toastStore.trigger({
-                        message: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } }),
-                        autohide: true,
-                        timeout: 5000
-                    });
-                    drawerStore.close();
-                } else {
-                    errorToast(toastStore, $t("general.oops"));
-                }
-            }
-        },
-        buttonTextCancel: $t("general.cancel"),
-        buttonTextConfirm: $t("general.confirm")
-    });
-
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
-    const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
+    const handleApproval = async (approve: boolean) => {
+        const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
+
+        if (resp.ok) {
+            toastStore.trigger({
+                message: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } }),
+                autohide: true,
+                timeout: 5000
+            });
+            drawerStore.close();
+        } else {
+            errorToast(toastStore, $t("general.oops"));
+        }
+    };
     const handleEdit = () => {
         goto(resolve("/items/[itemId]/edit", { itemId: item.id.toString() }) + `?redirectTo=${page.url.pathname}`);
     };

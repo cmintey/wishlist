@@ -34,6 +34,7 @@
         "@types/pulltorefreshjs": "^0.1.7",
         "@vite-pwa/sveltekit": "^1.0.0",
         "autoprefixer": "^10.4.21",
+        "bits-ui": "^2.9.7",
         "eslint-plugin-svelte": "^3.11.0",
         "fuzzysort": "^3.1.0",
         "globals": "^16.3.0",

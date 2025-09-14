@@ -1,22 +1,31 @@
+<script lang="ts" module>
+    import { type Readable } from "svelte/store";
+
+    type UnwrapReadable<T> = T extends Readable<infer U> ? U : never;
+    type Trigger = UnwrapReadable<ReturnType<typeof createDialog>["elements"]["trigger"]>;
+    type Actions = UnwrapReadable<ReturnType<typeof createDialog>["elements"]["close"]>;
+
+    export interface Props {
+        trigger: Snippet<[Trigger]>;
+        title: string;
+        description: Snippet;
+        body?: Snippet;
+        actions: Snippet<[Actions]>;
+        role?: "dialog" | "alertdialog";
+    }
+</script>
+
 <script lang="ts">
     import { createDialog, melt } from "@melt-ui/svelte";
     import type { Snippet } from "svelte";
     import { fly } from "svelte/transition";
 
-    interface Props {
-        trigger: Snippet<[typeof $trigger]>;
-        title: string;
-        description: Snippet;
-        body?: Snippet;
-        actions: Snippet<[typeof $close]>;
-    }
-
-    const props: Props = $props();
+    const { role = "dialog", ...props }: Props = $props();
 
     const {
         elements: { trigger, portalled, overlay, content, title, description, close },
         states: { open }
-    } = createDialog();
+    } = createDialog({ role });
 </script>
 
 {@render props.trigger($trigger)}

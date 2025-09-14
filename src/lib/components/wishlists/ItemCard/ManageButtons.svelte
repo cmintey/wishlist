@@ -2,6 +2,8 @@
     import type { PartialUser } from "./ItemCard.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
+    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
+    import { melt } from "@melt-ui/svelte";
 
     interface Props {
         item: ItemOnListDTO;
@@ -16,26 +18,27 @@
     const t = getFormatter();
 </script>
 
+{#snippet approvalButton(approve: boolean, callback?: VoidFunction)}
+    <ConfirmModal onConfirm={callback}>
+        {#snippet description()}
+            {@html $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } })}
+        {/snippet}
+        {#snippet trigger(trigger)}
+            <button
+                class={["btn btn-sm md:btn-md", approve ? "variant-filled-success" : "variant-filled-error"]}
+                onclick={(e) => e.stopPropagation()}
+                use:melt={trigger}
+            >
+                {approve ? $t("wishes.approve") : $t("wishes.deny")}
+            </button>
+        {/snippet}
+    </ConfirmModal>
+{/snippet}
+
 <div class="flex flex-row gap-x-2 md:gap-x-4">
     {#if !item.approved}
-        <button
-            class="variant-filled-success btn btn-sm md:btn"
-            onclick={(e) => {
-                e.stopPropagation();
-                props.onApprove?.();
-            }}
-        >
-            {$t("wishes.approve")}
-        </button>
-        <button
-            class="variant-filled-error btn btn-sm md:btn"
-            onclick={(e) => {
-                e.stopPropagation();
-                props.onDeny?.();
-            }}
-        >
-            {$t("wishes.deny")}
-        </button>
+        {@render approvalButton(true, props.onApprove)}
+        {@render approvalButton(false, props.onDeny)}
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
             class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
