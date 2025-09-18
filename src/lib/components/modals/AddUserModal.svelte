@@ -2,61 +2,103 @@
     import { UsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
     import type { User } from "@prisma/client";
-    import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
+    import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
+    import BaseModal, { type Props as BaseProps } from "./BaseModal.svelte";
+    import { Dialog, mergeProps } from "bits-ui";
+    import { GroupAPI } from "$lib/api/groups";
+    import { invalidateAll } from "$app/navigation";
+    import { debounce } from "$lib/util";
 
-    interface Props {
-        parent: any;
+    interface Props extends Pick<BaseProps, "trigger"> {
+        groupId: string;
     }
 
-    const { parent }: Props = $props();
+    const { groupId, trigger }: Props = $props();
     const t = getFormatter();
 
-    const modalStore = getModalStore();
-    let selectedUser: string | undefined = $state();
+    const groupAPI = $derived(new GroupAPI(groupId));
+    const usersAPI = new UsersAPI();
 
-    function onFormSubmit(): void {
+    let open = $state(false);
+
+    function resetForm() {
+        searchValue = undefined;
+        selectedUser = undefined;
+    }
+
+    async function onFormSubmit() {
         if (selectedUser) {
-            if ($modalStore[0].response) $modalStore[0].response(selectedUser);
-            modalStore.close();
+            await groupAPI.addMember(selectedUser);
+            await invalidateAll();
         }
     }
 
-    const usersAPI = new UsersAPI();
+    let selectedUser: string | undefined = $state();
+    let searchValue: string | undefined = $state();
 
-    let users: User[] = $state([]);
-    const doSearch = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-        const resp = await usersAPI.search(e.currentTarget.value);
-        users = await resp.json();
-    };
+    // let users: User[] = $state([]);
+    const doSearch = debounce(async (value: string | undefined) => {
+        if (value) {
+            return await usersAPI.search(value).then((resp) => resp.json() as unknown as User[]);
+        }
+        return [];
+    });
+
+    $effect(() => {
+        if (!open) {
+            resetForm();
+        }
+    });
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("general.add-user")}</header>
-    <span>{$t("general.search-for-user")}</span>
+<BaseModal title={$t("general.add-user")} {trigger} bind:open>
+    {#snippet description()}
+        {$t("general.search-for-user")}
+    {/snippet}
+
     <label class="w-fit">
         <span>{$t("general.search")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
                 <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
             </div>
-            <input class="input" oninput={doSearch} type="search" />
+            <input class="input" type="search" bind:value={searchValue} />
         </div>
     </label>
 
-    {#if users.length > 0}
-        <ListBox class="border border-surface-500 p-4 rounded-container-token">
-            {#each users as user}
-                <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
-                    {user.name}
-                </ListBoxItem>
-            {/each}
-        </ListBox>
-    {/if}
+    {#await doSearch(searchValue) then users}
+        {#if users.length > 0}
+            <ListBox class="border border-surface-500 p-4 rounded-container-token">
+                {#each users as user}
+                    <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
+                        <span>{user.name}</span>
+                        <span class="subtext">({user.email})</span>
+                    </ListBoxItem>
+                {/each}
+            </ListBox>
+        {/if}
+    {/await}
 
-    <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
-            {parent.buttonTextCancel}
-        </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.add-user")}</button>
-    </footer>
-</div>
+    {#snippet actions()}
+        <div class="flex justify-between">
+            <Dialog.Close>
+                {#snippet child({ props })}
+                    <button class="variant-ghost-surface btn btn-sm md:btn-md" {...props}>
+                        {$t("general.cancel")}
+                    </button>
+                {/snippet}
+            </Dialog.Close>
+
+            <Dialog.Close>
+                {#snippet child({ props })}
+                    <button
+                        class="variant-filled btn btn-sm md:btn-md"
+                        {...mergeProps({ onclick: onFormSubmit }, props)}
+                    >
+                        {$t("general.add-user")}
+                    </button>
+                {/snippet}
+            </Dialog.Close>
+        </div>
+    {/snippet}
+</BaseModal>

@@ -3,7 +3,7 @@
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
     import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
-    import { melt } from "@melt-ui/svelte";
+    import { mergeProps } from "bits-ui";
 
     interface Props {
         item: ItemOnListDTO;
@@ -23,11 +23,10 @@
         {#snippet description()}
             {@html $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } })}
         {/snippet}
-        {#snippet trigger(trigger)}
+        {#snippet trigger({ props })}
             <button
                 class={["btn btn-sm md:btn-md", approve ? "variant-filled-success" : "variant-filled-error"]}
-                onclick={(e) => e.stopPropagation()}
-                use:melt={trigger}
+                {...mergeProps({ onclick: (e: MouseEvent) => e.stopPropagation() }, props)}
             >
                 {approve ? $t("wishes.approve") : $t("wishes.deny")}
             </button>
