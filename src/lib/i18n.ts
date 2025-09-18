@@ -25,6 +25,7 @@ export const supportedLangs: Lang[] = [
     defaultLang,
     { name: "French", endonym: "Français", code: "fr", loader: () => import("../i18n/fr.json") },
     { name: "German", endonym: "Deutsch", code: "de", loader: () => import("../i18n/de.json") },
+    { name: "Greek", endonym: "Νέα Ελληνικά", code: "el", loader: () => import("../i18n/el.json") },
     { name: "Norwegian", endonym: "Norsk", code: "no", loader: () => import("../i18n/nb.json") },
     {
         name: "Norwegian Bokmål",
