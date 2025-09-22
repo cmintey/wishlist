@@ -18,11 +18,10 @@
     const users = $state(data.users);
 
     const hasNewItems = async (list: ListData) => {
-        if (!list.items || list.items.length === 0) return false;
+        if (!list.hash) return false;
         const userHash = await hash(list.id);
-        const currentHash = await hashItems(list.items);
         const viewedHash = $viewedItems[userHash];
-        return currentHash !== viewedHash;
+        return list.hash !== viewedHash;
     };
 </script>
 

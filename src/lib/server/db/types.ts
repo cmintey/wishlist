@@ -121,6 +121,7 @@ interface UserTable {
     picture: string | null;
     roleId: Generated<number>;
     username: string;
+    preferredLanguage: string | null;
 }
 
 interface UserGroupMembershipTable {
@@ -136,6 +137,10 @@ export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UserUpdate = Updateable<UserTable>;
 
+export type List = Selectable<ListTable>;
+export type NewList = Insertable<ListTable>;
+export type ListUpdate = Updateable<ListTable>;
+
 export type SystemUser = Selectable<SystemUserTable>;
 export type NewSystemUser = Insertable<SystemUserTable>;
 export type SystemUserUpdate = Updateable<SystemUserTable>;
@@ -143,6 +148,14 @@ export type SystemUserUpdate = Updateable<SystemUserTable>;
 export type Session = Selectable<SessionTable>;
 export type NewSession = Insertable<SessionTable>;
 export type SessionUpdate = Updateable<SessionTable>;
+
+export type SignupToken = Selectable<SignupTokenTable>;
+export type NewSignupToken = Insertable<SignupTokenTable>;
+export type SignupTokenUpdate = Updateable<SignupTokenTable>;
+
+export type UserGroupMembership = Selectable<UserGroupMembershipTable>;
+export type NewUserGroupMembership = Insertable<UserGroupMembershipTable>;
+export type UserGroupMembershipUpdate = Updateable<UserGroupMembershipTable>;
 
 export interface DB {
     _prisma_migrations: _PrismaMigrations;

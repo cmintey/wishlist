@@ -2,9 +2,9 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { requireLogin, requireLoginOrError } from "$lib/server/auth";
 import { z } from "zod";
-import { client } from "$lib/server/prisma";
 import { logger } from "$lib/server/logger";
 import { getFormatter } from "$lib/server/i18n";
+import { userRepository } from "$lib/server/db/user.repository";
 
 export const load = (async () => {
     requireLogin();
@@ -29,14 +29,7 @@ export const actions = {
         }
 
         try {
-            await client.user.update({
-                data: {
-                    preferredLanguage: result.data.language
-                },
-                where: {
-                    id: user.id
-                }
-            });
+            await userRepository.update(user.id, { preferredLanguage: result.data.language });
         } catch (err) {
             logger.error({ err, lang: result.data.language, userId: user.id }, "Unable to update user's language");
             error(500, $t("errors.unable-to-update-preferred-language"));

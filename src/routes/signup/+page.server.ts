@@ -1,5 +1,4 @@
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
 import { getSignupSchema } from "$lib/server/validations";
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
@@ -11,6 +10,8 @@ import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/server/i18n";
 import { logger } from "$lib/server/logger";
 import z from "zod";
+import { signupTokenRepository } from "$lib/server/db/signupToken.repository";
+import { userRepository } from "$lib/server/db/user.repository";
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (locals.user) redirect(302, url.searchParams.get("redirectTo") ?? "/");
@@ -20,16 +21,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
     const token = url.searchParams.get("token");
     if (token) {
-        const signup = await client.signupToken.findFirst({
-            where: {
-                hashedToken: hashToken(token),
-                redeemed: false
-            },
-            select: {
-                id: true,
-                createdAt: true
-            }
-        });
+        const signup = await signupTokenRepository.findByHashedTokenAndNotRedeemed(hashToken(token));
 
         if (!signup) error(400, $t("errors.reset-token-not-found"));
 
@@ -61,22 +53,14 @@ export const actions: Actions = {
             if (!signupData.data.tokenId) {
                 error(401, $t("errors.this-instance-is-invite-only"));
             }
-            const signup = await client.signupToken.findUnique({
-                where: {
-                    id: signupData.data.tokenId
-                },
-                select: {
-                    createdAt: true,
-                    redeemed: true
-                }
-            });
+            const signup = await signupTokenRepository.findById(signupData.data.tokenId);
 
             if (!signup || signup.redeemed || !validateToken(signup.createdAt)) {
                 error(400, $t("errors.invite-code-invalid"));
             }
         }
 
-        const userCount = await client.user.count();
+        const userCount = await userRepository.count();
         try {
             const user = await createUser(
                 {
