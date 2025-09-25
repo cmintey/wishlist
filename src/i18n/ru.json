@@ -418,7 +418,7 @@
         "purchased-toast": "Помечено пункт {purchased, select, true {купленный} other {не купленный}}",
         "hide-description": "Скрыть описание",
         "show-description": "Показать описание",
-        "count-items": "{itemCount, plural, one {# предмет other {# предметов}}",
+        "count-items": "{itemCount, plural, one {# предмет} other {# предметов}}",
         "hide-all-currencies": "скрыть все валюты...",
         "show-all-currencies": "показать все валюты..."
     }
