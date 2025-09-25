@@ -20,7 +20,7 @@
         "@eslint/js": "^9.33.0",
         "@floating-ui/dom": "^1.7.3",
         "@humanspeak/svelte-markdown": "^0.8.10",
-        "@skeletonlabs/skeleton": "^2.11.0",
+        "@skeletonlabs/skeleton": "^3.0.0",
         "@skeletonlabs/tw-plugin": "^0.4.1",
         "@sveltejs/adapter-node": "^5.3.1",
         "@sveltejs/kit": "^2.33.0",
