@@ -103,7 +103,9 @@
         "test-email": "Test E-post",
         "test-email-sent-toast": "Test e-post sendt",
         "wishlist-mode-registry-tooltip": "En bruker med en offentlig liste. Brukere fra andre grupper kan komme med forslag hvis de har fått tilgang til de, og anonyme brukere kan gjøre krav på ønsket.",
-        "wishlist-mode-wishlist-tooltip": "Flere brukere og flere lister med krav- og ønskeforslag. Listene kan gjøres offenlige hvis det tillates av gruppen."
+        "wishlist-mode-wishlist-tooltip": "Flere brukere og flere lister med krav- og ønskeforslag. Listene kan gjøres offenlige hvis det tillates av gruppen.",
+        "claims-require-email": "Kreve e-post",
+        "claims-require-email-tooltip": "Krev en e-postadresse for å anonymt gjøre krav på et ønske."
     },
     "auth": {
         "update-password": "Oppdater passord",
@@ -212,7 +214,8 @@
         "could-not-claim-quantity-items": "Kunne ikke gjøre krav på {quantity} ønsker. Bare {availableQuantity} ønsker er tilgjengelige.",
         "language-is-required": "Språk er obligatorisk",
         "registration-is-disabled": "Registrering er skrudd av",
-        "unable-to-update-preferred-language": "Kunne ikke oppdatere det foretrukne språket"
+        "unable-to-update-preferred-language": "Kunne ikke oppdatere det foretrukne språket",
+        "email-is-required-for-public-claims": "E-postadresse kreves for å offentlig kunne gjøre krav på et ønske"
     },
     "a11y": {
         "a-person-looking-at-an-empty-board": "En person som ser på en tom tavle",
@@ -399,7 +402,7 @@
         "additional-items-requested": "{remainingQuantity, plural, =0 {Ingen flere elementer er tilgjengelige.} one {Ingen flere elementer er tilgjengelige.} other {Ingen flere elementer er tilgjengelige.}}",
         "claimed-by-multiple-users": "Gjort krav på av flere brukere",
         "claimed-info-text": "{claimedQuantity, plural, one {Du har gjort krav på # ønsker.} other {Du har gjort krav på # ønsker.}}",
-        "count-items": "{itemCount} ønsker",
+        "count-items": "{itemCount}, plural, one {# item} other {# items}}",
         "create-and-add-another": "Opprett og legg til flere",
         "enter-the-quantity-to-claim": "Oppgi antalle du vil gjøre krav på.",
         "hide-all-currencies": "skjul valutaene...",
