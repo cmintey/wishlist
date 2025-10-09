@@ -38,6 +38,8 @@
         "build": "Збірка: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "build-date": "Дата збірки: {buildDate}",
         "claims": "Бронювання",
-        "claims-name-tooltip": "Відображати ім'я користувача, який забронював річ."
+        "claims-name-tooltip": "Відображати ім'я користувача, який забронював річ.",
+        "claims-require-email": "Email обов'язковий",
+        "claims-require-email-tooltip": "Потрібна електронна адреса, щоб анонімно отримати предмет."
     }
 }
