@@ -78,7 +78,7 @@
         "metascraper-title": "^5.49.1",
         "nodemailer": "^7.0.5",
         "openid-client": "^6.6.4",
-        "pino": "^9.9.0",
+        "pino": "^10.0.0",
         "prisma": "^6.14.0",
         "sharp": "^0.34.3",
         "svelte-i18n": "^4.0.1",
