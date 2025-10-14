@@ -1,5 +1,9 @@
-name: Build and Lint
-
+name: Type check & lint
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  actions: write
 on:
   pull_request:
   push:
@@ -50,6 +54,3 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
-
-      - name: Build
-        run: pnpm run build

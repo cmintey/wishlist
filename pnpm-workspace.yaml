@@ -1,6 +1,6 @@
 engineStrict: true
-autoInstallPeers: true
-nodeLinker: hoisted
+autoInstallPeers: false
+strictPeerDependencies: false
 ignoredBuiltDependencies:
     - sharp
 supportedArchitectures:

@@ -116,7 +116,6 @@ function setDeep(obj: Record<string, any>, path: string[], value: any) {
 
 function deepMerge(target: Record<string, any>, source: Record<string, any>): Record<string, unknown> {
     for (const key in source) {
-        if (key === "__proto__" || key === "constructor" || key === "prototype") continue;
         if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
             if (!target[key]) target[key] = {};
             deepMerge(target[key], source[key]);

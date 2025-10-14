@@ -2,12 +2,15 @@
     import type { Snippet } from "svelte";
 
     interface Props {
+        title: string;
         children: Snippet;
     }
 
-    const { children }: Props = $props();
+    const { title, children }: Props = $props();
+    const id = $props.id();
 </script>
 
-<div class="card flex flex-col gap-2 px-4 py-2">
+<section class="card flex flex-col gap-2 px-4 py-2" aria-labelledby={`header-${id}`}>
+    <h3 id={`header-${id}`} class="h3">{title}</h3>
     {@render children()}
-</div>
+</section>

@@ -13,8 +13,7 @@
     const t = getFormatter();
 </script>
 
-<SettingsGroup>
-    <h3 class="h3">{$t("admin.oidc")}</h3>
+<SettingsGroup title={$t("admin.oidc")}>
     <label class="checkbox-label">
         <input id="enableOIDC" name="enableOIDC" class="checkbox" type="checkbox" bind:checked={config.oidc.enable} />
         <span>{$t("general.enable")}</span>
