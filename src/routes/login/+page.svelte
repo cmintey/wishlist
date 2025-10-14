@@ -58,7 +58,12 @@
         <div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
             {#if data.isCallback}
                 <div class="flex flex-col items-center justify-center space-y-4">
-                    <Progress width="w-12 md:w-16" />
+                    <Progress class="w-12 md:w-16" value={null}>
+                        <Progress.Circle>
+                            <Progress.CircleTrack />
+                            <Progress.CircleRange />
+                        </Progress.Circle>
+                    </Progress>
                     <span class="text-lg md:text-xl">{$t("auth.authenticating")}</span>
                 </div>
             {:else}
@@ -105,7 +110,12 @@
                         <div class="flex items-center justify-center gap-x-4">
                             <button class="preset-filled-primary-500 btn w-min" disabled={signingIn}>
                                 {#if signingIn}
-                                    <Progress width="w-4" />
+                                    <Progress class="w-4" value={null}>
+                                        <Progress.Circle>
+                                            <Progress.CircleTrack />
+                                            <Progress.CircleRange />
+                                        </Progress.Circle>
+                                    </Progress>
                                 {/if}
                                 <span>{$t("auth.sign-in")}</span>
                             </button>

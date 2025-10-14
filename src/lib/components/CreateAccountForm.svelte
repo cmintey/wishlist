@@ -85,7 +85,12 @@
                 type="submit"
             >
                 {#if signingIn}
-                    <Progress width="w-4" />
+                    <Progress class="w-4" value={null}>
+                        <Progress.Circle>
+                            <Progress.CircleTrack />
+                            <Progress.CircleRange />
+                        </Progress.Circle>
+                    </Progress>
                 {/if}
                 <span>{$t("auth.create-account")}</span>
             </button>

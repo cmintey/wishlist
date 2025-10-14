@@ -74,7 +74,12 @@
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
                 {#if submitting}
-                    <Progress width="w-4" />
+                    <Progress class="w-4" value={null}>
+                        <Progress.Circle>
+                            <Progress.CircleTrack />
+                            <Progress.CircleRange />
+                        </Progress.Circle>
+                    </Progress>
                 {/if}
                 <span>{$t("setup.next")}</span>
                 <iconify-icon icon="ion:arrow-forward"></iconify-icon>

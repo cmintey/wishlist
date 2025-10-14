@@ -1,7 +1,7 @@
 <script lang="ts">
     import { zxcvbn, zxcvbnOptions, type ZxcvbnResult } from "@zxcvbn-ts/core";
     import { loadOptions, meterLabel } from "$lib/zxcvbn";
-    import { type PopupSettings, Progress } from "@skeletonlabs/skeleton-svelte";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -83,12 +83,12 @@
 
 {#if strengthMeter && value !== "" && strength}
     <div class="flex flex-row items-center gap-x-1 pt-1">
-        <Progress
-            label={$t("a11y.password-strength")}
-            max={5}
-            value={strength.score + 1}
-            bind:meter={meterLookup[strength.score.valueOf()]}
-        />
+        <Progress max={5} value={strength.score + 1}>
+            <Progress.Label class="sr-only">{$t("a11y.password-strength")}</Progress.Label>
+            <Progress.Track>
+                <Progress.Range class={meterLookup[strength.score.valueOf()]} />
+            </Progress.Track>
+        </Progress>
         <div
             class="flex items-center"
             class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}

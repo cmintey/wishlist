@@ -110,7 +110,12 @@
                     type="submit"
                 >
                     {#if sending}
-                        <Progress stroke={64} width="w-6" />
+                        <Progress class="w-6" value={null}>
+                            <Progress.Circle>
+                                <Progress.CircleTrack />
+                                <Progress.CircleRange />
+                            </Progress.Circle>
+                        </Progress>
                     {:else}
                         {$t("admin.test-email")}
                     {/if}
