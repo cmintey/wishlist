@@ -71,15 +71,15 @@
 
 <div class="flex flex-col h-full">
     <!-- Image extends to card edges -->
-    <div class="relative w-full h-48 overflow-hidden rounded-t-container-token">
+    <div class="relative w-full h-48 overflow-hidden rounded-t-lg">
         <Image
-            class="w-full h-full object-cover rounded-t-container-token"
+            class="w-full h-full object-cover rounded-t-lg"
             alt={item.name}
             data-testid="image"
             referrerpolicy="no-referrer"
             src={imageUrl}
         >
-            {@render defaultImage($t, ["w-full", "h-full", "rounded-t-container-token"])}
+            {@render defaultImage($t, ["w-full", "h-full", "rounded-t-lg"])}
         </Image>
     </div>
 
