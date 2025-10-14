@@ -77,7 +77,7 @@
 >
     <div class="grid grid-cols-12 gap-4 pb-4">
         <div class="col-span-full flex w-full flex-row flex-wrap gap-4">
-            <label class="flex-grow" for="name">
+            <label class="grow" for="name">
                 <span>{$t("auth.name")}</span>
                 <ClearableInput
                     id="name"

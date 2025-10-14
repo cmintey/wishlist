@@ -35,7 +35,7 @@
 <svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="variant-ghost-primary card-header flex flex-row items-center gap-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
+            class="variant-ghost-primary card-header rounded-tl-container-token rounded-tr-container-token flex flex-row items-center gap-x-2 px-4 py-2"
         >
             <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
@@ -45,7 +45,11 @@
     {/if}
 
     <div class="grid grid-cols-[auto_1fr] items-center gap-4 p-4">
-        <div style="background-color: {iconColor};" class="avatar" class:bg-primary-400-500-token={!iconColor}>
+        <div
+            style="background-color: {iconColor};"
+            class="text-surface-50 flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold md:w-16"
+            class:bg-primary-400-500-token={!iconColor}
+        >
             <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
@@ -81,9 +85,3 @@
         </div>
     </div>
 </svelte:element>
-
-<style lang="postcss">
-    .avatar {
-        @apply flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold text-surface-50 md:w-16;
-    }
-</style>

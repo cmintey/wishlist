@@ -29,6 +29,7 @@
         "@sveltejs/kit": "^2.33.0",
         "@sveltejs/vite-plugin-svelte": "^6.1.2",
         "@tailwindcss/forms": "^0.5.10",
+        "@tailwindcss/vite": "^4.1.14",
         "@types/eslint": "^9.6.1",
         "@types/node": "^22.18.8",
         "@types/nodemailer": "^7.0.0",
@@ -40,8 +41,6 @@
         "fuzzysort": "^3.1.0",
         "globals": "^16.3.0",
         "pino-pretty": "^13.1.1",
-        "postcss": "^8.5.6",
-        "postcss-load-config": "^6.0.1",
         "prettier": "^3.6.2",
         "prettier-plugin-svelte": "^3.4.0",
         "prettier-plugin-tailwindcss": "^0.6.14",
@@ -51,14 +50,13 @@
         "svelte-dnd-action": "^0.9.64",
         "svelte-eslint-parser": "^1.3.0",
         "svelte-preprocess": "^6.0.3",
-        "tailwindcss": "^3.4.17",
+        "tailwindcss": "^4.1.14",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1",
         "typescript": "^5.9.2",
         "typescript-eslint": "^8.40.0",
         "vite": "^7.1.2",
         "vite-plugin-pwa": "^1.0.2",
-        "vite-plugin-tailwind-purgecss": "^0.3.5",
         "workbox-build": "^7.3.0",
         "workbox-window": "^7.3.0"
     },
@@ -105,7 +103,8 @@
             "esbuild",
             "prisma",
             "re2",
-            "svelte-preprocess"
+            "svelte-preprocess",
+            "@tailwindcss/oxide"
         ]
     }
 }

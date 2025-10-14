@@ -1,10 +1,10 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
 import { SvelteKitPWA } from "@vite-pwa/sveltekit";
 import { exec } from "child_process";
 import { env } from "process";
 import { promisify } from "util";
 import type { UserConfig } from "vite";
-import { purgeCss } from "vite-plugin-tailwind-purgecss";
 
 // Get current tag/commit and last commit date from git
 const pexec = promisify(exec);
@@ -17,8 +17,8 @@ const [version, sha] = (
 
 const config: UserConfig = {
     plugins: [
+        tailwindcss(),
         sveltekit(),
-        purgeCss(),
         SvelteKitPWA({
             registerType: "autoUpdate",
             manifest: {

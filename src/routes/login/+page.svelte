@@ -114,7 +114,7 @@
                             {/if}
                         </div>
 
-                        <a class="absolute top-0 !mt-0 pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
+                        <a class="absolute top-0 mt-0! pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
                             {$t("auth.forgot-password")}
                         </a>
                     </div>

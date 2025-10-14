@@ -326,7 +326,7 @@
                         type="checkbox"
                         value={list.id}
                     />
-                    <div class="!mt-0 flex flex-row gap-x-2">
+                    <div class="mt-0! flex flex-row gap-x-2">
                         <span>
                             {list.name}
                         </span>
