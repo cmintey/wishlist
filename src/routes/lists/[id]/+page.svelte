@@ -238,7 +238,9 @@
             <ClaimFilterChip />
         {/if}
         <SortBy />
-        <ListViewModeChip {isTileView} />
+        {#if !reordering}
+            <ListViewModeChip {isTileView} />
+        {/if}
     </div>
     {#if data.list.owner.isMe}
         <div class="flex flex-row flex-wrap items-center gap-2">
@@ -303,9 +305,9 @@
 {:else}
     <!-- items -->
     <div
-        class={isTileView 
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token"
-            : "flex flex-col space-y-4 rounded-container-token"
+        class={reordering || !isTileView
+            ? "flex flex-col space-y-4 rounded-container-token"
+            : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token"
         }
         data-testid="items-container"
         onconsider={handleDnd}

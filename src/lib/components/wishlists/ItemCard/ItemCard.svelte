@@ -305,7 +305,27 @@
     role={reorderActions ? "none" : "button"}
 >
     {#if reorderActions}
-        <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
+        <!-- Reorder view - always use list layout -->
+        <ListItemCard
+            {item}
+            {user}
+            {showClaimedName}
+            {requireClaimEmail}
+            {groupId}
+            {showFor}
+            {onPublicList}
+            reorderActions={true}
+            {onDecreasePriority}
+            {onIncreasePriority}
+            onClaim={handleClaim}
+            onUnclaim={handleUnclaim}
+            onPurchased={handlePurchased}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onApproval={handleApproval}
+            defaultImage={defaultImage}
+            {id}
+        />
     {:else if isTileView}
         <GridItemCard
             {item}
@@ -315,6 +335,7 @@
             {groupId}
             {showFor}
             {onPublicList}
+            reorderActions={false}
             onClaim={handleClaim}
             onUnclaim={handleUnclaim}
             onPurchased={handlePurchased}
@@ -333,6 +354,7 @@
             {groupId}
             {showFor}
             {onPublicList}
+            reorderActions={false}
             onClaim={handleClaim}
             onUnclaim={handleUnclaim}
             onPurchased={handlePurchased}
