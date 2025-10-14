@@ -365,7 +365,11 @@
         "delete-list-confirmation": "¿Está seguro de querer eliminar esta lista? Cualquier objeto no asociado con otra lista también será eliminado.",
         "my-lists": "Mis listas",
         "no-lists-yet": "No hay listas aún",
-        "public": "Públicas"
+        "public": "Públicas",
+        "switch-to-list-view": "Cambiar a vista de lista",
+        "switch-to-tile-view": "Cambiar a vista de mosaicos",
+        "tile-view": "Vista de Mosaicos",
+        "list-view": "Vista de Lista"
     },
     "app": {
         "home": "Inicio",

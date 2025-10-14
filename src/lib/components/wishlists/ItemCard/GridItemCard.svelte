@@ -73,13 +73,13 @@
     <!-- Image extends to card edges -->
     <div class="relative w-full h-48 overflow-hidden rounded-t-container-token">
         <Image
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover rounded-t-container-token"
             alt={item.name}
             data-testid="image"
             referrerpolicy="no-referrer"
             src={imageUrl}
         >
-            {@render defaultImage($t, ["w-full", "h-full"])}
+            {@render defaultImage($t, ["w-full", "h-full", "rounded-t-container-token"])}
         </Image>
     </div>
 

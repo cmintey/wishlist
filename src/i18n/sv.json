@@ -382,7 +382,11 @@
         "public": "Publik",
         "delete-list-confirmation": "Är du säker på att du vill ta bort denna listan? Artiklar som inte hör samman med en annan lista kommer också att tas bort.",
         "added-by-somebody-else": "Tillagd av <span class=\"text-secondary-700-200-token font-bold\">någon annan</span>",
-        "item-was-removed-from-list": "{name} togs bort från denna listan"
+        "item-was-removed-from-list": "{name} togs bort från denna listan",
+        "switch-to-list-view": "Växla till listvy",
+        "switch-to-tile-view": "Växla till rutvy",
+        "tile-view": "Rutvy",
+        "list-view": "Listvy"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
