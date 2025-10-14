@@ -46,6 +46,15 @@
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
+    let quantityDisplay = $derived(unlimited ? $t("general.na") : quantity);
+    
+    // Reset quantity when item prop changes (for form clearing)
+    $effect(() => {
+        if (item.quantity !== undefined) {
+            quantity = item.quantity || 1;
+            unlimited = item.quantity === null;
+        }
+    });
 
     const listsHavingItem = $derived.by(() => {
         return productData.lists
@@ -241,20 +250,19 @@
                         name="quantity"
                         class="input w-0 min-w-full"
                         autocomplete="off"
-                        defaultValue={1}
+                        bind:value={quantityDisplay}
                         disabled={unlimited}
                         inputmode="numeric"
                         max="999"
                         min="1"
                         onchange={(e) => {
-                            if (!isNaN(e.currentTarget.valueAsNumber)) {
+                            if (!unlimited && !isNaN(e.currentTarget.valueAsNumber)) {
                                 quantity = e.currentTarget.valueAsNumber;
                             }
                         }}
                         required={unlimited ? false : true}
                         step="1"
                         type={unlimited ? "text" : "number"}
-                        value={unlimited ? $t("general.na") : quantity}
                     />
                 </div>
             </div>

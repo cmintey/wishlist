@@ -11,13 +11,14 @@
     const t = getFormatter();
     const toastStore = getToastStore();
 
-    let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
+    let itemData = $state<Pick<Item, "name" | "price" | "url" | "note" | "imageUrl" | "quantity">>({
         name: "",
         price: null,
         url: null,
         note: null,
-        imageUrl: null
-    };
+        imageUrl: null,
+        quantity: 1
+    });
 
     let warningHidden = $state(false);
 
@@ -29,13 +30,21 @@
         });
 
     const clearFields = () => {
-        const fieldIds = ["url", "name", "price", "formatted-price", "quantity", "image", "imageUrl", "note"];
+        const fieldIds = ["url", "name", "price", "formatted-price", "image", "imageUrl", "note"];
         fieldIds.forEach((id) => {
             const field = document.getElementById(id) as HTMLInputElement;
             if (field) {
                 field.value = "";
             }
         });
+        
+        // Reset the itemData object to initial state
+        itemData.name = "";
+        itemData.price = null;
+        itemData.url = null;
+        itemData.note = null;
+        itemData.imageUrl = null;
+        itemData.quantity = 1;
     };
 </script>
 
