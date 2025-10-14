@@ -277,15 +277,15 @@
             "bg-surface-300-600-token",
             "grid",
             "place-items-center",
-            "rounded",
-            "aspect-square",
+            sizeClasses.includes("w-full") ? "rounded-t-container-token" : "rounded",
+            sizeClasses.includes("w-full") ? "" : "aspect-square",
             sizeClasses
         ]}
         aria-label={t("a11y.default-item-image")}
         data-testid="image"
         role="img"
     >
-        <iconify-icon class="w-8 md:w-16" height="none" icon="ion:gift"></iconify-icon>
+        <iconify-icon class={sizeClasses.includes("w-full") ? "w-16 h-16" : "w-8 md:w-16"} height="none" icon="ion:gift"></iconify-icon>
     </div>
 {/snippet}
 
@@ -302,78 +302,83 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    <header class="card-header flex w-full px-4 pt-4">
-        {#if item.url}
-            <a
-                id={`${id}-name`}
-                class={isTileView 
-                    ? "line-clamp-3 text-sm font-bold dark:!text-primary-200 md:text-base text-center w-full"
-                    : "line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl w-full"
-                }
-                data-testid="name"
-                href={item.url}
-                onclick={(e) => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-            >
-                {item.name}
-            </a>
-        {:else}
-            <span 
-                id={`${id}-name`} 
-                class={isTileView 
-                    ? "line-clamp-3 text-sm font-bold md:text-base text-center w-full" 
-                    : "line-clamp-2 text-xl font-bold md:text-2xl w-full"
-                } 
-                data-testid="name"
-            >
-                {item.name}
-            </span>
-        {/if}
-    </header>
-
     {#if isTileView}
-        <div class="flex flex-col p-4">
-            <div class="flex justify-center mb-4">
+        <div class="flex flex-col h-full">
+            <!-- Image extends to card edges -->
+            <div class="relative w-full h-48 overflow-hidden rounded-t-container-token">
                 <Image
-                    class="aspect-square h-32 w-32 rounded object-contain md:h-40 md:w-40"
+                    class="w-full h-full object-cover"
                     alt={item.name}
                     data-testid="image"
                     referrerpolicy="no-referrer"
                     src={imageUrl}
                 >
-                    {@render defaultImage($t)}
+                    {@render defaultImage($t, ["w-full", "h-full"])}
                 </Image>
             </div>
 
-            <div class="flex flex-col space-y-2">
-                {#if item.price || item.itemPrice}
-                    <div class="flex items-center justify-center gap-x-2">
-                        <iconify-icon icon="ion:pricetag" class="text-sm"></iconify-icon>
-                        <span class="text-sm font-semibold" data-testid="price">{formatPrice(item)}</span>
-                    </div>
+            <!-- Title below image -->
+            <header class="card-header flex w-full px-4 pt-4">
+                {#if item.url}
+                    <a
+                        id={`${id}-name`}
+                        class="line-clamp-1 text-sm font-bold dark:!text-primary-200 md:text-base text-left w-full"
+                        data-testid="name"
+                        href={item.url}
+                        onclick={(e) => e.stopPropagation()}
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        {item.name}
+                    </a>
+                {:else}
+                    <span 
+                        id={`${id}-name`} 
+                        class="line-clamp-1 text-sm font-bold md:text-base text-left w-full" 
+                        data-testid="name"
+                    >
+                        {item.name}
+                    </span>
                 {/if}
+            </header>
 
-                {#if item.quantity}
-                    <div class="flex items-center justify-center gap-2 text-xs" data-testid="quantity">
-                        <iconify-icon icon="ion:gift" class="text-sm"></iconify-icon>
-                        <div class="flex flex-row flex-wrap gap-x-1">
-                            <span data-testid="quantity-desired">
+            <!-- Content area with consistent padding -->
+            <div class="flex flex-col space-y-2 p-4 flex-1">
+                <!-- Price with fallback -->
+                <div class="flex items-center gap-x-2">
+                    <iconify-icon icon="ion:pricetag" class="text-sm"></iconify-icon>
+                    <span class="text-sm font-semibold" data-testid="price">
+                        {#if item.price || item.itemPrice}
+                            {formatPrice(item)}
+                        {:else}
+                            ???
+                        {/if}
+                    </span>
+                </div>
+
+                <!-- Quantity with fallback -->
+                <div class="flex items-center gap-2 text-xs" data-testid="quantity">
+                    <iconify-icon icon="ion:gift" class="text-sm"></iconify-icon>
+                    <div class="flex flex-row flex-wrap gap-x-1">
+                        <span data-testid="quantity-desired">
+                            {#if item.quantity}
                                 {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
-                            </span>
-                            {#if user?.id !== item.userId}
-                                <span>·</span>
-                                <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
-                                    {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                                </span>
+                            {:else}
+                                unlimited
                             {/if}
-                        </div>
+                        </span>
+                        {#if user?.id !== item.userId && item.quantity}
+                            <span>·</span>
+                            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
+                                {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
+                            </span>
+                        {/if}
                     </div>
-                {/if}
+                </div>
 
-                <div class="flex items-center justify-center gap-2">
+                <div class="flex items-center gap-2">
                     <iconify-icon icon="ion:person" class="text-sm"></iconify-icon>
-                    <span class="text-wrap text-xs text-center" data-testid="added-by">
+                    <span class="text-wrap text-xs text-left" data-testid="added-by">
                         {#if showFor}
                             {@html $t("wishes.for", { values: { name: item.user.name } })}
                         {:else if !onPublicList}
@@ -387,9 +392,9 @@
                 </div>
 
                 {#if item.note}
-                    <div class="flex items-start justify-center gap-2">
+                    <div class="flex items-start gap-2">
                         <iconify-icon icon="ion:reader" class="text-sm mt-0.5 flex-shrink-0"></iconify-icon>
-                        <div class="line-clamp-2 whitespace-pre-wrap text-xs text-center" data-testid="notes">
+                        <div class="line-clamp-2 whitespace-pre-wrap text-xs text-left" data-testid="notes">
                             <Markdown source={item.note} />
                         </div>
                     </div>
@@ -397,6 +402,30 @@
             </div>
         </div>
     {:else}
+        <header class="card-header flex w-full px-4 pt-4">
+            {#if item.url}
+                <a
+                    id={`${id}-name`}
+                    class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl w-full"
+                    data-testid="name"
+                    href={item.url}
+                    onclick={(e) => e.stopPropagation()}
+                    rel="noreferrer"
+                    target="_blank"
+                >
+                    {item.name}
+                </a>
+            {:else}
+                <span 
+                    id={`${id}-name`} 
+                    class="line-clamp-2 text-xl font-bold md:text-2xl w-full" 
+                    data-testid="name"
+                >
+                    {item.name}
+                </span>
+            {/if}
+        </header>
+
         <div class="flex flex-row gap-x-4 p-4">
             <Image
                 class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
@@ -409,29 +438,37 @@
             </Image>
 
             <div class="flex flex-col">
-                {#if item.price || item.itemPrice}
-                    <div class="flex items-center gap-x-2">
-                        <iconify-icon icon="ion:pricetag"></iconify-icon>
-                        <span class="text-lg font-semibold" data-testid="price">{formatPrice(item)}</span>
-                    </div>
-                {/if}
+                <!-- Price with fallback -->
+                <div class="flex items-center gap-x-2">
+                    <iconify-icon icon="ion:pricetag"></iconify-icon>
+                    <span class="text-lg font-semibold" data-testid="price">
+                        {#if item.price || item.itemPrice}
+                            {formatPrice(item)}
+                        {:else}
+                            ???
+                        {/if}
+                    </span>
+                </div>
 
-                {#if item.quantity}
-                    <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
-                        <div class="flex flex-row flex-wrap gap-x-2">
-                            <span data-testid="quantity-desired">
+                <!-- Quantity with fallback -->
+                <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
+                    <iconify-icon icon="ion:gift"></iconify-icon>
+                    <div class="flex flex-row flex-wrap gap-x-2">
+                        <span data-testid="quantity-desired">
+                            {#if item.quantity}
                                 {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
-                            </span>
-                            {#if user?.id !== item.userId}
-                                <span>·</span>
-                                <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
-                                    {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                                </span>
+                            {:else}
+                                unlimited
                             {/if}
-                        </div>
+                        </span>
+                        {#if user?.id !== item.userId && item.quantity}
+                            <span>·</span>
+                            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
+                                {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
+                            </span>
+                        {/if}
                     </div>
-                {/if}
+                </div>
 
                 <div class="flex items-center gap-2">
                     <iconify-icon icon="ion:person"></iconify-icon>
@@ -468,24 +505,47 @@
         {#if reorderActions}
             <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
         {:else}
-            <ClaimButtons
-                {item}
-                onClaim={handleClaim}
-                {onPublicList}
-                onPurchase={handlePurchased}
-                onUnclaim={handleUnclaim}
-                showName={showClaimedName}
-                {user}
-            />
+            <div class="flex items-center gap-x-2">
+                <ClaimButtons
+                    {item}
+                    onClaim={handleClaim}
+                    {onPublicList}
+                    onPurchase={handlePurchased}
+                    onUnclaim={handleUnclaim}
+                    showName={showClaimedName}
+                    {user}
+                />
+                
+                <!-- Edit button on the left -->
+                {#if item.approved && (user?.id === item.user?.id || user?.id === item.addedBy?.id)}
+                    <button
+                        class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
+                        aria-label={$t("wishes.edit")}
+                        onclick={(e) => {
+                            e.stopPropagation();
+                            handleEdit();
+                        }}
+                        title={$t("wishes.edit")}
+                    >
+                        <iconify-icon icon="ion:edit"></iconify-icon>
+                    </button>
+                {/if}
+            </div>
 
-            <ManageButtons
-                {item}
-                onApprove={() => handleApproval(true)}
-                onDelete={handleDelete}
-                onDeny={() => handleApproval(false)}
-                onEdit={handleEdit}
-                {user}
-            />
+            <!-- Delete button on the right -->
+            {#if item.approved && (user?.id === item.user?.id || user?.id === item.addedBy?.id)}
+                <button
+                    class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
+                    aria-label={$t("wishes.delete")}
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        handleDelete();
+                    }}
+                    title={$t("wishes.delete")}
+                >
+                    <iconify-icon icon="ion:trash"></iconify-icon>
+                </button>
+            {/if}
         {/if}
     </footer>
 </div>
