@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import { type TableSource, type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import Search from "../Search.svelte";
     import { GroupsAPI } from "$lib/api/groups";
     import { getFormatter } from "$lib/i18n";
@@ -21,16 +20,11 @@
     const modalStore = getModalStore();
     const toastStore = getToastStore();
 
+    const headers = [$t("auth.name"), $t("general.user-count")];
+
     let groupsFiltered: Group[] = $state(groups);
 
-    let groupData: TableSource = $derived({
-        head: [$t("auth.name"), $t("general.user-count")],
-        body: tableMapperValues(groupsFiltered, ["name", "userCount"]),
-        meta: tableSourceMapper(groupsFiltered, ["name", "id"])
-    });
-
-    const selectionHandler = (meta: CustomEvent<string[]>) => {
-        const group: Group = meta.detail as unknown as Group;
+    const selectionHandler = (group: Group) => {
         goto(`/admin/groups/${group.id}`);
     };
 
@@ -77,3 +71,23 @@
 {#if groupData}
     <Table interactive source={groupData} on:selected={selectionHandler} />
 {/if}
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr>
+                {#each headers as header}
+                    <th>{header}</th>
+                {/each}
+            </tr>
+        </thead>
+        <tbody class="[&>tr]:hover:preset-tonal-primary">
+            {#each groupsFiltered as group}
+                <tr onclick={() => selectionHandler(group)}>
+                    <td>{group.name}</td>
+                    <td>{group.userCount}</td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>

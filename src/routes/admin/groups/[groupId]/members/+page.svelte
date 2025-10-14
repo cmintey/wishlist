@@ -117,9 +117,9 @@
 {/if}
 
 <div class="flex flex-col space-y-2">
-    <div class="table-container">
-        <table class="table-interactive table" role="grid">
-            <thead class="table-head">
+    <div class="table-wrap">
+        <table class="table" role="grid">
+            <thead>
                 <tr>
                     {#each head as label}
                         <th>
@@ -130,7 +130,7 @@
                     <th>{$t("general.remove")}</th>
                 </tr>
             </thead>
-            <tbody class="table-body">
+            <tbody class="[&>tr]:hover:preset-tonal-primary">
                 {#each data.group.users as user, row}
                     <tr aria-rowindex={row}>
                         {#each dataKeys as key, col}
