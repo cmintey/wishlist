@@ -3,13 +3,13 @@
     import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
-    import { FileUpload } from "@skeletonlabs/skeleton-svelte";
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
     import { goto } from "$app/navigation";
     import MarkdownEditor from "../MarkdownEditor.svelte";
+    import FileUpload from "../FileUpload.svelte";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -42,8 +42,6 @@
     let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
-    let files: FileList | undefined = $state();
-    let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
 
@@ -270,21 +268,7 @@
 
     <label class="col-span-full md:col-span-3" for="image">
         <span>{$t("wishes.upload-image")}</span>
-        <div
-            class="bg-surface-200-800 border-surface-500 rounded-base grid grid-cols-[auto_1fr] items-center gap-2 border"
-        >
-            <FileUpload
-                id="image"
-                name="image"
-                class="py-1 pl-1"
-                accept="image/*"
-                button="btn btn-sm preset-filled"
-                bind:files
-            >
-                {$t("general.select-file")}
-            </FileUpload>
-            <span>{uploadedImageName}</span>
-        </div>
+        <FileUpload name="image" class="py-1 pl-1" accept="image/*"></FileUpload>
     </label>
 
     <label class="col-span-full md:col-span-4" for="imageUrl">

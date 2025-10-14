@@ -43,15 +43,12 @@
                             };
                         }}
                     >
-                        <FileUpload
-                            id="profilePic"
-                            name="profilePic"
-                            accept="image/*"
-                            aria-label={$t("a11y.upload-profile-image")}
-                            button="btn-icon btn-icon-sm preset-tonal-secondary"
-                            on:change={() => submitButton?.click()}
-                        >
-                            <iconify-icon class="text-2xl" icon="ion:camera"></iconify-icon>
+                        <FileUpload name="profilePic" accept="image/*" onFileAccept={() => submitButton?.click()}>
+                            <FileUpload.Trigger class="btn-icon btn-icon-sm preset-tonal-secondary">
+                                <iconify-icon class="text-2xl" icon="ion:camera"></iconify-icon>
+                                <span class="sr-only">{$t("a11y.upload-profile-image")}</span>
+                            </FileUpload.Trigger>
+                            <FileUpload.HiddenInput />
                         </FileUpload>
                         <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button bind:this={submitButton} hidden type="submit"></button>
