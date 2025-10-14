@@ -58,7 +58,7 @@
             </span>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 <div class="flex flex-row items-center gap-2">
-                    <Avatar user={list.owner} width="w-6" />
+                    <Avatar class="w-6" user={list.owner} />
                     <span class="text-primary-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
 

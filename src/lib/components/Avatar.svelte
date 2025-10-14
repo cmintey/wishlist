@@ -1,23 +1,19 @@
 <script lang="ts">
     import { Avatar } from "@skeletonlabs/skeleton-svelte";
+    import type { ClassValue } from "svelte/elements";
 
     interface Props {
         user?: {
             name: string;
             picture?: string | null;
         };
-        [key: string]: any;
+        class: ClassValue;
     }
 
-    let { children, ...props }: Props = $props();
+    let { user, ...props }: Props = $props();
 </script>
 
-<Avatar
-    style="height:100%"
-    background="bg-primary-500"
-    initials={props.user?.name.split(" ").reduce((x, y) => x + y.at(0), "")}
-    src={props.user?.picture ? `/api/assets/${props.user.picture}` : ""}
-    {...props}
->
-    {@render children()}
+<Avatar {...props}>
+    <Avatar.Image src={user?.picture ? `/api/assets/${user.picture}` : ""}></Avatar.Image>
+    <Avatar.Fallback class="bg-primary-500">{user?.name.split(" ").reduce((x, y) => x + y.at(0), "")}</Avatar.Fallback>
 </Avatar>
