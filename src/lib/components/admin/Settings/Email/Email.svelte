@@ -2,7 +2,7 @@
     import SettingsGroup from "../SettingsGroup.svelte";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
-    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
 
     interface Props {
@@ -110,7 +110,7 @@
                     type="submit"
                 >
                     {#if sending}
-                        <ProgressRing stroke={64} width="w-6" />
+                        <Progress stroke={64} width="w-6" />
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

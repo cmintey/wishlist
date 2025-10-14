@@ -5,7 +5,7 @@
     import { steps } from "./steps";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
-    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
 
@@ -74,7 +74,7 @@
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
                 {#if submitting}
-                    <ProgressRing width="w-4" />
+                    <Progress width="w-4" />
                 {/if}
                 <span>{$t("setup.next")}</span>
                 <iconify-icon icon="ion:arrow-forward"></iconify-icon>

@@ -2,7 +2,7 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
-    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
@@ -58,7 +58,7 @@
         <div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
             {#if data.isCallback}
                 <div class="flex flex-col items-center justify-center space-y-4">
-                    <ProgressRing width="w-12 md:w-16" />
+                    <Progress width="w-12 md:w-16" />
                     <span class="text-lg md:text-xl">{$t("auth.authenticating")}</span>
                 </div>
             {:else}
@@ -105,7 +105,7 @@
                         <div class="flex items-center justify-center gap-x-4">
                             <button class="preset-filled-primary-500 btn w-min" disabled={signingIn}>
                                 {#if signingIn}
-                                    <ProgressRing width="w-4" />
+                                    <Progress width="w-4" />
                                 {/if}
                                 <span>{$t("auth.sign-in")}</span>
                             </button>

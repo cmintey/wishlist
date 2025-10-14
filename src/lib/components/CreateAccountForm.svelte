@@ -2,7 +2,7 @@
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         hideActions?: boolean;
@@ -85,7 +85,7 @@
                 type="submit"
             >
                 {#if signingIn}
-                    <ProgressRing width="w-4" />
+                    <Progress width="w-4" />
                 {/if}
                 <span>{$t("auth.create-account")}</span>
             </button>

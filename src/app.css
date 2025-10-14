@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "@skeletonlabs/skeleton";
-@import "@skeletonlabs/skeleton/optional/presets";
 @import "./theme.css";
 
 /* Add your theme import for your theme: "theme" here */
