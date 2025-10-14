@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Table, tableMapperValues, tableSourceMapper, type TableSource } from "@skeletonlabs/skeleton";
+    import { type TableSource } from "@skeletonlabs/skeleton-svelte";
     import Search from "../Search.svelte";
     import InviteUser from "./InviteUser.svelte";
     import type { Group } from "@prisma/client";
@@ -38,7 +38,7 @@
     };
 </script>
 
-<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:gap-x-4 md:space-y-0">
+<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
     <Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
     <form method="POST" use:enhance>
         <InviteUser {config} {groups} />

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
 
@@ -21,7 +21,7 @@
     };
 </script>
 
-<div class="w-100 flex flex-row items-center">
+<div class="flex w-100 flex-row items-center">
     <span class="text-ellipsis">
         <a href={url}>
             {@render children?.()}
@@ -43,9 +43,9 @@
         >
             <iconify-icon icon="ion:copy"></iconify-icon>
         </button>
-        <div class="card variant-filled-secondary p-2" data-popup="copy">
+        <div class="card preset-filled-secondary-500 p-2" data-popup="copy">
             {$t("general.copy-to-clipboard")}
-            <div class="variant-filled-secondary arrow"></div>
+            <div class="preset-filled-secondary-500 arrow"></div>
         </div>
         {#if copiedVisible}
             <span out:fade>{$t("general.copied")}</span>

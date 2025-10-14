@@ -7,7 +7,6 @@
     import type { Group } from "@prisma/client";
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
 
     const { onSuccess }: Props = $props();
@@ -68,7 +67,7 @@
                         {#each options as option}
                             <li>
                                 <a
-                                    class={[currentHash === option.hash && "!variant-filled-primary"]}
+                                    class={[currentHash === option.hash && "!preset-filled-primary-500"]}
                                     href={option.hash}
                                 >
                                     {option.label($t)}

@@ -35,7 +35,7 @@
 <svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="variant-ghost-primary card-header rounded-tl-container-token rounded-tr-container-token flex flex-row items-center gap-x-2 px-4 py-2"
+            class="preset-tonal-primary border-primary-500 card-header rounded-tl-container rounded-tr-container flex flex-row items-center gap-x-2 border px-4 py-2"
         >
             <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
@@ -48,21 +48,18 @@
         <div
             style="background-color: {iconColor};"
             class="text-surface-50 flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold md:w-16"
-            class:bg-primary-400-500-token={!iconColor}
+            class:bg-primary-500={!iconColor}
         >
             <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
-            <span
-                class="text-primary-700-200-token line-clamp-2 text-2xl font-bold md:text-4xl"
-                data-testid="list-name"
-            >
+            <span class="text-primary-800-200 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
                 {listName}
             </span>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 <div class="flex flex-row items-center gap-2">
                     <Avatar user={list.owner} width="w-6" />
-                    <span class="text-primary-700-200-token" data-testid="list-owner">{list.owner.name}</span>
+                    <span class="text-primary-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
 
                 {#if list.itemCount !== undefined}
@@ -74,7 +71,7 @@
                         </span>
                         {#if hasNewItems}
                             <iconify-icon
-                                class="text-primary-700-200-token opacity-40"
+                                class="text-primary-800-200 opacity-40"
                                 icon="ion:ellipse-sharp"
                                 width="0.5rem"
                             ></iconify-icon>

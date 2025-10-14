@@ -1,6 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { VirtualList } from "svelte-virtuallists";
     import fuzzysort from "fuzzysort";

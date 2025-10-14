@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { getDrawerStore } from "@skeletonlabs/skeleton";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
 
@@ -25,7 +24,7 @@
             <li>
                 <a
                     class="list-option gap-x-1 font-bold"
-                    class:variant-filled-primary={page.url.pathname === navItem.href}
+                    class:preset-filled-primary-500={page.url.pathname === navItem.href}
                     data-sveltekit-preload-data
                     href={navItem.href}
                     onclick={() => drawerStore.close()}

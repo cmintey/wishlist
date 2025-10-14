@@ -2,7 +2,7 @@
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { ProgressRadial } from "@skeletonlabs/skeleton";
+    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         hideActions?: boolean;
@@ -19,7 +19,7 @@
     let passwordConfirm = $state("");
 </script>
 
-<div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+<div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
     {#if data.id}
         <input id="tokenId" name="tokenId" class="hidden" value={data.id} />
     {/if}
@@ -31,7 +31,7 @@
         {/if}
     </label>
 
-    <div class="flex flex-col space-y-4 md:flex-row md:gap-x-2 md:space-y-0">
+    <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:gap-x-2">
         <label for="username">
             <span>{$t("auth.username")}</span>
             <input
@@ -80,12 +80,12 @@
     {#if !hideActions}
         <div class="flex items-center justify-center gap-x-4 pb-2">
             <button
-                class="variant-filled-primary btn w-min"
+                class="preset-filled-primary-500 btn w-min"
                 disabled={password !== passwordConfirm || signingIn}
                 type="submit"
             >
                 {#if signingIn}
-                    <ProgressRadial width="w-4" />
+                    <ProgressRing width="w-4" />
                 {/if}
                 <span>{$t("auth.create-account")}</span>
             </button>

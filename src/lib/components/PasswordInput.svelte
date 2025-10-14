@@ -1,7 +1,7 @@
 <script lang="ts">
     import { zxcvbn, zxcvbnOptions, type ZxcvbnResult } from "@zxcvbn-ts/core";
     import { loadOptions, meterLabel } from "$lib/zxcvbn";
-    import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings, Progress } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -83,7 +83,7 @@
 
 {#if strengthMeter && value !== "" && strength}
     <div class="flex flex-row items-center gap-x-1 pt-1">
-        <ProgressBar
+        <Progress
             label={$t("a11y.password-strength")}
             max={5}
             value={strength.score + 1}
@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <div class="card variant-filled p-4" data-popup="suggestions">
+    <div class="card preset-filled p-4" data-popup="suggestions">
         {#if strength.feedback.warning}
             <div class="flex flex-row items-center gap-x-4 pb-1">
                 <iconify-icon icon="ion:alert-circle"></iconify-icon>

@@ -4,7 +4,6 @@
     import type { Item } from "@prisma/client";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import { errorToast } from "$lib/components/toasts";
 
     const { data }: PageProps = $props();
@@ -41,8 +40,8 @@
 
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
     <div class="pb-4">
-        <aside class="alert variant-ghost-warning">
-            <div class="alert-message flex flex-row items-center gap-x-4 space-y-0">
+        <aside class="alert preset-tonal-warning border-warning-500 border">
+            <div class="alert-message flex flex-row items-center space-y-0 gap-x-4">
                 <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
                 <div>
                     <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>
@@ -52,7 +51,10 @@
                 </div>
             </div>
             <div class="alert-actions">
-                <button class="variant-ghost-warning btn btn-sm" onclick={() => (warningHidden = true)}>
+                <button
+                    class="preset-tonal-warning border-warning-500 btn btn-sm border"
+                    onclick={() => (warningHidden = true)}
+                >
                     {$t("general.ok")}
                 </button>
             </div>

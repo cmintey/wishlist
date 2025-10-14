@@ -1,5 +1,4 @@
 import type { Item } from "@prisma/client";
-import { localStorageStore } from "@skeletonlabs/skeleton";
 import type { Writable } from "svelte/store";
 
 export const viewedItems: Writable<Record<string, string>> = localStorageStore("viewedItems", {});

@@ -3,7 +3,7 @@
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import { isInstalled } from "$lib/stores/is-installed";
-    import { TabGroup, Tab } from "@skeletonlabs/skeleton";
+    import { Tab, Tabs } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -17,11 +17,11 @@
 </script>
 
 {#if user && $isInstalled}
-    <TabGroup
-        class="bottom-nav bg-surface-200-700-token w-full pt-4 md:hidden"
-        active="variant-glass-primary"
+    <Tabs
+        class="bottom-nav bg-surface-200-800 w-full pt-4 md:hidden"
+        active="preset-tonal-primary"
         border=""
-        hover="hover:variant-soft-primary"
+        hover="hover:preset-tonal-primary"
         justify="justify-around"
         padding="px-6 py-2"
         rounded="rounded-full"
@@ -36,7 +36,7 @@
                 <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
             </Tab>
         {/each}
-    </TabGroup>
+    </Tabs>
 {/if}
 
 <style global>

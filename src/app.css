@@ -1,10 +1,14 @@
 @import "tailwindcss";
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton/optional/presets";
+@import "./theme.css";
+
+/* Add your theme import for your theme: "theme" here */
 @plugin "@tailwindcss/forms";
 
 /* The following are classes defined in i18n files and are used */
 @source inline("text-secondary-700-200-token");
 @source inline("font-bold");
-@config '../tailwind.config.ts';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -144,7 +148,7 @@ label:not(.checkbox-label) {
 }
 
 input[type="checkbox"] {
-    @apply disabled:checked:bg-surface-400-500-token disabled:cursor-not-allowed;
+    @apply disabled:checked:bg-surface-500 disabled:cursor-not-allowed;
 }
 
 .checkbox-label {

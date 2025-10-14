@@ -8,9 +8,6 @@
 
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
-
-    import { getModalStore } from "@skeletonlabs/skeleton";
-
     const t = getFormatter();
     const modalStore = getModalStore();
 
@@ -40,20 +37,24 @@
     {/if}
 
     <footer class="modal-footer flex flex-wrap justify-between gap-y-2">
-        <button class="variant-ghost-surface btn btn-sm md:btn-md" onclick={onClose} type="button">
+        <button
+            class="preset-tonal-surface border-surface-500 btn btn-sm md:btn-md border"
+            onclick={onClose}
+            type="button"
+        >
             {$t("general.cancel")}
         </button>
         {#if $modalStore[0].meta.multipleLists}
             <div class="flex flex-wrap gap-2">
-                <button class="variant-filled-error btn btn-sm md:btn-md" onclick={onDelete} type="button">
+                <button class="preset-filled-error-500 btn btn-sm md:btn-md" onclick={onDelete} type="button">
                     {$t("wishes.all-lists")}
                 </button>
-                <button class="variant-filled-primary btn btn-sm md:btn-md" onclick={onRemove} type="button">
+                <button class="preset-filled-primary-500 btn btn-sm md:btn-md" onclick={onRemove} type="button">
                     {$t("wishes.this-list")}
                 </button>
             </div>
         {:else}
-            <button class="variant-filled btn btn-sm md:btn-md" onclick={onDelete} type="button">
+            <button class="preset-filled btn btn-sm md:btn-md" onclick={onDelete} type="button">
                 {$t("general.confirm")}
             </button>
         {/if}

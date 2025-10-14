@@ -2,7 +2,7 @@
     import SettingsGroup from "../SettingsGroup.svelte";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
-    import { ProgressRadial } from "@skeletonlabs/skeleton";
+    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
 
     interface Props {
@@ -104,13 +104,13 @@
             </div>
             <div class="flex w-full flex-row justify-end">
                 <button
-                    class="variant-ghost-primary btn mt-2 h-min w-fit"
+                    class="preset-tonal-primary border-primary-500 btn mt-2 h-min w-fit border"
                     disabled={!saved || sending}
                     formaction="/admin/settings?/send-test"
                     type="submit"
                 >
                     {#if sending}
-                        <ProgressRadial stroke={64} width="w-6" />
+                        <ProgressRing stroke={64} width="w-6" />
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

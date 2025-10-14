@@ -2,7 +2,6 @@
     import { getFormatter as getPriceFormatter, getLocaleConfig } from "$lib/price-formatter";
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
 
     interface Props {
@@ -99,7 +98,7 @@
         } catch {
             e.currentTarget.value = previousCurrency;
             toastStore.trigger({
-                background: "variant-filled-warning",
+                background: "preset-filled-warning-500",
                 message: $t("errors.invalid-currency-code")
             });
             return;
@@ -112,7 +111,7 @@
     <div class="input-group-shim">
         <iconify-icon icon="ion:pricetag"></iconify-icon>
     </div>
-    <div class="border-surface-400-500-token border-r focus:border-surface-400-500-token rtl:border-l">
+    <div class="border-surface-500 focus:border-surface-500 border-r rtl:border-l">
         <input {id} {name} {disabled} type="hidden" bind:value />
         <input
             bind:this={inputElement}
@@ -132,7 +131,7 @@
     </div>
     <input id="currency" name="currency" type="hidden" bind:value={currency} />
     <input
-        class="border-surface-400-500-token w-[8ch] border-l uppercase focus:border-surface-400-500-token"
+        class="border-surface-500 focus:border-surface-500 w-[8ch] border-l uppercase"
         data-testid="currency"
         maxlength="3"
         onchange={validateCurrency}

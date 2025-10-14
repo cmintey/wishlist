@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import { Tab } from "@skeletonlabs/skeleton";
+    import { Tab } from "@skeletonlabs/skeleton-svelte";
     import type { LayoutProps, Snapshot } from "./$types";
     import { GroupAPI } from "$lib/api/groups";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";

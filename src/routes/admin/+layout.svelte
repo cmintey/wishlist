@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Tab } from "@skeletonlabs/skeleton";
+    import { Tab } from "@skeletonlabs/skeleton-svelte";
     import type { LayoutProps, Snapshot } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { getFormatter } from "$lib/i18n";

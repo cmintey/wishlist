@@ -5,13 +5,7 @@
 </script>
 
 <script lang="ts">
-    import {
-        getDrawerStore,
-        getModalStore,
-        getToastStore,
-        type DrawerSettings,
-        type ModalSettings
-    } from "@skeletonlabs/skeleton";
+    import { type DrawerSettings, type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import type { User } from "@prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import ClaimButtons from "./ClaimButtons.svelte";
@@ -272,7 +266,7 @@
     <div
         class={[
             "flex-none",
-            "bg-surface-300-600-token",
+            "bg-surface-300-700",
             "grid",
             "place-items-center",
             "rounded",
@@ -290,7 +284,9 @@
 <div
     class="card block w-full text-start"
     class:card-hover={!reorderActions}
-    class:variant-ghost-warning={!item.approved}
+    class:preset-tonal-warning
+    border
+    border-warning-500={!item.approved}
     aria-labelledby={`${id}-name`}
     onclick={() => {
         if (!reorderActions) launchDrawer();
@@ -304,7 +300,7 @@
         {#if item.url}
             <a
                 id={`${id}-name`}
-                class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl"
+                class="dark:!text-primary-200 line-clamp-2 text-xl font-bold md:text-2xl"
                 data-testid="name"
                 href={item.url}
                 onclick={(e) => e.stopPropagation()}
@@ -348,7 +344,7 @@
                         </span>
                         {#if user?.id !== item.userId}
                             <span>·</span>
-                            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
+                            <span class="text-secondary-800-200 font-bold" data-testid="quantity-claimed">
                                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
                             </span>
                         {/if}
@@ -358,7 +354,7 @@
 
             <div class="flex items-center gap-2">
                 <iconify-icon icon="ion:person"></iconify-icon>
-                <span class="text-wrap text-base md:text-lg" data-testid="added-by">
+                <span class="text-base text-wrap md:text-lg" data-testid="added-by">
                     {#if showFor}
                         {@html $t("wishes.for", { values: { name: item.user.name } })}
                     {:else if !onPublicList}

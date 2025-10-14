@@ -15,7 +15,6 @@
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
@@ -157,7 +156,7 @@
                 const message = await resp.text();
                 toastStore.trigger({
                     message,
-                    background: "variant-filled-error"
+                    background: "preset-filled-error-500"
                 });
                 return;
             }
@@ -208,7 +207,7 @@
         if (!response.ok) {
             toastStore.trigger({
                 message: $t("wishes.unable-to-update-item-ordering"),
-                background: "variant-filled-error"
+                background: "preset-filled-error-500"
             });
             allItems = data.list.items;
         }
@@ -221,7 +220,7 @@
             <Markdown source={data.list.description} />
         {/if}
         <button
-            class="text-sm text-primary-700 dark:text-primary-500"
+            class="text-primary-700 dark:text-primary-500 text-sm"
             onclick={() => (hideDescription = !hideDescription)}
         >
             {hideDescription ? $t("wishes.show-description") : $t("wishes.hide-description")}
@@ -257,7 +256,7 @@
                         </TokenCopy>
                     </div>
                 {:else}
-                    <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>
+                    <button class="preset-outlined-surface-500 btn btn-sm" onclick={getOrCreatePublicList}>
                         {$t("wishes.share")}
                     </button>
                 {/if}
@@ -296,7 +295,7 @@
 {:else}
     <!-- items -->
     <div
-        class="flex flex-col space-y-4 rounded-container-token"
+        class="rounded-container flex flex-col space-y-4"
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}
@@ -304,7 +303,7 @@
             items,
             flipDurationMs,
             dragDisabled: false,
-            dropTargetClasses: ["variant-ringed-primary"],
+            dropTargetClasses: ["preset-outlined-primary-500"],
             dropTargetStyle: {}
         }}
     >
@@ -355,7 +354,7 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
+        class="preset-tonal-surface border-surface-500 btn fixed right-4 z-90 h-16 w-16 rounded-full border md:right-10 md:bottom-10 md:h-20 md:w-20"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"

@@ -3,7 +3,7 @@
     import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { env } from "$env/dynamic/public";
-    import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
+    import { FileUpload } from "@skeletonlabs/skeleton-svelte";
     import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
@@ -85,7 +85,7 @@
     const triggerToast = () => {
         toastStore.trigger({
             message: $t("errors.unable-to-find-product-information"),
-            background: "variant-filled-warning",
+            background: "preset-filled-warning-500",
             autohide: true,
             timeout: 5000
         });
@@ -182,7 +182,7 @@
             {#if productData.url}
                 <button
                     id="refresh-item"
-                    class="variant-ghost-primary btn btn-icon"
+                    class="preset-tonal-primary border-primary-500 btn btn-icon border"
                     aria-label={$t("a11y.refresh-item-data")}
                     onclick={(e) => {
                         e.preventDefault();
@@ -217,7 +217,7 @@
             />
         </div>
         {#if form?.errors?.name}
-            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form.errors.name[0]}</p>
+            <p class="unstyled text-error-600-400 pt-2 text-xs">{form.errors.name[0]}</p>
         {/if}
     </label>
 
@@ -264,25 +264,25 @@
             </label>
         </div>
         {#if form?.errors?.quantity}
-            <p class="unstyled text-error-500-400-token text-xs">{form.errors.quantity[0]}</p>
+            <p class="unstyled text-error-600-400 text-xs">{form.errors.quantity[0]}</p>
         {/if}
     </div>
 
     <label class="col-span-full md:col-span-3" for="image">
         <span>{$t("wishes.upload-image")}</span>
         <div
-            class="bg-surface-200-700-token border-surface-400-500-token grid grid-cols-[auto_1fr] items-center gap-2 border-token rounded-token"
+            class="bg-surface-200-800 border-surface-500 rounded-base grid grid-cols-[auto_1fr] items-center gap-2 border"
         >
-            <FileButton
+            <FileUpload
                 id="image"
                 name="image"
                 class="py-1 pl-1"
                 accept="image/*"
-                button="btn btn-sm variant-filled"
+                button="btn btn-sm preset-filled"
                 bind:files
             >
                 {$t("general.select-file")}
-            </FileButton>
+            </FileUpload>
             <span>{uploadedImageName}</span>
         </div>
     </label>
@@ -312,7 +312,7 @@
     <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
         <legend>{$t("wishes.lists")}</legend>
         <div
-            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+            class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-scroll border p-2"
             class:input-error={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
@@ -336,14 +336,14 @@
             {/each}
         </div>
         {#if form?.errors?.lists}
-            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists[0]}</p>
+            <p class="unstyled text-error-600-400 text-xs">{form.errors.lists[0]}</p>
         {/if}
     </fieldset>
 
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
     <div class="col-span-full flex w-full flex-col-reverse gap-2 sm:w-full sm:flex-row sm:justify-between">
-        <button class="variant-ghost-secondary btn" onclick={onCancel} type="button">
+        <button class="preset-tonal-secondary border-secondary-500 btn border" onclick={onCancel} type="button">
             {$t("general.cancel")}
         </button>
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2">
@@ -352,7 +352,7 @@
                     {$t("wishes.create-and-add-another")}
                 </button>
             {/if}
-            <button id="submit" class="variant-filled-primary btn" disabled={loading} type="submit">
+            <button id="submit" class="preset-filled-primary-500 btn" disabled={loading} type="submit">
                 {buttonText}
             </button>
         </div>

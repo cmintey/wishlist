@@ -1,7 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { getFormatter, supportedLangs } from "$lib/i18n";
-    import { getModalStore } from "@skeletonlabs/skeleton";
 
     interface Props {
         parent: any;

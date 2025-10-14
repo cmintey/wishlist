@@ -3,7 +3,7 @@
     import ChangePassword from "$lib/components/account/ChangePassword.svelte";
     import EditProfile from "$lib/components/account/EditProfile.svelte";
     import Avatar from "$lib/components/Avatar.svelte";
-    import { FileButton, getToastStore, Tab } from "@skeletonlabs/skeleton";
+    import { Tab, FileUpload } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
@@ -30,7 +30,7 @@
                 <div class="relative m-auto h-full w-full max-w-[150px]">
                     <Avatar user={data.user} width="w-32" />
                     <form
-                        class="absolute bottom-0 right-0 h-12 w-12"
+                        class="absolute right-0 bottom-0 h-12 w-12"
                         action="?/profilePicture"
                         enctype="multipart/form-data"
                         method="POST"
@@ -43,16 +43,16 @@
                             };
                         }}
                     >
-                        <FileButton
+                        <FileUpload
                             id="profilePic"
                             name="profilePic"
                             accept="image/*"
                             aria-label={$t("a11y.upload-profile-image")}
-                            button="btn-icon btn-icon-sm variant-glass-secondary"
+                            button="btn-icon btn-icon-sm preset-tonal-secondary"
                             on:change={() => submitButton?.click()}
                         >
                             <iconify-icon class="text-2xl" icon="ion:camera"></iconify-icon>
-                        </FileButton>
+                        </FileUpload>
                         <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button bind:this={submitButton} hidden type="submit"></button>
                     </form>

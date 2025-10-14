@@ -1,7 +1,6 @@
 <script lang="ts">
     import { SystemUsersAPI } from "$lib/api/users";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton";
     import { errorToast } from "../toasts";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
@@ -174,7 +173,7 @@
                     />
                 </label>
                 {#if error}
-                    <span class="text-error-500-400-token text-sm">{error}</span>
+                    <span class="text-error-600-400 text-sm">{error}</span>
                 {/if}
                 {#if claim}
                     <span class="subtext">
@@ -193,7 +192,7 @@
 
         <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
             {#if claim}
-                <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
+                <button class="preset-filled-error-500 btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
                     {$t("wishes.unclaim")}
                 </button>
             {/if}

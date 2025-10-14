@@ -1,7 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { General } from "$lib/components/admin/Settings";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { page } from "$app/state";
@@ -41,7 +40,7 @@
     {/if}
 
     <div class="flex w-full flex-row justify-end pt-6">
-        <button class="variant-filled-primary btn" type="submit">
+        <button class="preset-filled-primary-500 btn" type="submit">
             {$t("general.save")}
         </button>
     </div>

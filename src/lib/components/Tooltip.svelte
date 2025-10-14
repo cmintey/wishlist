@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
     import type { Snippet } from "svelte";
 
     interface Props {
@@ -30,8 +30,8 @@
             {/if}
         </span>
     </button>
-    <div class="card variant-filled-surface z-20 w-80 p-4" data-popup={popupId}>
+    <div class="card preset-filled-surface-500 z-20 w-80 p-4" data-popup={popupId}>
         {@render props.description()}
-        <div class="variant-filled-surface arrow"></div>
+        <div class="preset-filled-surface-500 arrow"></div>
     </div>
 </div>

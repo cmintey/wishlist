@@ -1,14 +1,6 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import {
-        Table,
-        tableMapperValues,
-        tableSourceMapper,
-        type TableSource,
-        getModalStore,
-        type ModalSettings,
-        getToastStore
-    } from "@skeletonlabs/skeleton";
+    import { type TableSource, type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import Search from "../Search.svelte";
     import { GroupsAPI } from "$lib/api/groups";
     import { getFormatter } from "$lib/i18n";
@@ -74,9 +66,9 @@
     };
 </script>
 
-<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:gap-x-4 md:space-y-0">
+<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
     <Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
-    <button class="variant-filled-primary btn" onclick={createGroup}>
+    <button class="preset-filled-primary-500 btn" onclick={createGroup}>
         <iconify-icon icon="ion:add"></iconify-icon>
         <p>{$t("general.create-group")}</p>
     </button>

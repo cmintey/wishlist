@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Stepper } from "@skeletonlabs/skeleton";
     interface Props {
         children?: import("svelte").Snippet;
     }
