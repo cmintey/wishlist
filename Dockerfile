@@ -1,44 +1,68 @@
-FROM node:22-slim@sha256:4a4884e8a44826194dff92ba316264f392056cbe243dcc9fd3551e71cea02b90 AS build
-
+FROM node:22-slim@sha256:d943bf20249f8b92eff6f605362df2ee9cf2d6ce2ea771a8886e126ec8714f08 AS base
 WORKDIR /usr/src/app
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable pnpm && corepack install -g pnpm@latest-10
 
+# Build step
+FROM base AS build
+# Deps for prisma and building packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./ .
-RUN npm i -g pnpm@latest-10
-RUN pnpm i --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY prisma/ ./prisma/
 RUN pnpm prisma generate
+COPY src/ ./src
+COPY templates/ ./templates
+COPY static/ ./static
+COPY vite.config.ts tsconfig.json tailwind.config.ts svelte.config.js postcss.config.cjs theme.ts ./
+ARG VERSION="unk"
+ARG SHA="unk"
+ENV VERSION=${VERSION}
+ENV SHA=${SHA}
 RUN pnpm run build
 RUN pnpm prune --prod
 
-FROM node:22-slim@sha256:4a4884e8a44826194dff92ba316264f392056cbe243dcc9fd3551e71cea02b90 AS app
+# Download Caddy from github
+FROM --platform=$BUILDPLATFORM alpine:latest AS caddy
 
+ARG TARGETPLATFORM
+ARG CADDY_VERSION=2.10.0
+
+WORKDIR /
+RUN apk add --no-cache curl tar
+RUN case "${TARGETPLATFORM}" in \
+    "linux/amd64") ARCH="amd64" ;; \
+    "linux/arm64") ARCH="arm64" ;; \
+    "linux/arm/v7") ARCH="armv7" ;; \
+    *) echo "Unsupported platform: ${TARGETPLATFORM}" && exit 1 ;; \
+    esac && \
+    curl -L "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_${ARCH}.tar.gz" \
+    | tar -xz
+
+# Bring everything together
+FROM base AS app
 ENV NODE_ENV=production
 ENV BODY_SIZE_LIMIT=5000000
 
 WORKDIR /usr/src/app
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    openssl debian-keyring debian-archive-keyring apt-transport-https curl gpg ca-certificates
-
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends caddy \
+    && apt-get install -y --no-install-recommends openssl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/src/app/build ./build/
-COPY --from=build /usr/src/app/node_modules ./node_modules/
+COPY --from=caddy /caddy /usr/bin/caddy
 COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
-RUN npm i -g pnpm@latest-10
-RUN chmod +x entrypoint.sh
+RUN chmod +x entrypoint.sh && chmod +x /usr/bin/caddy
+
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/build ./build/
 
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data

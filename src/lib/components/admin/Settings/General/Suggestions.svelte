@@ -12,8 +12,7 @@
     const t = getFormatter();
 </script>
 
-<SettingsGroup>
-    <h3 class="h3">{$t("admin.suggestions")}</h3>
+<SettingsGroup title={$t("admin.suggestions")}>
     <Setting>
         <label class="checkbox-label">
             <input
