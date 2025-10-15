@@ -419,11 +419,7 @@
         "update-claim": "Oppdater kravet",
         "updated-claim": "Oppdaterte kravet",
         "view-item": "Vis ønsket",
-        "write": "Skriv",
-        "switch-to-list-view": "Bytt til listevisning",
-        "switch-to-tile-view": "Bytt til flisvisning",
-        "tile-view": "Flisvisning",
-        "list-view": "Listevisning"
+        "write": "Skriv"
     },
     "unable-to-load-icons": "Kunne ikke laste ikonene."
 }

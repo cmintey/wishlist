@@ -420,10 +420,6 @@
         "view-wishes": "Переглянути побажання",
         "wishes-for": "Бажання {listOwner}",
         "write": "Написати",
-        "no-wishes-yet": "Немає побажань",
-        "switch-to-list-view": "Перемкнути на вигляд списку",
-        "switch-to-tile-view": "Перемкнути на вигляд плиток",
-        "tile-view": "Вигляд Плиток",
-        "list-view": "Вигляд Списку"
+        "no-wishes-yet": "Немає побажань"
     }
 }

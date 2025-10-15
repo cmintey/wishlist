@@ -420,10 +420,6 @@
         "show-description": "Показать описание",
         "count-items": "{itemCount, plural, one {# предмет} other {# предметов}}",
         "hide-all-currencies": "скрыть все валюты...",
-        "show-all-currencies": "показать все валюты...",
-        "switch-to-list-view": "Переключить на вид списка",
-        "switch-to-tile-view": "Переключить на вид плиток",
-        "tile-view": "Вид Плиток",
-        "list-view": "Вид Списка"
+        "show-all-currencies": "показать все валюты..."
     }
 }

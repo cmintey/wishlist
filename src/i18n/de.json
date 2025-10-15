@@ -205,11 +205,7 @@
         "show-description": "Zeige Beschreibung",
         "count-items": "{itemCount, plural, one {# Artikel} other {# Artikel}}",
         "hide-all-currencies": "verberge alle Währungen...",
-        "show-all-currencies": "zeige alle Währungen...",
-        "switch-to-list-view": "Zur Listenansicht wechseln",
-        "switch-to-tile-view": "Zur Kachelansicht wechseln",
-        "tile-view": "Kachelansicht",
-        "list-view": "Listenansicht"
+        "show-all-currencies": "zeige alle Währungen..."
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",

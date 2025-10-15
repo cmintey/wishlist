@@ -420,10 +420,6 @@
         "write": "Schrijven",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
         "hide-all-currencies": "verberg alle eenheden...",
-        "show-all-currencies": "Toon alle valuta's...",
-        "switch-to-list-view": "Schakel naar lijstweergave",
-        "switch-to-tile-view": "Schakel naar tegelweergave",
-        "tile-view": "Tegelweergave",
-        "list-view": "Lijstweergave"
+        "show-all-currencies": "Toon alle valuta's..."
     }
 }

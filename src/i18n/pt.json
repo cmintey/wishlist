@@ -240,11 +240,7 @@
         "wishes-for": "Os desejos de {listOwner}",
         "added-by": "Adicionado por <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "approval-required": "{listOwner} terá de aprovar a sua sugestão antes de esta ser adicionada à sua lista.",
-        "note-placeholder": "ou seja, tamanho, cor, etc.",
-        "switch-to-list-view": "Mudar para vista de lista",
-        "switch-to-tile-view": "Mudar para vista de mosaicos",
-        "tile-view": "Vista de Mosaicos",
-        "list-view": "Vista de Lista"
+        "note-placeholder": "ou seja, tamanho, cor, etc."
     },
     "general": {
         "save": "Guardar",

@@ -416,11 +416,7 @@
         "update-claim": "Mettre à jour la revendication",
         "updated-claim": "Revendication mise à jour",
         "view-item": "Voir l'objet",
-        "write": "Écrire",
-        "switch-to-list-view": "Passer à la vue liste",
-        "switch-to-tile-view": "Passer à la vue mosaïque",
-        "tile-view": "Vue Mosaïque",
-        "list-view": "Vue Liste"
+        "write": "Écrire"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }

@@ -247,11 +247,7 @@
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Czy chcesz usunąć <b>{name}</b> z tej i wszystkich innych list?",
         "item-was-removed-from-list": "Usunięto {name} z listy",
         "my-lists": "Moja Listy",
-        "no-lists-yet": "Brak list",
-        "switch-to-list-view": "Przełącz na widok listy",
-        "switch-to-tile-view": "Przełącz na widok kafelków",
-        "tile-view": "Widok Kafelków",
-        "list-view": "Widok Listy"
+        "no-lists-yet": "Brak list"
     },
     "a11y": {
         "refresh-item-data": "odśwież dane przedmiotu",
