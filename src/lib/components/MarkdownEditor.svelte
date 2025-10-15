@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Tab, Tabs } from "@skeletonlabs/skeleton-svelte";
+    import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import Markdown from "./Markdown.svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -12,13 +12,16 @@
     let { value, ...rest }: Props = $props();
     const t = getFormatter();
 
-    let previewNote = $state(false);
+    let currentTab = $state("write");
+    let previewNote = $derived(currentTab === "preview");
 </script>
 
 <div class="card p-2">
-    <Tabs border="border-none">
-        <Tab name={$t("wishes.write")} value={false} bind:group={previewNote}>{$t("wishes.write")}</Tab>
-        <Tab name={$t("wishes.preview")} value={true} bind:group={previewNote}>{$t("wishes.preview")}</Tab>
+    <Tabs class="border-none" onValueChange={({ value }) => (currentTab = value)} value={currentTab}>
+        <Tabs.List>
+            <Tabs.Trigger value={"write"}>{$t("wishes.write")}</Tabs.Trigger>
+            <Tabs.Trigger value={"preview"}>{$t("wishes.preview")}</Tabs.Trigger>
+        </Tabs.List>
     </Tabs>
     <textarea {...rest} class="textarea" class:hidden={previewNote} rows="4" bind:value></textarea>
     {#if previewNote}

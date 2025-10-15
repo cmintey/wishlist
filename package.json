@@ -22,6 +22,7 @@
         "@eslint/js": "^9.33.0",
         "@floating-ui/dom": "^1.7.3",
         "@humanspeak/svelte-markdown": "^0.8.10",
+        "@internationalized/date": "^3.10.0",
         "@playwright/test": "^1.53.1",
         "@skeletonlabs/skeleton": "^4.0.0",
         "@skeletonlabs/skeleton-svelte": "^4.0.0",

@@ -1,9 +1,8 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import { Tab } from "@skeletonlabs/skeleton-svelte";
+    import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import type { LayoutProps, Snapshot } from "./$types";
     import { GroupAPI } from "$lib/api/groups";
-    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
 
@@ -22,12 +21,19 @@
     };
 
     const groupId = $derived(data.group.id);
-    const tabs = [
-        { href: () => resolve("/admin/groups/[groupId]/members", { groupId }), label: $t("admin.members") },
-        { href: () => resolve("/admin/groups/[groupId]/settings", { groupId }), label: $t("admin.settings") }
-    ];
+    const tabs = {
+        members: { href: () => resolve("/admin/groups/[groupId]/members", { groupId }), label: $t("admin.members") },
+        settings: { href: () => resolve("/admin/groups/[groupId]/settings", { groupId }), label: $t("admin.settings") }
+    };
 
-    let selectedTab = $state(0);
+    type TabOption = keyof typeof tabs;
+
+    let selectedTab: TabOption = $state("members");
+
+    async function onValueChange(value: TabOption) {
+        selectedTab = value;
+        return goto(tabs[value].href(), { replaceState: true });
+    }
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,
@@ -60,17 +66,17 @@
     {/if}
 </div>
 
-<TabGroup>
-    {#each tabs as { label, href }, value}
-        <Tab name={label} {value} bind:group={selectedTab} on:change={() => goto(href(), { replaceState: true })}>
-            {label}
-        </Tab>
-    {/each}
+<Tabs onValueChange={({ value }) => onValueChange(value as TabOption)} value={selectedTab}>
+    <Tabs.List>
+        {#each Object.entries(tabs) as [value, { label }]}
+            <Tabs.Trigger {value}>
+                {label}
+            </Tabs.Trigger>
+        {/each}
+    </Tabs.List>
+</Tabs>
 
-    {#snippet panel()}
-        {@render children?.()}
-    {/snippet}
-</TabGroup>
+{@render children?.()}
 
 <svelte:head>
     <title>{$t("admin.group-settings")}</title>

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "@skeletonlabs/skeleton";
-@import "./theme.css";
+@import "./wishlist.css";
 
 /* Add your theme import for your theme: "theme" here */
 @plugin "@tailwindcss/forms";
