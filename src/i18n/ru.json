@@ -22,7 +22,8 @@
         "drag-handle": "переместить вручную для {name}",
         "toggle-manager": "{isManager, select, true {remove} other {add}} {user} с ролью редактора",
         "default-item-image": "значок пункта по умолчанию",
-        "unpurchase": "Отменить пункт как купленный"
+        "unpurchase": "Отменить пункт как купленный",
+        "user-menu": "Меню пользователя"
     },
     "admin": {
         "actions": "Действия",
