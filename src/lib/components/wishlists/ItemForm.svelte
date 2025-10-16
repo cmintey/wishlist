@@ -2,9 +2,8 @@
     import { page } from "$app/state";
     import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import { env } from "$env/dynamic/public";
     import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
-    import { getPriceValue } from "$lib/price-formatter";
+    import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
@@ -40,7 +39,7 @@
     let urlFetched = $state(false);
     const toastStore = getToastStore();
     let price: number | null = $state(getPriceValue(productData));
-    const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
+    const defaultCurrency = getDefaultCurrency();
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let files: FileList | undefined = $state();
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
