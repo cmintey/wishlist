@@ -5,7 +5,7 @@ import { browser } from "$app/environment";
 export const load = (async ({ data }) => {
     let locale: string;
     if (data.user?.preferredLanguage) {
-        locale = getClosestAvailablePreferredLanguage(data.user.preferredLanguage).code;
+        locale = getClosestAvailablePreferredLanguage(data.user.preferredLanguage)?.code ?? data.locale;
     } else if (browser) {
         locale = getClosestAvailableLocale(window.navigator.languages).code;
     } else {
