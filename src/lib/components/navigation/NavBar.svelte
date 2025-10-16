@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { AppBar, getDrawerStore, type DrawerSettings } from "@skeletonlabs/skeleton";
+    import { AppBar, type DrawerSettings } from "@skeletonlabs/skeleton-svelte";
     import logo from "$lib/assets/logo.png";
     import { page } from "$app/state";
     import NavMenu from "./NavMenu/NavMenu.svelte";
@@ -27,11 +27,11 @@
 {#snippet wishlistHeader()}
     <a class="flex flex-row items-center gap-x-2" href="/">
         <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-        <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
+        <span class="text-primary-950-50 text-2xl font-bold md:text-3xl">Wishlist</span>
     </a>
 {/snippet}
 
-<AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
+<AppBar background="bg-surface-200-800" padding="py-2 md:py-4 px-4">
     {#snippet lead()}
         <div class="flex content-center items-center gap-x-4">
             {#if user}
@@ -54,11 +54,11 @@
     {/snippet}
 
     {#if user}
-        <div class="hidden flex-row items-center pl-4 pt-0.5 md:flex">
+        <div class="hidden flex-row items-center pt-0.5 pl-4 md:flex">
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"
-                    class:variant-filled-primary={page.url.pathname === navItem.href}
+                    class:preset-filled-primary-500={page.url.pathname === navItem.href}
                     data-sveltekit-preload-data
                     href={navItem.href}
                 >

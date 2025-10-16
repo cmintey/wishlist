@@ -1,7 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { errorToast } from "$lib/components/toasts";

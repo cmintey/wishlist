@@ -33,7 +33,7 @@
 {#if disabled}
     <a class="flex flex-row items-center gap-x-2" href="/">
         <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-        <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
+        <span class="text-primary-950-50 text-2xl font-bold md:text-3xl">Wishlist</span>
     </a>
 {:else}
     <button class="btn w-fit p-0" aria-label={$t("setup.back")} onclick={() => history.back()} type="button">

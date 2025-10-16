@@ -2,7 +2,7 @@
     import { enhance } from "$app/forms";
     import { goto, invalidateAll } from "$app/navigation";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
-    import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+    import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
 
@@ -40,7 +40,7 @@
                     } else {
                         toastStore.trigger({
                             message: $t("general.oops"),
-                            background: "variant-filled-warning",
+                            background: "preset-filled-warning-500",
                             autohide: true,
                             timeout: 5000
                         });
@@ -62,21 +62,21 @@
 </div>
 
 <form method="POST" use:enhance>
-    <div class="mt-4 flex flex-col space-y-4 md:flex-row md:gap-x-4 md:space-y-0">
-        <button class="variant-filled-primary btn w-fit" formaction="?/reset-password">
+    <div class="mt-4 flex flex-col space-y-4 md:flex-row md:space-y-0 md:gap-x-4">
+        <button class="preset-filled-primary-500 btn w-fit" formaction="?/reset-password">
             {$t("admin.generate-reset-password-link")}
         </button>
         {#if data.editingUser.role.name == "ADMIN"}
-            <button class="variant-ghost-secondary btn w-fit" formaction="?/remove-admin">
+            <button class="preset-tonal-secondary border-secondary-500 btn w-fit border" formaction="?/remove-admin">
                 {$t("admin.remove-admin")}
             </button>
         {:else}
-            <button class="variant-ghost-secondary btn w-fit" formaction="?/make-admin">
+            <button class="preset-tonal-secondary border-secondary-500 btn w-fit border" formaction="?/make-admin">
                 {$t("admin.make-admin")}
             </button>
         {/if}
         <button
-            class="variant-ghost-error btn w-fit"
+            class="preset-tonal-error border-error-500 btn w-fit border"
             onclick={() => handleDelete(data.editingUser.username, data.editingUser.id)}
             type="button"
         >

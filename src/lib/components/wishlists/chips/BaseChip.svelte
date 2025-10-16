@@ -2,7 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
     import type { ClassValue } from "svelte/elements";
 
     interface Props {
@@ -119,8 +119,10 @@
 
 <div class={["flex flex-row gap-x-4", clazz]} data-testid={testId}>
     <button
-        class="variant-ringed-primary chip"
-        class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}
+        class="preset-outlined-primary-500 chip"
+        class:preset-tonal-primary
+        border
+        border-primary-500={selectedOptions[0].value !== defaultOption.value}
         use:popup={menuSettings}
     >
         {#if selectedOptions[0].direction === "asc"}
@@ -170,10 +172,14 @@
         </ul>
         {#if multiselect}
             <div class="flex flex-row justify-between gap-x-2 pt-4">
-                <button id="cancel" class="variant-ghost-secondary btn btn-sm" onclick={handleCancel}>
+                <button
+                    id="cancel"
+                    class="preset-tonal-secondary border-secondary-500 btn btn-sm border"
+                    onclick={handleCancel}
+                >
                     {$t("general.cancel")}
                 </button>
-                <button id="apply" class="variant-filled-primary btn btn-sm" onclick={() => handleApply()}>
+                <button id="apply" class="preset-filled-primary-500 btn btn-sm" onclick={() => handleApply()}>
                     {$t("general.apply")}
                 </button>
             </div>

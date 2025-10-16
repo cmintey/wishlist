@@ -38,7 +38,7 @@
             <span>{formatNumberAsPrice(highestTotal.currency, highestTotal.total)}</span>
             {#if totalCostByCurrency.length > 1 && !seePrices}
                 <button onclick={() => (seePrices = !seePrices)}>
-                    <span class="text-xs text-surface-900/70 dark:text-surface-50/50">
+                    <span class="text-surface-900/70 dark:text-surface-50/50 text-xs">
                         {$t("wishes.show-all-currencies")}
                     </span>
                 </button>
@@ -51,7 +51,7 @@
                 {#each totalCostByCurrency as { currency, total }}
                     <li>
                         <span
-                            class="variant-ghost-primary w-fit min-w-12 px-2 py-0.5 text-center text-sm rounded-token"
+                            class="preset-tonal-primary border-primary-500 rounded-base w-fit min-w-12 border px-2 py-0.5 text-center text-sm"
                         >
                             {currency}
                         </span>
@@ -60,7 +60,7 @@
                 {/each}
             </ul>
             <button class="w-fit" onclick={() => (seePrices = !seePrices)}>
-                <span class="text-xs text-surface-900/70 dark:text-surface-50/50">
+                <span class="text-surface-900/70 dark:text-surface-50/50 text-xs">
                     {$t("wishes.hide-all-currencies")}
                 </span>
             </button>

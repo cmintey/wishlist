@@ -1,9 +1,9 @@
 <script lang="ts">
-    import "../app.postcss";
+    import "../app.css";
 
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import { page } from "$app/state";
-    import { Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
+    import { type ModalComponent, ToastProvider } from "@skeletonlabs/skeleton-svelte";
     import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
     import { pwaInfo } from "virtual:pwa-info";
 
@@ -137,7 +137,7 @@
     </footer>
 </div>
 
-<Toast />
+<ToastProvider />
 <Modal components={modalComponentRegistry} />
 
 <svelte:head>

@@ -1,9 +1,9 @@
-import { type ToastStore } from "@skeletonlabs/skeleton";
+import { type ToastStore } from "@skeletonlabs/skeleton-svelte";
 
 export const errorToast = (toastStore: ToastStore, message: string) => {
     toastStore.trigger({
         message,
-        background: "variant-filled-error",
+        background: "preset-filled-error-500",
         autohide: true,
         timeout: 5000
     });

@@ -1,6 +1,6 @@
 <!-- Custom TabGroup component from Skeleton which fixes a type issue with svelte 5 -->
 <script lang="ts">
-    import type { CssClasses } from "@skeletonlabs/skeleton";
+    import type { CssClasses } from "@skeletonlabs/skeleton-svelte";
     // Slots
     /**
      * @slot panel - An optional region to house tab content.
@@ -12,19 +12,19 @@
     /** Provide classes to set the tab list flex justification. */
     export let justify: CssClasses = "justify-start";
     /** Provide classes to set the tab group border styles. */
-    export let border: CssClasses = "border-b border-surface-400-500-token";
+    export let border: CssClasses = "border-b border-surface-500";
 
     // Props (Tab)
     /** Provide classes to style each tab's active styles. */
-    export let active: CssClasses = "border-b-2 border-surface-900-50-token";
+    export let active: CssClasses = "border-b-2 border-surface-950-50";
     /** Provide classes to style each tab's hover styles. */
-    export let hover: CssClasses = "hover:variant-soft";
+    export let hover: CssClasses = "hover:preset-tonal";
     /** Provide classes to style each tab's flex styles. */
     export let flex: CssClasses = "flex-none";
     /** Provide classes to style each tab's padding styles. */
     export let padding: CssClasses = "px-4 py-2";
     /** Provide classes to style each tab's box radius styles. */
-    export let rounded: CssClasses = "rounded-tl-container-token rounded-tr-container-token";
+    export let rounded: CssClasses = "rounded-tl-container rounded-tr-container";
     /** Provide classes to set the vertical spacing between items. */
     export let spacing: CssClasses = "space-y-1";
 

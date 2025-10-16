@@ -19,7 +19,7 @@
 <div class="flex flex-row gap-x-2 md:gap-x-4">
     {#if !item.approved}
         <button
-            class="variant-filled-success btn btn-sm md:btn"
+            class="preset-filled-success-500 btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
                 props.onApprove?.();
@@ -28,7 +28,7 @@
             {$t("wishes.approve")}
         </button>
         <button
-            class="variant-filled-error btn btn-sm md:btn"
+            class="preset-filled-error-500 btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
                 props.onDeny?.();
@@ -38,7 +38,7 @@
         </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
-            class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
+            class="preset-tonal-primary border-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base border"
             aria-label={$t("wishes.edit")}
             onclick={(e) => {
                 e.stopPropagation();
@@ -49,7 +49,7 @@
             <iconify-icon icon="ion:edit"></iconify-icon>
         </button>
         <button
-            class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
+            class="preset-filled-error-500 btn btn-icon btn-icon-sm md:btn-icon-base"
             aria-label={$t("wishes.delete")}
             onclick={(e) => {
                 e.stopPropagation();

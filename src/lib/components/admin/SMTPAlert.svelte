@@ -11,8 +11,8 @@
 </script>
 
 {#if !$smtpAcknowledged && !smtpEnable}
-    <aside class="alert variant-ghost-warning mb-2">
-        <div class="alert-message flex flex-row items-center gap-x-4 space-y-0">
+    <aside class="alert preset-tonal-warning border-warning-500 mb-2 border">
+        <div class="alert-message flex flex-row items-center space-y-0 gap-x-4">
             <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
             <div>
                 <span class="text-xl font-bold">{$t("general.smtp-is-not-enabled")}</span>
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="alert-actions w-full justify-end lg:w-fit">
-            <button class="variant-filled-warning btn btn-sm" onclick={() => ($smtpAcknowledged = true)}>
+            <button class="preset-filled-warning-500 btn btn-sm" onclick={() => ($smtpAcknowledged = true)}>
                 {$t("general.dismiss")}
             </button>
         </div>

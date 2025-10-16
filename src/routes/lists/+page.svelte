@@ -50,7 +50,7 @@
 {/if}
 
 <button
-    class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
+    class="preset-tonal-surface border-surface-500 btn fixed right-4 z-90 h-16 w-16 rounded-full border md:right-10 md:bottom-10 md:h-20 md:w-20"
     class:bottom-24={$isInstalled}
     class:bottom-4={!$isInstalled}
     onclick={() => goto(`${page.url.pathname}/create`)}

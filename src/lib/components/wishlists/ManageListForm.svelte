@@ -5,7 +5,6 @@
     import ClearableInput from "$lib/components/ClearableInput.svelte";
     import { rgbToHex } from "$lib/util";
     import type { List, User } from "@prisma/client";
-    import { getModalStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";
 
@@ -77,7 +76,7 @@
 >
     <div class="grid grid-cols-12 gap-4 pb-4">
         <div class="col-span-full flex w-full flex-row flex-wrap gap-4">
-            <label class="flex-grow" for="name">
+            <label class="grow" for="name">
                 <span>{$t("auth.name")}</span>
                 <ClearableInput
                     id="name"
@@ -159,20 +158,24 @@
     </div>
 
     <div class="flex flex-row flex-wrap justify-between gap-4">
-        <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
+        <button
+            class="preset-tonal-secondary border-secondary-500 btn w-min border"
+            onclick={() => history.back()}
+            type="button"
+        >
             {$t("general.cancel")}
         </button>
         <div class="flex flex-row gap-x-4">
             {#if editing}
-                <button class="variant-filled-error btn w-min" formaction="?/delete" type="submit">
+                <button class="preset-filled-error-500 btn w-min" formaction="?/delete" type="submit">
                     {$t("wishes.delete")}
                 </button>
             {/if}
-            <button class="variant-filled-primary btn w-min" type="submit">
+            <button class="preset-filled-primary-500 btn w-min" type="submit">
                 {persistButtonName}
             </button>
         </div>
     </div>
 </form>
 
-<div bind:this={colorElement} class="bg-primary-400-500-token hidden"></div>
+<div bind:this={colorElement} class="bg-primary-500 hidden"></div>

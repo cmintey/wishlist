@@ -1,6 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { VirtualList } from "svelte-virtuallists";
     import fuzzysort from "fuzzysort";
@@ -104,7 +104,7 @@
         {/snippet}
     </ClearableInput>
 </label>
-<div class="card z-50 h-64 w-[22rem] max-w-full overflow-auto pl-2" data-popup="iconSelectorPopup">
+<div class="card z-50 h-64 w-88 max-w-full overflow-auto pl-2" data-popup="iconSelectorPopup">
     {#await getAvailableIcons()}
         <span>{$t("general.loading")}</span>
     {:then}
@@ -134,8 +134,8 @@
     {/await}
 </div>
 
-<style lang="postcss">
+<style lang="css">
     :global(.vtlist-inner) {
-        @apply justify-center;
+        justify-content: center;
     }
 </style>

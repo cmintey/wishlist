@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { getToastStore, getModalStore } from "@skeletonlabs/skeleton";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import type { Group } from "@prisma/client";
     import { fade } from "svelte/transition";
@@ -31,7 +30,7 @@
             } else {
                 toastStore.trigger({
                     message: $t("general.invite-sent"),
-                    background: "variant-filled-success",
+                    background: "preset-filled-success-500",
                     autohide: true,
                     timeout: 3000
                 });
@@ -40,7 +39,7 @@
             const data = (await response.json()) as { message: string };
             toastStore.trigger({
                 message: $t("errors.invite-failed-to-send", { values: { errorMessage: data.message } }),
-                background: "variant-filled-error",
+                background: "preset-filled-error-500",
                 autohide: true,
                 timeout: 3000
             });
@@ -68,8 +67,8 @@
     };
 </script>
 
-<div class="flex flex-col space-y-4 {vertical ? 'items-center' : 'md:flex-row md:items-end md:gap-x-4 md:space-y-0'}">
-    <button class="variant-filled-primary btn w-fit" onclick={triggerInviteModal} type="button">
+<div class="flex flex-col space-y-4 {vertical ? 'items-center' : 'md:flex-row md:items-end md:space-y-0 md:gap-x-4'}">
+    <button class="preset-filled-primary-500 btn w-fit" onclick={triggerInviteModal} type="button">
         <iconify-icon icon="ion:person-add"></iconify-icon>
         <p>{$t("general.invite-user")}</p>
     </button>
@@ -78,7 +77,7 @@
         <div
             class="flex flex-col space-y-2 {vertical
                 ? 'items-center'
-                : 'md:flex-row md:items-center md:gap-x-2 md:space-y-0'}"
+                : 'md:flex-row md:items-center md:space-y-0 md:gap-x-2'}"
             out:fade
         >
             <TokenCopy onCopied={() => setTimeout(() => (url = null), 1000)} {url}>

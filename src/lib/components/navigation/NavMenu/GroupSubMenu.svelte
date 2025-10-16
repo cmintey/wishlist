@@ -4,7 +4,7 @@
     import { UserAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
     import type { Group } from "@prisma/client";
-    import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
+    import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         user: LocalUser | undefined;

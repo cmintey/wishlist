@@ -1,7 +1,7 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
     import { Role } from "$lib/schema";
-    import { getModalStore, LightSwitch, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { getFormatter } from "$lib/i18n";
@@ -34,7 +34,7 @@
 {#if user}
     <div class="flex md:pr-4">
         <button class="h-10 md:h-12" use:popup={menuSettings}>
-            <Avatar {user} width="h-10 md:h-12" />
+            <Avatar class="h-10 md:h-12" {user} />
             <span class="sr-only">User Menu</span>
         </button>
         <div>

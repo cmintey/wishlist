@@ -1,7 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import PasswordInput from "../PasswordInput.svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -81,7 +80,7 @@
         </label>
 
         <button
-            class="variant-filled-primary btn w-fit"
+            class="preset-filled-primary-500 btn w-fit"
             disabled={passwordReset.current === "" ||
                 passwordReset.new === "" ||
                 passwordReset.new !== passwordReset.confirm}

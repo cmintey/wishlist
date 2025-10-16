@@ -2,7 +2,7 @@
     import { invalidateAll } from "$app/navigation";
     import { ItemsAPI } from "$lib/api/items";
     import { getFormatter } from "$lib/i18n";
-    import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
+    import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         groupId?: string | undefined;
@@ -39,7 +39,7 @@
                     } else {
                         toastStore.trigger({
                             message: $t("general.oops"),
-                            background: "variant-filled-warning",
+                            background: "preset-filled-warning-500",
                             autohide: true,
                             timeout: 5000
                         });
@@ -53,6 +53,6 @@
     };
 </script>
 
-<button class="variant-filled-error btn w-fit" onclick={handleDelete} type="button">
+<button class="preset-filled-error-500 btn w-fit" onclick={handleDelete} type="button">
     {$t("admin.clear-lists", { values: { claimedOnly: claimed, groupSpecific: groupId !== undefined } })}
 </button>

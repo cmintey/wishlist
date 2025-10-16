@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
-    import { ListBox, ListBoxItem, getModalStore, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         parent: any;
@@ -67,7 +67,7 @@
 
     {#if groups && groups.length > 0}
         <label for="group">{$t("general.group")}</label>
-        <ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
+        <ListBox id="group" class="border-surface-500 rounded-container border p-4">
             {#each groups as group}
                 <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
                     {group.name}
@@ -87,10 +87,13 @@
             <button class="btn {parent.buttonPositive}" use:popup={inviteViaPopup}>{$t("auth.invite-via")}</button>
             <div class="card p-4 shadow-xl" data-popup={inviteViaPopupName}>
                 <div class="flex flex-row gap-x-4">
-                    <button class="variant-ghost-primary btn" onclick={() => onFormSubmit("link")}>
+                    <button
+                        class="preset-tonal-primary border-primary-500 btn border"
+                        onclick={() => onFormSubmit("link")}
+                    >
                         {$t("general.invite-link")}
                     </button>
-                    <button class="variant-filled-primary btn" onclick={() => onFormSubmit("email")}>
+                    <button class="preset-filled-primary-500 btn" onclick={() => onFormSubmit("email")}>
                         {$t("auth.email")}
                     </button>
                 </div>

@@ -2,7 +2,7 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
-    import { getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
@@ -47,7 +47,7 @@
                     form.formElement.reset();
                 } else if (result.type === "error") {
                     toastStore.trigger({
-                        background: "variant-filled-error",
+                        background: "preset-filled-error-500",
                         message: result.error
                     });
                 }
@@ -55,10 +55,15 @@
             };
         }}
     >
-        <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+        <div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
             {#if data.isCallback}
                 <div class="flex flex-col items-center justify-center space-y-4">
-                    <ProgressRadial width="w-12 md:w-16" />
+                    <Progress class="w-12 md:w-16" value={null}>
+                        <Progress.Circle>
+                            <Progress.CircleTrack />
+                            <Progress.CircleRange />
+                        </Progress.Circle>
+                    </Progress>
                     <span class="text-lg md:text-xl">{$t("auth.authenticating")}</span>
                 </div>
             {:else}
@@ -103,9 +108,14 @@
                         {/if}
 
                         <div class="flex items-center justify-center gap-x-4">
-                            <button class="variant-filled-primary btn w-min" disabled={signingIn}>
+                            <button class="preset-filled-primary-500 btn w-min" disabled={signingIn}>
                                 {#if signingIn}
-                                    <ProgressRadial width="w-4" />
+                                    <Progress class="w-4" value={null}>
+                                        <Progress.Circle>
+                                            <Progress.CircleTrack />
+                                            <Progress.CircleRange />
+                                        </Progress.Circle>
+                                    </Progress>
                                 {/if}
                                 <span>{$t("auth.sign-in")}</span>
                             </button>
@@ -114,7 +124,7 @@
                             {/if}
                         </div>
 
-                        <a class="absolute top-0 !mt-0 pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
+                        <a class="absolute top-0 mt-0! pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
                             {$t("auth.forgot-password")}
                         </a>
                     </div>
@@ -123,14 +133,14 @@
                     {#if data.enableLogin}
                         <div class="flex w-full items-center justify-center">
                             <hr class="my-2 h-px w-3/4 border-0" />
-                            <span class="bg-surface-100-800-token absolute left-1/2 -translate-x-1/2 px-2">
+                            <span class="bg-surface-100-900 absolute left-1/2 -translate-x-1/2 px-2">
                                 {$t("auth.or")}
                             </span>
                         </div>
                     {/if}
                     <div class="flex justify-center">
                         <button
-                            class="variant-filled-primary btn"
+                            class="preset-filled-primary-500 btn"
                             disabled={signingIn}
                             onclick={() => window.location.assign(`/login/oidc${page.url.search}`)}
                             type="button"

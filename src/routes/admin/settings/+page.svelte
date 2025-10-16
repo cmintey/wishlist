@@ -5,7 +5,6 @@
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
 
     const { data }: PageProps = $props();
@@ -53,7 +52,7 @@
                 <ul>
                     {#each options as option}
                         <li>
-                            <a class={[currentHash === option.hash && "!variant-filled-primary"]} href={option.hash}>
+                            <a class={[currentHash === option.hash && "!preset-filled-primary-500"]} href={option.hash}>
                                 {option.label($t)}
                             </a>
                         </li>
@@ -81,7 +80,7 @@
 
             <!-- Save buttons -->
             <div class="flex w-full flex-row justify-end pt-5">
-                <button class="variant-filled-primary btn" type="submit">
+                <button class="preset-filled-primary-500 btn" type="submit">
                     {$t("general.save")}
                 </button>
             </div>

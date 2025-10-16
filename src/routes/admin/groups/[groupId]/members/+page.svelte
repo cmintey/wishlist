@@ -2,7 +2,7 @@
     import { goto, invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
-    import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
+    import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import type { PageData, PageProps } from "./$types";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
@@ -99,7 +99,7 @@
 {#if data.config.listMode !== "registry"}
     <div class="flex gap-x-4 py-4">
         <button
-            class="variant-filled-primary btn"
+            class="preset-filled-primary-500 btn"
             onclick={() => modalStore.trigger(addUserModalSettings)}
             type="button"
         >
@@ -117,9 +117,9 @@
 {/if}
 
 <div class="flex flex-col space-y-2">
-    <div class="table-container">
-        <table class="table table-interactive" role="grid">
-            <thead class="table-head">
+    <div class="table-wrap">
+        <table class="table" role="grid">
+            <thead>
                 <tr>
                     {#each head as label}
                         <th>
@@ -130,7 +130,7 @@
                     <th>{$t("general.remove")}</th>
                 </tr>
             </thead>
-            <tbody class="table-body">
+            <tbody class="[&>tr]:hover:preset-tonal-primary">
                 {#each data.group.users as user, row}
                     <tr aria-rowindex={row}>
                         {#each dataKeys as key, col}
@@ -164,7 +164,9 @@
         </table>
     </div>
     <div>
-        <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>{$t("admin.delete-group-title")}</button>
+        <button class="preset-filled-error-500 btn w-fit" onclick={deleteGroup}>
+            {$t("admin.delete-group-title")}
+        </button>
         <ClearListsButton groupId={page.params.groupId} />
         <ClearListsButton claimed groupId={page.params.groupId} />
     </div>

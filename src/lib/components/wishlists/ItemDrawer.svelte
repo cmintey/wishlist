@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { getDrawerStore } from "@skeletonlabs/skeleton";
     import type { PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ManageButtons from "./ItemCard/ManageButtons.svelte";
@@ -47,11 +46,11 @@
 
 <div class="flex max-h-[80dvh] flex-col gap-2 p-4 pb-4">
     <div class="grid grid-cols-[1fr_auto] justify-between gap-2 pb-2">
-        <span class="text-wrap break-words text-xl font-bold md:text-2xl">
+        <span class="text-xl font-bold text-wrap break-words md:text-2xl">
             {item.name}
         </span>
         <button
-            class="variant-ghost-surface btn btn-icon"
+            class="preset-tonal-surface border-surface-500 btn btn-icon border"
             aria-label={$t("a11y.close")}
             onclick={() => {
                 goto(page.url.pathname, { replaceState: true, noScroll: true });
@@ -86,7 +85,7 @@
                 <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
                 {#if user?.id !== item.userId}
                     <span>·</span>
-                    <span class="text-secondary-700-200-token font-bold">
+                    <span class="text-secondary-800-200 font-bold">
                         {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
                     </span>
                 {/if}

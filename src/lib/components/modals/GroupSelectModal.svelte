@@ -1,6 +1,5 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
-    import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
     interface Props {
         parent: any;
@@ -22,7 +21,7 @@
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
     <header class="text-2xl font-bold">{$t("general.select-group")}</header>
-    <ListBox class="border border-surface-500 p-4 rounded-container-token">
+    <ListBox class="border-surface-500 rounded-container border p-4">
         {#each groups as group}
             <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
                 {group.name}

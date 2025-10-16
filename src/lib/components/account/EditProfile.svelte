@@ -61,7 +61,7 @@
             {/if}
         </label>
 
-        <button class="variant-filled-primary btn w-fit" formaction="?/profile" type="submit">
+        <button class="preset-filled-primary-500 btn w-fit" formaction="?/profile" type="submit">
             {$t("general.update")}
         </button>
     </div>

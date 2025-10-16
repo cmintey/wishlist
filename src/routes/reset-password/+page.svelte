@@ -4,8 +4,6 @@
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
-    import { getToastStore } from "@skeletonlabs/skeleton";
-
     const { data, form }: PageProps = $props();
 
     const toastStore = getToastStore();
@@ -42,7 +40,7 @@
             };
         }}
     >
-        <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+        <div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
             <PasswordInput
                 id="password"
                 name="password"
@@ -68,7 +66,7 @@
             {/if}
 
             <button
-                class="variant-filled-primary btn w-fit"
+                class="preset-filled-primary-500 btn w-fit"
                 disabled={newPassword === "" || newPassword !== confirmPassword}
                 type="submit"
             >
