@@ -119,7 +119,7 @@ export const getClosestAvailableLocaleFromHeader = (acceptLanguage: string | und
 };
 
 export const getClosestAvailablePreferredLanguage = (preferredLanguage: string | undefined | null) => {
-    return preferredLanguage ? getClosestAvailableLocale([preferredLanguage]) : defaultLang;
+    return preferredLanguage ? getClosestAvailableLocale([preferredLanguage]) : null;
 };
 
 export const getClosestAvailableLocale = (langs: readonly string[]): Lang => {
