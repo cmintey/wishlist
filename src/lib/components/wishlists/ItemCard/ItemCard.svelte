@@ -127,30 +127,19 @@
         }
     };
 
-    const approvalModal = (approve: boolean): ModalSettings => ({
-        type: "confirm",
-        title: $t("general.please-confirm"),
-        body: $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } }),
-        response: async (r: boolean) => {
-            if (r) {
-                const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
-
-                if (resp.ok) {
-                    toaster.info({
-                        description: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } })
-                    });
-                    drawerStore.close();
-                } else {
-                    toaster.error({ description: $t("general.oops") });
-                }
-            }
-        },
-        buttonTextCancel: $t("general.cancel"),
-        buttonTextConfirm: $t("general.confirm")
-    });
-
     const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
-    const handleApproval = async (approve = true) => modalStore.trigger(approvalModal(approve));
+    const handleApproval = async (approve: boolean) => {
+        const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
+
+        if (resp.ok) {
+            toaster.info({
+                description: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } })
+            });
+            drawerStore.close();
+        } else {
+            toaster.error({ description: $t("general.oops") });
+        }
+    };
     const handleEdit = () => {
         goto(resolve("/items/[itemId]/edit", { itemId: item.id.toString() }) + `?redirectTo=${page.url.pathname}`);
     };
@@ -339,7 +328,7 @@
 
             <div class="flex items-center gap-2">
                 <iconify-icon icon="ion:person"></iconify-icon>
-                <span class="text-base text-wrap md:text-lg" data-testid="added-by">
+                <span class="text-wrap text-base md:text-lg" data-testid="added-by">
                     {#if showFor}
                         {@html $t("wishes.for", { values: { name: item.user.name } })}
                     {:else if !onPublicList}

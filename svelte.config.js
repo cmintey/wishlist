@@ -1,5 +1,6 @@
 import adapter from "@sveltejs/adapter-node";
 import { sveltePreprocess } from "svelte-preprocess";
+import { preprocessMeltUI, sequence } from "@melt-ui/pp";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
