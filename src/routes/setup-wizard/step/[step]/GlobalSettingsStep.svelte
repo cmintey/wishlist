@@ -8,6 +8,7 @@
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
 
     const { onSuccess }: Props = $props();
     const t = getFormatter();
@@ -18,7 +19,6 @@
     let sending = $state(false);
     let saved = $state(false);
 
-    const toastStore = getToastStore();
     const submit: Writable<() => void> = getContext("submit");
     $submit = () => {
         form?.requestSubmit();
@@ -53,7 +53,7 @@
                 }
                 if (action.search.endsWith("?/send-test") && result.type === "success") {
                     sending = false;
-                    toastStore.trigger({ message: $t("admin.test-email-sent-toast") });
+                    toaster.info({ description: $t("admin.test-email-sent-toast") });
                 }
                 await applyAction(result);
             };

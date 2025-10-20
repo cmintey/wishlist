@@ -1,6 +1,12 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
+    import {
+        Combobox,
+        Portal,
+        useListCollection,
+        type ComboboxRootProps,
+        type PopupSettings
+    } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { VirtualList } from "svelte-virtuallists";
     import fuzzysort from "fuzzysort";
@@ -77,9 +83,57 @@
         }
         return partitioned;
     };
+
+    const collection = $derived(
+        useListCollection({
+            items: availableIcons
+        })
+    );
+
+    let filteredIcons: string[] = $state([]);
+
+    const onOpenChange = async () => {
+        await getAvailableIcons();
+        filteredIcons = availableIcons;
+    };
+
+    const onInputValueChange: ComboboxRootProps["onInputValueChange"] = (event) => {
+        filteredIcons = fuzzysort.go(event.inputValue, availableIcons, { all: true }).map((result) => result.target);
+    };
 </script>
 
-<label for={id || "name"} use:popup={iconSelectorPopup}>
+<Combobox
+    name={id || "name"}
+    class="w-full max-w-md"
+    {collection}
+    inputBehavior="autohighlight"
+    {onInputValueChange}
+    {onOpenChange}
+    openOnClick
+    placeholder="gift"
+>
+    <Combobox.Label>{title ?? $t("general.icon")}</Combobox.Label>
+    <Combobox.Control>
+        <Combobox.Input type="text" />
+        <Combobox.Trigger />
+    </Combobox.Control>
+    <Portal>
+        <Combobox.Positioner class="z-[1]!">
+            <Combobox.Content>
+                {#each availableIcons as item (item)}
+                    <Combobox.Item {item}>
+                        <Combobox.ItemText>
+                            <!-- TODO: Use virtual list -->
+                            <iconify-icon class="text-xl" icon={"ion:" + item} noobserver></iconify-icon>
+                        </Combobox.ItemText>
+                    </Combobox.Item>
+                {/each}
+            </Combobox.Content>
+        </Combobox.Positioner>
+    </Portal>
+</Combobox>
+
+<!-- <label for={id || "name"} use:popup={iconSelectorPopup}>
     <span>{title ?? $t("general.icon")}</span>
     <ClearableInput
         id={id || "name"}
@@ -132,7 +186,7 @@
     {:catch}
         <span>{$t("unable-to-load-icons")}</span>
     {/await}
-</div>
+</div> -->
 
 <style lang="css">
     :global(.vtlist-inner) {

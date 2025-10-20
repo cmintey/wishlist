@@ -7,11 +7,10 @@
     import type { PageProps } from "./$types";
     import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { errorToast } from "$lib/components/toasts";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
-    const toastStore = getToastStore();
 
     let submitButton: HTMLElement | undefined = $state();
 </script>
@@ -32,7 +31,7 @@
                 use:enhance={() => {
                     return async ({ result }) => {
                         if (result.type === "error") {
-                            errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                            toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                             return;
                         }
                     };

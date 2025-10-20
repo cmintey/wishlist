@@ -8,11 +8,10 @@
     import { goto } from "$app/navigation";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
-
-    const toastStore = getToastStore();
 
     let signingIn = $state(false);
     let oAuthError: Record<string, string> | undefined = $state();
@@ -46,10 +45,7 @@
                 if (result.type === "failure") {
                     form.formElement.reset();
                 } else if (result.type === "error") {
-                    toastStore.trigger({
-                        background: "preset-filled-error-500",
-                        message: result.error
-                    });
+                    toaster.error({ description: result.error });
                 }
                 await update();
             };

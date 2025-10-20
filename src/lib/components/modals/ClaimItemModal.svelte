@@ -1,10 +1,10 @@
 <script lang="ts">
     import { SystemUsersAPI } from "$lib/api/users";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { errorToast } from "../toasts";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
 
     interface Props {
         parent: any;
@@ -23,7 +23,6 @@
 
     const t = getFormatter();
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
 
     const { item, userId, groupId, claimId, requireClaimEmail }: Meta = $modalStore[0].meta;
 
@@ -62,22 +61,18 @@
         const claimAPI = new ClaimAPI(claimId);
         const resp = await claimAPI.updateQuantity(quantity);
         if (resp.ok) {
-            let message;
+            let description;
             if (quantity === 0) {
-                message = $t("wishes.claimed-item", { values: { claimed: false } });
+                description = $t("wishes.claimed-item", { values: { claimed: false } });
             } else {
-                message = $t("wishes.updated-claim");
+                description = $t("wishes.updated-claim");
             }
-            toastStore.trigger({
-                message,
-                autohide: true,
-                timeout: 5000
-            });
+            toaster.info({ description });
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
             parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            toaster.error({ description: $t("general.oops") });
         }
     }
 
@@ -86,16 +81,14 @@
         const resp = await listItemAPI.claim(userId, quantity);
 
         if (resp.ok) {
-            toastStore.trigger({
-                message: $t("wishes.claimed-item", { values: { claimed: true } }),
-                autohide: true,
-                timeout: 5000
+            toaster.info({
+                description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
             parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            toaster.error({ description: $t("general.oops") });
         }
     }
 
@@ -106,7 +99,7 @@
             const responseData = await userResp.json();
 
             parent.onClose();
-            errorToast(toastStore, responseData.message || $t("general.oops"));
+            toaster.error({ description: responseData.message || $t("general.oops") });
             return;
         }
         const { id: publicUserId } = await userResp.json();
@@ -115,16 +108,14 @@
         const resp = await listItemAPI.claimPublic(publicUserId, quantity);
 
         if (resp.ok) {
-            toastStore.trigger({
-                message: $t("wishes.claimed-item", { values: { claimed: true } }),
-                autohide: true,
-                timeout: 5000
+            toaster.info({
+                description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
             $modalStore[0].response?.(true);
             return modalStore.close();
         } else {
             parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            toaster.error({ description: $t("general.oops") });
         }
     }
 </script>

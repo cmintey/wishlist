@@ -22,10 +22,10 @@
     import Image from "$lib/components/Image.svelte";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/server/i18n";
-    import { errorToast } from "$lib/components/toasts";
     import { getFormatter } from "$lib/i18n";
     import Markdown from "$lib/components/Markdown.svelte";
     import { resolve } from "$app/paths";
+    import { toaster } from "$lib/components/toaster";
 
     interface Props {
         item: ItemOnListDTO;
@@ -56,7 +56,6 @@
     const t = getFormatter();
 
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
     const drawerStore = getDrawerStore();
 
     $effect(() => {
@@ -106,14 +105,10 @@
                 if (resp.ok) {
                     invalidateAll();
 
-                    toastStore.trigger({
-                        message: $t("wishes.item-was-deleted", { values: { name: itemNameShort } }),
-                        autohide: true,
-                        timeout: 5000
-                    });
+                    toaster.info({ description: $t("wishes.item-was-deleted", { values: { name: itemNameShort } }) });
                     drawerStore.close();
                 } else {
-                    errorToast(toastStore, $t("general.oops"));
+                    toaster.error({ description: $t("general.oops") });
                 }
             } else if (r === DeleteConfirmationResult.REMOVE) {
                 const resp = await listItemAPI.delete();
@@ -121,14 +116,12 @@
                 if (resp.ok) {
                     invalidateAll();
 
-                    toastStore.trigger({
-                        message: $t("wishes.item-was-removed-from-list", { values: { name: itemNameShort } }),
-                        autohide: true,
-                        timeout: 5000
+                    toaster.info({
+                        description: $t("wishes.item-was-removed-from-list", { values: { name: itemNameShort } })
                     });
                     drawerStore.close();
                 } else {
-                    errorToast(toastStore, $t("general.oops"));
+                    toaster.error({ description: $t("general.oops") });
                 }
             }
         }
@@ -143,14 +136,12 @@
                 const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
 
                 if (resp.ok) {
-                    toastStore.trigger({
-                        message: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } }),
-                        autohide: true,
-                        timeout: 5000
+                    toaster.info({
+                        description: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } })
                     });
                     drawerStore.close();
                 } else {
-                    errorToast(toastStore, $t("general.oops"));
+                    toaster.error({ description: $t("general.oops") });
                 }
             }
         },
@@ -168,13 +159,9 @@
         const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(userId, quantity));
 
         if (resp.ok) {
-            toastStore.trigger({
-                message: $t("wishes.claimed-item", { values: { claimed: !unclaim } }),
-                autohide: true,
-                timeout: 5000
-            });
+            toaster.info({ description: $t("wishes.claimed-item", { values: { claimed: !unclaim } }) });
         } else {
-            errorToast(toastStore, $t("general.oops"));
+            toaster.error({ description: $t("general.oops") });
         }
     };
 
@@ -226,9 +213,7 @@
     const handlePurchased = async (purchased: boolean) => {
         const resp = await (purchased ? claimAPI.purchase() : claimAPI.unpurchase());
         if (resp.ok) {
-            toastStore.trigger({
-                message: $t("wishes.purchased-toast", { values: { purchased } })
-            });
+            toaster.info({ description: $t("wishes.purchased-toast", { values: { purchased } }) });
             item.claims[0].purchased = purchased;
         }
     };

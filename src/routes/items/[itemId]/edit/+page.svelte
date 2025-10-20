@@ -3,12 +3,11 @@
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
-    import { errorToast } from "$lib/components/toasts";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
 
     const t = getFormatter();
-    const toastStore = getToastStore();
 </script>
 
 {#if data.item}
@@ -18,14 +17,10 @@
         use:enhance={() => {
             return async ({ result, update }) => {
                 if (result.type === "error") {
-                    errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                    toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                     return;
                 } else {
-                    toastStore.trigger({
-                        message: $t("wishes.updated-success"),
-                        autohide: true,
-                        timeout: 5000
-                    });
+                    toaster.info({ description: $t("wishes.updated-success") });
                     update();
                 }
             };

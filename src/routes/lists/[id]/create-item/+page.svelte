@@ -4,11 +4,10 @@
     import type { Item } from "@prisma/client";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
-    import { errorToast } from "$lib/components/toasts";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
-    const toastStore = getToastStore();
 
     let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
         name: "",
@@ -19,13 +18,6 @@
     };
 
     let warningHidden = $state(false);
-
-    const successToast = () =>
-        toastStore.trigger({
-            message: "Item created",
-            autohide: true,
-            timeout: 5000
-        });
 
     const clearFields = () => {
         const fieldIds = ["url", "name", "price", "formatted-price", "quantity", "image", "imageUrl", "note"];
@@ -68,11 +60,11 @@
     use:enhance={({ submitter }) => {
         return async ({ result }) => {
             if (result.type === "error") {
-                errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                 return;
             }
             if (result.type === "success" || result.type === "redirect") {
-                successToast();
+                toaster.info({ description: $t("wishes.item-created") });
             }
             if (result.type === "redirect" && submitter?.id === "submit-stay") {
                 clearFields();

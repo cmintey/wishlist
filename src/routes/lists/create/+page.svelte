@@ -3,16 +3,14 @@
     import ManageListForm from "$lib/components/wishlists/ManageListForm.svelte";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
     $effect(() => {
         if (page.form && !page.form.success) {
-            getToastStore().trigger({
-                message: page.form.error || $t("errors.unable-to-create-list"),
-                background: "preset-filled-error-500"
-            });
+            toaster.error({ description: page.form.error || $t("errors.unable-to-create-list") });
         }
     });
 </script>

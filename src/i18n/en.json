@@ -188,6 +188,7 @@
         "claimed-by-user-must-be-specified": "Claimed by user must be specified",
         "could-not-claim-quantity-items": "Could not claim {quantity} items. Only {availableQuantity} available to claim.",
         "create-group-unknown-error": "An unknown error occurred while creating the group",
+        "email-is-required-for-public-claims": "Email is required for public claims",
         "group-does-not-exist": "Group does not exist",
         "group-is-already-active": "Group is already active",
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Group is not in registry mode. Cannot get a public link",
@@ -244,8 +245,7 @@
         "user-not-in-group": "User is not part of this group",
         "username-already-in-use": "{username} already in use",
         "username-must-not-be-blank": "Username must not be blank",
-        "valid-url-not-provided": "Valid url not provided",
-        "email-is-required-for-public-claims": "Email is required for public claims"
+        "valid-url-not-provided": "Valid url not provided"
     },
     "general": {
         "add-a-description": "Add a description",
@@ -377,6 +377,7 @@
         "hide-description": "Hide description",
         "image-url": "Image URL",
         "item-approved": "{name} was {approved, select, true {approved} other {denied}}",
+        "item-created": "Item created",
         "item-name": "Item Name",
         "item-url": "Item URL",
         "item-was-deleted": "{name} was deleted",

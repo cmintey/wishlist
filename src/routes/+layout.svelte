@@ -23,6 +23,7 @@
     import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
     import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
     import { setFormatter, setLocale } from "$lib/i18n";
+    import Toaster from "$lib/components/toaster/Toaster.svelte";
 
     const { data, children }: LayoutProps = $props();
 
@@ -137,7 +138,7 @@
     </footer>
 </div>
 
-<ToastProvider />
+<Toaster />
 <Modal components={modalComponentRegistry} />
 
 <svelte:head>

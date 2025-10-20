@@ -23,6 +23,7 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -45,7 +46,6 @@
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
-    const toastStore = getToastStore();
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -153,11 +153,8 @@
             const listApi = new ListAPI(data.list.id);
             const resp = await listApi.makePublic();
             if (!resp.ok) {
-                const message = await resp.text();
-                toastStore.trigger({
-                    message,
-                    background: "preset-filled-error-500"
-                });
+                const description = await resp.text();
+                toaster.error({ description });
                 return;
             }
         }
@@ -205,10 +202,7 @@
         }));
         const response = await listAPI.updateItems(displayOrderUpdate);
         if (!response.ok) {
-            toastStore.trigger({
-                message: $t("wishes.unable-to-update-item-ordering"),
-                background: "preset-filled-error-500"
-            });
+            toaster.error({ description: $t("wishes.unable-to-update-item-ordering") });
             allItems = data.list.items;
         }
     };

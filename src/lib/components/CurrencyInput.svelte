@@ -3,6 +3,7 @@
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "./toaster";
 
     interface Props {
         value?: number | null;
@@ -15,7 +16,6 @@
     let { value = $bindable(null), currency = $bindable("USD"), name, id, disabled = false }: Props = $props();
     const t = getFormatter();
 
-    const toastStore = getToastStore();
     let formatter = $derived(getPriceFormatter(currency));
     let localeConfig = $derived(getLocaleConfig(formatter));
     let maximumFractionDigits = $derived(formatter.resolvedOptions().maximumFractionDigits || 2);
@@ -87,8 +87,8 @@
     ) => {
         if (!e.currentTarget.value) {
             currency = previousCurrency;
-            toastStore.trigger({
-                message: $t("errors.price-must-have-a-currency")
+            toaster.info({
+                description: $t("errors.price-must-have-a-currency")
             });
             return;
         }
@@ -97,9 +97,8 @@
             currency = e.currentTarget.value.toUpperCase();
         } catch {
             e.currentTarget.value = previousCurrency;
-            toastStore.trigger({
-                background: "preset-filled-warning-500",
-                message: $t("errors.invalid-currency-code")
+            toaster.warning({
+                description: $t("errors.invalid-currency-code")
             });
             return;
         }

@@ -5,12 +5,12 @@
     import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
 
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
 
     const handleDelete = async (username: string, userId: string) => {
         const settings: ModalSettings = {
@@ -32,18 +32,9 @@
                         await goto("/admin/users");
                         invalidateAll();
 
-                        toastStore.trigger({
-                            message: $t("admin.user-was-deleted", { values: { username } }),
-                            autohide: true,
-                            timeout: 5000
-                        });
+                        toaster.info({ description: $t("admin.user-was-deleted", { values: { username } }) });
                     } else {
-                        toastStore.trigger({
-                            message: $t("general.oops"),
-                            background: "preset-filled-warning-500",
-                            autohide: true,
-                            timeout: 5000
-                        });
+                        toaster.info({ description: $t("general.oops") });
                     }
                 }
             },

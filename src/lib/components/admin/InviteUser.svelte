@@ -4,6 +4,7 @@
     import { fade } from "svelte/transition";
     import { InviteUsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
 
     interface Props {
         config: Config;
@@ -16,7 +17,6 @@
     const t = getFormatter();
 
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
     const inviteUsersAPI = new InviteUsersAPI();
 
     let url: string | null = $state(null);
@@ -28,20 +28,14 @@
             if (data.url) {
                 url = data.url;
             } else {
-                toastStore.trigger({
-                    message: $t("general.invite-sent"),
-                    background: "preset-filled-success-500",
-                    autohide: true,
-                    timeout: 3000
+                toaster.info({
+                    description: $t("general.invite-sent")
                 });
             }
         } else {
             const data = (await response.json()) as { message: string };
-            toastStore.trigger({
-                message: $t("errors.invite-failed-to-send", { values: { errorMessage: data.message } }),
-                background: "preset-filled-error-500",
-                autohide: true,
-                timeout: 3000
+            toaster.error({
+                description: $t("errors.invite-failed-to-send", { values: { errorMessage: data.message } })
             });
         }
     };

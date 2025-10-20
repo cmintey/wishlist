@@ -6,11 +6,10 @@
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
-
-    const toastStore = getToastStore();
 
     onMount(() => {
         if (!page.url.hash) {
@@ -36,11 +35,11 @@
         return ({ action, result }) => {
             if (action.search.endsWith("?/settings") && result.type === "success") {
                 saved = true;
-                toastStore.trigger({ message: $t("admin.settings-saved-toast") });
+                toaster.info({ description: $t("admin.settings-saved-toast") });
             }
             if (action.search.endsWith("?/send-test") && result.type === "success") {
                 sending = false;
-                toastStore.trigger({ message: $t("admin.test-email-sent-toast") });
+                toaster.info({ description: $t("admin.test-email-sent-toast") });
             }
         };
     }}

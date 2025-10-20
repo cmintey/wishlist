@@ -4,12 +4,12 @@
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { page } from "$app/state";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
     const config = $state(data.config);
-    const toastStore = getToastStore();
 </script>
 
 <form
@@ -21,7 +21,7 @@
 
         return ({ result }) => {
             if (result.type === "success") {
-                toastStore.trigger({ message: $t("admin.settings-saved-toast") });
+                toaster.info({ description: $t("admin.settings-saved-toast") });
             }
         };
     }}

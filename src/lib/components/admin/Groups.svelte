@@ -3,6 +3,7 @@
     import Search from "../Search.svelte";
     import { GroupsAPI } from "$lib/api/groups";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
 
     type Group = {
         id: string;
@@ -18,7 +19,6 @@
     const t = getFormatter();
 
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
 
     const headers = [$t("auth.name"), $t("general.user-count")];
 
@@ -42,12 +42,12 @@
                 const groupsAPI = new GroupsAPI();
                 const group = await groupsAPI.create(name);
                 if (group) {
-                    toastStore.trigger({
-                        message: $t("general.group-created-successfully")
+                    toaster.info({
+                        description: $t("general.group-created-successfully")
                     });
                 } else {
-                    toastStore.trigger({
-                        message: $t("errors.create-group-unknown-error")
+                    toaster.error({
+                        description: $t("errors.create-group-unknown-error")
                     });
                 }
                 await invalidateAll();
@@ -67,10 +67,6 @@
         <p>{$t("general.create-group")}</p>
     </button>
 </div>
-
-{#if groupData}
-    <Table interactive source={groupData} on:selected={selectionHandler} />
-{/if}
 
 <div class="table-wrap">
     <table class="table">

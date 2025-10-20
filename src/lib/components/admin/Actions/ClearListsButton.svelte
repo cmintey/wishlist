@@ -1,6 +1,7 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
     import { ItemsAPI } from "$lib/api/items";
+    import { toaster } from "$lib/components/toaster";
     import { getFormatter } from "$lib/i18n";
     import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
 
@@ -13,7 +14,6 @@
     const t = getFormatter();
 
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
     const itemsAPI = new ItemsAPI();
 
     const handleDelete = async () => {
@@ -31,18 +31,9 @@
                     if (resp.ok) {
                         invalidateAll();
 
-                        toastStore.trigger({
-                            message: $t("general.wishlists-cleared"),
-                            autohide: true,
-                            timeout: 5000
-                        });
+                        toaster.info({ description: $t("general.wishlists-cleared") });
                     } else {
-                        toastStore.trigger({
-                            message: $t("general.oops"),
-                            background: "preset-filled-warning-500",
-                            autohide: true,
-                            timeout: 5000
-                        });
+                        toaster.error({ description: $t("general.oops") });
                     }
                 }
             },

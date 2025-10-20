@@ -10,6 +10,7 @@
     import { goto } from "$app/navigation";
     import MarkdownEditor from "../MarkdownEditor.svelte";
     import FileUpload from "../FileUpload.svelte";
+    import { toaster } from "../toaster";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -38,7 +39,6 @@
     let url = $derived(page.url);
     let loading = $state(false);
     let urlFetched = $state(false);
-    const toastStore = getToastStore();
     let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
@@ -81,12 +81,7 @@
     };
 
     const triggerToast = () => {
-        toastStore.trigger({
-            message: $t("errors.unable-to-find-product-information"),
-            background: "preset-filled-warning-500",
-            autohide: true,
-            timeout: 5000
-        });
+        toaster.warning({ description: $t("errors.unable-to-find-product-information") });
     };
 
     const getInfo = async () => {

@@ -4,9 +4,9 @@
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
     const { data, form }: PageProps = $props();
 
-    const toastStore = getToastStore();
     const t = getFormatter();
 
     let newPassword = $state("");
@@ -28,13 +28,9 @@
             formData.append("id", `${data.id}` || "0");
             return async ({ result, update }) => {
                 if (result.type === "redirect") {
-                    toastStore.trigger({
-                        message: $t("auth.your-password-was-reset")
-                    });
+                    toaster.info({ description: $t("auth.your-password-was-reset") });
                 } else if (result.type === "error") {
-                    toastStore.trigger({
-                        message: $t("general.oops")
-                    });
+                    toaster.error({ description: $t("general.oops") });
                 }
                 update();
             };

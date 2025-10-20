@@ -3,9 +3,9 @@
     import { page } from "$app/state";
     import PasswordInput from "../PasswordInput.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
 
     const t = getFormatter();
-    const toastStore = getToastStore();
 
     let passwordReset = $state({
         current: "",
@@ -19,14 +19,8 @@
     use:enhance={() => {
         return async ({ result, update }) => {
             if (result.type === "success") {
-                const toastSettings = {
-                    message: $t("auth.password-updated-successfully"),
-                    autohide: true,
-                    timeout: 5000
-                };
-
                 passwordReset.current = "";
-                toastStore.trigger(toastSettings);
+                toaster.info({ description: $t("auth.password-updated-successfully") });
             }
 
             passwordReset.new = "";
