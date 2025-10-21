@@ -1,8 +1,9 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import Popup from "$lib/components/Popup.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
+    import { Popover } from "@skeletonlabs/skeleton-svelte";
     import type { ClassValue } from "svelte/elements";
 
     interface Props {
@@ -60,14 +61,7 @@
         }
     });
 
-    const popupKey = `${searchParam}-options`;
     let menuOpen = $state(false);
-    const menuSettings: PopupSettings = {
-        event: "click",
-        target: popupKey,
-        state: ({ state }) => (menuOpen = state),
-        closeQuery: multiselect ? "#apply, #cancel" : undefined
-    };
 
     const isOnlyDefaultOptionSelected = (opts: Option[]) => {
         return opts.length === 1 && opts[0].value === defaultOption.value;
@@ -118,71 +112,84 @@
 </script>
 
 <div class={["flex flex-row gap-x-4", clazz]} data-testid={testId}>
-    <button
-        class="preset-outlined-primary-500 chip"
-        class:preset-tonal-primary
-        border
-        border-primary-500={selectedOptions[0].value !== defaultOption.value}
-        use:popup={menuSettings}
-    >
-        {#if selectedOptions[0].direction === "asc"}
-            <iconify-icon icon="ion:arrow-up"></iconify-icon>
-        {:else if selectedOptions[0].direction === "desc"}
-            <iconify-icon icon="ion:arrow-down"></iconify-icon>
-        {:else if prefix}
-            <iconify-icon icon={prefix}></iconify-icon>
-        {/if}
-        <div class="flex gap-x-1">
-            <span>
-                {selectedOptions[0].displayValue}
-            </span>
-            {#if multiselect && selectedOptions.length > 1}
-                <span>
-                    +{selectedOptions.length - 1}
-                </span>
-            {/if}
-        </div>
-        <iconify-icon
-            class="arrow text-xs duration-300 ease-out"
-            class:rotate-180={menuOpen}
-            icon="ion:caret-down"
-        ></iconify-icon>
-    </button>
-    <nav class="card list-nav z-10 max-h-96 p-4 shadow-xl" data-popup={popupKey}>
-        <ul class="max-h-72 overflow-scroll">
-            {#each options as option (option.value + option.direction)}
-                <li>
-                    {#if multiselect}
-                        <label class="checkbox-label list-option">
-                            <input
-                                class="checkbox"
-                                checked={isSelected(option)}
-                                onchange={(e) => handleSelectChange(option, e.currentTarget.checked)}
-                                type="checkbox"
-                            />
-                            <span>{option.displayValue}</span>
-                        </label>
-                    {:else}
-                        <button class="list-option w-full" onclick={() => handleApply(option)}>
-                            {option.displayValue}
-                        </button>
+    <Popup>
+        {#snippet trigger(props)}
+            <button
+                {...props}
+                class={[
+                    "preset-outlined-primary-500 chip",
+                    selectedOptions[0].value !== defaultOption.value && "preset-tonal-primary border-primary-500 border"
+                ]}
+            >
+                {#if selectedOptions[0].direction === "asc"}
+                    <iconify-icon icon="ion:arrow-up"></iconify-icon>
+                {:else if selectedOptions[0].direction === "desc"}
+                    <iconify-icon icon="ion:arrow-down"></iconify-icon>
+                {:else if prefix}
+                    <iconify-icon icon={prefix}></iconify-icon>
+                {/if}
+                <div class="flex gap-x-1">
+                    <span>
+                        {selectedOptions[0].displayValue}
+                    </span>
+                    {#if multiselect && selectedOptions.length > 1}
+                        <span>
+                            +{selectedOptions.length - 1}
+                        </span>
                     {/if}
-                </li>
-            {/each}
-        </ul>
-        {#if multiselect}
-            <div class="flex flex-row justify-between gap-x-2 pt-4">
-                <button
-                    id="cancel"
-                    class="preset-tonal-secondary border-secondary-500 btn btn-sm border"
-                    onclick={handleCancel}
-                >
-                    {$t("general.cancel")}
-                </button>
-                <button id="apply" class="preset-filled-primary-500 btn btn-sm" onclick={() => handleApply()}>
-                    {$t("general.apply")}
-                </button>
+                </div>
+                <iconify-icon
+                    class="arrow text-xs duration-300 ease-out"
+                    class:rotate-180={menuOpen}
+                    icon="ion:caret-down"
+                ></iconify-icon>
+            </button>
+        {/snippet}
+
+        {#snippet content(props)}
+            <div {...props} class="card preset-filled-surface-100-900 list-nav z-10 max-h-96 p-4 shadow-xl">
+                <nav>
+                    <ul class="max-h-72 overflow-scroll">
+                        {#each options as option (option.value + option.direction)}
+                            <li>
+                                {#if multiselect}
+                                    <label class="checkbox-label list-option">
+                                        <input
+                                            class="checkbox"
+                                            checked={isSelected(option)}
+                                            onchange={(e) => handleSelectChange(option, e.currentTarget.checked)}
+                                            type="checkbox"
+                                        />
+                                        <span>{option.displayValue}</span>
+                                    </label>
+                                {:else}
+                                    <button class="list-option w-full" onclick={() => handleApply(option)}>
+                                        {option.displayValue}
+                                    </button>
+                                {/if}
+                            </li>
+                        {/each}
+                    </ul>
+                    {#if multiselect}
+                        <div class="flex flex-row justify-between gap-x-2 pt-4">
+                            <Popover.CloseTrigger
+                                id="cancel"
+                                class="preset-tonal-secondary border-secondary-500 btn btn-sm border"
+                                onclick={handleCancel}
+                            >
+                                {$t("general.cancel")}
+                            </Popover.CloseTrigger>
+                            <Popover.CloseTrigger
+                                id="apply"
+                                class="preset-filled-primary-500 btn btn-sm"
+                                onclick={() => handleApply()}
+                            >
+                                {$t("general.apply")}
+                            </Popover.CloseTrigger>
+                        </div>
+                    {/if}
+                </nav>
             </div>
-        {/if}
-    </nav>
+        {/snippet}
+    </Popup>
 </div>

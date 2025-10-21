@@ -5,26 +5,34 @@
     import { ClaimAPI } from "$lib/api/claims";
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "../toaster";
+    import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
+    import { Dialog } from "@skeletonlabs/skeleton-svelte";
 
-    interface Props {
-        parent: any;
-    }
-
-    interface Meta {
+    interface Props extends Omit<BaseModalProps, "title" | "description" | "actions" | "children" | "element"> {
         item: ItemOnListDTO;
         userId: string | undefined;
-        groupId: string | undefined;
-        claimId: string | undefined;
+        groupId: string;
         requireClaimEmail: boolean;
-        maxQuantity: number;
+        claimId?: string;
+        onSuccess?: VoidFunction;
+        onFailure?: VoidFunction;
     }
 
-    let { parent }: Props = $props();
+    let {
+        item,
+        userId,
+        groupId,
+        claimId,
+        requireClaimEmail,
+        onSuccess,
+        onFailure,
+        trigger: inputTrigger,
+        ...rest
+    }: Props = $props();
 
     const t = getFormatter();
-    const modalStore = getModalStore();
-
-    const { item, userId, groupId, claimId, requireClaimEmail }: Meta = $modalStore[0].meta;
+    const formId = $props.id();
+    let open = $state(false);
 
     const claim = item.claims.find((claim) => claim.claimId === claimId);
 
@@ -32,6 +40,22 @@
     let name: string | undefined = $state();
     let quantity = $state(claim?.quantity || 1);
     let error: string | undefined = $state();
+
+    async function handleTrigger(e: MouseEvent) {
+        e.stopPropagation();
+        if (!userId) {
+            open = true;
+            return;
+        }
+        if (claim && item.quantity === 1 && claim.quantity === 1) {
+            return onUnclaim();
+        }
+        if (item.remainingQuantity === 1) {
+            quantity = 1;
+            return onFormSubmit();
+        }
+        open = true;
+    }
 
     async function onUnclaim() {
         quantity = 0;
@@ -68,10 +92,10 @@
                 description = $t("wishes.updated-claim");
             }
             toaster.info({ description });
-            $modalStore[0].response?.(true);
-            return modalStore.close();
+            onSuccess?.();
+            open = false;
         } else {
-            parent.onClose();
+            onFailure?.();
             toaster.error({ description: $t("general.oops") });
         }
     }
@@ -84,10 +108,10 @@
             toaster.info({
                 description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
-            $modalStore[0].response?.(true);
-            return modalStore.close();
+            onSuccess?.();
+            open = false;
         } else {
-            parent.onClose();
+            onFailure?.();
             toaster.error({ description: $t("general.oops") });
         }
     }
@@ -98,7 +122,7 @@
         if (!userResp.ok) {
             const responseData = await userResp.json();
 
-            parent.onClose();
+            onFailure?.();
             toaster.error({ description: responseData.message || $t("general.oops") });
             return;
         }
@@ -111,18 +135,26 @@
             toaster.info({
                 description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
-            $modalStore[0].response?.(true);
-            return modalStore.close();
+            onSuccess?.();
+            open = false;
         } else {
-            parent.onClose();
+            onFailure?.();
             toaster.error({ description: $t("general.oops") });
         }
     }
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("wishes.claim-details")}</header>
-    <form onsubmit={onFormSubmit}>
+<BaseModal
+    description={$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}
+    onOpenChange={(e) => (open = e.open)}
+    {open}
+    title={$t("wishes.claim-details")}
+    {...rest}
+>
+    {#snippet trigger(props)}
+        {@render inputTrigger({ ...props, onclick: handleTrigger })}
+    {/snippet}
+    <form id={formId} onsubmit={onFormSubmit}>
         {#if !userId}
             <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
             <label class="w-fit">
@@ -180,21 +212,26 @@
                 {/if}
             </div>
         {/if}
-
+    </form>
+    {#snippet actions()}
         <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
             {#if claim}
-                <button class="preset-filled-error-500 btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
+                <Dialog.CloseTrigger
+                    class="preset-filled-error-500 btn btn-sm md:btn-base"
+                    onclick={onUnclaim}
+                    type="button"
+                >
                     {$t("wishes.unclaim")}
-                </button>
+                </Dialog.CloseTrigger>
             {/if}
             <div class="flex flex-wrap gap-2">
-                <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose} type="button">
+                <Dialog.CloseTrigger class="btn btn-sm md:btn-base variant-ghost-surface}" type="button">
                     {$t("general.cancel")}
-                </button>
-                <button class="btn btn-sm md:btn-base {parent.buttonPositive}" type="submit">
+                </Dialog.CloseTrigger>
+                <Dialog.CloseTrigger class="btn btn-sm md:btn-base variant-filled" form={formId} type="submit">
                     {$t("wishes.claim")}
-                </button>
+                </Dialog.CloseTrigger>
             </div>
         </footer>
-    </form>
-</div>
+    {/snippet}
+</BaseModal>

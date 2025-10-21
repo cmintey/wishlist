@@ -41,7 +41,7 @@
     };
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
+<div class="card preset-filled-surface-100-900 w-modal space-y-4 p-4 shadow-xl">
     <header class="text-2xl font-bold">{$t("general.invite-user")}</header>
 
     {#if smtpEnabled}
@@ -85,7 +85,7 @@
         </button>
         {#if smtpEnabled}
             <button class="btn {parent.buttonPositive}" use:popup={inviteViaPopup}>{$t("auth.invite-via")}</button>
-            <div class="card p-4 shadow-xl" data-popup={inviteViaPopupName}>
+            <div class="card preset-filled-surface-100-900 p-4 shadow-xl" data-popup={inviteViaPopupName}>
                 <div class="flex flex-row gap-x-4">
                     <button
                         class="preset-tonal-primary border-primary-500 btn border"

@@ -3,11 +3,11 @@
     import { getFormatter } from "$lib/i18n";
     import type { User } from "@prisma/client";
     import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
-    import BaseModal, { type Props as BaseProps } from "./BaseModal.svelte";
-    import { Dialog, mergeProps } from "bits-ui";
+    import BaseModal, { type BaseModalProps as BaseProps } from "./BaseModal.svelte";
     import { GroupAPI } from "$lib/api/groups";
     import { invalidateAll } from "$app/navigation";
     import { debounce } from "$lib/util";
+    import { Dialog } from "@skeletonlabs/skeleton-svelte";
 
     interface Props extends Pick<BaseProps, "trigger"> {
         groupId: string;
@@ -51,7 +51,7 @@
     });
 </script>
 
-<BaseModal title={$t("general.add-user")} {trigger} bind:open>
+<BaseModal title={$t("general.add-user")} {trigger}>
     {#snippet description()}
         {$t("general.search-for-user")}
     {/snippet}
@@ -81,24 +81,13 @@
 
     {#snippet actions()}
         <div class="flex justify-between">
-            <Dialog.Close>
-                {#snippet child({ props })}
-                    <button class="variant-ghost-surface btn btn-sm md:btn-md" {...props}>
-                        {$t("general.cancel")}
-                    </button>
-                {/snippet}
-            </Dialog.Close>
+            <Dialog.CloseTrigger class="variant-ghost-surface btn btn-sm md:btn-md">
+                {$t("general.cancel")}
+            </Dialog.CloseTrigger>
 
-            <Dialog.Close>
-                {#snippet child({ props })}
-                    <button
-                        class="variant-filled btn btn-sm md:btn-md"
-                        {...mergeProps({ onclick: onFormSubmit }, props)}
-                    >
-                        {$t("general.add-user")}
-                    </button>
-                {/snippet}
-            </Dialog.Close>
+            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
+                {$t("general.add-user")}
+            </Dialog.CloseTrigger>
         </div>
     {/snippet}
 </BaseModal>

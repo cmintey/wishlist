@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
+    import { Popover, Portal } from "@skeletonlabs/skeleton-svelte";
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
+    import { clipboard } from "$lib/clipboard.svelte";
 
     interface Props {
         url: string;
@@ -14,11 +15,6 @@
     const t = getFormatter();
 
     let copiedVisible = $state(false);
-
-    const tooltipSettings: PopupSettings = {
-        event: "hover",
-        target: "copy"
-    };
 </script>
 
 <div class="flex w-100 flex-row items-center">
@@ -26,27 +22,37 @@
         <a href={url}>
             {@render children?.()}
         </a>
-        <span data-clipboard="tokenUrl" hidden>{url}</span>
+        <span id="tokenUrl" hidden>{url}</span>
     </span>
     <div class="flex flex-row items-center">
-        <button
-            class="btn {btnStyle}"
-            aria-label={$t("general.copy-to-clipboard")}
-            onclick={() => {
-                onCopied?.();
-                copiedVisible = true;
-                setTimeout(() => (copiedVisible = false), 1000);
-            }}
-            type="button"
-            use:clipboard={{ element: "tokenUrl" }}
-            use:popup={tooltipSettings}
-        >
-            <iconify-icon icon="ion:copy"></iconify-icon>
-        </button>
-        <div class="card preset-filled-secondary-500 p-2" data-popup="copy">
-            {$t("general.copy-to-clipboard")}
-            <div class="preset-filled-secondary-500 arrow"></div>
-        </div>
+        <Popover>
+            <Popover.Trigger
+                class="btn {btnStyle}"
+                {@attach clipboard("tokenUrl")}
+                aria-label={$t("general.copy-to-clipboard")}
+                onclick={() => {
+                    onCopied?.();
+                    copiedVisible = true;
+                    setTimeout(() => (copiedVisible = false), 1000);
+                }}
+                type="button"
+            >
+                <iconify-icon icon="ion:copy"></iconify-icon>
+            </Popover.Trigger>
+            <Portal>
+                <Popover.Positioner>
+                    <Popover.Content class="card preset-filled-secondary-500 p-2">
+                        <Popover.Description>{$t("general.copy-to-clipboard")}</Popover.Description>
+                        <Popover.Arrow
+                            style="--arrow-size: calc(var(--spacing) * 2); --arrow-background: var(--color-secondary-500);"
+                        >
+                            <Popover.ArrowTip />
+                        </Popover.Arrow>
+                    </Popover.Content>
+                </Popover.Positioner>
+            </Portal>
+        </Popover>
+
         {#if copiedVisible}
             <span out:fade>{$t("general.copied")}</span>
         {/if}

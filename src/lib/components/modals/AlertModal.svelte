@@ -1,10 +1,10 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
+    import { Dialog } from "@skeletonlabs/skeleton-svelte";
     import BaseModal from "./BaseModal.svelte";
-    import type { Props as BaseProps } from "./BaseModal.svelte";
-    import { Dialog, mergeProps } from "bits-ui";
+    import type { BaseModalProps as BaseProps } from "./BaseModal.svelte";
 
-    interface Props extends Omit<BaseProps, "body" | "actions"> {
+    interface Props extends Omit<BaseProps, "actions"> {
         onConfirm?: VoidFunction;
         confirmText?: string;
     }
@@ -17,13 +17,9 @@
 <BaseModal {...rest}>
     {#snippet actions()}
         <div class="flex justify-end">
-            <Dialog.Close>
-                {#snippet child({ props })}
-                    <button class="variant-filled btn btn-sm md:btn-md" {...mergeProps({ onclick: onConfirm }, props)}>
-                        {confirmText}
-                    </button>
-                {/snippet}
-            </Dialog.Close>
+            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" onclick={onConfirm}>
+                {confirmText}
+            </Dialog.CloseTrigger>
         </div>
     {/snippet}
 </BaseModal>

@@ -48,7 +48,14 @@
     <div class="flex flex-col space-y-4">
         {#each sortedItems as item (item.id)}
             <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} requireClaimEmail showClaimedName showFor user={data.user} />
+                <ItemCard
+                    groupId={data.user.activeGroupId}
+                    {item}
+                    requireClaimEmail
+                    showClaimedName
+                    showFor
+                    user={data.user}
+                />
             </div>
         {/each}
     </div>

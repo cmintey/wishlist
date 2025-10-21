@@ -1,11 +1,12 @@
 <script lang="ts">
-    import { AppBar, type DrawerSettings } from "@skeletonlabs/skeleton-svelte";
+    import { AppBar } from "@skeletonlabs/skeleton-svelte";
     import logo from "$lib/assets/logo.png";
     import { page } from "$app/state";
     import NavMenu from "./NavMenu/NavMenu.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
     import { getFormatter } from "$lib/i18n";
+    import NavigationDrawer from "./NavigationDrawer.svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -15,13 +16,6 @@
 
     const { navItems, user, isProxyUser }: Props = $props();
     const t = getFormatter();
-
-    const drawerStore = getDrawerStore();
-    const drawerSettings: DrawerSettings = {
-        id: "nav",
-        position: "left",
-        width: "w-[280px] md:w-[480px]"
-    };
 </script>
 
 {#snippet wishlistHeader()}
@@ -31,44 +25,55 @@
     </a>
 {/snippet}
 
-<AppBar background="bg-surface-200-800" padding="py-2 md:py-4 px-4">
-    {#snippet lead()}
-        <div class="flex content-center items-center gap-x-4">
-            {#if user}
-                {#if !$isInstalled}
-                    <button
-                        class="btn btn-sm p-0 pt-0.5 md:hidden"
-                        aria-label={$t("a11y.menu")}
-                        onclick={() => drawerStore.open(drawerSettings)}
+<AppBar class="bg-surface-200-800 app-bar">
+    <AppBar.Toolbar class="grid-cols-[auto_1fr_auto]">
+        <AppBar.Lead>
+            {#snippet element(props)}
+                <div class={["flex content-center items-center gap-x-4", props.class]}>
+                    {#if user}
+                        {#if !$isInstalled}
+                            <NavigationDrawer {navItems}>
+                                {#snippet trigger(props)}
+                                    <button
+                                        class="btn btn-sm p-0 pt-0.5 md:hidden"
+                                        aria-label={$t("a11y.menu")}
+                                        {...props}
+                                    >
+                                        <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
+                                    </button>
+                                {/snippet}
+                            </NavigationDrawer>
+
+                            {@render wishlistHeader()}
+                        {:else}
+                            <BackButton />
+                        {/if}
+                    {:else}
+                        {@render wishlistHeader()}
+                    {/if}
+                </div>
+            {/snippet}
+        </AppBar.Lead>
+
+        {#if user}
+            <AppBar.Headline class="hidden flex-row items-center pt-0.5 pl-4 md:flex">
+                {#each navItems as navItem}
+                    <a
+                        class="list-option font-bold"
+                        class:preset-filled-primary-500={page.url.pathname === navItem.href}
+                        data-sveltekit-preload-data
+                        href={navItem.href}
                     >
-                        <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
-                    </button>
-                    {@render wishlistHeader()}
-                {:else}
-                    <BackButton />
-                {/if}
-            {:else}
-                {@render wishlistHeader()}
-            {/if}
-        </div>
-    {/snippet}
+                        {$t(navItem.labelKey)}
+                    </a>
+                {/each}
+            </AppBar.Headline>
+        {/if}
 
-    {#if user}
-        <div class="hidden flex-row items-center pt-0.5 pl-4 md:flex">
-            {#each navItems as navItem}
-                <a
-                    class="list-option font-bold"
-                    class:preset-filled-primary-500={page.url.pathname === navItem.href}
-                    data-sveltekit-preload-data
-                    href={navItem.href}
-                >
-                    {$t(navItem.labelKey)}
-                </a>
-            {/each}
-        </div>
-    {/if}
-
-    {#snippet trail()}
-        <NavMenu {isProxyUser} {user} />
-    {/snippet}
+        <AppBar.Trail>
+            {#snippet element()}
+                <NavMenu {isProxyUser} {user} />
+            {/snippet}
+        </AppBar.Trail>
+    </AppBar.Toolbar>
 </AppBar>

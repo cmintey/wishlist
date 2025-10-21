@@ -5,20 +5,16 @@
 </script>
 
 <script lang="ts">
-    import { type DrawerSettings, type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import type { User } from "@prisma/client";
-    import { ItemAPI } from "$lib/api/items";
     import ClaimButtons from "./ClaimButtons.svelte";
-    import { goto, invalidateAll } from "$app/navigation";
+    import { goto } from "$app/navigation";
     import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import ReorderButtons from "./ReorderButtons.svelte";
     import { formatPrice } from "$lib/price-formatter";
     import { page } from "$app/state";
     import ManageButtons from "./ManageButtons.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
-    import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
     import Image from "$lib/components/Image.svelte";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/server/i18n";
@@ -26,13 +22,14 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import { resolve } from "$app/paths";
     import { toaster } from "$lib/components/toaster";
+    import ItemDrawer from "../ItemDrawer.svelte";
 
     interface Props {
         item: ItemOnListDTO;
         user?: PartialUser; // logged in user
         showClaimedName?: boolean;
         requireClaimEmail?: boolean;
-        groupId?: string;
+        groupId: string;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -55,8 +52,7 @@
     const id = $props.id();
     const t = getFormatter();
 
-    const modalStore = getModalStore();
-    const drawerStore = getDrawerStore();
+    let drawerOpen = $state(false);
 
     $effect(() => {
         if (page.url.searchParams.get("item-id") === item.id.toString()) {
@@ -78,125 +74,12 @@
         }
     });
 
-    const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
-
-    const itemAPI = $derived(new ItemAPI(item.id));
-    const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
     const claimAPI = $derived(new ClaimAPI(item.claims[0]?.claimId));
 
-    const itemNameShort = item.name.length > 42 ? item.name.substring(0, 42) + "…" : item.name;
-    const confirmDeleteModal: ModalSettings = {
-        type: "component",
-        component: "deleteItem",
-        title: $t("general.please-confirm"),
-        body: $t(
-            item.listCount > 1
-                ? "wishes.are-you-sure-you-wish-to-delete-item-multiple-lists"
-                : "wishes.are-you-sure-you-wish-to-delete-item",
-            { values: { name: itemNameShort } }
-        ),
-        meta: {
-            multipleLists: item.listCount > 1
-        },
-        response: async (r: DeleteConfirmationResult) => {
-            if (r == DeleteConfirmationResult.DELETE) {
-                const resp = await itemAPI.delete();
+    const itemNameShort = $derived(item.name.length > 42 ? item.name.substring(0, 42) + "…" : item.name);
 
-                if (resp.ok) {
-                    invalidateAll();
-
-                    toaster.info({ description: $t("wishes.item-was-deleted", { values: { name: itemNameShort } }) });
-                    drawerStore.close();
-                } else {
-                    toaster.error({ description: $t("general.oops") });
-                }
-            } else if (r === DeleteConfirmationResult.REMOVE) {
-                const resp = await listItemAPI.delete();
-
-                if (resp.ok) {
-                    invalidateAll();
-
-                    toaster.info({
-                        description: $t("wishes.item-was-removed-from-list", { values: { name: itemNameShort } })
-                    });
-                    drawerStore.close();
-                } else {
-                    toaster.error({ description: $t("general.oops") });
-                }
-            }
-        }
-    };
-
-    const handleDelete = async () => modalStore.trigger(confirmDeleteModal);
-    const handleApproval = async (approve: boolean) => {
-        const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
-
-        if (resp.ok) {
-            toaster.info({
-                description: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } })
-            });
-            drawerStore.close();
-        } else {
-            toaster.error({ description: $t("general.oops") });
-        }
-    };
     const handleEdit = () => {
         goto(resolve("/items/[itemId]/edit", { itemId: item.id.toString() }) + `?redirectTo=${page.url.pathname}`);
-    };
-
-    const doClaim = async (userId: string, quantity = 1, unclaim = false) => {
-        const resp = await (unclaim ? claimAPI.unclaim() : listItemAPI.claim(userId, quantity));
-
-        if (resp.ok) {
-            toaster.info({ description: $t("wishes.claimed-item", { values: { claimed: !unclaim } }) });
-        } else {
-            toaster.error({ description: $t("general.oops") });
-        }
-    };
-
-    const handleClaim = async () => {
-        if (item.remainingQuantity === 1 && user?.id) {
-            await doClaim(user.id);
-            drawerStore.close();
-            return;
-        }
-        modalStore.trigger({
-            type: "component",
-            component: "claimItemModal",
-            meta: {
-                item,
-                userId: user?.id,
-                groupId: groupId,
-                claimId: undefined,
-                requireClaimEmail: requireClaimEmail
-            },
-            async response(r: boolean) {
-                if (r) drawerStore.close();
-            }
-        });
-    };
-
-    const handleUnclaim = async () => {
-        if (!(user?.id && userClaim)) {
-            return;
-        }
-        if (item.quantity === 1 && userClaim.quantity === 1) {
-            await doClaim(user.id, 1, true);
-            drawerStore.close();
-            return;
-        }
-        modalStore.trigger({
-            type: "component",
-            component: "claimItemModal",
-            meta: {
-                item,
-                userId: user.id,
-                claimId: userClaim.claimId
-            },
-            async response(r: boolean) {
-                if (r) drawerStore.close();
-            }
-        });
     };
 
     const handlePurchased = async (purchased: boolean) => {
@@ -207,32 +90,12 @@
         }
     };
 
-    const drawerSettings: DrawerSettings = $derived({
-        id: "item",
-        position: "bottom",
-        height: "max-h-screen",
-        padding: "md:px-12 lg:px-32 xl:px-56",
-        meta: {
-            item,
-            showFor,
-            user,
-            showClaimedName,
-            requireClaimEmail,
-            onPublicList,
-            handleClaim,
-            handleDelete,
-            handlePurchased,
-            handleApproval,
-            handleEdit,
-            defaultImage
-        }
-    });
-
     function launchDrawer() {
         goto(`?item-id=${item.id}`, { replaceState: true, noScroll: true });
     }
+
     function openDrawer() {
-        drawerStore.open(drawerSettings);
+        drawerOpen = true;
     }
 </script>
 
@@ -255,12 +118,27 @@
     </div>
 {/snippet}
 
+<ItemDrawer
+    {defaultImage}
+    {groupId}
+    {handleEdit}
+    {handlePurchased}
+    {item}
+    {itemNameShort}
+    {onPublicList}
+    open={drawerOpen}
+    {requireClaimEmail}
+    {showFor}
+    showName={showClaimedName}
+    {user}
+/>
+
 <div
-    class="card block w-full text-start"
-    class:card-hover={!reorderActions}
-    class:preset-tonal-warning
-    border
-    border-warning-500={!item.approved}
+    class={[
+        "card preset-filled-surface-100-900 block w-full text-start",
+        reorderActions ? "" : "card-hover",
+        item.approved ? "" : "preset-tonal-warning border-warning-500 border"
+    ]}
     aria-labelledby={`${id}-name`}
     onclick={() => {
         if (!reorderActions) launchDrawer();
@@ -328,7 +206,7 @@
 
             <div class="flex items-center gap-2">
                 <iconify-icon icon="ion:person"></iconify-icon>
-                <span class="text-wrap text-base md:text-lg" data-testid="added-by">
+                <span class="text-base text-wrap md:text-lg" data-testid="added-by">
                     {#if showFor}
                         {@html $t("wishes.for", { values: { name: item.user.name } })}
                     {:else if !onPublicList}
@@ -361,23 +239,16 @@
             <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
         {:else}
             <ClaimButtons
+                {groupId}
                 {item}
-                onClaim={handleClaim}
                 {onPublicList}
                 onPurchase={handlePurchased}
-                onUnclaim={handleUnclaim}
+                {requireClaimEmail}
                 showName={showClaimedName}
                 {user}
             />
 
-            <ManageButtons
-                {item}
-                onApprove={() => handleApproval(true)}
-                onDelete={handleDelete}
-                onDeny={() => handleApproval(false)}
-                onEdit={handleEdit}
-                {user}
-            />
+            <ManageButtons {item} {itemNameShort} onEdit={handleEdit} {user} />
         {/if}
     </footer>
 </div>

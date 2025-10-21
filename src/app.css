@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton-svelte";
 @import "./wishlist.css";
 
 /* Add your theme import for your theme: "theme" here */
@@ -8,6 +9,8 @@
 /* The following are classes defined in i18n files and are used */
 @source inline("text-secondary-700-200-token");
 @source inline("font-bold");
+
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,

@@ -1,26 +1,26 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
+    import type { Group } from "@prisma/client";
+    import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
+    import { Dialog } from "@skeletonlabs/skeleton-svelte";
 
-    interface Props {
-        parent: any;
+    interface Props extends Omit<BaseModalProps, "title" | "description" | "actions" | "children"> {
+        groups: Group[];
+        onSubmit: (groupId: string | undefined) => void;
     }
 
-    const { parent }: Props = $props();
+    const { groups, onSubmit, ...props }: Props = $props();
     const t = getFormatter();
-    const modalStore = getModalStore();
     let selectedGroup: string | undefined = $state();
-    let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];
 
-    function onFormSubmit(): void {
-        if (selectedGroup) {
-            if ($modalStore[0]?.response) $modalStore[0].response(selectedGroup);
-            modalStore.close();
-        }
+    function onFormSubmit() {
+        onSubmit(selectedGroup);
     }
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("general.select-group")}</header>
+<BaseModal title={$t("general.select-group")} {...props}>
+    {#snippet description()}{/snippet}
+
     <ListBox class="border-surface-500 rounded-container border p-4">
         {#each groups as group}
             <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
@@ -29,10 +29,15 @@
         {/each}
     </ListBox>
 
-    <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
-            {parent.buttonTextCancel}
-        </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.change-group")}</button>
-    </footer>
-</div>
+    {#snippet actions()}
+        <div class="flex justify-between">
+            <Dialog.CloseTrigger class="variant-ghost-surface btn btn-sm md:btn-md">
+                {$t("general.cancel")}
+            </Dialog.CloseTrigger>
+
+            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
+                {$t("general.change-group")}
+            </Dialog.CloseTrigger>
+        </div>
+    {/snippet}
+</BaseModal>

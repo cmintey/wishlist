@@ -7,6 +7,7 @@
     import type { List, User } from "@prisma/client";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";
+    import ConfirmModal from "../modals/ConfirmModal.svelte";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
@@ -24,7 +25,7 @@
 
     const { data, persistButtonName, listMode, allowsPublicLists, editing = false }: Props = $props();
     const t = getFormatter();
-    const modalStore = getModalStore();
+    const formId: string = $props.id();
 
     let list = $state(data.list);
     let colorElement: Element | undefined = $state();
@@ -38,39 +39,18 @@
     });
     let colorValue: string | null = $state((() => defaultColor)());
 
-    const handleDelete = async () => {
-        return new Promise((resolve, reject) => {
-            return modalStore.trigger({
-                type: "confirm",
-                title: $t("general.please-confirm"),
-                body: $t("wishes.delete-list-confirmation"),
-                response(confirmed: boolean) {
-                    if (!confirmed) {
-                        reject();
-                    } else {
-                        resolve(null);
-                    }
-                },
-                buttonTextCancel: $t("general.cancel"),
-                buttonTextConfirm: $t("general.confirm")
-            });
-        });
-    };
-
     $effect(() => {
         if (!colorValue) colorValue = defaultColor;
     });
 </script>
 
 <form
+    id={formId}
     action="?/persist"
     method="POST"
     use:enhance={async (e) => {
         if (e.formData.get("iconColor") === defaultColor) {
             e.formData.delete("iconColor");
-        }
-        if (e.action.search === "?/delete") {
-            await handleDelete().catch(() => e.cancel());
         }
     }}
 >
@@ -167,9 +147,16 @@
         </button>
         <div class="flex flex-row gap-x-4">
             {#if editing}
-                <button class="preset-filled-error-500 btn w-min" formaction="?/delete" type="submit">
-                    {$t("wishes.delete")}
-                </button>
+                <ConfirmModal
+                    confirmButtonProps={{ type: "submit", form: formId, formaction: "?/delete" }}
+                    description={$t("wishes.delete-list-confirmation")}
+                >
+                    {#snippet trigger(props)}
+                        <button {...props} class="preset-filled-error-500 btn w-min">
+                            {$t("wishes.delete")}
+                        </button>
+                    {/snippet}
+                </ConfirmModal>
             {/if}
             <button class="preset-filled-primary-500 btn w-min" type="submit">
                 {persistButtonName}

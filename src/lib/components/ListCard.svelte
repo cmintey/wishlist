@@ -32,7 +32,12 @@
     });
 </script>
 
-<svelte:element this={elementTag} bind:this={element} class="card" class:card-hover={!preventNavigate}>
+<svelte:element
+    this={elementTag}
+    bind:this={element}
+    class="card preset-filled-surface-100-900"
+    class:card-hover={!preventNavigate}
+>
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
             class="preset-tonal-primary border-primary-500 card-header rounded-tl-container rounded-tr-container flex flex-row items-center gap-x-2 border px-4 py-2"

@@ -21,7 +21,7 @@
         if (!list.items || list.items.length === 0) return false;
         const userHash = await hash(list.id);
         const currentHash = await hashItems(list.items);
-        const viewedHash = $viewedItems[userHash];
+        const viewedHash = viewedItems.current[userHash];
         return currentHash !== viewedHash;
     };
 </script>

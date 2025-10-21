@@ -2,46 +2,33 @@
     import { enhance } from "$app/forms";
     import { goto, invalidateAll } from "$app/navigation";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
-    import { type ModalSettings } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
+    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
 
-    const modalStore = getModalStore();
+    const handleDelete = async () => {
+        const resp = await fetch(`/api/users/${data.editingUser.id}`, {
+            method: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                accept: "application/json"
+            }
+        });
 
-    const handleDelete = async (username: string, userId: string) => {
-        const settings: ModalSettings = {
-            type: "confirm",
-            title: $t("general.please-confirm"),
-            body: $t("admin.delete-user-confirmation", { values: { username } }),
-            // confirm = TRUE | cancel = FALSE
-            response: async (r: boolean) => {
-                if (r) {
-                    const resp = await fetch(`/api/users/${userId}`, {
-                        method: "DELETE",
-                        headers: {
-                            "content-type": "application/json",
-                            accept: "application/json"
-                        }
-                    });
+        if (resp.ok) {
+            await goto("/admin/users");
+            invalidateAll();
 
-                    if (resp.ok) {
-                        await goto("/admin/users");
-                        invalidateAll();
-
-                        toaster.info({ description: $t("admin.user-was-deleted", { values: { username } }) });
-                    } else {
-                        toaster.info({ description: $t("general.oops") });
-                    }
-                }
-            },
-            buttonTextCancel: $t("general.cancel"),
-            buttonTextConfirm: $t("general.confirm")
-        };
-        modalStore.trigger(settings);
+            toaster.info({
+                description: $t("admin.user-was-deleted", { values: { username: data.editingUser.username } })
+            });
+        } else {
+            toaster.info({ description: $t("general.oops") });
+        }
     };
 </script>
 
@@ -66,13 +53,17 @@
                 {$t("admin.make-admin")}
             </button>
         {/if}
-        <button
-            class="preset-tonal-error border-error-500 btn w-fit border"
-            onclick={() => handleDelete(data.editingUser.username, data.editingUser.id)}
-            type="button"
+        <ConfirmModal
+            description={$t("admin.delete-user-confirmation", { values: { username: data.editingUser.username } })}
+            onConfirm={handleDelete}
+            title={$t("general.please-confirm")}
         >
-            {$t("admin.delete-user")}
-        </button>
+            {#snippet trigger(props)}
+                <button class="preset-tonal-error border-error-500 btn w-fit border" {...props}>
+                    {$t("admin.delete-user")}
+                </button>
+            {/snippet}
+        </ConfirmModal>
     </div>
 </form>
 

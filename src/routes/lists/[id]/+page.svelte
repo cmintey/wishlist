@@ -98,7 +98,7 @@
 
     const updateHash = async () => {
         const userHash = await hash(data.list.id);
-        $viewedItems[userHash] = await hashItems(allItems);
+        viewedItems.current[userHash] = await hashItems(allItems);
     };
 
     const subscribeToEvents = () => {

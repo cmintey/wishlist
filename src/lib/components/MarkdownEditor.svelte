@@ -16,7 +16,7 @@
     let previewNote = $derived(currentTab === "preview");
 </script>
 
-<div class="card p-2">
+<div class="card preset-filled-surface-100-900 p-2">
     <Tabs class="border-none" onValueChange={({ value }) => (currentTab = value)} value={currentTab}>
         <Tabs.List>
             <Tabs.Trigger value={"write"}>{$t("wishes.write")}</Tabs.Trigger>
