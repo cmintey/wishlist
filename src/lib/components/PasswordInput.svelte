@@ -4,6 +4,7 @@
     import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
+    import Popup from "./Popup.svelte";
 
     interface Props {
         id: string;
@@ -45,12 +46,6 @@
         e.preventDefault();
         visible = !visible;
     };
-
-    const popupSettings: PopupSettings = {
-        event: "hover",
-        target: "suggestions",
-        placement: "right"
-    };
 </script>
 
 <label for={id}>
@@ -59,7 +54,7 @@
         <input
             {id}
             {name}
-            class="input"
+            class="ig-input"
             class:input-error={error}
             {autocomplete}
             oninput={(e) => (value = e.currentTarget.value)}
@@ -70,6 +65,7 @@
         />
         <button
             id="showpassword"
+            class="ig-cell border-l-0!"
             aria-label={$t("a11y.toggle-password-visibility")}
             onclick={handleClick}
             onkeypress={(e) => e.preventDefault()}
@@ -89,30 +85,36 @@
                 <Progress.Range class={meterLookup[strength.score.valueOf()]} />
             </Progress.Track>
         </Progress>
-        <div
-            class="flex items-center"
-            class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
-            use:popup={popupSettings}
-        >
-            <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
-        </div>
-    </div>
 
-    <div class="card preset-filled p-4" data-popup="suggestions">
-        {#if strength.feedback.warning}
-            <div class="flex flex-row items-center gap-x-4 pb-1">
-                <iconify-icon icon="ion:alert-circle"></iconify-icon>
-                <p>{strength.feedback.warning}</p>
-            </div>
-        {/if}
-        <ul class="list">
-            {#each strength.feedback.suggestions as suggestion}
-                <li>
-                    <iconify-icon icon="ion:arrow-forward"></iconify-icon>
-                    <p>{suggestion}</p>
-                </li>
-            {/each}
-        </ul>
+        <Popup>
+            {#snippet trigger(props)}
+                <button
+                    {...props}
+                    class="flex items-center"
+                    class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
+                >
+                    <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
+                </button>
+            {/snippet}
+            {#snippet content(props)}
+                <div {...props} class="card preset-filled p-4">
+                    {#if strength.feedback.warning}
+                        <div class="flex flex-row items-center gap-x-4 pb-1">
+                            <iconify-icon icon="ion:alert-circle"></iconify-icon>
+                            <p>{strength.feedback.warning}</p>
+                        </div>
+                    {/if}
+                    <ul class="list">
+                        {#each strength.feedback.suggestions as suggestion}
+                            <li>
+                                <iconify-icon icon="ion:arrow-forward"></iconify-icon>
+                                <p>{suggestion}</p>
+                            </li>
+                        {/each}
+                    </ul>
+                </div>
+            {/snippet}
+        </Popup>
     </div>
 
     <p>{$t(meterLabel[strength?.score])}</p>

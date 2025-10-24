@@ -3,7 +3,6 @@
     import IconSelector from "$lib/components/IconSelector.svelte";
     import { enhance } from "$app/forms";
     import ClearableInput from "$lib/components/ClearableInput.svelte";
-    import { rgbToHex } from "$lib/util";
     import type { List, User } from "@prisma/client";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";
@@ -29,14 +28,9 @@
 
     let list = $state(data.list);
     let colorElement: Element | undefined = $state();
-    let defaultColor: string = $derived.by(() => {
-        if (colorElement) {
-            const rgbColor = getComputedStyle(colorElement).backgroundColor;
-            const rgbValues = rgbColor.match(/\d+/g)?.map(Number.parseFloat);
-            return rgbValues ? rgbToHex(rgbValues[0], rgbValues[1], rgbValues[2]) : "";
-        }
-        return list.iconColor || "";
-    });
+    let defaultColor: string = $derived(
+        colorElement ? getComputedStyle(colorElement).backgroundColor : list.iconColor || ""
+    );
     let colorValue: string | null = $state((() => defaultColor)());
 
     $effect(() => {
@@ -99,7 +93,6 @@
                     bind:value={colorValue}
                 />
                 <ClearableInput
-                    class="input"
                     clearButtonLabel={$t("a11y.clear-color-field")}
                     onValueClear={() => {
                         colorValue = defaultColor;

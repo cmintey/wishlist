@@ -2,7 +2,6 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
-    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
@@ -51,15 +50,12 @@
             };
         }}
     >
-        <div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
+        <div
+            class="rounded-container card preset-filled-surface-100-900 inset-ring-surface-200-800 flex flex-col space-y-4 p-4 inset-ring"
+        >
             {#if data.isCallback}
                 <div class="flex flex-col items-center justify-center space-y-4">
-                    <Progress class="w-12 md:w-16" value={null}>
-                        <Progress.Circle>
-                            <Progress.CircleTrack />
-                            <Progress.CircleRange />
-                        </Progress.Circle>
-                    </Progress>
+                    <span class="loading loading-spinner w-8 md:w-12"></span>
                     <span class="text-lg md:text-xl">{$t("auth.authenticating")}</span>
                 </div>
             {:else}
@@ -106,12 +102,7 @@
                         <div class="flex items-center justify-center gap-x-4">
                             <button class="preset-filled-primary-500 btn w-min" disabled={signingIn}>
                                 {#if signingIn}
-                                    <Progress class="w-4" value={null}>
-                                        <Progress.Circle>
-                                            <Progress.CircleTrack />
-                                            <Progress.CircleRange />
-                                        </Progress.Circle>
-                                    </Progress>
+                                    <span class="loading loading-spinner loading-xs"></span>
                                 {/if}
                                 <span>{$t("auth.sign-in")}</span>
                             </button>
@@ -128,8 +119,8 @@
                 {#if data.oidcConfig?.ready}
                     {#if data.enableLogin}
                         <div class="flex w-full items-center justify-center">
-                            <hr class="my-2 h-px w-3/4 border-0" />
-                            <span class="bg-surface-100-900 absolute left-1/2 -translate-x-1/2 px-2">
+                            <hr class="hr my-2 h-px w-3/4" />
+                            <span class="preset-filled-surface-100-900 absolute left-1/2 -translate-x-1/2 px-2">
                                 {$t("auth.or")}
                             </span>
                         </div>

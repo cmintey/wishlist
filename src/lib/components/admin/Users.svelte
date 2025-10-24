@@ -35,7 +35,7 @@
 <div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
     <Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
     <form method="POST" use:enhance>
-        <InviteUser {config} {groups} />
+        <!-- <InviteUser {config} {groups} /> -->
     </form>
 </div>
 

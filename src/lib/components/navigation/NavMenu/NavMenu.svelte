@@ -21,13 +21,13 @@
     <div class="flex md:pr-4">
         <Popup>
             {#snippet trigger(props)}
-                <button class="h-10 md:h-12" {...props}>
-                    <Avatar class="h-10 md:h-12" {user} />
+                <button class="size-10 md:size-12" {...props}>
+                    <Avatar class="size-10 md:size-12" {user} />
                     <span class="sr-only">User Menu</span>
                 </button>
             {/snippet}
             {#snippet content(props)}
-                <div {...props}>
+                <div {...props} class="z-10!">
                     <nav
                         class="card preset-filled-surface-100-900 list-nav p-4 shadow-xl"
                         data-testid="user menu navigation"
@@ -48,10 +48,10 @@
                                 </li>
                             {/if}
 
-                            <hr />
+                            <hr class="hr" />
                             <GroupSubMenu {user} />
                             {#if !isProxyUser}
-                                <hr />
+                                <hr class="hr" />
                                 <li>
                                     <button
                                         class="list-option w-full"
@@ -65,11 +65,11 @@
                                     </button>
                                 </li>
                             {/if}
-                            <hr class="pb-1" />
+                            <hr class="hr pb-1" />
                             <li>
                                 <ChangeLanguageModal currentLanguage={user.preferredLanguage}>
                                     {#snippet trigger(props)}
-                                        <button class="list-option w-full" {...props} type="button">
+                                        <button {...props} class="list-option w-full" type="button">
                                             <iconify-icon icon="ion:language"></iconify-icon>
                                             <p>{$t("general.language")}</p>
                                         </button>
@@ -78,7 +78,6 @@
                             </li>
                             <li>
                                 <div class="flex w-full justify-around pt-1">
-                                    <p>{$t("general.mode")}</p>
                                     <LightSwitch />
                                 </div>
                             </li>
@@ -88,6 +87,4 @@
             {/snippet}
         </Popup>
     </div>
-{:else}
-    <LightSwitch />
 {/if}

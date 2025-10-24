@@ -5,7 +5,6 @@
     import { steps } from "./steps";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
-    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
 
@@ -74,12 +73,7 @@
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
                 {#if submitting}
-                    <Progress class="w-4" value={null}>
-                        <Progress.Circle>
-                            <Progress.CircleTrack />
-                            <Progress.CircleRange />
-                        </Progress.Circle>
-                    </Progress>
+                    <span class="loading loading-spinner loading-xs"></span>
                 {/if}
                 <span>{$t("setup.next")}</span>
                 <iconify-icon icon="ion:arrow-forward"></iconify-icon>

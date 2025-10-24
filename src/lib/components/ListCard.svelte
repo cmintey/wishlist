@@ -40,7 +40,7 @@
 >
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="preset-tonal-primary border-primary-500 card-header rounded-tl-container rounded-tr-container flex flex-row items-center gap-x-2 border px-4 py-2"
+            class="preset-tonal-primary border-primary-500 rounded-tl-container rounded-tr-container flex flex-row items-center gap-x-2 border px-4 py-1"
         >
             <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
@@ -63,7 +63,7 @@
             </span>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 <div class="flex flex-row items-center gap-2">
-                    <Avatar class="w-6" user={list.owner} />
+                    <Avatar class="size-6" user={list.owner} />
                     <span class="text-primary-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
 

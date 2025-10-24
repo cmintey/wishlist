@@ -146,14 +146,14 @@
     <label class="col-span-full" for="url">
         <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row gap-x-4">
-            <div class="input-group grid-cols-[auto_1fr_auto]">
-                <div class="input-group-shim">
+            <div class="input-group w-full grid-cols-[auto_1fr_auto]">
+                <div class="ig-cell preset-tonal">
                     <iconify-icon icon="ion:link"></iconify-icon>
                 </div>
                 <input
                     id="url"
                     name="url"
-                    class="input"
+                    class="ig-input"
                     onfocusout={() => getInfo()}
                     placeholder={$t("wishes.url-placeholder")}
                     type="url"
@@ -162,6 +162,7 @@
                 {#if productData.url}
                     <button
                         id="reset-field"
+                        class="ig-cell"
                         aria-label={$t("a11y.clear-url-field")}
                         onclick={() => (productData.url = null)}
                         onkeypress={(e) => e.preventDefault()}
@@ -195,13 +196,13 @@
     <label class="col-span-full xl:col-span-3" for="name">
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
-            <div class="input-group-shim">
+            <div class="ig-cell preset-tonal">
                 <iconify-icon icon="ion:bag-handle"></iconify-icon>
             </div>
             <input
                 id="name"
                 name="name"
-                class="input"
+                class="ig-input"
                 class:input-error={form?.errors?.name}
                 autocomplete="off"
                 required
@@ -226,13 +227,13 @@
         <div class="flex flex-row items-center gap-2">
             <div class="grow">
                 <div class="input-group grid-cols-[auto_1fr]">
-                    <div class="input-group-shim">
+                    <div class="ig-cell preset-tonal">
                         <iconify-icon icon="ion:gift"></iconify-icon>
                     </div>
                     <input
                         id="quantity"
                         name="quantity"
-                        class="input w-0 min-w-full"
+                        class="ig-input w-0 min-w-full"
                         autocomplete="off"
                         defaultValue={1}
                         disabled={unlimited}
@@ -269,13 +270,13 @@
     <label class="col-span-full md:col-span-4" for="imageUrl">
         <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
-            <div class="input-group-shim">
+            <div class="ig-cell preset-tonal">
                 <iconify-icon icon="ion:image"></iconify-icon>
             </div>
             <input
                 id="imageUrl"
                 name="imageUrl"
-                class="input"
+                class="ig-input"
                 autocomplete="off"
                 type="text"
                 bind:value={productData.imageUrl}
@@ -327,7 +328,7 @@
         </button>
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2">
             {#if !item.id}
-                <button id="submit-stay" class="variant-outline-primary btn" disabled={loading} type="submit">
+                <button id="submit-stay" class="btn preset-outlined-primary-500" disabled={loading} type="submit">
                     {$t("wishes.create-and-add-another")}
                 </button>
             {/if}

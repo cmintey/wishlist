@@ -2,12 +2,13 @@
 @import "@skeletonlabs/skeleton";
 @import "@skeletonlabs/skeleton-svelte";
 @import "./wishlist.css";
+@import "./styles/list.css";
+@import "./styles/loading.css";
 
-/* Add your theme import for your theme: "theme" here */
 @plugin "@tailwindcss/forms";
 
 /* The following are classes defined in i18n files and are used */
-@source inline("text-secondary-700-200-token");
+@source inline("text-secondary-800-200");
 @source inline("font-bold");
 
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
@@ -131,41 +132,43 @@
         font-display: swap;
     }
 }
+
+@layer components {
+    a:not(.unstyled):is(:not(.prose *)):not(.btn):not(.btn-icon):not(.app-bar a):not(.logo-item):not(a.card):not(
+            .list-nav a
+        ) {
+        @apply text-primary-700 decoration-primary-500/20 hover:decoration-primary-500 dark:text-primary-500 underline decoration-dotted underline-offset-4;
+    }
+
+    label:not(.checkbox-label) {
+        @apply space-y-1;
+    }
+
+    .btn,
+    .chip,
+    .list-nav a,
+    .list-nav .list-option {
+        @apply rtl:space-x-reverse;
+    }
+
+    .subtext {
+        @apply text-surface-900/70 dark:text-surface-50/50 text-sm;
+    }
+}
+
 @layer utilities {
+    input[type="checkbox"] {
+        @apply bg-surface-100-900 disabled:checked:bg-surface-500 disabled:cursor-not-allowed;
+    }
+
+    .checkbox-label {
+        @apply flex flex-row items-center gap-x-2;
+    }
 }
 
 html,
 body {
     @apply h-full;
-}
-
-a:not(.unstyled):is(:not(.prose *)):not(.btn):not(.btn-icon):not(.app-bar a):not(.logo-item):not(a.card):not(
-        .list-nav a
-    ) {
-    @apply text-primary-700 decoration-primary-500/20 hover:decoration-primary-500 dark:text-primary-500 underline decoration-dotted underline-offset-4;
-}
-
-label:not(.checkbox-label) {
-    @apply space-y-1;
-}
-
-input[type="checkbox"] {
-    @apply disabled:checked:bg-surface-500 disabled:cursor-not-allowed;
-}
-
-.checkbox-label {
-    @apply flex flex-row items-center gap-x-2;
-}
-
-.btn,
-.chip,
-.list-nav a,
-.list-nav .list-option {
-    @apply rtl:space-x-reverse;
-}
-
-.subtext {
-    @apply text-surface-900/70 dark:text-surface-50/50 text-sm;
 }
 
 /*! purgecss start ignore */

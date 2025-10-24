@@ -39,9 +39,10 @@
             </Tabs.Trigger>
         {/each}
     </Tabs.List>
+    <Tabs.Content value={selectedTab}>
+        {@render children?.()}
+    </Tabs.Content>
 </Tabs>
-
-{@render children?.()}
 
 <svelte:head>
     <title>{$t("admin.administration")}</title>

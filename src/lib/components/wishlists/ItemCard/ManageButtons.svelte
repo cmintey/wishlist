@@ -38,8 +38,8 @@
         {/snippet}
         {#snippet trigger(props)}
             <button
-                class={["btn btn-sm md:btn-md", approve ? "preset-filled-success-500" : "preset-filled-error-500"]}
                 {...props}
+                class={["btn btn-sm md:btn-md", approve ? "preset-filled-success-500" : "preset-filled-error-500"]}
                 onclick={(e) => {
                     e.stopPropagation();
                     props.onclick?.(e);
@@ -70,9 +70,9 @@
         <DeleteItemModal {item} {itemNameShort}>
             {#snippet trigger(props)}
                 <button
+                    {...props}
                     class="preset-filled-error-500 btn btn-icon btn-icon-sm md:btn-icon-base"
                     aria-label={$t("wishes.delete")}
-                    {...props}
                     onclick={(e) => {
                         e.stopPropagation();
                         props.onclick?.(e);

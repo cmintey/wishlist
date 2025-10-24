@@ -46,7 +46,7 @@
     <div class="flex flex-row gap-x-2 md:gap-x-4">
         <ClaimItemModal claimId={userClaim.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
             {#snippet trigger(props)}
-                <button class="preset-tonal-secondary border-secondary-500 btn btn-sm md:btn border" {...props}>
+                <button {...props} class="preset-tonal-secondary border-secondary-500 btn btn-sm md:btn border">
                     {item.quantity === 1 && userClaim.quantity === 1 ? $t("wishes.unclaim") : $t("wishes.update-claim")}
                 </button>
             {/snippet}
@@ -72,7 +72,7 @@
     <div class="flex flex-row items-center gap-x-2 md:gap-x-4">
         <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
             {#snippet trigger(props)}
-                <button class="preset-filled-secondary-500 btn btn-sm md:btn" {...props}>
+                <button {...props} class="btn btn-sm md:btn preset-filled-secondary-600-400">
                     {$t("wishes.claim")}
                 </button>
             {/snippet}

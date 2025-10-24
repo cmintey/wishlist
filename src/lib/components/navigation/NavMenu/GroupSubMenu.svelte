@@ -43,7 +43,7 @@
             {#if group.active}
                 {#if groups.length > 1}
                     <li>
-                        <div class="flex w-fit flex-row items-center gap-x-4 px-4 py-2">
+                        <div class="flex w-full flex-row items-center gap-x-4 px-4 py-2">
                             <iconify-icon icon="ion:people"></iconify-icon>
                             <span>{group.name}</span>
                         </div>
@@ -51,7 +51,7 @@
                 {/if}
                 {#if group.isManager}
                     <li>
-                        <button class="list-option w-fit" onclick={() => goto(`/admin/groups/${group.id}`)}>
+                        <button class="list-option w-full" onclick={() => goto(`/admin/groups/${group.id}`)}>
                             <iconify-icon icon="ion:settings"></iconify-icon>
                             <span>{$t("general.manage-group")}</span>
                         </button>
@@ -63,7 +63,7 @@
             <li>
                 <GroupSelectModal {groups} onSubmit={changeGroup}>
                     {#snippet trigger(props)}
-                        <button class="list-option w-fit" {...props}>
+                        <button {...props} class="list-option w-full">
                             <iconify-icon icon="ion:swap-horizontal"></iconify-icon>
                             <span>{$t("general.change-group")}</span>
                         </button>
@@ -82,7 +82,7 @@
         title={$t("general.enter-group-name")}
     >
         {#snippet trigger(props)}
-            <button class="list-option w-fit" {...props}>
+            <button {...props} class="list-option w-full">
                 <iconify-icon icon="ion:add"></iconify-icon>
                 <span>{$t("general.create-group")}</span>
             </button>

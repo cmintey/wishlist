@@ -22,7 +22,7 @@
     </Tabs.List>
     <Tabs.Content class="flex w-fit flex-col items-center" value="profile">
         <div class="relative m-auto h-full w-full max-w-[150px]">
-            <Avatar class="w-32" user={data.user} />
+            <Avatar class="size-32" user={data.user} />
             <form
                 class="absolute right-0 bottom-0 h-12 w-12"
                 action="?/profilePicture"

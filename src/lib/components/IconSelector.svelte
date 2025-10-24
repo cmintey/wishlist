@@ -1,12 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import {
-        Combobox,
-        Portal,
-        useListCollection,
-        type ComboboxRootProps,
-        type PopupSettings
-    } from "@skeletonlabs/skeleton-svelte";
+    import { Combobox, Portal, useListCollection, type ComboboxRootProps } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { VirtualList } from "svelte-virtuallists";
     import fuzzysort from "fuzzysort";
@@ -69,12 +63,6 @@
         return Promise.resolve();
     };
 
-    const iconSelectorPopup: PopupSettings = {
-        event: "focus-click",
-        target: "iconSelectorPopup",
-        placement: "bottom"
-    };
-
     const partition = <T,>(items: T[], partitionSize: number) => {
         let partitioned: T[][] = [];
         for (let i = 0; i < items.length; i += partitionSize) {
@@ -98,13 +86,23 @@
     };
 
     const onInputValueChange: ComboboxRootProps["onInputValueChange"] = (event) => {
+        if (event.reason === "item-select") {
+            iconValue = event.inputValue;
+            onIconSelected?.(iconValue);
+        }
+        search = event.inputValue;
         filteredIcons = fuzzysort.go(event.inputValue, availableIcons, { all: true }).map((result) => result.target);
+        if (filteredIcons.find((i) => i === search)) {
+            iconValue = search;
+        }
     };
+
+    $inspect(iconValue);
 </script>
 
 <Combobox
     name={id || "name"}
-    class="w-full max-w-md"
+    class="w-full"
     {collection}
     inputBehavior="autohighlight"
     {onInputValueChange}
@@ -114,17 +112,27 @@
 >
     <Combobox.Label>{title ?? $t("general.icon")}</Combobox.Label>
     <Combobox.Control>
-        <Combobox.Input type="text" />
+        <!-- <Combobox.Input type="text" /> -->
+        <Combobox.Input>
+            {#snippet element(props)}
+                <div class="input-group grid grid-cols-[auto_1fr]">
+                    <div class="ig-cell preset-tonal items-center">
+                        <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
+                    </div>
+                    <input {...props} />
+                </div>
+            {/snippet}
+        </Combobox.Input>
         <Combobox.Trigger />
     </Combobox.Control>
     <Portal>
         <Combobox.Positioner class="z-[1]!">
-            <Combobox.Content>
-                {#each availableIcons as item (item)}
+            <Combobox.Content class="grid h-64 max-w-full grid-cols-6 overflow-auto pl-2 md:grid-cols-12">
+                {#each filteredIcons as item (item)}
                     <Combobox.Item {item}>
                         <Combobox.ItemText>
                             <!-- TODO: Use virtual list -->
-                            <iconify-icon class="text-xl" icon={"ion:" + item} noobserver></iconify-icon>
+                            <iconify-icon class="text-xl" icon={"ion:" + item}></iconify-icon>
                         </Combobox.ItemText>
                     </Combobox.Item>
                 {/each}
@@ -152,7 +160,7 @@
         value={iconValue}
     >
         {#snippet lead()}
-            <div class="input-group-shim items-center">
+            <div class="ig-cell preset-tonal items-center">
                 <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
             </div>
         {/snippet}

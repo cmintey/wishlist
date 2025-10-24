@@ -126,11 +126,11 @@
     {item}
     {itemNameShort}
     {onPublicList}
-    open={drawerOpen}
     {requireClaimEmail}
     {showFor}
     showName={showClaimedName}
     {user}
+    bind:open={drawerOpen}
 />
 
 <div
@@ -148,7 +148,7 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    <header class="card-header flex w-full">
+    <header class="flex w-full p-4 pb-0">
         {#if item.url}
             <a
                 id={`${id}-name`}
@@ -231,7 +231,7 @@
     </div>
 
     <footer
-        class="card-footer flex flex-row"
+        class="flex flex-row p-4 pt-0"
         class:justify-between={!reorderActions}
         class:justify-center={reorderActions}
     >

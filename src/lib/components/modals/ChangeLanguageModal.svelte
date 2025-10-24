@@ -25,11 +25,11 @@
 
     {#snippet actions()}
         <div class="flex justify-between">
-            <Dialog.CloseTrigger class="variant-ghost-surface btn btn-sm md:btn-md" type="button">
+            <Dialog.CloseTrigger class="preset-tonal btn btn-sm md:btn-base inset-ring" type="button">
                 {$t("general.cancel")}
             </Dialog.CloseTrigger>
 
-            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" form={formId} type="submit">
+            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-base" form={formId} type="submit">
                 {$t("general.save")}
             </Dialog.CloseTrigger>
         </div>
@@ -37,7 +37,6 @@
 
     <form
         id={formId}
-        class="card preset-filled-surface-100-900 w-modal space-y-4 p-4 shadow-xl"
         action="/?/language"
         method="POST"
         use:enhance={() => {

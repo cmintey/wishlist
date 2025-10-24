@@ -107,33 +107,33 @@
 </script>
 
 <div class="input-group grid-cols-[auto_1fr_auto]">
-    <div class="input-group-shim">
+    <div class="ig-cell preset-tonal">
         <iconify-icon icon="ion:pricetag"></iconify-icon>
     </div>
-    <div class="border-surface-500 focus:border-surface-500 border-r rtl:border-l">
-        <input {id} {name} {disabled} type="hidden" bind:value />
-        <input
-            bind:this={inputElement}
-            id={`formatted-${id}`}
-            name={`formatted-${name}`}
-            class="input"
-            autocomplete="off"
-            {disabled}
-            inputmode={maximumFractionDigits > 0 ? "decimal" : "numeric"}
-            onblur={handleBlur}
-            onfocus={handleFocus}
-            onkeydown={handleKeyDown}
-            placeholder={formatter.format(0)}
-            type="text"
-            bind:value={displayValue}
-        />
-    </div>
-    <input id="currency" name="currency" type="hidden" bind:value={currency} />
     <input
-        class="border-surface-500 focus:border-surface-500 w-[8ch] border-l uppercase"
+        bind:this={inputElement}
+        id={`formatted-${id}`}
+        name={`formatted-${name}`}
+        class="ig-input"
+        autocomplete="off"
+        {disabled}
+        inputmode={maximumFractionDigits > 0 ? "decimal" : "numeric"}
+        onblur={handleBlur}
+        onfocus={handleFocus}
+        onkeydown={handleKeyDown}
+        placeholder={formatter.format(0)}
+        type="text"
+        bind:value={displayValue}
+    />
+    <input
+        class="ig-input w-[8ch] uppercase"
         data-testid="currency"
         maxlength="3"
         onchange={validateCurrency}
+        type="text"
         value={currency}
     />
 </div>
+
+<input {id} {name} {disabled} type="hidden" bind:value />
+<input id="currency" name="currency" type="hidden" bind:value={currency} />

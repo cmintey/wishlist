@@ -35,7 +35,7 @@
     {#snippet actions()}
         <div class="flex justify-between">
             <Dialog.CloseTrigger
-                class="variant-ghost-surface btn btn-sm md:btn-md"
+                class="preset-tonal btn btn-sm md:btn-base inset-ring"
                 onclick={onCancel}
                 {...cancelButtonProps}
             >
@@ -43,7 +43,7 @@
             </Dialog.CloseTrigger>
 
             <Dialog.CloseTrigger
-                class="variant-filled btn btn-sm md:btn-md"
+                class="preset-filled btn btn-sm md:btn-base"
                 onclick={onConfirm}
                 {...confirmButtonProps}
             >

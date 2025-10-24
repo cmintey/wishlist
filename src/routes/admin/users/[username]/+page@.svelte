@@ -34,7 +34,7 @@
 
 <div class="flex flex-col space-y-2">
     <h1 class="h1 mb-2">{data.editingUser.name}</h1>
-    <hr />
+    <hr class="hr" />
     <h2 class="h2">{$t("admin.username-field", { values: { username: data.editingUser.username } })}</h2>
     <h3 class="h3">{$t("admin.id-field", { values: { id: data.editingUser.id } })}</h3>
 </div>

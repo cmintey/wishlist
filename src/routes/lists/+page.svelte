@@ -50,7 +50,7 @@
 {/if}
 
 <button
-    class="preset-tonal-surface border-surface-500 btn fixed right-4 z-90 h-16 w-16 rounded-full border md:right-10 md:bottom-10 md:h-20 md:w-20"
+    class="inset-ring-surface-200-800 preset-tonal btn fixed right-4 z-30 h-16 w-16 rounded-full inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20"
     class:bottom-24={$isInstalled}
     class:bottom-4={!$isInstalled}
     onclick={() => goto(`${page.url.pathname}/create`)}

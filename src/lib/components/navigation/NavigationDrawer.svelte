@@ -2,6 +2,8 @@
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import { Dialog, Portal, type DialogTriggerProps } from "@skeletonlabs/skeleton-svelte";
+    import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
+    import ModalContent from "../modals/parts/ModalContent.svelte";
 
     interface Props {
         trigger: DialogTriggerProps["element"];
@@ -17,11 +19,9 @@
 <Dialog onOpenChange={(e) => (open = e.open)} {open}>
     <Dialog.Trigger element={trigger}></Dialog.Trigger>
     <Portal>
-        <Dialog.Backdrop
-            class="bg-surface-50-950/50 fixed inset-0 z-50 w-[280px] opacity-0 transition transition-discrete data-[state=open]:opacity-100 md:w-[480px] starting:data-[state=open]:opacity-0"
-        />
+        <ModalBackdrop></ModalBackdrop>
         <Dialog.Positioner class="fixed inset-0 z-50 flex justify-start">
-            <Dialog.Content class="mt-4 flex flex-row place-content-between items-center px-4">
+            <ModalContent>
                 <header class="flex items-center justify-between">
                     <Dialog.Title class="text-4xl font-bold">Wishlist</Dialog.Title>
                     <Dialog.CloseTrigger class="btn-icon preset-tonal">
@@ -48,7 +48,7 @@
                         {/each}
                     </ul>
                 </nav>
-            </Dialog.Content>
+            </ModalContent>
         </Dialog.Positioner>
     </Portal>
 </Dialog>

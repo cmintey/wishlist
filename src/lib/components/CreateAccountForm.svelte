@@ -2,7 +2,6 @@
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { Progress } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         hideActions?: boolean;
@@ -19,7 +18,7 @@
     let passwordConfirm = $state("");
 </script>
 
-<div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
+<div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 inset-ring">
     {#if data.id}
         <input id="tokenId" name="tokenId" class="hidden" value={data.id} />
     {/if}
@@ -85,12 +84,7 @@
                 type="submit"
             >
                 {#if signingIn}
-                    <Progress class="w-4" value={null}>
-                        <Progress.Circle>
-                            <Progress.CircleTrack />
-                            <Progress.CircleRange />
-                        </Progress.Circle>
-                    </Progress>
+                    <span class="loading loading-spinner loading-xs"></span>
                 {/if}
                 <span>{$t("auth.create-account")}</span>
             </button>

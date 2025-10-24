@@ -59,10 +59,10 @@
     <label class="w-fit">
         <span>{$t("general.search")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
-            <div class="input-group-shim">
+            <div class="ig-cell preset-tonal">
                 <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
             </div>
-            <input class="input" type="search" bind:value={searchValue} />
+            <input class="ig-input" type="search" bind:value={searchValue} />
         </div>
     </label>
 

@@ -32,7 +32,7 @@
                     };
                 }}
             >
-                <div class="bg-surface-100-900 ring-outline-token rounded-container flex flex-col space-y-4 p-4">
+                <div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 inset-ring">
                     <label class="w-full" for="email">
                         <span>{$t("auth.email")}</span>
                         <input

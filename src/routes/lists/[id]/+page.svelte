@@ -277,7 +277,7 @@
                 </div>
             {/each}
         </div>
-        <hr />
+        <hr class="hr" />
     </div>
 {/if}
 
@@ -348,7 +348,7 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="preset-tonal-surface border-surface-500 btn fixed right-4 z-90 h-16 w-16 rounded-full border md:right-10 md:bottom-10 md:h-20 md:w-20"
+        class="preset-tonal btn inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 rounded-full inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"

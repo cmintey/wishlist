@@ -9,7 +9,7 @@
     const { trigger, content }: Props = $props();
 </script>
 
-<Popover>
+<Popover autoFocus={false}>
     <Popover.Trigger element={trigger}></Popover.Trigger>
     <Portal>
         <Popover.Positioner>

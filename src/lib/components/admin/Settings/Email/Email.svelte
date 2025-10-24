@@ -2,7 +2,6 @@
     import SettingsGroup from "../SettingsGroup.svelte";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
-    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
 
     interface Props {
@@ -110,12 +109,7 @@
                     type="submit"
                 >
                     {#if sending}
-                        <Progress class="w-6" value={null}>
-                            <Progress.Circle>
-                                <Progress.CircleTrack />
-                                <Progress.CircleRange />
-                            </Progress.Circle>
-                        </Progress>
+                        <span class="loading loading-spinner loading-xs"></span>
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

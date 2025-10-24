@@ -160,10 +160,10 @@
             <label class="w-fit">
                 <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
-                    <div class="input-group-shim">
+                    <div class="ig-cell preset-tonal">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                     </div>
-                    <input class="input" type="text" bind:value={name} />
+                    <input class="ig-input" type="text" bind:value={name} />
                 </div>
             </label>
 
@@ -171,10 +171,10 @@
                 <label class="w-fit">
                     <span>{$t("auth.email")}</span>
                     <div class="input-group grid-cols-[auto_1fr_auto]">
-                        <div class="input-group-shim">
+                        <div class="ig-cell preset-tonal">
                             <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                         </div>
-                        <input class="input" required type="email" bind:value={username} />
+                        <input class="ig-input" required type="email" bind:value={username} />
                     </div>
                 </label>
             {/if}
