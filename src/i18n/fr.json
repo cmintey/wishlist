@@ -329,7 +329,7 @@
         "unable-to-update-password": "Impossible de mettre à jour le mot de passe"
     },
     "wishes": {
-        "added-by": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "added-by": "Ajouté par <span class=\"text-secondary-800-200 font-bold\">{name}</span>",
         "claimed": "Réservé",
         "claimed-item": "Elément {claimed, select, true {réservé} other {non réservé}}",
         "create-for": "Créer un Souhait pour {listOwner}",
@@ -346,7 +346,7 @@
         "approvals-waiting": "Vous avez {approvalCount, plural, one {# item} other {# items}} attendant votre approbation",
         "create": "Créer un Souhait",
         "edit": "Éditer",
-        "for": "Pour <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "for": "Pour <span class=\"text-secondary-800-200 font-bold\">{name}</span>",
         "hang-tight-gathering-product-data": "Patientez un moment, récupération des données produit",
         "approval-needed": "Approbation requise",
         "approval-confirmation": "Êtes-vous certain d'<b>{approve, select, true {approve} other {deny}}</b> cette suggestion de {name}",
@@ -394,7 +394,7 @@
         "item-was-removed-from-list": "{name} a été retiré de la liste",
         "all-lists": "Toutes les listes",
         "this-list": "Cette liste",
-        "added-by-somebody-else": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">quelqu'un d'autre</span>",
+        "added-by-somebody-else": "Ajouté par <span class=\"text-secondary-800-200 font-bold\">quelqu'un d'autre</span>",
         "claimed-by-multiple-users": "Réservé par plusieurs utilisateurs",
         "additional-items-requested": "{remainingQuantity, plural, =0 {Il n'y a pas d'objets supplémentaires disponibles.} one {Il y a # objet disponible.} other {Il y a # objets supplémentaires disponibles.}}",
         "claimed-info-text": "{claimedQuantity, plural, one {Vous avez revendiqué # objet.} other {Vous avez revendiqué # objets.}}",

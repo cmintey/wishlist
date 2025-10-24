@@ -321,7 +321,7 @@
         "approve": "Godkänn",
         "claimed-item": "{claimed, select, true {Reserverad} other {Ej reserverad}} artikel",
         "finish": "Avsluta",
-        "for": "För <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "for": "För <span class=\"text-secondary-800-200 font-bold\">{name}</span>",
         "heads-up": "Se upp!",
         "image-url": "Bild URL",
         "item-was-deleted": "{name} var borttaget",
@@ -351,7 +351,7 @@
         "share": "Dela lista",
         "wishes-for": "{listOwner}s önskningar",
         "add-item": "Lägg till artikel",
-        "added-by": "Tillagt av <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "added-by": "Tillagt av <span class=\"text-secondary-800-200 font-bold\">{name}</span>",
         "approval-confirmation": "Är du säker på att du vill <b>{approve, select, true {godkänna} other {neka}}</b> detta förslag från {name}",
         "approval-needed": "Godkännande behövs",
         "approval-required": "{listOwner} måste godkänna ditt förslag innan det läggs till i deras lista.",
@@ -381,7 +381,7 @@
         "create-list": "Skapa lista",
         "public": "Publik",
         "delete-list-confirmation": "Är du säker på att du vill ta bort denna listan? Artiklar som inte hör samman med en annan lista kommer också att tas bort.",
-        "added-by-somebody-else": "Tillagd av <span class=\"text-secondary-700-200-token font-bold\">någon annan</span>",
+        "added-by-somebody-else": "Tillagd av <span class=\"text-secondary-800-200 font-bold\">någon annan</span>",
         "item-was-removed-from-list": "{name} togs bort från denna listan"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
