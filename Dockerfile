@@ -27,7 +27,7 @@ RUN pnpm run build
 RUN pnpm prune --prod
 
 # Download Caddy from github
-FROM --platform=$BUILDPLATFORM alpine:latest AS caddy
+FROM --platform=$BUILDPLATFORM alpine:latest@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 AS caddy
 
 ARG TARGETPLATFORM
 ARG CADDY_VERSION=2.10.0
