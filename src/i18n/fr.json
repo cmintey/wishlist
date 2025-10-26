@@ -64,12 +64,11 @@
         "item-not-found-on-list": "Article non trouvé dans la liste",
         "unable-to-update-claim": "Impossible de mettre à jour la réservation",
         "an-item-must-be-added-to-at-least-one-list": "Un élément doit être ajouté à au moins une liste",
-        "could-not-claim-quantity-items": "Impossible de réserver {quantity} exemplaires. Seulement {availableQuantity} exemplaires sont disponibles à la réservation.",
+        "could-not-claim-quantity-items": "Impossible de demander {quantity} exemplaires. Seulement {availableQuantity} exemplaires sont disponibles.",
         "public-lists-not-allowed": "Les listes publiques ne sont pas autorisées dans ce groupe",
         "registration-is-disabled": "L'enregistrement est desactivé",
         "unable-to-update-preferred-language": "Impossible de mettre à jour la langue préférée",
-        "language-is-required": "La langue est requise",
-        "email-is-required-for-public-claims": "Un email est nécessaire pour des réservation publiques"
+        "language-is-required": "La langue est requise"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -162,9 +161,7 @@
         "suggestions-surprise-me-tooltip": "L'élément est automatiquement ajouté à la liste du propriétaire sans qu'il ne le sache.",
         "suggestions-tooltip": "Autoriser les utilisateurs d'un même groupe à suggérer des éléments à la liste d'un autre utilisateur.",
         "test-email": "E-mail de test",
-        "test-email-sent-toast": "E-mail de test envoyé",
-        "claims-require-email": "Nécessite un email",
-        "claims-require-email-tooltip": "Nécessite une adresse email pour réserver anonymement un élément."
+        "test-email-sent-toast": "E-mail de test envoyé"
     },
     "auth": {
         "password": "Mot de passe",
@@ -227,8 +224,7 @@
         "clear-icon-field": "effacer le champ icône",
         "clear-name-field": "effacer le champ nom",
         "default-item-image": "image de l'élément par défaut",
-        "unpurchase": "Marquer l'élément comme non acheté",
-        "user-menu": "Menu utilisateur"
+        "unpurchase": "Marquer l'élément comme non acheté"
     },
     "app": {
         "my-claims": "Mes réservations",
@@ -355,7 +351,7 @@
         "approval-needed": "Approbation requise",
         "approval-confirmation": "Êtes-vous certain d'<b>{approve, select, true {approve} other {deny}}</b> cette suggestion de {name}",
         "approval-required": "{listOwner} doit approuver votre suggestion avant qu'elle soit ajoutée à sa liste.",
-        "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Avant que vous ne puissiez réserver l'article, nous avons juste besoin d'une chose.",
+        "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Avant que vous puissiez réserver l'article, nous avons juste besoin d'une chose.",
         "claim-details": "Détails de la réservation",
         "are-you-sure-you-wish-to-delete-item": "Êtes-vous certain de vouloir supprimer <b>{name}</b> ?",
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Voulez vous supprimer <b>{name}</b> de cette liste ou de toutes les listes ?",
@@ -401,10 +397,10 @@
         "added-by-somebody-else": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">quelqu'un d'autre</span>",
         "claimed-by-multiple-users": "Réservé par plusieurs utilisateurs",
         "additional-items-requested": "{remainingQuantity, plural, =0 {Il n'y a pas d'objets supplémentaires disponibles.} one {Il y a # objet disponible.} other {Il y a # objets supplémentaires disponibles.}}",
-        "claimed-info-text": "{claimedQuantity, plural, one {Vous avez réservé # objet.} other {Vous avez réservé # objets.}}",
-        "count-items": "{itemCount, plural, one {# item} other {# items}}",
+        "claimed-info-text": "{claimedQuantity, plural, one {Vous avez revendiqué # objet.} other {Vous avez revendiqué # objets.}}",
+        "count-items": "{itemCount} objets",
         "create-and-add-another": "Créer et en ajouter un autre",
-        "enter-the-quantity-to-claim": "Entrer la quantité à réserver.",
+        "enter-the-quantity-to-claim": "Entrer la quantité à revendiquer.",
         "hide-all-currencies": "Cacher toutes les devises…",
         "hide-description": "Cacher la description",
         "no-limit": "Pas de limite",
@@ -412,13 +408,13 @@
         "purchase": "Marquer l'objet comme étant acheté",
         "purchased-toast": "Objet marqué comme étant {purchased, select, true {acheté} other {non acheté}}",
         "quantity": "Quantité",
-        "quantity-claimed": "{quantity} réservé(s)",
+        "quantity-claimed": "{quantity} revendiqué(s)",
         "quantity-desired": "{quantity} souhaité(s)",
         "show-all-currencies": "Afficher toutes les devises…",
         "show-description": "Afficher la description",
         "supports-markdown": "Supporte le Markdown",
-        "update-claim": "Mettre à jour la réservation",
-        "updated-claim": "Réservation mise à jour",
+        "update-claim": "Mettre à jour la revendication",
+        "updated-claim": "Revendication mise à jour",
         "view-item": "Voir l'objet",
         "write": "Écrire"
     },
