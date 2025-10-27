@@ -32,7 +32,7 @@ export const GET = (async ({ locals, params }) => {
         config.suggestions.enable &&
         config.suggestions.method === "surprise" &&
         locals.user &&
-        list.owner.id === locals.user.id
+        (list.owner.id === locals.user.id || list.managers.find(({ userId }) => userId === locals.user!.id))
     ) {
         return new Response();
     }

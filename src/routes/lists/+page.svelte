@@ -5,10 +5,10 @@
     import ListCard from "$lib/components/ListCard.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import { goto } from "$app/navigation";
-    import { page } from "$app/state";
     import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
     import empty from "$lib/assets/no_wishes.svg";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     type ListData = PageData["otherLists"][0];
 
@@ -53,7 +53,7 @@
     class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
     class:bottom-24={$isInstalled}
     class:bottom-4={!$isInstalled}
-    onclick={() => goto(`${page.url.pathname}/create`)}
+    onclick={() => goto(resolve("/lists/create"))}
 >
     <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     <span class="sr-only">{$t("wishes.create-list")}</span>

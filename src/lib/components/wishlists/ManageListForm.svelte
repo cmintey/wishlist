@@ -8,9 +8,11 @@
     import { getModalStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";
+    import { page } from "$app/state";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
+        managers: Pick<User, "id" | "name">[];
     }
 
     interface Props {
@@ -38,6 +40,7 @@
         return list.iconColor || "";
     });
     let colorValue: string | null = $state((() => defaultColor)());
+    let managers = $state(list.managers);
 
     const handleDelete = async () => {
         return new Promise((resolve, reject) => {
@@ -57,6 +60,18 @@
             });
         });
     };
+
+    const addManager = () => {
+        modalStore.trigger({
+            type: "component",
+            component: "selectListManager",
+            response(user: { id: string; name: string }) {
+                managers.push(user);
+            }
+        });
+    };
+
+    $inspect(managers);
 
     $effect(() => {
         if (!colorValue) colorValue = defaultColor;
@@ -149,6 +164,35 @@
                 />
             </label>
         </div>
+
+        <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5">
+            <div class="flex items-end justify-between">
+                <legend>List managers</legend>
+                <button class="variant-ghost-primary btn btn-sm" onclick={addManager} type="button">
+                    Add a manager
+                </button>
+            </div>
+
+            <div
+                class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+                class:input-error={page.form?.errors?.managers}
+            >
+                {#if managers.length === 0}
+                    <span>No managers</span>
+                {/if}
+                {#each managers as manager (manager.id)}
+                    <label class="flex items-center gap-x-2" for={manager.id}>
+                        <input id={manager.id} name="managers" class="hidden" readonly type="text" value={manager.id} />
+                        <span>
+                            {manager.name}
+                        </span>
+                    </label>
+                {/each}
+            </div>
+            {#if page.form?.errors?.managers}
+                <p class="unstyled text-error-500-400-token text-xs">{page.form.errors.managers[0]}</p>
+            {/if}
+        </fieldset>
 
         <div class="col-span-full">
             <div class="flex flex-col space-y-2">
