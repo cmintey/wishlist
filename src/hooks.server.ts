@@ -56,7 +56,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 };
 
 function transformForLang(html: string, lang: Lang) {
-    console.log(lang);
     return html.replace("%lang%", lang.code).replace("%dir%", lang.rtl ? "rtl" : "ltr");
 }
 

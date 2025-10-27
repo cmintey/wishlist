@@ -29,22 +29,28 @@ export const load: PageServerLoad = async ({ params }) => {
 
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && user.id !== list.owner.id) {
+    if (
+        !config.suggestions.enable &&
+        user.id !== list.owner.id &&
+        !list.managers.find(({ userId }) => userId === user.id)
+    ) {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
     const lists = await getAvailableLists(list.owner.id, user.id);
 
+    const isOwnerOrManager =
+        list.owner.id === user.id || list.managers.find(({ userId }) => userId === user.id) !== undefined;
     return {
         lists,
         list: {
             id: list.id,
             owner: {
                 name: list.owner.name,
-                isMe: list.owner.id === user.id
+                isMe: isOwnerOrManager
             }
         },
-        suggestion: list.owner.id !== user.id,
+        suggestion: !isOwnerOrManager,
         suggestionMethod: config.suggestions.method
     };
 };

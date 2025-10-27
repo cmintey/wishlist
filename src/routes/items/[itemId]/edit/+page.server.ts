@@ -44,7 +44,12 @@ export const load: PageServerLoad = async ({ params }) => {
                     list: {
                         select: {
                             id: true,
-                            ownerId: true
+                            ownerId: true,
+                            managers: {
+                                select: {
+                                    userId: true
+                                }
+                            }
                         }
                     }
                 }
@@ -69,7 +74,10 @@ export const load: PageServerLoad = async ({ params }) => {
             ...item,
             lists: item.lists.map(({ list, addedById }) => ({
                 id: list.id,
-                canModify: list.ownerId === user.id || addedById === user.id
+                canModify:
+                    list.ownerId === user.id ||
+                    addedById === user.id ||
+                    list.managers.find(({ userId }) => userId === user.id) !== undefined
             }))
         },
         lists

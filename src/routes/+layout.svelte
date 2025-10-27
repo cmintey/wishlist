@@ -23,6 +23,7 @@
     import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
     import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
     import { setFormatter, setLocale } from "$lib/i18n";
+    import SelectListManagerModal from "$lib/components/modals/SelectListManagerModal.svelte";
 
     const { data, children }: LayoutProps = $props();
 
@@ -109,6 +110,9 @@
         },
         chooseLanguage: {
             ref: ChangeLanguageModal
+        },
+        selectListManager: {
+            ref: SelectListManagerModal
         }
     };
 
