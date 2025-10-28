@@ -18,6 +18,7 @@
     const drawerStore = getDrawerStore();
     const item: ItemOnListDTO = $drawerStore.meta.item;
     const user: PartialUser | undefined = $drawerStore.meta.user;
+    const userCanManage: boolean = $drawerStore.meta.userCanManage;
     const showFor: boolean = $drawerStore.meta.showFor;
     const showName: boolean = $drawerStore.meta.showName;
     const onPublicList: boolean = $drawerStore.meta.onPublicList;
@@ -136,6 +137,7 @@
             onDeny={() => handleApproval(false)}
             {onEdit}
             {user}
+            {userCanManage}
         />
     </div>
 </div>

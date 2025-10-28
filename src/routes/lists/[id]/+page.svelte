@@ -278,6 +278,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
@@ -319,6 +320,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
@@ -337,6 +339,7 @@
                             requireClaimEmail={data.requireClaimEmail}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
+                            userCanManage={data.list.isManager}
                         />
                     </div>
                 {/each}
