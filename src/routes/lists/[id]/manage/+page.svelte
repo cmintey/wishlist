@@ -19,13 +19,7 @@
     });
 </script>
 
-<ManageListForm
-    allowsPublicLists={data.allowsPublicLists}
-    {data}
-    editing
-    listMode={data.listMode}
-    persistButtonName={$t("general.save")}
-/>
+<ManageListForm {...data} editing persistButtonName={$t("general.save")} />
 
 <svelte:head>
     <title>{$t("wishes.manage-list")}</title>

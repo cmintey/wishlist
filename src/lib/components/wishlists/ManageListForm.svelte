@@ -12,24 +12,22 @@
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
-        managers: Pick<User, "id" | "name">[];
+        managers: Pick<User, "id" | "name" | "email">[];
     }
 
     interface Props {
-        data: {
-            list: ListProps;
-        };
+        list: ListProps;
         persistButtonName: string;
         listMode: ListMode;
         allowsPublicLists: boolean;
+        groupId: string;
         editing?: boolean;
     }
 
-    const { data, persistButtonName, listMode, allowsPublicLists, editing = false }: Props = $props();
+    const { list, persistButtonName, listMode, allowsPublicLists, groupId, editing = false }: Props = $props();
     const t = getFormatter();
     const modalStore = getModalStore();
 
-    let list = $state(data.list);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived.by(() => {
         if (colorElement) {
@@ -65,10 +63,18 @@
         modalStore.trigger({
             type: "component",
             component: "selectListManager",
-            response(user: { id: string; name: string }) {
-                managers.push(user);
+            meta: {
+                groupId,
+                managers: [list.owner, ...managers]
+            },
+            response(user: { id: string; name: string; email: string }) {
+                managers = [...managers, user];
             }
         });
+    };
+
+    const removeManager = (id: string) => {
+        managers = managers.filter((user) => user.id !== id);
     };
 
     $inspect(managers);
@@ -165,27 +171,35 @@
             </label>
         </div>
 
-        <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5">
+        <fieldset class="col-span-full flex min-w-0 flex-col space-y-2 md:col-span-5">
             <div class="flex items-end justify-between">
-                <legend>List managers</legend>
+                <legend>{$t("wishes.list-managers")}</legend>
                 <button class="variant-ghost-primary btn btn-sm" onclick={addManager} type="button">
-                    Add a manager
+                    {$t("wishes.add-a-manager")}
                 </button>
             </div>
 
             <div
-                class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+                class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-y-scroll p-2 border-token rounded-container-token"
                 class:input-error={page.form?.errors?.managers}
             >
                 {#if managers.length === 0}
-                    <span>No managers</span>
+                    <span class="subtext">{$t("wishes.no-managers")}</span>
                 {/if}
                 {#each managers as manager (manager.id)}
-                    <label class="flex items-center gap-x-2" for={manager.id}>
+                    <label class="flex items-center justify-between" for={manager.id}>
                         <input id={manager.id} name="managers" class="hidden" readonly type="text" value={manager.id} />
-                        <span>
-                            {manager.name}
-                        </span>
+
+                        <div class="flex items-center gap-x-2 truncate">
+                            <p class="truncate">{manager.name}</p>
+                            <span class="subtext truncate">{manager.email}</span>
+                        </div>
+                        <button class="flex items-center" onclick={() => removeManager(manager.id)} type="button">
+                            <iconify-icon icon="ion:close"></iconify-icon>
+                            <span class="sr-only">
+                                {$t("a11y.remove-manager-name", { values: { name: manager.name } })}
+                            </span>
+                        </button>
                     </label>
                 {/each}
             </div>

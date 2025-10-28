@@ -37,10 +37,12 @@ export const load = (async () => {
                 username: user.username,
                 picture: user.picture || null
             },
-            description: null
+            description: null,
+            managers: []
         },
         listMode: config.listMode,
-        allowsPublicLists: config.allowPublicLists
+        allowsPublicLists: config.allowPublicLists,
+        groupId: activeMembership.groupId
     };
 }) satisfies PageServerLoad;
 

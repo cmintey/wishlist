@@ -39,6 +39,11 @@ export class UserAPI {
     };
 }
 
+type UsersSearchOptions = {
+    groupId?: string;
+    excludedUserIds?: string[];
+};
+
 export class UsersAPI {
     _makeRequest = async (method: string, query = "") => {
         const options: RequestInit = {
@@ -48,15 +53,19 @@ export class UsersAPI {
             }
         };
 
-        return await fetch(`/api/users${query}`, options);
+        return await fetch(`/api/users?${query}`, options);
     };
 
     all = async () => {
         return await this._makeRequest("GET");
     };
 
-    search = async (search: string) => {
-        return await this._makeRequest("GET", `?name=${search}`);
+    search = async (search: string, options?: UsersSearchOptions) => {
+        const params = new URLSearchParams();
+        params.append("name", search);
+        if (options?.groupId) params.append("groupId", options.groupId);
+        if (options?.excludedUserIds) params.append("excludedUserIds", options.excludedUserIds.join(","));
+        return await this._makeRequest("GET", params.toString());
     };
 }
 
