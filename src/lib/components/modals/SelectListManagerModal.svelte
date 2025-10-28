@@ -33,7 +33,6 @@
         }
     }
 
-    // TODO: allow filtering by group id
     const usersAPI = new UsersAPI();
 
     let users: Pick<User, "id" | "name" | "email">[] = $state([]);

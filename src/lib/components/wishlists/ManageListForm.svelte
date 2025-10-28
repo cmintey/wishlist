@@ -77,8 +77,6 @@
         managers = managers.filter((user) => user.id !== id);
     };
 
-    $inspect(managers);
-
     $effect(() => {
         if (!colorValue) colorValue = defaultColor;
     });
