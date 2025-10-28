@@ -160,7 +160,6 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
         options.loggedInUserId !== options.listOwnerId &&
         !options.listManagers?.has(options.loggedInUserId || "")
     ) {
-        console.log("approved only");
         itemListFilter.approved = true;
     }
 
