@@ -8,14 +8,26 @@
         parent: any;
     }
 
+    interface Meta {
+        groupId: string;
+        managers: Pick<User, "id">[];
+    }
+
     const { parent }: Props = $props();
     const t = getFormatter();
 
     const modalStore = getModalStore();
+    const { groupId, managers }: Meta = $modalStore[0].meta;
+
+    const searchOptions = {
+        groupId,
+        excludedUserIds: managers.map(({ id }) => id)
+    };
+
     let selectedUser: string | undefined = $state();
 
     function onFormSubmit(): void {
-        if (selectedUser) {
+        if (selectedUser && selectedUser !== "") {
             if ($modalStore[0].response) $modalStore[0].response(users.find(({ id }) => id === selectedUser));
             modalStore.close();
         }
@@ -24,9 +36,9 @@
     // TODO: allow filtering by group id
     const usersAPI = new UsersAPI();
 
-    let users: User[] = $state([]);
+    let users: Pick<User, "id" | "name" | "email">[] = $state([]);
     const doSearch = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-        const resp = await usersAPI.search(e.currentTarget.value);
+        const resp = await usersAPI.search(e.currentTarget.value, searchOptions);
         users = await resp.json();
     };
 </script>
@@ -55,9 +67,7 @@
     {/if}
 
     <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
-            {parent.buttonTextCancel}
-        </button>
+        <button class="btn {parent.buttonNeutral}" onclick={modalStore.close}>{$t("general.cancel")}</button>
         <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.add-user")}</button>
     </footer>
 </div>

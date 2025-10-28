@@ -42,7 +42,8 @@ export const load: PageServerLoad = async ({ params }) => {
                         user: {
                             select: {
                                 id: true,
-                                name: true
+                                name: true,
+                                email: true
                             }
                         }
                     }
@@ -67,7 +68,8 @@ export const load: PageServerLoad = async ({ params }) => {
             managers: list.managers.map(({ user }) => ({ ...user }))
         },
         listMode: config.listMode,
-        allowsPublicLists: config.allowPublicLists
+        allowsPublicLists: config.allowPublicLists,
+        groupId: activeMembership.groupId
     };
 };
 
