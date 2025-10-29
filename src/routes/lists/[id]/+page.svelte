@@ -18,6 +18,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
+    import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
     import { getFormatter } from "$lib/i18n";
@@ -43,6 +44,7 @@
         }
     });
     let hideDescription = $state(false);
+    let isTileView = $derived(page.url.searchParams.get("view") !== "list");
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -236,6 +238,9 @@
             <ClaimFilterChip />
         {/if}
         <SortBy />
+        {#if !reordering}
+            <ListViewModeChip {isTileView} />
+        {/if}
     </div>
     {#if data.list.owner.isMe}
         <div class="flex flex-row flex-wrap items-center gap-2">
@@ -271,7 +276,10 @@
 {#if data.list.owner.isMe && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
-        <div class="flex flex-col space-y-4" data-testid="approvals-container">
+        <div class={isTileView 
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4"
+            : "flex flex-col space-y-4"
+        } data-testid="approvals-container">
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
@@ -280,6 +288,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
                         user={data.list.owner}
+                        {isTileView}
                     />
                 </div>
             {/each}
@@ -296,7 +305,10 @@
 {:else}
     <!-- items -->
     <div
-        class="flex flex-col space-y-4 rounded-container-token"
+        class={reordering || !isTileView
+            ? "flex flex-col space-y-4 rounded-container-token"
+            : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token"
+        }
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}
@@ -321,6 +333,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        {isTileView}
                     />
                 </div>
             {/each}
@@ -339,6 +352,7 @@
                             requireClaimEmail={data.requireClaimEmail}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
+                            {isTileView}
                         />
                     </div>
                 {/each}
