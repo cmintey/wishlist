@@ -148,6 +148,10 @@
             history.back();
         }
     };
+
+    const selectAll = () => {
+        document.getElementsByName("lists").forEach((el) => ((el as HTMLInputElement).checked = true));
+    };
 </script>
 
 <div class="grid grid-cols-7 gap-4">
@@ -311,7 +315,11 @@
     </label>
 
     <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
-        <legend>{$t("wishes.lists")}</legend>
+        <div class="flex items-end justify-between">
+            <legend>{$t("wishes.lists")}</legend>
+            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">Select all</button>
+        </div>
+
         <div
             class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
             class:input-error={form?.errors?.lists}
