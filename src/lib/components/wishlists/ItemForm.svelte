@@ -314,9 +314,13 @@
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
     </label>
 
-    <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
+    <fieldset
+        class="col-span-full flex flex-col space-y-2 md:col-span-5"
+        class:hidden={lists.length <= 1}
+        aria-labelledby="lists-label"
+    >
         <div class="flex items-end justify-between">
-            <legend>{$t("wishes.lists")}</legend>
+            <legend id="lists-label">{$t("wishes.lists")}</legend>
             <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">
                 {$t("general.select-all")}
             </button>
