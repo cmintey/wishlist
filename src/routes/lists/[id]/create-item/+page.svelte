@@ -20,6 +20,7 @@
     };
 
     let warningHidden = $state(false);
+    let saving = $state(false);
 
     const successToast = () =>
         toastStore.trigger({
@@ -29,11 +30,27 @@
         });
 
     const clearFields = () => {
-        const fieldIds = ["url", "name", "price", "formatted-price", "quantity", "image", "imageUrl", "note"];
+        const fieldIds = [
+            "url",
+            "name",
+            "price",
+            "formatted-price",
+            "quantity",
+            "image",
+            "imageUrl",
+            "note",
+            "unlimited"
+        ];
         fieldIds.forEach((id) => {
             const field = document.getElementById(id) as HTMLInputElement;
             if (field) {
-                field.value = "";
+                if (id === "quantity") {
+                    field.value = "1";
+                } else if (id === "unlimited") {
+                    field.checked = false;
+                } else {
+                    field.value = "";
+                }
             }
         });
     };
@@ -64,7 +81,9 @@
     enctype="multipart/form-data"
     method="POST"
     use:enhance={({ submitter }) => {
+        saving = true;
         return async ({ result }) => {
+            saving = false;
             if (result.type === "error") {
                 errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
                 return;
@@ -81,7 +100,13 @@
         };
     }}
 >
-    <ItemForm buttonText={$t("wishes.add-item")} currentList={data.list.id} item={itemData} lists={data.lists} />
+    <ItemForm
+        buttonText={$t("wishes.add-item")}
+        currentList={data.list.id}
+        item={itemData}
+        lists={data.lists}
+        {saving}
+    />
 </form>
 
 <svelte:head>
