@@ -317,7 +317,9 @@
     <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
         <div class="flex items-end justify-between">
             <legend>{$t("wishes.lists")}</legend>
-            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">Select all</button>
+            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">
+                {$t("general.select-all")}
+            </button>
         </div>
 
         <div
