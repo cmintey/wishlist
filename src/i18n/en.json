@@ -336,7 +336,9 @@
     },
     "unable-to-load-icons": "Unable to load icons.",
     "wishes": {
-        "add-a-manager": "Add a manager",
+        "add-a-list-manager": "Add a list manager",
+        "add-a-list-manager-explainer": "Search for a user within this group to add as a manager to your list.",
+        "add-a-manager": "Add manager",
         "add-item": "Create item",
         "added-by": "Added by <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "added-by-somebody-else": "Added by <span class=\"text-secondary-700-200-token font-bold\">somebody else</span>",
@@ -385,6 +387,7 @@
         "item-was-deleted": "{name} was deleted",
         "item-was-removed-from-list": "{name} was removed from this list",
         "list-managers": "List managers",
+        "list-managers-tooltip": "List managers can do everything you can do including approving or denying suggestions, updating list settings, and removing items from the list. If your group is set to 'surprise' mode, any items added by a list manager will be visible to you.",
         "lists": "Lists",
         "manage": "Manage",
         "manage-list": "Manage List",

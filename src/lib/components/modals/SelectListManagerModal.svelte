@@ -43,8 +43,8 @@
 </script>
 
 <div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("general.add-user")}</header>
-    <span>{$t("general.search-for-user")}</span>
+    <header class="text-2xl font-bold">{$t("wishes.add-a-list-manager")}</header>
+    <p>{$t("wishes.add-a-list-manager-explainer")}</p>
     <label class="w-fit">
         <span>{$t("general.search")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
@@ -67,6 +67,6 @@
 
     <footer class="modal-footer {parent.regionFooter}">
         <button class="btn {parent.buttonNeutral}" onclick={modalStore.close}>{$t("general.cancel")}</button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.add-user")}</button>
+        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("wishes.add-a-manager")}</button>
     </footer>
 </div>

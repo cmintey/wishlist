@@ -117,19 +117,19 @@ export class ItemCard {
     }
 
     async approve() {
+        const name = await this.name.textContent();
         await this.approveButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
-        const name = await this.name.textContent();
         new Toast(this.card.page()).waitForToastWithText(`${name} was approved`);
         return this;
     }
 
     async deny() {
+        const name = await this.name.textContent();
         await this.denyButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
-        const name = await this.name.textContent();
         new Toast(this.card.page()).waitForToastWithText(`${name} was denied`);
         return this;
     }

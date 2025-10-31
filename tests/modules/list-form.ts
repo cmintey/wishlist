@@ -1,4 +1,5 @@
 import { type Locator, type Page } from "@playwright/test";
+import { ListManagersSelector } from "./list-managers-selector";
 
 export class ListForm {
     private readonly createButton: Locator;
@@ -7,7 +8,7 @@ export class ListForm {
     private readonly cancelButton: Locator;
     private readonly nameField: Locator;
     private readonly publicCheckbox: Locator;
-    // TODO: Add the other list options
+    private readonly listManagers: ListManagersSelector;
 
     constructor(page: Page) {
         this.createButton = page.getByRole("button", { name: "Create" });
@@ -16,6 +17,7 @@ export class ListForm {
         this.cancelButton = page.getByRole("button", { name: "Cancel" });
         this.nameField = page.getByLabel("Name", { exact: true });
         this.publicCheckbox = page.getByLabel("Public", { exact: true });
+        this.listManagers = new ListManagersSelector(page);
     }
 
     async setName(name: string) {
@@ -46,5 +48,9 @@ export class ListForm {
 
     async cancel() {
         await this.cancelButton.click();
+    }
+
+    getListManagers() {
+        return this.listManagers;
     }
 }

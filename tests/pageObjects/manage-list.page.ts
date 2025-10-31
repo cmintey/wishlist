@@ -2,18 +2,21 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import { ListForm } from "../modules/list-form";
 import { Modal } from "../modules/modal";
+import { ListPage } from "./list.page";
 
 interface Props {
     id?: string;
 }
 
 export class ManageListPage extends BasePage {
+    private readonly listId: string;
     private readonly header: Locator;
     private readonly listForm: ListForm;
 
     constructor(page: Page, props?: Props) {
         const id = props?.id ?? new URL(page.url()).pathname.split("/").at(-1);
         super(page, `/lists/${id}/manage`);
+        this.listId = id!;
         this.header = page.getByRole("heading", { name: "Manage List" });
         this.listForm = new ListForm(page);
     }
@@ -26,6 +29,7 @@ export class ManageListPage extends BasePage {
         const name = await this.listForm.getName();
         await this.listForm.save();
         await expect(this.page.getByRole("heading", { name })).toBeVisible();
+        return new ListPage(this.page, { id: this.listId, name });
     }
 
     async setName(name: string) {
@@ -45,5 +49,24 @@ export class ManageListPage extends BasePage {
         await this.listForm.delete();
         const modal = new Modal(this.page, { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
+    }
+
+    async getManagers() {
+        return await this.listForm.getListManagers().getManagers();
+    }
+
+    async expectNoManagers() {
+        await this.listForm.getListManagers().expectNoManagers();
+        return this;
+    }
+
+    async addManager(name: string) {
+        await this.listForm.getListManagers().addManager(name);
+        return this;
+    }
+
+    async removeManager(name: string) {
+        await this.listForm.getListManagers().removeManager(name);
+        return this;
     }
 }
