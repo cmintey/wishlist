@@ -36,6 +36,7 @@
     interface Props {
         item: ItemOnListDTO;
         user?: PartialUser; // logged in user
+        userCanManage?: boolean;
         showClaimedName?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
@@ -50,6 +51,7 @@
         item,
         groupId,
         user = undefined,
+        userCanManage = false,
         showClaimedName = false,
         requireClaimEmail = true,
         showFor = false,
@@ -103,7 +105,8 @@
             { values: { name: itemNameShort } }
         ),
         meta: {
-            multipleLists: item.listCount > 1
+            multipleLists: item.listCount > 1,
+            isOnlyManager: userCanManage
         },
         response: async (r: DeleteConfirmationResult) => {
             if (r == DeleteConfirmationResult.DELETE) {
@@ -248,6 +251,7 @@
             item,
             showFor,
             user,
+            userCanManage,
             showClaimedName,
             requireClaimEmail,
             onPublicList,
@@ -407,6 +411,7 @@
                 onDeny={() => handleApproval(false)}
                 onEdit={handleEdit}
                 {user}
+                {userCanManage}
             />
         {/if}
     </footer>

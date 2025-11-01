@@ -21,9 +21,7 @@ export const load: PageServerLoad = async ({ params }) => {
     const list = await client.list
         .findUnique({
             where: {
-                id: params.id,
-                ownerId: user.id,
-                groupId: activeMembership.groupId
+                id: params.id
             },
             select: {
                 id: true,
@@ -33,20 +31,45 @@ export const load: PageServerLoad = async ({ params }) => {
                 public: true,
                 owner: {
                     select: {
+                        id: true,
                         name: true,
                         username: true,
                         picture: true
                     }
                 },
+                managers: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true
+                            }
+                        }
+                    }
+                },
+                groupId: true,
                 description: true
             }
         })
         .then((list) => list ?? error(404, $t("errors.list-not-found")));
 
+    // Logged in users must be in the correct group, or viewing a public list
+    if (list.owner.id !== user.id && !list.managers.find(({ user: manager }) => manager.id === user.id)) {
+        error(401, $t("errors.not-authorized"));
+    }
+    if (list.groupId !== activeMembership.groupId) {
+        error(401, $t("errors.user-must-be-in-the-correct-group"));
+    }
+
     return {
-        list,
+        list: {
+            ...list,
+            managers: list.managers.map(({ user }) => ({ ...user }))
+        },
         listMode: config.listMode,
-        allowsPublicLists: config.allowPublicLists
+        allowsPublicLists: config.allowPublicLists,
+        groupId: activeMembership.groupId
     };
 };
 
@@ -57,18 +80,8 @@ export const actions: Actions = {
 
         const activeMembership = await getActiveMembership(user);
         const config = await getConfig(activeMembership.groupId);
-        const listOwner = await client.list.findUnique({
-            select: {
-                ownerId: true
-            },
-            where: {
-                id: params.id,
-                groupId: activeMembership.groupId
-            }
-        });
-        if (user.id !== listOwner?.ownerId) {
-            error(401, $t("errors.not-authorized"));
-        }
+
+        await canManage(params.id, user, activeMembership.groupId);
 
         const form = await request.formData();
         const listPropertiesSchema = getListPropertiesSchema();
@@ -77,7 +90,8 @@ export const actions: Actions = {
             icon: form.get("icon"),
             iconColor: form.get("iconColor"),
             public: form.get("public"),
-            description: form.get("description")
+            description: form.get("description"),
+            managers: form.getAll("managers")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -109,6 +123,27 @@ export const actions: Actions = {
                     id: params.id
                 }
             });
+
+            const managers = listProperties.data.managers;
+            if (managers) {
+                const existingManagers = await client.listManager.findMany({
+                    where: {
+                        listId: params.id
+                    }
+                });
+                const managersToDelete = existingManagers
+                    .filter(({ userId }) => !managers.includes(userId))
+                    .map(({ id }) => id);
+                const managersToCreate = managers.filter(
+                    (userId) => existingManagers.find((manager) => manager.userId === userId) === undefined
+                );
+                await client.$transaction([
+                    client.listManager.deleteMany({ where: { id: { in: managersToDelete } } }),
+                    client.listManager.createMany({
+                        data: managersToCreate.map((userId) => ({ listId: params.id, userId }))
+                    })
+                ]);
+            }
         } catch (err) {
             logger.error({ err }, "Unable to update list settings");
             return fail(500, {
@@ -148,3 +183,28 @@ export const actions: Actions = {
         return redirect(302, `/lists`);
     }
 };
+
+async function canManage(id: string, user: LocalUser, groupId: string) {
+    const $t = await getFormatter();
+
+    const list = await client.list.findUnique({
+        select: {
+            ownerId: true,
+            managers: {
+                select: {
+                    userId: true
+                }
+            }
+        },
+        where: {
+            id,
+            groupId
+        }
+    });
+    if (!list) {
+        error(404, $t("errors.list-not-found"));
+    }
+    if (user.id !== list.ownerId && !list.managers.find(({ userId }) => userId === user.id)) {
+        error(401, $t("errors.not-authorized"));
+    }
+}
