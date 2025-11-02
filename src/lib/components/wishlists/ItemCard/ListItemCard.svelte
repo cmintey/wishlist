@@ -111,7 +111,7 @@
                 {#if item.price || item.itemPrice}
                     {formatPrice(item)}
                 {:else}
-                    ???
+                    $ -
                 {/if}
             </span>
         </div>
@@ -124,7 +124,7 @@
                     {#if item.quantity}
                         {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
                     {:else}
-                        unlimited
+                        {$t("wishes.no-limit")}
                     {/if}
                 </span>
                 {#if user?.id !== item.userId && item.quantity}
@@ -151,14 +151,16 @@
             </span>
         </div>
 
-        {#if item.note}
-            <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-                <iconify-icon icon="ion:reader"></iconify-icon>
-                <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
+        <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
+            <iconify-icon icon="ion:reader"></iconify-icon>
+            <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
+                {#if item.note}
                     <Markdown source={item.note} />
-                </div>
+                {:else}
+                    -
+                {/if}
             </div>
-        {/if}
+        </div>
     </div>
 </div>
 
