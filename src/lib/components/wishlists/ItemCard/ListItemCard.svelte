@@ -179,9 +179,30 @@
             />
         </div>
 
-        <!-- Edit and Delete buttons on the right -->
+        <!-- Edit, Delete, or Approval buttons on the right -->
         <div class="flex items-center gap-x-2">
-            {#if item.approved && (user?.id === item.user?.id || user?.id === item.addedBy?.id)}
+            {#if !item.approved}
+                <!-- Approval buttons for unapproved items -->
+                <button
+                    class="variant-filled-success btn btn-sm"
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        onApproval?.(true);
+                    }}
+                >
+                    {$t("wishes.approve")}
+                </button>
+                <button
+                    class="variant-filled-error btn btn-sm"
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        onApproval?.(false);
+                    }}
+                >
+                    {$t("wishes.deny")}
+                </button>
+            {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
+                <!-- Edit and Delete buttons for approved items owned by user -->
                 <button
                     class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
                     aria-label={$t("wishes.edit")}

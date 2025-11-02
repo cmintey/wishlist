@@ -79,7 +79,10 @@
             referrerpolicy="no-referrer"
             src={imageUrl}
         >
-            {@render defaultImage($t, ["w-full", "h-full", "rounded-t-lg"])}
+            <!-- Custom default image with transparent background for tile view -->
+            <div class="w-full h-full flex items-center justify-center rounded-t-lg bg-transparent">
+                <iconify-icon class="w-16 h-16" height="none" icon="ion:gift"></iconify-icon>
+            </div>
         </Image>
     </div>
 
@@ -183,8 +186,28 @@
                     {user}
                 />
                 
-                <!-- Edit button on the left -->
-                {#if item.approved && (user?.id === item.user?.id || user?.id === item.addedBy?.id)}
+                <!-- Approval buttons for unapproved items -->
+                {#if !item.approved}
+                    <button
+                        class="variant-filled-success btn btn-sm"
+                        onclick={(e) => {
+                            e.stopPropagation();
+                            onApproval?.(true);
+                        }}
+                    >
+                        {$t("wishes.approve")}
+                    </button>
+                    <button
+                        class="variant-filled-error btn btn-sm"
+                        onclick={(e) => {
+                            e.stopPropagation();
+                            onApproval?.(false);
+                        }}
+                    >
+                        {$t("wishes.deny")}
+                    </button>
+                {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
+                    <!-- Edit button for approved items -->
                     <button
                         class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
                         aria-label={$t("wishes.edit")}
