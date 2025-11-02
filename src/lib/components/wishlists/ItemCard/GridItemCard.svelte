@@ -163,7 +163,7 @@
         {#if item.note}
             <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
                 <iconify-icon icon="ion:reader"></iconify-icon>
-                <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
+                <div class="line-clamp-1 whitespace-pre-wrap" data-testid="notes">
                     <Markdown source={item.note} />
                 </div>
             </div>
@@ -171,59 +171,54 @@
     </div>
 
     <!-- Footer with buttons -->
-    <footer class="card-footer flex flex-row px-4 pb-4" class:justify-between={!reorderActions} class:justify-center={reorderActions}>
+    <footer class="card-footer flex flex-row justify-end px-4 pb-4 gap-x-2">
         {#if reorderActions}
             <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
         {:else}
-            <div class="flex items-center gap-x-2">
-                <ClaimButtons
-                    {item}
-                    onClaim={onClaim}
-                    {onPublicList}
-                    onPurchase={onPurchased}
-                    onUnclaim={onUnclaim}
-                    showName={showClaimedName}
-                    {user}
-                />
-                
-                <!-- Approval buttons for unapproved items -->
-                {#if !item.approved}
-                    <button
-                        class="variant-filled-success btn btn-sm"
-                        onclick={(e) => {
-                            e.stopPropagation();
-                            onApproval?.(true);
-                        }}
-                    >
-                        {$t("wishes.approve")}
-                    </button>
-                    <button
-                        class="variant-filled-error btn btn-sm"
-                        onclick={(e) => {
-                            e.stopPropagation();
-                            onApproval?.(false);
-                        }}
-                    >
-                        {$t("wishes.deny")}
-                    </button>
-                {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
-                    <!-- Edit button for approved items -->
-                    <button
-                        class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
-                        aria-label={$t("wishes.edit")}
-                        onclick={(e) => {
-                            e.stopPropagation();
-                            onEdit?.();
-                        }}
-                        title={$t("wishes.edit")}
-                    >
-                        <iconify-icon icon="ion:edit"></iconify-icon>
-                    </button>
-                {/if}
-            </div>
-
-            <!-- Delete button on the right -->
-            {#if item.approved && (user?.id === item.user?.id || user?.id === item.addedBy?.id)}
+            <ClaimButtons
+                {item}
+                onClaim={onClaim}
+                {onPublicList}
+                onPurchase={onPurchased}
+                onUnclaim={onUnclaim}
+                showName={showClaimedName}
+                {user}
+            />
+            
+            <!-- Approval buttons for unapproved items -->
+            {#if !item.approved}
+                <button
+                    class="variant-filled-success btn btn-sm"
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        onApproval?.(true);
+                    }}
+                >
+                    {$t("wishes.approve")}
+                </button>
+                <button
+                    class="variant-filled-error btn btn-sm"
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        onApproval?.(false);
+                    }}
+                >
+                    {$t("wishes.deny")}
+                </button>
+            {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
+                <!-- Edit button for approved items -->
+                <button
+                    class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
+                    aria-label={$t("wishes.edit")}
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        onEdit?.();
+                    }}
+                    title={$t("wishes.edit")}
+                >
+                    <iconify-icon icon="ion:edit"></iconify-icon>
+                </button>
+                <!-- Delete button -->
                 <button
                     class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
                     aria-label={$t("wishes.delete")}
