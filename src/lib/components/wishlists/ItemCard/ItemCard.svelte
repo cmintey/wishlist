@@ -106,7 +106,7 @@
         ),
         meta: {
             multipleLists: item.listCount > 1,
-            isOnlyManager: userCanManage
+            isOnlyManager: user?.id !== item.user?.id && user?.id !== item.addedBy?.id && userCanManage
         },
         response: async (r: DeleteConfirmationResult) => {
             if (r == DeleteConfirmationResult.DELETE) {

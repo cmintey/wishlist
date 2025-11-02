@@ -13,6 +13,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemCreateSchema } from "$lib/server/validations";
 import z from "zod";
+import type { List } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -102,7 +103,12 @@ export const actions: Actions = {
             select: {
                 id: true,
                 ownerId: true,
-                groupId: true
+                groupId: true,
+                managers: {
+                    select: {
+                        userId: true
+                    }
+                }
             },
             where: {
                 id: {
@@ -117,7 +123,7 @@ export const actions: Actions = {
                 return {
                     listId: l.id,
                     addedById: user.id,
-                    approved: l.ownerId === user.id || config.suggestions.method !== "approval"
+                    approved: determineApprovalStatus(config, l, user)
                 };
             })
         );
@@ -144,4 +150,16 @@ export const actions: Actions = {
         const redirectTo = requestUrl.searchParams.get("redirectTo");
         redirect(302, redirectTo || "/");
     }
+};
+
+interface PartialList extends Pick<List, "id" | "groupId" | "ownerId"> {
+    managers: { userId: string }[];
+}
+
+const determineApprovalStatus = (config: Config, list: PartialList, user: LocalUser) => {
+    if (list.ownerId === user.id || config.suggestions.method !== "approval") {
+        return true;
+    }
+
+    return list.managers.some(({ userId }) => userId === user.id);
 };
