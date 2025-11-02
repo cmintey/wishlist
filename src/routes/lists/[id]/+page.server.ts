@@ -6,7 +6,7 @@ import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
 import type { UserGroupMembership } from "@prisma/client";
 
-export const load = (async ({ params, url, locals, depends }) => {
+export const load = (async ({ params, url, locals, depends, cookies }) => {
     const $t = await getFormatter();
 
     const list = await getById(params.id);
@@ -46,6 +46,10 @@ export const load = (async ({ params, url, locals, depends }) => {
     const items = await getItems(list.id, options);
 
     depends("data:items");
+    
+    // Read view preference from cookie (for SSR to prevent flicker)
+    const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
+    
     return {
         list: {
             ...list,
@@ -67,6 +71,7 @@ export const load = (async ({ params, url, locals, depends }) => {
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
         requireClaimEmail: config.claims.requireEmail,
-        suggestionsEnabled: config.suggestions.enable
+        suggestionsEnabled: config.suggestions.enable,
+        initialViewPreference: viewPreference || "list"
     };
 }) satisfies PageServerLoad;

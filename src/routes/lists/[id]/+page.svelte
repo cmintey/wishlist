@@ -12,6 +12,7 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
+    import { listViewPreference, getListViewPreference } from "$lib/stores/list-view-preference";
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
@@ -44,7 +45,37 @@
         }
     });
     let hideDescription = $state(false);
-    let isTileView = $derived(page.url.searchParams.get("view") === "tile");
+    // Initialize from server data (cookie) to prevent flicker
+    // This value comes from the server, so SSR renders the correct view
+    let isTileView = $state(data.initialViewPreference === "tile");
+    
+    // Sync cookie with localStorage on mount (in case localStorage was updated elsewhere)
+    onMount(() => {
+        const localStorageValue = getListViewPreference();
+        const cookieMatches = document.cookie.includes(`listViewPreference=${localStorageValue}`);
+        
+        // If cookie doesn't match localStorage, update cookie
+        if (!cookieMatches) {
+            document.cookie = `listViewPreference=${localStorageValue}; path=/; max-age=${60 * 60 * 24 * 365}`;
+        }
+        
+        // Update state if needed
+        const shouldBeTile = localStorageValue === "tile";
+        if (isTileView !== shouldBeTile) {
+            isTileView = shouldBeTile;
+        }
+    });
+    
+    // Keep synced with store changes
+    $effect(() => {
+        const storeValue = $listViewPreference;
+        const newIsTileView = storeValue === "tile";
+        
+        // Only update if the value actually changed
+        if (isTileView !== newIsTileView) {
+            isTileView = newIsTileView;
+        }
+    });
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -306,8 +337,8 @@
     <!-- items -->
     <div
         class={reordering || !isTileView
-            ? "flex flex-col space-y-4 rounded-container-token"
-            : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token"
+            ? "flex flex-col space-y-4 rounded-container-token transition-opacity duration-150"
+            : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token transition-opacity duration-150"
         }
         data-testid="items-container"
         onconsider={handleDnd}

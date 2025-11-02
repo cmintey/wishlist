@@ -1,7 +1,6 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
-    import { goto } from "$app/navigation";
-    import { page } from "$app/state";
+    import { listViewPreference } from "$lib/stores/list-view-preference";
 
     interface Props {
         isTileView: boolean;
@@ -10,18 +9,14 @@
     const { isTileView }: Props = $props();
     const t = getFormatter();
     
-    const handleToggle = (tileView: boolean) => {
-        const newUrl = new URL(page.url);
+    const handleToggle = async (tileView: boolean) => {
+        const newValue = tileView ? "tile" : "list";
         
-        if (tileView) {
-            // Set to tile view
-            newUrl.searchParams.set("view", "tile");
-        } else {
-            // Default to list view, so remove the parameter
-            newUrl.searchParams.delete("view");
-        }
+        // Save to localStorage for immediate update
+        $listViewPreference = newValue;
         
-        goto(newUrl, { replaceState: true });
+        // Save to cookie for server-side rendering (prevents flicker on refresh)
+        document.cookie = `listViewPreference=${newValue}; path=/; max-age=${60 * 60 * 24 * 365}`; // 1 year
     };
 </script>
 
