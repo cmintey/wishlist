@@ -318,7 +318,7 @@
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
-                        user={data.list.owner}
+                        user={data.loggedInUser}
                         {isTileView}
                     />
                 </div>
