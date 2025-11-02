@@ -4,10 +4,13 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { toItemOnListDTO } from "$lib/dtos/item-mapper";
 import { requireLogin } from "$lib/server/auth";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ cookies }) => {
     const user = requireLogin();
 
     const activeMembership = await getActiveMembership(user);
+    
+    // Read view preference from cookie (for SSR to prevent flicker)
+    const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
 
     const items = await client.item.findMany({
         where: {
@@ -99,6 +102,7 @@ export const load: PageServerLoad = async () => {
             ...user,
             activeGroupId: activeMembership.groupId
         },
-        items: itemDTOs
+        items: itemDTOs,
+        initialViewPreference: viewPreference || "list"
     };
 };

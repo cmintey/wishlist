@@ -11,9 +11,12 @@
         onClaim?: VoidFunction;
         onUnclaim?: VoidFunction;
         onPurchase?: (purchased: boolean) => void;
+        gap?: "sm" | "md";
     }
 
-    let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
+    let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase, gap = "md" }: Props = $props();
+    
+    const gapClass = gap === "sm" ? "gap-x-1 md:gap-x-2" : "gap-x-2 md:gap-x-4";
     const t = getFormatter();
 
     const shouldShowName = (claim?: ClaimDTO) => {
@@ -34,7 +37,7 @@
 {#if !onPublicList && item.userId === user?.id}
     <div></div>
 {:else if userClaim}
-    <div class="flex flex-row gap-x-2 md:gap-x-4">
+    <div class="flex flex-row {gapClass}">
         <button
             class="variant-ghost-secondary btn btn-sm md:btn"
             onclick={(e) => {
@@ -61,7 +64,7 @@
         </button>
     </div>
 {:else if item.isClaimable}
-    <div class="flex flex-row items-center gap-x-2 md:gap-x-4">
+    <div class="flex flex-row items-center {gapClass}">
         <button
             class="variant-filled-secondary btn btn-sm md:btn"
             onclick={(e) => {
