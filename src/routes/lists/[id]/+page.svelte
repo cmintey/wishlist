@@ -44,7 +44,7 @@
         }
     });
     let hideDescription = $state(false);
-    let isTileView = $derived(page.url.searchParams.get("view") !== "list");
+    let isTileView = $derived(page.url.searchParams.get("view") === "tile");
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);

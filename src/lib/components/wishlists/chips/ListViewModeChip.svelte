@@ -14,11 +14,11 @@
         const newUrl = new URL(page.url);
         
         if (tileView) {
-            // Default to tile view, so remove the parameter
-            newUrl.searchParams.delete("view");
+            // Set to tile view
+            newUrl.searchParams.set("view", "tile");
         } else {
-            // Set to list view
-            newUrl.searchParams.set("view", "list");
+            // Default to list view, so remove the parameter
+            newUrl.searchParams.delete("view");
         }
         
         goto(newUrl, { replaceState: true });

@@ -60,7 +60,7 @@
         reorderActions = false,
         onIncreasePriority = undefined,
         onDecreasePriority = undefined,
-        isTileView = true
+        isTileView = false
     }: Props = $props();
     const id = $props.id();
     const t = getFormatter();
