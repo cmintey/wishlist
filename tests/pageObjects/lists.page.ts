@@ -44,7 +44,7 @@ export class ListsPage extends BasePage {
     }
 
     async getListByName(name: string) {
-        const list = this.listItems.filter({ hasText: name });
+        const list = this.listItems.filter({ has: this.page.getByTestId("list-name").filter({ hasText: name }) });
         await expect(list).toBeVisible();
         return new ListCard(list);
     }

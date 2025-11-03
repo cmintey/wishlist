@@ -3,6 +3,7 @@ import { expect, test } from "../fixtures";
 import { ListsPage } from "../pageObjects/lists.page";
 import { setSuggestionMethod } from "../helpers/suggestions";
 import { randomString } from "../util";
+import { ListPage } from "../pageObjects/list.page";
 
 test("user can add a list manager", async ({ userFactory }) => {
     const { page, user } = await userFactory.createUserPage();
@@ -146,7 +147,7 @@ test("manager can approve/deny/delete items", async ({ userFactory }) => {
         await listPage.assertNoItems();
     });
 
-    const item = await test.step("manager can approve item", async () => {
+    await test.step("manager can approve item", async () => {
         return new ListsPage(listManager.page)
             .goto()
             .then((p) => p.getListByName(listOwner.user.name))
@@ -164,7 +165,10 @@ test("manager can approve/deny/delete items", async ({ userFactory }) => {
     });
 
     await test.step("manager can delete item", async () => {
-        await item.delete();
+        await new ListPage(listManager.page, { name: `${listOwner.user.name}'s Wishes` })
+            .getItemAt(0)
+            .then((i) => i.assertName(itemName2))
+            .then((i) => i.delete());
     });
 
     await test.step("item is no longer visible by user", async () => {
@@ -172,11 +176,63 @@ test("manager can approve/deny/delete items", async ({ userFactory }) => {
     });
 });
 
-test.skip("manager can only remove item from list not delete from all lists", async () => {});
+test("manager can only remove item from list not delete from all lists", async ({ userFactory }) => {
+    const { groupOwner: listOwner, groupUser: listManager } = await userFactory.createMultiUserPages();
+    await setSuggestionMethod(listOwner.page, "auto-approval");
+    await addManager(listOwner.page, listManager.user.name);
 
-test.skip("list owner can still delete from all lists", async () => {});
+    const listName = randomString();
+    await test.step("user creates another list", async () => {
+        await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.create())
+            .then((createList) => createList.create(listName));
+    });
 
-test.skip("manager can edit item", async () => {});
+    const itemName = randomString();
+    await test.step("user creates item on both lists", async () => {
+        const createItemPage = await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.getListAt(0))
+            .then((l) => l.click())
+            .then((list) => list.createItem());
+        await createItemPage
+            .getForm()
+            .then((form) => form.fillName(itemName))
+            .then((form) => form.selectList(listName));
+        await createItemPage.create();
+    });
+
+    await test.step("manager can delete item only on managed list", async () => {
+        await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listName))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertDeleteButtonHidden());
+        await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.deleteNoConfirm())
+            .then((modal) => modal.assertAllListsNotVisible())
+            .then((modal) => modal.assertThisListsVisible())
+            .then((modal) => modal.cancel());
+    });
+
+    await test.step("list owner can delete item on all lists", async () => {
+        await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.deleteNoConfirm())
+            .then((modal) => modal.assertAllListsVisible())
+            .then((modal) => modal.assertThisListsVisible())
+            .then((modal) => modal.allLists());
+    });
+});
 
 async function addManager(ownerPage: Page, managerName: string) {
     await test.step("add manager", async () => {
