@@ -32,6 +32,8 @@
     import { getFormatter } from "$lib/i18n";
     import Markdown from "$lib/components/Markdown.svelte";
     import { resolve } from "$app/paths";
+    import GridItemCard from "./GridItemCard.svelte";
+    import ListItemCard from "./ListItemCard.svelte";
 
     interface Props {
         item: ItemOnListDTO;
@@ -44,6 +46,7 @@
         reorderActions?: boolean;
         onIncreasePriority?: ItemVoidFunction | undefined;
         onDecreasePriority?: ItemVoidFunction | undefined;
+        isTileView?: boolean;
     }
 
     const {
@@ -56,7 +59,8 @@
         onPublicList = false,
         reorderActions = false,
         onIncreasePriority = undefined,
-        onDecreasePriority = undefined
+        onDecreasePriority = undefined,
+        isTileView = false
     }: Props = $props();
     const id = $props.id();
     const t = getFormatter();
@@ -275,15 +279,15 @@
             "bg-surface-300-600-token",
             "grid",
             "place-items-center",
-            "rounded",
-            "aspect-square",
+            sizeClasses.includes("w-full") ? "rounded-t-container-token" : "rounded",
+            sizeClasses.includes("w-full") ? "" : "aspect-square",
             sizeClasses
         ]}
         aria-label={t("a11y.default-item-image")}
         data-testid="image"
         role="img"
     >
-        <iconify-icon class="w-8 md:w-16" height="none" icon="ion:gift"></iconify-icon>
+        <iconify-icon class={sizeClasses.includes("w-full") ? "w-16 h-16" : "w-8 md:w-16"} height="none" icon="ion:gift"></iconify-icon>
     </div>
 {/snippet}
 
@@ -300,114 +304,65 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    <header class="card-header flex w-full">
-        {#if item.url}
-            <a
-                id={`${id}-name`}
-                class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl"
-                data-testid="name"
-                href={item.url}
-                onclick={(e) => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-            >
-                {item.name}
-            </a>
-        {:else}
-            <span id={`${id}-name`} class="line-clamp-2 text-xl font-bold md:text-2xl" data-testid="name">
-                {item.name}
-            </span>
-        {/if}
-    </header>
-
-    <div class="flex flex-row gap-x-4 p-4">
-        <Image
-            class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
-            alt={item.name}
-            data-testid="image"
-            referrerpolicy="no-referrer"
-            src={imageUrl}
-        >
-            {@render defaultImage($t)}
-        </Image>
-
-        <div class="flex flex-col">
-            {#if item.price || item.itemPrice}
-                <div class="flex items-center gap-x-2">
-                    <iconify-icon icon="ion:pricetag"></iconify-icon>
-                    <span class="text-lg font-semibold" data-testid="price">{formatPrice(item)}</span>
-                </div>
-            {/if}
-
-            {#if item.quantity}
-                <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
-                    <iconify-icon icon="ion:gift"></iconify-icon>
-                    <div class="flex flex-row flex-wrap gap-x-2">
-                        <span data-testid="quantity-desired">
-                            {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
-                        </span>
-                        {#if user?.id !== item.userId}
-                            <span>·</span>
-                            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
-                                {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                            </span>
-                        {/if}
-                    </div>
-                </div>
-            {/if}
-
-            <div class="flex items-center gap-2">
-                <iconify-icon icon="ion:person"></iconify-icon>
-                <span class="text-wrap text-base md:text-lg" data-testid="added-by">
-                    {#if showFor}
-                        {@html $t("wishes.for", { values: { name: item.user.name } })}
-                    {:else if !onPublicList}
-                        {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
-                    {:else}
-                        {@html item.addedBy.id === item.user.id
-                            ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                            : $t("wishes.added-by-somebody-else")}
-                    {/if}
-                </span>
-            </div>
-
-            {#if item.note}
-                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-                    <iconify-icon icon="ion:reader"></iconify-icon>
-                    <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
-                        <Markdown source={item.note} />
-                    </div>
-                </div>
-            {/if}
-        </div>
-    </div>
-
-    <footer
-        class="card-footer flex flex-row"
-        class:justify-between={!reorderActions}
-        class:justify-center={reorderActions}
-    >
-        {#if reorderActions}
-            <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
-        {:else}
-            <ClaimButtons
-                {item}
-                onClaim={handleClaim}
-                {onPublicList}
-                onPurchase={handlePurchased}
-                onUnclaim={handleUnclaim}
-                showName={showClaimedName}
-                {user}
-            />
-
-            <ManageButtons
-                {item}
-                onApprove={() => handleApproval(true)}
-                onDelete={handleDelete}
-                onDeny={() => handleApproval(false)}
-                onEdit={handleEdit}
-                {user}
-            />
-        {/if}
-    </footer>
+    {#if reorderActions}
+        <!-- Reorder view - always use list layout -->
+        <ListItemCard
+            {item}
+            {user}
+            {showClaimedName}
+            {requireClaimEmail}
+            {groupId}
+            {showFor}
+            {onPublicList}
+            reorderActions={true}
+            {onDecreasePriority}
+            {onIncreasePriority}
+            onClaim={handleClaim}
+            onUnclaim={handleUnclaim}
+            onPurchased={handlePurchased}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onApproval={handleApproval}
+            defaultImage={defaultImage}
+            {id}
+        />
+    {:else if isTileView}
+        <GridItemCard
+            {item}
+            {user}
+            {showClaimedName}
+            {requireClaimEmail}
+            {groupId}
+            {showFor}
+            {onPublicList}
+            reorderActions={false}
+            onClaim={handleClaim}
+            onUnclaim={handleUnclaim}
+            onPurchased={handlePurchased}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onApproval={handleApproval}
+            defaultImage={defaultImage}
+            {id}
+        />
+    {:else}
+        <ListItemCard
+            {item}
+            {user}
+            {showClaimedName}
+            {requireClaimEmail}
+            {groupId}
+            {showFor}
+            {onPublicList}
+            reorderActions={false}
+            onClaim={handleClaim}
+            onUnclaim={handleUnclaim}
+            onPurchased={handlePurchased}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onApproval={handleApproval}
+            defaultImage={defaultImage}
+            {id}
+        />
+    {/if}
 </div>
