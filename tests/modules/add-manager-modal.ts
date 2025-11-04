@@ -7,8 +7,8 @@ export class AddManagerModal extends Modal {
 
     constructor(page: Page) {
         super(page, { submitButtonText: "Add manager" });
-        this.searchInput = page.getByLabel("Search");
-        this.searchResultsContainer = page.getByRole("listbox");
+        this.searchInput = this.modal.getByLabel("Search");
+        this.searchResultsContainer = this.modal.getByRole("listbox");
     }
 
     async searchAndSelect(name: string) {
