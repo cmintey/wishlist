@@ -34,5 +34,6 @@ export class Modal {
     async submit() {
         await expect(this.modal).toBeVisible();
         await this.submitButton.click();
+        await expect(this.modal).not.toBeVisible();
     }
 }
