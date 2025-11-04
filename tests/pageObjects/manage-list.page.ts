@@ -29,8 +29,8 @@ export class ManageListPage extends BasePage {
     async save() {
         const name = await this.listForm.getName();
         await this.listForm.save();
-        await expect(this.page.getByRole("heading", { name })).toBeVisible();
-        return new ListPage(this.page, { id: this.listId, name });
+        const listPage = new ListPage(this.page, { id: this.listId, name });
+        return await listPage.waitForNavigate();
     }
 
     async setName(name: string) {

@@ -51,6 +51,11 @@ export class ListPage extends BasePage {
         return this.id;
     }
 
+    async waitForNavigate() {
+        await this.page.waitForURL(this.getUrl(), { waitUntil: "load" });
+        return this;
+    }
+
     async manage() {
         await this.manageButton.click();
         return new ManageListPage(this.page);
