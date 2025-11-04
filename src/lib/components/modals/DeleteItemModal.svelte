@@ -45,9 +45,11 @@
         </button>
         {#if $modalStore[0].meta.multipleLists}
             <div class="flex flex-wrap gap-2">
-                <button class="variant-filled-error btn btn-sm md:btn-md" onclick={onDelete} type="button">
-                    {$t("wishes.all-lists")}
-                </button>
+                {#if !$modalStore[0].meta.isOnlyManager}
+                    <button class="variant-filled-error btn btn-sm md:btn-md" onclick={onDelete} type="button">
+                        {$t("wishes.all-lists")}
+                    </button>
+                {/if}
                 <button class="variant-filled-primary btn btn-sm md:btn-md" onclick={onRemove} type="button">
                     {$t("wishes.this-list")}
                 </button>

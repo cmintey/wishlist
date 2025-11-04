@@ -237,7 +237,7 @@
         {/if}
         <SortBy />
     </div>
-    {#if data.list.owner.isMe}
+    {#if data.list.owner.isMe || data.list.isManager}
         <div class="flex flex-row flex-wrap items-center gap-2">
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
@@ -245,7 +245,7 @@
     {/if}
 </div>
 
-{#if data.list.owner.isMe}
+{#if data.list.owner.isMe || data.list.isManager}
     <div class="flex flex-wrap-reverse justify-between gap-2 pb-4">
         <ListStatistics {items} />
         {#if data.listMode === "registry" || data.list.public}
@@ -266,9 +266,7 @@
     </div>
 {/if}
 
-{#if data.list.owner.isMe}{/if}
-
-{#if data.list.owner.isMe && approvals.length > 0}
+{#if (data.list.owner.isMe || data.list.isManager) && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
         <div class="flex flex-col space-y-4" data-testid="approvals-container">
@@ -279,7 +277,8 @@
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
-                        user={data.list.owner}
+                        user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
@@ -321,6 +320,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
@@ -339,6 +339,7 @@
                             requireClaimEmail={data.requireClaimEmail}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
+                            userCanManage={data.list.isManager}
                         />
                     </div>
                 {/each}

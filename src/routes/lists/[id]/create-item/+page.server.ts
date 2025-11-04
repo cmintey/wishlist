@@ -13,6 +13,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemCreateSchema } from "$lib/server/validations";
 import z from "zod";
+import type { List } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -29,22 +30,28 @@ export const load: PageServerLoad = async ({ params }) => {
 
     const config = await getConfig(activeMembership.groupId);
 
-    if (!config.suggestions.enable && user.id !== list.owner.id) {
+    if (
+        !config.suggestions.enable &&
+        user.id !== list.owner.id &&
+        !list.managers.find(({ userId }) => userId === user.id)
+    ) {
         error(401, $t("errors.suggestions-are-disabled"));
     }
 
     const lists = await getAvailableLists(list.owner.id, user.id);
 
+    const isOwnerOrManager =
+        list.owner.id === user.id || list.managers.find(({ userId }) => userId === user.id) !== undefined;
     return {
         lists,
         list: {
             id: list.id,
             owner: {
                 name: list.owner.name,
-                isMe: list.owner.id === user.id
+                isMe: isOwnerOrManager
             }
         },
-        suggestion: list.owner.id !== user.id,
+        suggestion: !isOwnerOrManager,
         suggestionMethod: config.suggestions.method
     };
 };
@@ -96,7 +103,12 @@ export const actions: Actions = {
             select: {
                 id: true,
                 ownerId: true,
-                groupId: true
+                groupId: true,
+                managers: {
+                    select: {
+                        userId: true
+                    }
+                }
             },
             where: {
                 id: {
@@ -111,7 +123,7 @@ export const actions: Actions = {
                 return {
                     listId: l.id,
                     addedById: user.id,
-                    approved: l.ownerId === user.id || config.suggestions.method !== "approval"
+                    approved: determineApprovalStatus(config, l, user)
                 };
             })
         );
@@ -138,4 +150,16 @@ export const actions: Actions = {
         const redirectTo = requestUrl.searchParams.get("redirectTo");
         redirect(302, redirectTo || "/");
     }
+};
+
+interface PartialList extends Pick<List, "id" | "groupId" | "ownerId"> {
+    managers: { userId: string }[];
+}
+
+const determineApprovalStatus = (config: Config, list: PartialList, user: LocalUser) => {
+    if (list.ownerId === user.id || config.suggestions.method !== "approval") {
+        return true;
+    }
+
+    return list.managers.some(({ userId }) => userId === user.id);
 };

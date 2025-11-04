@@ -18,7 +18,12 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
 
     const list = await client.list.findUnique({
         select: {
-            ownerId: true
+            ownerId: true,
+            managers: {
+                select: {
+                    userId: true
+                }
+            }
         },
         where: {
             id: params.listId
@@ -26,7 +31,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     });
     if (!list) {
         error(404, $t("errors.list-not-found"));
-    } else if (list.ownerId !== user.id) {
+    } else if (list.ownerId !== user.id && !list.managers.find(({ userId }) => userId === user.id)) {
         error(401, $t("errors.not-authorized"));
     }
     if (isNaN(parseInt(params.itemId))) {
@@ -82,7 +87,12 @@ export const DELETE: RequestHandler = async ({ params }) => {
     const [list, item, listItem, claims] = await Promise.all([
         client.list.findUnique({
             select: {
-                ownerId: true
+                ownerId: true,
+                managers: {
+                    select: {
+                        userId: true
+                    }
+                }
             },
             where: {
                 id: params.listId
@@ -137,7 +147,11 @@ export const DELETE: RequestHandler = async ({ params }) => {
         error(404, $t("errors.item-not-found"));
     }
 
-    if (listItem.addedById !== user.id && list.ownerId !== user.id) {
+    if (
+        listItem.addedById !== user.id &&
+        list.ownerId !== user.id &&
+        !list.managers.find(({ userId }) => userId === user.id)
+    ) {
         error(401, $t("errors.not-authorized"));
     }
 

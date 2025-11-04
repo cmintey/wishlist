@@ -47,6 +47,7 @@ export class GroupSettingsPage extends BasePage {
 
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
     }
 
     async clickMembersTab() {

@@ -14,6 +14,7 @@ export class CreateListPage extends BasePage {
 
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
     }
 
     async createDefault() {
