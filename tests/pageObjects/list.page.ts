@@ -40,6 +40,7 @@ export class ListPage extends BasePage {
 
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
     }
 
     getUrl() {

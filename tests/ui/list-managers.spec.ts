@@ -20,7 +20,10 @@ test("user can add a list manager", async ({ userFactory }) => {
     await manageListPage.addManager(managerUserData.name);
     expect(await manageListPage.getManagers()).toContainEqual(managerUserData.name);
 
-    await manageListPage.save().then((lp) => lp.manage());
+    await manageListPage
+        .save()
+        .then((lp) => lp.at())
+        .then((lp) => lp.manage());
 
     expect(await manageListPage.getManagers()).toContainEqual(managerUserData.name);
     await manageListPage.removeManager(managerUserData.name);

@@ -25,6 +25,7 @@ export class CreateItemPage extends BasePage {
 
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
     }
 
     async getForm() {
