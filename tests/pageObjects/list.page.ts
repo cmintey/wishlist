@@ -58,7 +58,7 @@ export class ListPage extends BasePage {
 
     async manage() {
         await this.manageButton.click();
-        return new ManageListPage(this.page);
+        return await new ManageListPage(this.page, { id: this.id }).waitForNavigate();
     }
 
     async getShareListButton() {

@@ -21,8 +21,17 @@ export class ManageListPage extends BasePage {
         this.listForm = new ListForm(page);
     }
 
+    getUrl() {
+        return `/lists/${this.listId}/manage`;
+    }
+
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
+    }
+
+    async waitForNavigate() {
+        await this.page.waitForURL(this.getUrl(), { waitUntil: "load" });
         return this;
     }
 
