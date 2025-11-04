@@ -42,7 +42,7 @@ jobs:
             - name: Install Node.js
               uses: actions/setup-node@v6
               with:
-                  node-version: 22
+                  node-version: 24
 
             - name: Get pnpm store directory
               id: pnpm-cache
@@ -67,7 +67,7 @@ jobs:
             - name: Run Playwright tests
               run: pnpm test
 
-            - uses: actions/upload-artifact@v4
+            - uses: actions/upload-artifact@v5
               if: ${{ !cancelled() }}
               with:
                   name: playwright-report
