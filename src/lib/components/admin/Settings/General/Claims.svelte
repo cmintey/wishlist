@@ -37,11 +37,11 @@
                 checked={config.claims.showForOwner}
                 type="checkbox"
             />
-            <span>Show for list owner</span>
+            <span>{$t("admin.show-for-list-owner")}</span>
         </label>
 
         {#snippet description()}
-            Allow list owners to view claims on their own lists.
+            {$t("admin.show-for-list-owner-description")}
         {/snippet}
     </Setting>
     <Setting>

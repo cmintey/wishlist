@@ -91,6 +91,8 @@
         "select-a-group-option": "Select a group",
         "settings": "Settings",
         "settings-saved-toast": "Settings saved successfully",
+        "show-for-list-owner": "Show for list owner",
+        "show-for-list-owner-description": "Allow list owners to view claims on their own lists.",
         "show-name": "Show name",
         "smtp": "SMTP",
         "smtp-from-email": "From Email",
