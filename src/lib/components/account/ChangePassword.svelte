@@ -37,7 +37,7 @@
     }}
 >
     <div class="flex flex-col items-start space-y-4">
-        <h3 class="h3">Credentials</h3>
+        <h3 class="h3">{$t("admin.credentials")}</h3>
         <div class="flex space-y-1">
             <PasswordInput
                 id="oldpassword"
