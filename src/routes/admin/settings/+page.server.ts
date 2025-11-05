@@ -79,7 +79,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               clientSecret: configData.oidcClientSecret!,
               providerName: configData.oidcProviderName,
               autoRedirect: configData.oidcAutoRedirect,
-              autoRegister: configData.oidcAutoRegister
+              autoRegister: configData.oidcAutoRegister,
+              enableSync: configData.oidcEnableSync,
+              disableEmailVerification: configData.oidcDisableEmailVerification
           }
         : {
               enable: false,
@@ -88,7 +90,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               clientSecret: configData.oidcClientSecret,
               providerName: configData.oidcProviderName,
               autoRedirect: configData.oidcAutoRedirect,
-              autoRegister: configData.oidcAutoRegister
+              autoRegister: configData.oidcAutoRegister,
+              enableSync: configData.oidcEnableSync,
+              disableEmailVerification: configData.oidcDisableEmailVerification
           };
 
     const newConfig: Config = {

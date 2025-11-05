@@ -27,7 +27,9 @@ enum ConfigKey {
     OIDC_CLIENT_SECRET = "oidc.clientSecret",
     OIDC_PROVIDER_NAME = "oidc.providerName",
     OIDC_AUTO_REDIRECT = "oidc.autoRedirect",
-    OIDC_AUTO_REGISTER = "oidc.autoRegister"
+    OIDC_AUTO_REGISTER = "oidc.autoRegister",
+    OIDC_ENABLE_SYNC = "oidc.enableSync",
+    OIDC_DISABLE_EMAIL_VERIFICATION = "oidc.disableEmailVerification"
 }
 
 type Transformer<T> = (val: string | null, shouldMask?: boolean) => T;
@@ -65,7 +67,9 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "oidc.discoveryUrl": stringTransformer,
     "oidc.providerName": stringTransformer,
     "oidc.autoRedirect": booleanTransformer,
-    "oidc.autoRegister": booleanTransformer
+    "oidc.autoRegister": booleanTransformer,
+    "oidc.enableSync": booleanTransformer,
+    "oidc.disableEmailVerification": booleanTransformer
 };
 
 const defaultConfig: Config = {
@@ -97,9 +101,11 @@ function buildConfig(configMap: Record<string, string | null>, includeSensitive 
     const config: Partial<Config> = {};
 
     for (const [key, value] of Object.entries(configMap)) {
-        const transformer: Transformer<unknown> = transformers[key as ConfigKey];
-        const path = key.split(".");
-        setDeep(config, path, transformer(value, !includeSensitive));
+        if (key in transformers) {
+            const transformer: Transformer<unknown> = transformers[key as ConfigKey];
+            const path = key.split(".");
+            setDeep(config, path, transformer(value, !includeSensitive));
+        }
     }
 
     return deepMerge(defaultConfig, config) as Config;
