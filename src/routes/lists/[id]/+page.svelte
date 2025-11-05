@@ -276,6 +276,7 @@
                         groupId={data.list.groupId}
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
@@ -318,6 +319,7 @@
                         onIncreasePriority={handleIncreasePriority}
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
@@ -337,6 +339,7 @@
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}
+                            showClaimForOwner={data.showClaimForOwner}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
                             userCanManage={data.list.isManager}
