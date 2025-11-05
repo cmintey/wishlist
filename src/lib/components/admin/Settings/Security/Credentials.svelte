@@ -20,8 +20,8 @@
                 id="enableSignup"
                 name="enableSignup"
                 class="checkbox"
+                checked={config.enableSignup}
                 type="checkbox"
-                bind:checked={config.enableSignup}
             />
             <span>{$t("admin.enable-signup")}</span>
         </label>
@@ -45,7 +45,7 @@
                 id="passwordStrength"
                 name="passwordStrength"
                 class="select w-fit min-w-64"
-                bind:value={config.security.passwordStrength}
+                value={config.security.passwordStrength}
             >
                 {#each strengthOptions as label, idx}
                     <option value={idx - 1}>{$t(label)}</option>
@@ -63,8 +63,8 @@
                 id="disablePasswordLogin"
                 name="disablePasswordLogin"
                 class="checkbox"
+                checked={config.security.disablePasswordLogin}
                 type="checkbox"
-                bind:checked={config.security.disablePasswordLogin}
             />
             <span>{$t("admin.disable-password-login")}</span>
         </label>
