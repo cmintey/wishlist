@@ -16,20 +16,24 @@ export const GET: RequestHandler = async ({ url }) => {
         select: {
             id: true,
             name: true,
+            username: true,
             email: true
         },
         where: {
             id: {
                 notIn: url.searchParams.get("excludedUserIds")?.split(",") || undefined
             },
-            name: {
-                contains: url.searchParams.get("name") || undefined
-            },
-            UserGroupMembership: {
-                some: {
-                    groupId: url.searchParams.get("groupId") || undefined
-                }
-            }
+            OR: [
+                { name: { contains: url.searchParams.get("name") || undefined } },
+                { username: { contains: url.searchParams.get("name") || undefined } }
+            ],
+            UserGroupMembership: url.searchParams.has("groupId")
+                ? {
+                      some: {
+                          groupId: url.searchParams.get("groupId") || undefined
+                      }
+                  }
+                : {}
         }
     });
 

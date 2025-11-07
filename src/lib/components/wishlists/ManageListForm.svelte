@@ -13,7 +13,7 @@
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
-        managers: Pick<User, "id" | "name" | "email">[];
+        managers: Pick<User, "id" | "name" | "username">[];
     }
 
     interface Props {
@@ -69,7 +69,7 @@
                 groupId,
                 managers: [list.owner, ...managers]
             },
-            response(user: { id: string; name: string; email: string }) {
+            response(user: { id: string; name: string; username: string }) {
                 managers = [...managers, user];
             }
         });
@@ -199,9 +199,9 @@
                 {/if}
                 {#each managers as manager (manager.id)}
                     <label class="flex items-center justify-between" for={manager.id}>
-                        <div class="flex items-center gap-x-2 truncate">
+                        <div class="flex items-baseline gap-x-2 truncate">
                             <p class="truncate" data-part="name">{manager.name}</p>
-                            <span class="subtext truncate" data-part="email">{manager.email}</span>
+                            <span class="subtext truncate" data-part="email">{manager.username}</span>
                         </div>
                         <button class="flex items-center" onclick={() => removeManager(manager.id)} type="button">
                             <iconify-icon icon="ion:close"></iconify-icon>
