@@ -65,7 +65,7 @@
             </div>
         {:else if tabSet === 1 && !data.isProxyUser}
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {#if !data.isProxyUser && (!data.oidcConfig.ready || data.user.oauthId !== null)}
+                {#if !(data.isProxyUser || (data.oidcConfig.ready && data.user.oauthId))}
                     <ChangePassword />
                 {/if}
                 {#if data.oidcConfig.ready}
