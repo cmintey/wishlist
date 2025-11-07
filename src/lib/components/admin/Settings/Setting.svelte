@@ -1,15 +1,17 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
+    import type { ClassValue } from "svelte/elements";
 
     interface Props {
+        class?: ClassValue;
         description?: Snippet;
         children: Snippet;
     }
 
-    const { description, children }: Props = $props();
+    const { description, children, ...props }: Props = $props();
 </script>
 
-<div>
+<div {...props}>
     {@render children()}
     {#if description}
         <span class="subtext">

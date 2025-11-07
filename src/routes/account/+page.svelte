@@ -17,6 +17,9 @@
     let submitButton: HTMLElement | undefined = $state();
 
     let tabSet = $state(0);
+    let profileEditDisabled = $state(
+        data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.user.oauthId !== null
+    );
 </script>
 
 <TabGroup>
@@ -58,11 +61,11 @@
                     </form>
                 </div>
 
-                <EditProfile user={data.user} />
+                <EditProfile disabled={profileEditDisabled} user={data.user} />
             </div>
         {:else if tabSet === 1 && !data.isProxyUser}
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {#if !data.isProxyUser}
+                {#if !(data.isProxyUser || (data.oidcConfig.ready && data.user.oauthId))}
                     <ChangePassword />
                 {/if}
                 {#if data.oidcConfig.ready}

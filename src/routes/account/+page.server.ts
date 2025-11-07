@@ -18,10 +18,10 @@ import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 import { logger } from "$lib/server/logger";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, fetch }) => {
     const user = requireLogin();
 
-    const oidcConfig = await getOIDCConfig();
+    const oidcConfig = await getOIDCConfig(fetch);
 
     return {
         user,
