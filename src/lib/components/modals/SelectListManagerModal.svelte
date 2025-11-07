@@ -35,7 +35,7 @@
 
     const usersAPI = new UsersAPI();
 
-    let users: Pick<User, "id" | "name" | "email">[] = $state([]);
+    let users: Pick<User, "id" | "name" | "email" | "username">[] = $state([]);
     const doSearch = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
         const resp = await usersAPI.search(e.currentTarget.value, searchOptions);
         users = await resp.json();
@@ -59,7 +59,10 @@
         <ListBox class="border border-surface-500 p-4 rounded-container-token">
             {#each users as user}
                 <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
-                    {user.name}
+                    <div class="flex items-baseline gap-2">
+                        <span>{user.name}</span>
+                        <span class="subtext">{user.username}</span>
+                    </div>
                 </ListBoxItem>
             {/each}
         </ListBox>

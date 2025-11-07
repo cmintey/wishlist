@@ -46,8 +46,11 @@
     {#if users.length > 0}
         <ListBox class="border border-surface-500 p-4 rounded-container-token">
             {#each users as user}
-                <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
-                    {user.name}
+                <ListBoxItem name="user" value={user.id} bind:group={selectedUser}>
+                    <div class="flex items-baseline gap-2">
+                        <span>{user.name}</span>
+                        <span class="subtext">{user.username}</span>
+                    </div>
                 </ListBoxItem>
             {/each}
         </ListBox>
