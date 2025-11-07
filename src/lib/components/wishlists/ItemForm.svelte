@@ -2,9 +2,8 @@
     import { page } from "$app/state";
     import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import { env } from "$env/dynamic/public";
-    import { FileButton, getToastStore } from "@skeletonlabs/skeleton";
-    import { getPriceValue } from "$lib/price-formatter";
+    import { FileButton, getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
+    import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
@@ -28,24 +27,26 @@
         lists?: ListProps[];
         currentList?: string;
         buttonText: string;
+        saving: boolean;
     }
 
-    let { item = $bindable(), buttonText, lists: otherLists = [], currentList }: Props = $props();
+    let { item = $bindable(), buttonText, lists: otherLists = [], currentList, saving = false }: Props = $props();
     const t = getFormatter();
 
     let productData = $state(item);
     let form = $derived(page.form);
     let url = $derived(page.url);
-    let loading = $state(false);
+    let fetching = $state(false);
     let urlFetched = $state(false);
     const toastStore = getToastStore();
     let price: number | null = $state(getPriceValue(productData));
-    const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
+    const defaultCurrency = getDefaultCurrency();
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let files: FileList | undefined = $state();
     let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
+    let submitSrc = $state("submit");
 
     const listsHavingItem = $derived.by(() => {
         return productData.lists
@@ -93,7 +94,7 @@
 
     const getInfo = async () => {
         if (productData.url && !urlFetched) {
-            loading = true;
+            fetching = true;
             const url = extractUrl(productData.url);
             const res = await fetch(`/api/product?url=${url}`);
             if (res.ok) {
@@ -128,7 +129,7 @@
             } else {
                 triggerToast();
             }
-            loading = false;
+            fetching = false;
             urlFetched = true;
         }
     };
@@ -146,6 +147,10 @@
         } else {
             history.back();
         }
+    };
+
+    const selectAll = () => {
+        document.getElementsByName("lists").forEach((el) => ((el as HTMLInputElement).checked = true));
     };
 </script>
 
@@ -309,8 +314,18 @@
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
     </label>
 
-    <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
-        <legend>{$t("wishes.lists")}</legend>
+    <fieldset
+        class="col-span-full flex flex-col space-y-2 md:col-span-5"
+        class:hidden={lists.length <= 1}
+        aria-labelledby="lists-label"
+    >
+        <div class="flex items-end justify-between">
+            <legend id="lists-label">{$t("wishes.lists")}</legend>
+            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">
+                {$t("general.select-all")}
+            </button>
+        </div>
+
         <div
             class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
             class:input-error={form?.errors?.lists}
@@ -343,22 +358,40 @@
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
     <div class="col-span-full flex w-full flex-col-reverse gap-2 sm:w-full sm:flex-row sm:justify-between">
-        <button class="variant-ghost-secondary btn" onclick={onCancel} type="button">
+        <button class="variant-ghost-secondary btn" disabled={fetching || saving} onclick={onCancel} type="button">
             {$t("general.cancel")}
         </button>
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2">
             {#if !item.id}
-                <button id="submit-stay" class="variant-outline-primary btn" disabled={loading} type="submit">
-                    {$t("wishes.create-and-add-another")}
+                <button
+                    id="submit-stay"
+                    class="variant-outline-primary btn"
+                    disabled={fetching || saving}
+                    onclick={() => (submitSrc = "submit-stay")}
+                    type="submit"
+                >
+                    {#if saving && submitSrc == "submit-stay"}
+                        <ProgressRadial width="w-4" />
+                    {/if}
+                    <span>{$t("wishes.create-and-add-another")}</span>
                 </button>
             {/if}
-            <button id="submit" class="variant-filled-primary btn" disabled={loading} type="submit">
-                {buttonText}
+            <button
+                id="submit"
+                class="variant-filled-primary btn"
+                disabled={fetching || saving}
+                onclick={() => (submitSrc = "submit")}
+                type="submit"
+            >
+                {#if saving && submitSrc == "submit"}
+                    <ProgressRadial width="w-4" />
+                {/if}
+                <span>{buttonText}</span>
             </button>
         </div>
     </div>
 </div>
 
-{#if loading}
+{#if fetching}
     <Backdrop text={$t("wishes.hang-tight-gathering-product-data")} />
 {/if}

@@ -25,6 +25,7 @@ export class CreateItemPage extends BasePage {
 
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
     }
 
     async getForm() {
@@ -41,5 +42,11 @@ export class CreateItemPage extends BasePage {
 
     async assertApprovalRequiredAlert() {
         await expect(this.approvalRequiredAlert).toBeVisible();
+        return this;
+    }
+
+    async assertApprovalRequiredAlertNotVisible() {
+        await expect(this.approvalRequiredAlert).not.toBeVisible();
+        return this;
     }
 }

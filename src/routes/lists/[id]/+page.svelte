@@ -48,29 +48,29 @@
     // Initialize from server data (cookie) to prevent flicker
     // This value comes from the server, so SSR renders the correct view
     let isTileView = $state(data.initialViewPreference === "tile");
-    
+
     // Sync cookie with localStorage on mount (in case localStorage was updated elsewhere)
     onMount(() => {
         const localStorageValue = getListViewPreference();
         const cookieMatches = document.cookie.includes(`listViewPreference=${localStorageValue}`);
-        
+
         // If cookie doesn't match localStorage, update cookie
         if (!cookieMatches) {
             document.cookie = `listViewPreference=${localStorageValue}; path=/; max-age=${60 * 60 * 24 * 365}`;
         }
-        
+
         // Update state if needed
         const shouldBeTile = localStorageValue === "tile";
         if (isTileView !== shouldBeTile) {
             isTileView = shouldBeTile;
         }
     });
-    
+
     // Keep synced with store changes
     $effect(() => {
         const storeValue = $listViewPreference;
         const newIsTileView = storeValue === "tile";
-        
+
         // Only update if the value actually changed
         if (isTileView !== newIsTileView) {
             isTileView = newIsTileView;
@@ -273,7 +273,7 @@
             <ListViewModeChip {isTileView} />
         {/if}
     </div>
-    {#if data.list.owner.isMe}
+    {#if data.list.owner.isMe || data.list.isManager}
         <div class="flex flex-row flex-wrap items-center gap-2">
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
@@ -281,7 +281,7 @@
     {/if}
 </div>
 
-{#if data.list.owner.isMe}
+{#if data.list.owner.isMe || data.list.isManager}
     <div class="flex flex-wrap-reverse justify-between gap-2 pb-4">
         <ListStatistics {items} />
         {#if data.listMode === "registry" || data.list.public}
@@ -302,23 +302,25 @@
     </div>
 {/if}
 
-{#if data.list.owner.isMe}{/if}
-
-{#if data.list.owner.isMe && approvals.length > 0}
+{#if (data.list.owner.isMe || data.list.isManager) && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
-        <div class={isTileView 
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4"
-            : "flex flex-col space-y-4"
-        } data-testid="approvals-container">
+        <div
+            class={isTileView
+                ? "grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5"
+                : "flex flex-col space-y-4"}
+            data-testid="approvals-container"
+        >
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
                         groupId={data.list.groupId}
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                         {isTileView}
                     />
                 </div>
@@ -337,9 +339,8 @@
     <!-- items -->
     <div
         class={reordering || !isTileView
-            ? "flex flex-col space-y-4 rounded-container-token transition-opacity duration-150"
-            : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token transition-opacity duration-150"
-        }
+            ? "flex flex-col space-y-4 transition-opacity duration-150 rounded-container-token"
+            : "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5"}
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}
@@ -362,8 +363,10 @@
                         onIncreasePriority={handleIncreasePriority}
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                         {isTileView}
                     />
                 </div>
@@ -381,8 +384,10 @@
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}
+                            showClaimForOwner={data.showClaimForOwner}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
+                            userCanManage={data.list.isManager}
                             {isTileView}
                         />
                     </div>

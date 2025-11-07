@@ -8,26 +8,28 @@
     import { getModalStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";
+    import { page } from "$app/state";
+    import Tooltip from "../Tooltip.svelte";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
+        managers: Pick<User, "id" | "name" | "email">[];
     }
 
     interface Props {
-        data: {
-            list: ListProps;
-        };
+        list: ListProps;
         persistButtonName: string;
         listMode: ListMode;
         allowsPublicLists: boolean;
+        groupId: string;
         editing?: boolean;
     }
 
-    const { data, persistButtonName, listMode, allowsPublicLists, editing = false }: Props = $props();
+    const { list: list_, persistButtonName, listMode, allowsPublicLists, groupId, editing = false }: Props = $props();
     const t = getFormatter();
     const modalStore = getModalStore();
 
-    let list = $state(data.list);
+    let list = $state(list_);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived.by(() => {
         if (colorElement) {
@@ -38,6 +40,7 @@
         return list.iconColor || "";
     });
     let colorValue: string | null = $state((() => defaultColor)());
+    let managers = $state(list.managers);
 
     const handleDelete = async () => {
         return new Promise((resolve, reject) => {
@@ -56,6 +59,24 @@
                 buttonTextConfirm: $t("general.confirm")
             });
         });
+    };
+
+    const addManager = () => {
+        modalStore.trigger({
+            type: "component",
+            component: "selectListManager",
+            meta: {
+                groupId,
+                managers: [list.owner, ...managers]
+            },
+            response(user: { id: string; name: string; email: string }) {
+                managers = [...managers, user];
+            }
+        });
+    };
+
+    const removeManager = (id: string) => {
+        managers = managers.filter((user) => user.id !== id);
     };
 
     $effect(() => {
@@ -149,6 +170,53 @@
                 />
             </label>
         </div>
+
+        <fieldset
+            class="col-span-full flex min-w-0 flex-col space-y-2 md:col-span-5"
+            aria-labelledby="list-managers-label"
+        >
+            <div class="flex items-end justify-between">
+                <Tooltip>
+                    {#snippet label()}
+                        <legend id="list-managers-label">{$t("wishes.list-managers")}</legend>
+                    {/snippet}
+                    {#snippet description()}
+                        <p>{$t("wishes.list-managers-tooltip")}</p>
+                    {/snippet}
+                </Tooltip>
+                <button class="variant-ghost-primary btn btn-sm" onclick={addManager} type="button">
+                    {$t("wishes.add-a-manager")}
+                </button>
+            </div>
+
+            <div
+                class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-y-scroll p-2 border-token rounded-container-token"
+                class:input-error={page.form?.errors?.managers}
+                data-testid="list-managers-list"
+            >
+                {#if managers.length === 0}
+                    <span class="subtext">{$t("wishes.no-managers")}</span>
+                {/if}
+                {#each managers as manager (manager.id)}
+                    <label class="flex items-center justify-between" for={manager.id}>
+                        <div class="flex items-center gap-x-2 truncate">
+                            <p class="truncate" data-part="name">{manager.name}</p>
+                            <span class="subtext truncate" data-part="email">{manager.email}</span>
+                        </div>
+                        <button class="flex items-center" onclick={() => removeManager(manager.id)} type="button">
+                            <iconify-icon icon="ion:close"></iconify-icon>
+                            <span class="sr-only">
+                                {$t("a11y.remove-manager-name", { values: { name: manager.name } })}
+                            </span>
+                        </button>
+                    </label>
+                    <input id={manager.id} name="managers" class="hidden" readonly type="text" value={manager.id} />
+                {/each}
+            </div>
+            {#if page.form?.errors?.managers}
+                <p class="unstyled text-error-500-400-token text-xs">{page.form.errors.managers[0]}</p>
+            {/if}
+        </fieldset>
 
         <div class="col-span-full">
             <div class="flex flex-col space-y-2">

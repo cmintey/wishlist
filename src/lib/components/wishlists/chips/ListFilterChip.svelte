@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { User } from "@prisma/client";
     import BaseChip from "./BaseChip.svelte";
-    import { getFormatter, getLocale } from "$lib/i18n";
+    import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
 
     type PartialUser = Pick<User, "id" | "name" | "picture">;
@@ -34,7 +34,7 @@
                 return unique;
             })
             .map((user) => ({ value: user.id, displayValue: user.name }) as Option)
-            .toSorted((a, b) => a.displayValue.localeCompare(b.displayValue, locale || "en-US"));
+            .toSorted((a, b) => a.displayValue.localeCompare(b.displayValue, locale || defaultLang.code));
     }
 </script>
 

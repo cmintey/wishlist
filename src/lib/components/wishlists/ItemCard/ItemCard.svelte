@@ -38,7 +38,9 @@
     interface Props {
         item: ItemOnListDTO;
         user?: PartialUser; // logged in user
+        userCanManage?: boolean;
         showClaimedName?: boolean;
+        showClaimForOwner?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
         showFor?: boolean;
@@ -53,7 +55,9 @@
         item,
         groupId,
         user = undefined,
+        userCanManage = false,
         showClaimedName = false,
+        showClaimForOwner = false,
         requireClaimEmail = true,
         showFor = false,
         onPublicList = false,
@@ -107,7 +111,8 @@
             { values: { name: itemNameShort } }
         ),
         meta: {
-            multipleLists: item.listCount > 1
+            multipleLists: item.listCount > 1,
+            isOnlyManager: user?.id !== item.user?.id && user?.id !== item.addedBy?.id && userCanManage
         },
         response: async (r: DeleteConfirmationResult) => {
             if (r == DeleteConfirmationResult.DELETE) {
@@ -252,7 +257,9 @@
             item,
             showFor,
             user,
+            userCanManage,
             showClaimedName,
+            showClaimForOwner,
             requireClaimEmail,
             onPublicList,
             handleClaim,
@@ -287,7 +294,11 @@
         data-testid="image"
         role="img"
     >
-        <iconify-icon class={sizeClasses.includes("w-full") ? "w-16 h-16" : "w-8 md:w-16"} height="none" icon="ion:gift"></iconify-icon>
+        <iconify-icon
+            class={sizeClasses.includes("w-full") ? "h-16 w-16" : "w-8 md:w-16"}
+            height="none"
+            icon="ion:gift"
+        ></iconify-icon>
     </div>
 {/snippet}
 
@@ -323,7 +334,7 @@
             onDelete={handleDelete}
             onEdit={handleEdit}
             onApproval={handleApproval}
-            defaultImage={defaultImage}
+            {defaultImage}
             {id}
         />
     {:else if isTileView}
@@ -342,7 +353,7 @@
             onDelete={handleDelete}
             onEdit={handleEdit}
             onApproval={handleApproval}
-            defaultImage={defaultImage}
+            {defaultImage}
             {id}
         />
     {:else}
@@ -361,7 +372,7 @@
             onDelete={handleDelete}
             onEdit={handleEdit}
             onApproval={handleApproval}
-            defaultImage={defaultImage}
+            {defaultImage}
             {id}
         />
     {/if}

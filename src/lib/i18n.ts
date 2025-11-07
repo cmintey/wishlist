@@ -1,7 +1,7 @@
 import { register, init, format, waitLocale } from "svelte-i18n";
 import { derived, type Readable } from "svelte/store";
 import type { MessageObject, MessageFormatter } from "./server/i18n";
-import { getContext, setContext } from "svelte";
+import { createContext } from "svelte";
 import { dev } from "$app/environment";
 
 export interface Lang {
@@ -61,6 +61,11 @@ export const supportedLangs: Lang[] = [
     }
 ];
 
+const supportedLangsByCode: Record<string, Lang> = supportedLangs.reduce(
+    (accum, lang) => ({ ...accum, [lang.code]: lang }),
+    {}
+);
+
 export async function initFormatter(locale: string) {
     await waitLocale(locale);
     return derived(format, ($format) => {
@@ -74,21 +79,8 @@ export async function initFormatter(locale: string) {
     });
 }
 
-export function setFormatter(t: Readable<MessageFormatter>) {
-    setContext("translator", t);
-}
-
-export function getFormatter() {
-    return getContext("translator") as Readable<MessageFormatter>;
-}
-
-export function setLocale(locale: string) {
-    setContext("locale", locale);
-}
-
-export function getLocale() {
-    return (getContext("locale") as string) || defaultLang.code;
-}
+export const [getFormatter, setFormatter] = createContext<Readable<MessageFormatter>>();
+export const [getLocale, setLocale] = createContext<string>();
 
 export const initLang = async (locale: string) => {
     supportedLangs.forEach((lang) => register(lang.code, lang.loader));
@@ -119,16 +111,27 @@ export const getClosestAvailableLocaleFromHeader = (acceptLanguage: string | und
 };
 
 export const getClosestAvailablePreferredLanguage = (preferredLanguage: string | undefined | null) => {
-    return preferredLanguage ? getClosestAvailableLocale([preferredLanguage]) : defaultLang;
+    return preferredLanguage ? getClosestAvailableLocale([preferredLanguage]) : null;
 };
 
 export const getClosestAvailableLocale = (langs: readonly string[]): Lang => {
-    const availableLangs = langs
-        .map((lang) => supportedLangs.find((supportedLang) => supportedLang.code === lang))
-        .filter((lang) => lang !== undefined);
-    return availableLangs.length > 0 ? availableLangs[0] : defaultLang;
+    const langsAndSubLangs = langs.flatMap((lang) => getSubLocales(lang));
+    for (const lang of langsAndSubLangs) {
+        if (lang in supportedLangsByCode) {
+            return supportedLangsByCode[lang];
+        }
+    }
+    return defaultLang;
 };
 
 export const getPrimaryLang = (locale: string) => {
     return locale?.toLowerCase().split("-")[0];
+};
+
+// https://github.com/kaisermann/svelte-i18n/blob/780932a3e1270d521d348aac8ba03be9df309f04/src/runtime/stores/locale.ts#L11
+const getSubLocales = (refLocale: string) => {
+    return refLocale
+        .split("-")
+        .map((_, i, arr) => arr.slice(0, i + 1).join("-"))
+        .reverse();
 };

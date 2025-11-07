@@ -9,7 +9,7 @@ export abstract class BasePage {
         this.urlPath = urlPath;
     }
 
-    abstract at(): Promise<void>;
+    abstract at(): Promise<this>;
 
     async goto(opts?: { skipAssert: boolean }) {
         await this.page.goto(this.urlPath);

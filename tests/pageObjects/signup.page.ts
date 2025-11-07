@@ -18,6 +18,7 @@ export class SignupPage extends BasePage {
 
     async at() {
         await expect(this.header).toBeVisible();
+        return this;
     }
 
     async createAccount(): Promise<Omit<UserData, "id" | "groups">> {

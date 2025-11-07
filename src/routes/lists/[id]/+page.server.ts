@@ -40,6 +40,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
         sortDir: url.searchParams.get("dir"),
         suggestionMethod: config.suggestions.method,
         listOwnerId: list.owner.id,
+        listManagers: new Set(list.managers.map(({ userId }) => userId)),
         loggedInUserId: locals.user?.id || null
     };
 
@@ -58,6 +59,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
                 isMe: list.owner.id === locals.user?.id,
                 activeGroupId: list.groupId
             },
+            isManager: list.managers.find(({ userId }) => userId === locals.user?.id) !== undefined,
             items
         },
         loggedInUser: locals.user
@@ -70,6 +72,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
             : undefined,
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
+        showClaimForOwner: config.claims.showForOwner,
         requireClaimEmail: config.claims.requireEmail,
         suggestionsEnabled: config.suggestions.enable,
         initialViewPreference: viewPreference || "list"

@@ -27,7 +27,10 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     const { session, user } = await validateSessionToken(sessionToken);
-    lang = getClosestAvailablePreferredLanguage(user?.preferredLanguage);
+    if (user?.preferredLanguage) {
+        lang = getClosestAvailablePreferredLanguage(user.preferredLanguage) ?? lang;
+    }
+
     await loadLocale(lang.code);
     if (session !== null) {
         setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);

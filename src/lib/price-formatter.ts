@@ -21,11 +21,24 @@ const getMaximumFractionDigits = (currency: string, locale?: string) => {
     return getFormatter(currency, locale).resolvedOptions().maximumFractionDigits || 2;
 };
 
+export const getDefaultCurrency = () => {
+    if (!env.PUBLIC_DEFAULT_CURRENCY) {
+        return "USD";
+    }
+    try {
+        new Intl.NumberFormat("en-US", { currency: env.PUBLIC_DEFAULT_CURRENCY });
+    } catch {
+        console.warn("Invalid currency: ", env.PUBLIC_DEFAULT_CURRENCY);
+        return "USD";
+    }
+    return env.PUBLIC_DEFAULT_CURRENCY;
+};
+
 export const getFormatter = (currency: string | null, locale?: string) => {
     return getNumberFormatter({
         locale: locale ?? (browser ? getLocale() : defaultLang.code),
         style: "currency",
-        currency: currency || env.PUBLIC_DEFAULT_CURRENCY,
+        currency: currency || getDefaultCurrency(),
         currencyDisplay: "narrowSymbol"
     });
 };

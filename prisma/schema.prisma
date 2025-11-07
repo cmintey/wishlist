@@ -26,6 +26,7 @@ model User {
     oauthId             String?
     lists               List[]
     preferredLanguage   String?
+    managedLists        ListManager[]
 
     @@map("user")
 }
@@ -84,13 +85,14 @@ model UserGroupMembership {
 }
 
 model List {
-    id          String      @id @unique @default(cuid())
+    id          String        @id @unique @default(cuid())
     name        String?
-    owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    owner       User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId     String
-    group       Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    managers    ListManager[]
+    group       Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId     String
-    public      Boolean     @default(false)
+    public      Boolean       @default(false)
     icon        String?
     iconColor   String?
     items       ListItem[]
@@ -101,6 +103,17 @@ model List {
     @@index([groupId])
     @@index([ownerId, groupId])
     @@map("list")
+}
+
+model ListManager {
+    id     String @id @unique @default(uuid())
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+    listId String
+
+    @@index([listId])
+    @@map("list_manager")
 }
 
 model Item {

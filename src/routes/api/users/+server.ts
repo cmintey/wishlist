@@ -10,12 +10,25 @@ import { treeifyError } from "zod";
 export const GET: RequestHandler = async ({ url }) => {
     await requireLoginOrError();
 
-    let users: User[] = [];
+    let users: Pick<User, "id" | "name" | "email">[] = [];
 
     users = await client.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true
+        },
         where: {
+            id: {
+                notIn: url.searchParams.get("excludedUserIds")?.split(",") || undefined
+            },
             name: {
                 contains: url.searchParams.get("name") || undefined
+            },
+            UserGroupMembership: {
+                some: {
+                    groupId: url.searchParams.get("groupId") || undefined
+                }
             }
         }
     });

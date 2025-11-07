@@ -2,6 +2,7 @@ import { expect, type Locator } from "@playwright/test";
 import { EditItemPage } from "../pageObjects/edit-item.page";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
+import { DeleteItemModal } from "./delete-item-modal";
 
 export class ItemCard {
     private readonly card: Locator;
@@ -104,32 +105,47 @@ export class ItemCard {
         return this;
     }
 
+    async assertDeleteButtonHidden() {
+        await expect(this.deleteButton).not.toBeVisible();
+        return this;
+    }
+
     async edit() {
         await this.editButton.click();
         await this.card.page().waitForURL(/\/items\/\d+\/edit/);
         return new EditItemPage(this.card.page());
     }
 
-    async delete() {
+    async delete(multipleLists = false, type: "this" | "all" = "all") {
+        const modal = await this.deleteNoConfirm();
+        if (!multipleLists) {
+            await modal.submit();
+        } else if (type === "this") {
+            await modal.thisList();
+        } else {
+            await modal.allLists();
+        }
+    }
+
+    async deleteNoConfirm() {
         await this.deleteButton.click();
-        const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
-        await modal.submit();
+        return new DeleteItemModal(this.card.page());
     }
 
     async approve() {
+        const name = await this.name.textContent();
         await this.approveButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
-        const name = await this.name.textContent();
         new Toast(this.card.page()).waitForToastWithText(`${name} was approved`);
         return this;
     }
 
     async deny() {
+        const name = await this.name.textContent();
         await this.denyButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
-        const name = await this.name.textContent();
         new Toast(this.card.page()).waitForToastWithText(`${name} was denied`);
         return this;
     }

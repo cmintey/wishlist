@@ -66,6 +66,7 @@ export const settingSchema = z.object({
     smtpFrom: z.string().optional(),
     smtpFromName: z.string().optional(),
     claimsShowName: z.coerce.boolean().default(false),
+    claimsShowForOwner: z.coerce.boolean().default(false),
     claimsRequireEmail: z.coerce.boolean().default(false),
     listMode: z.enum(["standard", "registry"]).default("standard"),
     passwordStrength: z.coerce.number().min(-1).max(5).default(2),
@@ -92,7 +93,8 @@ export const getListPropertiesSchema = () => {
         icon: z.string().trim().nullable(),
         iconColor: z.string().trim().nullable(),
         public: z.coerce.boolean().default(false),
-        description: z.string().max(10000).nullable()
+        description: z.string().max(10000).nullable(),
+        managers: z.string().array().nullable().default([])
     });
 };
 

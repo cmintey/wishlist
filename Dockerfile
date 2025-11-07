@@ -1,4 +1,4 @@
-FROM node:22-slim@sha256:d943bf20249f8b92eff6f605362df2ee9cf2d6ce2ea771a8886e126ec8714f08 AS base
+FROM node:22-slim@sha256:7e3a5fac109e00e9f2616cd24f5227e2eb0d473bf33b98d661b0c1862f6bfbbd AS base
 WORKDIR /usr/src/app
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -27,7 +27,7 @@ RUN pnpm run build
 RUN pnpm prune --prod
 
 # Download Caddy from github
-FROM --platform=$BUILDPLATFORM alpine:latest AS caddy
+FROM --platform=$BUILDPLATFORM alpine:latest@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 AS caddy
 
 ARG TARGETPLATFORM
 ARG CADDY_VERSION=2.10.0

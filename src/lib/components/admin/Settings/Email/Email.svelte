@@ -23,13 +23,7 @@
 
     <SettingsGroup title={$t("admin.smtp")}>
         <label class="checkbox-label">
-            <input
-                id="enableSMTP"
-                name="enableSMTP"
-                class="checkbox"
-                type="checkbox"
-                bind:checked={config.smtp.enable}
-            />
+            <input id="enableSMTP" name="enableSMTP" class="checkbox" checked={config.smtp.enable} type="checkbox" />
             <span>{$t("general.enable")}</span>
         </label>
         {#if config.smtp.enable}
@@ -43,7 +37,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        bind:value={config.smtp.host}
+                        value={config.smtp.host}
                     />
                 </label>
                 <label for="smtpPort">
@@ -55,7 +49,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        bind:value={config.smtp.port}
+                        value={config.smtp.port}
                     />
                 </label>
                 <label for="smtpUser">
@@ -67,7 +61,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        bind:value={config.smtp.user}
+                        value={config.smtp.user}
                     />
                 </label>
                 <PasswordInput
@@ -75,7 +69,7 @@
                     name="smtpPass"
                     label={$t("auth.password")}
                     required
-                    bind:value={config.smtp.pass}
+                    value={config.smtp.pass}
                 />
                 <label for="smtpFrom">
                     <span>{$t("admin.smtp-from-email")}</span>
@@ -86,7 +80,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        bind:value={config.smtp.from}
+                        value={config.smtp.from}
                     />
                 </label>
                 <label for="smtpFromName">
@@ -98,7 +92,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        bind:value={config.smtp.fromName}
+                        value={config.smtp.fromName}
                     />
                 </label>
             </div>

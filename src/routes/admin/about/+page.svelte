@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { getFormatter, getLocale } from "$lib/i18n";
+    import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
     import { getDateFormatter } from "svelte-i18n";
 
     const t = getFormatter();
     const date = getDateFormatter({
-        locale: getLocale(),
+        locale: getLocale() || defaultLang.code,
         format: "medium"
     });
     const version: string = __VERSION__;
