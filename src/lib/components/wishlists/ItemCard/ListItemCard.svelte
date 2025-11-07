@@ -3,16 +3,18 @@
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
     import Image from "$lib/components/Image.svelte";
-    import Markdown from "$lib/components/Markdown.svelte";
-    import ClaimButtons from "./ClaimButtons.svelte";
-    import ReorderButtons from "./ReorderButtons.svelte";
-    import { formatPrice } from "$lib/price-formatter";
     import type { MessageFormatter } from "$lib/server/i18n";
+    import ItemNameHeader from "./components/ItemNameHeader.svelte";
+    import ItemAttributes from "./components/ItemAttributes.svelte";
+    import ItemFooter from "./components/ItemFooter.svelte";
+    import type { ClassValue } from "svelte/elements";
+    import ItemImage from "./components/ItemImage.svelte";
 
     interface Props {
         item: ItemOnListDTO;
         user?: PartialUser;
         showClaimedName?: boolean;
+        showClaimForOwner?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
         showFor?: boolean;
@@ -26,7 +28,6 @@
         onDelete?: () => void;
         onEdit?: () => void;
         onApproval?: (approve: boolean) => void;
-        defaultImage: (t: MessageFormatter) => any;
         id: string;
     }
 
@@ -34,6 +35,7 @@
         item,
         user,
         showClaimedName = false,
+        showClaimForOwner = false,
         requireClaimEmail = true,
         groupId,
         showFor = false,
@@ -47,187 +49,55 @@
         onDelete,
         onEdit,
         onApproval,
-        defaultImage,
         id
     }: Props = $props();
-
-    const t = getFormatter();
-
-    const imageUrl: string | undefined = $derived.by(() => {
-        if (item.imageUrl) {
-            try {
-                new URL(item.imageUrl);
-                return item.imageUrl;
-            } catch {
-                if (item.imageUrl.startsWith("/") || item.imageUrl.endsWith("/")) {
-                    return;
-                }
-                return `/api/assets/${item.imageUrl}`;
-            }
-        }
-    });
 </script>
 
-<header class="card-header flex w-full px-4 pt-4">
-    {#if item.url}
-        <a
-            id={`${id}-name`}
-            class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl w-full"
-            data-testid="name"
-            href={item.url}
-            onclick={(e) => e.stopPropagation()}
-            rel="noreferrer"
-            target="_blank"
-        >
-            {item.name}
-        </a>
-    {:else}
-        <span 
-            id={`${id}-name`} 
-            class="line-clamp-2 text-xl font-bold md:text-2xl w-full" 
-            data-testid="name"
-        >
-            {item.name}
-        </span>
-    {/if}
-</header>
+<ItemNameHeader />
 
 <div class="flex flex-row gap-x-4 p-4">
-    <Image
-        class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
-        alt={item.name}
-        data-testid="image"
-        referrerpolicy="no-referrer"
-        src={imageUrl}
-    >
-        {@render defaultImage($t)}
-    </Image>
+    <ItemImage>
+        {#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
+            <div
+                class={[
+                    "flex-none",
+                    "bg-surface-300-600-token",
+                    "grid",
+                    "place-items-center",
+                    sizeClasses.includes("w-full") ? "rounded-t-container-token" : "rounded",
+                    sizeClasses.includes("w-full") ? "" : "aspect-square",
+                    sizeClasses
+                ]}
+                aria-label={t("a11y.default-item-image")}
+                data-testid="image"
+                role="img"
+            >
+                <iconify-icon
+                    class={sizeClasses.includes("w-full") ? "h-16 w-16" : "w-8 md:w-16"}
+                    height="none"
+                    icon="ion:gift"
+                ></iconify-icon>
+            </div>
+        {/snippet}
+    </ItemImage>
 
     <div class="flex flex-col">
-        <!-- Price with fallback -->
-        <div class="flex items-center gap-x-2">
-            <iconify-icon icon="ion:pricetag"></iconify-icon>
-            <span class="text-lg font-semibold" data-testid="price">
-                {#if item.price || item.itemPrice}
-                    {formatPrice(item)}
-                {:else}
-                    $ -
-                {/if}
-            </span>
-        </div>
-
-        <!-- Quantity with fallback -->
-        <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
-            <iconify-icon icon="ion:gift"></iconify-icon>
-            <div class="flex flex-row flex-wrap gap-x-2">
-                <span data-testid="quantity-desired">
-                    {#if item.quantity}
-                        {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
-                    {:else}
-                        {$t("wishes.no-limit")}
-                    {/if}
-                </span>
-                {#if user?.id !== item.userId && item.quantity}
-                    <span>·</span>
-                    <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
-                        {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                    </span>
-                {/if}
-            </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-            <iconify-icon icon="ion:person"></iconify-icon>
-            <span class="text-wrap text-base md:text-lg" data-testid="added-by">
-                {#if showFor}
-                    {@html $t("wishes.for", { values: { name: item.user.name } })}
-                {:else if !onPublicList}
-                    {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
-                {:else}
-                    {@html item.addedBy.id === item.user.id
-                        ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                        : $t("wishes.added-by-somebody-else")}
-                {/if}
-            </span>
-        </div>
-
-        <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-            <iconify-icon icon="ion:reader"></iconify-icon>
-            <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
-                {#if item.note}
-                    <Markdown source={item.note} />
-                {:else}
-                    -
-                {/if}
-            </div>
-        </div>
+        <ItemAttributes {onPublicList} {showClaimForOwner} {showFor} {user} />
     </div>
 </div>
 
 <!-- Footer with buttons -->
-<footer class="card-footer flex flex-row px-4 pb-4" class:justify-between={!reorderActions} class:justify-center={reorderActions}>
-    {#if reorderActions}
-        <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
-    {:else}
-        <div class="flex items-center gap-x-2">
-            <ClaimButtons
-                {item}
-                onClaim={onClaim}
-                {onPublicList}
-                onPurchase={onPurchased}
-                onUnclaim={onUnclaim}
-                showName={showClaimedName}
-                {user}
-            />
-        </div>
-
-        <!-- Edit, Delete, or Approval buttons on the right -->
-        <div class="flex items-center gap-x-2">
-            {#if !item.approved}
-                <!-- Approval buttons for unapproved items -->
-                <button
-                    class="variant-filled-success btn btn-sm"
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        onApproval?.(true);
-                    }}
-                >
-                    {$t("wishes.approve")}
-                </button>
-                <button
-                    class="variant-filled-error btn btn-sm"
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        onApproval?.(false);
-                    }}
-                >
-                    {$t("wishes.deny")}
-                </button>
-            {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
-                <!-- Edit and Delete buttons for approved items owned by user -->
-                <button
-                    class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
-                    aria-label={$t("wishes.edit")}
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        onEdit?.();
-                    }}
-                    title={$t("wishes.edit")}
-                >
-                    <iconify-icon icon="ion:edit"></iconify-icon>
-                </button>
-                <button
-                    class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
-                    aria-label={$t("wishes.delete")}
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        onDelete?.();
-                    }}
-                    title={$t("wishes.delete")}
-                >
-                    <iconify-icon icon="ion:trash"></iconify-icon>
-                </button>
-            {/if}
-        </div>
-    {/if}
-</footer>
+<ItemFooter
+    {onApproval}
+    {onClaim}
+    {onDecreasePriority}
+    {onDelete}
+    {onEdit}
+    {onIncreasePriority}
+    {onPurchased}
+    {onUnclaim}
+    {reorderActions}
+    {showClaimForOwner}
+    {showClaimedName}
+    {user}
+/>

@@ -2,40 +2,8 @@
     export interface PartialUser extends Pick<User, "id" | "name"> {
         activeGroupId: string;
     }
-</script>
 
-<script lang="ts">
-    import {
-        getDrawerStore,
-        getModalStore,
-        getToastStore,
-        type DrawerSettings,
-        type ModalSettings
-    } from "@skeletonlabs/skeleton";
-    import type { User } from "@prisma/client";
-    import { ItemAPI } from "$lib/api/items";
-    import ClaimButtons from "./ClaimButtons.svelte";
-    import { goto, invalidateAll } from "$app/navigation";
-    import type { ItemVoidFunction } from "./ReorderButtons.svelte";
-    import ReorderButtons from "./ReorderButtons.svelte";
-    import { formatPrice } from "$lib/price-formatter";
-    import { page } from "$app/state";
-    import ManageButtons from "./ManageButtons.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { ListItemAPI } from "$lib/api/lists";
-    import { ClaimAPI } from "$lib/api/claims";
-    import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
-    import Image from "$lib/components/Image.svelte";
-    import type { ClassValue } from "svelte/elements";
-    import type { MessageFormatter } from "$lib/server/i18n";
-    import { errorToast } from "$lib/components/toasts";
-    import { getFormatter } from "$lib/i18n";
-    import Markdown from "$lib/components/Markdown.svelte";
-    import { resolve } from "$app/paths";
-    import GridItemCard from "./GridItemCard.svelte";
-    import ListItemCard from "./ListItemCard.svelte";
-
-    interface Props {
+    export interface ItemCardProps {
         item: ItemOnListDTO;
         user?: PartialUser; // logged in user
         userCanManage?: boolean;
@@ -50,6 +18,33 @@
         onDecreasePriority?: ItemVoidFunction | undefined;
         isTileView?: boolean;
     }
+</script>
+
+<script lang="ts">
+    import {
+        getDrawerStore,
+        getModalStore,
+        getToastStore,
+        type DrawerSettings,
+        type ModalSettings
+    } from "@skeletonlabs/skeleton";
+    import type { User } from "@prisma/client";
+    import { ItemAPI } from "$lib/api/items";
+    import { goto, invalidateAll } from "$app/navigation";
+    import type { ItemVoidFunction } from "./ReorderButtons.svelte";
+    import { page } from "$app/state";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import { ListItemAPI } from "$lib/api/lists";
+    import { ClaimAPI } from "$lib/api/claims";
+    import { DeleteConfirmationResult } from "$lib/components/modals/DeleteItemModal.svelte";
+    import type { ClassValue } from "svelte/elements";
+    import type { MessageFormatter } from "$lib/server/i18n";
+    import { errorToast } from "$lib/components/toasts";
+    import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
+    import GridItemCard from "./GridItemCard.svelte";
+    import ListItemCard from "./ListItemCard.svelte";
+    import { setComponentId, setItem } from "./context";
 
     const {
         item,
@@ -65,7 +60,7 @@
         onIncreasePriority = undefined,
         onDecreasePriority = undefined,
         isTileView = false
-    }: Props = $props();
+    }: ItemCardProps = $props();
     const id = $props.id();
     const t = getFormatter();
 
@@ -73,23 +68,12 @@
     const toastStore = getToastStore();
     const drawerStore = getDrawerStore();
 
+    setComponentId(id);
+    setItem(item);
+
     $effect(() => {
         if (page.url.searchParams.get("item-id") === item.id.toString()) {
             openDrawer();
-        }
-    });
-
-    const imageUrl: string | undefined = $derived.by(() => {
-        if (item.imageUrl) {
-            try {
-                new URL(item.imageUrl);
-                return item.imageUrl;
-            } catch {
-                if (item.imageUrl.startsWith("/") || item.imageUrl.endsWith("/")) {
-                    return;
-                }
-                return resolve("/api/assets/[id]", { id: item.imageUrl });
-            }
         }
     });
 
@@ -318,62 +302,62 @@
     {#if reorderActions}
         <!-- Reorder view - always use list layout -->
         <ListItemCard
-            {item}
-            {user}
-            {showClaimedName}
-            {requireClaimEmail}
+            {id}
             {groupId}
-            {showFor}
-            {onPublicList}
-            reorderActions={true}
-            {onDecreasePriority}
-            {onIncreasePriority}
+            {item}
+            onApproval={handleApproval}
             onClaim={handleClaim}
-            onUnclaim={handleUnclaim}
-            onPurchased={handlePurchased}
+            {onDecreasePriority}
             onDelete={handleDelete}
             onEdit={handleEdit}
-            onApproval={handleApproval}
-            {defaultImage}
-            {id}
+            {onIncreasePriority}
+            {onPublicList}
+            onPurchased={handlePurchased}
+            onUnclaim={handleUnclaim}
+            reorderActions={true}
+            {requireClaimEmail}
+            {showClaimForOwner}
+            {showClaimedName}
+            {showFor}
+            {user}
         />
     {:else if isTileView}
         <GridItemCard
-            {item}
-            {user}
-            {showClaimedName}
-            {requireClaimEmail}
+            {id}
             {groupId}
-            {showFor}
-            {onPublicList}
-            reorderActions={false}
+            {item}
+            onApproval={handleApproval}
             onClaim={handleClaim}
-            onUnclaim={handleUnclaim}
-            onPurchased={handlePurchased}
             onDelete={handleDelete}
             onEdit={handleEdit}
-            onApproval={handleApproval}
-            {defaultImage}
-            {id}
+            {onPublicList}
+            onPurchased={handlePurchased}
+            onUnclaim={handleUnclaim}
+            reorderActions={false}
+            {requireClaimEmail}
+            {showClaimForOwner}
+            {showClaimedName}
+            {showFor}
+            {user}
         />
     {:else}
         <ListItemCard
-            {item}
-            {user}
-            {showClaimedName}
-            {requireClaimEmail}
+            {id}
             {groupId}
-            {showFor}
-            {onPublicList}
-            reorderActions={false}
+            {item}
+            onApproval={handleApproval}
             onClaim={handleClaim}
-            onUnclaim={handleUnclaim}
-            onPurchased={handlePurchased}
             onDelete={handleDelete}
             onEdit={handleEdit}
-            onApproval={handleApproval}
-            {defaultImage}
-            {id}
+            {onPublicList}
+            onPurchased={handlePurchased}
+            onUnclaim={handleUnclaim}
+            reorderActions={false}
+            {requireClaimEmail}
+            {showClaimForOwner}
+            {showClaimedName}
+            {showFor}
+            {user}
         />
     {/if}
 </div>
