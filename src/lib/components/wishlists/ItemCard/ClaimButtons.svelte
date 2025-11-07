@@ -1,37 +1,27 @@
 <script lang="ts">
     import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
+    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
+    import { getClaimedName, shouldShowName } from "../util";
 
     interface Props {
         item: ItemOnListDTO;
         user: PartialUser | undefined; // logged in user
         showName: boolean;
+        showForOwner: boolean;
         onPublicList?: boolean;
         onClaim?: VoidFunction;
         onUnclaim?: VoidFunction;
         onPurchase?: (purchased: boolean) => void;
     }
 
-    let { item, user, showName, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
+    let { item, user, showName, showForOwner, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
     const t = getFormatter();
-
-    const shouldShowName = (claim?: ClaimDTO) => {
-        if (showName) {
-            if (onPublicList && claim?.publicClaimedBy?.name) {
-                return true;
-            }
-            if (user && claim?.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name) {
-                return true;
-            }
-        }
-        return false;
-    };
 
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
 </script>
 
-{#if !onPublicList && item.userId === user?.id}
+{#if !onPublicList && item.userId === user?.id && !showForOwner}
     <div></div>
 {:else if userClaim}
     <div class="flex flex-row gap-x-2 md:gap-x-4">
@@ -60,7 +50,7 @@
             <iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon>
         </button>
     </div>
-{:else if item.isClaimable}
+{:else if item.isClaimable && item.userId !== user?.id}
     <div class="flex flex-row items-center gap-x-2 md:gap-x-4">
         <button
             class="variant-filled-secondary btn btn-sm md:btn"
@@ -72,20 +62,17 @@
             {$t("wishes.claim")}
         </button>
     </div>
-{:else if item.claims.length === 1 && shouldShowName(item.claims[0])}
-    {@const { claimedBy, publicClaimedBy } = item.claims[0]}
+{:else if item.claims.length === 0}
+    <div></div>
+{:else if item.claims.length === 1 && shouldShowName(showName, onPublicList, user, item.claims[0])}
     <span>
         {$t("wishes.claimed-by", {
             values: {
-                name: claimedBy
-                    ? claimedBy.name
-                    : publicClaimedBy.name === "ANONYMOUS_NAME"
-                      ? $t("wishes.anonymous")
-                      : publicClaimedBy.name
+                name: getClaimedName(item.claims[0])
             }
         })}
     </span>
-{:else if item.claims.length > 1 && shouldShowName()}
+{:else if item.claims.length > 1 && shouldShowName(showName, onPublicList, user)}
     <span>{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span>{$t("wishes.claimed")}</span>

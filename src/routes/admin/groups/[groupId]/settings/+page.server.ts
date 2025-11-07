@@ -48,6 +48,7 @@ export const actions: Actions = {
             suggestionMethod: true,
             enableSuggestions: true,
             claimsShowName: true,
+            claimsShowForOwner: true,
             claimsRequireEmail: true,
             listMode: true,
             enableDefaultListCreation: true,
@@ -71,6 +72,7 @@ export const actions: Actions = {
             },
             claims: {
                 showName: configData.data.claimsShowName,
+                showForOwner: configData.data.claimsShowForOwner,
                 requireEmail: configData.data.claimsRequireEmail
             },
             listMode: configData.data.listMode,

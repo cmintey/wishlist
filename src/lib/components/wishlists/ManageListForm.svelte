@@ -25,10 +25,11 @@
         editing?: boolean;
     }
 
-    const { list, persistButtonName, listMode, allowsPublicLists, groupId, editing = false }: Props = $props();
+    const { list: list_, persistButtonName, listMode, allowsPublicLists, groupId, editing = false }: Props = $props();
     const t = getFormatter();
     const modalStore = getModalStore();
 
+    let list = $state(list_);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived.by(() => {
         if (colorElement) {

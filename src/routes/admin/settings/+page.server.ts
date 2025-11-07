@@ -100,6 +100,7 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         smtp: smtpConfig,
         claims: {
             showName: configData.claimsShowName,
+            showForOwner: configData.claimsShowForOwner,
             requireEmail: configData.claimsRequireEmail
         },
         listMode: "standard",

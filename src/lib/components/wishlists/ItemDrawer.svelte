@@ -13,6 +13,7 @@
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import Markdown from "../Markdown.svelte";
+    import { getClaimedName, shouldShowName } from "./util";
 
     const t = getFormatter();
     const drawerStore = getDrawerStore();
@@ -20,7 +21,8 @@
     const user: PartialUser | undefined = $drawerStore.meta.user;
     const userCanManage: boolean = $drawerStore.meta.userCanManage;
     const showFor: boolean = $drawerStore.meta.showFor;
-    const showName: boolean = $drawerStore.meta.showName;
+    const showClaimedName: boolean = $drawerStore.meta.showClaimedName;
+    const showClaimForOwner: boolean = $drawerStore.meta.showClaimForOwner;
     const onPublicList: boolean = $drawerStore.meta.onPublicList;
     const handleClaim: (v?: boolean) => void = $drawerStore.meta.handleClaim;
     const handleDelete: VoidFunction = $drawerStore.meta.handleDelete;
@@ -28,6 +30,21 @@
     const handleApproval: (v: boolean) => void = $drawerStore.meta.handleApproval;
     const handleEdit: () => void = $drawerStore.meta.handleEdit;
     const defaultImage: Snippet<[MessageFormatter, ClassValue]> = $drawerStore.meta.defaultImage;
+
+    let expandClaims = $state(false);
+
+    const groupedClaims = $derived(
+        item.claims.reduce(
+            (acc, claim) => {
+                const name = shouldShowName(showClaimedName, onPublicList, user, claim)
+                    ? getClaimedName(claim)
+                    : $t("wishes.anonymous");
+                acc[name] = (acc[name] || 0) + claim.quantity;
+                return acc;
+            },
+            {} as Record<string, number>
+        )
+    );
 
     const onEdit = () => {
         goto(page.url.pathname, { replaceState: true, noScroll: true });
@@ -85,7 +102,7 @@
             <iconify-icon icon="ion:gift"></iconify-icon>
             <div class="flex flex-row flex-wrap gap-x-2">
                 <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
-                {#if user?.id !== item.userId}
+                {#if user?.id !== item.userId || showClaimForOwner}
                     <span>·</span>
                     <span class="text-secondary-700-200-token font-bold">
                         {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
@@ -93,6 +110,30 @@
                 {/if}
             </div>
         </div>
+        {#if showClaimedName && item.claims.length > 0 && (item.userId !== user?.id || showClaimForOwner)}
+            <div class="card text-sm">
+                <button
+                    class="flex w-full items-center !justify-start gap-2 p-2 !text-start text-sm"
+                    onclick={() => (expandClaims = !expandClaims)}
+                >
+                    <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
+                    <span>{expandClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}</span>
+                </button>
+
+                {#if expandClaims}
+                    <div class="px-2 pb-2">
+                        {#each Object.entries(groupedClaims) as [name, claimCount]}
+                            <div class="flex items-center justify-between py-1">
+                                <span>{name}</span>
+                                <span>
+                                    {$t("wishes.claims", { values: { claimCount } })}
+                                </span>
+                            </div>
+                        {/each}
+                    </div>
+                {/if}
+            </div>
+        {/if}
     {/if}
 
     <div class="flex items-center gap-x-2">
@@ -126,7 +167,8 @@
             {onPublicList}
             onPurchase={handlePurchased}
             onUnclaim={() => handleClaim(true)}
-            {showName}
+            showForOwner={showClaimForOwner}
+            showName={showClaimedName}
             {user}
         />
 
