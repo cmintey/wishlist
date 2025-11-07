@@ -60,8 +60,8 @@
                 defaultGroup,
                 smtpEnabled: config.smtp.enable
             },
-            async response(data: { group?: string; email?: string; method: InviteMethod }) {
-                await generateInvite(data);
+            async response(data?: { group?: string; email?: string; method: InviteMethod }) {
+                if (data) await generateInvite(data);
             },
             buttonTextCancel: $t("general.cancel")
         });

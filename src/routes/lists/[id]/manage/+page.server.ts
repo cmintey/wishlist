@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ params }) => {
                             select: {
                                 id: true,
                                 name: true,
-                                email: true
+                                username: true
                             }
                         }
                     }

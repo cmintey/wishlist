@@ -80,7 +80,9 @@ export const settingSchema = z.object({
     oidcClientSecret: z.string().optional(),
     oidcProviderName: z.string().optional(),
     oidcAutoRedirect: z.coerce.boolean().default(false),
-    oidcAutoRegister: z.coerce.boolean().default(false)
+    oidcAutoRegister: z.coerce.boolean().default(false),
+    oidcEnableSync: z.coerce.boolean().default(false),
+    oidcDisableEmailVerification: z.coerce.boolean().default(false)
 });
 
 export const publicListCreateSchema = z.object({

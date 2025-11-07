@@ -22,11 +22,13 @@
         "two-people-looking-in-an-empty-box": "Twee mensen kijken in een lege doos",
         "unpurchase": "Markeer item als niet gekocht",
         "upload-profile-image": "profielfoto uploaden",
-        "wishlist-logo": "Wenslijst Logo"
+        "wishlist-logo": "Wenslijst Logo",
+        "remove-manager-name": "Verwijder {name}",
+        "user-menu": "Gebruikersmenu"
     },
     "admin": {
         "about": "Over",
-        "account": "Profiel",
+        "account": "Account",
         "actions": "Acties",
         "add-member": "Voeg lid toe",
         "add-remove-manager-message": "Weet je zeker dat je deze gebruiker {isManager, select, true {add} other {remove}} wilt als groepsbeheerder?",
@@ -313,7 +315,8 @@
         "very-strong": "Erg sterk",
         "very-weak": "Erg zwak",
         "weak": "Zwak",
-        "wishlists-cleared": "Wenlijsten zijn opgeruimd."
+        "wishlists-cleared": "Wenlijsten zijn opgeruimd.",
+        "select-all": "Selecteer alles"
     },
     "setup": {
         "back": "Terug",
@@ -420,6 +423,12 @@
         "write": "Schrijven",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
         "hide-all-currencies": "verberg alle eenheden...",
-        "show-all-currencies": "Toon alle valuta's..."
+        "show-all-currencies": "Toon alle valuta's...",
+        "add-a-list-manager": "Voeg een lijst beheerder toe",
+        "add-a-list-manager-explainer": "Zoek naar een gebruiker in deze groep om als manager aan je lijst toe te voegen.",
+        "add-a-manager": "Beheerder toevoegen",
+        "list-managers": "Lijst beheerders",
+        "list-managers-tooltip": "Lijst beheerders kunnen alles doen wat je kunt doen inclusief het goedkeuren of afwijzen van suggesties, het bijwerken van lijsten, en het verwijderen van items van de lijst. Als jouw groep wordt toegewezen aan de verrassingsmodus, zullen alle items toegevoegd door een lijst beheerder zichtbaar voor je zijn.",
+        "no-managers": "Geen beheerders"
     }
 }
