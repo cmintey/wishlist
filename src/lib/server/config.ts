@@ -14,6 +14,7 @@ enum ConfigKey {
     SMTP_FROM = "smtp.from",
     SMTP_FROM_NAME = "smtp.fromName",
     CLAIMS_SHOW_NAME = "claims.showName",
+    CLAIMS_SHOW_FOR_OWNER = "claims.showForOwner",
     CLAIMS_REQUIRE_EMAIL = "claims.requireEmail",
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
@@ -54,6 +55,7 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "smtp.from": stringTransformer,
     "smtp.fromName": stringTransformer,
     "claims.showName": booleanTransformer,
+    "claims.showForOwner": booleanTransformer,
     "claims.requireEmail": booleanTransformer,
     listMode: stringTransformer,
     "security.passwordStrength": numberTransformer,
@@ -83,6 +85,7 @@ const defaultConfig: Config = {
     },
     claims: {
         showName: true,
+        showForOwner: false,
         requireEmail: true
     },
     listMode: "standard",

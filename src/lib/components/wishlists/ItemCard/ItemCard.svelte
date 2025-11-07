@@ -38,6 +38,7 @@
         user?: PartialUser; // logged in user
         userCanManage?: boolean;
         showClaimedName?: boolean;
+        showClaimForOwner?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
         showFor?: boolean;
@@ -53,6 +54,7 @@
         user = undefined,
         userCanManage = false,
         showClaimedName = false,
+        showClaimForOwner = false,
         requireClaimEmail = true,
         showFor = false,
         onPublicList = false,
@@ -253,6 +255,7 @@
             user,
             userCanManage,
             showClaimedName,
+            showClaimForOwner,
             requireClaimEmail,
             onPublicList,
             handleClaim,
@@ -350,7 +353,7 @@
                         <span data-testid="quantity-desired">
                             {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
                         </span>
-                        {#if user?.id !== item.userId}
+                        {#if user?.id !== item.userId || showClaimForOwner}
                             <span>·</span>
                             <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
                                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
@@ -387,7 +390,7 @@
     </div>
 
     <footer
-        class="card-footer flex flex-row"
+        class="card-footer flex flex-row items-center"
         class:justify-between={!reorderActions}
         class:justify-center={reorderActions}
     >
@@ -400,6 +403,7 @@
                 {onPublicList}
                 onPurchase={handlePurchased}
                 onUnclaim={handleUnclaim}
+                showForOwner={showClaimForOwner}
                 showName={showClaimedName}
                 {user}
             />
