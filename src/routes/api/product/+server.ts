@@ -9,12 +9,14 @@ import shopping from "$lib/server/shopping";
 import { parseAcceptLanguageHeader } from "$lib/i18n";
 import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
+import { env } from "$env/dynamic/private";
 
 const scraper = metascraper([shopping(), metascraperTitle(), metascraperImage()]);
 
 const goShopping = async (targetUrl: string, locales: string[]) => {
     const resp = await gotScraping({
         url: targetUrl,
+        proxyUrl: env.HTTP_PROXY || "",
         headerGeneratorOptions: {
             devices: ["desktop"],
             locales
