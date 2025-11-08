@@ -287,7 +287,7 @@
 {/snippet}
 
 <div
-    class="card block w-full text-start"
+    class="card block h-full w-full text-start"
     class:card-hover={!reorderActions}
     class:variant-ghost-warning={!item.approved}
     aria-labelledby={`${id}-name`}
@@ -303,7 +303,6 @@
         <!-- Reorder view - always use list layout -->
         <ListItemCard
             {id}
-            {groupId}
             {item}
             onApproval={handleApproval}
             onClaim={handleClaim}
@@ -315,16 +314,15 @@
             onPurchased={handlePurchased}
             onUnclaim={handleUnclaim}
             reorderActions={true}
-            {requireClaimEmail}
             {showClaimForOwner}
             {showClaimedName}
             {showFor}
             {user}
+            {userCanManage}
         />
     {:else if isTileView}
         <GridItemCard
             {id}
-            {groupId}
             {item}
             onApproval={handleApproval}
             onClaim={handleClaim}
@@ -334,16 +332,15 @@
             onPurchased={handlePurchased}
             onUnclaim={handleUnclaim}
             reorderActions={false}
-            {requireClaimEmail}
             {showClaimForOwner}
             {showClaimedName}
             {showFor}
             {user}
+            {userCanManage}
         />
     {:else}
         <ListItemCard
             {id}
-            {groupId}
             {item}
             onApproval={handleApproval}
             onClaim={handleClaim}
@@ -353,11 +350,11 @@
             onPurchased={handlePurchased}
             onUnclaim={handleUnclaim}
             reorderActions={false}
-            {requireClaimEmail}
             {showClaimForOwner}
             {showClaimedName}
             {showFor}
             {user}
+            {userCanManage}
         />
     {/if}
 </div>

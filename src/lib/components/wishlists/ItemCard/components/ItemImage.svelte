@@ -7,10 +7,11 @@
     import type { MessageFormatter } from "$lib/server/i18n";
 
     interface Props {
+        class?: ClassValue;
         defaultImage: (t: MessageFormatter, sizeClasses?: ClassValue) => any;
     }
 
-    const { defaultImage }: Props = $props();
+    const { defaultImage, ...props }: Props = $props();
     const t = getFormatter();
     const item = getItem();
 
@@ -29,12 +30,6 @@
     });
 </script>
 
-<Image
-    class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
-    alt={item.name}
-    data-testid="image"
-    referrerpolicy="no-referrer"
-    src={imageUrl}
->
+<Image {...props} alt={item.name} data-testid="image" referrerpolicy="no-referrer" src={imageUrl}>
     {@render defaultImage($t)}
 </Image>

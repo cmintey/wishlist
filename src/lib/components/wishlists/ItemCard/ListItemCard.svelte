@@ -1,8 +1,6 @@
 <script lang="ts">
     import type { PartialUser } from "./ItemCard.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
-    import Image from "$lib/components/Image.svelte";
     import type { MessageFormatter } from "$lib/server/i18n";
     import ItemNameHeader from "./components/ItemNameHeader.svelte";
     import ItemAttributes from "./components/ItemAttributes.svelte";
@@ -13,10 +11,9 @@
     interface Props {
         item: ItemOnListDTO;
         user?: PartialUser;
+        userCanManage?: boolean;
         showClaimedName?: boolean;
         showClaimForOwner?: boolean;
-        requireClaimEmail?: boolean;
-        groupId?: string;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -34,10 +31,9 @@
     const {
         item,
         user,
+        userCanManage = false,
         showClaimedName = false,
         showClaimForOwner = false,
-        requireClaimEmail = true,
-        groupId,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -56,7 +52,7 @@
 <ItemNameHeader />
 
 <div class="flex flex-row gap-x-4 p-4">
-    <ItemImage>
+    <ItemImage class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40">
         {#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
             <div
                 class={[
@@ -100,4 +96,5 @@
     {showClaimForOwner}
     {showClaimedName}
     {user}
+    {userCanManage}
 />

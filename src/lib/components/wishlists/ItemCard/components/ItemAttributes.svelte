@@ -13,19 +13,17 @@
 </script>
 
 <!-- Price with fallback -->
-<div class="flex items-center gap-x-2">
-    <iconify-icon icon="ion:pricetag"></iconify-icon>
-    <span class="text-lg font-semibold" data-testid="price">
-        {#if item.price || item.itemPrice}
+{#if item.price || item.itemPrice}
+    <div class="flex items-center gap-x-2">
+        <iconify-icon icon="ion:pricetag"></iconify-icon>
+        <span data-testid="price">
             {formatPrice(item)}
-        {:else}
-            $ -
-        {/if}
-    </span>
-</div>
+        </span>
+    </div>
+{/if}
 
 <!-- Quantity with fallback -->
-<div class="flex items-center gap-2 text-base md:text-lg" data-testid="quantity">
+<div class="flex items-center gap-2" data-testid="quantity">
     <iconify-icon icon="ion:gift"></iconify-icon>
     <div class="flex flex-row flex-wrap gap-x-2">
         <span data-testid="quantity-desired">
@@ -47,7 +45,7 @@
 <!-- Added by / For (claims page) -->
 <div class="flex items-center gap-2">
     <iconify-icon icon="ion:person"></iconify-icon>
-    <span class="text-wrap text-base md:text-lg" data-testid="added-by">
+    <span class="text-wrap" data-testid="added-by">
         {#if showFor}
             {@html $t("wishes.for", { values: { name: item.user.name } })}
         {:else if !onPublicList}
@@ -62,13 +60,11 @@
 
 <!-- Notes -->
 <!-- TODO: list item card has line-clamp-2 -->
-<div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-    <iconify-icon icon="ion:reader"></iconify-icon>
-    <div class="line-clamp-1 whitespace-pre-wrap" data-testid="notes">
-        {#if item.note}
+{#if item.note}
+    <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
+        <iconify-icon icon="ion:reader"></iconify-icon>
+        <div class={"line-clamp-1 whitespace-pre-wrap"} data-testid="notes">
             <Markdown source={item.note} />
-        {:else}
-            -
-        {/if}
+        </div>
     </div>
-</div>
+{/if}

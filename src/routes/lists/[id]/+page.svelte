@@ -269,16 +269,16 @@
             <ClaimFilterChip />
         {/if}
         <SortBy />
+    </div>
+    <div class="flex flex-row flex-wrap items-center gap-2">
         {#if !reordering}
             <ListViewModeChip {isTileView} />
         {/if}
-    </div>
-    {#if data.list.owner.isMe || data.list.isManager}
-        <div class="flex flex-row flex-wrap items-center gap-2">
+        {#if data.list.owner.isMe || data.list.isManager}
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
-        </div>
-    {/if}
+        {/if}
+    </div>
 </div>
 
 {#if data.list.owner.isMe || data.list.isManager}
@@ -307,7 +307,7 @@
         <h2 class="h2">{$t("wishes.approvals")}</h2>
         <div
             class={isTileView
-                ? "grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5"
+                ? "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
                 : "flex flex-col space-y-4"}
             data-testid="approvals-container"
         >
@@ -340,7 +340,7 @@
     <div
         class={reordering || !isTileView
             ? "flex flex-col space-y-4 transition-opacity duration-150 rounded-container-token"
-            : "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5"}
+            : "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"}
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}

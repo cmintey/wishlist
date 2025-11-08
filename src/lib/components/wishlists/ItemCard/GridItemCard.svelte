@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { PartialUser } from "./ItemCard.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
     import ItemNameHeader from "./components/ItemNameHeader.svelte";
     import ItemAttributes from "./components/ItemAttributes.svelte";
     import ItemFooter from "./components/ItemFooter.svelte";
@@ -10,10 +9,9 @@
     interface Props {
         item: ItemOnListDTO;
         user?: PartialUser;
+        userCanManage?: boolean;
         showClaimedName?: boolean;
         showClaimForOwner?: boolean;
-        requireClaimEmail?: boolean;
-        groupId?: string;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -31,10 +29,9 @@
     const {
         item,
         user,
+        userCanManage = false,
         showClaimedName = false,
         showClaimForOwner = false,
-        requireClaimEmail = true,
-        groupId,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -52,10 +49,13 @@
 
 <div class="flex h-full flex-col">
     <!-- Image extends to card edges -->
-    <div class="relative h-48 w-full overflow-hidden rounded-t-lg">
-        <ItemImage>
-            {#snippet defaultImage(t, sizeClasses)}
-                <div class="flex h-full w-full items-center justify-center rounded-t-lg bg-transparent">
+    <div class="relative h-48 w-full overflow-hidden p-[1px]">
+        <ItemImage class="h-full w-full object-cover rounded-tl-container-token rounded-tr-container-token">
+            {#snippet defaultImage(t, _sizeClasses)}
+                <div
+                    class="bg-surface-300-600-token flex h-full w-full items-center justify-center rounded-tl-container-token rounded-tr-container-token"
+                    aria-label={t("a11y.default-item-image")}
+                >
                     <iconify-icon class="h-16 w-16" height="none" icon="ion:gift"></iconify-icon>
                 </div>
             {/snippet}
@@ -66,7 +66,7 @@
     <ItemNameHeader />
 
     <!-- Content area with consistent padding -->
-    <div class="flex flex-1 flex-col space-y-2 p-4">
+    <div class="flex flex-1 flex-col space-y-1 p-4">
         <ItemAttributes {onPublicList} {showClaimForOwner} {showFor} {user} />
     </div>
 
@@ -83,5 +83,6 @@
         {showClaimForOwner}
         {showClaimedName}
         {user}
+        {userCanManage}
     />
 </div>

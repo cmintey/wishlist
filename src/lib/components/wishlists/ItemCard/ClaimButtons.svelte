@@ -13,22 +13,10 @@
         onClaim?: VoidFunction;
         onUnclaim?: VoidFunction;
         onPurchase?: (purchased: boolean) => void;
-        gap?: "sm" | "md";
     }
 
-    let {
-        item,
-        user,
-        showName,
-        showForOwner,
-        onPublicList = false,
-        onClaim,
-        onUnclaim,
-        onPurchase,
-        gap = "md"
-    }: Props = $props();
+    let { item, user, showName, showForOwner, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
 
-    const gapClass = gap === "sm" ? "gap-x-1 md:gap-x-2" : "gap-x-2 md:gap-x-4";
     const t = getFormatter();
 
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
@@ -37,7 +25,7 @@
 {#if !onPublicList && item.userId === user?.id && !showForOwner}
     <div></div>
 {:else if userClaim}
-    <div class="flex flex-row {gapClass}">
+    <div class="flex flex-row gap-2">
         <button
             class="variant-ghost-secondary btn btn-sm md:btn"
             onclick={(e) => {
@@ -64,7 +52,7 @@
         </button>
     </div>
 {:else if item.isClaimable && item.userId !== user?.id}
-    <div class="flex flex-row items-center {gapClass}">
+    <div class="flex flex-row items-center gap-x-2">
         <button
             class="variant-filled-secondary btn btn-sm md:btn"
             onclick={(e) => {
@@ -78,7 +66,7 @@
 {:else if item.claims.length === 0}
     <div></div>
 {:else if item.claims.length === 1 && shouldShowName(showName, onPublicList, user, item.claims[0])}
-    <span>
+    <span class="line-clamp-2 truncate text-wrap">
         {$t("wishes.claimed-by", {
             values: {
                 name: getClaimedName(item.claims[0])
@@ -86,7 +74,7 @@
         })}
     </span>
 {:else if item.claims.length > 1 && shouldShowName(showName, onPublicList, user)}
-    <span>{$t("wishes.claimed-by-multiple-users")}</span>
+    <span class="line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
-    <span>{$t("wishes.claimed")}</span>
+    <span class="line-clamp-2 truncate text-wrap">{$t("wishes.claimed")}</span>
 {/if}

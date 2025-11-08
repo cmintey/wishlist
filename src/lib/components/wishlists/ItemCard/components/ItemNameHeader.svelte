@@ -5,11 +5,11 @@
     const item = getItem();
 </script>
 
-<header class="card-header flex w-full px-4 pt-4">
+<header class="card-header line-clamp-1 flex w-full px-4 pt-4 text-lg font-bold md:text-xl">
     {#if item.url}
         <a
             id={`${id}-name`}
-            class="line-clamp-1 w-full text-left text-xl font-bold dark:!text-primary-200 md:text-2xl"
+            class="line-clamp-1 dark:!text-primary-200"
             data-testid="name"
             href={item.url}
             onclick={(e) => e.stopPropagation()}
@@ -19,7 +19,7 @@
             {item.name}
         </a>
     {:else}
-        <span id={`${id}-name`} class="line-clamp-1 w-full text-left text-xl font-bold md:text-2xl" data-testid="name">
+        <span id={`${id}-name`} class="line-clamp-1" data-testid="name">
             {item.name}
         </span>
     {/if}
