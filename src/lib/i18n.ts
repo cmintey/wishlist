@@ -22,6 +22,7 @@ export const defaultLang: Lang = {
 
 // Endonyms: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
 export const supportedLangs: Lang[] = [
+    { name: "Czech", endonym: "Čeština", code: "cs", loader: () => import("../i18n/cs.json") },
     { name: "Danish", endonym: "Dansk", code: "da", loader: () => import("../i18n/da.json") },
     { name: "Dutch", endonym: "Nederlands", code: "nl", loader: () => import("../i18n/nl.json") },
     defaultLang,
