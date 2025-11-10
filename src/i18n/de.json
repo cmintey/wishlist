@@ -222,7 +222,7 @@
         "add-a-list-manager-explainer": "Suche nach einem Benutzer in dieser Gruppe um ihn als Manager zu deiner Liste hinzuzufügen.",
         "add-a-manager": "Manager hinzufügen",
         "list-managers": "Listen Managers",
-        "claims": "{claimCount, plural, ein {# claim} other {# claims}}",
+        "claims": "{claimCount, plural, one {# Reservierung} other {# Reservierungen}}",
         "hide-claims": "Beanspruchte Wünsche verstecken",
         "list-managers-tooltip": "Listenmanager können alles tun, was du tun kannst. Dazu gehört Vorschläge anzunehmen und abzulehnen, Listeneinstellungen zu aktualisieren und Gegenstände von der Liste zu entfernen. Wenn deine Gruppe auf den Modus 'Überraschung' gestellt ist, werden alle Gegenstände, die ein Listenmanager hinzugefügt hat, auch dir angezeigt.",
         "no-managers": "Keine Manager",
