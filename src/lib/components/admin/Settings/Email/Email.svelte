@@ -8,25 +8,38 @@
     interface Props {
         config: Pick<Config, "smtp">;
         sending: boolean;
-        saved: boolean;
         hidden?: boolean;
     }
 
-    const { config, saved, sending, hidden = false }: Props = $props();
+    const { config: config_, sending, hidden = false }: Props = $props();
     const t = getFormatter();
+
+    let config = $state(config_);
+    let enabled = $state(config.smtp.enable);
+    let allFilled = $derived(
+        enabled &&
+            config.smtp.from &&
+            config.smtp.fromName &&
+            config.smtp.host &&
+            config.smtp.pass &&
+            config.smtp.port &&
+            config.smtp.user
+    );
+
+    $inspect(config.smtp);
 </script>
 
 <div class={{ hidden, "flex flex-col gap-4": !hidden }}>
     <h2 class="h2">{$t("auth.email")}</h2>
 
-    <SmtpAlert smtpEnable={config.smtp.enable} />
+    <SmtpAlert smtpEnable={enabled} />
 
     <SettingsGroup title={$t("admin.smtp")}>
         <label class="checkbox-label">
-            <input id="enableSMTP" name="enableSMTP" class="checkbox" checked={config.smtp.enable} type="checkbox" />
+            <input id="enableSMTP" name="enableSMTP" class="checkbox" type="checkbox" bind:checked={enabled} />
             <span>{$t("general.enable")}</span>
         </label>
-        {#if config.smtp.enable}
+        {#if enabled}
             <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
                 <label for="smtpHost">
                     <span>{$t("admin.smtp-host")}</span>
@@ -37,7 +50,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        value={config.smtp.host}
+                        bind:value={config.smtp.host}
                     />
                 </label>
                 <label for="smtpPort">
@@ -49,7 +62,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        value={config.smtp.port}
+                        bind:value={config.smtp.port}
                     />
                 </label>
                 <label for="smtpUser">
@@ -61,7 +74,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        value={config.smtp.user}
+                        bind:value={config.smtp.user}
                     />
                 </label>
                 <PasswordInput
@@ -69,7 +82,7 @@
                     name="smtpPass"
                     label={$t("auth.password")}
                     required
-                    value={config.smtp.pass}
+                    bind:value={config.smtp.pass}
                 />
                 <label for="smtpFrom">
                     <span>{$t("admin.smtp-from-email")}</span>
@@ -80,7 +93,7 @@
                         autocomplete="off"
                         required
                         type="text"
-                        value={config.smtp.from}
+                        bind:value={config.smtp.from}
                     />
                 </label>
                 <label for="smtpFromName">
@@ -92,14 +105,14 @@
                         autocomplete="off"
                         required
                         type="text"
-                        value={config.smtp.fromName}
+                        bind:value={config.smtp.fromName}
                     />
                 </label>
             </div>
             <div class="flex w-full flex-row justify-end">
                 <button
                     class="variant-ghost-primary btn mt-2 h-min w-fit"
-                    disabled={!saved || sending}
+                    disabled={!allFilled || sending}
                     formaction="/admin/settings?/send-test"
                     type="submit"
                 >

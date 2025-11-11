@@ -89,7 +89,7 @@
             <!-- Settings -->
             <div class="w-full">
                 <General {config} {groups} hidden={currentHash !== options[0].hash} />
-                <Email {config} hidden={currentHash !== options[1].hash} {saved} {sending} />
+                <Email {config} hidden={currentHash !== options[1].hash} {sending} />
                 <Security {config} hidden={currentHash !== options[2].hash} />
             </div>
         </div>

@@ -4,8 +4,9 @@
     import { popup, ProgressBar, type PopupSettings } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
+    import type { HTMLInputAttributes } from "svelte/elements";
 
-    interface Props {
+    interface Props extends HTMLInputAttributes {
         id: string;
         name?: string | undefined;
         label: string;
