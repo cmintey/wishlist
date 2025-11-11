@@ -11,14 +11,16 @@
 
     const { config }: Props = $props();
     const t = getFormatter();
+
+    let enabled = $state(config.oidc.enable);
 </script>
 
 <SettingsGroup title={$t("admin.oidc")}>
     <label class="checkbox-label">
-        <input id="enableOIDC" name="enableOIDC" class="checkbox" checked={config.oidc.enable} type="checkbox" />
+        <input id="enableOIDC" name="enableOIDC" class="checkbox" type="checkbox" bind:checked={enabled} />
         <span>{$t("general.enable")}</span>
     </label>
-    {#if config.oidc.enable}
+    {#if enabled}
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
             <label for="oidcDiscoveryUrl">
                 <span>{$t("admin.oidc-url")}</span>
