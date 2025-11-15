@@ -17,7 +17,12 @@
         "toggle-password-visibility": "visibilidade da palavra-passe",
         "two-people-looking-in-an-empty-box": "Duas pessoas a olhar para uma caixa vazia",
         "upload-profile-image": "carregar imagem de perfil",
-        "wishlist-logo": "Logótipo da Wishlist"
+        "wishlist-logo": "Logótipo da Wishlist",
+        "clear-color-field": "Limpar cor do campo",
+        "default-item-image": "imagem padrão do item",
+        "remove-manager-name": "Remover {name}",
+        "unpurchase": "Marca o item como não comprado",
+        "user-menu": "Menu utilizador"
     },
     "admin": {
         "account": "Conta",
@@ -78,7 +83,14 @@
         "wishlist-mode-registry": "Registo",
         "members": "Membros",
         "remove-member-title": "Remover membro",
-        "registry-mode-alert-text": "Este grupo está no <b>Modo de Registo</b>. Nenhum membro adicional pode ser adicionado neste modo. Pode obter um link público para a sua lista na página da sua lista."
+        "registry-mode-alert-text": "Este grupo está no <b>Modo de Registo</b>. Nenhum membro adicional pode ser adicionado neste modo. Pode obter um link público para a sua lista na página da sua lista.",
+        "allow-public-lists": "Permitir listas publicas",
+        "allow-public-lists-tooltip": "Permite que cada utilizador crie uma lista publica. Não faz efeito caso o groupo estiver em modo \"Registry\".",
+        "claims-require-email-tooltip": "Email necessário para anonimamente reivindicar o item.",
+        "credentials": "Credencias",
+        "disable-email-verification": "Disibilitar verificação de email",
+        "disable-password-login": "Disabilitar login por password",
+        "enable-default-list-creation": "Abilitar criação de lista padrão"
     },
     "auth": {
         "sign-out-of-all-devices": "Terminar a sessão em todos os dispositivos?",
