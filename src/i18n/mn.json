@@ -8,7 +8,8 @@
         "increase-priority": "{name} -ийн эрэмбийг нэмэх",
         "cancel-editing": "Засварыг цуцлах",
         "wishlist-logo": "Хүслийн жагсаалтын лого",
-        "upload-profile-image": "Профайл зураг байршуул"
+        "upload-profile-image": "Профайл зураг байршуул",
+        "a-person-looking-at-an-empty-board": "Хоосон байна"
     },
     "admin": {
         "add-member": "Гишүүн нэмэх",
