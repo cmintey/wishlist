@@ -80,7 +80,7 @@
                         </button>
                     </li>
                     <li>
-                        <div class="flex w-full justify-around pt-1">
+                        <div class="list-option flex gap-2 pt-1">
                             <p>{$t("general.mode")}</p>
                             <LightSwitch title={$t("general.toggle-dark-mode")} />
                         </div>

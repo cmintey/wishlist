@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter, getLocale } from "$lib/i18n";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
     interface Props {
@@ -8,6 +8,7 @@
 
     const { parent }: Props = $props();
     const t = getFormatter();
+    const locale = getLocale();
     const modalStore = getModalStore();
     let selectedGroup: string | undefined = $state();
     let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];
@@ -23,7 +24,7 @@
 <div class="card w-modal space-y-4 p-4 shadow-xl">
     <header class="text-2xl font-bold">{$t("general.select-group")}</header>
     <ListBox class="border border-surface-500 p-4 rounded-container-token">
-        {#each groups as group}
+        {#each groups.toSorted((a, b) => a.name.localeCompare(b.name, locale)) as group}
             <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
                 {group.name}
             </ListBoxItem>
