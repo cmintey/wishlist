@@ -68,9 +68,9 @@
             {#if group.active}
                 {#if groups.length > 1}
                     <li>
-                        <div class="flex w-fit flex-row items-center gap-x-4 px-4 py-2">
+                        <div class="flex w-fit max-w-[24ch] flex-row items-center gap-x-4 px-4 py-2 md:max-w-full">
                             <iconify-icon icon="ion:people"></iconify-icon>
-                            <span>{group.name}</span>
+                            <span class="truncate">{group.name}</span>
                         </div>
                     </li>
                 {/if}
