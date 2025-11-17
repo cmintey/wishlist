@@ -318,7 +318,7 @@
         "select-all": "Vybrat vše",
         "select-file": "Vybrat soubor",
         "select-group": "Vybrat skupinu",
-        "select-user-group": "Vyberte skupinu, do které bude uživatel zařazen. Bude vygenerován odkaz na pozvánku",
+        "select-user-group": "Vyberte skupinu, do které bude uživatel zařazen. Zároveň bude vygenerován odkaz s pozvánkou",
         "smtp-is-not-enabled": "Není povolen SMTP",
         "smtp-not-enabled-implication": "I když nastavení poštovního serveru není povinné, uživatelé si nebudou moci sami obnovit hesla a budete jim muset manuálně posílat odkazy pro jejich resetování.",
         "strong": "Silné",
