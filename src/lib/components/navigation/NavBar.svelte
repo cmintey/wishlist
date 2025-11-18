@@ -10,10 +10,11 @@
     interface Props {
         navItems: NavItem[];
         user: LocalUser | null;
+        groups: GroupInformation[] | null;
         isProxyUser: boolean;
     }
 
-    const { navItems, user, isProxyUser }: Props = $props();
+    const { navItems, user, groups, isProxyUser }: Props = $props();
     const t = getFormatter();
 
     const drawerStore = getDrawerStore();
@@ -27,7 +28,7 @@
 {#snippet wishlistHeader()}
     <a class="flex flex-row items-center gap-x-2" href="/">
         <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-        <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
+        <span class="text-primary-900-50-token hidden text-2xl font-bold sm:block md:text-3xl">Wishlist</span>
     </a>
 {/snippet}
 
@@ -69,6 +70,6 @@
     {/if}
 
     {#snippet trail()}
-        <NavMenu {isProxyUser} {user} />
+        <NavMenu {groups} {isProxyUser} {user} />
     {/snippet}
 </AppBar>

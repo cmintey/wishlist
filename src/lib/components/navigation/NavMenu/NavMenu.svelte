@@ -5,13 +5,15 @@
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { getFormatter } from "$lib/i18n";
+    import GroupSelectChip from "$lib/components/wishlists/chips/GroupSelectChip.svelte";
 
     interface Props {
         user: LocalUser | null;
+        groups: GroupInformation[] | null;
         isProxyUser: boolean;
     }
 
-    const { user, isProxyUser }: Props = $props();
+    const { user, groups, isProxyUser }: Props = $props();
     const t = getFormatter();
     const modalStore = getModalStore();
 
@@ -32,6 +34,10 @@
 </script>
 
 {#if user}
+    {#if groups && groups?.length > 1}
+        <GroupSelectChip {groups} {user} />
+    {/if}
+
     <div class="flex md:pr-4">
         <button class="h-10 md:h-12" use:popup={menuSettings}>
             <Avatar {user} width="h-10 md:h-12" />
@@ -56,7 +62,7 @@
                     {/if}
 
                     <hr />
-                    <GroupSubMenu {user} />
+                    <GroupSubMenu {groups} {user} />
                     {#if !isProxyUser}
                         <hr />
                         <li>
@@ -80,7 +86,7 @@
                         </button>
                     </li>
                     <li>
-                        <div class="list-option flex gap-2 pt-1">
+                        <div class="list-option flex items-center gap-2 pt-1">
                             <p>{$t("general.mode")}</p>
                             <LightSwitch title={$t("general.toggle-dark-mode")} />
                         </div>

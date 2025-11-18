@@ -9,6 +9,7 @@
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -87,7 +88,7 @@
                 const group = await groupAPI.delete();
                 if (group) {
                     await invalidateAll();
-                    goto("/");
+                    goto(resolve("/lists"));
                 }
             },
             buttonTextCancel: $t("general.cancel"),

@@ -1,4 +1,4 @@
-import type { Group, UserGroupMembership } from "@prisma/client";
+import type { UserGroupMembership } from "@prisma/client";
 
 export class UserAPI {
     userId: string;
@@ -20,22 +20,14 @@ export class UserAPI {
         return await fetch(`/api/users/${this.userId}${path}`, options);
     };
 
-    groups = async (): Promise<GroupInformation[]> => {
-        return await this._makeRequest("GET", "/groups")
-            .then((resp) => resp.json())
-            .then(({ groups }) => groups);
-    };
-
-    activeGroup = async (): Promise<Group> => {
-        return await this._makeRequest("GET", "/groups?active=true")
-            .then((resp) => resp.json())
-            .then(({ groups }) => groups[0]);
-    };
-
     setActiveGroup = async (groupId: string): Promise<UserGroupMembership> => {
         return await this._makeRequest("PATCH", `/groups/${groupId}`, { active: true })
             .then((resp) => resp.json())
             .then(({ membership }) => membership);
+    };
+
+    delete = async (): Promise<Response> => {
+        return await this._makeRequest("DELETE");
     };
 }
 
