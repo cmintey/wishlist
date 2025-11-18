@@ -5,6 +5,8 @@
     import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
+    import { UserAPI } from "$lib/api/users";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
@@ -20,16 +22,10 @@
             // confirm = TRUE | cancel = FALSE
             response: async (r: boolean) => {
                 if (r) {
-                    const resp = await fetch(`/api/users/${userId}`, {
-                        method: "DELETE",
-                        headers: {
-                            "content-type": "application/json",
-                            accept: "application/json"
-                        }
-                    });
+                    const resp = await new UserAPI(userId).delete();
 
                     if (resp.ok) {
-                        await goto("/admin/users");
+                        await goto(resolve("/admin/users"));
                         invalidateAll();
 
                         toastStore.trigger({
