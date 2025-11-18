@@ -6,6 +6,7 @@
     import { getFormatter } from "$lib/i18n";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import { errorToast } from "$lib/components/toasts";
+    import { goto } from "$app/navigation";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -88,13 +89,15 @@
                 errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
                 return;
             }
-            if (result.type === "success" || result.type === "redirect") {
+            if (result.type === "redirect") {
                 successToast();
-            }
-            if (result.type === "redirect" && submitter?.id === "submit-stay") {
-                clearFields();
-                window.scrollTo({ top: 0 });
-                return;
+
+                if (submitter?.id === "submit-stay") {
+                    clearFields();
+                    window.scrollTo({ top: 0 });
+                    return;
+                }
+                return goto(result.location, { invalidateAll: true, replaceState: true });
             }
             await applyAction(result);
         };

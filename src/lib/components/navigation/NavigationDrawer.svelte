@@ -11,6 +11,7 @@
     const t = getFormatter();
 
     const drawerStore = getDrawerStore();
+    const user: LocalUser | undefined = $drawerStore.meta?.user;
 </script>
 
 <div class="mt-4 flex flex-row place-content-between items-center px-4">
@@ -25,9 +26,9 @@
             <li>
                 <a
                     class="list-option gap-x-1 font-bold"
-                    class:variant-filled-primary={page.url.pathname === navItem.href}
+                    class:variant-filled-primary={page.url.pathname + page.url.search === navItem.href(user)}
                     data-sveltekit-preload-data
-                    href={navItem.href}
+                    href={navItem.href(user)}
                     onclick={() => drawerStore.close()}
                 >
                     <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>

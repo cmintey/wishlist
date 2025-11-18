@@ -143,7 +143,7 @@
 
     const onCancel = () => {
         if (page.url.searchParams.has("redirectTo")) {
-            goto(page.url.searchParams.get("redirectTo")!);
+            goto(page.url.searchParams.get("redirectTo")!, { replaceState: true });
         } else {
             history.back();
         }
