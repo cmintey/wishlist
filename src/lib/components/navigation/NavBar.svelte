@@ -20,7 +20,10 @@
     const drawerSettings: DrawerSettings = {
         id: "nav",
         position: "left",
-        width: "w-[280px] md:w-[480px]"
+        width: "w-[280px] md:w-[480px]",
+        meta: {
+            user
+        }
     };
 </script>
 
@@ -58,9 +61,9 @@
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"
-                    class:variant-filled-primary={page.url.pathname === navItem.href}
+                    class:variant-filled-primary={page.url.pathname + page.url.search === navItem.href(user)}
                     data-sveltekit-preload-data
-                    href={navItem.href}
+                    href={navItem.href(user)}
                 >
                     {$t(navItem.labelKey)}
                 </a>
