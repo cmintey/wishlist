@@ -365,7 +365,7 @@
         aria-label="add item"
         onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >
-        <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
+        <iconify-icon class="text-2xl" icon="ion:add"></iconify-icon>
     </button>
 {/if}
 
