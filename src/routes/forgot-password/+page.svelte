@@ -13,9 +13,9 @@
 {#if data.smtpEnabled}
     <div class="flex flex-col items-center space-y-4">
         <h1 class="h1">{$t("auth.reset-password")}</h1>
-        {#if form?.success}
+        {#if true}
             <div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
-                <iconify-icon icon="ion:checkmark-circle-outline" width="100"></iconify-icon>
+                <iconify-icon class="text-6xl" icon="ion:checkmark-circle-outline"></iconify-icon>
                 <span class="text-xl font-bold">{$t("general.success")}</span>
                 <p>{$t("auth.check-your-email")}</p>
             </div>

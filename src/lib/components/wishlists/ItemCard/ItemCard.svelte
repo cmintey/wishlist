@@ -292,7 +292,7 @@
         data-testid="image"
         role="img"
     >
-        <iconify-icon class="w-8 md:w-16" height="none" icon="ion:gift"></iconify-icon>
+        <iconify-icon class="size-8 md:size-16" height="none" icon="ion:gift"></iconify-icon>
     </div>
 {/snippet}
 
