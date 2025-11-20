@@ -254,7 +254,8 @@
         "username-already-in-use": "{username} al in gebruik",
         "username-must-not-be-blank": "Gebruikersnaam mag niet leeg zijn",
         "valid-url-not-provided": "Geldige URL niet verstrekt",
-        "email-is-required-for-public-claims": "Email is vereist voor publieke claims"
+        "email-is-required-for-public-claims": "Email is vereist voor publieke claims",
+        "oidc-error": "Authenticeren met OAuth is mislukt"
     },
     "general": {
         "add-a-description": "Voeg een beschrijving toe",
@@ -413,7 +414,7 @@
         "quantity": "Hoeveelheid",
         "quantity-claimed": "{quantity} geclaimd",
         "quantity-desired": "{quantity} gewenst",
-        "reorder": "Herstellen",
+        "reorder": "Volgorde aanpassen",
         "share": "Deellijst",
         "show-description": "Toon beschrijving",
         "supports-markdown": "Ondersteunt Markdown",
