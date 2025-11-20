@@ -1,4 +1,4 @@
-import type { ClaimDTO } from "$lib/dtos/item-dto";
+import type { ClaimDTO, ItemOnListDTO } from "$lib/dtos/item-dto";
 import { getFormatter } from "$lib/i18n";
 import { get } from "svelte/store";
 import type { PartialUser } from "./ItemCard/ItemCard.svelte";
@@ -15,18 +15,27 @@ export const getClaimedName = ({ claimedBy, publicClaimedBy }: ClaimDTO) => {
 };
 
 export const shouldShowName = (
+    item: ItemOnListDTO,
     showNameConfig: boolean,
-    onPublicList: boolean,
+    showForOwner: boolean,
     user: PartialUser | undefined,
     claim?: ClaimDTO
 ) => {
-    if (showNameConfig) {
-        if (onPublicList && claim?.publicClaimedBy?.name) {
-            return true;
-        }
-        if (user && claim?.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name) {
-            return true;
-        }
+    // Completely disabled
+    if (!showNameConfig) {
+        return false;
     }
-    return false;
+    // No logged in user
+    if (!user) {
+        return false;
+    }
+    // List owner can only view if the config is set
+    if (item.user.id === user.id && showForOwner) {
+        return true;
+    }
+    // Everyone else can only see claims by users in their group
+    if (claim && (claim.publicClaimedBy || !claim.claimedBy?.groups.includes(user.activeGroupId))) {
+        return false;
+    }
+    return true;
 };

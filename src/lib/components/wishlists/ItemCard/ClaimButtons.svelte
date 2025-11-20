@@ -62,9 +62,9 @@
             {$t("wishes.claim")}
         </button>
     </div>
-{:else if item.claims.length === 0}
+{:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
     <div></div>
-{:else if item.claims.length === 1 && shouldShowName(showName, onPublicList, user, item.claims[0])}
+{:else if item.claims.length === 1 && shouldShowName(item, showName, showForOwner, user, item.claims[0])}
     <span>
         {$t("wishes.claimed-by", {
             values: {
@@ -72,7 +72,7 @@
             }
         })}
     </span>
-{:else if item.claims.length > 1 && shouldShowName(showName, onPublicList, user)}
+{:else if item.claims.length > 1 && shouldShowName(item, showName, showForOwner, user)}
     <span>{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span>{$t("wishes.claimed")}</span>
