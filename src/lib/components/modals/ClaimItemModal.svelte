@@ -191,7 +191,7 @@
             </div>
         {/if}
 
-        <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
+        <footer class={["flex flex-wrap gap-2 pt-2", claim ? "justify-between" : "justify-end"]}>
             {#if claim}
                 <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
                     {$t("wishes.unclaim")}

@@ -33,19 +33,6 @@
 
     let expandClaims = $state(false);
 
-    const groupedClaims = $derived(
-        item.claims.reduce(
-            (acc, claim) => {
-                const name = shouldShowName(showClaimedName, onPublicList, user, claim)
-                    ? getClaimedName(claim)
-                    : $t("wishes.anonymous");
-                acc[name] = (acc[name] || 0) + claim.quantity;
-                return acc;
-            },
-            {} as Record<string, number>
-        )
-    );
-
     const onEdit = () => {
         goto(page.url.pathname, { replaceState: true, noScroll: true });
         drawerStore.close();
@@ -121,12 +108,13 @@
                 </button>
 
                 {#if expandClaims}
-                    <div class="px-2 pb-2">
-                        {#each Object.entries(groupedClaims) as [name, claimCount]}
+                    <div class="max-h-32 overflow-scroll px-2 pb-2">
+                        {#each item.claims as claim}
+                            {@const showName = shouldShowName(item, showClaimedName, showClaimForOwner, user, claim)}
                             <div class="flex items-center justify-between py-1">
-                                <span>{name}</span>
+                                <span>{showName ? getClaimedName(claim) : $t("wishes.anonymous")}</span>
                                 <span>
-                                    {$t("wishes.claims", { values: { claimCount } })}
+                                    {$t("wishes.claims", { values: { claimCount: claim.quantity } })}
                                 </span>
                             </div>
                         {/each}
