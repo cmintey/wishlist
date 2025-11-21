@@ -69,7 +69,8 @@
         "registration-is-disabled": "L'enregistrement est desactivé",
         "unable-to-update-preferred-language": "Impossible de mettre à jour la langue préférée",
         "language-is-required": "La langue est requise",
-        "email-is-required-for-public-claims": "Un email est nécessaire pour des réservation publiques"
+        "email-is-required-for-public-claims": "Un email est nécessaire pour des réservation publiques",
+        "oidc-error": "Erreur lors de l'authentification OAuth"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -91,11 +92,11 @@
         "id-field": "Id Utilisateur : {id}",
         "claims": "Réservations",
         "add-remove-manager-message": "Êtes-vous sûr de vouloir {isManager, select, true {add} other {remove}} cet utilisateur comme gestionnaire de groupe ?",
-        "admin": "Administrateur",
+        "admin": "Administration",
         "administration": "Administration",
         "remove-member-title": "Retirer le membre",
         "security": "Sécurité",
-        "show-name": "Affichez le nom",
+        "show-name": "Afficher le nom",
         "smtp": "SMTP",
         "smtp-from-name": "Nom de l'expéditeur",
         "suggestions": "Suggestions",
@@ -114,7 +115,7 @@
         "users": "Utilisateurs",
         "wishlist-mode-display-text": "En mode 'Liste de souhaits' , vous pouvez avoir plusieurs utilisateurs et listes, et réserver les articles d'autres utilisateurs. En mode \"Liste publique\", vous avez une seule liste que vous pouvez partager publiquement.",
         "wishlist-mode-wishlist": "Liste de souhaits",
-        "wishlist-mode": "Mode Liste de souhaits",
+        "wishlist-mode": "Mode liste de souhaits",
         "wishlist-mode-registry": "Liste publique",
         "clear-lists-confirmation": "Êtes-vous sûr de vouloir effacer {claimedOnly, select, true {éléments réservés} other {toutes les listes de souhait}} {groupSpecific, select, true {dans ce groupe} other {dans <b>tous les groupes</b>}} ? <b>Cette action est irréversible !</b>",
         "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Administrateur",
@@ -144,7 +145,7 @@
         "general": "Général",
         "oidc": "OpenID Connect (OIDC)",
         "oidc-auto-redirect": "Redirection auto",
-        "oidc-auto-redirect-tooltip": "Une fois activé, la page de connexion redirigera automatiquement vers la page de connexion de votre fournisseur d'identité. Pour contourner cela, vous pouvez ajouter \"?direct=1\" à l'URL.",
+        "oidc-auto-redirect-tooltip": "Pour contourner la redirection automatique, vous pouvez ajouter '?direct=1' à l'URL.",
         "oidc-auto-register": "Inscription auto",
         "oidc-client-secret": "Client Secret",
         "oidc-provider-name": "Nom du fournisseur",
@@ -164,7 +165,15 @@
         "test-email": "E-mail de test",
         "test-email-sent-toast": "E-mail de test envoyé",
         "claims-require-email": "Nécessite un email",
-        "claims-require-email-tooltip": "Nécessite une adresse email pour réserver anonymement un élément."
+        "claims-require-email-tooltip": "Nécessite une adresse email pour réserver anonymement un élément.",
+        "disable-email-verification": "Déactiver la vérification d'email",
+        "disable-email-verification-description": "Désactiver la nécessité que l'email de l'utilisateur soit vérifié avec le fournisseur d'identité pour lier et créer le compte.",
+        "enable-sync": "Activer la synchronisation",
+        "enable-sync-description": "Activer la synchronisation des attributs utilisateur depuis votre fournisseur d'identité comme le nom et l'email.",
+        "oidc-auto-redirect-description": "Rediriger automatiquement vers la page de connexion de votre fournisseur d'identité.",
+        "profile-disabled": "Votre profil est géré par votre fournisseur OAuth.",
+        "show-for-list-owner": "Afficher pour le propriétaire de la liste",
+        "show-for-list-owner-description": "Permet au propriétaire de la liste de voir les réservations sur leurs propres listes."
     },
     "auth": {
         "password": "Mot de passe",
@@ -228,7 +237,8 @@
         "clear-name-field": "effacer le champ nom",
         "default-item-image": "image de l'élément par défaut",
         "unpurchase": "Marquer l'élément comme non acheté",
-        "user-menu": "Menu utilisateur"
+        "user-menu": "Menu utilisateur",
+        "remove-manager-name": "Supprimer {name}"
     },
     "app": {
         "my-claims": "Mes réservations",
@@ -314,7 +324,9 @@
         "description": "Description",
         "dont-see-language": "Vous ne voyez pas votre langue ici ou vous constatez une traduction mauvaise ou absente ? <a href=\"{href}\" target=\"_blank\"> Allez voir la documentation sur comment contribuer.</a>",
         "language": "Langue",
-        "use-system-language": "Utiliser la langue du système"
+        "use-system-language": "Utiliser la langue du système",
+        "oauth": "OAuth",
+        "select-all": "Sélectionner tout"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -336,7 +348,7 @@
         "added-by": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "claimed": "Réservé",
         "claimed-item": "Elément {claimed, select, true {réservé} other {non réservé}}",
-        "create-for": "Créer un Souhait pour {listOwner}",
+        "create-for": "Créer un souhait pour {listOwner}",
         "default-sort": "Tri par défaut",
         "delete": "Supprimer",
         "deny": "Refuser",
@@ -348,7 +360,7 @@
         "approvals": "Approbations",
         "add-item": "Ajouter un objet",
         "approvals-waiting": "Vous avez {approvalCount, plural, one {# item} other {# items}} attendant votre approbation",
-        "create": "Créer un Souhait",
+        "create": "Créer un souhait",
         "edit": "Éditer",
         "for": "Pour <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "hang-tight-gathering-product-data": "Patientez un moment, récupération des données produit",
@@ -420,7 +432,16 @@
         "update-claim": "Mettre à jour la réservation",
         "updated-claim": "Réservation mise à jour",
         "view-item": "Voir l'objet",
-        "write": "Écrire"
+        "write": "Écrire",
+        "add-a-list-manager": "Ajouter un gestionnaire de liste",
+        "add-a-list-manager-explainer": "Recherchez un utilisateur dans le groupe à ajouter en tant que gestionnaire à la liste.",
+        "add-a-manager": "Ajouter gestionnaire",
+        "claims": "{claimCount, plural, one {# réservation} other {# réservations}}",
+        "hide-claims": "Masquer les réservations",
+        "list-managers": "Gestionnaires de liste",
+        "list-managers-tooltip": "Les gestionnaires de liste peuvent faire tout ce que vous pouvez faire, y compris approuver ou refuser des suggestions, modifier les paramètres de la liste, et supprimer des éléments de la liste. Si votre groupe est en mode 'surprise', vous pourrez voir tout élément ajouté par un gestionnaire de liste.",
+        "no-managers": "Aucun gestionnaire",
+        "show-claims": "Afficher les réservations"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
