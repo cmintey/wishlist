@@ -98,7 +98,7 @@
 </script>
 
 {#if data.config.listMode !== "registry"}
-    <div class="flex gap-x-4 py-4">
+    <div class="flex flex-wrap gap-2 py-4">
         <button
             class="variant-filled-primary btn"
             onclick={() => modalStore.trigger(addUserModalSettings)}
@@ -164,7 +164,7 @@
             </tbody>
         </table>
     </div>
-    <div>
+    <div class="flex flex-wrap gap-2">
         <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>{$t("admin.delete-group-title")}</button>
         <ClearListsButton groupId={page.params.groupId} />
         <ClearListsButton claimed groupId={page.params.groupId} />
