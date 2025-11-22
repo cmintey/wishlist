@@ -31,7 +31,14 @@
 {#snippet wishlistHeader()}
     <a class="flex flex-row items-center gap-x-2" href="/">
         <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-        <span class="text-primary-900-50-token hidden text-2xl font-bold sm:block md:text-3xl">Wishlist</span>
+        <span
+            class={[
+                "text-primary-900-50-token text-2xl font-bold md:text-3xl",
+                groups && groups.length > 1 ? "hidden sm:block" : "block"
+            ]}
+        >
+            Wishlist
+        </span>
     </a>
 {/snippet}
 
@@ -49,7 +56,7 @@
                     </button>
                     {@render wishlistHeader()}
                 {:else}
-                    <BackButton />
+                    <BackButton header={wishlistHeader} />
                 {/if}
             {:else}
                 {@render wishlistHeader()}
