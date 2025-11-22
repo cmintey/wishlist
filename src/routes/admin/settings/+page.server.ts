@@ -30,8 +30,8 @@ export const actions: Actions = {
     "send-test": async () => {
         const user = await requireRole(Role.ADMIN);
 
-        await sendTest(user.email);
-        return { action: "send-test", success: true };
+        const resp = await sendTest(user.email);
+        return { action: "send-test", ...resp };
     },
     settings: async ({ request }) => {
         await requireRole(Role.ADMIN);
@@ -56,8 +56,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               enable: true,
               host: configData.smtpHost!,
               port: configData.smtpPort!,
-              user: configData.smtpUser!,
-              pass: configData.smtpPass!,
+              user: configData.smtpUser,
+              pass: configData.smtpPass,
               from: configData.smtpFrom!,
               fromName: configData.smtpFromName!
           }

@@ -51,8 +51,8 @@ type SMTPConfig =
           enable: true;
           host: string;
           port: number;
-          user: string;
-          pass: string;
+          user?: string;
+          pass?: string;
           from: string;
           fromName: string;
       };
