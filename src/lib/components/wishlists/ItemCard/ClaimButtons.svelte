@@ -23,7 +23,24 @@
 </script>
 
 {#if !onPublicList && item.userId === user?.id && !showForOwner}
-    <div></div>
+    <!-- Giftee viewing their own item - show archive button -->
+    <div class="flex flex-row gap-x-2 md:gap-x-4">
+        <button
+            class={[
+                "btn btn-icon btn-icon-sm md:btn-icon-base",
+                item.archived && "variant-soft-warning",
+                !item.archived && "variant-ringed-warning"
+            ].join(" ")}
+            aria-label={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+            onclick={(e) => {
+                e.stopPropagation();
+                onArchive?.(!item.archived);
+            }}
+            title={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+        >
+            <iconify-icon icon={item.archived ? "ion:archive" : "ion:archive-outline"}></iconify-icon>
+        </button>
+    </div>
 {:else if userClaim}
     <div class="flex flex-row gap-x-2 md:gap-x-4">
         <button
@@ -78,8 +95,6 @@
             {$t("wishes.claim")}
         </button>
     </div>
-{:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
-    <div></div>
 {:else if item.claims.length === 1 && shouldShowName(item, showName, showForOwner, user, item.claims[0])}
     <span>
         {$t("wishes.claimed-by", {
