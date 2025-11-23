@@ -357,6 +357,8 @@
         "finish": "Terminer",
         "claimed-by": "Réservé par {name}",
         "approve": "Approuver",
+        "archive": "Archiver",
+        "archive-toast": "{archived, select, true {Élément archivé} other {Élément désarchivé}}",
         "approvals": "Approbations",
         "add-item": "Ajouter un objet",
         "approvals-waiting": "Vous avez {approvalCount, plural, one {# item} other {# items}} attendant votre approbation",

@@ -383,6 +383,8 @@
         "claimed-item": "{claimed, select, true {Reservert} other {Frigjort}} item",
         "manage": "Administrer",
         "approve": "Godkjenn",
+        "archive": "Arkiver",
+        "archive-toast": "{archived, select, true {Ønsket arkivert} other {Ønsket dearskivert}}",
         "share": "Del ønskeliste",
         "notes": "Notater",
         "view-wishes": "Se ønsker",

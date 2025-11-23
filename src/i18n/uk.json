@@ -345,6 +345,8 @@
         "approvals": "Затвердження",
         "approvals-waiting": "У вас на ваше схвалення {approvalCount, plural, one {# елемент} few {# елементи} many {# елементів} other {# елемента}}",
         "approve": "Схвалити",
+        "archive": "Архівувати",
+        "archive-toast": "{archived, select, true {Елемент архівовано} other {Елемент розархівовано}}",
         "are-you-sure-you-wish-to-delete-item": "Ви впевнені, що хочете видалити <b>{name}</b>?",
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Бажаєте видалити <b>{name}</b> з цього списку чи зі всіх списків?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Перш ніж ви зможете отримати цей предмет, нам потрібна від вас лише одна річ.",

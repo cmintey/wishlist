@@ -52,17 +52,19 @@
             {$t("wishes.deny")}
         </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
-        <button
-            class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
-            aria-label={$t("wishes.edit")}
-            onclick={(e) => {
-                e.stopPropagation();
-                props.onEdit?.();
-            }}
-            title={$t("wishes.edit")}
-        >
-            <iconify-icon icon="ion:edit"></iconify-icon>
-        </button>
+        {#if !item.archived || user?.id === item.addedBy?.id}
+            <button
+                class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
+                aria-label={$t("wishes.edit")}
+                onclick={(e) => {
+                    e.stopPropagation();
+                    props.onEdit?.();
+                }}
+                title={$t("wishes.edit")}
+            >
+                <iconify-icon icon="ion:edit"></iconify-icon>
+            </button>
+        {/if}
         {@render deleteButton()}
     {:else if userCanManage}
         {@render deleteButton()}

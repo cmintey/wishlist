@@ -208,6 +208,8 @@
         "approval-needed": "Aprovação necessária",
         "approvals-waiting": "You have {approvalCount, plural, one {# item} other {# items}} à espera da sua aprovação",
         "approve": "Aprovar",
+        "archive": "Arquivar",
+        "archive-toast": "{archived, select, true {Item arquivado} other {Item desarquivado}}",
         "are-you-sure-you-wish-to-delete-item": "Tem a certeza de que pretende apagar {name}?",
         "claim": "Reclamar",
         "claim-details": "Detalhes da reclamação",

@@ -6,6 +6,8 @@ import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { requireLoginOrError } from "$lib/server/auth";
 import type { List as PrismaList, Item as PrismaItem } from "@prisma/client";
+import { logger } from "$lib/server/logger";
+import { getItemInclusions } from "$lib/server/items";
 
 interface List extends Pick<PrismaList, "groupId"> {
     managers: string[];
@@ -117,5 +119,43 @@ export const DELETE: RequestHandler = async ({ params }) => {
         return new Response(JSON.stringify(item), { status: 200 });
     } catch {
         error(404, $t("errors.item-not-found"));
+    }
+};
+
+export const PATCH: RequestHandler = async ({ params, request }) => {
+    const user = await requireLoginOrError();
+    const $t = await getFormatter();
+    const item = await validateItem(params?.itemId);
+
+    // item is not created by the user or for the user and
+    // item is not on a list which is managed by the user
+    if (user.id !== item.createdById && user.id !== item.userId && !isItemOnManagedList(item, user)) {
+        error(401, $t("errors.not-authorized"));
+    }
+
+    try {
+        const body = (await request.json()) as Record<string, unknown>;
+        const { archived } = body;
+
+        if (typeof archived !== "boolean") {
+            error(400, $t("errors.invalid-request"));
+        }
+
+        const updatedItem = await client.item.update({
+            where: {
+                id: item.id
+            },
+            data: {
+                archived
+            },
+            include: getItemInclusions()
+        });
+
+        itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
+
+        return new Response(JSON.stringify(updatedItem), { status: 200 });
+    } catch (err) {
+        logger.error({ err }, "Unable to update item");
+        error(500, $t("errors.unable-to-update-item"));
     }
 };

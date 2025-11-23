@@ -319,6 +319,8 @@
         "anonymous": "Anonym",
         "approvals": "Godkännanden",
         "approve": "Godkänn",
+        "archive": "Arkivera",
+        "archive-toast": "{archived, select, true {Artikel arkiverad} other {Artikel dearchiverad}}",
         "claimed-item": "{claimed, select, true {Reserverad} other {Ej reserverad}} artikel",
         "finish": "Avsluta",
         "for": "För <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",

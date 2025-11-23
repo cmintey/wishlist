@@ -21,6 +21,14 @@ export class ItemAPI {
     delete = async () => {
         return await this._makeRequest("DELETE");
     };
+
+    archive = async () => {
+        return await this._makeRequest("PATCH", { archived: true });
+    };
+
+    unarchive = async () => {
+        return await this._makeRequest("PATCH", { archived: false });
+    };
 }
 
 export class ItemsAPI {

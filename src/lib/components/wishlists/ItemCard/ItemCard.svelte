@@ -246,6 +246,17 @@
         }
     };
 
+    const handleArchive = async (archived: boolean) => {
+        const itemAPI = new ItemAPI(item.id);
+        const resp = await (archived ? itemAPI.archive() : itemAPI.unarchive());
+        if (resp.ok) {
+            toastStore.trigger({
+                message: $t("wishes.archive-toast", { values: { archived } })
+            });
+            item.archived = archived;
+        }
+    };
+
     const drawerSettings: DrawerSettings = $derived({
         id: "item",
         position: "bottom",
@@ -263,6 +274,7 @@
             handleClaim,
             handleDelete,
             handlePurchased,
+            handleArchive,
             handleApproval,
             handleEdit,
             defaultImage
@@ -309,24 +321,37 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    <header class="card-header flex w-full">
-        {#if item.url}
-            <a
-                id={`${id}-name`}
-                class="line-clamp-2 text-xl font-bold dark:!text-primary-200 md:text-2xl"
-                data-testid="name"
-                href={item.url}
-                onclick={(e) => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-            >
-                {item.name}
-            </a>
-        {:else}
-            <span id={`${id}-name`} class="line-clamp-2 text-xl font-bold md:text-2xl" data-testid="name">
-                {item.name}
-            </span>
-        {/if}
+        <header class="p-4" class:pb-0={item.price || item.itemPrice || item.quantity || item.description}>
+        <div class="flex items-start justify-between gap-2">
+            <div class="flex-1">
+                {#if item.url}
+                    <a
+                        id={`${id}-name`}
+                        class="line-clamp-2 text-xl font-bold hover:underline md:text-2xl"
+                        href={item.url}
+                        onclick={(e) => e.stopPropagation()}
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        {item.name}
+                    </a>
+                {:else}
+                    <span id={`${id}-name`} class="line-clamp-2 text-xl font-bold md:text-2xl" data-testid="name">
+                        {item.name}
+                    </span>
+                {/if}
+            </div>
+            {#if item.archived}
+                <div
+                    class="flex-none whitespace-nowrap rounded px-2 py-1 text-xs font-semibold badge variant-soft-warning"
+                    title={$t("wishes.archive")}
+                    data-testid="archived-badge"
+                >
+                    <iconify-icon icon="ion:archive" class="mr-1 inline" aria-hidden="true"></iconify-icon>
+                    {$t("wishes.archive")}
+                </div>
+            {/if}
+        </div>
     </header>
 
     <div class="flex flex-row gap-x-4 p-4">
@@ -404,6 +429,7 @@
                 onClaim={handleClaim}
                 {onPublicList}
                 onPurchase={handlePurchased}
+                onArchive={handleArchive}
                 onUnclaim={handleUnclaim}
                 showForOwner={showClaimForOwner}
                 showName={showClaimedName}

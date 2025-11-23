@@ -202,6 +202,8 @@
         "approval-needed": "Akceptacja wymagana",
         "approval-required": "{listOwner} musi zaakceptować propozycję zanim pojawi się na jej/jego liście życzeń.",
         "approve": "Akceptuj",
+        "archive": "Archiwizuj",
+        "archive-toast": "{archived, select, true {Przedmiot zarchiwizowany} other {Przedmiot przywrócony}}",
         "are-you-sure-you-wish-to-delete-item": "Na pewno chcesz usunąć <b>{name}</b>?",
         "approvals": "Zatwierdzenia",
         "approvals-waiting": "Masz {approvalCount, plural, zero {# oczekujących zaproszeń} one {# oczekujące zaproszenie} two {# oczekujące zaproszenia} few {# oczekujące zaproszenia} many {# oczekujących zaproszeń} other {# oczekujące zaproszenia}}",

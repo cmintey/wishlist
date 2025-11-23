@@ -114,9 +114,13 @@ async function deleteClaim(id: string, user: LocalUser) {
             }
         });
 
-        const item = await client.item.findUnique({
+        // When unclaiming, also unarchive the item
+        const item = await client.item.update({
             where: {
                 id: claim.itemId
+            },
+            data: {
+                archived: false
             },
             include: getItemInclusions()
         });

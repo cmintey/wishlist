@@ -13,9 +13,10 @@
         onClaim?: VoidFunction;
         onUnclaim?: VoidFunction;
         onPurchase?: (purchased: boolean) => void;
+        onArchive?: (archived: boolean) => void;
     }
 
-    let { item, user, showName, showForOwner, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
+    let { item, user, showName, showForOwner, onPublicList = false, onClaim, onUnclaim, onPurchase, onArchive }: Props = $props();
     const t = getFormatter();
 
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
@@ -48,6 +49,21 @@
             title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
         >
             <iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon>
+        </button>
+        <button
+            class={[
+                "btn btn-icon btn-icon-sm md:btn-icon-base",
+                item.archived && "variant-soft-warning",
+                !item.archived && "variant-ringed-warning"
+            ].join(" ")}
+            aria-label={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+            onclick={(e) => {
+                e.stopPropagation();
+                onArchive?.(!item.archived);
+            }}
+            title={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+        >
+            <iconify-icon icon={item.archived ? "ion:archive" : "ion:archive-outline"}></iconify-icon>
         </button>
     </div>
 {:else if item.isClaimable && item.userId !== user?.id}

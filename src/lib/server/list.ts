@@ -14,6 +14,7 @@ export interface GetItemsOptions {
     listOwnerId: string;
     listManagers?: Set<string>;
     loggedInUserId: string | null;
+    showArchivedItems?: boolean; // Show archived items - true for giftee/giver, false for others
 }
 
 export interface ListProperties {
@@ -164,19 +165,49 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     }
 
     // In "surprise" mode, only show the items the owner or other managers added
+    // BUT always allow archived items that belong to the giftee or giver
     if (
         options.suggestionMethod === "surprise" &&
         (options.loggedInUserId === options.listOwnerId ||
             (options.loggedInUserId && options.listManagers?.has(options.loggedInUserId)))
     ) {
-        if (options.listManagers) {
-            itemListFilter.addedById = {
-                in: [options.loggedInUserId, ...options.listManagers]
-            };
-        } else {
-            itemListFilter.addedById = options.loggedInUserId;
-        }
+        // For surprise mode, allow items from owner/managers OR archived items that belong to user
+        itemListFilter.OR = [
+            {
+                addedById: options.listManagers
+                    ? { in: [options.loggedInUserId, ...options.listManagers] }
+                    : options.loggedInUserId
+            },
+            {
+                item: {
+                    archived: true,
+                    OR: [
+                        { userId: options.loggedInUserId },
+                        { createdById: options.loggedInUserId }
+                    ]
+                }
+            }
+        ];
     }
+
+    // For archived items, only show if user is giftee (userId) or giver (createdById)
+    // Anonymous users see all non-archived items
+    itemListFilter.item = {
+        OR: [
+            { archived: false },
+            ...(options.loggedInUserId
+                ? [
+                    {
+                        archived: true,
+                        OR: [
+                            { userId: options.loggedInUserId },
+                            { createdById: options.loggedInUserId }
+                        ]
+                    }
+                ]
+                : [])
+        ]
+    };
 
     const list = await client.list.findUnique({
         where: {

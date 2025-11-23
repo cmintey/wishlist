@@ -330,6 +330,8 @@
         "approvals": "Godkendelser",
         "approvals-waiting": "Du har {approvalCount, plural, one {# item} other {# items}} som afventer din godkendelse",
         "approve": "Godkend",
+        "archive": "Arkiver",
+        "archive-toast": "{archived, select, true {Ønsket arkiveret} other {Ønsket dearkiveret}}",
         "are-you-sure-you-wish-to-delete-item": "Er du sikker på, at du vil slette <b>{name}</b>?",
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Vil du slette <b>{name}</b> fra denne liste eller alle lister?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Før du kan reservere ønsket, har vi bare brug for en ting fra dig.",

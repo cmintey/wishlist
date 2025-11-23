@@ -400,6 +400,8 @@
         "unclaimed": "Бронь снята",
         "approval-confirmation": "Вы уверены, что хотите <b>{approve, select, true {approve} other {deny}}</b> это предложение от {name}",
         "approve": "Одобрить",
+        "archive": "Архивировать",
+        "archive-toast": "{archived, select, true {Элемент архивирован} other {Элемент разархивирован}}",
         "approval-required": "{listOwner} должен будет одобрить ваше предложение, прежде чем оно будет добавлено в свой список.",
         "hang-tight-gathering-product-data": "Ожидайте, собираем данные о продукте",
         "unable-to-update-item-ordering": "Невозможно обновить порядок элементов",

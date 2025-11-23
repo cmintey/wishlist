@@ -27,6 +27,7 @@
     const handleClaim: (v?: boolean) => void = $drawerStore.meta.handleClaim;
     const handleDelete: VoidFunction = $drawerStore.meta.handleDelete;
     const handlePurchased: (v: boolean) => void = $drawerStore.meta.handlePurchased;
+    const handleArchive: (v: boolean) => void = $drawerStore.meta.handleArchive;
     const handleApproval: (v: boolean) => void = $drawerStore.meta.handleApproval;
     const handleEdit: () => void = $drawerStore.meta.handleEdit;
     const defaultImage: Snippet<[MessageFormatter, ClassValue]> = $drawerStore.meta.defaultImage;
@@ -154,6 +155,7 @@
             onClaim={handleClaim}
             {onPublicList}
             onPurchase={handlePurchased}
+            onArchive={handleArchive}
             onUnclaim={() => handleClaim(true)}
             showForOwner={showClaimForOwner}
             showName={showClaimedName}
