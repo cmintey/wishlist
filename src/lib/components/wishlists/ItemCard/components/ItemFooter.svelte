@@ -1,28 +1,11 @@
 <script lang="ts">
     import ClaimButtons from "../ClaimButtons.svelte";
-    import { getItem } from "../context";
-    import type { PartialUser } from "../ItemCard.svelte";
+    import type { InternalItemCardProps } from "../ItemCard.svelte";
     import ManageButtons from "../ManageButtons.svelte";
     import ReorderButtons from "../ReorderButtons.svelte";
 
-    interface Props {
-        user?: PartialUser;
-        userCanManage: boolean;
-        showClaimedName?: boolean;
-        showClaimForOwner?: boolean;
-        onPublicList?: boolean;
-        reorderActions?: boolean;
-        onIncreasePriority?: (itemId: number) => void;
-        onDecreasePriority?: (itemId: number) => void;
-        onClaim?: () => void;
-        onUnclaim?: () => void;
-        onPurchased?: (purchased: boolean) => void;
-        onDelete?: () => void;
-        onEdit?: () => void;
-        onApproval?: (approve: boolean) => void;
-    }
-
     const {
+        item,
         user,
         userCanManage,
         showClaimedName = false,
@@ -37,9 +20,7 @@
         onDelete,
         onEdit,
         onApproval
-    }: Props = $props();
-
-    const item = getItem();
+    }: Omit<InternalItemCardProps, "id"> = $props();
 </script>
 
 <footer
@@ -54,10 +35,10 @@
             {item}
             {onClaim}
             {onPublicList}
-            onPurchase={onPurchased}
+            {onPurchased}
             {onUnclaim}
-            showForOwner={showClaimForOwner}
-            showName={showClaimedName}
+            {showClaimForOwner}
+            {showClaimedName}
             {user}
         />
 

@@ -1,6 +1,5 @@
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
     import type { MessageFormatter } from "$lib/server/i18n";
     import ItemNameHeader from "./components/ItemNameHeader.svelte";
     import ItemAttributes from "./components/ItemAttributes.svelte";
@@ -8,27 +7,8 @@
     import type { ClassValue } from "svelte/elements";
     import ItemImage from "./components/ItemImage.svelte";
 
-    interface Props {
-        item: ItemOnListDTO;
-        user?: PartialUser;
-        userCanManage?: boolean;
-        showClaimedName?: boolean;
-        showClaimForOwner?: boolean;
-        showFor?: boolean;
-        onPublicList?: boolean;
-        reorderActions?: boolean;
-        onIncreasePriority?: (itemId: number) => void;
-        onDecreasePriority?: (itemId: number) => void;
-        onClaim?: () => void;
-        onUnclaim?: () => void;
-        onPurchased?: (purchased: boolean) => void;
-        onDelete?: () => void;
-        onEdit?: () => void;
-        onApproval?: (approve: boolean) => void;
-        id: string;
-    }
-
     const {
+        id,
         item,
         user,
         userCanManage = false,
@@ -44,15 +24,14 @@
         onPurchased,
         onDelete,
         onEdit,
-        onApproval,
-        id
-    }: Props = $props();
+        onApproval
+    }: InternalItemCardProps = $props();
 </script>
 
-<ItemNameHeader />
+<ItemNameHeader {id} {item} />
 
 <div class="flex flex-row gap-x-4 p-4">
-    <ItemImage class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40">
+    <ItemImage class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40" {item}>
         {#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
             <div
                 class={[
@@ -78,12 +57,13 @@
     </ItemImage>
 
     <div class="flex flex-col">
-        <ItemAttributes {onPublicList} {showClaimForOwner} {showFor} {user} />
+        <ItemAttributes {item} {onPublicList} {showClaimForOwner} {showFor} {user} />
     </div>
 </div>
 
 <!-- Footer with buttons -->
 <ItemFooter
+    {item}
     {onApproval}
     {onClaim}
     {onDecreasePriority}

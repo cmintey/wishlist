@@ -1,19 +1,18 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
-    import { getItem } from "../context";
     import Image from "$lib/components/Image.svelte";
     import { resolve } from "$app/paths";
     import type { MessageFormatter } from "$lib/server/i18n";
+    import type { InternalItemCardProps } from "../ItemCard.svelte";
 
-    interface Props {
+    interface Props extends Pick<InternalItemCardProps, "item"> {
         class?: ClassValue;
         defaultImage: (t: MessageFormatter, sizeClasses?: ClassValue) => any;
     }
 
-    const { defaultImage, ...props }: Props = $props();
+    const { item, defaultImage, ...props }: Props = $props();
     const t = getFormatter();
-    const item = getItem();
 
     const imageUrl: string | undefined = $derived.by(() => {
         if (item.imageUrl) {

@@ -1,28 +1,37 @@
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
     import { getClaimedName, shouldShowName } from "../util";
 
-    interface Props {
-        item: ItemOnListDTO;
-        user: PartialUser | undefined; // logged in user
-        showName: boolean;
-        showForOwner: boolean;
-        onPublicList?: boolean;
-        onClaim?: VoidFunction;
-        onUnclaim?: VoidFunction;
-        onPurchase?: (purchased: boolean) => void;
-    }
+    type Props = Pick<
+        InternalItemCardProps,
+        | "item"
+        | "user"
+        | "showClaimedName"
+        | "showClaimForOwner"
+        | "onPublicList"
+        | "onClaim"
+        | "onUnclaim"
+        | "onPurchased"
+    >;
 
-    let { item, user, showName, showForOwner, onPublicList = false, onClaim, onUnclaim, onPurchase }: Props = $props();
+    let {
+        item,
+        user,
+        showClaimedName = false,
+        showClaimForOwner = false,
+        onPublicList = false,
+        onClaim,
+        onUnclaim,
+        onPurchased
+    }: Props = $props();
 
     const t = getFormatter();
 
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
 </script>
 
-{#if !onPublicList && item.userId === user?.id && !showForOwner}
+{#if !onPublicList && item.userId === user?.id && !showClaimForOwner}
     <div></div>
 {:else if userClaim}
     <div class="flex flex-row gap-2">
@@ -44,7 +53,7 @@
             aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
             onclick={(e) => {
                 e.stopPropagation();
-                onPurchase?.(!userClaim.purchased);
+                onPurchased?.(!userClaim.purchased);
             }}
             title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
         >
@@ -65,7 +74,7 @@
     </div>
 {:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
     <div></div>
-{:else if item.claims.length === 1 && shouldShowName(item, showName, showForOwner, user, item.claims[0])}
+{:else if item.claims.length === 1 && shouldShowName(item, showClaimedName, showClaimForOwner, user, item.claims[0])}
     <span class="line-clamp-2 truncate text-wrap">
         {$t("wishes.claimed-by", {
             values: {
@@ -73,7 +82,7 @@
             }
         })}
     </span>
-{:else if item.claims.length > 1 && shouldShowName(item, showName, showForOwner, user)}
+{:else if item.claims.length > 1 && shouldShowName(item, showClaimedName, showClaimForOwner, user)}
     <span class="line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span class="line-clamp-2 truncate text-wrap">{$t("wishes.claimed")}</span>

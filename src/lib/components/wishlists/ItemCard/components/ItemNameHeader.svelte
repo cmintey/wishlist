@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { getComponentId, getItem } from "../context";
+    import type { InternalItemCardProps } from "../ItemCard.svelte";
 
-    const id = getComponentId();
-    const item = getItem();
+    const { id, item }: Pick<InternalItemCardProps, "id" | "item"> = $props();
 </script>
 
 <header class="card-header line-clamp-1 flex w-full px-4 pt-4 text-lg font-bold md:text-xl">

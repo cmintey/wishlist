@@ -1,16 +1,10 @@
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
 
-    interface Props {
-        item: ItemOnListDTO;
-        user: PartialUser | undefined;
-        userCanManage: boolean;
+    interface Props extends Pick<InternalItemCardProps, "item" | "user" | "userCanManage" | "onDelete" | "onEdit"> {
         onApprove?: VoidFunction;
         onDeny?: VoidFunction;
-        onDelete?: VoidFunction;
-        onEdit?: VoidFunction;
     }
 
     const { item, user, userCanManage, ...props }: Props = $props();

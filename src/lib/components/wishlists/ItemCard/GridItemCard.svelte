@@ -1,32 +1,12 @@
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
     import ItemNameHeader from "./components/ItemNameHeader.svelte";
     import ItemAttributes from "./components/ItemAttributes.svelte";
     import ItemFooter from "./components/ItemFooter.svelte";
     import ItemImage from "./components/ItemImage.svelte";
 
-    interface Props {
-        item: ItemOnListDTO;
-        user?: PartialUser;
-        userCanManage?: boolean;
-        showClaimedName?: boolean;
-        showClaimForOwner?: boolean;
-        showFor?: boolean;
-        onPublicList?: boolean;
-        reorderActions?: boolean;
-        onIncreasePriority?: (itemId: number) => void;
-        onDecreasePriority?: (itemId: number) => void;
-        onClaim?: () => void;
-        onUnclaim?: () => void;
-        onPurchased?: (purchased: boolean) => void;
-        onDelete?: () => void;
-        onEdit?: () => void;
-        onApproval?: (approve: boolean) => void;
-        id: string;
-    }
-
     const {
+        id,
         item,
         user,
         userCanManage = false,
@@ -42,15 +22,14 @@
         onPurchased,
         onDelete,
         onEdit,
-        onApproval,
-        id
-    }: Props = $props();
+        onApproval
+    }: InternalItemCardProps = $props();
 </script>
 
 <div class="flex h-full flex-col">
     <!-- Image extends to card edges -->
     <div class="relative h-48 w-full overflow-hidden p-[1px]">
-        <ItemImage class="h-full w-full object-cover rounded-tl-container-token rounded-tr-container-token">
+        <ItemImage class="h-full w-full object-cover rounded-tl-container-token rounded-tr-container-token" {item}>
             {#snippet defaultImage(t, _sizeClasses)}
                 <div
                     class="bg-surface-300-600-token flex h-full w-full items-center justify-center rounded-tl-container-token rounded-tr-container-token"
@@ -63,14 +42,15 @@
     </div>
 
     <!-- Title below image -->
-    <ItemNameHeader />
+    <ItemNameHeader {id} {item} />
 
     <!-- Content area with consistent padding -->
     <div class="flex flex-1 flex-col space-y-1 p-4">
-        <ItemAttributes {onPublicList} {showClaimForOwner} {showFor} {user} />
+        <ItemAttributes {item} {onPublicList} {showClaimForOwner} {showFor} {user} />
     </div>
 
     <ItemFooter
+        {item}
         {onApproval}
         {onClaim}
         {onDecreasePriority}

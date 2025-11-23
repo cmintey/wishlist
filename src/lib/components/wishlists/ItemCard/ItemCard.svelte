@@ -18,6 +18,27 @@
         onDecreasePriority?: ItemVoidFunction | undefined;
         isTileView?: boolean;
     }
+
+    type ItemVoidFunction = (itemId: number) => void;
+    export interface InternalItemCardProps {
+        id: string;
+        item: ItemOnListDTO;
+        user?: PartialUser;
+        userCanManage?: boolean;
+        showClaimedName?: boolean;
+        showClaimForOwner?: boolean;
+        showFor?: boolean;
+        onPublicList?: boolean;
+        reorderActions?: boolean;
+        onIncreasePriority?: ItemVoidFunction;
+        onDecreasePriority?: ItemVoidFunction;
+        onClaim?: () => void;
+        onUnclaim?: () => void;
+        onPurchased?: (purchased: boolean) => void;
+        onDelete?: () => void;
+        onEdit?: () => void;
+        onApproval?: (approve: boolean) => void;
+    }
 </script>
 
 <script lang="ts">
@@ -31,7 +52,6 @@
     import type { User } from "@prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import { goto, invalidateAll } from "$app/navigation";
-    import type { ItemVoidFunction } from "./ReorderButtons.svelte";
     import { page } from "$app/state";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ListItemAPI } from "$lib/api/lists";
@@ -44,7 +64,6 @@
     import { resolve } from "$app/paths";
     import GridItemCard from "./GridItemCard.svelte";
     import ListItemCard from "./ListItemCard.svelte";
-    import { setComponentId, setItem } from "./context";
 
     const {
         item,
@@ -67,9 +86,6 @@
     const modalStore = getModalStore();
     const toastStore = getToastStore();
     const drawerStore = getDrawerStore();
-
-    setComponentId(id);
-    setItem(item);
 
     $effect(() => {
         if (page.url.searchParams.get("item-id") === item.id.toString()) {
@@ -301,9 +317,8 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    {#if reorderActions}
-        <!-- Reorder view - always use list layout -->
-        <ListItemCard
+    {#if isTileView}
+        <GridItemCard
             {id}
             {item}
             onApproval={handleApproval}
@@ -315,25 +330,7 @@
             {onPublicList}
             onPurchased={handlePurchased}
             onUnclaim={handleUnclaim}
-            reorderActions={true}
-            {showClaimForOwner}
-            {showClaimedName}
-            {showFor}
-            {user}
-            {userCanManage}
-        />
-    {:else if isTileView}
-        <GridItemCard
-            {id}
-            {item}
-            onApproval={handleApproval}
-            onClaim={handleClaim}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            {onPublicList}
-            onPurchased={handlePurchased}
-            onUnclaim={handleUnclaim}
-            reorderActions={false}
+            {reorderActions}
             {showClaimForOwner}
             {showClaimedName}
             {showFor}
@@ -346,12 +343,14 @@
             {item}
             onApproval={handleApproval}
             onClaim={handleClaim}
+            {onDecreasePriority}
             onDelete={handleDelete}
             onEdit={handleEdit}
+            {onIncreasePriority}
             {onPublicList}
             onPurchased={handlePurchased}
             onUnclaim={handleUnclaim}
-            reorderActions={false}
+            {reorderActions}
             {showClaimForOwner}
             {showClaimedName}
             {showFor}

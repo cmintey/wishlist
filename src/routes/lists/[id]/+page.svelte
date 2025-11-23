@@ -281,7 +281,7 @@
         <h2 class="h2">{$t("wishes.approvals")}</h2>
         <div
             class={isTileView
-                ? "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+                ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
                 : "flex flex-col space-y-4"}
             data-testid="approvals-container"
         >
@@ -312,9 +312,9 @@
 {:else}
     <!-- items -->
     <div
-        class={reordering || !isTileView
-            ? "flex flex-col space-y-4 transition-opacity duration-150 rounded-container-token"
-            : "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"}
+        class={isTileView
+            ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+            : "flex flex-col space-y-4"}
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}

@@ -2,14 +2,12 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import { getFormatter } from "$lib/i18n";
     import { formatPrice } from "$lib/price-formatter";
-    import { getItem } from "../context";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    type Props = Pick<ItemCardProps, "onPublicList" | "user" | "showClaimForOwner" | "showFor">;
+    type Props = Pick<ItemCardProps, "item" | "onPublicList" | "user" | "showClaimForOwner" | "showFor">;
 
     const t = getFormatter();
-    const item = getItem();
-    const { onPublicList, user, showClaimForOwner, showFor }: Props = $props();
+    const { item, onPublicList, user, showClaimForOwner, showFor }: Props = $props();
 </script>
 
 <!-- Price with fallback -->
