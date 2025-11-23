@@ -28,17 +28,17 @@
         <button
             class={[
                 "btn btn-icon btn-icon-sm md:btn-icon-base",
-                item.archived && "variant-soft-warning",
-                !item.archived && "variant-ringed-warning"
+                item.archivedById !== null && "variant-soft-warning",
+                item.archivedById === null && "variant-ringed-warning"
             ].join(" ")}
-            aria-label={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+            aria-label={item.archivedById !== null ? $t("a11y.unarchive") : $t("wishes.archive")}
             onclick={(e) => {
                 e.stopPropagation();
-                onArchive?.(!item.archived);
+                onArchive?.(item.archivedById === null);
             }}
-            title={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+            title={item.archivedById !== null ? $t("a11y.unarchive") : $t("wishes.archive")}
         >
-            <iconify-icon icon={item.archived ? "ion:archive" : "ion:archive-outline"}></iconify-icon>
+            <iconify-icon icon={item.archivedById !== null ? "ion:archive" : "ion:archive-outline"}></iconify-icon>
         </button>
     </div>
 {:else if userClaim}
@@ -70,17 +70,17 @@
         <button
             class={[
                 "btn btn-icon btn-icon-sm md:btn-icon-base",
-                item.archived && "variant-soft-warning",
-                !item.archived && "variant-ringed-warning"
+                item.archivedById !== null && "variant-soft-warning",
+                item.archivedById === null && "variant-ringed-warning"
             ].join(" ")}
-            aria-label={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+            aria-label={item.archivedById !== null ? $t("a11y.unarchive") : $t("wishes.archive")}
             onclick={(e) => {
                 e.stopPropagation();
-                onArchive?.(!item.archived);
+                onArchive?.(item.archivedById === null);
             }}
-            title={item.archived ? $t("a11y.unarchive") : $t("wishes.archive")}
+            title={item.archivedById !== null ? $t("a11y.unarchive") : $t("wishes.archive")}
         >
-            <iconify-icon icon={item.archived ? "ion:archive" : "ion:archive-outline"}></iconify-icon>
+            <iconify-icon icon={item.archivedById !== null ? "ion:archive" : "ion:archive-outline"}></iconify-icon>
         </button>
     </div>
 {:else if item.isClaimable && item.userId !== user?.id}

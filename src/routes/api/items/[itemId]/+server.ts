@@ -141,16 +141,18 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
             error(400, $t("errors.invalid-request"));
         }
 
-        // Only the item creator (item.userId) OR someone who claimed it can unarchive items
+        // Only the item creator (item.userId) OR the user who archived it can unarchive items
         if (!archived) {
-            const userHasClaim = await client.itemClaim.findFirst({
+            const currentItem = await client.item.findUnique({
                 where: {
-                    itemId: item.id,
-                    claimedById: user.id
+                    id: item.id
+                },
+                select: {
+                    archivedById: true
                 }
             });
 
-            if (user.id !== item.userId && !userHasClaim) {
+            if (user.id !== item.userId && user.id !== currentItem?.archivedById) {
                 error(401, $t("errors.not-authorized"));
             }
         }
@@ -160,7 +162,7 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
                 id: item.id
             },
             data: {
-                archived
+                archivedById: archived ? user.id : null
             },
             include: getItemInclusions()
         });

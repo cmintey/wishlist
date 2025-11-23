@@ -17,6 +17,7 @@ model User {
     picture             String?
     items               Item[]                @relation("MyItems")
     createdItems        Item[]                @relation("CreatedItems")
+    archivedItems       Item[]                @relation("ArchivedItems")
     addedItems          ListItem[]
     claimedItems        ItemClaim[]
     role                Role                  @relation(fields: [roleId], references: [id])
@@ -126,7 +127,8 @@ model Item {
     note        String?
     imageUrl    String?
     quantity    Int?
-    archived    Boolean     @default(false)
+    archivedBy  User?       @relation(name: "ArchivedItems", fields: [archivedById], references: [id], onDelete: SetNull)
+    archivedById String?
     user        User        @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     createdBy   User        @relation(name: "CreatedItems", fields: [createdById], references: [id], onDelete: Cascade)
@@ -135,6 +137,7 @@ model Item {
     claims      ItemClaim[]
 
     @@index([userId])
+    @@index([archivedById])
     @@map("items")
 }
 

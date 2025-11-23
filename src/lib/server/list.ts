@@ -179,7 +179,7 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
             },
             {
                 item: {
-                    archived: true,
+                    archivedById: { not: null },
                     OR: [
                         { userId: options.loggedInUserId },
                         { createdById: options.loggedInUserId }
@@ -193,11 +193,11 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     // Anonymous users see all non-archived items
     itemListFilter.item = {
         OR: [
-            { archived: false },
+            { archivedById: null },
             ...(options.loggedInUserId
                 ? [
                     {
-                        archived: true,
+                        archivedById: { not: null },
                         OR: [
                             { userId: options.loggedInUserId },
                             { createdById: options.loggedInUserId }
@@ -248,8 +248,8 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     } else {
         itemDTOs.sort((a, b) => {
             // Sort archived items to the bottom
-            if (a.archived && !b.archived) return 1;
-            if (!a.archived && b.archived) return -1;
+            if (a.archivedById !== null && b.archivedById === null) return 1;
+            if (a.archivedById === null && b.archivedById !== null) return -1;
             // Then sort by displayOrder
             return (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity);
         });

@@ -52,7 +52,7 @@
             {$t("wishes.deny")}
         </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
-        {#if !item.archived || user?.id === item.addedBy?.id}
+        {#if item.archivedById === null || user?.id === item.addedBy?.id}
             <button
                 class="variant-ghost-primary btn btn-icon btn-icon-sm md:btn-icon-base"
                 aria-label={$t("wishes.edit")}

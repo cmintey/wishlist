@@ -285,7 +285,7 @@
             toastStore.trigger({
                 message: $t("wishes.archive-toast", { values: { archived } })
             });
-            item.archived = archived;
+            item.archivedById = archived ? user?.id ?? null : null;
         }
     };
 
@@ -373,7 +373,7 @@
                     </span>
                 {/if}
             </div>
-            {#if item.archived}
+            {#if item.archivedById !== null}
                 <div
                     class="flex-none whitespace-nowrap rounded px-2 py-1 text-xs font-semibold badge variant-soft-warning"
                     title={$t("wishes.archive")}

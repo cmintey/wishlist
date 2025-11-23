@@ -37,7 +37,7 @@
     let items = $derived.by(() => {
         let filtered = allItems.filter((item) => item.approved);
         if (!showArchived) {
-            filtered = filtered.filter((item) => !item.archived);
+            filtered = filtered.filter((item) => item.archivedById === null);
         }
         return filtered;
     });
