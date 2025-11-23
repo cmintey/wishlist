@@ -2,6 +2,7 @@
     import type { PageProps } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
+    import ArchiveToggle from "$lib/components/wishlists/chips/ArchiveToggle.svelte";
     import { goto, invalidate } from "$app/navigation";
     import { page } from "$app/state";
     import { onMount } from "svelte";
@@ -30,9 +31,16 @@
 
     let allItems: ItemOnListDTO[] = $state(data.list.items);
     let reordering = $state(false);
+    let showArchived = $state(false);
     let publicListUrl: URL | undefined = $state();
     let approvals = $derived(allItems.filter((item) => !item.approved));
-    let items = $derived(allItems.filter((item) => item.approved));
+    let items = $derived.by(() => {
+        let filtered = allItems.filter((item) => item.approved);
+        if (!showArchived) {
+            filtered = filtered.filter((item) => !item.archived);
+        }
+        return filtered;
+    });
     let listName = $derived.by(() => {
         if (data.list.name) {
             return data.list.name;
@@ -236,6 +244,7 @@
             <ClaimFilterChip />
         {/if}
         <SortBy />
+        <ArchiveToggle bind:showArchived />
     </div>
     {#if data.list.owner.isMe || data.list.isManager}
         <div class="flex flex-row flex-wrap items-center gap-2">

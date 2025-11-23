@@ -6,8 +6,10 @@ export const claimFilter = (filter: string | null, userId: string | null) => {
     } else if (filter === "claimed") {
         return (item: ItemOnListDTO) => {
             const userHasClaimed = item.claims.find((c) => userId && c.claimedBy?.id === userId);
-            return !item.isClaimable || userHasClaimed;
+            return (!item.isClaimable || userHasClaimed) && !item.archived;
         };
+    } else if (filter === "archived") {
+        return (item: ItemOnListDTO) => item.archived;
     }
     return (_item: ItemOnListDTO) => true;
 };

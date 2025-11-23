@@ -14,7 +14,6 @@ export interface GetItemsOptions {
     listOwnerId: string;
     listManagers?: Set<string>;
     loggedInUserId: string | null;
-    showArchivedItems?: boolean; // Show archived items - true for giftee/giver, false for others
 }
 
 export interface ListProperties {
@@ -247,7 +246,13 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
             itemDTOs.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
         }
     } else {
-        itemDTOs.sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity));
+        itemDTOs.sort((a, b) => {
+            // Sort archived items to the bottom
+            if (a.archived && !b.archived) return 1;
+            if (!a.archived && b.archived) return -1;
+            // Then sort by displayOrder
+            return (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity);
+        });
     }
 
     return itemDTOs;
