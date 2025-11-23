@@ -363,6 +363,7 @@
         "approve": "Schválit",
         "archive": "Archivovat",
         "archive-toast": "{archived, select, true {Položka archivována} other {Položka odarchivována}}",
+        "archive-warning": "Když archivujete <b>{name}</b>, majitel seznamu bude moci vidět toto přání.",
         "are-you-sure-you-wish-to-delete-item": "Opravdu chcete odebrat <b>{name}</b>?",
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Opravdu smazat <b>{name}</b> ze všech seznamů?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Než si zarezervuješ nějaký dárek, jestě je potřeba pár drobností.",

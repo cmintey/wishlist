@@ -22,8 +22,8 @@
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
 </script>
 
-{#if !onPublicList && item.userId === user?.id && !showForOwner}
-    <!-- Giftee viewing their own item - show archive button -->
+{#if !onPublicList && item.userId === user?.id && item.createdById === user?.id && !showForOwner}
+    <!-- Giftee who created the item - show archive/unarchive button -->
     <div class="flex flex-row gap-x-2 md:gap-x-4">
         <button
             class={[

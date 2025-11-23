@@ -367,6 +367,7 @@
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Do you want to delete <b>{name}</b> from this list or all lists?",
         "archive": "Archive",
         "archive-toast": "{archived, select, true {Item archived} other {Item unarchived}}",
+        "archive-warning": "When you archive <b>{name}</b>, the list owner will be able to see this wish.",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Before you can claim the item, we just need one thing from you.",
         "claim": "Claim",
         "claim-details": "Claim Details",

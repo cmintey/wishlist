@@ -402,6 +402,7 @@
         "approve": "Одобрить",
         "archive": "Архивировать",
         "archive-toast": "{archived, select, true {Элемент архивирован} other {Элемент разархивирован}}",
+        "archive-warning": "Когда вы архивируете <b>{name}</b>, владелец списка сможет увидеть это желание.",
         "approval-required": "{listOwner} должен будет одобрить ваше предложение, прежде чем оно будет добавлено в свой список.",
         "hang-tight-gathering-product-data": "Ожидайте, собираем данные о продукте",
         "unable-to-update-item-ordering": "Невозможно обновить порядок элементов",

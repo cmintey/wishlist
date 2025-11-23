@@ -247,6 +247,38 @@
     };
 
     const handleArchive = async (archived: boolean) => {
+        // Only the item creator (item.userId) or someone who claimed it can unarchive
+        const isItemCreator = user?.id === item.userId;
+        const hasClaimedItem = item.claims.some((claim) => claim.claimedBy?.id === user?.id);
+        
+        if (!archived && !isItemCreator && !hasClaimedItem) {
+            // User is trying to unarchive but doesn't have permission
+            errorToast(toastStore, $t("general.oops"));
+            return;
+        }
+        
+        // Show confirmation if user has claimed this item but is not the creator
+        // Only show warning when ARCHIVING, not when unarchiving
+        if (archived && hasClaimedItem && !isItemCreator) {
+            const settings: ModalSettings = {
+                type: "confirm",
+                title: $t("general.please-confirm"),
+                body: $t("wishes.archive-warning", { values: { name: itemNameShort } }),
+                response: async (r: boolean) => {
+                    if (r) {
+                        await doArchive(archived);
+                    }
+                },
+                buttonTextCancel: $t("general.cancel"),
+                buttonTextConfirm: $t("general.confirm")
+            };
+            modalStore.trigger(settings);
+        } else {
+            await doArchive(archived);
+        }
+    };
+
+    const doArchive = async (archived: boolean) => {
         const itemAPI = new ItemAPI(item.id);
         const resp = await (archived ? itemAPI.archive() : itemAPI.unarchive());
         if (resp.ok) {

@@ -385,6 +385,7 @@
         "approve": "Godkjenn",
         "archive": "Arkiver",
         "archive-toast": "{archived, select, true {Ønsket arkivert} other {Ønsket dearskivert}}",
+        "archive-warning": "Når du arkiverer <b>{name}</b>, vil listeeierno kunne se dette ønsket.",
         "share": "Del ønskeliste",
         "notes": "Notater",
         "view-wishes": "Se ønsker",

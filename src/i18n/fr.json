@@ -359,6 +359,7 @@
         "approve": "Approuver",
         "archive": "Archiver",
         "archive-toast": "{archived, select, true {Élément archivé} other {Élément désarchivé}}",
+        "archive-warning": "Lorsque vous archivez <b>{name}</b>, le propriétaire de la liste pourra voir ce souhait.",
         "approvals": "Approbations",
         "add-item": "Ajouter un objet",
         "approvals-waiting": "Vous avez {approvalCount, plural, one {# item} other {# items}} attendant votre approbation",

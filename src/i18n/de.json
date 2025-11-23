@@ -164,6 +164,7 @@
         "approvals-waiting": "Du hast {approvalCount, plural, one {# Artikel} other {# Artikel}} die auf deine Zustimmung warten",
         "archive": "Archivieren",
         "archive-toast": "{archived, select, true {Artikel archiviert} other {Artikel dearchiviert}}",
+        "archive-warning": "Wenn du <b>{name}</b> archivierst, kann der Listenbesitzer diesen Wunsch sehen.",
         "are-you-sure-you-wish-to-delete-item": "Bist du sicher, dass du <b>{name}</b> löschen möchten?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Bevor du den Artikel reservieren kannst, benötigen wir eine Information von dir.",
         "claim": "Reservieren",

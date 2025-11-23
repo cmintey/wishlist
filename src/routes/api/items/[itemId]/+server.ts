@@ -141,6 +141,20 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
             error(400, $t("errors.invalid-request"));
         }
 
+        // Only the item creator (item.userId) OR someone who claimed it can unarchive items
+        if (!archived) {
+            const userHasClaim = await client.itemClaim.findFirst({
+                where: {
+                    itemId: item.id,
+                    claimedById: user.id
+                }
+            });
+
+            if (user.id !== item.userId && !userHasClaim) {
+                error(401, $t("errors.not-authorized"));
+            }
+        }
+
         const updatedItem = await client.item.update({
             where: {
                 id: item.id

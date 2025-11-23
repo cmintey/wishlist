@@ -338,6 +338,7 @@
         "approve": "Aprobar",
         "archive": "Archivar",
         "archive-toast": "{archived, select, true {Artículo archivado} other {Artículo desarchivado}}",
+        "archive-warning": "Cuando archive <b>{name}</b>, el propietario de la lista podrá ver este deseo.",
         "are-you-sure-you-wish-to-delete-item": "¿Está seguro de querer eliminar a <b>{name}</b>?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Antes de que puedas reclamar el artículo, solo necesitamos una cosa de ti.",
         "claim-details": "Detalles reclamo",

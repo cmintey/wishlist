@@ -360,6 +360,7 @@
         "approve": "Goedkeuren",
         "archive": "Archiveren",
         "archive-toast": "{archived, select, true {Item gearchiveerd} other {Item gede-archiveerd}}",
+        "archive-warning": "Wanneer u <b>{name}</b> archiveert, kan de lijsteigenaar deze wens zien.",
         "are-you-sure-you-wish-to-delete-item": "Weet u zeker dat u <b> {name} </b> wilt verwijderen?",
         "are-you-sure-you-wish-to-delete-item-multiple-lists": "Wilt u <b> {name} </b> uit deze lijst of alle lijsten verwijderen?",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Voordat u het item kunt claimen, hebben we slechts één ding van u nodig.",
