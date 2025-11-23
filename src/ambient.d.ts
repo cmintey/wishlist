@@ -12,7 +12,7 @@ declare module "virtual:pwa-register" {
 
 type NavItem = {
     labelKey: string;
-    href: string;
+    href: (user?: LocalUser | null) => string;
     icon: string;
 };
 

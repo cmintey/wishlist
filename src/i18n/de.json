@@ -87,7 +87,7 @@
         "wishlist-mode-wishlist": "Wunschliste",
         "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann.",
         "password-reset-link": "Passwort zurücksetzen Link",
-        "enable-default-list-creation": "Aktiviere Erstellung einer Standard Liste",
+        "enable-default-list-creation": "Aktiviere Erstellung einer Standard-Liste",
         "enable-default-list-creation-tooltip": "Aktiviere das Erstellen einer Liste wenn ein Benutzer einer Gruppe beitritt. Benutzer können Listen weiterhin selbst erstellen.",
         "list-creation": "Listeneinstellungen",
         "allow-public-lists-tooltip": "Erlaube den Benutzern die Liste öffentlich verfügbar zu machen. Dies hat keinen Einfluss, wenn die Gruppe im \"Register-Modus\" ist.",
@@ -113,13 +113,21 @@
         "wishlist-mode-wishlist-tooltip": "Mehrere Benutzer und mehrere Listen mit Reservierungen und Vorschlägen. Listen können öffentlich gemacht werden, wenn die Gruppe es zulässt.",
         "disable-password-login": "Login mit Passwort deaktivieren",
         "disable-password-login-tooltip": "Deaktiviert den Login via Passwort. Danach nur Header und OAuth Authentifizierung möglich.",
-        "oidc-auto-redirect": "Auto Redirect",
+        "oidc-auto-redirect": "Automatische Weiterleitung",
         "oidc-auto-redirect-tooltip": "Wenn aktiviert, wird der Nutzer automatisch von der Login Seite auf die Login Seite des Identity Providers umgeleitet. Dies kann umgangen werden, indem '?direct=1' der URL hinzugefügt wird.",
-        "oidc-auto-register": "Auto Register",
+        "oidc-auto-register": "Automatisch registrieren",
         "oidc-auto-register-tooltip": "Erstelle automatisch einen neuen Account für OAuth Nutzer, die sich zum ersten Mal einloggen.",
         "oidc-client-id": "Client Id",
         "claims-require-email": "Email benötigt",
-        "claims-require-email-tooltip": "Es wird eine Email Adresse benötigt um dem Artikel anonym zu beanspruchen."
+        "claims-require-email-tooltip": "Es wird eine Email Adresse benötigt um dem Artikel anonym zu beanspruchen.",
+        "disable-email-verification": "Email-Verifizierung deaktivieren",
+        "disable-email-verification-description": "Deaktiviere die Bedigung, dass die Email eines Nutzers mit dem IdP verifiziert werden muss, um einen Account zu erstellen oder zu verlinken.",
+        "enable-sync": "Synchronisierung aktivieren",
+        "enable-sync-description": "Synchronisierung von Nutzerdaten wie Name und Email vom IdP aktivieren.",
+        "oidc-auto-redirect-description": "Automatisch zur Anmeldeseite deines IdPs weiterleiten.",
+        "profile-disabled": "Dein Profil wird von deinem OAuth-Provider verwaltet.",
+        "show-for-list-owner": "Dem Listeninhaber anzeigen",
+        "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen."
     },
     "wishes": {
         "filter": "Filter",
@@ -213,7 +221,12 @@
         "add-a-list-manager": "Listen Manager hinzufügen",
         "add-a-list-manager-explainer": "Suche nach einem Benutzer in dieser Gruppe um ihn als Manager zu deiner Liste hinzuzufügen.",
         "add-a-manager": "Manager hinzufügen",
-        "list-managers": "Listen Managers"
+        "list-managers": "Listen Managers",
+        "claims": "{claimCount, plural, one {# Reservierung} other {# Reservierungen}}",
+        "hide-claims": "Beanspruchte Wünsche verstecken",
+        "list-managers-tooltip": "Listenmanager können alles tun, was du tun kannst. Dazu gehört Vorschläge anzunehmen und abzulehnen, Listeneinstellungen zu aktualisieren und Gegenstände von der Liste zu entfernen. Wenn deine Gruppe auf den Modus 'Überraschung' gestellt ist, werden alle Gegenstände, die ein Listenmanager hinzugefügt hat, auch dir angezeigt.",
+        "no-managers": "Keine Manager",
+        "show-claims": "Beanspruchte Wünsche anzeigen"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -393,7 +406,8 @@
         "language": "Sprache",
         "na": "N/V",
         "use-system-language": "Benutze Systemsprache",
-        "select-all": "Alles auswählen"
+        "select-all": "Alles auswählen",
+        "oauth": "OAuth"
     },
     "app": {
         "home": "Start",

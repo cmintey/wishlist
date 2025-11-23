@@ -10,24 +10,35 @@
     interface Props {
         navItems: NavItem[];
         user: LocalUser | null;
+        groups: GroupInformation[] | null;
         isProxyUser: boolean;
     }
 
-    const { navItems, user, isProxyUser }: Props = $props();
+    const { navItems, user, groups, isProxyUser }: Props = $props();
     const t = getFormatter();
 
     const drawerStore = getDrawerStore();
     const drawerSettings: DrawerSettings = {
         id: "nav",
         position: "left",
-        width: "w-[280px] md:w-[480px]"
+        width: "w-[280px] md:w-[480px]",
+        meta: {
+            user
+        }
     };
 </script>
 
 {#snippet wishlistHeader()}
     <a class="flex flex-row items-center gap-x-2" href="/">
         <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-        <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
+        <span
+            class={[
+                "text-primary-900-50-token text-2xl font-bold md:text-3xl",
+                groups && groups.length > 1 ? "hidden sm:block" : "block"
+            ]}
+        >
+            Wishlist
+        </span>
     </a>
 {/snippet}
 
@@ -45,7 +56,7 @@
                     </button>
                     {@render wishlistHeader()}
                 {:else}
-                    <BackButton />
+                    <BackButton header={wishlistHeader} />
                 {/if}
             {:else}
                 {@render wishlistHeader()}
@@ -58,9 +69,9 @@
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"
-                    class:variant-filled-primary={page.url.pathname === navItem.href}
+                    class:variant-filled-primary={page.url.pathname + page.url.search === navItem.href(user)}
                     data-sveltekit-preload-data
-                    href={navItem.href}
+                    href={navItem.href(user)}
                 >
                     {$t(navItem.labelKey)}
                 </a>
@@ -69,6 +80,6 @@
     {/if}
 
     {#snippet trail()}
-        <NavMenu {isProxyUser} {user} />
+        <NavMenu {groups} {isProxyUser} {user} />
     {/snippet}
 </AppBar>

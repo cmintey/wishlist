@@ -9,6 +9,7 @@
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -87,7 +88,7 @@
                 const group = await groupAPI.delete();
                 if (group) {
                     await invalidateAll();
-                    goto("/");
+                    goto(resolve("/lists"));
                 }
             },
             buttonTextCancel: $t("general.cancel"),
@@ -97,7 +98,7 @@
 </script>
 
 {#if data.config.listMode !== "registry"}
-    <div class="flex gap-x-4 py-4">
+    <div class="flex flex-wrap gap-2 py-4">
         <button
             class="variant-filled-primary btn"
             onclick={() => modalStore.trigger(addUserModalSettings)}
@@ -163,7 +164,7 @@
             </tbody>
         </table>
     </div>
-    <div>
+    <div class="flex flex-wrap gap-2">
         <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>{$t("admin.delete-group-title")}</button>
         <ClearListsButton groupId={page.params.groupId} />
         <ClearListsButton claimed groupId={page.params.groupId} />

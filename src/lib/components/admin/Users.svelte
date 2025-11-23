@@ -8,6 +8,7 @@
     import { getFormatter } from "$lib/i18n";
 
     type User = {
+        id: string;
         username: string;
         name: string;
         email?: string;
@@ -29,12 +30,12 @@
     let userData: TableSource = $derived({
         head: [$t("auth.name"), $t("auth.username"), $t("auth.email"), $t("admin.admin"), $t("admin.groups")],
         body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
-        meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin"])
+        meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin", "id"])
     });
 
     const selectionHandler = (meta: CustomEvent<string[]>) => {
         const user = meta.detail as unknown as User;
-        goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.username}`);
+        goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
     };
 </script>
 

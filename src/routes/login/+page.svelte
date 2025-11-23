@@ -8,6 +8,7 @@
     import { goto } from "$app/navigation";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
@@ -24,7 +25,11 @@
             });
             if (!resp.ok) {
                 oAuthError = await resp.json();
-                goto("/login?error=" + (oAuthError?.message || $t("general.oops")));
+                goto(
+                    resolve("/login") +
+                        "?" +
+                        new URLSearchParams({ error: oAuthError?.message || $t("general.oops") }).toString()
+                );
             } else if (resp.redirected) {
                 goto(resp.url, { invalidateAll: true });
             }
@@ -143,8 +148,8 @@
         </div>
     </form>
     {#if data.error}
-        <Alert class="w-80 md:w-1/2" noicon title="Failed to authenticate with OAuth" type="error">
-            <pre>{data.error}</pre>
+        <Alert class="w-80 md:w-1/2" noicon title={$t("errors.oidc-error")} type="error">
+            <pre class="text-wrap">{data.error}</pre>
         </Alert>
     {/if}
 </div>

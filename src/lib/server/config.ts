@@ -74,7 +74,7 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "oidc.disableEmailVerification": booleanTransformer
 };
 
-const defaultConfig: Config = {
+const getDefaultConfig = (): Config => ({
     enableSignup: true,
     suggestions: {
         enable: true,
@@ -98,7 +98,7 @@ const defaultConfig: Config = {
     oidc: {
         enable: false
     }
-};
+});
 
 function buildConfig(configMap: Record<string, string | null>, includeSensitive = false): Config {
     const config: Partial<Config> = {};
@@ -111,7 +111,7 @@ function buildConfig(configMap: Record<string, string | null>, includeSensitive 
         }
     }
 
-    return deepMerge(defaultConfig, config) as Config;
+    return deepMerge(getDefaultConfig(), config) as Config;
 }
 
 function setDeep(obj: Record<string, any>, path: string[], value: any) {

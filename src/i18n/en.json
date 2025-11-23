@@ -225,6 +225,7 @@
         "no-email-provided": "No email provided",
         "no-group-friendly-msg": "If you're seeing this page, it's because you aren't in a group yet! Either request a group to join, or create your own.",
         "not-authorized": "Not Authorized",
+        "oidc-error": "Failed to authenticate with OAuth",
         "one-or-more-items-missing-an-id": "One or more items missing an id",
         "password-min-strength": "Password must be at least ''{minStrength}''",
         "password-must-not-be-blank": "Password must not be blank",

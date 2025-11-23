@@ -9,6 +9,7 @@ export const load: PageServerLoad = async () => {
 
     const usersQuery = client.user.findMany({
         select: {
+            id: true,
             username: true,
             name: true,
             email: true,

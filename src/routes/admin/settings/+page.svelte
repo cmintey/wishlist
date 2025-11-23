@@ -5,7 +5,7 @@
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { getToastStore } from "@skeletonlabs/skeleton";
+    import { getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
 
     const { data }: PageProps = $props();
@@ -24,7 +24,7 @@
     let config = $state(data.config);
     let groups = $state(data.groups);
     let sending = $state(false);
-    let saved = $state(false);
+    let saving = $state(false);
 </script>
 
 <form
@@ -33,10 +33,12 @@
     use:enhance={({ action }) => {
         if (action.search.endsWith("?/send-test")) {
             sending = true;
+        } else {
+            saving = true;
         }
         return ({ action, result }) => {
             if (action.search.endsWith("?/settings") && result.type === "success") {
-                saved = true;
+                saving = false;
                 toastStore.trigger({ message: $t("admin.settings-saved-toast") });
             }
             if (action.search.endsWith("?/send-test") && result.type === "success") {
@@ -72,7 +74,7 @@
         <!-- Settings -->
         <div class="w-full">
             <General {config} {groups} hidden={currentHash !== options[0].hash} />
-            <Email {config} hidden={currentHash !== options[1].hash} {saved} {sending} />
+            <Email {config} hidden={currentHash !== options[1].hash} {sending} />
             <Security {config} hidden={currentHash !== options[2].hash} />
 
             {#if page.form?.error}
@@ -81,8 +83,11 @@
 
             <!-- Save buttons -->
             <div class="flex w-full flex-row justify-end pt-5">
-                <button class="variant-filled-primary btn" type="submit">
-                    {$t("general.save")}
+                <button class="variant-filled-primary btn" disabled={saving} type="submit">
+                    {#if saving}
+                        <ProgressRadial stroke={64} width="w-6" />
+                    {/if}
+                    <span>{$t("general.save")}</span>
                 </button>
             </div>
         </div>

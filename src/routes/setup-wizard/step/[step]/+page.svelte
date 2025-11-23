@@ -8,6 +8,7 @@
     import { ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
+    import { resolve } from "$app/paths";
 
     let locked = false;
 
@@ -79,7 +80,7 @@
             <button
                 class="variant-filled-primary btn"
                 disabled={locked}
-                onclick={() => goto("/login", { invalidateAll: true })}
+                onclick={() => goto(resolve("/login"), { invalidateAll: true })}
                 type="submit"
             >
                 {$t("setup.complete")}

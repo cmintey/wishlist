@@ -53,7 +53,7 @@
     class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
     class:bottom-24={$isInstalled}
     class:bottom-4={!$isInstalled}
-    onclick={() => goto(resolve("/lists/create"))}
+    onclick={() => goto(resolve("/lists/create"), { replaceState: true })}
 >
     <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     <span class="sr-only">{$t("wishes.create-list")}</span>

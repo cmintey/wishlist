@@ -13,7 +13,9 @@
     const { navItems, user }: Props = $props();
     const t = getFormatter();
 
-    let tabsBottomNav: number | undefined = $state(navItems.findIndex((n) => page.url.pathname.startsWith(n.href)));
+    let tabsBottomNav: number | undefined = $state(
+        navItems.findIndex((n) => page.url.pathname.startsWith(n.href(user)))
+    );
 </script>
 
 {#if user && $isInstalled}
@@ -31,9 +33,12 @@
                 name={$t(navItem.labelKey)}
                 {value}
                 bind:group={tabsBottomNav}
-                on:click={() => goto(`${navItem.href}`)}
+                on:click={() => goto(navItem.href(user))}
             >
-                <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
+                <div class="flex flex-col">
+                    <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
+                    <span class="text-xs">{$t(navItem.labelKey)}</span>
+                </div>
             </Tab>
         {/each}
     </TabGroup>

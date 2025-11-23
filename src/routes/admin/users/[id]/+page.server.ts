@@ -10,13 +10,13 @@ export const load: PageServerLoad = async ({ params }) => {
     const user = await requireRole(Role.ADMIN);
     const $t = await getFormatter();
 
-    if (user.username === params.username) {
+    if (user.username === params.id) {
         redirect(303, "/account");
     }
 
     const editingUser = await client.user.findUnique({
         where: {
-            username: params.username
+            id: params.id
         },
         select: {
             username: true,
@@ -42,7 +42,7 @@ export const actions: Actions = {
 
         const user = await client.user.findUnique({
             where: {
-                username: params.username
+                id: params.id
             },
             select: {
                 id: true
@@ -69,7 +69,7 @@ export const actions: Actions = {
 
         await client.user.update({
             where: {
-                username: params.username
+                id: params.id
             },
             data: {
                 roleId: Role.ADMIN
@@ -83,7 +83,7 @@ export const actions: Actions = {
 
         await client.user.update({
             where: {
-                username: params.username
+                id: params.id
             },
             data: {
                 roleId: Role.USER
