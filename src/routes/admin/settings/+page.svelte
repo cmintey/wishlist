@@ -7,6 +7,7 @@
     import type { PageProps } from "./$types";
     import { getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
+    import { errorToast } from "$lib/components/toasts";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -43,7 +44,14 @@
             }
             if (action.search.endsWith("?/send-test") && result.type === "success") {
                 sending = false;
-                toastStore.trigger({ message: $t("admin.test-email-sent-toast") });
+                if (!result.data?.success) {
+                    const message: string = result.data?.message
+                        ? (result.data.message as string)
+                        : $t("errors.something-went-wrong");
+                    errorToast(toastStore, message);
+                } else {
+                    toastStore.trigger({ message: $t("admin.test-email-sent-toast") });
+                }
             }
         };
     }}

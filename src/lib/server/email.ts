@@ -44,13 +44,7 @@ const sendEmail = async (options: Mail.Options) => {
 
     if (
         !config.smtp.enable ||
-        (config.smtp.enable &&
-            !config.smtp.host &&
-            !config.smtp.port &&
-            !config.smtp.user &&
-            !config.smtp.pass &&
-            !config.smtp.from &&
-            !config.smtp.fromName)
+        (config.smtp.enable && !config.smtp.host && !config.smtp.port && !config.smtp.from && !config.smtp.fromName)
     ) {
         logger.error("SMTP not set up properly, check your settings");
         return {
@@ -62,10 +56,7 @@ const sendEmail = async (options: Mail.Options) => {
     const transport = nodemailer.createTransport({
         port: config.smtp.port,
         host: config.smtp.host,
-        auth: {
-            user: config.smtp.user,
-            pass: config.smtp.pass
-        }
+        auth: config.smtp.user && config.smtp.pass ? { user: config.smtp.user, pass: config.smtp.pass } : undefined
     });
 
     return await transport

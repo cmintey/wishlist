@@ -17,13 +17,7 @@
     let config = $state(config_);
     let enabled = $state(config.smtp.enable);
     let allFilled = $derived(
-        enabled &&
-            config.smtp.from &&
-            config.smtp.fromName &&
-            config.smtp.host &&
-            config.smtp.pass &&
-            config.smtp.port &&
-            config.smtp.user
+        enabled && config.smtp.from && config.smtp.fromName && config.smtp.host && config.smtp.port
     );
 </script>
 
@@ -70,7 +64,6 @@
                         name="smtpUser"
                         class="input"
                         autocomplete="off"
-                        required
                         type="text"
                         bind:value={config.smtp.user}
                     />
@@ -79,7 +72,6 @@
                     id="smtpPass"
                     name="smtpPass"
                     label={$t("auth.password")}
-                    required
                     bind:value={config.smtp.pass}
                 />
                 <label for="smtpFrom">
