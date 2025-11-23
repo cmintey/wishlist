@@ -25,8 +25,6 @@
             config.smtp.port &&
             config.smtp.user
     );
-
-    $inspect(config.smtp);
 </script>
 
 <div class={{ hidden, "flex flex-col gap-4": !hidden }}>
