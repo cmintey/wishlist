@@ -120,7 +120,7 @@ async function deleteClaim(id: string, user: LocalUser) {
                 id: claim.itemId
             },
             data: {
-                archived: false
+                archivedById: null
             },
             include: getItemInclusions()
         });

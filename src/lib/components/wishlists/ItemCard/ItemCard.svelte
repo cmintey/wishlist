@@ -247,19 +247,10 @@
     };
 
     const handleArchive = async (archived: boolean) => {
-        // Only the item creator (item.userId) or someone who claimed it can unarchive
-        const isItemCreator = user?.id === item.userId;
+        const isGiftee = user?.id === item.userId;
         const hasClaimedItem = item.claims.some((claim) => claim.claimedBy?.id === user?.id);
         
-        if (!archived && !isItemCreator && !hasClaimedItem) {
-            // User is trying to unarchive but doesn't have permission
-            errorToast(toastStore, $t("general.oops"));
-            return;
-        }
-        
-        // Show confirmation if user has claimed this item but is not the creator
-        // Only show warning when ARCHIVING, not when unarchiving
-        if (archived && hasClaimedItem && !isItemCreator) {
+        if (archived && hasClaimedItem && !isGiftee) {
             const settings: ModalSettings = {
                 type: "confirm",
                 title: $t("general.please-confirm"),
@@ -285,7 +276,7 @@
             toastStore.trigger({
                 message: $t("wishes.archive-toast", { values: { archived } })
             });
-            item.archivedById = archived ? user?.id ?? null : null;
+            item.archived = archived;
         }
     };
 
@@ -353,49 +344,6 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-        {#if item.archivedById !== null}
-        <!-- Archived item - simplified layout -->
-        <header class="p-4">
-            <div class="flex items-start justify-between gap-2">
-                <div class="flex-1">
-                    <span id={`${id}-name`} class="line-clamp-2 text-xl font-bold md:text-2xl" data-testid="name">
-                        {item.name}
-                    </span>
-                </div>
-            </div>
-        </header>
-
-        <footer class="card-footer flex flex-row items-center justify-end gap-2">
-            <!-- Unarchive button - only show if user is the one who archived it -->
-            {#if user?.id === item.archivedById}
-                <button
-                    class="variant-soft-warning btn btn-icon btn-icon-sm md:btn-icon-base"
-                    aria-label={$t("a11y.unarchive")}
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        handleArchive(false);
-                    }}
-                    title={$t("a11y.unarchive")}
-                >
-                    <iconify-icon icon="ion:archive"></iconify-icon>
-                </button>
-            {/if}
-
-            <!-- Delete button -->
-            <button
-                class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
-                aria-label={$t("wishes.delete")}
-                onclick={(e) => {
-                    e.stopPropagation();
-                    handleDelete();
-                }}
-                title={$t("wishes.delete")}
-            >
-                <iconify-icon icon="ion:trash"></iconify-icon>
-            </button>
-        </footer>
-    {:else}
-        <!-- Active item - full layout -->
         <header class="p-4" class:pb-0={item.price || item.itemPrice || item.quantity || item.description}>
         <div class="flex items-start justify-between gap-2">
             <div class="flex-1">
@@ -416,10 +364,20 @@
                     </span>
                 {/if}
             </div>
+            {#if item.archived}
+                <div
+                    class="flex-none whitespace-nowrap rounded px-2 py-1 text-xs font-semibold badge variant-soft-warning"
+                    title={$t("wishes.archive")}
+                    data-testid="archived-badge"
+                >
+                    <iconify-icon icon="ion:archive" class="mr-1 inline" aria-hidden="true"></iconify-icon>
+                    {$t("wishes.archive")}
+                </div>
+            {/if}
         </div>
     </header>
 
-   <div class="flex flex-row gap-x-4 p-4">
+    <div class="flex flex-row gap-x-4 p-4">
         <Image
             class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40"
             alt={item.name}
@@ -438,79 +396,78 @@
                 </div>
             {/if}
 
-                {#if item.quantity}
-                    <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
-                        <div class="flex flex-row flex-wrap gap-x-2">
-                            <span data-testid="quantity-desired">
-                                {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
+            {#if item.quantity}
+                <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg" data-testid="quantity">
+                    <iconify-icon icon="ion:gift"></iconify-icon>
+                    <div class="flex flex-row flex-wrap gap-x-2">
+                        <span data-testid="quantity-desired">
+                            {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
+                        </span>
+                        {#if user?.id !== item.userId || showClaimForOwner}
+                            <span>·</span>
+                            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
+                                {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
                             </span>
-                            {#if user?.id !== item.userId || showClaimForOwner}
-                                <span>·</span>
-                                <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
-                                    {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                                </span>
-                            {/if}
-                        </div>
-                    </div>
-                {/if}
-
-                <div class="flex items-center gap-2">
-                    <iconify-icon icon="ion:person"></iconify-icon>
-                    <span class="text-wrap text-base md:text-lg" data-testid="added-by">
-                        {#if showFor}
-                            {@html $t("wishes.for", { values: { name: item.user.name } })}
-                        {:else if !onPublicList}
-                            {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
-                        {:else}
-                            {@html item.addedBy.id === item.user.id
-                                ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                                : $t("wishes.added-by-somebody-else")}
                         {/if}
-                    </span>
-                </div>
-
-                {#if item.note}
-                    <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-                        <iconify-icon icon="ion:reader"></iconify-icon>
-                        <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
-                            <Markdown source={item.note} />
-                        </div>
                     </div>
-                {/if}
-            </div>
-        </div>
-
-        <footer
-            class="card-footer flex flex-row items-center"
-            class:justify-between={!reorderActions}
-            class:justify-center={reorderActions}
-        >
-            {#if reorderActions}
-                <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
-            {:else}
-                <ClaimButtons
-                    {item}
-                    onClaim={handleClaim}
-                    {onPublicList}
-                    onPurchase={handlePurchased}
-                    onArchive={handleArchive}
-                    onUnclaim={handleUnclaim}
-                    showForOwner={showClaimForOwner}
-                    showName={showClaimedName}
-                    {user}
-                />
-
-                <ManageButtons
-                    {item}
-                    onApprove={() => handleApproval(true)}
-                    onDelete={handleDelete}
-                    onDeny={() => handleApproval(false)}
-                    onEdit={handleEdit}
-                    {user}
-                    {userCanManage}
-                />
+                </div>
             {/if}
-        </footer>
-    {/if}
+
+            <div class="flex items-center gap-2">
+                <iconify-icon icon="ion:person"></iconify-icon>
+                <span class="text-wrap text-base md:text-lg" data-testid="added-by">
+                    {#if showFor}
+                        {@html $t("wishes.for", { values: { name: item.user.name } })}
+                    {:else if !onPublicList}
+                        {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
+                    {:else}
+                        {@html item.addedBy.id === item.user.id
+                            ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
+                            : $t("wishes.added-by-somebody-else")}
+                    {/if}
+                </span>
+            </div>
+
+            {#if item.note}
+                <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
+                    <iconify-icon icon="ion:reader"></iconify-icon>
+                    <div class="line-clamp-2 whitespace-pre-wrap" data-testid="notes">
+                        <Markdown source={item.note} />
+                    </div>
+                </div>
+            {/if}
+        </div>
+    </div>
+
+    <footer
+        class="card-footer flex flex-row items-center"
+        class:justify-between={!reorderActions}
+        class:justify-center={reorderActions}
+    >
+        {#if reorderActions}
+            <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
+        {:else}
+            <ClaimButtons
+                {item}
+                onClaim={handleClaim}
+                {onPublicList}
+                onPurchase={handlePurchased}
+                onArchive={handleArchive}
+                onUnclaim={handleUnclaim}
+                showForOwner={showClaimForOwner}
+                showName={showClaimedName}
+                {user}
+            />
+
+            <ManageButtons
+                {item}
+                onApprove={() => handleApproval(true)}
+                onDelete={handleDelete}
+                onDeny={() => handleApproval(false)}
+                onEdit={handleEdit}
+                {user}
+                {userCanManage}
+            />
+        {/if}
+    </footer>
 </div>
