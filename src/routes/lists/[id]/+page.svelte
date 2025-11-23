@@ -12,7 +12,7 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
-    import { listViewPreference, getListViewPreference } from "$lib/stores/list-view-preference";
+    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
@@ -45,37 +45,11 @@
         }
     });
     let hideDescription = $state(false);
+
     // Initialize from server data (cookie) to prevent flicker
     // This value comes from the server, so SSR renders the correct view
-    let isTileView = $state(data.initialViewPreference === "tile");
-
-    // Sync cookie with localStorage on mount (in case localStorage was updated elsewhere)
-    onMount(() => {
-        const localStorageValue = getListViewPreference();
-        const cookieMatches = document.cookie.includes(`listViewPreference=${localStorageValue}`);
-
-        // If cookie doesn't match localStorage, update cookie
-        if (!cookieMatches) {
-            document.cookie = `listViewPreference=${localStorageValue}; path=/; max-age=${60 * 60 * 24 * 365}`;
-        }
-
-        // Update state if needed
-        const shouldBeTile = localStorageValue === "tile";
-        if (isTileView !== shouldBeTile) {
-            isTileView = shouldBeTile;
-        }
-    });
-
-    // Keep synced with store changes
-    $effect(() => {
-        const storeValue = $listViewPreference;
-        const newIsTileView = storeValue === "tile";
-
-        // Only update if the value actually changed
-        if (isTileView !== newIsTileView) {
-            isTileView = newIsTileView;
-        }
-    });
+    initListViewPreference(data.initialViewPreference);
+    let isTileView = $derived(getListViewPreference() === "tile");
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -315,13 +289,13 @@
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
                         groupId={data.list.groupId}
+                        {isTileView}
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
-                        {isTileView}
                     />
                 </div>
             {/each}
@@ -358,6 +332,7 @@
                 <div animate:flip={{ duration: flipDurationMs }}>
                     <ItemCard
                         groupId={data.list.groupId}
+                        {isTileView}
                         {item}
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
@@ -367,7 +342,6 @@
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
-                        {isTileView}
                     />
                 </div>
             {/each}
@@ -381,6 +355,7 @@
                     >
                         <ItemCard
                             groupId={data.list.groupId}
+                            {isTileView}
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}
@@ -388,7 +363,6 @@
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
                             userCanManage={data.list.isManager}
-                            {isTileView}
                         />
                     </div>
                 {/each}

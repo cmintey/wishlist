@@ -7,46 +7,18 @@
     import noClaims from "$lib/assets/no_claims.svg";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
-    import { listViewPreference, getListViewPreference } from "$lib/stores/list-view-preference";
+    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
     import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
-    import { onMount } from "svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
     let items: ItemOnListDTO[] = $state(data.items);
-    
+
     // Initialize from server data (cookie) to prevent flicker
     // This value comes from the server, so SSR renders the correct view
-    let isTileView = $state(data.initialViewPreference === "tile");
-    
-    // Sync cookie with localStorage on mount (in case localStorage was updated elsewhere)
-    onMount(() => {
-        const localStorageValue = getListViewPreference();
-        const cookieMatches = document.cookie.includes(`listViewPreference=${localStorageValue}`);
-        
-        // If cookie doesn't match localStorage, update cookie
-        if (!cookieMatches) {
-            document.cookie = `listViewPreference=${localStorageValue}; path=/; max-age=${60 * 60 * 24 * 365}`;
-        }
-        
-        // Update state if needed
-        const shouldBeTile = localStorageValue === "tile";
-        if (isTileView !== shouldBeTile) {
-            isTileView = shouldBeTile;
-        }
-    });
-    
-    // Keep synced with store changes
-    $effect(() => {
-        const storeValue = $listViewPreference;
-        const newIsTileView = storeValue === "tile";
-        
-        // Only update if the value actually changed
-        if (isTileView !== newIsTileView) {
-            isTileView = newIsTileView;
-        }
-    });
+    initListViewPreference(data.initialViewPreference);
+    let isTileView = $derived(getListViewPreference() === "tile");
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -87,14 +59,13 @@
 {:else}
     <div
         class={isTileView
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 rounded-container-token transition-opacity duration-150"
-            : "flex flex-col space-y-4 rounded-container-token transition-opacity duration-150"
-        }
+            ? "grid grid-cols-1 gap-4 transition-opacity duration-150 rounded-container-token sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5"
+            : "flex flex-col space-y-4 transition-opacity duration-150 rounded-container-token"}
         data-testid="claims-container"
     >
         {#each sortedItems as item (item.id)}
             <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard {item} requireClaimEmail showClaimedName showFor user={data.user} {isTileView} />
+                <ItemCard {isTileView} {item} requireClaimEmail showClaimedName showFor user={data.user} />
             </div>
         {/each}
     </div>
