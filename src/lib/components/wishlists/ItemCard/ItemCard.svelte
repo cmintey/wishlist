@@ -249,8 +249,9 @@
     const handleArchive = async (archived: boolean) => {
         const isGiftee = user?.id === item.userId;
         const hasClaimedItem = item.claims.some((claim) => claim.claimedBy?.id === user?.id);
+        const itemCreatedByGiftee = item.createdById === item.userId;
         
-        if (archived && hasClaimedItem && !isGiftee) {
+        if (archived && hasClaimedItem && !isGiftee && !itemCreatedByGiftee) {
             const settings: ModalSettings = {
                 type: "confirm",
                 title: $t("general.please-confirm"),
@@ -276,7 +277,11 @@
             toastStore.trigger({
                 message: $t("wishes.archive-toast", { values: { archived } })
             });
-            item.archived = archived;
+            const updatedItem = await resp.json();
+            item.archived = updatedItem.archived;
+            item.archivedById = updatedItem.archivedById;
+        } else {
+            errorToast(toastStore, $t("errors.unable-to-update-item"));
         }
     };
 

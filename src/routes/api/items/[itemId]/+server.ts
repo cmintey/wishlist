@@ -127,12 +127,6 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
     const $t = await getFormatter();
     const item = await validateItem(params?.itemId);
 
-    // item is not created by the user or for the user and
-    // item is not on a list which is managed by the user
-    if (user.id !== item.createdById && user.id !== item.userId && !isItemOnManagedList(item, user)) {
-        error(401, $t("errors.not-authorized"));
-    }
-
     try {
         const body = (await request.json()) as Record<string, unknown>;
         const { archived } = body;
@@ -141,20 +135,22 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
             error(400, $t("errors.invalid-request"));
         }
 
-        // Only the item creator (item.userId) OR the user who archived it can unarchive items
-        if (!archived) {
-            const currentItem = await client.item.findUnique({
-                where: {
-                    id: item.id
-                },
-                select: {
-                    archivedById: true
+        // Check if user created the item or claimed it
+        const userClaim = await client.itemClaim.findFirst({
+            where: {
+                itemId: item.id,
+                claimedBy: {
+                    id: user.id
                 }
-            });
-
-            if (user.id !== item.userId && user.id !== currentItem?.archivedById) {
-                error(401, $t("errors.not-authorized"));
             }
+        });
+
+        const userIsCreator = user.id === item.createdById;
+        const userHasClaimed = userClaim !== null;
+
+        // Only the creator or someone who claimed the item can archive/unarchive
+        if (!userIsCreator && !userHasClaimed) {
+            error(401, $t("errors.not-authorized"));
         }
 
         const updatedItem = await client.item.update({
