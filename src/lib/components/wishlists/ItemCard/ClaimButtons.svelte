@@ -32,6 +32,7 @@
                 item.archivedById === null && "variant-ringed-warning"
             ].join(" ")}
             aria-label={item.archivedById !== null ? $t("a11y.unarchive") : $t("wishes.archive")}
+            disabled={item.archivedById !== null && user?.id !== item.archivedById}
             onclick={(e) => {
                 e.stopPropagation();
                 onArchive?.(item.archivedById === null);
@@ -74,6 +75,7 @@
                 item.archivedById === null && "variant-ringed-warning"
             ].join(" ")}
             aria-label={item.archivedById !== null ? $t("a11y.unarchive") : $t("wishes.archive")}
+            disabled={item.archivedById !== null && user?.id !== item.archivedById}
             onclick={(e) => {
                 e.stopPropagation();
                 onArchive?.(item.archivedById === null);

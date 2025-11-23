@@ -241,9 +241,21 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
 
     if (options.sort === "price") {
         if (options.sortDir === "desc") {
-            itemDTOs.sort((a, b) => (b.itemPrice?.value ?? -Infinity) - (a.itemPrice?.value ?? -Infinity));
+            itemDTOs.sort((a, b) => {
+                // Sort archived items to the bottom
+                if (a.archivedById !== null && b.archivedById === null) return 1;
+                if (a.archivedById === null && b.archivedById !== null) return -1;
+                // Then sort by price
+                return (b.itemPrice?.value ?? -Infinity) - (a.itemPrice?.value ?? -Infinity);
+            });
         } else {
-            itemDTOs.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+            itemDTOs.sort((a, b) => {
+                // Sort archived items to the bottom
+                if (a.archivedById !== null && b.archivedById === null) return 1;
+                if (a.archivedById === null && b.archivedById !== null) return -1;
+                // Then sort by price
+                return (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity);
+            });
         }
     } else {
         itemDTOs.sort((a, b) => {
