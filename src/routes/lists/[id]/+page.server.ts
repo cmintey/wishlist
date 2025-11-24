@@ -47,10 +47,10 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
     const items = await getItems(list.id, options);
 
     depends("data:items");
-    
+
     // Read view preference from cookie (for SSR to prevent flicker)
     const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
-    
+
     return {
         list: {
             ...list,

@@ -71,7 +71,7 @@ export class ItemCard {
     }
 
     async assertNoQuantity() {
-        await expect(this.quantity).not.toBeVisible({ timeout: 100 });
+        await expect(this.quantityDesired).toHaveText("No limit");
         return this;
     }
 

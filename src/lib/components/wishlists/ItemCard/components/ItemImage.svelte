@@ -5,10 +5,11 @@
     import { resolve } from "$app/paths";
     import type { MessageFormatter } from "$lib/server/i18n";
     import type { InternalItemCardProps } from "../ItemCard.svelte";
+    import type { Snippet } from "svelte";
 
     interface Props extends Pick<InternalItemCardProps, "item"> {
         class?: ClassValue;
-        defaultImage: (t: MessageFormatter, sizeClasses?: ClassValue) => any;
+        defaultImage: Snippet<[t: MessageFormatter]>;
     }
 
     const { item, defaultImage, ...props }: Props = $props();

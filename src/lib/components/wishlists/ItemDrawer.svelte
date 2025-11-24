@@ -3,17 +3,15 @@
     import type { PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ManageButtons from "./ItemCard/ManageButtons.svelte";
-    import { formatPrice } from "$lib/price-formatter";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import type { Snippet } from "svelte";
-    import Image from "../Image.svelte";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/server/i18n";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
-    import Markdown from "../Markdown.svelte";
-    import { getClaimedName, shouldShowName } from "./util";
+    import ItemImage from "./ItemCard/components/ItemImage.svelte";
+    import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
 
     const t = getFormatter();
     const drawerStore = getDrawerStore();
@@ -29,25 +27,13 @@
     const handlePurchased: (v: boolean) => void = $drawerStore.meta.handlePurchased;
     const handleApproval: (v: boolean) => void = $drawerStore.meta.handleApproval;
     const handleEdit: () => void = $drawerStore.meta.handleEdit;
-    const defaultImage: Snippet<[MessageFormatter, ClassValue]> = $drawerStore.meta.defaultImage;
-
-    let expandClaims = $state(false);
+    const _defaultImage: Snippet<[MessageFormatter, classes?: ClassValue]> = $drawerStore.meta.defaultImage;
 
     const onEdit = () => {
         goto(page.url.pathname, { replaceState: true, noScroll: true });
         drawerStore.close();
         handleEdit();
     };
-
-    let imageUrl: string | undefined = $state();
-    if (item.imageUrl) {
-        try {
-            new URL(item.imageUrl);
-            imageUrl = item.imageUrl;
-        } catch {
-            imageUrl = `/api/assets/${item.imageUrl}`;
-        }
-    }
 </script>
 
 <div class="flex max-h-[80dvh] flex-col gap-2 p-4 pb-4">
@@ -68,95 +54,28 @@
     </div>
 
     <div class="flex max-h-[40dvh] justify-center">
-        <Image class="max-h-full object-scale-down" alt={item.name} referrerpolicy="no-referrer" src={imageUrl}>
-            {@render defaultImage($t, "w-1/3 aspect-square")}
-        </Image>
+        <ItemImage class="max-h-full object-scale-down" {item}>
+            {#snippet defaultImage(t)}
+                {@render _defaultImage(t, "w-1/3 aspect-square")}
+            {/snippet}
+        </ItemImage>
     </div>
 
     {#if item.url}
         <a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">{$t("wishes.view-item")}</a>
     {/if}
 
-    {#if item.price || item.itemPrice}
-        <div class="flex items-center gap-x-2">
-            <iconify-icon icon="ion:pricetag"></iconify-icon>
-            <span class="text-lg font-semibold">{formatPrice(item)}</span>
-        </div>
-    {/if}
-
-    {#if item.quantity}
-        <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg">
-            <iconify-icon icon="ion:gift"></iconify-icon>
-            <div class="flex flex-row flex-wrap gap-x-2">
-                <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
-                {#if user?.id !== item.userId || showClaimForOwner}
-                    <span>·</span>
-                    <span class="text-secondary-700-200-token font-bold">
-                        {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                    </span>
-                {/if}
-            </div>
-        </div>
-        {#if showClaimedName && item.claims.length > 0 && (item.userId !== user?.id || showClaimForOwner)}
-            <div class="card text-sm">
-                <button
-                    class="flex w-full items-center !justify-start gap-2 p-2 !text-start text-sm"
-                    onclick={() => (expandClaims = !expandClaims)}
-                >
-                    <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
-                    <span>{expandClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}</span>
-                </button>
-
-                {#if expandClaims}
-                    <div class="max-h-32 overflow-scroll px-2 pb-2">
-                        {#each item.claims as claim}
-                            {@const showName = shouldShowName(item, showClaimedName, showClaimForOwner, user, claim)}
-                            <div class="flex items-center justify-between py-1">
-                                <span>{showName ? getClaimedName(claim) : $t("wishes.anonymous")}</span>
-                                <span>
-                                    {$t("wishes.claims", { values: { claimCount: claim.quantity } })}
-                                </span>
-                            </div>
-                        {/each}
-                    </div>
-                {/if}
-            </div>
-        {/if}
-    {/if}
-
-    <div class="flex items-center gap-x-2">
-        <iconify-icon icon="ion:person"></iconify-icon>
-        <span class="text-base md:text-lg">
-            {#if showFor}
-                {@html $t("wishes.for", { values: { name: item.user.name } })}
-            {:else if !onPublicList}
-                {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
-            {:else}
-                {@html item.addedBy.id === item.user.id
-                    ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                    : $t("wishes.added-by-somebody-else")}
-            {/if}
-        </span>
-    </div>
-
-    {#if item.note}
-        <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-            <iconify-icon icon="ion:reader"></iconify-icon>
-            <p class="whitespace-pre-wrap">
-                <Markdown source={item.note} />
-            </p>
-        </div>
-    {/if}
+    <ItemAttributes fullNotes {item} {onPublicList} {showClaimForOwner} {showClaimedName} showDetail {showFor} {user} />
 
     <div class="flex flex-row justify-between pb-4">
         <ClaimButtons
             {item}
             onClaim={handleClaim}
             {onPublicList}
-            onPurchase={handlePurchased}
+            onPurchased={handlePurchased}
             onUnclaim={() => handleClaim(true)}
-            showForOwner={showClaimForOwner}
-            showName={showClaimedName}
+            {showClaimForOwner}
+            {showClaimedName}
             {user}
         />
 

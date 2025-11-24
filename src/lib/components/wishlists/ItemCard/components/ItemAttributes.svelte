@@ -2,12 +2,31 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import { getFormatter } from "$lib/i18n";
     import { formatPrice } from "$lib/price-formatter";
+    import { shouldShowName, getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    type Props = Pick<ItemCardProps, "item" | "onPublicList" | "user" | "showClaimForOwner" | "showFor">;
+    interface Props
+        extends Pick<
+            ItemCardProps,
+            "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showFor"
+        > {
+        showDetail?: boolean;
+        fullNotes?: boolean;
+    }
 
     const t = getFormatter();
-    const { item, onPublicList, user, showClaimForOwner, showFor }: Props = $props();
+    const {
+        item,
+        onPublicList,
+        user,
+        showClaimedName,
+        showClaimForOwner = false,
+        showFor,
+        showDetail = false,
+        fullNotes = false
+    }: Props = $props();
+
+    let expandClaims = $state(false);
 </script>
 
 <!-- Price with fallback -->
@@ -39,6 +58,31 @@
         {/if}
     </div>
 </div>
+{#if showDetail && showClaimedName && item.claims.length > 0 && (item.userId !== user?.id || showClaimForOwner)}
+    <div class="card text-sm">
+        <button
+            class="flex w-full items-center !justify-start gap-2 p-2 !text-start text-sm"
+            onclick={() => (expandClaims = !expandClaims)}
+        >
+            <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
+            <span>{expandClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}</span>
+        </button>
+
+        {#if expandClaims}
+            <div class="max-h-32 overflow-scroll px-2 pb-2">
+                {#each item.claims as claim}
+                    {@const showName = shouldShowName(item, showClaimedName, showClaimForOwner, user, claim)}
+                    <div class="flex items-center justify-between py-1">
+                        <span>{showName ? getClaimedName(claim) : $t("wishes.anonymous")}</span>
+                        <span>
+                            {$t("wishes.claims", { values: { claimCount: claim.quantity } })}
+                        </span>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    </div>
+{/if}
 
 <!-- Added by / For (claims page) -->
 <div class="flex items-center gap-2">
@@ -57,11 +101,10 @@
 </div>
 
 <!-- Notes -->
-<!-- TODO: list item card has line-clamp-2 -->
 {#if item.note}
     <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
         <iconify-icon icon="ion:reader"></iconify-icon>
-        <div class={"line-clamp-1 whitespace-pre-wrap"} data-testid="notes">
+        <div class={["whitespace-pre-wrap", fullNotes ? "" : "line-clamp-2"]} data-testid="notes">
             <Markdown source={item.note} />
         </div>
     </div>

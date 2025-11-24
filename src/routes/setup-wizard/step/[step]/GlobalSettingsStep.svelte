@@ -17,7 +17,6 @@
     let groups: Group[] = $state(page.data.groups);
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
-    let saved = $state(false);
 
     const toastStore = getToastStore();
     const submit: Writable<() => void> = getContext("submit");

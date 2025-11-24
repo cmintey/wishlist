@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const user = requireLogin();
 
     const activeMembership = await getActiveMembership(user);
-    
+
     // Read view preference from cookie (for SSR to prevent flicker)
     const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
 

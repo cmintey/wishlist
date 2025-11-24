@@ -22,7 +22,8 @@
         onPurchased,
         onDelete,
         onEdit,
-        onApproval
+        onApproval,
+        defaultImage: _defaultImage
     }: InternalItemCardProps = $props();
 </script>
 
@@ -30,13 +31,8 @@
     <!-- Image extends to card edges -->
     <div class="relative h-48 w-full overflow-hidden p-[1px]">
         <ItemImage class="h-full w-full object-cover rounded-tl-container-token rounded-tr-container-token" {item}>
-            {#snippet defaultImage(t, _sizeClasses)}
-                <div
-                    class="bg-surface-300-600-token flex h-full w-full items-center justify-center rounded-tl-container-token rounded-tr-container-token"
-                    aria-label={t("a11y.default-item-image")}
-                >
-                    <iconify-icon class="h-16 w-16" height="none" icon="ion:gift"></iconify-icon>
-                </div>
+            {#snippet defaultImage(t)}
+                {@render _defaultImage(t, "rounded-tl-container-token rounded-tr-container-token  h-full w-full")}
             {/snippet}
         </ItemImage>
     </div>
@@ -46,7 +42,7 @@
 
     <!-- Content area with consistent padding -->
     <div class="flex flex-1 flex-col space-y-1 p-4">
-        <ItemAttributes {item} {onPublicList} {showClaimForOwner} {showFor} {user} />
+        <ItemAttributes {item} {onPublicList} {showClaimForOwner} {showClaimedName} {showFor} {user} />
     </div>
 
     <ItemFooter

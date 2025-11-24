@@ -20,7 +20,7 @@
         onDelete,
         onEdit,
         onApproval
-    }: Omit<InternalItemCardProps, "id"> = $props();
+    }: Omit<InternalItemCardProps, "id" | "defaultImage"> = $props();
 </script>
 
 <footer

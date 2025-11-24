@@ -38,6 +38,7 @@
         onDelete?: () => void;
         onEdit?: () => void;
         onApproval?: (approve: boolean) => void;
+        defaultImage: Snippet<[MessageFormatter, classes?: ClassValue]>;
     }
 </script>
 
@@ -64,6 +65,7 @@
     import { resolve } from "$app/paths";
     import GridItemCard from "./GridItemCard.svelte";
     import ListItemCard from "./ListItemCard.svelte";
+    import type { Snippet } from "svelte";
 
     const {
         item,
@@ -283,24 +285,12 @@
 
 {#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
     <div
-        class={[
-            "flex-none",
-            "bg-surface-300-600-token",
-            "grid",
-            "place-items-center",
-            sizeClasses.includes("w-full") ? "rounded-t-container-token" : "rounded",
-            sizeClasses.includes("w-full") ? "" : "aspect-square",
-            sizeClasses
-        ]}
+        class={["bg-surface-300-600-token grid flex-none place-items-center", sizeClasses]}
         aria-label={t("a11y.default-item-image")}
         data-testid="image"
         role="img"
     >
-        <iconify-icon
-            class={sizeClasses.includes("w-full") ? "h-16 w-16" : "w-8 md:w-16"}
-            height="none"
-            icon="ion:gift"
-        ></iconify-icon>
+        <iconify-icon class="size-8 md:size-16" height="none" icon="ion:gift"></iconify-icon>
     </div>
 {/snippet}
 
@@ -320,6 +310,7 @@
     {#if isTileView}
         <GridItemCard
             {id}
+            {defaultImage}
             {item}
             onApproval={handleApproval}
             onClaim={handleClaim}
@@ -340,6 +331,7 @@
     {:else}
         <ListItemCard
             {id}
+            {defaultImage}
             {item}
             onApproval={handleApproval}
             onClaim={handleClaim}
