@@ -12,12 +12,14 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
+    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
+    import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
     import { getFormatter } from "$lib/i18n";
@@ -43,6 +45,11 @@
         }
     });
     let hideDescription = $state(false);
+
+    // Initialize from server data (cookie) to prevent flicker
+    // This value comes from the server, so SSR renders the correct view
+    initListViewPreference(data.initialViewPreference);
+    let isTileView = $derived(getListViewPreference() === "tile");
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -237,12 +244,15 @@
         {/if}
         <SortBy />
     </div>
-    {#if data.list.owner.isMe || data.list.isManager}
-        <div class="flex flex-row flex-wrap items-center gap-2">
+    <div class="flex flex-row flex-wrap items-center gap-2">
+        {#if !reordering}
+            <ListViewModeChip {isTileView} />
+        {/if}
+        {#if data.list.owner.isMe || data.list.isManager}
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
-        </div>
-    {/if}
+        {/if}
+    </div>
 </div>
 
 {#if data.list.owner.isMe || data.list.isManager}
@@ -269,11 +279,17 @@
 {#if (data.list.owner.isMe || data.list.isManager) && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
-        <div class="flex flex-col space-y-4" data-testid="approvals-container">
+        <div
+            class={isTileView
+                ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+                : "flex flex-col space-y-4"}
+            data-testid="approvals-container"
+        >
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
                         groupId={data.list.groupId}
+                        {isTileView}
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
@@ -296,7 +312,9 @@
 {:else}
     <!-- items -->
     <div
-        class="flex flex-col space-y-4 rounded-container-token"
+        class={isTileView
+            ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+            : "flex flex-col space-y-4"}
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}
@@ -314,6 +332,7 @@
                 <div animate:flip={{ duration: flipDurationMs }}>
                     <ItemCard
                         groupId={data.list.groupId}
+                        {isTileView}
                         {item}
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
@@ -336,6 +355,7 @@
                     >
                         <ItemCard
                             groupId={data.list.groupId}
+                            {isTileView}
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}

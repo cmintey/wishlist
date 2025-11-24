@@ -1,25 +1,20 @@
-<script lang="ts" module>
-    export type ItemVoidFunction = (itemId: number) => void;
-</script>
-
 <script lang="ts">
     import { dragHandle } from "svelte-dnd-action";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
+    import { getListViewPreference } from "$lib/stores/list-view-preference.svelte";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
 
-    interface Props {
-        item: ItemOnListDTO;
-        onIncreasePriority?: ItemVoidFunction | undefined;
-        onDecreasePriority?: ItemVoidFunction | undefined;
-    }
+    type Props = Pick<InternalItemCardProps, "item" | "onIncreasePriority" | "onDecreasePriority">;
 
-    const { item, onIncreasePriority = undefined, onDecreasePriority = undefined }: Props = $props();
+    const { item, onIncreasePriority, onDecreasePriority }: Props = $props();
     const t = getFormatter();
 
     let messageObj = $derived({ values: { name: item.name } });
+
+    let isTileView = $derived(getListViewPreference() === "tile");
 </script>
 
-<div class="w-max gap-x-4">
+<div class={["flex w-max gap-x-4", isTileView && "flex-row-reverse"]}>
     <button
         class="variant-outline-primary btn btn-icon btn-icon-sm md:btn-icon"
         aria-label={$t("a11y.decrease-priority", messageObj)}
@@ -28,7 +23,7 @@
             if (onDecreasePriority) onDecreasePriority(item.id);
         }}
     >
-        <iconify-icon icon="ion:arrow-down"></iconify-icon>
+        <iconify-icon class={[isTileView && "-rotate-90"]} icon="ion:arrow-down"></iconify-icon>
     </button>
     <button
         class="variant-outline-primary btn md:btn-lg"
@@ -46,6 +41,6 @@
             if (onIncreasePriority) onIncreasePriority(item.id);
         }}
     >
-        <iconify-icon icon="ion:arrow-up"></iconify-icon>
+        <iconify-icon class={[isTileView && "-rotate-90"]} icon="ion:arrow-up"></iconify-icon>
     </button>
 </div>

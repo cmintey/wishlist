@@ -19,7 +19,8 @@ export default tseslint.config(
             "**/pnpm-lock.yaml",
             "**/package-lock.json",
             "**/yarn.lock",
-            "**/dev-dist"
+            "**/dev-dist",
+            "**/playwright*"
         ]
     },
     eslint.configs.recommended,
