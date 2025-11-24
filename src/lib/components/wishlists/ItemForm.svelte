@@ -141,6 +141,17 @@
         }
     });
 
+    // Hijack the back button to navigate back to the redirect
+    onMount(() => {
+        const callback = async (_event: PopStateEvent) => {
+            if (page.url.searchParams.has("redirectTo")) {
+                await goto(page.url.searchParams.get("redirectTo")!, { invalidateAll: true });
+            }
+        };
+        addEventListener("popstate", callback, { once: true });
+        return () => removeEventListener("popstate", callback);
+    });
+
     const onCancel = () => {
         if (page.url.searchParams.has("redirectTo")) {
             goto(page.url.searchParams.get("redirectTo")!, { replaceState: true });
