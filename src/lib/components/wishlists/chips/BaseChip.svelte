@@ -9,6 +9,7 @@
         options: Option[];
         defaultOption: Option;
         searchParam: string;
+        label?: string;
         directionParam?: string | undefined;
         prefix?: string;
         multiselect?: boolean;
@@ -20,6 +21,7 @@
         options,
         defaultOption,
         searchParam,
+        label,
         directionParam = undefined,
         prefix = undefined,
         multiselect = false,
@@ -117,9 +119,12 @@
     };
 </script>
 
-<div class={["flex flex-row gap-x-4", clazz]} data-testid={testId}>
+<div class={["flex flex-col gap-1", clazz]} data-testid={testId}>
+    {#if label}
+        <span class="text-xs">{label}</span>
+    {/if}
     <button
-        class="variant-ringed-primary chip"
+        class="variant-ringed-primary chip h-fit w-fit"
         class:variant-ghost-primary={selectedOptions[0].value !== defaultOption.value}
         use:popup={menuSettings}
     >

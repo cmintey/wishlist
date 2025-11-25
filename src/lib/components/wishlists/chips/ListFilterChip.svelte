@@ -4,7 +4,7 @@
     import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
 
-    type PartialUser = Pick<User, "id" | "name" | "picture">;
+    type PartialUser = Pick<User, "id" | "name">;
 
     interface Props {
         users: PartialUser[];
@@ -17,6 +17,7 @@
 
     const users = $state(props.users);
 
+    const label = $t("wishes.filter");
     const prefix = "ion:people";
     const searchParam = "users";
     const defaultOption: Option = {
@@ -38,4 +39,13 @@
     }
 </script>
 
-<BaseChip class={props.class} {defaultOption} multiselect {options} {prefix} {searchParam} testId="list-filter" />
+<BaseChip
+    class={props.class}
+    {defaultOption}
+    {label}
+    multiselect
+    {options}
+    {prefix}
+    {searchParam}
+    testId="list-filter"
+/>

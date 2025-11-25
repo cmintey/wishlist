@@ -237,14 +237,14 @@
 {/if}
 
 <!-- chips -->
-<div class="flex flex-wrap justify-between gap-2 pb-4">
-    <div class="flex flex-row flex-wrap items-center gap-2">
+<div class="flex flex-wrap items-end justify-between gap-2 pb-4">
+    <div class="flex flex-row flex-wrap items-end gap-2">
         {#if !data.list.owner.isMe}
             <ClaimFilterChip />
         {/if}
         <SortBy />
     </div>
-    <div class="flex flex-row flex-wrap items-center gap-2">
+    <div class="flex flex-row flex-wrap items-end gap-2">
         {#if !reordering}
             <ListViewModeChip {isTileView} />
         {/if}
