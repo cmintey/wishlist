@@ -31,7 +31,7 @@
         {/each}
     </ListBox>
 
-    <footer class="modal-footer {parent.regionFooter}">
+    <footer class="modal-footer {parent.regionFooter} flex-wrap gap-2">
         <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
             {parent.buttonTextCancel}
         </button>
