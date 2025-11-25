@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { AppBar, getDrawerStore, type DrawerSettings } from "@skeletonlabs/skeleton";
+    import { getDrawerStore, type DrawerSettings } from "@skeletonlabs/skeleton";
     import logo from "$lib/assets/logo.png";
     import { page } from "$app/state";
     import NavMenu from "./NavMenu/NavMenu.svelte";
@@ -30,7 +30,7 @@
 
 {#snippet wishlistHeader()}
     <a class="flex flex-row items-center gap-x-2" href="/">
-        <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
+        <img class="size:h-12 aspect-square size-10 object-scale-down" alt="Wishlist Logo" src={logo} />
         <span
             class={[
                 "text-primary-900-50-token text-2xl font-bold md:text-3xl",
@@ -42,30 +42,30 @@
     </a>
 {/snippet}
 
-<AppBar background="bg-surface-200-700-token" padding="py-2 md:py-4 px-4">
-    {#snippet lead()}
-        <div class="flex content-center items-center gap-x-4">
-            {#if user}
-                {#if !$isInstalled}
-                    <button
-                        class="btn btn-sm p-0 pt-0.5 md:hidden"
-                        aria-label={$t("a11y.menu")}
-                        onclick={() => drawerStore.open(drawerSettings)}
-                    >
-                        <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
-                    </button>
-                    {@render wishlistHeader()}
-                {:else}
-                    <BackButton header={wishlistHeader} />
-                {/if}
-            {:else}
+<div class="app-bar bg-surface-200-700-token flex gap-4 px-4 py-2 md:py-4">
+    <!-- Header -->
+    <div class="flex flex-shrink-0 flex-grow content-center items-center gap-x-4 md:flex-grow-0">
+        {#if user}
+            {#if !$isInstalled}
+                <button
+                    class="btn btn-sm p-0 pt-0.5 md:hidden"
+                    aria-label={$t("a11y.menu")}
+                    onclick={() => drawerStore.open(drawerSettings)}
+                >
+                    <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
+                </button>
                 {@render wishlistHeader()}
+            {:else}
+                <BackButton header={wishlistHeader} />
             {/if}
-        </div>
-    {/snippet}
+        {:else}
+            {@render wishlistHeader()}
+        {/if}
+    </div>
 
+    <!-- Nav items -->
     {#if user}
-        <div class="hidden flex-row items-center pl-4 pt-0.5 md:flex">
+        <div class="hidden flex-row items-center pl-4 pt-0.5 md:flex md:flex-grow">
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"
@@ -79,7 +79,6 @@
         </div>
     {/if}
 
-    {#snippet trail()}
-        <NavMenu {groups} {isProxyUser} {user} />
-    {/snippet}
-</AppBar>
+    <!-- Trail -->
+    <NavMenu {groups} {isProxyUser} {user} />
+</div>

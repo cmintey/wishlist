@@ -34,67 +34,64 @@
 </script>
 
 {#if user}
-    {#if groups && groups?.length > 1}
-        <GroupSelectChip {groups} {user} />
-    {/if}
-
-    <div class="flex md:pr-4">
+    <div class="flex min-w-0 items-center gap-4">
+        {#if groups && groups?.length > 1}
+            <GroupSelectChip {groups} {user} />
+        {/if}
         <button class="h-10 md:h-12" use:popup={menuSettings}>
             <Avatar {user} width="h-10 md:h-12" />
             <span class="sr-only">User Menu</span>
         </button>
-        <div>
-            <nav class="card list-nav p-4 shadow-xl" data-popup="user" data-testid="user menu navigation">
-                <ul>
-                    <li>
-                        <a href="/account">
-                            <iconify-icon icon="ion:person"></iconify-icon>
-                            <span class="flex-auto">{$t("admin.account")}</span>
-                        </a>
-                    </li>
-                    {#if user.roleId == Role.ADMIN}
-                        <li>
-                            <a href="/admin">
-                                <iconify-icon icon="ion:settings"></iconify-icon>
-                                <span class="flex-auto">{$t("admin.admin")}</span>
-                            </a>
-                        </li>
-                    {/if}
-
-                    <hr />
-                    <GroupSubMenu {groups} {user} />
-                    {#if !isProxyUser}
-                        <hr />
-                        <li>
-                            <button
-                                class="list-option w-full"
-                                onclick={async () => {
-                                    await fetch("/logout", { method: "POST" });
-                                    invalidateAll();
-                                }}
-                            >
-                                <iconify-icon icon="ion:log-out"></iconify-icon>
-                                <p>{$t("auth.sign-out")}</p>
-                            </button>
-                        </li>
-                    {/if}
-                    <hr class="pb-1" />
-                    <li>
-                        <button class="list-option w-full" onclick={chooseLanguage} type="button">
-                            <iconify-icon icon="ion:language"></iconify-icon>
-                            <p>{$t("general.language")}</p>
-                        </button>
-                    </li>
-                    <li>
-                        <div class="list-option flex items-center gap-2 pt-1">
-                            <p>{$t("general.mode")}</p>
-                            <LightSwitch title={$t("general.toggle-dark-mode")} />
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
+    <nav class="card list-nav p-4 shadow-xl" data-popup="user" data-testid="user menu navigation">
+        <ul>
+            <li>
+                <a href="/account">
+                    <iconify-icon icon="ion:person"></iconify-icon>
+                    <span class="flex-auto">{$t("admin.account")}</span>
+                </a>
+            </li>
+            {#if user.roleId == Role.ADMIN}
+                <li>
+                    <a href="/admin">
+                        <iconify-icon icon="ion:settings"></iconify-icon>
+                        <span class="flex-auto">{$t("admin.admin")}</span>
+                    </a>
+                </li>
+            {/if}
+
+            <hr />
+            <GroupSubMenu {groups} {user} />
+            {#if !isProxyUser}
+                <hr />
+                <li>
+                    <button
+                        class="list-option w-full"
+                        onclick={async () => {
+                            await fetch("/logout", { method: "POST" });
+                            invalidateAll();
+                        }}
+                    >
+                        <iconify-icon icon="ion:log-out"></iconify-icon>
+                        <p>{$t("auth.sign-out")}</p>
+                    </button>
+                </li>
+            {/if}
+            <hr class="pb-1" />
+            <li>
+                <button class="list-option w-full" onclick={chooseLanguage} type="button">
+                    <iconify-icon icon="ion:language"></iconify-icon>
+                    <p>{$t("general.language")}</p>
+                </button>
+            </li>
+            <li>
+                <div class="list-option flex items-center gap-2 pt-1">
+                    <p>{$t("general.mode")}</p>
+                    <LightSwitch title={$t("general.toggle-dark-mode")} />
+                </div>
+            </li>
+        </ul>
+    </nav>
 {:else}
     <LightSwitch />
 {/if}

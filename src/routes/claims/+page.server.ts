@@ -18,7 +18,10 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
         where: {
             claims: {
                 some: {
-                    claimedById: user.id
+                    claimedById: user.id,
+                    list: {
+                        groupId: activeMembership.groupId
+                    }
                 }
             },
             lists: {
