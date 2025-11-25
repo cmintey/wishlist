@@ -21,13 +21,7 @@
     });
 </script>
 
-<RadioGroup
-    name="list-view-mode"
-    class="!rounded"
-    active="variant-filled-primary"
-    padding="py-0 px-2"
-    rounded="rounded"
->
+<RadioGroup name="list-view-mode" class="h-fit" active="variant-filled-primary" padding="py-0 px-2" rounded="rounded">
     <RadioItem
         name="list-view-mode"
         class="text-sm"
