@@ -373,7 +373,7 @@
         "claimed-item": "{claimed, select, true {Rezervováno} other {K rezervaci}}",
         "create": "Vytvořit přání",
         "create-and-add-another": "Vytvořit a přidat další",
-        "create-for": "Vypvořit přání pro {listOwner}",
+        "create-for": "Navrhnout dárek pro {listOwner}",
         "create-list": "Vytvořit seznam",
         "default-sort": "Výchozí",
         "delete": "Smazat",
@@ -442,6 +442,10 @@
         "count-items": "{itemCount, plural, one {# ks} other {# ks}}",
         "heads-up": "Pozor!",
         "quantity-desired": "Přeje si {quantity} ks",
-        "supports-markdown": "Podporuje Markdown syntaxi"
+        "supports-markdown": "Podporuje Markdown syntaxi",
+        "switch-to-list-view": "Přepnout na řádkové zobrazení",
+        "switch-to-tile-view": "Přepnout na dlaždicové zobrazení",
+        "tile-view": "Dlaždicové zobrazení",
+        "list-view": "Řádkové zobrazení"
     }
 }
