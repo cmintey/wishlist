@@ -55,7 +55,7 @@
     class:bottom-4={!$isInstalled}
     onclick={() => goto(resolve("/lists/create"), { replaceState: true })}
 >
-    <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
+    <iconify-icon class="text-2xl" icon="ion:add"></iconify-icon>
     <span class="sr-only">{$t("wishes.create-list")}</span>
 </button>
 

@@ -46,7 +46,7 @@
 
     <div class="grid grid-cols-[auto_1fr] items-center gap-4 p-4">
         <div style="background-color: {iconColor};" class="avatar" class:bg-primary-400-500-token={!iconColor}>
-            <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
+            <iconify-icon class="text-2xl" icon={"ion:" + (list.icon ?? "gift")}></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
             <span
@@ -70,9 +70,9 @@
                         </span>
                         {#if hasNewItems}
                             <iconify-icon
-                                class="text-primary-700-200-token opacity-40"
+                                class="text-primary-700-200-token size-2 opacity-40"
                                 icon="ion:ellipse-sharp"
-                                width="0.5rem"
+                                width="none"
                             ></iconify-icon>
                         {/if}
                     </div>
