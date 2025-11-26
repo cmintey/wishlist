@@ -1,6 +1,6 @@
-import cuid2 from "@paralleldrive/cuid2";
+import { createId } from "@paralleldrive/cuid2";
 import { db } from ".";
-import type { NewUser, UserUpdate } from "./types";
+import type { NewUser, User, UserUpdate } from "./types";
 
 class UserRepository {
     private readonly selectFrom = db.selectFrom("user");
@@ -10,7 +10,7 @@ class UserRepository {
     }
 
     async create(user: Omit<NewUser, "id">) {
-        const id = cuid2.createId();
+        const id = createId();
         return db
             .insertInto("user")
             .values({ id, ...user })
@@ -19,7 +19,15 @@ class UserRepository {
     }
 
     async findByUsername(username: string) {
-        return this.selectFrom.selectAll().where("username", "=", username).executeTakeFirst();
+        return this.selectFrom.select("id").where("username", "=", username).executeTakeFirst();
+    }
+
+    async findById(id: string) {
+        return db
+            .selectFrom("user")
+            .select(["id", "username", "email", "name", "roleId", "picture", "oauthId", "preferredLanguage"])
+            .where("id", "=", id)
+            .executeTakeFirst();
     }
 
     async count() {

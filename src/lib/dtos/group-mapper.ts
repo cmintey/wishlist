@@ -1,14 +1,15 @@
 import { Role } from "$lib/schema";
-import type { Group, Role as RoleModel } from "@prisma/client";
 
 export const toGroupInformation = (membership: {
-    group: Group;
+    id: string;
+    name: string;
     active: boolean;
-    role: RoleModel;
+    roleId: number;
 }): GroupInformation => {
     return {
-        ...membership.group,
+        id: membership.id,
+        name: membership.name,
         active: membership.active,
-        isManager: membership.role.id === Role.GROUP_MANAGER || membership.role.id === Role.ADMIN
+        isManager: membership.roleId === Role.GROUP_MANAGER || membership.roleId === Role.ADMIN
     };
 };

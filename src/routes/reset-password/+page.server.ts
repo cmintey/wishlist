@@ -1,6 +1,4 @@
 import { invalidateUserSessions } from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
-import { hashToken } from "$lib/server/token";
 import { getResetPasswordSchema } from "$lib/server/validations";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
@@ -9,25 +7,17 @@ import { env } from "$env/dynamic/private";
 import { getFormatter } from "$lib/server/i18n";
 import { hashPassword } from "$lib/server/password";
 import { logger } from "$lib/server/logger";
+import { passwordResetRepository } from "$lib/server/db/passwordReset.repository";
+import { userRepository } from "$lib/server/db/user.repository";
 
 export const load: PageServerLoad = async ({ url }) => {
     const $t = await getFormatter();
     const token = url.searchParams.get("token");
 
     if (token) {
-        const reset = await client.passwordReset.findFirst({
-            where: {
-                hashedToken: hashToken(token),
-                redeemed: false
-            },
-            select: {
-                id: true,
-                userId: true,
-                createdAt: true
-            }
-        });
+        const reset = await passwordResetRepository.findByToken(token);
 
-        if (!reset) error(400, $t("errors.reset-token-not-found"));
+        if (!reset || reset.redeemed) error(400, $t("errors.reset-token-not-found"));
 
         const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
         const expiry = reset.createdAt.getTime() + expiresIn;
@@ -60,15 +50,7 @@ export const actions: Actions = {
             return fail(400, { error: true, errors: z.flattenError(pwdData.error).fieldErrors });
         }
 
-        const user = await client.user.findUnique({
-            where: {
-                id: pwdData.data.userId
-            },
-            select: {
-                id: true,
-                username: true
-            }
-        });
+        const user = await userRepository.findById(pwdData.data.userId);
 
         if (!user) {
             logger.error("Could not find user by id");
@@ -80,22 +62,9 @@ export const actions: Actions = {
                 await invalidateUserSessions(user.id),
                 await hashPassword(pwdData.data.newPassword)
             ]);
-            await client.user.update({
-                data: {
-                    hashedPassword
-                },
-                where: {
-                    id: user.id
-                }
-            });
-            await client.passwordReset.update({
-                where: {
-                    id: pwdData.data.id
-                },
-                data: {
-                    redeemed: true
-                }
-            });
+
+            await userRepository.update(user.id, { hashedPassword });
+            await passwordResetRepository.update(pwdData.data.id, { redeemed: true });
         } catch (err) {
             logger.error({ err }, "Failed to update password");
             error(422, $t("setup.unable-to-update-password"));

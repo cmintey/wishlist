@@ -6,6 +6,10 @@ class GroupRepository {
     async findAny() {
         return this.selectFrom.selectAll().limit(1).executeTakeFirst();
     }
+
+    async findAll() {
+        return this.selectFrom.selectAll().execute();
+    }
 }
 
 export const groupRepository = new GroupRepository();

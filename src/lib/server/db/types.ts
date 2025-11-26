@@ -157,6 +157,14 @@ export type UserGroupMembership = Selectable<UserGroupMembershipTable>;
 export type NewUserGroupMembership = Insertable<UserGroupMembershipTable>;
 export type UserGroupMembershipUpdate = Updateable<UserGroupMembershipTable>;
 
+export type Group = Selectable<GroupTable>;
+export type NewGroup = Insertable<GroupTable>;
+export type GroupUpdate = Updateable<GroupTable>;
+
+export type PasswordReset = Selectable<PasswordResetTable>;
+export type NewPasswordReset = Insertable<PasswordResetTable>;
+export type PasswordResetUpdate = Updateable<PasswordResetTable>;
+
 export interface DB {
     _prisma_migrations: _PrismaMigrations;
     group: GroupTable;

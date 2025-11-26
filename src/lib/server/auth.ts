@@ -1,17 +1,16 @@
 import { dev } from "$app/environment";
 import { env } from "$env/dynamic/private";
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import { sha256 } from "@oslojs/crypto/sha2";
+import { encodeBase32LowerCaseNoPadding } from "@oslojs/encoding";
 import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
-import { db, type Session, type User } from "./db";
-import type { Insertable } from "kysely";
+import { type Session, type User } from "./db";
 import { logger } from "./logger";
+import { sessionRepository } from "./db/session.repository";
+import { userRepository } from "./db/user.repository";
+import { userGroupRepository } from "./db/userGroup.repository";
 
-const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
-const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
 const origin = new URL(env.ORIGIN || "localhost:3280");
 
 export const sessionCookieName = "wishlist_session";
@@ -24,50 +23,38 @@ export function generateSessionToken(): string {
 }
 
 export async function createSession(token: string, userId: string): Promise<Session> {
-    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-    const session: Insertable<Session> = {
-        id: sessionId,
-        userId,
-        expiresAt: new Date(Date.now() + EXPIRES_IN)
-    };
-    await db.insertInto("session").values(session).execute();
-    return session;
+    return sessionRepository.create(token, userId);
 }
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
-    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-    const session = await db.selectFrom("session").selectAll().where("id", "=", sessionId).executeTakeFirst();
+    const session = await sessionRepository.findByToken(token);
     if (!session) {
         return { session: null, user: null };
     }
 
-    const user = await db
-        .selectFrom("user")
-        .select(["id", "username", "email", "name", "roleId", "picture", "oauthId", "preferredLanguage"])
-        .where("id", "=", session.userId)
-        .executeTakeFirst();
+    const user = await userRepository.findById(session.userId);
     if (!user) {
         logger.warn({ userId: session.userId }, "No user found for session");
         return { session: null, user: null };
     }
 
     if (Date.now() >= session.expiresAt.getTime()) {
-        await db.deleteFrom("session").where("id", "=", session.id).execute();
+        await sessionRepository.delete(session);
         return { session: null, user: null };
     }
-    if (Date.now() >= session.expiresAt.getTime() - REFRESH_TIME) {
-        session.expiresAt = new Date(Date.now() + EXPIRES_IN);
-        await db.updateTable("session").set({ expiresAt: session.expiresAt }).where("id", "=", session.id).execute();
+    if (Date.now() >= session.expiresAt.getTime() - sessionRepository.REFRESH_TIME) {
+        const refreshedSession = await sessionRepository.refresh(session);
+        return { session: refreshedSession, user };
     }
     return { session, user };
 }
 
-export async function invalidateSession(sessionId: string): Promise<void> {
-    await db.deleteFrom("session").where("id", "=", sessionId).execute();
+export async function invalidateSession(sessionId: string) {
+    await sessionRepository.deleteById(sessionId);
 }
 
-export async function invalidateUserSessions(userId: string): Promise<void> {
-    await db.deleteFrom("session").where("userId", "=", userId).execute();
+export async function invalidateUserSessions(userId: string) {
+    await sessionRepository.deleteAllByUserId(userId);
 }
 
 export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt: Date): void {
@@ -134,13 +121,7 @@ export async function requireAdminOrManager(groupId: string) {
         return user;
     }
 
-    const userGroupMembership = await db
-        .selectFrom("user_group_membership")
-        .select("roleId")
-        .where("userId", "=", user.id)
-        .where("groupId", "=", groupId)
-        .executeTakeFirst();
-
+    const userGroupMembership = await userGroupRepository.find(user.id, groupId);
     if (userGroupMembership && userGroupMembership.roleId === Role.GROUP_MANAGER) {
         return user;
     }

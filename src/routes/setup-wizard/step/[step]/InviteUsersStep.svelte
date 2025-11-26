@@ -1,9 +1,9 @@
 <script lang="ts">
     import { page } from "$app/state";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
-    import type { Group } from "@prisma/client";
     import type { Props } from "./steps";
     import { getFormatter } from "$lib/i18n";
+    import type { Group } from "$lib/server/db";
 
     const _props: Props = $props();
     const t = getFormatter();

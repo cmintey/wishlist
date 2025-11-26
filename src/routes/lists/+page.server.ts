@@ -1,11 +1,9 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
 import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
 import { requireLogin } from "$lib/server/auth";
-import { db } from "$lib/server/db";
 import { listRepository } from "$lib/server/db/list.repository";
 
 export const load = (async ({ url }) => {
@@ -139,7 +137,7 @@ export const load = (async ({ url }) => {
     const [myLists, otherLists, hashes] = await Promise.all([
         userListsQuery,
         otherListsQuery,
-        listRepository.getListHashes(activeMembership.groupId)
+        listRepository.getListHashes({ groupId: activeMembership.groupId })
     ]);
 
     const users = [
