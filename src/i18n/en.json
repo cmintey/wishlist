@@ -369,6 +369,7 @@
         "claimed": "Claimed",
         "claimed-by": "Claimed by {name}",
         "claimed-by-multiple-users": "Claimed by multiple users",
+        "claimed-by-you-on-another-list": "Claimed by you on another list",
         "claimed-info-text": "{claimedQuantity, plural, one {You've claimed # item.} other {You've claimed # items.}}",
         "claimed-item": "{claimed, select, true {Claimed} other {Unclaimed}} item",
         "claims": "{claimCount, plural, one {# claim} other {# claims}}",
