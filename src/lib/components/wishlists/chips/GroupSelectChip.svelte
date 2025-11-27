@@ -47,7 +47,7 @@
     <ul class="max-h-72 overflow-scroll">
         {#each groups as group (group.id)}
             <li>
-                <button class="list-option w-fit justify-between" onclick={() => onSelect(group)}>
+                <button class="list-option w-full justify-between" onclick={() => onSelect(group)}>
                     <span class="max-w-full truncate">{group.name}</span>
                     {#if group.id === activeGroup.id}
                         <iconify-icon icon="ion:checkmark"></iconify-icon>

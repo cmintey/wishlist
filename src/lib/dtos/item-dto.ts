@@ -9,6 +9,7 @@ interface UserWithGroups extends MinimalUser {
 type BaseClaim = {
     claimId: string;
     quantity: number;
+    listId: string;
 };
 
 interface Claimed extends BaseClaim {
