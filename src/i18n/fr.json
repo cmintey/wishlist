@@ -121,7 +121,7 @@
         "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Administrateur",
         "build-date": "Date de déploiement : {buildDate}",
         "build": "Build : <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
-        "clear-lists": "Effacer {groupSpecific, select, true {} other {Tout}} {claimedOnly, select, true {Réservations} other {Listes}}",
+        "clear-lists": "Effacer {groupSpecific, select, true {} other {toutes}} {claimedOnly, select, true {les réservations} other {les listes}}",
         "make-admin": "Promouvoir administrateur",
         "manager": "Administrateur",
         "members": "Membres",
@@ -286,7 +286,7 @@
         "this-invite-link-is-only-valid-for-one-signup": "Ce lien d'invitation est valide pour seulement une inscription",
         "required-field": "champ requis",
         "invite-link": "Lien d'invitation",
-        "invite-user": "Invitez un utilisateur",
+        "invite-user": "Inviter un utilisateur",
         "manage-group": "Gérez les groupes",
         "remove": "Retirer",
         "search": "Recherche",
@@ -441,7 +441,11 @@
         "list-managers": "Gestionnaires de liste",
         "list-managers-tooltip": "Les gestionnaires de liste peuvent faire tout ce que vous pouvez faire, y compris approuver ou refuser des suggestions, modifier les paramètres de la liste, et supprimer des éléments de la liste. Si votre groupe est en mode 'surprise', vous pourrez voir tout élément ajouté par un gestionnaire de liste.",
         "no-managers": "Aucun gestionnaire",
-        "show-claims": "Afficher les réservations"
+        "show-claims": "Afficher les réservations",
+        "switch-to-list-view": "Passer en vue liste",
+        "switch-to-tile-view": "Passer en vue tuile",
+        "tile-view": "Vue tuile",
+        "list-view": "Vue liste"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
