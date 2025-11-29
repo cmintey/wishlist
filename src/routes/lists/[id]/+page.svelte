@@ -248,7 +248,7 @@
         {#if !reordering}
             <ListViewModeChip {isTileView} />
         {/if}
-        {#if data.list.owner.isMe || data.list.isManager}
+        {#if data.list.owner.isMe || data.list.isManager || data.list.isAdmin}
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
         {/if}
