@@ -43,7 +43,14 @@ const config: UserConfig = {
                         type: "image/png",
                         purpose: "any maskable"
                     }
-                ]
+                ],
+                share_target: {
+                    action: "/items/create",
+                    method: "GET",
+                    params: {
+                        url: "productUrl"
+                    }
+                }
             },
             devOptions: {
                 enabled: true,
