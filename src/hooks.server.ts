@@ -1,3 +1,4 @@
+import type { RouteId } from "$app/types";
 import { env } from "$env/dynamic/private";
 import { getClosestAvailableLocaleFromHeader, getClosestAvailablePreferredLanguage, type Lang } from "$lib/i18n";
 import {
@@ -26,16 +27,16 @@ export const handle: Handle = async ({ event, resolve }) => {
         });
     }
 
-    const { session, user } = await validateSessionToken(sessionToken);
+    const { session, user, fresh } = await validateSessionToken(sessionToken);
     if (user?.preferredLanguage) {
         lang = getClosestAvailablePreferredLanguage(user.preferredLanguage) ?? lang;
     }
 
     await loadLocale(lang.code);
-    if (session !== null) {
-        setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
-    } else {
+    if (session === null) {
         deleteSessionTokenCookie(event.cookies);
+    } else if (fresh) {
+        setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
     }
 
     const isProxyUser =
@@ -47,6 +48,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = user;
     event.locals.session = session;
     event.locals.locale = lang.code;
+
+    if (event.route.id && !(event.route.id in nonPrivateRoutes)) {
+        event.setHeaders({
+            "Cache-Control": "private"
+        });
+    }
 
     return resolve(event, {
         transformPageChunk({ html }) {
@@ -70,3 +77,13 @@ export const handleError: HandleServerError = async ({ error: err, event, status
         message
     );
 };
+
+const nonPrivateRoutes: RouteId[] = [
+    "/login",
+    "/signup",
+    "/setup-wizard",
+    "/setup-wizard/step",
+    "/setup-wizard/step/[step]",
+    "/reset-password",
+    "/group-error"
+];
