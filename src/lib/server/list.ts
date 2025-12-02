@@ -171,7 +171,7 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     ) {
         if (options.listManagers) {
             itemListFilter.addedById = {
-                in: [options.loggedInUserId, ...options.listManagers]
+                in: [options.listOwnerId, ...options.listManagers]
             };
         } else {
             itemListFilter.addedById = options.loggedInUserId;
