@@ -49,6 +49,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.session = session;
     event.locals.locale = lang.code;
 
+    if (event.route.id && !(event.route.id in nonPrivateRoutes)) {
+        event.setHeaders({
+            "Cache-Control": "private"
+        });
+    }
+
     return resolve(event, {
         transformPageChunk({ html }) {
             return transformForLang(html, lang);
