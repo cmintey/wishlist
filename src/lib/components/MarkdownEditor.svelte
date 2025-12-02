@@ -24,7 +24,7 @@
     {#if previewNote}
         {#if value}
             <div
-                class="variant-ringed-surface h-28 max-w-none overflow-scroll whitespace-pre-wrap px-3 py-2 rounded-container-token"
+                class="variant-ringed-surface h-28 max-w-none overflow-auto whitespace-pre-wrap px-3 py-2 rounded-container-token"
                 data-testid="markdown-preview"
             >
                 <Markdown source={value} />

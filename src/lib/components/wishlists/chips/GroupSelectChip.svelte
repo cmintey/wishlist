@@ -44,7 +44,7 @@
     ></iconify-icon>
 </button>
 <nav class="card list-nav z-10 max-h-96 max-w-full p-4 shadow-xl" data-popup={popupKey}>
-    <ul class="max-h-72 overflow-scroll">
+    <ul class="max-h-72 overflow-auto">
         {#each groups as group (group.id)}
             <li>
                 <button class="list-option w-fit justify-between" onclick={() => onSelect(group)}>

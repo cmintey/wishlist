@@ -338,7 +338,7 @@
         </div>
 
         <div
-            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-auto p-2 border-token rounded-container-token"
             class:input-error={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
