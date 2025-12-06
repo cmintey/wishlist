@@ -56,7 +56,7 @@
     <div class="flex max-h-[40dvh] justify-center">
         <ItemImage class="max-h-full object-scale-down" {item}>
             {#snippet defaultImage(t)}
-                {@render _defaultImage(t, "w-1/3 aspect-square")}
+                {@render _defaultImage(t, "w-40 md:w-48 aspect-square rounded")}
             {/snippet}
         </ItemImage>
     </div>
