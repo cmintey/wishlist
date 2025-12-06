@@ -448,6 +448,7 @@
         "tile-view": "Dlaždicové zobrazení",
         "list-view": "Řádkové zobrazení",
         "group-by": "Seskupit podle",
-        "sort-by": "Seřadit podle"
+        "sort-by": "Seřadit podle",
+        "claimed-by-you-on-another-list": "Máte zarezervováno v jiném seznamu"
     }
 }
