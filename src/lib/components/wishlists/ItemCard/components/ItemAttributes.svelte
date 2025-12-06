@@ -69,7 +69,7 @@
         </button>
 
         {#if expandClaims}
-            <div class="max-h-32 overflow-scroll px-2 pb-2">
+            <div class="max-h-32 overflow-auto px-2 pb-2">
                 {#each item.claims as claim}
                     {@const showName = shouldShowName(item, showClaimedName, showClaimForOwner, user, claim)}
                     <div class="flex items-center justify-between py-1">

@@ -152,7 +152,7 @@
         ></iconify-icon>
     </button>
     <nav class="card list-nav z-10 max-h-96 p-4 shadow-xl" data-popup={popupKey}>
-        <ul class="max-h-72 overflow-scroll">
+        <ul class="max-h-72 overflow-auto">
             {#each options as option (option.value + option.direction)}
                 <li>
                     {#if multiselect}
