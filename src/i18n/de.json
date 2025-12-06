@@ -171,7 +171,7 @@
         "claimed-item": "{claimed, select, true {Reservierter} other {Nicht-Reservierter}} Artikel",
         "create": "Erstelle Wunsch",
         "create-for": "Wunsch erstellen für {listOwner}",
-        "default-sort": "Standard Sortierung",
+        "default-sort": "Priorität",
         "delete": "Löschen",
         "deny": "Ablehnen",
         "edit": "Bearbeiten",
@@ -226,7 +226,13 @@
         "hide-claims": "Beanspruchte Wünsche verstecken",
         "list-managers-tooltip": "Listenmanager können alles tun, was du tun kannst. Dazu gehört Vorschläge anzunehmen und abzulehnen, Listeneinstellungen zu aktualisieren und Gegenstände von der Liste zu entfernen. Wenn deine Gruppe auf den Modus 'Überraschung' gestellt ist, werden alle Gegenstände, die ein Listenmanager hinzugefügt hat, auch dir angezeigt.",
         "no-managers": "Keine Manager",
-        "show-claims": "Beanspruchte Wünsche anzeigen"
+        "show-claims": "Beanspruchte Wünsche anzeigen",
+        "group-by": "Gruppieren nach",
+        "list-view": "Listenansicht",
+        "sort-by": "Sortieren nach",
+        "switch-to-list-view": "Zur Listenansicht wechseln",
+        "switch-to-tile-view": "Zur Kachelansicht wechseln",
+        "tile-view": "Kachelansicht"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -298,7 +304,8 @@
         "could-not-claim-quantity-items": "Konnte {quantity} Artikel nicht reservieren. Es sind nur {availableQuantity} verfügbar.",
         "language-is-required": "Sprache wird benötigt",
         "unable-to-update-preferred-language": "Ändern der bevorzugten Sprache nicht möglich",
-        "email-is-required-for-public-claims": "Email Adresse ist notwendig für öffentliche Beanspruchung"
+        "email-is-required-for-public-claims": "Email Adresse ist notwendig für öffentliche Beanspruchung",
+        "oidc-error": "Authentifizierung mit OAuth fehlgeschlagen"
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
