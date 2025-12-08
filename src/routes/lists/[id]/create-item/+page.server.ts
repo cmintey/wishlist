@@ -13,7 +13,7 @@ import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemCreateSchema } from "$lib/server/validations";
 import z from "zod";
-import type { List } from "@prisma/client";
+import type { List, Prisma } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -117,13 +117,36 @@ export const actions: Actions = {
             }
         });
 
-        const listItems = await Promise.all(
+        const maxDisplay = await client.listItem.groupBy({
+            by: ["listId"],
+            _max: {
+                displayOrder: true
+            },
+            _count: {
+                id: true
+            },
+            where: {
+                listId: {
+                    in: listIds
+                }
+            }
+        });
+        const nextDisplayOrderByList = maxDisplay.reduce(
+            (accum, curr) => {
+                accum[curr.listId] = curr._max.displayOrder ? curr._max.displayOrder + 1 : curr._count.id;
+                return accum;
+            },
+            {} as Record<string, number>
+        );
+
+        const listItems: Prisma.ListItemUncheckedCreateWithoutItemInput[] = await Promise.all(
             lists.map(async (l) => {
                 const config = await getConfig(l.groupId);
                 return {
                     listId: l.id,
                     addedById: user.id,
-                    approved: determineApprovalStatus(config, l, user)
+                    approved: determineApprovalStatus(config, l, user),
+                    displayOrder: nextDisplayOrderByList[l.id]
                 };
             })
         );
