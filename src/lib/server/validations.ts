@@ -135,6 +135,7 @@ export const getItemCreateSchema = async () => {
             .transform((v) => (v === undefined ? null : v)),
         imageUrl: z.string().optional(),
         image: z.instanceof(File).optional(),
+        mostWanted: z.coerce.boolean().default(false),
         note: z.string().optional(),
         lists: z
             .union([z.string(), z.tuple([z.string()], z.string())], {

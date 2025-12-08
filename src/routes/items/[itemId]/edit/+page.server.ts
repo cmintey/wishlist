@@ -95,7 +95,7 @@ export const actions: Actions = {
         if (!form.success) {
             return fail(400, { errors: z.flattenError(form.error).fieldErrors });
         }
-        const { url, imageUrl, image, name, price, currency, quantity, note, lists } = form.data;
+        const { url, imageUrl, image, name, price, currency, quantity, note, lists, mostWanted } = form.data;
 
         const item = await client.item.findUniqueOrThrow({
             include: {
@@ -189,6 +189,7 @@ export const actions: Actions = {
                 note,
                 itemPriceId,
                 quantity,
+                mostWanted,
                 lists: {
                     create: listItemsToCreate,
                     deleteMany: {

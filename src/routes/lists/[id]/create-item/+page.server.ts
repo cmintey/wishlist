@@ -78,7 +78,7 @@ export const actions: Actions = {
             z.treeifyError(form.error);
             return fail(400, { errors: z.flattenError(form.error).fieldErrors });
         }
-        const { url, imageUrl, image, name, price, currency, quantity, note, lists: listIds } = form.data;
+        const { url, imageUrl, image, name, price, currency, quantity, note, lists: listIds, mostWanted } = form.data;
 
         let newImageFile: string | undefined | null;
         if (image && isValidImage(image)) {
@@ -161,6 +161,7 @@ export const actions: Actions = {
                 createdById: user.id,
                 itemPriceId,
                 quantity,
+                mostWanted,
                 lists: {
                     create: listItems
                 }
