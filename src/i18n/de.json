@@ -232,7 +232,8 @@
         "sort-by": "Sortieren nach",
         "switch-to-list-view": "Zur Listenansicht wechseln",
         "switch-to-tile-view": "Zur Kachelansicht wechseln",
-        "tile-view": "Kachelansicht"
+        "tile-view": "Kachelansicht",
+        "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
