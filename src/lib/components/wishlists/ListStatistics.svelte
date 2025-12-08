@@ -16,7 +16,7 @@
             .filter((i) => i.itemPrice !== null)
             .reduce(
                 (accum, item) => {
-                    accum[item.itemPrice!.currency] = (accum[item.itemPrice!.currency] ||= 0) + item.itemPrice!.value;
+                    accum[item.itemPrice!.currency] = (accum[item.itemPrice!.currency] ||= 0) + item.itemPrice!.value * (item.quantity || 1);
                     return accum;
                 },
                 {} as Record<string, number>
