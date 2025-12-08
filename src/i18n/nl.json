@@ -442,6 +442,7 @@
         "no-managers": "Geen beheerders",
         "claims": "{claimCount, plural, one {# claim} other {# claims}}",
         "hide-claims": "Verberg claims",
-        "show-claims": "Toon claims"
+        "show-claims": "Toon claims",
+        "claimed-by-you-on-another-list": "Door jou geclaimd op een andere lijst"
     }
 }
