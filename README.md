@@ -75,6 +75,8 @@ You can now connect to your application at `http://<host>:3280`.
 
 `DEFAULT_CURRENCY`: The global default currency (ISO-Code) to be used. Currency can still be changed on a per-item basis
 
+`MAX_IMAGE_SIZE`: Maxinum image size that can be uploaded (in bytes). Defaults to 5000000 (5MB)
+
 ### Running behind a reverse proxy
 
 It is recommended to run Wishlist behind a reverse proxy. Currently, Wishlist does not support running on a different subpath (i.e. `https://domain.com/wishlist`).
