@@ -4,7 +4,7 @@
     import { GroupsAPI } from "$lib/api/groups";
     import { UserAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
     interface Props {

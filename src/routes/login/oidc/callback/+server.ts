@@ -8,7 +8,7 @@ import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
 import { oidcLogger as logger } from "$lib/server/logger";
-import { Prisma, type User } from "@prisma/client";
+import { Prisma, type User } from "$lib/generated/prisma/client";
 import type { UserInfoResponse } from "openid-client";
 
 export const POST: RequestHandler = async (event) => {

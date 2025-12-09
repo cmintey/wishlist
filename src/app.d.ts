@@ -8,9 +8,9 @@ declare global {
     declare namespace App {
         // Locals must be an interface and not a type
         interface Locals {
-            user: Omit<import("@prisma/client").User, "hashedPassword"> | null;
+            user: LocalUser | null;
             isProxyUser: boolean;
-            session: import("@prisma/client").Session | null;
+            session: import("$lib/generated/prisma/client").Session | null;
             locale: string;
         }
     }

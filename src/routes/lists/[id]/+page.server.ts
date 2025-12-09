@@ -4,7 +4,7 @@ import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
 import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
-import type { UserGroupMembership } from "@prisma/client";
+import type { UserGroupMembership } from "$lib/generated/prisma/client";
 
 export const load = (async ({ params, url, locals, depends, cookies }) => {
     const $t = await getFormatter();
