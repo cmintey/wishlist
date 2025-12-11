@@ -447,6 +447,8 @@
         "sort-by": "Сортировка",
         "switch-to-list-view": "Переключиться на вид списка",
         "switch-to-tile-view": "Переключиться на вид плитки",
-        "tile-view": "Плитки"
+        "tile-view": "Плитки",
+        "claimed-by-you-on-another-list": "Заявлено вами в другом списке",
+        "claims": "{claimCount, plural, one {# claim} other {# claims}}"
     }
 }
