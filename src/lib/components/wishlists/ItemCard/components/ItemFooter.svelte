@@ -14,6 +14,7 @@
         reorderActions = false,
         onIncreasePriority,
         onDecreasePriority,
+        onPriorityChange,
         onClaim,
         onUnclaim,
         onPurchased,
@@ -24,12 +25,13 @@
 </script>
 
 <footer
-    class="card-footer flex flex-wrap items-center gap-2 px-4 pb-4"
-    class:justify-between={!reorderActions}
-    class:justify-center={reorderActions}
+    class={[
+        "card-footer flex flex-wrap items-center gap-2 px-4",
+        reorderActions ? "justify-center pb-0" : "justify-between"
+    ]}
 >
     {#if reorderActions}
-        <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} />
+        <ReorderButtons {item} {onDecreasePriority} {onIncreasePriority} {onPriorityChange} />
     {:else}
         <ClaimButtons
             {item}

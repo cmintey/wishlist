@@ -26,6 +26,7 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
+    import { errorToast } from "$lib/components/toasts";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -83,6 +84,12 @@
 
     $effect(() => {
         allItems = data.list.items;
+    });
+
+    $effect(() => {
+        if (reordering) {
+            allItems.forEach((it, idx) => (it.displayOrder = idx));
+        }
     });
 
     const groupItems = (items: ItemOnListDTO[]) => {
@@ -189,6 +196,7 @@
     }
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
+        allItems.forEach((item, idx) => (item.displayOrder = idx));
     };
     const swap = <T,>(arr: T[], a: number, b: number) => {
         return arr.with(a, arr[b]).with(b, arr[a]);
@@ -203,6 +211,43 @@
         const itemIdx = allItems.findIndex((item) => item.id === itemId);
         if (itemIdx < allItems.length - 1) {
             allItems = swap(allItems, itemIdx, itemIdx + 1);
+        }
+    };
+    const handlePriorityInput = (item: ItemOnListDTO, idxString: string) => {
+        const targetIdx = Number.parseInt(idxString) - 1;
+        const currentIdx = allItems.findIndex((it) => it.id === item.id);
+
+        if (Number.isNaN(targetIdx) || targetIdx < 0 || targetIdx > allItems.length - 1) {
+            errorToast(toastStore, $t("errors.display-order-invalid", { values: { min: 1, max: allItems.length } }));
+            if (item.displayOrder) {
+                const el = document.getElementById(`${item.id}-displayOrder`) as HTMLInputElement;
+                el.value = (item.displayOrder + 1).toString();
+            }
+            return;
+        }
+        if (currentIdx !== targetIdx) {
+            const resortedItems: ItemOnListDTO[] = [];
+            let displayOrder = 0;
+            for (let i = 0; i < allItems.length; i++) {
+                if (i === currentIdx) {
+                    continue;
+                }
+                if (i === targetIdx) {
+                    if (targetIdx < currentIdx) {
+                        resortedItems.push(allItems[currentIdx]);
+                        resortedItems.push(allItems[i]);
+                    } else {
+                        resortedItems.push(allItems[i]);
+                        resortedItems.push(allItems[currentIdx]);
+                    }
+
+                    resortedItems.at(-2)!.displayOrder = displayOrder++;
+                } else {
+                    resortedItems.push(allItems[i]);
+                }
+                resortedItems.at(-1)!.displayOrder = displayOrder++;
+            }
+            allItems = resortedItems;
         }
     };
     const handleReorderFinalize = async () => {
@@ -334,6 +379,7 @@
                         {item}
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
+                        onPriorityChange={handlePriorityInput}
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}

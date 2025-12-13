@@ -308,3 +308,37 @@ export const getAvailableLists = async (ownerId: string, loggedInUserId: string)
 
     return listsAvailable;
 };
+
+export const getNextDisplayOrderForLists = async (listIds: string[], mostWanted = false) => {
+    if (mostWanted) {
+        return listIds.reduce(
+            (accum, listId) => {
+                accum[listId] = -1;
+                return accum;
+            },
+            {} as Record<string, number>
+        );
+    } else {
+        const maxDisplay = await client.listItem.groupBy({
+            by: ["listId"],
+            _max: {
+                displayOrder: true
+            },
+            _count: {
+                id: true
+            },
+            where: {
+                listId: {
+                    in: listIds
+                }
+            }
+        });
+        return maxDisplay.reduce(
+            (accum, curr) => {
+                accum[curr.listId] = curr._max.displayOrder ? curr._max.displayOrder + 1 : curr._count.id;
+                return accum;
+            },
+            {} as Record<string, number>
+        );
+    }
+};

@@ -17,6 +17,7 @@
         reorderActions = false,
         onIncreasePriority,
         onDecreasePriority,
+        onPriorityChange,
         onClaim,
         onUnclaim,
         onPurchased,
@@ -53,6 +54,7 @@
         {onDelete}
         {onEdit}
         {onIncreasePriority}
+        {onPriorityChange}
         {onPurchased}
         {onUnclaim}
         {reorderActions}

@@ -7,13 +7,13 @@ import { createImage, isValidImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter, getLocale } from "$lib/server/i18n";
-import { getAvailableLists, getById } from "$lib/server/list";
+import { getAvailableLists, getById, getNextDisplayOrderForLists } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemCreateSchema } from "$lib/server/validations";
 import z from "zod";
-import type { List } from "@prisma/client";
+import type { List, Prisma } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -78,7 +78,7 @@ export const actions: Actions = {
             z.treeifyError(form.error);
             return fail(400, { errors: z.flattenError(form.error).fieldErrors });
         }
-        const { url, imageUrl, image, name, price, currency, quantity, note, lists: listIds } = form.data;
+        const { url, imageUrl, image, name, price, currency, quantity, note, lists: listIds, mostWanted } = form.data;
 
         let newImageFile: string | undefined | null;
         if (image && isValidImage(image)) {
@@ -117,13 +117,16 @@ export const actions: Actions = {
             }
         });
 
-        const listItems = await Promise.all(
+        const nextDisplayOrderByList = await getNextDisplayOrderForLists(listIds, mostWanted);
+
+        const listItems: Prisma.ListItemUncheckedCreateWithoutItemInput[] = await Promise.all(
             lists.map(async (l) => {
                 const config = await getConfig(l.groupId);
                 return {
                     listId: l.id,
                     addedById: user.id,
-                    approved: determineApprovalStatus(config, l, user)
+                    approved: determineApprovalStatus(config, l, user),
+                    displayOrder: nextDisplayOrderByList[l.id] || 0
                 };
             })
         );
@@ -138,6 +141,7 @@ export const actions: Actions = {
                 createdById: user.id,
                 itemPriceId,
                 quantity,
+                mostWanted,
                 lists: {
                     create: listItems
                 }
