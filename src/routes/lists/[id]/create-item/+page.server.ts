@@ -126,7 +126,7 @@ export const actions: Actions = {
                     listId: l.id,
                     addedById: user.id,
                     approved: determineApprovalStatus(config, l, user),
-                    displayOrder: nextDisplayOrderByList[l.id]
+                    displayOrder: nextDisplayOrderByList[l.id] || 0
                 };
             })
         );

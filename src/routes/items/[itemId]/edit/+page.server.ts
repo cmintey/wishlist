@@ -103,6 +103,7 @@ export const actions: Actions = {
                     select: {
                         id: true,
                         addedById: true,
+                        displayOrder: true,
                         list: {
                             select: {
                                 id: true,
@@ -177,13 +178,14 @@ export const actions: Actions = {
                         listId: l.id,
                         addedById: user.id,
                         approved: determineApprovalStatus(config, l, user),
-                        displayOrder: nextDisplayOrderByList[l.id]
+                        displayOrder: nextDisplayOrderByList[l.id] || 0
                     };
                 })
         );
 
         let listItemsToUpdate: Prisma.ListItemUpdateWithWhereUniqueWithoutItemInput[] | undefined = undefined;
-        if (mostWanted) {
+        // If item is newly most wanted, then update existing lists
+        if (!item.mostWanted && mostWanted) {
             listItemsToUpdate = desiredLists
                 // existing lists only
                 .filter((l) => item.lists.find(({ list }) => list.id === l.id) !== undefined)
