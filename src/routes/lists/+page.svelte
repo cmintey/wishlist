@@ -3,7 +3,6 @@
     import { fade } from "svelte/transition";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
     import ListCard from "$lib/components/ListCard.svelte";
-    import { isInstalled } from "$lib/stores/is-installed";
     import { goto } from "$app/navigation";
     import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
     import empty from "$lib/assets/no_wishes.svg";
@@ -26,7 +25,16 @@
     };
 </script>
 
-<ListFilterChip class="pb-4" {users} />
+<div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
+    <ListFilterChip {users} />
+    <button
+        class="variant-ghost-secondary btn btn-sm h-fit items-center"
+        onclick={() => goto(resolve("/lists/create"))}
+    >
+        <iconify-icon icon="ion:add"></iconify-icon>
+        <span class="text-xs">{$t("wishes.create-list")}</span>
+    </button>
+</div>
 
 {#if data.myLists.length + data.otherLists.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
@@ -48,16 +56,6 @@
         {/each}
     </div>
 {/if}
-
-<button
-    class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
-    class:bottom-24={$isInstalled}
-    class:bottom-4={!$isInstalled}
-    onclick={() => goto(resolve("/lists/create"), { replaceState: true })}
->
-    <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
-    <span class="sr-only">{$t("wishes.create-list")}</span>
-</button>
 
 <svelte:head>
     <title>{$t("wishes.lists")}</title>

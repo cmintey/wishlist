@@ -256,18 +256,16 @@
 </div>
 
 {#if data.list.owner.isMe || data.list.isManager}
-    <div class="flex flex-wrap-reverse justify-between gap-2 pb-4">
+    <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
         <ListStatistics {items} />
         {#if data.listMode === "registry" || data.list.public}
-            <div class="flex h-fit flex-row gap-x-2">
+            <div class="flex flex-row gap-x-2">
                 {#if publicListUrl}
-                    <div class="flex flex-row">
-                        <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>
-                            {$t("wishes.public-url")}
-                        </TokenCopy>
-                    </div>
+                    <TokenCopy btnStyle="btn-sm" url={publicListUrl?.href}>
+                        <span>{$t("wishes.public-url")}</span>
+                    </TokenCopy>
                 {:else}
-                    <button class="variant-ringed-surface btn btn-sm" onclick={getOrCreatePublicList}>
+                    <button class="variant-ringed-surface btn btn-sm text-xs" onclick={getOrCreatePublicList}>
                         {$t("wishes.share")}
                     </button>
                 {/if}
