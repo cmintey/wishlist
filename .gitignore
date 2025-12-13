@@ -13,6 +13,7 @@ vite.config.ts.timestamp-*
 data/
 uploads/
 prisma/*.db*
+src/lib/generated/
 
 # Playwright
 /test-results/

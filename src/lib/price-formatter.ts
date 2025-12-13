@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/public";
-import type { ItemPrice } from "@prisma/client";
+import type { ItemPrice } from "$lib/generated/prisma/client";
 import { getNumberFormatter } from "svelte-i18n";
 import { defaultLang, getLocale } from "./i18n";
 import { browser } from "$app/environment";

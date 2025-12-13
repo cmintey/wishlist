@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../client";
 
 const PATCH_ID = "item-price";
-const prisma = new PrismaClient();
 
 const isPatchApplied =
     (await prisma.patch.findUnique({
@@ -13,7 +12,7 @@ const isPatchApplied =
 if (isPatchApplied) {
     console.log("Skipping already applied patch: '%s'", PATCH_ID);
 } else {
-    const symbolToCurrencyMap = {
+    const symbolToCurrencyMap: Record<string, string> = {
         $: "USD",
         "€": "EUR",
         "£": "GBP",
@@ -36,7 +35,7 @@ if (isPatchApplied) {
         const commaGroupSepRegex = /^(\d{0,3}\\,\d{3}){0,}\d{0,}\.?\d{0,2}$/g;
         const dotGroupSepRegex = /^(\d{0,3}\.\d{3}){0,}\d{0,},?\d{0,2}$/g;
 
-        const price = item.price;
+        const price = item.price!;
         const priceWithoutSymbols = /[\d\\.\\,]+/g.exec(price)?.[0]?.trim();
         const symbol = /[^\\,\\.\d\w\s]/g.exec(price)?.[0];
         let currency;

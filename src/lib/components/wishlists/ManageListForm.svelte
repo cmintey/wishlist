@@ -4,7 +4,7 @@
     import { enhance } from "$app/forms";
     import ClearableInput from "$lib/components/ClearableInput.svelte";
     import { rgbToHex } from "$lib/util";
-    import type { List, User } from "@prisma/client";
+    import type { List, User } from "$lib/generated/prisma/client";
     import { getModalStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";

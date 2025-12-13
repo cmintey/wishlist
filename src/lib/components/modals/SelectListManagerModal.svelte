@@ -1,7 +1,7 @@
 <script lang="ts">
     import { UsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
-    import type { User } from "@prisma/client";
+    import type { User } from "$lib/generated/prisma/client";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
     interface Props {

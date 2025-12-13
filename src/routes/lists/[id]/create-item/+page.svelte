@@ -1,7 +1,7 @@
 <script lang="ts">
     import { applyAction, enhance } from "$app/forms";
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
-    import type { Item } from "@prisma/client";
+    import type { Item } from "$lib/generated/prisma/client";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { getToastStore } from "@skeletonlabs/skeleton";

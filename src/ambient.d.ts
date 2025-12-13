@@ -111,7 +111,7 @@ type Option = {
 };
 type Direction = "asc" | "desc";
 
-type GroupInformation = import("@prisma/client").Group & {
+type GroupInformation = import("$lib/generated/prisma/client").Group & {
     isManager: boolean;
     active: boolean;
 };
@@ -124,4 +124,4 @@ type DeepPartial<T> = T extends object
 
 type InviteMethod = "email" | "link";
 
-type LocalUser = Omit<import("@prisma/client").User, "hashedPassword">;
+type LocalUser = Omit<import("$lib/generated/prisma/client").User, "hashedPassword">;

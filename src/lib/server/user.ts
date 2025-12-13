@@ -1,7 +1,7 @@
 import { client } from "$lib/server/prisma";
 import { Role } from "$lib/schema";
 import { getConfig } from "$lib/server/config";
-import type { User } from "@prisma/client";
+import type { User } from "$lib/generated/prisma/client";
 import { create } from "./list";
 import { hashPassword } from "./password";
 

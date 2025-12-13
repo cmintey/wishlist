@@ -4,7 +4,7 @@
     import { getContext, onMount } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { getToastStore } from "@skeletonlabs/skeleton";

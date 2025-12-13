@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getToastStore, getModalStore } from "@skeletonlabs/skeleton";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { fade } from "svelte/transition";
     import { InviteUsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";

@@ -1,5 +1,5 @@
 import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-import type { Item } from "@prisma/client";
+import type { Item } from "$lib/generated/prisma/client";
 import { toItemOnListDTO, type FullItem } from "./dtos/item-mapper";
 
 const ITEM_UPDATE = "item_update";

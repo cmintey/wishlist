@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { User } from "@prisma/client";
+    import type { User } from "$lib/generated/prisma/client";
     import BaseChip from "./BaseChip.svelte";
     import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";

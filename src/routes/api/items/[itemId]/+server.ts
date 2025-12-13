@@ -5,7 +5,7 @@ import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { requireLoginOrError } from "$lib/server/auth";
-import type { List as PrismaList, Item as PrismaItem } from "@prisma/client";
+import type { List as PrismaList, Item as PrismaItem } from "$lib/generated/prisma/client";
 
 interface List extends Pick<PrismaList, "groupId"> {
     managers: string[];

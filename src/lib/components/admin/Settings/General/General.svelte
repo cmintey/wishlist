@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import WishlistMode from "./WishlistMode.svelte";
     import Suggestions from "./Suggestions.svelte";
     import Claims from "./Claims.svelte";

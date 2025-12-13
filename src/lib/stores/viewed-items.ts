@@ -1,4 +1,4 @@
-import type { Item } from "@prisma/client";
+import type { Item } from "$lib/generated/prisma/client";
 import { localStorageStore } from "@skeletonlabs/skeleton";
 import type { Writable } from "svelte/store";
 

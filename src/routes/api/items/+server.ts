@@ -5,7 +5,7 @@ import type { RequestHandler } from "./$types";
 import { requireAccessToGroup } from "../groups/[groupId]/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "$lib/generated/prisma/client";
 import { patchItem } from "$lib/server/api-common";
 import { getFormatter } from "$lib/server/i18n";
 import { getItemInclusions } from "$lib/server/items";

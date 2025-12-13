@@ -1,6 +1,6 @@
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
-import type { UserGroupMembership } from "@prisma/client";
+import type { UserGroupMembership } from "$lib/generated/prisma/client";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { getFormatter } from "$lib/server/i18n";

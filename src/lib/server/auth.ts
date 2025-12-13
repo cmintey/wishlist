@@ -2,7 +2,7 @@ import { dev } from "$app/environment";
 import { client } from "./prisma";
 import { env } from "$env/dynamic/private";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import type { Session, User } from "@prisma/client";
+import type { Session, User } from "$lib/generated/prisma/client";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";

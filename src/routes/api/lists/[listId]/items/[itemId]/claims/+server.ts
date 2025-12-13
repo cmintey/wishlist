@@ -4,7 +4,7 @@ import { client } from "$lib/server/prisma";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { listItemClaimSchema } from "$lib/server/validations";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "$lib/generated/prisma/client";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { logger } from "$lib/server/logger";

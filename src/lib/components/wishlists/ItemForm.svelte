@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
+    import type { Group, Item, ItemPrice, List, User } from "$lib/generated/prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
     import { FileButton, getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
     import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
