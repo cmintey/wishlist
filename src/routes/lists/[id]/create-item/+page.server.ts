@@ -7,7 +7,7 @@ import { createImage, isValidImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter, getLocale } from "$lib/server/i18n";
-import { getAvailableLists, getById } from "$lib/server/list";
+import { getAvailableLists, getById, getNextDisplayOrderForLists } from "$lib/server/list";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
 import { requireLogin } from "$lib/server/auth";
@@ -117,27 +117,7 @@ export const actions: Actions = {
             }
         });
 
-        const maxDisplay = await client.listItem.groupBy({
-            by: ["listId"],
-            _max: {
-                displayOrder: true
-            },
-            _count: {
-                id: true
-            },
-            where: {
-                listId: {
-                    in: listIds
-                }
-            }
-        });
-        const nextDisplayOrderByList = maxDisplay.reduce(
-            (accum, curr) => {
-                accum[curr.listId] = curr._max.displayOrder ? curr._max.displayOrder + 1 : curr._count.id;
-                return accum;
-            },
-            {} as Record<string, number>
-        );
+        const nextDisplayOrderByList = await getNextDisplayOrderForLists(listIds, mostWanted);
 
         const listItems: Prisma.ListItemUncheckedCreateWithoutItemInput[] = await Promise.all(
             lists.map(async (l) => {

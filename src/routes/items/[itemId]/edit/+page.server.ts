@@ -9,11 +9,11 @@ import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter, getLocale } from "$lib/server/i18n";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
-import { getAvailableLists } from "$lib/server/list";
+import { getAvailableLists, getNextDisplayOrderForLists } from "$lib/server/list";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemUpdateSchema } from "$lib/server/validations";
 import z from "zod";
-import type { List } from "@prisma/client";
+import type { List, Prisma } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -155,6 +155,9 @@ export const actions: Actions = {
         });
 
         const desiredListIds = new Set(desiredLists.map(({ id }) => id));
+
+        const nextDisplayOrderByList = await getNextDisplayOrderForLists([...desiredListIds], mostWanted);
+
         const listItemsToDelete = item.lists
             // only the list owner or the person who added the item can remove it from the list
             .filter(
@@ -173,10 +176,29 @@ export const actions: Actions = {
                     return {
                         listId: l.id,
                         addedById: user.id,
-                        approved: determineApprovalStatus(config, l, user)
+                        approved: determineApprovalStatus(config, l, user),
+                        displayOrder: nextDisplayOrderByList[l.id]
                     };
                 })
         );
+
+        let listItemsToUpdate: Prisma.ListItemUpdateWithWhereUniqueWithoutItemInput[] | undefined = undefined;
+        if (mostWanted) {
+            listItemsToUpdate = desiredLists
+                // existing lists only
+                .filter((l) => item.lists.find(({ list }) => list.id === l.id) !== undefined)
+                .map((list) => ({
+                    data: {
+                        displayOrder: -1
+                    },
+                    where: {
+                        listId_itemId: {
+                            itemId: parseInt(params.itemId),
+                            listId: list.id
+                        }
+                    }
+                }));
+        }
 
         const updatedItem = await client.item.update({
             where: {
@@ -192,6 +214,7 @@ export const actions: Actions = {
                 mostWanted,
                 lists: {
                     create: listItemsToCreate,
+                    update: listItemsToUpdate,
                     deleteMany: {
                         id: {
                             in: listItemsToDelete
