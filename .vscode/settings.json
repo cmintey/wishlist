@@ -13,5 +13,12 @@
         "general.very-strong",
         "general.very-weak",
         "general.weak"
+    ],
+    "tailwindCSS.classAttributes": [
+        "class",
+        "className",
+        "ngClass",
+        "class:list",
+        "icon"
     ]
 }

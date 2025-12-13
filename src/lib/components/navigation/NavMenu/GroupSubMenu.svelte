@@ -3,6 +3,7 @@
     import { resolve } from "$app/paths";
     import { GroupsAPI } from "$lib/api/groups";
     import { UserAPI } from "$lib/api/users";
+    import Icon from "$lib/components/Icon.svelte";
     import { getFormatter } from "$lib/i18n";
     import type { Group } from "@prisma/client";
     import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
@@ -71,7 +72,7 @@
             {#if groups.length > 1}
                 <li>
                     <div class="flex w-fit max-w-[24ch] flex-row items-center gap-x-4 px-4 py-2 md:max-w-full">
-                        <iconify-icon icon="ion:people"></iconify-icon>
+                        <Icon icon="ion--people"></Icon>
                         <span class="truncate">{group.name}</span>
                     </div>
                 </li>
@@ -79,7 +80,7 @@
             {#if group.isManager}
                 <li>
                     <button class="list-option w-fit" onclick={() => goto(`/admin/groups/${group.id}`)}>
-                        <iconify-icon icon="ion:settings"></iconify-icon>
+                        <Icon icon="ion--settings"></Icon>
                         <span>{$t("general.manage-group")}</span>
                     </button>
                 </li>
@@ -89,7 +90,7 @@
     {#if groups.length > 1}
         <li>
             <button class="list-option w-fit" onclick={() => changeGroup(groups)}>
-                <iconify-icon icon="ion:swap-horizontal"></iconify-icon>
+                <Icon icon="ion--swap-horizontal"></Icon>
                 <span>{$t("general.change-group")}</span>
             </button>
         </li>
@@ -98,7 +99,7 @@
 
 <li>
     <button class="list-option w-fit" onclick={createGroup}>
-        <iconify-icon icon="ion:add"></iconify-icon>
+        <Icon icon="ion--add"></Icon>
         <span>{$t("general.create-group")}</span>
     </button>
 </li>

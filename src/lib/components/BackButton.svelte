@@ -3,6 +3,7 @@
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import type { Snippet } from "svelte";
+    import Icon from "./Icon.svelte";
 
     interface Props {
         header: Snippet;
@@ -32,7 +33,7 @@
     {@render header()}
 {:else}
     <button class="btn w-fit p-0" aria-label={$t("setup.back")} onclick={() => history.back()} type="button">
-        <iconify-icon class="mt-0.5" icon="ion:arrow-back"></iconify-icon>
+        <Icon class="mt-0.5" icon="ion--arrow-back"></Icon>
         <span class="truncate text-xl">{$t("setup.back")}</span>
     </button>
 {/if}

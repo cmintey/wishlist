@@ -3,6 +3,7 @@
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
+    import Icon from "./Icon.svelte";
 
     interface Props {
         url: string;
@@ -42,7 +43,7 @@
             use:clipboard={{ element: "tokenUrl" }}
             use:popup={tooltipSettings}
         >
-            <iconify-icon icon="ion:copy"></iconify-icon>
+            <Icon icon="ion--copy"></Icon>
         </button>
         <div class="card variant-filled-secondary z-20 p-2" data-popup="copy">
             {$t("general.copy-to-clipboard")}

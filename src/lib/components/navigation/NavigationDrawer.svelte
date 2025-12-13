@@ -3,6 +3,7 @@
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import logo from "$lib/assets/logo.png";
+    import Icon from "../Icon.svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -21,7 +22,7 @@
         <span class="text-primary-900-50-token text-2xl font-bold md:text-3xl">Wishlist</span>
     </div>
     <button class="variant-ghost-surface btn-icon" aria-label={$t("a11y.close")} onclick={() => drawerStore.close()}>
-        <iconify-icon class="text-xl" icon="ion:close"></iconify-icon>
+        <Icon class="text-xl" icon="ion--close"></Icon>
     </button>
 </div>
 <nav class="list-nav p-4">
@@ -35,7 +36,7 @@
                     href={navItem.href(user)}
                     onclick={() => drawerStore.close()}
                 >
-                    <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
+                    <Icon class="text-xl" icon={navItem.icon}></Icon>
                     <p>{$t(navItem.labelKey)}</p>
                 </a>
             </li>

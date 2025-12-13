@@ -8,6 +8,7 @@
     import empty from "$lib/assets/no_wishes.svg";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import Icon from "$lib/components/Icon.svelte";
 
     type ListData = PageData["otherLists"][0];
 
@@ -31,7 +32,7 @@
         class="variant-ghost-secondary btn btn-sm h-fit items-center"
         onclick={() => goto(resolve("/lists/create"))}
     >
-        <iconify-icon icon="ion:add"></iconify-icon>
+        <Icon icon="ion--add"></Icon>
         <span class="text-xs">{$t("wishes.create-list")}</span>
     </button>
 </div>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import Icon from "$lib/components/Icon.svelte";
     import { getFormatter } from "$lib/i18n";
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import type { ClassValue } from "svelte/elements";
@@ -129,11 +130,11 @@
         use:popup={menuSettings}
     >
         {#if selectedOptions[0].direction === "asc"}
-            <iconify-icon icon="ion:arrow-up"></iconify-icon>
+            <Icon icon="ion--arrow-up"></Icon>
         {:else if selectedOptions[0].direction === "desc"}
-            <iconify-icon icon="ion:arrow-down"></iconify-icon>
+            <Icon icon="ion--arrow-down"></Icon>
         {:else if prefix}
-            <iconify-icon icon={prefix}></iconify-icon>
+            <Icon icon={prefix}></Icon>
         {/if}
         <div class="flex gap-x-1">
             <span>
@@ -145,11 +146,7 @@
                 </span>
             {/if}
         </div>
-        <iconify-icon
-            class="arrow text-xs duration-300 ease-out"
-            class:rotate-180={menuOpen}
-            icon="ion:caret-down"
-        ></iconify-icon>
+        <Icon class={["arrow text-xs duration-300 ease-out", menuOpen && "rotate-180"]} icon="ion--caret-down"></Icon>
     </button>
     <nav class="card list-nav z-10 max-h-96 p-4 shadow-xl" data-popup={popupKey}>
         <ul class="max-h-72 overflow-auto">

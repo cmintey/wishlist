@@ -2,6 +2,7 @@
     import type { List, User } from "@prisma/client";
     import Avatar from "./Avatar.svelte";
     import { getFormatter } from "$lib/i18n";
+    import Icon from "./Icon.svelte";
 
     interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor">> {
         owner: Pick<User, "name" | "username" | "picture">;
@@ -37,7 +38,7 @@
         <div
             class="variant-ghost-primary card-header flex flex-row items-center gap-x-2 px-4 py-2 rounded-tl-container-token rounded-tr-container-token"
         >
-            <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
+            <Icon class="text-xl" icon="ion--information-circle"></Icon>
             <p class="text-sm">
                 {$t("wishes.approvals-waiting", { values: { approvalCount: list.unapprovedCount } })}
             </p>
@@ -46,7 +47,9 @@
 
     <div class="grid grid-cols-[auto_1fr] items-center gap-4 p-4">
         <div style="background-color: {iconColor};" class="avatar" class:bg-primary-400-500-token={!iconColor}>
-            <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
+            <!-- <Icon class="size-6" icon="icon-[ion--{list.icon ?? 'gift'}]" dynamic></Icon> -->
+            <Icon class="size-6" icon="ion--{list.icon ?? 'gift'}"></Icon>
+            <!-- <Icon class="size-6" icon="icon-[ion--gift]" dynamic></Icon> -->
         </div>
         <div class="flex flex-col space-y-1">
             <span
@@ -64,16 +67,12 @@
                 {#if list.itemCount !== undefined}
                     <span>·</span>
                     <div class="flex flex-row items-center gap-x-2">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
+                        <Icon icon="ion--gift"></Icon>
                         <span data-testid="item-count">
                             {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
                         </span>
                         {#if hasNewItems}
-                            <iconify-icon
-                                class="text-primary-700-200-token opacity-40"
-                                icon="ion:ellipse-sharp"
-                                width="0.5rem"
-                            ></iconify-icon>
+                            <Icon class="text-primary-700-200-token w-2 opacity-40" icon="ion--ellipse-sharp"></Icon>
                         {/if}
                     </div>
                 {/if}

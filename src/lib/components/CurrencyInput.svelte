@@ -4,6 +4,7 @@
     import { onMount } from "svelte";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
+    import Icon from "./Icon.svelte";
 
     interface Props {
         value?: number | null;
@@ -110,7 +111,7 @@
 
 <div class="input-group grid-cols-[auto_1fr_auto]">
     <div class="input-group-shim">
-        <iconify-icon icon="ion:pricetag"></iconify-icon>
+        <Icon icon="ion--pricetag"></Icon>
     </div>
     <div class="border-surface-400-500-token border-r focus:border-surface-400-500-token rtl:border-l">
         <input {id} {name} {disabled} type="hidden" bind:value />

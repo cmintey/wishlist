@@ -21,7 +21,7 @@
     const label = $t("wishes.filter");
     const defaultOption = options[0];
     const searchParam = "filter";
-    const prefix = "ion:filter";
+    const prefix = "ion-filter";
 </script>
 
 <BaseChip {defaultOption} {label} {options} {prefix} {searchParam} />

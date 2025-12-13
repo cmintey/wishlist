@@ -1,6 +1,7 @@
 <script lang="ts">
     import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import type { Snippet } from "svelte";
+    import Icon from "./Icon.svelte";
 
     interface Props {
         label: Snippet;
@@ -26,7 +27,7 @@
             {#if props.icon}
                 {@render props.icon()}
             {:else}
-                <iconify-icon class="text-secondary-500" icon="ion:help-circle-outline"></iconify-icon>
+                <Icon class="text-secondary-500" icon="ion--help-circle-outline"></Icon>
             {/if}
         </span>
     </button>

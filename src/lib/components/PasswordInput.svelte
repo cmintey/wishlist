@@ -5,6 +5,7 @@
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
     import type { HTMLInputAttributes } from "svelte/elements";
+    import Icon from "./Icon.svelte";
 
     interface Props extends HTMLInputAttributes {
         id: string;
@@ -77,7 +78,7 @@
             tabindex="-1"
             type="button"
         >
-            <iconify-icon class="-mb-0.5" icon="ion:{visible ? 'eye-off' : 'eye'}"></iconify-icon>
+            <Icon class="-mb-0.5" icon={visible ? "ion--eye-off" : "ion--eye"}></Icon>
         </button>
     </div>
 </label>
@@ -95,21 +96,21 @@
             class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
             use:popup={popupSettings}
         >
-            <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
+            <Icon icon="ion--information-circle-outline"></Icon>
         </div>
     </div>
 
     <div class="card variant-filled p-4" data-popup="suggestions">
         {#if strength.feedback.warning}
             <div class="flex flex-row items-center gap-x-4 pb-1">
-                <iconify-icon icon="ion:alert-circle"></iconify-icon>
+                <Icon icon="ion--alert-circle"></Icon>
                 <p>{strength.feedback.warning}</p>
             </div>
         {/if}
         <ul class="list">
             {#each strength.feedback.suggestions as suggestion}
                 <li>
-                    <iconify-icon icon="ion:arrow-forward"></iconify-icon>
+                    <Icon icon="ion--arrow-forward"></Icon>
                     <p>{suggestion}</p>
                 </li>
             {/each}

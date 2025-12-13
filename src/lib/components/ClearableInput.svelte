@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
     import type { HTMLInputAttributes } from "svelte/elements";
+    import Icon from "./Icon.svelte";
 
     interface Props extends HTMLInputAttributes {
         onValueClear: () => void;
@@ -29,7 +30,7 @@
             tabindex="-1"
             type="button"
         >
-            <iconify-icon class="text-xl" icon="ion:close-circle"></iconify-icon>
+            <Icon class="text-xl" icon="ion--close-circle"></Icon>
         </button>
     {/if}
 </div>

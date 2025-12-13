@@ -1,6 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import Backdrop from "$lib/components/Backdrop.svelte";
+    import Icon from "$lib/components/Icon.svelte";
     import { getFormatter } from "$lib/i18n";
     import type { PageProps } from "./$types";
 
@@ -15,7 +16,7 @@
         <h1 class="h1">{$t("auth.reset-password")}</h1>
         {#if form?.success}
             <div class="flex w-80 flex-col items-center space-y-1 text-center md:w-full">
-                <iconify-icon icon="ion:checkmark-circle-outline" width="100"></iconify-icon>
+                <Icon icon="ion--checkmark-circle-outline w-24"></Icon>
                 <span class="text-xl font-bold">{$t("general.success")}</span>
                 <p>{$t("auth.check-your-email")}</p>
             </div>

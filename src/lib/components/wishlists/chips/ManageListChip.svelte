@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "$lib/components/Icon.svelte";
     import { getFormatter } from "$lib/i18n";
     import type { MouseEventHandler } from "svelte/elements";
 
@@ -12,7 +13,7 @@
 
 <div>
     <button class="variant-filled-primary chip" {onclick}>
-        <iconify-icon icon="ion:build"></iconify-icon>
+        <Icon icon="ion--build"></Icon>
         <span>{$t("wishes.manage")}</span>
     </button>
 </div>

@@ -2,6 +2,7 @@
     import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
     import { getClaimedName, shouldShowName } from "../util";
+    import Icon from "$lib/components/Icon.svelte";
 
     type Props = Pick<
         InternalItemCardProps,
@@ -59,7 +60,7 @@
                 }}
                 title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
             >
-                <iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon>
+                <Icon icon={userClaim.purchased ? "ion--bag-check" : "ion--bag"}></Icon>
             </button>
         </div>
     {:else}

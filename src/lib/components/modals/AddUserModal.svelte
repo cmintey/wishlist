@@ -3,6 +3,7 @@
     import { getFormatter } from "$lib/i18n";
     import type { User } from "@prisma/client";
     import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
+    import Icon from "../Icon.svelte";
 
     interface Props {
         parent: any;
@@ -37,7 +38,7 @@
         <span>{$t("general.search")}</span>
         <div class="input-group grid-cols-[auto_1fr_auto]">
             <div class="input-group-shim">
-                <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
+                <Icon class="text-lg" icon="ion--search"></Icon>
             </div>
             <input class="input" oninput={doSearch} type="search" />
         </div>

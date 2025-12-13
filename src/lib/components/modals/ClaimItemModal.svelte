@@ -6,6 +6,7 @@
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
     import { getFormatter } from "$lib/i18n";
+    import Icon from "../Icon.svelte";
 
     interface Props {
         parent: any;
@@ -139,7 +140,7 @@
                 <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="input-group-shim">
-                        <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                        <Icon class="text-lg" icon="ion--person"></Icon>
                     </div>
                     <input class="input" type="text" bind:value={name} />
                 </div>
@@ -150,7 +151,7 @@
                     <span>{$t("auth.email")}</span>
                     <div class="input-group grid-cols-[auto_1fr_auto]">
                         <div class="input-group-shim">
-                            <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                            <Icon class="text-lg" icon="ion--person"></Icon>
                         </div>
                         <input class="input" required type="email" bind:value={username} />
                     </div>

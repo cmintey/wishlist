@@ -9,6 +9,7 @@
     import { getFormatter } from "$lib/i18n";
     import { goto } from "$app/navigation";
     import MarkdownEditor from "../MarkdownEditor.svelte";
+    import Icon from "../Icon.svelte";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -171,7 +172,7 @@
         <div class="flex flex-row gap-x-4">
             <div class="input-group grid-cols-[auto_1fr_auto]">
                 <div class="input-group-shim">
-                    <iconify-icon icon="ion:link"></iconify-icon>
+                    <Icon icon="ion--link"></Icon>
                 </div>
                 <input
                     id="url"
@@ -191,7 +192,7 @@
                         tabindex="-1"
                         type="button"
                     >
-                        <iconify-icon icon="ion:close-circle"></iconify-icon>
+                        <Icon icon="ion--close-circle"></Icon>
                     </button>
                 {/if}
             </div>
@@ -209,7 +210,7 @@
                     tabindex="-1"
                     type="button"
                 >
-                    <iconify-icon icon="ion:refresh"></iconify-icon>
+                    <Icon icon="ion--refresh"></Icon>
                 </button>
             {/if}
         </div>
@@ -219,7 +220,7 @@
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
-                <iconify-icon icon="ion:bag-handle"></iconify-icon>
+                <Icon icon="ion--bag-handle"></Icon>
             </div>
             <input
                 id="name"
@@ -250,7 +251,7 @@
             <div class="grow">
                 <div class="input-group grid-cols-[auto_1fr]">
                     <div class="input-group-shim">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
+                        <Icon icon="ion--gift"></Icon>
                     </div>
                     <input
                         id="quantity"
@@ -307,7 +308,7 @@
         <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="input-group-shim">
-                <iconify-icon icon="ion:image"></iconify-icon>
+                <Icon icon="ion--image"></Icon>
             </div>
             <input
                 id="imageUrl"

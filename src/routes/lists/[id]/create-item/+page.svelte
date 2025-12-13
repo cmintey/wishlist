@@ -7,6 +7,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import { errorToast } from "$lib/components/toasts";
     import { goto } from "$app/navigation";
+    import Icon from "$lib/components/Icon.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -61,7 +62,7 @@
     <div class="pb-4">
         <aside class="alert variant-ghost-warning">
             <div class="alert-message flex flex-row items-center gap-x-4 space-y-0">
-                <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
+                <Icon class="text-4xl" icon="ion--warning"></Icon>
                 <div>
                     <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>
                     <p class="text-sm">

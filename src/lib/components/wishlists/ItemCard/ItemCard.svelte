@@ -68,6 +68,7 @@
     import GridItemCard from "./GridItemCard.svelte";
     import ListItemCard from "./ListItemCard.svelte";
     import type { Snippet } from "svelte";
+    import Icon from "$lib/components/Icon.svelte";
 
     const {
         item,
@@ -295,7 +296,7 @@
         data-testid="image"
         role="img"
     >
-        <iconify-icon class="size-8 md:size-16" height="none" icon="ion:gift"></iconify-icon>
+        <Icon class="size-8 md:size-16" icon="ion--gift"></Icon>
     </div>
 {/snippet}
 

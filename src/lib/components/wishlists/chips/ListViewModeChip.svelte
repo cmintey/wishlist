@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "$lib/components/Icon.svelte";
     import { getFormatter } from "$lib/i18n";
     import { setListViewPreference } from "$lib/stores/list-view-preference.svelte";
     import { RadioGroup, RadioItem } from "@skeletonlabs/skeleton";
@@ -29,7 +30,7 @@
         value="list"
         bind:group={selectedValue}
     >
-        <iconify-icon class="text-xs" icon="ion:list"></iconify-icon>
+        <Icon class="text-xs" icon="ion--list"></Icon>
     </RadioItem>
     <RadioItem
         name="list-view-mode"
@@ -38,6 +39,6 @@
         value="tile"
         bind:group={selectedValue}
     >
-        <iconify-icon class="text-xs" icon="ion:grid"></iconify-icon>
+        <Icon class="text-xs" icon="ion--grid"></Icon>
     </RadioItem>
 </RadioGroup>

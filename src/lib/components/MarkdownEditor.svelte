@@ -2,6 +2,7 @@
     import { Tab, TabGroup } from "@skeletonlabs/skeleton";
     import Markdown from "./Markdown.svelte";
     import { getFormatter } from "$lib/i18n";
+    import Icon from "./Icon.svelte";
 
     interface Props {
         id: string;
@@ -32,7 +33,7 @@
         {/if}
     {/if}
     <a class="variant-soft btn btn-sm mt-1" href="https://www.markdownguide.org/basic-syntax/" target="_blank">
-        <iconify-icon icon="ion:logo-markdown"></iconify-icon>
+        <Icon icon="ion--logo-markdown"></Icon>
         <span>{$t("wishes.supports-markdown")}</span>
     </a>
 </div>

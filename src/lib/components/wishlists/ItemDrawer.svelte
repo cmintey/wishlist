@@ -12,6 +12,7 @@
     import { getFormatter } from "$lib/i18n";
     import ItemImage from "./ItemCard/components/ItemImage.svelte";
     import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
+    import Icon from "../Icon.svelte";
 
     const t = getFormatter();
     const drawerStore = getDrawerStore();
@@ -49,7 +50,7 @@
                 drawerStore.close();
             }}
         >
-            <iconify-icon icon="ion:close"></iconify-icon>
+            <Icon icon="ion--close"></Icon>
         </button>
     </div>
 

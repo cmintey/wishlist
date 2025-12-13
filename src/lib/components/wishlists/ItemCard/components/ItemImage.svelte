@@ -6,6 +6,7 @@
     import type { MessageFormatter } from "$lib/server/i18n";
     import type { InternalItemCardProps } from "../ItemCard.svelte";
     import type { Snippet } from "svelte";
+    import Icon from "$lib/components/Icon.svelte";
 
     interface Props extends Pick<InternalItemCardProps, "item"> {
         class?: ClassValue;
@@ -35,7 +36,7 @@
 <div class={[props.class, "relative"]}>
     {#if item.mostWanted}
         <div class={["glow variant-filled-primary chip absolute start-1 top-1", badgeClass]}>
-            <iconify-icon icon="ion:star"></iconify-icon>
+            <Icon icon="ion--star"></Icon>
             <span class={shrinkBadge ? "hidden md:block" : "block"}>{$t("wishes.most-wanted")}</span>
         </div>
     {/if}

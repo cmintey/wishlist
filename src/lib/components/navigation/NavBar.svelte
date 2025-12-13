@@ -6,6 +6,7 @@
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
     import { getFormatter } from "$lib/i18n";
+    import Icon from "../Icon.svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -52,7 +53,7 @@
                     aria-label={$t("a11y.menu")}
                     onclick={() => drawerStore.open(drawerSettings)}
                 >
-                    <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
+                    <Icon class="text-2xl" icon="ion--menu"></Icon>
                 </button>
                 {@render wishlistHeader()}
             {:else}

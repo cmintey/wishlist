@@ -1,6 +1,7 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
     import fuzzysort from "fuzzysort";
+    import Icon from "./Icon.svelte";
 
     interface Props {
         data: Record<string, unknown>[];
@@ -27,7 +28,7 @@
     <span>{$t("general.search")}</span>
     <div class="input-group grid-cols-[auto_1fr_auto]">
         <div class="input-group-shim">
-            <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
+            <Icon class="text-lg" icon="ion--search"></Icon>
         </div>
         <input class="input" type="search" bind:value={search} />
     </div>

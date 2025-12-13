@@ -3,6 +3,7 @@
     import { getFormatter } from "$lib/i18n";
     import { getListViewPreference } from "$lib/stores/list-view-preference.svelte";
     import type { InternalItemCardProps } from "./ItemCard.svelte";
+    import Icon from "$lib/components/Icon.svelte";
 
     type Props = Pick<InternalItemCardProps, "item" | "onIncreasePriority" | "onDecreasePriority" | "onPriorityChange">;
 
@@ -25,7 +26,7 @@
             }}
             title={$t("a11y.decrease-priority", messageObj)}
         >
-            <iconify-icon class={[isTileView && "md:-rotate-90"]} icon="ion:arrow-down"></iconify-icon>
+            <Icon class={[isTileView && "md:-rotate-90"]} icon="ion--arrow-down"></Icon>
         </button>
         <div>
             <label class="sr-only" for="displayOrder">{$t("wishes.display-order")}</label>
@@ -47,7 +48,7 @@
             }}
             title={$t("a11y.increase-priority", messageObj)}
         >
-            <iconify-icon class={[isTileView && "md:-rotate-90"]} icon="ion:arrow-up"></iconify-icon>
+            <Icon class={[isTileView && "md:-rotate-90"]} icon="ion--arrow-up"></Icon>
         </button>
     </div>
 
@@ -58,6 +59,6 @@
         title={$t("a11y.drag-handle", messageObj)}
         use:dragHandle
     >
-        <iconify-icon icon="ion:reorder-two"></iconify-icon>
+        <Icon icon="ion--reorder-two"></Icon>
     </button>
 </div>

@@ -24,7 +24,7 @@
     const defaultOption = options[0];
     const searchParam = "sort";
     const directionParam = "dir";
-    const prefix = "ion:swap-vertical";
+    const prefix = "ion--swap-vertical";
 </script>
 
 <BaseChip {defaultOption} {directionParam} {label} {options} {prefix} {searchParam} />

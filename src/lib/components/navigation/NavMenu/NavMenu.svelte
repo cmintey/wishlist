@@ -6,6 +6,7 @@
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { getFormatter } from "$lib/i18n";
     import GroupSelectChip from "$lib/components/wishlists/chips/GroupSelectChip.svelte";
+    import Icon from "$lib/components/Icon.svelte";
 
     interface Props {
         user: LocalUser | null;
@@ -47,14 +48,14 @@
         <ul>
             <li>
                 <a href="/account">
-                    <iconify-icon icon="ion:person"></iconify-icon>
+                    <Icon icon="ion--person"></Icon>
                     <span class="flex-auto">{$t("admin.account")}</span>
                 </a>
             </li>
             {#if user.roleId == Role.ADMIN}
                 <li>
                     <a href="/admin">
-                        <iconify-icon icon="ion:settings"></iconify-icon>
+                        <Icon icon="ion--settings"></Icon>
                         <span class="flex-auto">{$t("admin.admin")}</span>
                     </a>
                 </li>
@@ -72,7 +73,7 @@
                             invalidateAll();
                         }}
                     >
-                        <iconify-icon icon="ion:log-out"></iconify-icon>
+                        <Icon icon="ion--log-out"></Icon>
                         <p>{$t("auth.sign-out")}</p>
                     </button>
                 </li>
@@ -80,7 +81,7 @@
             <hr class="pb-1" />
             <li>
                 <button class="list-option w-full" onclick={chooseLanguage} type="button">
-                    <iconify-icon icon="ion:language"></iconify-icon>
+                    <Icon icon="ion--language"></Icon>
                     <p>{$t("general.language")}</p>
                 </button>
             </li>

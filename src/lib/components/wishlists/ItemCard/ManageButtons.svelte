@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
+    import Icon from "$lib/components/Icon.svelte";
 
     interface Props extends Pick<InternalItemCardProps, "item" | "user" | "userCanManage" | "onDelete" | "onEdit"> {
         onApprove?: VoidFunction;
@@ -21,7 +22,7 @@
         }}
         title={$t("wishes.delete")}
     >
-        <iconify-icon icon="ion:trash"></iconify-icon>
+        <Icon icon="ion--trash"></Icon>
     </button>
 {/snippet}
 
@@ -36,7 +37,7 @@
             }}
             title={$t("wishes.deny")}
         >
-            <iconify-icon icon="ion:close"></iconify-icon>
+            <Icon icon="ion--close"></Icon>
         </button>
         <button
             class="variant-filled-success btn-icon btn-icon-sm md:btn-icon-base"
@@ -47,7 +48,7 @@
             }}
             title={$t("wishes.approve")}
         >
-            <iconify-icon icon="ion:checkmark"></iconify-icon>
+            <Icon icon="ion--checkmark"></Icon>
         </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
@@ -59,7 +60,7 @@
             }}
             title={$t("wishes.edit")}
         >
-            <iconify-icon icon="ion:edit"></iconify-icon>
+            <Icon icon="ion--edit"></Icon>
         </button>
         {@render deleteButton()}
     {:else if userCanManage}

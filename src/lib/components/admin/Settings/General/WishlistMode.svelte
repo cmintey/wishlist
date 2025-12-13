@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "$lib/components/Icon.svelte";
     import Tooltip from "$lib/components/Tooltip.svelte";
     import { getFormatter } from "$lib/i18n";
     import Setting from "../Setting.svelte";
@@ -48,7 +49,7 @@
         </label>
         {#if disabled}
             <div class="flex flex-row items-center gap-x-1">
-                <iconify-icon class="text-warning-800 dark:text-warning-500" icon="ion:warning"></iconify-icon>
+                <Icon class="text-warning-800 dark:text-warning-500" icon="ion--warning"></Icon>
                 <span class="text-sm text-warning-800 dark:text-warning-500">
                     {$t("admin.wishlist-mode-alert", { values: { memberCount: groupUserCount, listCount: listCount } })}
                 </span>

@@ -9,6 +9,7 @@
     import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
     import { getFormatter } from "$lib/i18n";
     import { errorToast } from "$lib/components/toasts";
+    import Icon from "$lib/components/Icon.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -54,7 +55,7 @@
                             button="btn-icon btn-icon-sm variant-glass-secondary"
                             on:change={() => submitButton?.click()}
                         >
-                            <iconify-icon class="text-2xl" icon="ion:camera"></iconify-icon>
+                            <Icon class="text-2xl" icon="ion--camera"></Icon>
                         </FileButton>
                         <!-- svelte-ignore a11y_consider_explicit_label -->
                         <button bind:this={submitButton} hidden type="submit"></button>

@@ -27,6 +27,7 @@
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
     import { errorToast } from "$lib/components/toasts";
+    import Icon from "$lib/components/Icon.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -429,7 +430,7 @@
         aria-label="add item"
         onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >
-        <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
+        <Icon class="size-8" icon="ion--add"></Icon>
     </button>
 {/if}
 

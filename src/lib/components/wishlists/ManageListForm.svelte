@@ -10,6 +10,7 @@
     import MarkdownEditor from "../MarkdownEditor.svelte";
     import { page } from "$app/state";
     import Tooltip from "../Tooltip.svelte";
+    import Icon from "../Icon.svelte";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
         owner: Pick<User, "name" | "username" | "picture">;
@@ -204,7 +205,7 @@
                             <span class="subtext truncate" data-part="email">{manager.username}</span>
                         </div>
                         <button class="flex items-center" onclick={() => removeManager(manager.id)} type="button">
-                            <iconify-icon icon="ion:close"></iconify-icon>
+                            <Icon icon="ion--close"></Icon>
                             <span class="sr-only">
                                 {$t("a11y.remove-manager-name", { values: { name: manager.name } })}
                             </span>

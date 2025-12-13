@@ -18,7 +18,7 @@
     const users = $state(props.users);
 
     const label = $t("wishes.filter");
-    const prefix = "ion:people";
+    const prefix = "ion--people";
     const searchParam = "users";
     const defaultOption: Option = {
         value: "",

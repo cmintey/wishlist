@@ -10,6 +10,7 @@
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import Icon from "$lib/components/Icon.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -104,7 +105,7 @@
             onclick={() => modalStore.trigger(addUserModalSettings)}
             type="button"
         >
-            <iconify-icon icon="ion:person-add"></iconify-icon>
+            <Icon icon="ion--person-add"></Icon>
             <span>{$t("admin.add-member")}</span>
         </button>
         <form method="POST" use:enhance>
@@ -147,7 +148,7 @@
                                 })}
                                 onclick={() => toggleManager(user.id, !user.isGroupManager)}
                             >
-                                <iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}"></iconify-icon>
+                                <Icon icon="ion--sparkles{user.isGroupManager ? '' : '-outline'}"></Icon>
                             </button>
                         </td>
                         <td aria-colindex={dataKeys.length} role="gridcell" tabindex={-1}>
@@ -156,7 +157,7 @@
                                 aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
                                 onclick={() => removeMember(user.id)}
                             >
-                                <iconify-icon icon="ion:person-remove"></iconify-icon>
+                                <Icon icon="ion--person-remove"></Icon>
                             </button>
                         </td>
                     </tr>

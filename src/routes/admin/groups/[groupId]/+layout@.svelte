@@ -6,6 +6,7 @@
     import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import Icon from "$lib/components/Icon.svelte";
 
     const { data, children }: LayoutProps = $props();
     const t = getFormatter();
@@ -46,16 +47,16 @@
         />
         <div class="-gap-x-2 flex flex-row items-center">
             <button class="btn-icon pr-0" aria-label={$t("a11y.save-group-name")} onclick={() => saveGroupName()}>
-                <iconify-icon icon="ion:save" width="24px"></iconify-icon>
+                <Icon class="w-6" icon="ion--save"></Icon>
             </button>
             <button class="btn-icon pl-0" aria-label={$t("a11y.cancel-editing")} onclick={() => (editing = !editing)}>
-                <iconify-icon class="text-error-500" icon="ion:close" width="24px"></iconify-icon>
+                <Icon class="w-6 text-error-500" icon="ion--close"></Icon>
             </button>
         </div>
     {:else}
         <h2 class="h2 pb-2">{data.group.name}</h2>
         <button class="btn-icon" aria-label={$t("a11y.edit-group-name")} onclick={() => (editing = !editing)}>
-            <iconify-icon icon="ion:create-outline" width="24px"></iconify-icon>
+            <Icon class="w-6" icon="ion--create-outline"></Icon>
         </button>
     {/if}
 </div>

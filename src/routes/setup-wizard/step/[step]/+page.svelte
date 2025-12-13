@@ -9,6 +9,7 @@
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
     import { resolve } from "$app/paths";
+    import Icon from "$lib/components/Icon.svelte";
 
     let locked = false;
 
@@ -60,20 +61,20 @@
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->
         <button class="variant-ghost btn" disabled={$stepperState.current <= 1} onclick={onBack} type="button">
-            <iconify-icon icon="ion:arrow-back"></iconify-icon>
+            <Icon icon="ion--arrow-back"></Icon>
             <span>{$t("setup.back")}</span>
         </button>
         {#if $stepperState.current < $stepperState.total - 1}
             <!-- Button: Next -->
             <button class="variant-filled btn" disabled={locked} onclick={submit} type="submit">
                 {#if locked}
-                    <iconify-icon icon="ion:lock-closed"></iconify-icon>
+                    <Icon icon="ion--lock-closed"></Icon>
                 {/if}
                 {#if submitting}
                     <ProgressRadial width="w-4" />
                 {/if}
                 <span>{$t("setup.next")}</span>
-                <iconify-icon icon="ion:arrow-forward"></iconify-icon>
+                <Icon icon="ion--arrow-forward"></Icon>
             </button>
         {:else}
             <!-- Button: Complete -->

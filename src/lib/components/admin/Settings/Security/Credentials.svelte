@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "$lib/components/Icon.svelte";
     import Tooltip from "$lib/components/Tooltip.svelte";
     import { getFormatter } from "$lib/i18n";
     import { strengthOptions } from "$lib/zxcvbn";
@@ -37,7 +38,7 @@
                     <span>{$t("admin.password-strength-warning")}</span>
                 {/snippet}
                 {#snippet icon()}
-                    <iconify-icon class="text-warning-700" icon="ion:warning-outline"></iconify-icon>
+                    <Icon class="text-warning-700" icon="ion--warning-outline"></Icon>
                 {/snippet}
             </Tooltip>
 

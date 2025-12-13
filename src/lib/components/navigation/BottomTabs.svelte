@@ -4,6 +4,7 @@
     import { getFormatter } from "$lib/i18n";
     import { isInstalled } from "$lib/stores/is-installed";
     import { TabGroup, Tab } from "@skeletonlabs/skeleton";
+    import Icon from "../Icon.svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -36,7 +37,7 @@
                 on:click={() => goto(navItem.href(user))}
             >
                 <div class="flex flex-col">
-                    <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
+                    <Icon class="text-xl" icon={navItem.icon}></Icon>
                     <span class="text-xs">{$t(navItem.labelKey)}</span>
                 </div>
             </Tab>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "$lib/components/Icon.svelte";
     import Markdown from "$lib/components/Markdown.svelte";
     import { getFormatter } from "$lib/i18n";
     import { formatPrice } from "$lib/price-formatter";
@@ -32,7 +33,7 @@
 <!-- Price with fallback -->
 {#if item.price || item.itemPrice}
     <div class="flex items-center gap-x-2">
-        <iconify-icon icon="ion:pricetag"></iconify-icon>
+        <Icon icon="ion--pricetag"></Icon>
         <span data-testid="price">
             {formatPrice(item)}
         </span>
@@ -41,7 +42,7 @@
 
 <!-- Quantity with fallback -->
 <div class="flex items-center gap-2" data-testid="quantity">
-    <iconify-icon icon="ion:gift"></iconify-icon>
+    <Icon icon="ion--gift"></Icon>
     <div class="flex flex-row flex-wrap gap-x-2">
         <span data-testid="quantity-desired">
             {#if item.quantity}
@@ -64,7 +65,7 @@
             class="flex w-full items-center !justify-start gap-2 p-2 !text-start text-sm"
             onclick={() => (expandClaims = !expandClaims)}
         >
-            <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
+            <Icon icon={expandClaims ? "ion--chevron-up" : "ion--chevron-down"}></Icon>
             <span>{expandClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}</span>
         </button>
 
@@ -86,7 +87,7 @@
 
 <!-- Added by / For (claims page) -->
 <div class="flex items-center gap-2">
-    <iconify-icon icon="ion:person"></iconify-icon>
+    <Icon icon="ion--person"></Icon>
     <span class="text-wrap" data-testid="added-by">
         {#if showFor}
             {@html $t("wishes.for", { values: { name: item.user.name } })}
@@ -103,7 +104,7 @@
 <!-- Notes -->
 {#if item.note}
     <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-        <iconify-icon icon="ion:reader"></iconify-icon>
+        <Icon icon="ion--reader"></Icon>
         <div class={["whitespace-pre-wrap", fullNotes ? "" : "line-clamp-2"]} data-testid="notes">
             <Markdown source={item.note} />
         </div>
