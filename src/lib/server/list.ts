@@ -3,7 +3,7 @@ import { client } from "./prisma";
 import { claimFilter } from "./sort-filter-util";
 import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
 
 export interface GetItemsOptions {
