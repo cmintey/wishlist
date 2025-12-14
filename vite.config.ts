@@ -45,10 +45,12 @@ const config: UserConfig = {
                     }
                 ],
                 share_target: {
-                    action: "/items/create",
+                    action: "/items/import",
                     method: "GET",
                     params: {
-                        url: "productUrl"
+                        url: "url",
+                        text: "text",
+                        title: "title"
                     }
                 }
             },
