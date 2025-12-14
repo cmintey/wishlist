@@ -9,11 +9,11 @@ import { getMinorUnits } from "$lib/price-formatter";
 import { getFormatter, getLocale } from "$lib/server/i18n";
 import { ItemEvent } from "$lib/events";
 import { getItemInclusions } from "$lib/server/items";
-import { getAvailableLists } from "$lib/server/list";
+import { getAvailableLists, getNextDisplayOrderForLists } from "$lib/server/list";
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemUpdateSchema } from "$lib/server/validations";
 import z from "zod";
-import type { List } from "$lib/generated/prisma/client";
+import type { List, Prisma } from "$lib/generated/prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -95,7 +95,7 @@ export const actions: Actions = {
         if (!form.success) {
             return fail(400, { errors: z.flattenError(form.error).fieldErrors });
         }
-        const { url, imageUrl, image, name, price, currency, quantity, note, lists } = form.data;
+        const { url, imageUrl, image, name, price, currency, quantity, note, lists, mostWanted } = form.data;
 
         const item = await client.item.findUniqueOrThrow({
             include: {
@@ -103,6 +103,7 @@ export const actions: Actions = {
                     select: {
                         id: true,
                         addedById: true,
+                        displayOrder: true,
                         list: {
                             select: {
                                 id: true,
@@ -155,6 +156,9 @@ export const actions: Actions = {
         });
 
         const desiredListIds = new Set(desiredLists.map(({ id }) => id));
+
+        const nextDisplayOrderByList = await getNextDisplayOrderForLists([...desiredListIds], mostWanted);
+
         const listItemsToDelete = item.lists
             // only the list owner or the person who added the item can remove it from the list
             .filter(
@@ -173,10 +177,30 @@ export const actions: Actions = {
                     return {
                         listId: l.id,
                         addedById: user.id,
-                        approved: determineApprovalStatus(config, l, user)
+                        approved: determineApprovalStatus(config, l, user),
+                        displayOrder: nextDisplayOrderByList[l.id] || 0
                     };
                 })
         );
+
+        let listItemsToUpdate: Prisma.ListItemUpdateWithWhereUniqueWithoutItemInput[] | undefined = undefined;
+        // If item is newly most wanted, then update existing lists
+        if (!item.mostWanted && mostWanted) {
+            listItemsToUpdate = desiredLists
+                // existing lists only
+                .filter((l) => item.lists.find(({ list }) => list.id === l.id) !== undefined)
+                .map((list) => ({
+                    data: {
+                        displayOrder: -1
+                    },
+                    where: {
+                        listId_itemId: {
+                            itemId: parseInt(params.itemId),
+                            listId: list.id
+                        }
+                    }
+                }));
+        }
 
         const updatedItem = await client.item.update({
             where: {
@@ -189,8 +213,10 @@ export const actions: Actions = {
                 note,
                 itemPriceId,
                 quantity,
+                mostWanted,
                 lists: {
                     create: listItemsToCreate,
+                    update: listItemsToUpdate,
                     deleteMany: {
                         id: {
                             in: listItemsToDelete

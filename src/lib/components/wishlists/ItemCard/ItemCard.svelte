@@ -16,6 +16,7 @@
         reorderActions?: boolean;
         onIncreasePriority?: ItemVoidFunction | undefined;
         onDecreasePriority?: ItemVoidFunction | undefined;
+        onPriorityChange?: (item: ItemOnListDTO, idx: string) => void;
         isTileView?: boolean;
     }
 
@@ -32,6 +33,7 @@
         reorderActions?: boolean;
         onIncreasePriority?: ItemVoidFunction;
         onDecreasePriority?: ItemVoidFunction;
+        onPriorityChange?: (item: ItemOnListDTO, idx: string) => void;
         onClaim?: () => void;
         onUnclaim?: () => void;
         onPurchased?: (purchased: boolean) => void;
@@ -80,6 +82,7 @@
         reorderActions = false,
         onIncreasePriority = undefined,
         onDecreasePriority = undefined,
+        onPriorityChange,
         isTileView = false
     }: ItemCardProps = $props();
     const id = $props.id();
@@ -281,6 +284,8 @@
     function openDrawer() {
         drawerStore.open(drawerSettings);
     }
+
+    const ItemCard = $derived(isTileView ? GridItemCard : ListItemCard);
 </script>
 
 {#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
@@ -307,47 +312,25 @@
     }}
     role={reorderActions ? "none" : "button"}
 >
-    {#if isTileView}
-        <GridItemCard
-            {id}
-            {defaultImage}
-            {item}
-            onApproval={handleApproval}
-            onClaim={handleClaim}
-            {onDecreasePriority}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            {onIncreasePriority}
-            {onPublicList}
-            onPurchased={handlePurchased}
-            onUnclaim={handleUnclaim}
-            {reorderActions}
-            {showClaimForOwner}
-            {showClaimedName}
-            {showFor}
-            {user}
-            {userCanManage}
-        />
-    {:else}
-        <ListItemCard
-            {id}
-            {defaultImage}
-            {item}
-            onApproval={handleApproval}
-            onClaim={handleClaim}
-            {onDecreasePriority}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            {onIncreasePriority}
-            {onPublicList}
-            onPurchased={handlePurchased}
-            onUnclaim={handleUnclaim}
-            {reorderActions}
-            {showClaimForOwner}
-            {showClaimedName}
-            {showFor}
-            {user}
-            {userCanManage}
-        />
-    {/if}
+    <ItemCard
+        {id}
+        {defaultImage}
+        {item}
+        onApproval={handleApproval}
+        onClaim={handleClaim}
+        {onDecreasePriority}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+        {onIncreasePriority}
+        {onPriorityChange}
+        {onPublicList}
+        onPurchased={handlePurchased}
+        onUnclaim={handleUnclaim}
+        {reorderActions}
+        {showClaimForOwner}
+        {showClaimedName}
+        {showFor}
+        {user}
+        {userCanManage}
+    />
 </div>

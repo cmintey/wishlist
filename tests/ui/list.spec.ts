@@ -303,3 +303,49 @@ test("list shows item count correctly", async ({ page }) => {
     await listsPage.goto();
     await listsPage.getListAt(0).then((l) => l.assertItemCount(0));
 });
+
+test("most wanted item", async ({ page }) => {
+    const listsPage = new ListsPage(page);
+
+    const listPage = await test.step("No items on list", async () => {
+        await listsPage.goto();
+
+        const list = await listsPage.getListAt(0);
+        const listPage = await list.click();
+        await listPage.assertNoItems();
+        return listPage;
+    });
+
+    const firstItemName = await test.step("Create first item on list", async () => {
+        const firstItemName = randomString();
+        const createItemPage = await listPage.createItem();
+        await createItemPage.getForm().then((f) => f.fillName(firstItemName));
+        await createItemPage.create();
+
+        await listPage.at();
+        await new Toast(page).waitForToastWithText("Item created").then((toast) => toast.dismissToast());
+        await listPage.getItemAt(0).then((item) => item.assertName(firstItemName));
+
+        return firstItemName;
+    });
+
+    const mostWantedItemName = await test.step("Create most wanted item on list", async () => {
+        const mostWantedItemName = randomString();
+        await listPage.createItem().then(async (lp) => {
+            await lp
+                .getForm()
+                .then((form) => form.fillName(mostWantedItemName))
+                .then((form) => form.checkMostWanted());
+            await lp.create();
+        });
+        await listPage.at();
+        await new Toast(page).waitForToastWithText("Item created");
+
+        return mostWantedItemName;
+    });
+
+    await test.step("Most wanted item is first", async () => {
+        await listPage.getItemAt(0).then((item) => item.assertName(mostWantedItemName));
+        await listPage.getItemAt(1).then((item) => item.assertName(firstItemName));
+    });
+});

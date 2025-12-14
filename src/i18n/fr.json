@@ -447,7 +447,8 @@
         "tile-view": "Vue tuile",
         "list-view": "Vue liste",
         "sort-by": "Trier par",
-        "group-by": "Regrouper par"
+        "group-by": "Regrouper par",
+        "claimed-by-you-on-another-list": "Réservé par vous sur une autre liste"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
