@@ -4,7 +4,7 @@ import { error } from "@sveltejs/kit";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
 import { getById } from "$lib/server/list";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "$lib/generated/prisma/client";
 import type { RequestHandler } from "./$types";
 import { requireLoginOrError } from "$lib/server/auth";
 

@@ -1,4 +1,4 @@
-import type { Item, ItemPrice, SystemUser, User } from "@prisma/client";
+import type { Item, ItemPrice, SystemUser, User } from "$lib/generated/prisma/client";
 
 type MinimalUser = Pick<User, "id" | "name">;
 

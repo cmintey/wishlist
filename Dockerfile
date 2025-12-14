@@ -13,7 +13,6 @@ RUN apt-get update \
 ENV RUSTFLAGS="-C target-cpu=x86-64 -C target-feature=-sse4.1,-sse4.2,-avx,-avx2"
 ENV CFLAGS="-march=x86-64 -mtune=generic"
 ENV CXXFLAGS="-march=x86-64 -mtune=generic"
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE="binary"
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
@@ -59,7 +58,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=caddy /caddy /usr/bin/caddy
-COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
+COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "prisma.config.ts", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
@@ -67,6 +66,7 @@ RUN chmod +x entrypoint.sh && chmod +x /usr/bin/caddy
 
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/build ./build/
+COPY --from=build /usr/src/app/src/lib/generated/prisma ./src/lib/generated/prisma
 
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data

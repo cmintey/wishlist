@@ -1,4 +1,4 @@
-import type { UserGroupMembership } from "@prisma/client";
+import type { UserGroupMembership } from "$lib/generated/prisma/client";
 
 export class UserAPI {
     userId: string;
