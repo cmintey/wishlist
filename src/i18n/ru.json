@@ -237,7 +237,8 @@
         "could-not-claim-quantity-items": "Не удалось заявить {quantity} предметов. Доступно для заявки только {availableQuantity}.",
         "language-is-required": "Язык обязателен",
         "unable-to-update-preferred-language": "Не удалось обновить предпочтительный язык",
-        "email-is-required-for-public-claims": "Эл. почта требуется для публичных запросов"
+        "email-is-required-for-public-claims": "Эл. почта требуется для публичных запросов",
+        "oidc-error": "Не удалось пройти аутентификацию с помощью OAuth"
     },
     "general": {
         "icon": "Значок",
@@ -359,7 +360,7 @@
         "claimed-item": "{claimed, select, true {Claimed} other {Unclaimed}} элемент",
         "create": "Создать желание",
         "create-for": "Создать желание для {listOwner}",
-        "default-sort": "Сортировка по умолчанию",
+        "default-sort": "Приоритет",
         "delete": "Убрать",
         "deny": "Отказать",
         "item-approved": "{name} был {approved, select, true {approved} other {denied}}",
@@ -440,6 +441,14 @@
         "list-managers": "Список менеджеров",
         "list-managers-tooltip": "Менеджеры списков могут делать все, что вы можете делать, включая утверждение или отклонение предложений, обновление настроек списка и удаление элементов из списка. Если ваша группа настроена в режим «сюрприз», все элементы, добавленные менеджером списков, будут видны вам.",
         "no-managers": "Нет менеджеров",
-        "show-claims": "Показать претензии"
+        "show-claims": "Показать претензии",
+        "group-by": "Группировать по",
+        "list-view": "Список",
+        "sort-by": "Сортировка",
+        "switch-to-list-view": "Переключиться на вид списка",
+        "switch-to-tile-view": "Переключиться на вид плитки",
+        "tile-view": "Плитки",
+        "claimed-by-you-on-another-list": "Заявлено вами в другом списке",
+        "claims": "{claimCount, plural, one {# claim} other {# claims}}"
     }
 }

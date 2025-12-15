@@ -349,7 +349,7 @@
         "claimed": "Réservé",
         "claimed-item": "Elément {claimed, select, true {réservé} other {non réservé}}",
         "create-for": "Créer un souhait pour {listOwner}",
-        "default-sort": "Tri par défaut",
+        "default-sort": "Priorité",
         "delete": "Supprimer",
         "deny": "Refuser",
         "edit-wish": "Éditer le Souhait",
@@ -445,7 +445,10 @@
         "switch-to-list-view": "Passer en vue liste",
         "switch-to-tile-view": "Passer en vue tuile",
         "tile-view": "Vue tuile",
-        "list-view": "Vue liste"
+        "list-view": "Vue liste",
+        "sort-by": "Trier par",
+        "group-by": "Regrouper par",
+        "claimed-by-you-on-another-list": "Réservé par vous sur une autre liste"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }

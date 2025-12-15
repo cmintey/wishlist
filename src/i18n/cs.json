@@ -375,7 +375,7 @@
         "create-and-add-another": "Vytvořit a přidat další",
         "create-for": "Navrhnout dárek pro {listOwner}",
         "create-list": "Vytvořit seznam",
-        "default-sort": "Výchozí",
+        "default-sort": "Priorita",
         "delete": "Smazat",
         "delete-list-confirmation": "Opravdu chcete smazat seznam? Všechny přeměty, které nejsou součásní jiného seznamu, budou také vymazány.",
         "deny": "Zamítnout",
@@ -446,6 +446,9 @@
         "switch-to-list-view": "Přepnout na řádkové zobrazení",
         "switch-to-tile-view": "Přepnout na dlaždicové zobrazení",
         "tile-view": "Dlaždicové zobrazení",
-        "list-view": "Řádkové zobrazení"
+        "list-view": "Řádkové zobrazení",
+        "group-by": "Seskupit podle",
+        "sort-by": "Seřadit podle",
+        "claimed-by-you-on-another-list": "Máte zarezervováno v jiném seznamu"
     }
 }

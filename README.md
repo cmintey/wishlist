@@ -75,13 +75,15 @@ You can now connect to your application at `http://<host>:3280`.
 
 `DEFAULT_CURRENCY`: The global default currency (ISO-Code) to be used. Currency can still be changed on a per-item basis
 
+`MAX_IMAGE_SIZE`: Maxinum image size that can be uploaded (in bytes). Defaults to 5000000 (5MB)
+
 ### Running behind a reverse proxy
 
 It is recommended to run Wishlist behind a reverse proxy. Currently, Wishlist does not support running on a different subpath (i.e. `https://domain.com/wishlist`).
 
-#### Nginx
+#### Nginx / Synology NAS
 
-There is a [known issue](https://github.com/cmintey/wishlist/issues/170) when running behind Nginx. It is recommended to set the following properties in your Nginx configuration:
+There is a [known issue](https://github.com/cmintey/wishlist/issues/170) when running behind Nginx or Synology NAS (which uses Nginx under the hood) proxies. It is recommended to set the following properties in your Nginx configuration:
 
 ```Text
 proxy_buffer_size   128k;

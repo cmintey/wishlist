@@ -2,10 +2,11 @@
     import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
+    import type { ClassValue } from "svelte/elements";
 
     interface Props {
         url: string;
-        btnStyle?: string;
+        btnStyle?: ClassValue;
         children?: import("svelte").Snippet;
         onCopied?: VoidFunction;
     }
@@ -43,7 +44,7 @@
         >
             <iconify-icon icon="ion:copy"></iconify-icon>
         </button>
-        <div class="card variant-filled-secondary p-2" data-popup="copy">
+        <div class="card variant-filled-secondary z-20 p-2" data-popup="copy">
             {$t("general.copy-to-clipboard")}
             <div class="variant-filled-secondary arrow"></div>
         </div>

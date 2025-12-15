@@ -7,6 +7,9 @@ import { finished } from "stream/promises";
 import { ReadableStream } from "stream/web";
 import { createWriteStream } from "node:fs";
 import { error } from "@sveltejs/kit";
+import { env } from "$env/dynamic/private";
+
+const DEFAULT_MAX_IMAGE_SIZE = 5000000;
 
 const slugify = (str: string) => {
     return str
@@ -35,7 +38,10 @@ const fetchImage = async (imageUrl: string) => {
 };
 
 export const isValidImage = (image: File) => {
-    return image.size > 0 && image.size <= 5000000;
+    const maxImageSize = env.MAX_IMAGE_SIZE
+        ? Number.parseInt(env.MAX_IMAGE_SIZE) || DEFAULT_MAX_IMAGE_SIZE
+        : DEFAULT_MAX_IMAGE_SIZE;
+    return image.size > 0 && image.size <= maxImageSize;
 };
 
 export const createImage = async (filename: string, image: File | string | null | undefined) => {

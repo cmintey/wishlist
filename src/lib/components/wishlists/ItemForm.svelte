@@ -299,7 +299,7 @@
             >
                 {$t("general.select-file")}
             </FileButton>
-            <span>{uploadedImageName}</span>
+            <span class="truncate">{uploadedImageName}</span>
         </div>
     </label>
 
@@ -320,6 +320,14 @@
         </div>
     </label>
 
+    <div class="col-span-full">
+        <label class="checkbox-label w-fit" for="mostWanted">
+            <input id="mostWanted" name="mostWanted" class="checkbox" checked={item.mostWanted} type="checkbox" />
+            <span>{$t("wishes.most-wanted")}</span>
+        </label>
+        <span class="subtext">{$t("wishes.most-wanted-description")}</span>
+    </div>
+
     <label class="col-span-full" for="note">
         <span>{$t("wishes.notes")}</span>
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
@@ -338,7 +346,7 @@
         </div>
 
         <div
-            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-scroll p-2 border-token rounded-container-token"
+            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-auto p-2 border-token rounded-container-token"
             class:input-error={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
