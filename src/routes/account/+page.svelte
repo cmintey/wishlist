@@ -13,6 +13,9 @@
     const t = getFormatter();
 
     let submitButton: HTMLElement | undefined = $state();
+    let profileEditDisabled = $state(
+        data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.user.oauthId !== null
+    );
 </script>
 
 <Tabs>
@@ -49,11 +52,11 @@
             </form>
         </div>
 
-        <EditProfile user={data.user} />
+        <EditProfile disabled={profileEditDisabled} user={data.user} />
     </Tabs.Content>
 
     <Tabs.Content class="grid grid-cols-1 gap-4 md:grid-cols-2" value="security">
-        {#if !data.isProxyUser}
+        {#if !(data.isProxyUser || (data.oidcConfig.ready && data.user.oauthId))}
             <ChangePassword />
         {/if}
         {#if data.oidcConfig.ready}

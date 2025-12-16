@@ -3,17 +3,25 @@ import { client } from "$lib/server/prisma";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { toItemOnListDTO } from "$lib/dtos/item-mapper";
 import { requireLogin } from "$lib/server/auth";
+import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ url, cookies }) => {
     const user = requireLogin();
 
     const activeMembership = await getActiveMembership(user);
 
+    // Read view preference from cookie (for SSR to prevent flicker)
+    const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
+
+    const userIdFilter = decodeMultiValueFilter(url.searchParams.get("users"));
     const items = await client.item.findMany({
         where: {
             claims: {
                 some: {
-                    claimedById: user.id
+                    claimedById: user.id,
+                    list: {
+                        groupId: activeMembership.groupId
+                    }
                 }
             },
             lists: {
@@ -22,6 +30,9 @@ export const load: PageServerLoad = async () => {
                         groupId: activeMembership.groupId
                     }
                 }
+            },
+            userId: {
+                in: userIdFilter.length > 0 ? userIdFilter : undefined
             }
         },
         include: {
@@ -99,6 +110,7 @@ export const load: PageServerLoad = async () => {
             ...user,
             activeGroupId: activeMembership.groupId
         },
-        items: itemDTOs
+        items: itemDTOs,
+        initialViewPreference: viewPreference || "list"
     };
 };

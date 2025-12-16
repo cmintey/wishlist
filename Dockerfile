@@ -1,8 +1,6 @@
-FROM node:22-slim@sha256:d943bf20249f8b92eff6f605362df2ee9cf2d6ce2ea771a8886e126ec8714f08 AS base
+FROM node:24-slim@sha256:0afb7822fac7bf9d7c1bf3b6e6c496dee6b2b64d8dfa365501a3c68e8eba94b2 AS base
 WORKDIR /usr/src/app
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable pnpm && corepack install -g pnpm@latest-10
+RUN npm install -g pnpm@latest-10
 
 # Build step
 FROM base AS build
@@ -10,6 +8,11 @@ FROM base AS build
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
+
+# Build flags for compatibility on older systems
+ENV RUSTFLAGS="-C target-cpu=x86-64 -C target-feature=-sse4.1,-sse4.2,-avx,-avx2"
+ENV CFLAGS="-march=x86-64 -mtune=generic"
+ENV CXXFLAGS="-march=x86-64 -mtune=generic"
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
@@ -27,7 +30,7 @@ RUN pnpm run build
 RUN pnpm prune --prod
 
 # Download Caddy from github
-FROM --platform=$BUILDPLATFORM alpine:latest AS caddy
+FROM --platform=$BUILDPLATFORM alpine:3.23.0@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375 AS caddy
 
 ARG TARGETPLATFORM
 ARG CADDY_VERSION=2.10.0
@@ -55,7 +58,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=caddy /caddy /usr/bin/caddy
-COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "Caddyfile", "./"]
+COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "prisma.config.ts", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
@@ -63,6 +66,7 @@ RUN chmod +x entrypoint.sh && chmod +x /usr/bin/caddy
 
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/build ./build/
+COPY --from=build /usr/src/app/src/lib/generated/prisma ./src/lib/generated/prisma
 
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data

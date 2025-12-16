@@ -12,7 +12,7 @@ declare module "virtual:pwa-register" {
 
 type NavItem = {
     labelKey: string;
-    href: string;
+    href: (user?: LocalUser | null) => string;
     icon: string;
 };
 
@@ -51,8 +51,8 @@ type SMTPConfig =
           enable: true;
           host: string;
           port: number;
-          user: string;
-          pass: string;
+          user?: string;
+          pass?: string;
           from: string;
           fromName: string;
       };
@@ -66,6 +66,8 @@ type OIDCConfig =
           providerName?: string | null;
           autoRedirect?: boolean | null;
           autoRegister?: boolean | null;
+          enableSync?: boolean | null;
+          disableEmailVerification?: boolean | null;
       }
     | {
           enable: true;
@@ -75,6 +77,8 @@ type OIDCConfig =
           providerName?: string | null;
           autoRedirect: boolean;
           autoRegister: boolean;
+          enableSync: boolean;
+          disableEmailVerification: boolean;
       };
 
 type Config = {
@@ -86,6 +90,7 @@ type Config = {
     smtp: SMTPConfig;
     claims: {
         showName: boolean;
+        showForOwner: boolean;
         requireEmail: boolean;
     };
     listMode: ListMode;
@@ -106,7 +111,7 @@ type Option = {
 };
 type Direction = "asc" | "desc";
 
-type GroupInformation = import("@prisma/client").Group & {
+type GroupInformation = import("$lib/generated/prisma/client").Group & {
     isManager: boolean;
     active: boolean;
 };
@@ -119,4 +124,4 @@ type DeepPartial<T> = T extends object
 
 type InviteMethod = "email" | "link";
 
-type LocalUser = Omit<import("@prisma/client").User, "hashedPassword">;
+type LocalUser = Omit<import("$lib/generated/prisma/client").User, "hashedPassword">;

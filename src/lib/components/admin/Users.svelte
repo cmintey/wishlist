@@ -2,11 +2,12 @@
     import { goto } from "$app/navigation";
     import Search from "../Search.svelte";
     import InviteUser from "./InviteUser.svelte";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { enhance } from "$app/forms";
     import { getFormatter } from "$lib/i18n";
 
     type User = {
+        id: string;
         username: string;
         name: string;
         email?: string;
@@ -28,11 +29,11 @@
     let usersFiltered: (User & { groups?: string[] })[] = $state(users);
 
     const selectionHandler = (user: User) => {
-        goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.username}`);
+        goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
     };
 </script>
 
-<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
+<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:gap-x-4 md:space-y-0">
     <Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
     <form method="POST" use:enhance>
         <!-- <InviteUser {config} {groups} /> -->

@@ -4,9 +4,11 @@
         item: ItemOnListDTO;
         itemNameShort: string;
         user: PartialUser | undefined;
+        userCanManage: boolean;
         groupId: string;
         showFor: boolean;
-        showName: boolean;
+        showClaimedName: boolean;
+        showClaimForOwner: boolean;
         onPublicList: boolean;
         handlePurchased: (v: boolean) => void;
         handleEdit: VoidFunction;
@@ -19,16 +21,15 @@
     import type { PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ManageButtons from "./ItemCard/ManageButtons.svelte";
-    import { formatPrice } from "$lib/price-formatter";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import type { Snippet } from "svelte";
-    import Image from "../Image.svelte";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/server/i18n";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
-    import Markdown from "../Markdown.svelte";
+    import ItemImage from "./ItemCard/components/ItemImage.svelte";
+    import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
     import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
@@ -39,30 +40,22 @@
         item,
         itemNameShort,
         user,
+        userCanManage,
         groupId,
         showFor,
-        showName,
+        showClaimedName,
+        showClaimForOwner
         onPublicList,
         handlePurchased,
         handleEdit,
-        defaultImage,
-        requireClaimEmail
+        defaultImage: _defaultImage,
+        requireClaimEmail,
     }: ItemDrawerProps = $props();
 
     const onEdit = () => {
         open = false;
         handleEdit();
     };
-
-    let imageUrl: string | undefined = $state();
-    if (item.imageUrl) {
-        try {
-            new URL(item.imageUrl);
-            imageUrl = item.imageUrl;
-        } catch {
-            imageUrl = `/api/assets/${item.imageUrl}`;
-        }
-    }
 </script>
 
 <Dialog onOpenChange={(e) => (open = e.open)} {open}>
@@ -83,16 +76,13 @@
                     </Dialog.CloseTrigger>
                 </div>
 
-                <div class="flex max-h-[40dvh] justify-center">
-                    <Image
-                        class="max-h-full object-scale-down"
-                        alt={item.name}
-                        referrerpolicy="no-referrer"
-                        src={imageUrl}
-                    >
-                        {@render defaultImage($t, "w-1/3 aspect-square")}
-                    </Image>
-                </div>
+    <div class="flex max-h-[40dvh] justify-center">
+        <ItemImage class="max-h-full object-scale-down" {item}>
+            {#snippet defaultImage(t)}
+                {@render _defaultImage(t, "w-40 md:w-48 aspect-square rounded")}
+            {/snippet}
+        </ItemImage>
+    </div>
 
                 {#if item.url}
                     <a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">
@@ -100,66 +90,26 @@
                     </a>
                 {/if}
 
-                {#if item.price || item.itemPrice}
-                    <div class="flex items-center gap-x-2">
-                        <iconify-icon icon="ion:pricetag"></iconify-icon>
-                        <span class="text-lg font-semibold">{formatPrice(item)}</span>
-                    </div>
-                {/if}
-
-                {#if item.quantity}
-                    <div class="grid grid-cols-[auto_1fr] items-center gap-2 text-base md:text-lg">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
-                        <div class="flex flex-row flex-wrap gap-x-2">
-                            <span>{$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}</span>
-                            {#if user?.id !== item.userId}
-                                <span>·</span>
-                                <span class="text-secondary-800-200 font-bold">
-                                    {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
-                                </span>
-                            {/if}
-                        </div>
-                    </div>
-                {/if}
-
-                <div class="flex items-center gap-x-2">
-                    <iconify-icon icon="ion:person"></iconify-icon>
-                    <span class="text-base md:text-lg">
-                        {#if showFor}
-                            {@html $t("wishes.for", { values: { name: item.user.name } })}
-                        {:else if !onPublicList}
-                            {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
-                        {:else}
-                            {@html item.addedBy.id === item.user.id
-                                ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                                : $t("wishes.added-by-somebody-else")}
-                        {/if}
-                    </span>
-                </div>
-
-                {#if item.note}
-                    <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
-                        <iconify-icon icon="ion:reader"></iconify-icon>
-                        <p class="whitespace-pre-wrap">
-                            <Markdown source={item.note} />
-                        </p>
-                    </div>
-                {/if}
+    <ItemAttributes fullNotes {item} {onPublicList} {showClaimForOwner} {showClaimedName} showDetail {showFor} {user} />
 
                 <div class="flex flex-row justify-between pb-4">
                     <ClaimButtons
                         {groupId}
                         {item}
                         {onPublicList}
-                        onPurchase={handlePurchased}
+                        onPurchased={handlePurchased}
                         {requireClaimEmail}
-                        {showName}
+                        {showClaimForOwner}
+            {showClaimedName}
                         {user}
                     />
 
-                    <ManageButtons {item} {itemNameShort} {onEdit} {user} />
-                </div>
-            </ModalContent>
-        </Dialog.Positioner>
-    </Portal>
-</Dialog>
+        <ManageButtons
+            {item}
+            {onEdit}
+            {user}
+            {userCanManage}
+            {itemNameShort}
+        />
+    </div>
+</div>

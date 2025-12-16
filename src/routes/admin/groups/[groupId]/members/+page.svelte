@@ -8,6 +8,7 @@
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
     import DeleteGroupModal from "$lib/components/modals/DeleteGroupModal.svelte";
     import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
     import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
@@ -35,7 +36,7 @@
 </script>
 
 {#if data.config.listMode !== "registry"}
-    <div class="flex gap-x-4 py-4">
+    <div class="flex flex-wrap gap-2 py-4">
         <AddUserModal groupId={data.group.id}>
             {#snippet trigger({ props })}
                 <button class="preset-filled-primary-500 btn" type="button" {...props}>
@@ -117,7 +118,7 @@
             </tbody>
         </table>
     </div>
-    <div>
+    <div class="flex flex-wrap gap-2">
         <DeleteGroupModal defaultGroup={data.config.defaultGroup} groupId={data.group.id} />
         <ClearListsButton groupId={page.params.groupId} />
         <ClearListsButton claimed groupId={page.params.groupId} />

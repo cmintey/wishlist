@@ -1,88 +1,94 @@
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO, ClaimDTO } from "$lib/dtos/item-dto";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
-    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
+    import { getClaimedName, shouldShowName } from "../util";
 
-    interface Props {
-        item: ItemOnListDTO;
-        user: PartialUser | undefined; // logged in user
-        showName: boolean;
-        groupId: string;
-        requireClaimEmail: boolean;
-        onPublicList?: boolean;
-        onPurchase?: (purchased: boolean) => void;
-    }
+    type Props = Pick<
+        InternalItemCardProps,
+        | "item"
+        | "user"
+        | "showClaimedName"
+        | "showClaimForOwner"
+        | "onPublicList"
+        | "onClaim"
+        | "onUnclaim"
+        | "onPurchased"
+    >;
 
-    let { item, user, showName, groupId, requireClaimEmail, onPublicList = false, onPurchase }: Props = $props();
+    let {
+        item,
+        user,
+        showClaimedName = false,
+        showClaimForOwner = false,
+        onPublicList = false,
+        onClaim,
+        onUnclaim,
+        onPurchased
+    }: Props = $props();
+
     const t = getFormatter();
 
-    const shouldShowName = (claim?: ClaimDTO) => {
-        if (showName) {
-            if (onPublicList && claim?.publicClaimedBy?.name) {
-                return true;
-            }
-            if (user && claim?.claimedBy?.groups.includes(user.activeGroupId) && claim.claimedBy?.name) {
-                return true;
-            }
-        }
-        return false;
-    };
-
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
-
-    const getClaimedByName = ({ claimedBy, publicClaimedBy }: ClaimDTO) => {
-        return claimedBy
-            ? claimedBy.name
-            : publicClaimedBy.name === "ANONYMOUS_NAME"
-              ? $t("wishes.anonymous")
-              : publicClaimedBy.name;
-    };
+    const isClaimOnList = $derived(userClaim?.listId === item.listId);
 </script>
 
-{#if !onPublicList && item.userId === user?.id}
+{#if !onPublicList && item.userId === user?.id && !showClaimForOwner}
     <div></div>
 {:else if userClaim}
-    <div class="flex flex-row gap-x-2 md:gap-x-4">
-        <ClaimItemModal claimId={userClaim.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
-            {#snippet trigger(props)}
-                <button {...props} class="preset-tonal-secondary border-secondary-500 btn btn-sm md:btn border">
-                    {item.quantity === 1 && userClaim.quantity === 1 ? $t("wishes.unclaim") : $t("wishes.update-claim")}
-                </button>
-            {/snippet}
-        </ClaimItemModal>
-
+    {#if isClaimOnList}
+        <div class="flex flex-row gap-2">
+            <button
+                class="variant-ghost-secondary btn btn-sm md:btn"
+                onclick={(e) => {
+                    e.stopPropagation();
+                    onUnclaim?.();
+                }}
+            >
+                {item.quantity === 1 && userClaim.quantity === 1 ? $t("wishes.unclaim") : $t("wishes.update-claim")}
+            </button>
+            <button
+                class={[
+                    "btn btn-icon btn-icon-sm md:btn-icon-base",
+                    userClaim.purchased && "variant-soft-secondary",
+                    !userClaim.purchased && "variant-ringed-secondary"
+                ]}
+                aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
+                onclick={(e) => {
+                    e.stopPropagation();
+                    onPurchased?.(!userClaim.purchased);
+                }}
+                title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
+            >
+                <iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon>
+            </button>
+        </div>
+    {:else}
+        <span class="text-subtle text-wrap">{$t("wishes.claimed-by-you-on-another-list")}</span>
+    {/if}
+{:else if item.isClaimable && item.userId !== user?.id}
+    <div class="flex flex-row items-center gap-x-2">
         <button
-            class={[
-                "btn btn-icon btn-icon-sm md:btn-icon-base",
-                userClaim.purchased && "preset-tonal-secondary",
-                !userClaim.purchased && "preset-outlined-secondary-500"
-            ]}
-            aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
+            class="variant-filled-secondary btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
-                onPurchase?.(!userClaim.purchased);
+                onClaim?.();
             }}
-            title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
         >
-            <iconify-icon icon={userClaim.purchased ? "ion:bag-check" : "ion:bag"}></iconify-icon>
+            {$t("wishes.claim")}
         </button>
     </div>
-{:else if item.isClaimable}
-    <div class="flex flex-row items-center gap-x-2 md:gap-x-4">
-        <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
-            {#snippet trigger(props)}
-                <button {...props} class="btn btn-sm md:btn preset-filled-secondary-600-400">
-                    {$t("wishes.claim")}
-                </button>
-            {/snippet}
-        </ClaimItemModal>
-    </div>
-{:else if item.claims.length === 1 && shouldShowName(item.claims[0])}
-    {@const claim = item.claims[0]}
-    <span>{$t("wishes.claimed-by", { values: { name: getClaimedByName(claim) } })}</span>
-{:else if item.claims.length > 1 && shouldShowName()}
-    <span>{$t("wishes.claimed-by-multiple-users")}</span>
+{:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
+    <div></div>
+{:else if item.claims.length === 1 && shouldShowName(item, showClaimedName, showClaimForOwner, user, item.claims[0])}
+    <span class="text-subtle line-clamp-2 truncate text-wrap">
+        {$t("wishes.claimed-by", {
+            values: {
+                name: getClaimedName(item.claims[0])
+            }
+        })}
+    </span>
+{:else if item.claims.length > 1 && shouldShowName(item, showClaimedName, showClaimForOwner, user)}
+    <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
-    <span>{$t("wishes.claimed")}</span>
+    <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed")}</span>
 {/if}

@@ -1,11 +1,10 @@
 datasource db {
     provider = "sqlite"
-    url      = env("DATABASE_URL")
 }
 
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "debian-openssl-1.1.x", "linux-arm64-openssl-1.1.x"]
+    provider = "prisma-client"
+    output   = "../src/lib/generated/prisma"
 }
 
 model User {
@@ -26,6 +25,7 @@ model User {
     oauthId             String?
     lists               List[]
     preferredLanguage   String?
+    managedLists        ListManager[]
 
     @@map("user")
 }
@@ -84,13 +84,14 @@ model UserGroupMembership {
 }
 
 model List {
-    id          String      @id @unique @default(cuid())
+    id          String        @id @unique @default(cuid())
     name        String?
-    owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    owner       User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId     String
-    group       Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    managers    ListManager[]
+    group       Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId     String
-    public      Boolean     @default(false)
+    public      Boolean       @default(false)
     icon        String?
     iconColor   String?
     items       ListItem[]
@@ -103,6 +104,17 @@ model List {
     @@map("list")
 }
 
+model ListManager {
+    id     String @id @unique @default(uuid())
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+    listId String
+
+    @@index([listId])
+    @@map("list_manager")
+}
+
 model Item {
     id          Int         @id @unique @default(autoincrement())
     name        String
@@ -113,6 +125,7 @@ model Item {
     note        String?
     imageUrl    String?
     quantity    Int?
+    mostWanted  Boolean     @default(false)
     user        User        @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     createdBy   User        @relation(name: "CreatedItems", fields: [createdById], references: [id], onDelete: Cascade)

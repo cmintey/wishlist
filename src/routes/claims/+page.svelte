@@ -1,43 +1,63 @@
 <script lang="ts">
-    import { quintOut } from "svelte/easing";
-    import { crossfade } from "svelte/transition";
+    import { fade, scale } from "svelte/transition";
     import { flip } from "svelte/animate";
     import type { PageProps } from "./$types";
     import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
     import noClaims from "$lib/assets/no_claims.svg";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
+    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
+    import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
+    import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
+    import ClaimsGroupBy from "$lib/components/wishlists/chips/ClaimsGroupBy.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
     let items: ItemOnListDTO[] = $state(data.items);
 
-    const [send, receive] = crossfade({
-        duration: (d) => Math.sqrt(d * 200),
+    $effect(() => {
+        items = data.items;
+    });
 
-        fallback(node) {
-            const style = getComputedStyle(node);
-            const transform = style.transform === "none" ? "" : style.transform;
+    // Initialize from server data (cookie) to prevent flicker
+    // This value comes from the server, so SSR renders the correct view
+    initListViewPreference(data.initialViewPreference);
+    let isTileView = $derived(getListViewPreference() === "tile");
 
-            return {
-                duration: 600,
-                easing: quintOut,
-                css: (t) => `
-					transform: ${transform} scale(${t});
-					opacity: ${t}
-				`
-            };
+    let groupBy = $state("purchased");
+
+    let groupedItems = $derived.by(() => {
+        let groupedItems: Record<string, ItemOnListDTO[]> = { _default: items };
+        if (groupBy === "purchased") {
+            groupedItems = Object.groupBy(items, (it) => (it.claims[0].purchased ? "Purchased" : "_default"));
+        } else if (groupBy === "user") {
+            groupedItems = items.reduce(
+                (accum, item) => {
+                    (accum[item.user.name] ??= []).push(item);
+                    return accum;
+                },
+                {} as Record<string, ItemOnListDTO[]>
+            );
         }
+        return Object.entries(groupedItems).toSorted(([categoryA], [categoryB]) => categoryA.localeCompare(categoryB));
     });
 
-    let sortedItems = $derived.by(() => {
-        const unpurchasedItems: ItemOnListDTO[] = [];
-        const purchasedItems: ItemOnListDTO[] = [];
-        items.forEach((item) => (item.claims[0].purchased ? purchasedItems.push(item) : unpurchasedItems.push(item)));
-        return [...unpurchasedItems, ...purchasedItems];
-    });
+    const isPurchased = (item: ItemOnListDTO) => {
+        return item.claims[0].purchased ? 1 : 0;
+    };
+
+    let users = $derived(items.map((item) => item.user));
 </script>
+
+<!-- View mode toggle -->
+<div class="flex flex-wrap items-end justify-between gap-2 pb-4">
+    <div class="flex items-end gap-2">
+        <ListFilterChip {users} />
+        <ClaimsGroupBy bind:groupBy />
+    </div>
+    <ListViewModeChip {isTileView} />
+</div>
 
 {#if data.items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
@@ -45,17 +65,35 @@
         <p class="text-2xl">{$t("wishes.nothing-claimed-yet")}</p>
     </div>
 {:else}
-    <div class="flex flex-col space-y-4">
-        {#each sortedItems as item (item.id)}
-            <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
-                <ItemCard
-                    groupId={data.user.activeGroupId}
-                    {item}
-                    requireClaimEmail
-                    showClaimedName
-                    showFor
-                    user={data.user}
-                />
+    <div class="flex flex-col space-y-4" data-testid="claims-container">
+        {#each groupedItems as [category, items] (category)}
+            {@const sortedItems =
+                groupBy !== "purchased" ? items.toSorted((a, b) => isPurchased(a) - isPurchased(b)) : items}
+            {#if category !== "_default"}
+                <span transition:fade>{category}</span>
+            {/if}
+            <div
+                class={[
+                    isTileView
+                        ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+                        : "flex flex-col space-y-4"
+                ]}
+                data-testid="category"
+                transition:scale
+            >
+                {#each sortedItems as item (item.id)}
+                    <div transition:fade animate:flip={{ duration: 200 }}>
+                        <ItemCard
+                            groupId={data.user.activeGroupId}
+                            {isTileView}
+                            {item}
+                            requireClaimEmail
+                            showClaimedName
+                            showFor
+                            user={data.user}
+                        />
+                    </div>
+                {/each}
             </div>
         {/each}
     </div>

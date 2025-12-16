@@ -6,21 +6,18 @@
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
     import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
+    import { resolve } from "$app/paths";
+    import { UserAPI } from "$lib/api/users";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
 
     const handleDelete = async () => {
-        const resp = await fetch(`/api/users/${data.editingUser.id}`, {
-            method: "DELETE",
-            headers: {
-                "content-type": "application/json",
-                accept: "application/json"
-            }
-        });
+        const userAPI = new UserAPI(data.editingUser.id);
+        const resp = await userAPI.delete();
 
         if (resp.ok) {
-            await goto("/admin/users");
+            await goto(resolve("/admin/users"));
             invalidateAll();
 
             toaster.info({

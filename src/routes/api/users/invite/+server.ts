@@ -12,8 +12,6 @@ export const POST: RequestHandler = async ({ url, request }) => {
     const user = await requireLoginOrError();
     const $t = await getFormatter();
 
-    if (user.roleId === Role.USER) error(401, $t("errors.not-authorized"));
-
     const config = await getConfig();
     let schema;
 

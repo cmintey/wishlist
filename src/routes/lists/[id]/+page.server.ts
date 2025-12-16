@@ -4,9 +4,9 @@ import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
 import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
-import type { UserGroupMembership } from "@prisma/client";
+import type { UserGroupMembership } from "$lib/generated/prisma/client";
 
-export const load = (async ({ params, url, locals, depends }) => {
+export const load = (async ({ params, url, locals, depends, cookies }) => {
     const $t = await getFormatter();
 
     const list = await getById(params.id);
@@ -40,12 +40,17 @@ export const load = (async ({ params, url, locals, depends }) => {
         sortDir: url.searchParams.get("dir"),
         suggestionMethod: config.suggestions.method,
         listOwnerId: list.owner.id,
+        listManagers: new Set(list.managers.map(({ userId }) => userId)),
         loggedInUserId: locals.user?.id || null
     };
 
     const items = await getItems(list.id, options);
 
     depends("data:items");
+
+    // Read view preference from cookie (for SSR to prevent flicker)
+    const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
+
     return {
         list: {
             ...list,
@@ -54,6 +59,7 @@ export const load = (async ({ params, url, locals, depends }) => {
                 isMe: list.owner.id === locals.user?.id,
                 activeGroupId: list.groupId
             },
+            isManager: list.managers.find(({ userId }) => userId === locals.user?.id) !== undefined,
             items
         },
         loggedInUser: locals.user
@@ -66,7 +72,9 @@ export const load = (async ({ params, url, locals, depends }) => {
             : undefined,
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
+        showClaimForOwner: config.claims.showForOwner,
         requireClaimEmail: config.claims.requireEmail,
-        suggestionsEnabled: config.suggestions.enable
+        suggestionsEnabled: config.suggestions.enable,
+        initialViewPreference: viewPreference || "list"
     };
 }) satisfies PageServerLoad;

@@ -1,9 +1,8 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import type { Group, Item, ItemPrice, List, User } from "@prisma/client";
+    import type { Group, Item, ItemPrice, List, User } from "$lib/generated/prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import { env } from "$env/dynamic/public";
-    import { getPriceValue } from "$lib/price-formatter";
+    import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
@@ -29,21 +28,23 @@
         lists?: ListProps[];
         currentList?: string;
         buttonText: string;
+        saving: boolean;
     }
 
-    let { item = $bindable(), buttonText, lists: otherLists = [], currentList }: Props = $props();
+    let { item = $bindable(), buttonText, lists: otherLists = [], currentList, saving = false }: Props = $props();
     const t = getFormatter();
 
     let productData = $state(item);
     let form = $derived(page.form);
     let url = $derived(page.url);
-    let loading = $state(false);
+    let fetching = $state(false);
     let urlFetched = $state(false);
     let price: number | null = $state(getPriceValue(productData));
-    const defaultCurrency = env.PUBLIC_DEFAULT_CURRENCY || "USD";
+    const defaultCurrency = getDefaultCurrency();
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
+    let submitSrc = $state("submit");
 
     const listsHavingItem = $derived.by(() => {
         return productData.lists
@@ -86,7 +87,7 @@
 
     const getInfo = async () => {
         if (productData.url && !urlFetched) {
-            loading = true;
+            fetching = true;
             const url = extractUrl(productData.url);
             const res = await fetch(`/api/product?url=${url}`);
             if (res.ok) {
@@ -121,7 +122,7 @@
             } else {
                 triggerToast();
             }
-            loading = false;
+            fetching = false;
             urlFetched = true;
         }
     };
@@ -133,12 +134,27 @@
         }
     });
 
+    // Hijack the back button to navigate back to the redirect
+    onMount(() => {
+        const callback = async (_event: PopStateEvent) => {
+            if (page.url.searchParams.has("redirectTo")) {
+                await goto(page.url.searchParams.get("redirectTo")!, { invalidateAll: true });
+            }
+        };
+        addEventListener("popstate", callback, { once: true });
+        return () => removeEventListener("popstate", callback);
+    });
+
     const onCancel = () => {
         if (page.url.searchParams.has("redirectTo")) {
-            goto(page.url.searchParams.get("redirectTo")!);
+            goto(page.url.searchParams.get("redirectTo")!, { replaceState: true });
         } else {
             history.back();
         }
+    };
+
+    const selectAll = () => {
+        document.getElementsByName("lists").forEach((el) => ((el as HTMLInputElement).checked = true));
     };
 </script>
 
@@ -284,15 +300,33 @@
         </div>
     </label>
 
+    <div class="col-span-full">
+        <label class="checkbox-label w-fit" for="mostWanted">
+            <input id="mostWanted" name="mostWanted" class="checkbox" checked={item.mostWanted} type="checkbox" />
+            <span>{$t("wishes.most-wanted")}</span>
+        </label>
+        <span class="subtext">{$t("wishes.most-wanted-description")}</span>
+    </div>
+
     <label class="col-span-full" for="note">
         <span>{$t("wishes.notes")}</span>
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
     </label>
 
-    <fieldset class="col-span-full flex flex-col space-y-2 md:col-span-5" class:hidden={lists.length <= 1}>
-        <legend>{$t("wishes.lists")}</legend>
+    <fieldset
+        class="col-span-full flex flex-col space-y-2 md:col-span-5"
+        class:hidden={lists.length <= 1}
+        aria-labelledby="lists-label"
+    >
+        <div class="flex items-end justify-between">
+            <legend id="lists-label">{$t("wishes.lists")}</legend>
+            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">
+                {$t("general.select-all")}
+            </button>
+        </div>
+
         <div
-            class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-scroll border p-2"
+            class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2"
             class:input-error={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
@@ -323,22 +357,45 @@
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
     <div class="col-span-full flex w-full flex-col-reverse gap-2 sm:w-full sm:flex-row sm:justify-between">
-        <button class="preset-tonal-secondary border-secondary-500 btn border" onclick={onCancel} type="button">
+        <button
+            class="preset-tonal-secondary border-secondary-500 btn border"
+            disabled={fetching || saving}
+            onclick={onCancel}
+            type="button"
+        >
             {$t("general.cancel")}
         </button>
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2">
             {#if !item.id}
-                <button id="submit-stay" class="btn preset-outlined-primary-500" disabled={loading} type="submit">
-                    {$t("wishes.create-and-add-another")}
+                <button
+                    id="submit-stay"
+                    class="btn preset-outlined-primary-500"
+                    disabled={fetching || saving}
+                    onclick={() => (submitSrc = "submit-stay")}
+                    type="submit"
+                >
+                    {#if saving && submitSrc == "submit-stay"}
+                        <ProgressRadial width="w-4" />
+                    {/if}
+                    <span>{$t("wishes.create-and-add-another")}</span>
                 </button>
             {/if}
-            <button id="submit" class="preset-filled-primary-500 btn" disabled={loading} type="submit">
-                {buttonText}
+            <button
+                id="submit"
+                class="preset-filled-primary-500 btn"
+                disabled={fetching || saving}
+                onclick={() => (submitSrc = "submit")}
+                type="submit"
+            >
+                {#if saving && submitSrc == "submit"}
+                    <ProgressRadial width="w-4" />
+                {/if}
+                <span>{buttonText}</span>
             </button>
         </div>
     </div>
 </div>
 
-{#if loading}
+{#if fetching}
     <Backdrop text={$t("wishes.hang-tight-gathering-product-data")} />
 {/if}

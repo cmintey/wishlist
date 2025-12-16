@@ -27,7 +27,7 @@
     {#if previewNote}
         {#if value}
             <div
-                class="preset-outlined-surface-500 rounded-container h-28 max-w-none overflow-scroll px-3 py-2 whitespace-pre-wrap"
+                class="preset-outlined-surface-500 rounded-container h-28 max-w-none overflow-auto px-3 py-2 whitespace-pre-wrap"
                 data-testid="markdown-preview"
             >
                 <Markdown source={value} />

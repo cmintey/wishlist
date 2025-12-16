@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
+    import logo from "$lib/assets/logo.png";
     import { Dialog, Portal, type DialogTriggerProps } from "@skeletonlabs/skeleton-svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
@@ -8,9 +9,10 @@
     interface Props {
         trigger: DialogTriggerProps["element"];
         navItems: NavItem[];
+        user: LocalUser | undefined;
     }
 
-    const { trigger, navItems }: Props = $props();
+    const { trigger, navItems, user }: Props = $props();
     const t = getFormatter();
 
     let open = $state(false);
@@ -36,9 +38,10 @@
                             <li>
                                 <a
                                     class="list-option gap-x-1 font-bold"
-                                    class:preset-filled-primary-500={page.url.pathname === navItem.href}
+                                    class:preset-filled-primary-500={page.url.pathname + page.url.search ===
+                                        navItem.href(user)}
                                     data-sveltekit-preload-data
-                                    href={navItem.href}
+                                    href={navItem.href(user)}
                                     onclick={() => (open = false)}
                                 >
                                     <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>

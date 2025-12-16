@@ -2,11 +2,12 @@
     import { Popover, Portal } from "@skeletonlabs/skeleton-svelte";
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
+    import type { ClassValue } from "svelte/elements";
     import { clipboard } from "$lib/clipboard.svelte";
 
     interface Props {
         url: string;
-        btnStyle?: string;
+        btnStyle?: ClassValue;
         children?: import("svelte").Snippet;
         onCopied?: VoidFunction;
     }

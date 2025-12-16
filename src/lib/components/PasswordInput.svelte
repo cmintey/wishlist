@@ -4,9 +4,10 @@
     import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
+    import type { HTMLInputAttributes } from "svelte/elements";
     import Popup from "./Popup.svelte";
 
-    interface Props {
+    interface Props extends HTMLInputAttributes {
         id: string;
         name?: string | undefined;
         label: string;

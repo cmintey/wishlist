@@ -1,19 +1,22 @@
 import { getFormatter } from "$lib/server/i18n";
-import { patchItem } from "$lib/server/api-common";
-import { getConfig } from "$lib/server/config";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { ItemEvent } from "$lib/events";
-import { getActiveMembership } from "$lib/server/group-membership";
 import { tryDeleteImage } from "$lib/server/image-util";
-import { getItemInclusions } from "$lib/server/items";
 import { client } from "$lib/server/prisma";
-import type { Prisma } from "@prisma/client";
 import { error, type RequestHandler } from "@sveltejs/kit";
-import assert from "assert";
+import { requireLoginOrError } from "$lib/server/auth";
+import type { List as PrismaList, Item as PrismaItem } from "$lib/generated/prisma/client";
 
-const validateItem = async (itemId: string | undefined, locals: App.Locals, checkPublic = false) => {
+interface List extends Pick<PrismaList, "groupId"> {
+    managers: string[];
+}
+
+interface Item extends Pick<PrismaItem, "id" | "createdById" | "userId"> {
+    lists: List[];
+}
+
+const validateItem = async (itemId: string | undefined) => {
     const $t = await getFormatter();
-    if (!checkPublic && !locals.user) error(401, $t("errors.unauthenticated"));
 
     if (!itemId) {
         error(400, $t("errors.must-specify-an-item-to-delete"));
@@ -26,6 +29,7 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
             id: parseInt(itemId)
         },
         select: {
+            id: true,
             createdById: true,
             userId: true,
             lists: {
@@ -33,17 +37,15 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
                     list: {
                         select: {
                             groupId: true,
-                            public: true
-                        }
-                    },
-                    addedBy: {
-                        select: {
-                            username: true
+                            managers: {
+                                select: {
+                                    userId: true
+                                }
+                            }
                         }
                     }
                 }
-            },
-            imageUrl: true
+            }
         }
     });
 
@@ -51,49 +53,38 @@ const validateItem = async (itemId: string | undefined, locals: App.Locals, chec
         error(404, $t("errors.item-not-found"));
     }
 
-    if (checkPublic) {
-        const onPublicList = item.lists.map((li) => li.list).reduce((c, v) => c || v.public, false);
-        if (!locals.user && onPublicList) {
-            return item;
-        } else {
-            error(401, $t("errors.not-authorized"));
-        }
-    }
-
     const { lists, ...rest } = item;
     return {
         ...rest,
         lists: lists.map((li) => ({
             groupId: li.list.groupId,
-            public: li.list.public,
-            addedBy: li.addedBy
+            managers: li.list.managers.map(({ userId }) => userId)
         }))
     };
 };
 
-export const DELETE: RequestHandler = async ({ params, locals }) => {
-    const $t = await getFormatter();
-    const foundItem = await validateItem(params?.itemId, locals);
-    assert(locals.user);
-    assert(params.itemId);
-
-    const activeMembership = await getActiveMembership(locals.user);
-    const config = await getConfig(activeMembership.groupId);
-
-    let suggestionDenied = false;
-    const suggestionMethod = config.suggestions.method;
-    if (foundItem.userId === locals.user.id && suggestionMethod !== "surprise") {
-        suggestionDenied = true;
+const isItemOnManagedList = (item: Item, user: LocalUser) => {
+    if (item.lists.length > 1 || item.lists.length === 0) {
+        return false;
     }
+    return item.lists[0].managers.find((userId) => user.id === userId) !== undefined;
+};
 
-    if (!suggestionDenied && foundItem.createdById !== locals.user.id) {
+export const DELETE: RequestHandler = async ({ params }) => {
+    const user = await requireLoginOrError();
+    const $t = await getFormatter();
+    const item = await validateItem(params?.itemId);
+
+    // item is not created by the user or for the user and
+    // item is not on a list which is managed by the user
+    if (user.id !== item.createdById && user.id !== item.userId && !isItemOnManagedList(item, user)) {
         error(401, $t("errors.not-authorized"));
     }
 
     try {
-        const prismaItem = await client.item.delete({
+        const deletedItem = await client.item.delete({
             where: {
-                id: parseInt(params.itemId)
+                id: item.id
             },
             select: {
                 id: true,
@@ -111,48 +102,19 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
             }
         });
 
-        const { lists, ...rest } = prismaItem;
-        const item = {
+        const { lists, ...rest } = deletedItem;
+        const itemToReturn = {
             ...rest,
             lists: lists.map((li) => ({ ...li.list }))
         };
 
-        itemEmitter.emit(ItemEvent.ITEM_DELETE, item);
+        itemEmitter.emit(ItemEvent.ITEM_DELETE, itemToReturn);
 
-        if (item.imageUrl) {
-            await tryDeleteImage(item.imageUrl);
+        if (itemToReturn.imageUrl) {
+            await tryDeleteImage(itemToReturn.imageUrl);
         }
 
         return new Response(JSON.stringify(item), { status: 200 });
-    } catch {
-        error(404, $t("errors.item-not-found"));
-    }
-};
-
-export const PATCH: RequestHandler = async ({ params, locals, request }) => {
-    const $t = await getFormatter();
-    const body = (await request.json()) as Record<string, unknown>;
-    const item = await validateItem(params?.itemId, locals, body.publicPledgedById !== undefined);
-
-    const { data, deleteOldImage } = patchItem(body);
-
-    try {
-        delete data.id;
-        const updatedItem = await client.item.update({
-            where: {
-                id: parseInt(params.itemId!)
-            },
-            include: getItemInclusions(),
-            data: data as Prisma.ItemUpdateInput
-        });
-
-        if (deleteOldImage && item.imageUrl) {
-            await tryDeleteImage(item.imageUrl);
-        }
-
-        itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
-
-        return new Response(JSON.stringify(updatedItem), { status: 200 });
     } catch {
         error(404, $t("errors.item-not-found"));
     }

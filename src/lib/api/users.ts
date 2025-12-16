@@ -1,4 +1,4 @@
-import type { Group, UserGroupMembership } from "@prisma/client";
+import type { UserGroupMembership } from "$lib/generated/prisma/client";
 
 export class UserAPI {
     userId: string;
@@ -20,24 +20,21 @@ export class UserAPI {
         return await fetch(`/api/users/${this.userId}${path}`, options);
     };
 
-    groups = async (): Promise<GroupInformation[]> => {
-        return await this._makeRequest("GET", "/groups")
-            .then((resp) => resp.json())
-            .then(({ groups }) => groups);
-    };
-
-    activeGroup = async (): Promise<Group> => {
-        return await this._makeRequest("GET", "/groups?active=true")
-            .then((resp) => resp.json())
-            .then(({ groups }) => groups[0]);
-    };
-
     setActiveGroup = async (groupId: string): Promise<UserGroupMembership> => {
         return await this._makeRequest("PATCH", `/groups/${groupId}`, { active: true })
             .then((resp) => resp.json())
             .then(({ membership }) => membership);
     };
+
+    delete = async (): Promise<Response> => {
+        return await this._makeRequest("DELETE");
+    };
 }
+
+type UsersSearchOptions = {
+    groupId?: string;
+    excludedUserIds?: string[];
+};
 
 export class UsersAPI {
     _makeRequest = async (method: string, query = "") => {
@@ -48,15 +45,19 @@ export class UsersAPI {
             }
         };
 
-        return await fetch(`/api/users${query}`, options);
+        return await fetch(`/api/users?${query}`, options);
     };
 
     all = async () => {
         return await this._makeRequest("GET");
     };
 
-    search = async (search: string) => {
-        return await this._makeRequest("GET", `?name=${search}`);
+    search = async (search: string, options?: UsersSearchOptions) => {
+        const params = new URLSearchParams();
+        params.append("name", search);
+        if (options?.groupId) params.append("groupId", options.groupId);
+        if (options?.excludedUserIds) params.append("excludedUserIds", options.excludedUserIds.join(","));
+        return await this._makeRequest("GET", params.toString());
     };
 }
 

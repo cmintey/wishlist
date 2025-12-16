@@ -20,10 +20,11 @@
         }
     ];
 
+    const label = $t("wishes.sort-by");
     const defaultOption = options[0];
     const searchParam = "sort";
     const directionParam = "dir";
     const prefix = "ion:swap-vertical";
 </script>
 
-<BaseChip {defaultOption} {directionParam} {options} {prefix} {searchParam} />
+<BaseChip {defaultOption} {directionParam} {label} {options} {prefix} {searchParam} />

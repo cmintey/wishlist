@@ -22,7 +22,9 @@
         "clear-icon-field": "entferne ausgewähltes Icon",
         "clear-name-field": "lösche eigenen Namen",
         "default-item-image": "Standard Artikelbild",
-        "unpurchase": "Markiere Artikel als nicht gekauft"
+        "unpurchase": "Markiere Artikel als nicht gekauft",
+        "remove-manager-name": "Entferne {name}",
+        "user-menu": "Benutzer Menü"
     },
     "admin": {
         "administration": "Administration",
@@ -85,7 +87,7 @@
         "wishlist-mode-wishlist": "Wunschliste",
         "wishlist-mode-display-text": "Im \"Wunschlisten\" Modus können mehrere Benutzer und Listen vorhanden sein und man kann Wünsche anderer Benutzer reservieren. Im \"Register\" Modus gibt es nur eine einzelne Liste die über einen Link öffentlich geteilt werden kann.",
         "password-reset-link": "Passwort zurücksetzen Link",
-        "enable-default-list-creation": "Aktiviere Erstellung einer Standard Liste",
+        "enable-default-list-creation": "Aktiviere Erstellung einer Standard-Liste",
         "enable-default-list-creation-tooltip": "Aktiviere das Erstellen einer Liste wenn ein Benutzer einer Gruppe beitritt. Benutzer können Listen weiterhin selbst erstellen.",
         "list-creation": "Listeneinstellungen",
         "allow-public-lists-tooltip": "Erlaube den Benutzern die Liste öffentlich verfügbar zu machen. Dies hat keinen Einfluss, wenn die Gruppe im \"Register-Modus\" ist.",
@@ -111,11 +113,21 @@
         "wishlist-mode-wishlist-tooltip": "Mehrere Benutzer und mehrere Listen mit Reservierungen und Vorschlägen. Listen können öffentlich gemacht werden, wenn die Gruppe es zulässt.",
         "disable-password-login": "Login mit Passwort deaktivieren",
         "disable-password-login-tooltip": "Deaktiviert den Login via Passwort. Danach nur Header und OAuth Authentifizierung möglich.",
-        "oidc-auto-redirect": "Auto Redirect",
+        "oidc-auto-redirect": "Automatische Weiterleitung",
         "oidc-auto-redirect-tooltip": "Wenn aktiviert, wird der Nutzer automatisch von der Login Seite auf die Login Seite des Identity Providers umgeleitet. Dies kann umgangen werden, indem '?direct=1' der URL hinzugefügt wird.",
-        "oidc-auto-register": "Auto Register",
+        "oidc-auto-register": "Automatisch registrieren",
         "oidc-auto-register-tooltip": "Erstelle automatisch einen neuen Account für OAuth Nutzer, die sich zum ersten Mal einloggen.",
-        "oidc-client-id": "Client Id"
+        "oidc-client-id": "Client Id",
+        "claims-require-email": "Email benötigt",
+        "claims-require-email-tooltip": "Es wird eine Email Adresse benötigt um dem Artikel anonym zu beanspruchen.",
+        "disable-email-verification": "Email-Verifizierung deaktivieren",
+        "disable-email-verification-description": "Deaktiviere die Bedigung, dass die Email eines Nutzers mit dem IdP verifiziert werden muss, um einen Account zu erstellen oder zu verlinken.",
+        "enable-sync": "Synchronisierung aktivieren",
+        "enable-sync-description": "Synchronisierung von Nutzerdaten wie Name und Email vom IdP aktivieren.",
+        "oidc-auto-redirect-description": "Automatisch zur Anmeldeseite deines IdPs weiterleiten.",
+        "profile-disabled": "Dein Profil wird von deinem OAuth-Provider verwaltet.",
+        "show-for-list-owner": "Dem Listeninhaber anzeigen",
+        "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen."
     },
     "wishes": {
         "filter": "Filter",
@@ -159,7 +171,7 @@
         "claimed-item": "{claimed, select, true {Reservierter} other {Nicht-Reservierter}} Artikel",
         "create": "Erstelle Wunsch",
         "create-for": "Wunsch erstellen für {listOwner}",
-        "default-sort": "Standard Sortierung",
+        "default-sort": "Priorität",
         "delete": "Löschen",
         "deny": "Ablehnen",
         "edit": "Bearbeiten",
@@ -205,7 +217,23 @@
         "show-description": "Zeige Beschreibung",
         "count-items": "{itemCount, plural, one {# Artikel} other {# Artikel}}",
         "hide-all-currencies": "verberge alle Währungen...",
-        "show-all-currencies": "zeige alle Währungen..."
+        "show-all-currencies": "zeige alle Währungen...",
+        "add-a-list-manager": "Listen Manager hinzufügen",
+        "add-a-list-manager-explainer": "Suche nach einem Benutzer in dieser Gruppe um ihn als Manager zu deiner Liste hinzuzufügen.",
+        "add-a-manager": "Manager hinzufügen",
+        "list-managers": "Listen Managers",
+        "claims": "{claimCount, plural, one {# Reservierung} other {# Reservierungen}}",
+        "hide-claims": "Beanspruchte Wünsche verstecken",
+        "list-managers-tooltip": "Listenmanager können alles tun, was du tun kannst. Dazu gehört Vorschläge anzunehmen und abzulehnen, Listeneinstellungen zu aktualisieren und Gegenstände von der Liste zu entfernen. Wenn deine Gruppe auf den Modus 'Überraschung' gestellt ist, werden alle Gegenstände, die ein Listenmanager hinzugefügt hat, auch dir angezeigt.",
+        "no-managers": "Keine Manager",
+        "show-claims": "Beanspruchte Wünsche anzeigen",
+        "group-by": "Gruppieren nach",
+        "list-view": "Listenansicht",
+        "sort-by": "Sortieren nach",
+        "switch-to-list-view": "Zur Listenansicht wechseln",
+        "switch-to-tile-view": "Zur Kachelansicht wechseln",
+        "tile-view": "Kachelansicht",
+        "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -276,7 +304,9 @@
         "registration-is-disabled": "Registrierung ist deaktiviert",
         "could-not-claim-quantity-items": "Konnte {quantity} Artikel nicht reservieren. Es sind nur {availableQuantity} verfügbar.",
         "language-is-required": "Sprache wird benötigt",
-        "unable-to-update-preferred-language": "Ändern der bevorzugten Sprache nicht möglich"
+        "unable-to-update-preferred-language": "Ändern der bevorzugten Sprache nicht möglich",
+        "email-is-required-for-public-claims": "Email Adresse ist notwendig für öffentliche Beanspruchung",
+        "oidc-error": "Authentifizierung mit OAuth fehlgeschlagen"
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
@@ -383,7 +413,9 @@
         "dont-see-language": "Ist deine Sprache hier nicht aufgeführt oder hast du eine fehlende oder falsche Übersetzung entdeckt? <a href=\"{href}\" target=\"_blank\"> Lies in der Dokumentation nach, wie du einen Beitrag leisten kannst.</a>",
         "language": "Sprache",
         "na": "N/V",
-        "use-system-language": "Benutze Systemsprache"
+        "use-system-language": "Benutze Systemsprache",
+        "select-all": "Alles auswählen",
+        "oauth": "OAuth"
     },
     "app": {
         "home": "Start",

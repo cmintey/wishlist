@@ -12,7 +12,7 @@ import { getOIDCConfig } from "$lib/server/openid";
 import { logger } from "$lib/server/logger";
 import z from "zod";
 
-export const load: PageServerLoad = async ({ locals, request, cookies, url }) => {
+export const load: PageServerLoad = async ({ locals, request, cookies, url, fetch }) => {
     const config = await getConfig();
     const redirectTo = url.searchParams.get("redirectTo");
     if (locals.user) {
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url }) =>
         redirect(302, "/setup-wizard");
     }
 
-    const oidcConfig = await getOIDCConfig();
+    const oidcConfig = await getOIDCConfig(fetch);
     if (oidcConfig.ready && oidcConfig.autoRedirect && canRedirect(url, cookies)) {
         redirect(302, "/login/oidc");
     }

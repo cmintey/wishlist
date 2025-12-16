@@ -10,11 +10,11 @@
     const { providerName: providerName_, oauthId }: Props = $props();
     const t = getFormatter();
 
-    const providerName = $derived(providerName_ || "OAuth");
+    const providerName = $derived(providerName_ || $t("general.oauth"));
 </script>
 
 <div class="flex flex-col gap-4">
-    <h3 class="h3">OAuth</h3>
+    <h3 class="h3">{$t("general.oauth")}</h3>
 
     {#if oauthId}
         <form class="flex flex-col gap-4" action="?/unlinkoauth" method="POST" use:enhance>

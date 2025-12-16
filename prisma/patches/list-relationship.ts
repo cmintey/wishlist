@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../client";
 import { init, isCuid } from "@paralleldrive/cuid2";
 
 const PATCH_ID = "list-relationship";
-const prisma = new PrismaClient();
 const createId = init({
     length: 10
 });

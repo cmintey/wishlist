@@ -22,7 +22,7 @@ const callbackSchema = z.object({
     url: z.url()
 });
 
-async function getClientConfig(config?: Config) {
+async function getClientConfig(fetch: RequestEvent["fetch"], config?: Config) {
     let rediscover = false;
     if (!config) {
         config = await getConfig(undefined, true);
@@ -45,29 +45,29 @@ async function getClientConfig(config?: Config) {
     }
 
     if (oidcConfig === null || rediscover) {
-        oidcConfig = await client.discovery(new URL(discoveryUrl), clientId, clientSecret);
+        oidcConfig = await client.discovery(new URL(discoveryUrl), clientId, clientSecret, undefined, {
+            /** @ts-expect-error Fetch API compatability*/
+            [client.customFetch]: fetch
+        });
         return oidcConfig;
     }
     return oidcConfig;
 }
 
-export async function isOIDCConfigured() {
-    return (await getClientConfig()) !== null;
-}
-
-export async function getOIDCConfig() {
+export async function getOIDCConfig(fetch: RequestEvent["fetch"]) {
     const config = await getConfig();
-    const clientConfig = await getClientConfig(config);
+    const clientConfig = await getClientConfig(fetch, config);
     return {
         ready: clientConfig !== null,
         providerName: config.oidc.providerName,
-        autoRedirect: config.oidc.autoRedirect
+        autoRedirect: config.oidc.autoRedirect,
+        enableSync: config.oidc.enableSync
     };
 }
 
 export async function authorizeRedirect(event: RequestEvent) {
     const $t = await getFormatter();
-    const config = await getClientConfig();
+    const config = await getClientConfig(event.fetch);
     if (!config) {
         return Response.json({ message: $t("auth.oidc-client-not-configured") }, { status: 400 });
     }
@@ -129,7 +129,7 @@ export async function authorizeRedirect(event: RequestEvent) {
 export async function handleCallback(event: RequestEvent) {
     logger.debug("Initiating callback");
     const $t = await getFormatter();
-    const config = await getClientConfig();
+    const config = await getClientConfig(event.fetch);
     if (!config) {
         logger.error("OIDC not configured");
         error(400, $t("auth.oidc-client-not-configured"));

@@ -1,0 +1,41 @@
+import type { ClaimDTO, ItemOnListDTO } from "$lib/dtos/item-dto";
+import { getFormatter } from "$lib/i18n";
+import { get } from "svelte/store";
+import type { PartialUser } from "./ItemCard/ItemCard.svelte";
+
+export const getClaimedName = ({ claimedBy, publicClaimedBy }: ClaimDTO) => {
+    if (claimedBy) {
+        return claimedBy.name;
+    }
+    if (publicClaimedBy?.name && publicClaimedBy.name !== "ANONYMOUS_NAME") {
+        return publicClaimedBy.name;
+    }
+    const t = getFormatter();
+    return get(t)("wishes.anonymous");
+};
+
+export const shouldShowName = (
+    item: ItemOnListDTO,
+    showNameConfig: boolean,
+    showForOwner: boolean,
+    user: PartialUser | undefined,
+    claim?: ClaimDTO
+) => {
+    // Completely disabled
+    if (!showNameConfig) {
+        return false;
+    }
+    // No logged in user
+    if (!user) {
+        return false;
+    }
+    // List owner can only view if the config is set
+    if (item.user.id === user.id && showForOwner) {
+        return true;
+    }
+    // Everyone else can only see claims by users in their group
+    if (claim && (claim.publicClaimedBy || !claim.claimedBy?.groups.includes(user.activeGroupId))) {
+        return false;
+    }
+    return true;
+};

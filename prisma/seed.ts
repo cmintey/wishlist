@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "./client";
 
-const prisma = new PrismaClient();
 const roles = async () => {
     await prisma.role.upsert({
         where: {
@@ -67,21 +66,6 @@ const groups = async () => {
             });
         }
 
-        const allItems = await prisma.item.findMany();
-        for (const item of allItems) {
-            await prisma.item.update({
-                where: {
-                    id: item.id
-                },
-                data: {
-                    group: {
-                        connect: {
-                            id: defaultGroup.id
-                        }
-                    }
-                }
-            });
-        }
         console.log("created default group");
     } else {
         console.log("skipping default group creation");

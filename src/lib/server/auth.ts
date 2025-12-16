@@ -2,7 +2,7 @@ import { dev } from "$app/environment";
 import { client } from "./prisma";
 import { env } from "$env/dynamic/private";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import type { Session, User } from "@prisma/client";
+import type { Session, User } from "$lib/generated/prisma/client";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
@@ -57,12 +57,12 @@ export async function validateSessionToken(token: string): Promise<SessionValida
         }
     });
     if (result === null) {
-        return { session: null, user: null };
+        return { session: null, user: null, fresh: false };
     }
     const { user, ...session } = result;
     if (Date.now() >= session.expiresAt.getTime()) {
         await client.session.delete({ where: { id: sessionId } });
-        return { session: null, user: null };
+        return { session: null, user: null, fresh: false };
     }
     if (Date.now() >= session.expiresAt.getTime() - REFRESH_TIME) {
         session.expiresAt = new Date(Date.now() + EXPIRES_IN);
@@ -74,8 +74,9 @@ export async function validateSessionToken(token: string): Promise<SessionValida
                 expiresAt: session.expiresAt
             }
         });
+        return { session, user, fresh: true };
     }
-    return { session, user };
+    return { session, user, fresh: false };
 }
 
 export async function invalidateSession(sessionId: string): Promise<void> {
@@ -107,8 +108,8 @@ export function deleteSessionTokenCookie(cookies: Cookies): void {
 }
 
 export type SessionValidationResult =
-    | { session: Session; user: Omit<User, "hashedPassword"> }
-    | { session: null; user: null };
+    | { session: Session; user: Omit<User, "hashedPassword">; fresh: boolean }
+    | { session: null; user: null; fresh: false };
 
 export function requireLogin() {
     const { locals, url } = getRequestEvent();

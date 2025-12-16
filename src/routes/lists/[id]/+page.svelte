@@ -12,17 +12,20 @@
     import empty from "$lib/assets/no_wishes.svg";
     import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
     import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
+    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
+    import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
     import { getFormatter } from "$lib/i18n";
     import Markdown from "$lib/components/Markdown.svelte";
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
+    import { errorToast } from "$lib/components/toasts";
     import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
@@ -43,6 +46,11 @@
         }
     });
     let hideDescription = $state(false);
+
+    // Initialize from server data (cookie) to prevent flicker
+    // This value comes from the server, so SSR renders the correct view
+    initListViewPreference(data.initialViewPreference);
+    let isTileView = $derived(getListViewPreference() === "tile");
 
     const flipDurationMs = 200;
     const listAPI = new ListAPI(data.list.id);
@@ -75,6 +83,12 @@
 
     $effect(() => {
         allItems = data.list.items;
+    });
+
+    $effect(() => {
+        if (reordering) {
+            allItems.forEach((it, idx) => (it.displayOrder = idx));
+        }
     });
 
     const groupItems = (items: ItemOnListDTO[]) => {
@@ -178,6 +192,7 @@
     }
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
+        allItems.forEach((item, idx) => (item.displayOrder = idx));
     };
     const swap = <T,>(arr: T[], a: number, b: number) => {
         return arr.with(a, arr[b]).with(b, arr[a]);
@@ -192,6 +207,43 @@
         const itemIdx = allItems.findIndex((item) => item.id === itemId);
         if (itemIdx < allItems.length - 1) {
             allItems = swap(allItems, itemIdx, itemIdx + 1);
+        }
+    };
+    const handlePriorityInput = (item: ItemOnListDTO, idxString: string) => {
+        const targetIdx = Number.parseInt(idxString) - 1;
+        const currentIdx = allItems.findIndex((it) => it.id === item.id);
+
+        if (Number.isNaN(targetIdx) || targetIdx < 0 || targetIdx > allItems.length - 1) {
+            errorToast(toastStore, $t("errors.display-order-invalid", { values: { min: 1, max: allItems.length } }));
+            if (item.displayOrder) {
+                const el = document.getElementById(`${item.id}-displayOrder`) as HTMLInputElement;
+                el.value = (item.displayOrder + 1).toString();
+            }
+            return;
+        }
+        if (currentIdx !== targetIdx) {
+            const resortedItems: ItemOnListDTO[] = [];
+            let displayOrder = 0;
+            for (let i = 0; i < allItems.length; i++) {
+                if (i === currentIdx) {
+                    continue;
+                }
+                if (i === targetIdx) {
+                    if (targetIdx < currentIdx) {
+                        resortedItems.push(allItems[currentIdx]);
+                        resortedItems.push(allItems[i]);
+                    } else {
+                        resortedItems.push(allItems[i]);
+                        resortedItems.push(allItems[currentIdx]);
+                    }
+
+                    resortedItems.at(-2)!.displayOrder = displayOrder++;
+                } else {
+                    resortedItems.push(allItems[i]);
+                }
+                resortedItems.at(-1)!.displayOrder = displayOrder++;
+            }
+            allItems = resortedItems;
         }
     };
     const handleReorderFinalize = async () => {
@@ -223,34 +275,35 @@
 {/if}
 
 <!-- chips -->
-<div class="flex flex-wrap justify-between gap-2 pb-4">
-    <div class="flex flex-row flex-wrap items-center gap-2">
+<div class="flex flex-wrap items-end justify-between gap-2 pb-4">
+    <div class="flex flex-row flex-wrap items-end gap-2">
         {#if !data.list.owner.isMe}
             <ClaimFilterChip />
         {/if}
         <SortBy />
     </div>
-    {#if data.list.owner.isMe}
-        <div class="flex flex-row flex-wrap items-center gap-2">
+    <div class="flex flex-row flex-wrap items-end gap-2">
+        {#if !reordering}
+            <ListViewModeChip {isTileView} />
+        {/if}
+        {#if data.list.owner.isMe || data.list.isManager}
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
             <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
-        </div>
-    {/if}
+        {/if}
+    </div>
 </div>
 
-{#if data.list.owner.isMe}
-    <div class="flex flex-wrap-reverse justify-between gap-2 pb-4">
+{#if data.list.owner.isMe || data.list.isManager}
+    <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
         <ListStatistics {items} />
         {#if data.listMode === "registry" || data.list.public}
-            <div class="flex h-fit flex-row gap-x-2">
+            <div class="flex flex-row gap-x-2">
                 {#if publicListUrl}
-                    <div class="flex flex-row">
-                        <TokenCopy btnStyle="btn-icon-sm" url={publicListUrl?.href}>
-                            {$t("wishes.public-url")}
-                        </TokenCopy>
-                    </div>
+                    <TokenCopy btnStyle="btn-sm" url={publicListUrl?.href}>
+                        <span>{$t("wishes.public-url")}</span>
+                    </TokenCopy>
                 {:else}
-                    <button class="preset-outlined-surface-500 btn btn-sm" onclick={getOrCreatePublicList}>
+                    <button class="preset-outlined-surface-500 btn btn-sm text-xs" onclick={getOrCreatePublicList}>
                         {$t("wishes.share")}
                     </button>
                 {/if}
@@ -259,20 +312,26 @@
     </div>
 {/if}
 
-{#if data.list.owner.isMe}{/if}
-
-{#if data.list.owner.isMe && approvals.length > 0}
+{#if (data.list.owner.isMe || data.list.isManager) && approvals.length > 0}
     <div class="flex flex-col space-y-4 pb-4">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
-        <div class="flex flex-col space-y-4" data-testid="approvals-container">
+        <div
+            class={isTileView
+                ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+                : "flex flex-col space-y-4"}
+            data-testid="approvals-container"
+        >
             {#each approvals as item (item.id)}
                 <div in:receive={{ key: item.id }} out:send|local={{ key: item.id }} animate:flip={{ duration: 200 }}>
                     <ItemCard
                         groupId={data.list.groupId}
+                        {isTileView}
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
-                        user={data.list.owner}
+                        user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
@@ -289,7 +348,9 @@
 {:else}
     <!-- items -->
     <div
-        class="rounded-container flex flex-col space-y-4"
+        class={isTileView
+            ? "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+            : "flex flex-col space-y-4"}
         data-testid="items-container"
         onconsider={handleDnd}
         onfinalize={handleDnd}
@@ -307,13 +368,17 @@
                 <div animate:flip={{ duration: flipDurationMs }}>
                     <ItemCard
                         groupId={data.list.groupId}
+                        {isTileView}
                         {item}
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
+                        onPriorityChange={handlePriorityInput}
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
@@ -327,11 +392,14 @@
                     >
                         <ItemCard
                             groupId={data.list.groupId}
+                            {isTileView}
                             {item}
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}
+                            showClaimForOwner={data.showClaimForOwner}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
+                            userCanManage={data.list.isManager}
                         />
                     </div>
                 {/each}
@@ -352,7 +420,7 @@
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
-        onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`)}
+        onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >
         <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
     </button>

@@ -214,7 +214,7 @@
         {/if}
     </form>
     {#snippet actions()}
-        <footer class={["flex flex-wrap gap-2", claim ? "justify-between" : "justify-end"]}>
+        <footer class={["flex flex-wrap gap-2 pt-2", claim ? "justify-between" : "justify-end"]}>
             {#if claim}
                 <Dialog.CloseTrigger
                     class="preset-filled-error-500 btn btn-sm md:btn-base"

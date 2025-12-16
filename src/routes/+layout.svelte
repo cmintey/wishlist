@@ -14,6 +14,7 @@
     import PullToRefresh from "pulltorefreshjs";
     import { navItems } from "$lib/components/navigation/navigation";
     import { setFormatter, setLocale } from "$lib/i18n";
+    import SelectListManagerModal from "$lib/components/modals/SelectListManagerModal.svelte";
     import Toaster from "$lib/components/toaster/Toaster.svelte";
 
     const { data, children }: LayoutProps = $props();
@@ -87,11 +88,11 @@
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
-        <NavBar isProxyUser={data.isProxyUser} {navItems} user={data.user} />
+        <NavBar groups={data.groups} isProxyUser={data.isProxyUser} {navItems} user={data.user} />
     </header>
 
     <main id="main" class="h-full min-h-screen px-4 py-4 md:px-12 lg:px-32 xl:px-56">
-        {#if !$isInstalled && !disabled && documentTitle}
+        {#if !disabled && documentTitle}
             <h1 class="h1 pb-2 md:pb-4">{documentTitle}</h1>
         {/if}
         {@render children?.()}

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { UsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
-    import type { User } from "@prisma/client";
+    import type { User } from "$lib/generated/prisma/client";
     import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
     import BaseModal, { type BaseModalProps as BaseProps } from "./BaseModal.svelte";
     import { GroupAPI } from "$lib/api/groups";
@@ -72,7 +72,7 @@
                 {#each users as user}
                     <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
                         <span>{user.name}</span>
-                        <span class="subtext">({user.email})</span>
+                        <span class="subtext">{user.username}</span>
                     </ListBoxItem>
                 {/each}
             </ListBox>

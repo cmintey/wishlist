@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "$lib/generated/prisma/client";
 
 export const getItemInclusions = (listId?: string) => {
     return {
@@ -23,6 +23,7 @@ export const getItemInclusions = (listId?: string) => {
                 id: true,
                 quantity: true,
                 purchased: true,
+                listId: true,
                 claimedBy: {
                     select: {
                         id: true,

@@ -11,17 +11,17 @@ import { getResetPasswordSchema } from "$lib/server/validations";
 import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
-import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import type { Prisma } from "$lib/generated/prisma/client";
 import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { getFormatter } from "$lib/server/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 import { logger } from "$lib/server/logger";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, fetch }) => {
     const user = requireLogin();
 
-    const oidcConfig = await getOIDCConfig();
+    const oidcConfig = await getOIDCConfig(fetch);
 
     return {
         user,
@@ -58,7 +58,7 @@ export const actions: Actions = {
                 }
             });
         } catch (e) {
-            const err = e as PrismaClientKnownRequestError;
+            const err = e as Prisma.PrismaClientKnownRequestError;
             logger.error({ err: e });
             const targets = err.meta?.target as string[];
             const errors = targets.reduce(

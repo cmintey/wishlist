@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { User } from "@prisma/client";
+    import type { User } from "$lib/generated/prisma/client";
     import BaseChip from "./BaseChip.svelte";
-    import { getFormatter, getLocale } from "$lib/i18n";
+    import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
 
-    type PartialUser = Pick<User, "id" | "name" | "picture">;
+    type PartialUser = Pick<User, "id" | "name">;
 
     interface Props {
         users: PartialUser[];
@@ -17,6 +17,7 @@
 
     const users = $state(props.users);
 
+    const label = $t("wishes.filter");
     const prefix = "ion:people";
     const searchParam = "users";
     const defaultOption: Option = {
@@ -34,8 +35,17 @@
                 return unique;
             })
             .map((user) => ({ value: user.id, displayValue: user.name }) as Option)
-            .toSorted((a, b) => a.displayValue.localeCompare(b.displayValue, locale || "en-US"));
+            .toSorted((a, b) => a.displayValue.localeCompare(b.displayValue, locale || defaultLang.code));
     }
 </script>
 
-<BaseChip class={props.class} {defaultOption} multiselect {options} {prefix} {searchParam} testId="list-filter" />
+<BaseChip
+    class={props.class}
+    {defaultOption}
+    {label}
+    multiselect
+    {options}
+    {prefix}
+    {searchParam}
+    testId="list-filter"
+/>

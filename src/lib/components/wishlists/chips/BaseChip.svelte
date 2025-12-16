@@ -10,6 +10,7 @@
         options: Option[];
         defaultOption: Option;
         searchParam: string;
+        label?: string;
         directionParam?: string | undefined;
         prefix?: string;
         multiselect?: boolean;
@@ -21,6 +22,7 @@
         options,
         defaultOption,
         searchParam,
+        label,
         directionParam = undefined,
         prefix = undefined,
         multiselect = false,
@@ -111,13 +113,16 @@
     };
 </script>
 
-<div class={["flex flex-row gap-x-4", clazz]} data-testid={testId}>
+<div class={["flex flex-col gap-1", clazz]} data-testid={testId}>
+    {#if label}
+        <span class="text-xs">{label}</span>
+    {/if}
     <Popup>
         {#snippet trigger(props)}
             <button
                 {...props}
                 class={[
-                    "preset-outlined-primary-500 chip",
+                    "preset-outlined-primary-500 chip h-fit w-fit",
                     selectedOptions[0].value !== defaultOption.value && "preset-tonal-primary border-primary-500 border"
                 ]}
             >
@@ -149,7 +154,7 @@
         {#snippet content(props)}
             <div {...props} class="card preset-filled-surface-100-900 list-nav z-10 max-h-96 p-4 shadow-xl">
                 <nav>
-                    <ul class="max-h-72 overflow-scroll">
+                    <ul class="max-h-72 overflow-auto">
                         {#each options as option (option.value + option.direction)}
                             <li>
                                 {#if multiselect}

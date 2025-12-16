@@ -5,9 +5,10 @@
 
     interface Props {
         user: LocalUser;
+        disabled: boolean;
     }
 
-    let { user = $bindable() }: Props = $props();
+    let { user, disabled }: Props = $props();
     const t = getFormatter();
 </script>
 
@@ -20,9 +21,10 @@
                 name="name"
                 class="input"
                 autocomplete="name"
+                {disabled}
                 placeholder={user.name}
                 type="text"
-                bind:value={user.name}
+                value={user.name}
             />
             {#if page.form?.errors?.name}
                 <span class="text-xs text-red-500">{page.form?.errors?.name[0]}</span>
@@ -36,9 +38,10 @@
                 name="username"
                 class="input"
                 autocomplete="username"
+                {disabled}
                 placeholder={user.username}
                 type="text"
-                bind:value={user.username}
+                value={user.username}
             />
             {#if page.form?.errors?.username}
                 <span class="text-xs text-red-500">{page.form?.errors?.username[0]}</span>
@@ -52,16 +55,21 @@
                 name="email"
                 class="input"
                 autocomplete="email"
+                {disabled}
                 placeholder={user.email}
                 type="email"
-                bind:value={user.email}
+                value={user.email}
             />
             {#if page.form?.errors?.email}
                 <span class="text-xs text-red-500">{page.form?.errors?.email[0]}</span>
             {/if}
         </label>
 
-        <button class="preset-filled-primary-500 btn w-fit" formaction="?/profile" type="submit">
+        {#if disabled}
+            <span>{$t("admin.profile-disabled")}</span>
+        {/if}
+
+        <button class="preset-filled-primary-500 btn w-fit" {disabled} formaction="?/profile" type="submit">
             {$t("general.update")}
         </button>
     </div>

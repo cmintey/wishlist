@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     const t = getFormatter();
     let introStep = $state(0);
@@ -33,7 +34,7 @@
             <button
                 style:visibility={introStep < 2 ? "hidden" : ""}
                 class="preset-filled-primary-500 btn"
-                onclick={() => goto("setup-wizard/step/1")}
+                onclick={() => goto(resolve("/setup-wizard/step/1"))}
                 type="button"
                 in:fade={{ delay: 1200 }}
             >

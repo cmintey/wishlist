@@ -1,20 +1,17 @@
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
     import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
     import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
     import { ListItemAPI } from "$lib/api/lists";
     import { toaster } from "$lib/components/toaster";
 
-    interface Props {
-        item: ItemOnListDTO;
-        user: PartialUser | undefined;
-        itemNameShort: string;
-        onEdit?: VoidFunction;
+    interface Props extends Pick<InternalItemCardProps, "item" | "user" | "userCanManage" | "onDelete" | "onEdit"> {
+        onApprove?: VoidFunction;
+        onDeny?: VoidFunction;
     }
 
-    const { item, user, itemNameShort, ...props }: Props = $props();
+    const { item, user, userCanManage, ...props }: Props = $props();
     const t = getFormatter();
     const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
 
@@ -31,30 +28,44 @@
     };
 </script>
 
-{#snippet approvalButton(approve: boolean)}
-    <ConfirmModal onConfirm={() => handleApproval(approve)}>
-        {#snippet description()}
-            {@html $t("wishes.approval-confirmation", { values: { name: item.addedBy?.name, approve } })}
-        {/snippet}
-        {#snippet trigger(props)}
-            <button
-                {...props}
-                class={["btn btn-sm md:btn-md", approve ? "preset-filled-success-500" : "preset-filled-error-500"]}
-                onclick={(e) => {
-                    e.stopPropagation();
-                    props.onclick?.(e);
-                }}
-            >
-                {approve ? $t("wishes.approve") : $t("wishes.deny")}
-            </button>
-        {/snippet}
-    </ConfirmModal>
+{#snippet deleteButton()}
+    <button
+        class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
+        aria-label={$t("wishes.delete")}
+        onclick={(e) => {
+            e.stopPropagation();
+            props.onDelete?.();
+        }}
+        title={$t("wishes.delete")}
+    >
+        <iconify-icon icon="ion:trash"></iconify-icon>
+    </button>
 {/snippet}
 
-<div class="flex flex-row gap-x-2 md:gap-x-4">
+<div class="flex flex-row flex-wrap gap-2">
     {#if !item.approved}
-        {@render approvalButton(true)}
-        {@render approvalButton(false)}
+        <button
+            class="variant-filled-error btn-icon btn-icon-sm md:btn-icon-base"
+            aria-label={$t("wishes.deny")}
+            onclick={(e) => {
+                e.stopPropagation();
+                props.onDeny?.();
+            }}
+            title={$t("wishes.deny")}
+        >
+            <iconify-icon icon="ion:close"></iconify-icon>
+        </button>
+        <button
+            class="variant-filled-success btn-icon btn-icon-sm md:btn-icon-base"
+            aria-label={$t("wishes.approve")}
+            onclick={(e) => {
+                e.stopPropagation();
+                props.onApprove?.();
+            }}
+            title={$t("wishes.approve")}
+        >
+            <iconify-icon icon="ion:checkmark"></iconify-icon>
+        </button>
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
             class="preset-tonal-primary border-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base border"
@@ -67,21 +78,8 @@
         >
             <iconify-icon icon="ion:edit"></iconify-icon>
         </button>
-        <DeleteItemModal {item} {itemNameShort}>
-            {#snippet trigger(props)}
-                <button
-                    {...props}
-                    class="preset-filled-error-500 btn btn-icon btn-icon-sm md:btn-icon-base"
-                    aria-label={$t("wishes.delete")}
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        props.onclick?.(e);
-                    }}
-                    title={$t("wishes.delete")}
-                >
-                    <iconify-icon icon="ion:trash"></iconify-icon>
-                </button>
-            {/snippet}
-        </DeleteItemModal>
+        {@render deleteButton()}
+    {:else if userCanManage}
+        {@render deleteButton()}
     {/if}
 </div>

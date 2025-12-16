@@ -66,6 +66,7 @@ export const settingSchema = z.object({
     smtpFrom: z.string().optional(),
     smtpFromName: z.string().optional(),
     claimsShowName: z.coerce.boolean().default(false),
+    claimsShowForOwner: z.coerce.boolean().default(false),
     claimsRequireEmail: z.coerce.boolean().default(false),
     listMode: z.enum(["standard", "registry"]).default("standard"),
     passwordStrength: z.coerce.number().min(-1).max(5).default(2),
@@ -79,7 +80,9 @@ export const settingSchema = z.object({
     oidcClientSecret: z.string().optional(),
     oidcProviderName: z.string().optional(),
     oidcAutoRedirect: z.coerce.boolean().default(false),
-    oidcAutoRegister: z.coerce.boolean().default(false)
+    oidcAutoRegister: z.coerce.boolean().default(false),
+    oidcEnableSync: z.coerce.boolean().default(false),
+    oidcDisableEmailVerification: z.coerce.boolean().default(false)
 });
 
 export const publicListCreateSchema = z.object({
@@ -92,7 +95,8 @@ export const getListPropertiesSchema = () => {
         icon: z.string().trim().nullable(),
         iconColor: z.string().trim().nullable(),
         public: z.coerce.boolean().default(false),
-        description: z.string().max(10000).nullable()
+        description: z.string().max(10000).nullable(),
+        managers: z.string().array().nullable().default([])
     });
 };
 
@@ -131,6 +135,7 @@ export const getItemCreateSchema = async () => {
             .transform((v) => (v === undefined ? null : v)),
         imageUrl: z.string().optional(),
         image: z.instanceof(File).optional(),
+        mostWanted: z.coerce.boolean().default(false),
         note: z.string().optional(),
         lists: z
             .union([z.string(), z.tuple([z.string()], z.string())], {

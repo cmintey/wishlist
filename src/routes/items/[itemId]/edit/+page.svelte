@@ -8,6 +8,8 @@
     const { data }: PageProps = $props();
 
     const t = getFormatter();
+
+    let saving = $state(false);
 </script>
 
 {#if data.item}
@@ -15,7 +17,9 @@
         enctype="multipart/form-data"
         method="POST"
         use:enhance={() => {
+            saving = true;
             return async ({ result, update }) => {
+                saving = false;
                 if (result.type === "error") {
                     toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                     return;
@@ -26,7 +30,7 @@
             };
         }}
     >
-        <ItemForm buttonText={$t("general.save")} item={data.item} lists={data.lists} />
+        <ItemForm buttonText={$t("general.save")} item={data.item} lists={data.lists} {saving} />
     </form>
 {/if}
 

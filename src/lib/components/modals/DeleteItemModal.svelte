@@ -14,9 +14,10 @@
     interface Props extends Omit<BaseModalProps, "title" | "description" | "children" | "element" | "actions"> {
         item: ItemOnListDTO;
         itemNameShort: string;
+        isOnlyManager: boolean;
     }
 
-    const { item, itemNameShort, ...props }: Props = $props();
+    const { item, itemNameShort, isOnlyManager, ...props }: Props = $props();
 
     const t = getFormatter();
     const itemAPI = $derived(new ItemAPI(item.id));
@@ -66,9 +67,11 @@
             </Dialog.CloseTrigger>
             {#if item.listCount > 1}
                 <div class="flex flex-wrap gap-2">
-                    <Dialog.CloseTrigger class="preset-filled-error-500 btn btn-sm md:btn-md" onclick={onDelete}>
-                        {$t("wishes.all-lists")}
-                    </Dialog.CloseTrigger>
+                    {#if !isOnlyManager}
+                        <Dialog.CloseTrigger class="preset-filled-error-500 btn btn-sm md:btn-md" onclick={onDelete}>
+                            {$t("wishes.all-lists")}
+                        </Dialog.CloseTrigger>
+                    {/if}
                     <Dialog.CloseTrigger class="preset-filled-primary-500 btn btn-sm md:btn-md" onclick={onRemove}>
                         {$t("wishes.this-list")}
                     </Dialog.CloseTrigger>

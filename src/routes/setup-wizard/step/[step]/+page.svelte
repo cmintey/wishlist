@@ -7,6 +7,7 @@
     import { goto } from "$app/navigation";
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
+    import { resolve } from "$app/paths";
 
     let locked = false;
 
@@ -83,7 +84,7 @@
             <button
                 class="preset-filled-primary-500 btn"
                 disabled={locked}
-                onclick={() => goto("/login", { invalidateAll: true })}
+                onclick={() => goto(resolve("/login"), { invalidateAll: true })}
                 type="submit"
             >
                 {$t("setup.complete")}

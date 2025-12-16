@@ -4,21 +4,26 @@
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
     import { getFormatter } from "$lib/i18n";
+    import GroupSelectChip from "$lib/components/wishlists/chips/GroupSelectChip.svelte";
     import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
     import LightSwitch from "./LightSwitch.svelte";
     import Popup from "$lib/components/Popup.svelte";
 
     interface Props {
         user: LocalUser | null;
+        groups: GroupInformation[] | null;
         isProxyUser: boolean;
     }
 
-    const { user, isProxyUser }: Props = $props();
+    const { user, groups, isProxyUser }: Props = $props();
     const t = getFormatter();
 </script>
 
 {#if user}
-    <div class="flex md:pr-4">
+    <div class="flex min-w-0 items-center gap-4">
+        {#if groups && groups?.length > 1}
+            <GroupSelectChip {groups} {user} />
+        {/if}
         <Popup>
             {#snippet trigger(props)}
                 <button class="size-10 md:size-12" {...props}>
@@ -49,7 +54,7 @@
                             {/if}
 
                             <hr class="hr" />
-                            <GroupSubMenu {user} />
+                            <GroupSubMenu {groups} {user} />
                             {#if !isProxyUser}
                                 <hr class="hr" />
                                 <li>
@@ -87,4 +92,6 @@
             {/snippet}
         </Popup>
     </div>
+{:else}
+    <LightSwitch />
 {/if}

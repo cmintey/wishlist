@@ -14,6 +14,7 @@ enum ConfigKey {
     SMTP_FROM = "smtp.from",
     SMTP_FROM_NAME = "smtp.fromName",
     CLAIMS_SHOW_NAME = "claims.showName",
+    CLAIMS_SHOW_FOR_OWNER = "claims.showForOwner",
     CLAIMS_REQUIRE_EMAIL = "claims.requireEmail",
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
@@ -27,7 +28,9 @@ enum ConfigKey {
     OIDC_CLIENT_SECRET = "oidc.clientSecret",
     OIDC_PROVIDER_NAME = "oidc.providerName",
     OIDC_AUTO_REDIRECT = "oidc.autoRedirect",
-    OIDC_AUTO_REGISTER = "oidc.autoRegister"
+    OIDC_AUTO_REGISTER = "oidc.autoRegister",
+    OIDC_ENABLE_SYNC = "oidc.enableSync",
+    OIDC_DISABLE_EMAIL_VERIFICATION = "oidc.disableEmailVerification"
 }
 
 type Transformer<T> = (val: string | null, shouldMask?: boolean) => T;
@@ -52,6 +55,7 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "smtp.from": stringTransformer,
     "smtp.fromName": stringTransformer,
     "claims.showName": booleanTransformer,
+    "claims.showForOwner": booleanTransformer,
     "claims.requireEmail": booleanTransformer,
     listMode: stringTransformer,
     "security.passwordStrength": numberTransformer,
@@ -65,10 +69,12 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "oidc.discoveryUrl": stringTransformer,
     "oidc.providerName": stringTransformer,
     "oidc.autoRedirect": booleanTransformer,
-    "oidc.autoRegister": booleanTransformer
+    "oidc.autoRegister": booleanTransformer,
+    "oidc.enableSync": booleanTransformer,
+    "oidc.disableEmailVerification": booleanTransformer
 };
 
-const defaultConfig: Config = {
+const getDefaultConfig = (): Config => ({
     enableSignup: true,
     suggestions: {
         enable: true,
@@ -79,6 +85,7 @@ const defaultConfig: Config = {
     },
     claims: {
         showName: true,
+        showForOwner: false,
         requireEmail: true
     },
     listMode: "standard",
@@ -91,18 +98,20 @@ const defaultConfig: Config = {
     oidc: {
         enable: false
     }
-};
+});
 
 function buildConfig(configMap: Record<string, string | null>, includeSensitive = false): Config {
     const config: Partial<Config> = {};
 
     for (const [key, value] of Object.entries(configMap)) {
-        const transformer: Transformer<unknown> = transformers[key as ConfigKey];
-        const path = key.split(".");
-        setDeep(config, path, transformer(value, !includeSensitive));
+        if (key in transformers) {
+            const transformer: Transformer<unknown> = transformers[key as ConfigKey];
+            const path = key.split(".");
+            setDeep(config, path, transformer(value, !includeSensitive));
+        }
     }
 
-    return deepMerge(defaultConfig, config) as Config;
+    return deepMerge(getDefaultConfig(), config) as Config;
 }
 
 function setDeep(obj: Record<string, any>, path: string[], value: any) {

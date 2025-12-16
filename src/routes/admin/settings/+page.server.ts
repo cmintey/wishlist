@@ -30,8 +30,8 @@ export const actions: Actions = {
     "send-test": async () => {
         const user = await requireRole(Role.ADMIN);
 
-        await sendTest(user.email);
-        return { action: "send-test", success: true };
+        const resp = await sendTest(user.email);
+        return { action: "send-test", ...resp };
     },
     settings: async ({ request }) => {
         await requireRole(Role.ADMIN);
@@ -56,8 +56,8 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               enable: true,
               host: configData.smtpHost!,
               port: configData.smtpPort!,
-              user: configData.smtpUser!,
-              pass: configData.smtpPass!,
+              user: configData.smtpUser,
+              pass: configData.smtpPass,
               from: configData.smtpFrom!,
               fromName: configData.smtpFromName!
           }
@@ -79,7 +79,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               clientSecret: configData.oidcClientSecret!,
               providerName: configData.oidcProviderName,
               autoRedirect: configData.oidcAutoRedirect,
-              autoRegister: configData.oidcAutoRegister
+              autoRegister: configData.oidcAutoRegister,
+              enableSync: configData.oidcEnableSync,
+              disableEmailVerification: configData.oidcDisableEmailVerification
           }
         : {
               enable: false,
@@ -88,7 +90,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               clientSecret: configData.oidcClientSecret,
               providerName: configData.oidcProviderName,
               autoRedirect: configData.oidcAutoRedirect,
-              autoRegister: configData.oidcAutoRegister
+              autoRegister: configData.oidcAutoRegister,
+              enableSync: configData.oidcEnableSync,
+              disableEmailVerification: configData.oidcDisableEmailVerification
           };
 
     const newConfig: Config = {
@@ -100,6 +104,7 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
         smtp: smtpConfig,
         claims: {
             showName: configData.claimsShowName,
+            showForOwner: configData.claimsShowForOwner,
             requireEmail: configData.claimsRequireEmail
         },
         listMode: "standard",

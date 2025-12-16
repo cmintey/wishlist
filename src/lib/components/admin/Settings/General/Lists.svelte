@@ -18,8 +18,8 @@
                 id="enableDefaultListCreation"
                 name="enableDefaultListCreation"
                 class="checkbox"
+                checked={config.enableDefaultListCreation}
                 type="checkbox"
-                bind:checked={config.enableDefaultListCreation}
             />
             <span>{$t("admin.enable-default-list-creation")}</span>
         </label>

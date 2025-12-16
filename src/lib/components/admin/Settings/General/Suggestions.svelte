@@ -10,6 +10,8 @@
 
     const { config }: Props = $props();
     const t = getFormatter();
+
+    let enabled = $state(config.suggestions.enable);
 </script>
 
 <SettingsGroup title={$t("admin.suggestions")}>
@@ -20,7 +22,7 @@
                 name="enableSuggestions"
                 class="checkbox"
                 type="checkbox"
-                bind:checked={config.suggestions.enable}
+                bind:checked={enabled}
             />
             <span>{$t("general.enable")}</span>
         </label>
@@ -29,7 +31,7 @@
         {/snippet}
     </Setting>
 
-    {#if config.suggestions.enable}
+    {#if enabled}
         <Setting>
             <label class="flex flex-col pb-1" for="suggestionMethod">
                 <Tooltip>
@@ -66,7 +68,7 @@
                     id="suggestionMethod"
                     name="suggestionMethod"
                     class="select w-fit min-w-64"
-                    bind:value={config.suggestions.method}
+                    value={config.suggestions.method}
                 >
                     <option value="surprise">{$t("admin.suggestions-surprise-me")}</option>
                     <option value="auto-approval">{$t("admin.suggestions-auto-approve")}</option>

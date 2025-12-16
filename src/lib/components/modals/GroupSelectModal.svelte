@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter, getLocale } from "$lib/i18n";
     import type { Group } from "@prisma/client";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
@@ -11,6 +11,7 @@
 
     const { groups, onSubmit, ...props }: Props = $props();
     const t = getFormatter();
+    const locale = getLocale();
     let selectedGroup: string | undefined = $state();
 
     function onFormSubmit() {
@@ -22,7 +23,7 @@
     {#snippet description()}{/snippet}
 
     <ListBox class="border-surface-500 rounded-container border p-4">
-        {#each groups as group}
+        {#each groups.toSorted((a, b) => a.name.localeCompare(b.name, locale)) as group}
             <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
                 {group.name}
             </ListBoxItem>
@@ -30,7 +31,7 @@
     </ListBox>
 
     {#snippet actions()}
-        <div class="flex justify-between">
+        <div class="flex flex-wrap justify-between gap-2">
             <Dialog.CloseTrigger class="variant-ghost-surface btn btn-sm md:btn-md">
                 {$t("general.cancel")}
             </Dialog.CloseTrigger>

@@ -22,15 +22,17 @@
         "two-people-looking-in-an-empty-box": "Twee mensen kijken in een lege doos",
         "unpurchase": "Markeer item als niet gekocht",
         "upload-profile-image": "profielfoto uploaden",
-        "wishlist-logo": "Wenslijst Logo"
+        "wishlist-logo": "Wenslijst Logo",
+        "remove-manager-name": "Verwijder {name}",
+        "user-menu": "Gebruikersmenu"
     },
     "admin": {
         "about": "Over",
-        "account": "Profiel",
+        "account": "Account",
         "actions": "Acties",
         "add-member": "Voeg lid toe",
-        "add-remove-manager-message": "Weet je zeker dat je deze gebruiker {isManager, select, true {add} other {remove}} wilt als groepsbeheerder?",
-        "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} beheerder",
+        "add-remove-manager-message": "Weet je zeker dat je deze gebruiker wilt {isManager, select, true {toevoegen} other {verwijderen}} als groepsbeheerder?",
+        "add-remove-manager-title": "Beheerder {isManager, select, true {toevoegen} other {verwijderen}}",
         "admin": "Beheer",
         "administration": "Administratie",
         "allow-public-lists": "Sta openbare lijsten toe",
@@ -50,7 +52,7 @@
         "delete-user-confirmation": "Weet u zeker dat u {username} wilt verwijderen? <b> Deze actie is onomkeerbaar! </b>",
         "dev": "dev",
         "disable-password-login": "Schakel inloggen met wachtwoord uit",
-        "disable-password-login-tooltip": "Schakelt inloggen met een wachtwoord uit. Alleen header- en oAuth-authenticatie zijn toegestaan.",
+        "disable-password-login-tooltip": "Schakelt inloggen met een wachtwoord uit. Alleen header- en OAuth-authenticatie zijn toegestaan.",
         "enable-default-list-creation": "Schakel standaardlijst maken in",
         "enable-default-list-creation-tooltip": "Schakel het maken van een lijst in wanneer een nieuwe gebruiker lid wordt van een groep. Gebruikers kunnen zelf nog steeds lijsten maken.",
         "enable-signup": "Schakel registratie in",
@@ -66,9 +68,9 @@
         "members": "Leden",
         "oidc": "OpenId Connect (OIDC)",
         "oidc-auto-redirect": "Automatisch omleiden",
-        "oidc-auto-redirect-tooltip": "Indien ingeschakeld, wordt de inlogpagina automatisch omgeleid naar de aanmeldingspagina van uw identiteitsprovider. Om dit te omzeilen, kan de '? Direct = 1' aan de URL worden toegevoegd.",
-        "oidc-auto-register": "Auto -register",
-        "oidc-auto-register-tooltip": "Maakt nieuwe accountcreatie mogelijk voor OAuth -gebruikers die zich voor het eerst aanmelden.",
+        "oidc-auto-redirect-tooltip": "Om de automatische omleiding te omzeilen, kan '?direct=1' aan de URL worden toegevoegd.",
+        "oidc-auto-register": "Automatisch registreren",
+        "oidc-auto-register-tooltip": "Maakt nieuwe accountcreatie mogelijk voor OAuth-gebruikers die zich voor het eerst aanmelden.",
         "oidc-client-id": "Client -ID",
         "oidc-client-secret": "Cliëntgeheim",
         "oidc-provider-name": "Naam van de provider",
@@ -109,15 +111,23 @@
         "username-field": "Gebruikersnaam: {username}",
         "users": "Gebruikers",
         "version": "Versie: <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
-        "wishlist-mode": "WISSLIST -modus",
+        "wishlist-mode": "Verlanglijstmodus",
         "wishlist-mode-alert": "Er zijn {memberCount} leden en {listCount} lijsten in deze groep, u kunt de modus niet schakelen totdat u alle behalve één lid en één lijst verwijdert.",
         "wishlist-mode-display-text": "In de 'Wishlist' -modus kunt u meerdere gebruikers en lijsten hebben en items van andere gebruikers claimen. In de modus 'Registry' hebt u een enkele lijst die u publiekelijk kunt delen.",
         "wishlist-mode-registry": "Register",
         "wishlist-mode-registry-tooltip": "Eén gebruiker met één openbare lijst. Gebruikers van andere groepen kunnen suggesties doen als toegestane en anonieme gebruikers items kunnen claimen.",
         "wishlist-mode-wishlist": "Verlanglijst",
         "wishlist-mode-wishlist-tooltip": "Meerdere gebruikers en meerdere lijsten met claim- en itemsuggesties. Lijsten kunnen openbaar worden gemaakt indien toegestaan door de groep.",
-        "claims-require-email": "Email vereist",
-        "claims-require-email-tooltip": "Vereis een emailadres om anoniem een item te claimen."
+        "claims-require-email": "E-mail vereist",
+        "claims-require-email-tooltip": "Vereis een emailadres om anoniem een item te claimen.",
+        "disable-email-verification": "Schakel e-mail bevestiging uit",
+        "disable-email-verification-description": "Schakel de vereiste uit dat het e-mailadres van de gebruiker bij de IdP moet worden geverifieerd voor het koppelen en aanmaken van een account.",
+        "enable-sync": "Schakel synchronisatie in",
+        "enable-sync-description": "Schakel synchronisatie van gebruikerskenmerken van uw IdP in, zoals naam en e-mailadres.",
+        "oidc-auto-redirect-description": "Automatisch doorgestuurd naar de aanmeldpagina van uw IdP.",
+        "profile-disabled": "Uw profiel wordt beheerd door uw OAuth-provider.",
+        "show-for-list-owner": "Weergeven voor lijsteigenaar",
+        "show-for-list-owner-description": "Geef lijsteigenaren de mogelijkheid om claims op hun eigen lijsten te bekijken."
     },
     "app": {
         "home": "Start",
@@ -244,7 +254,8 @@
         "username-already-in-use": "{username} al in gebruik",
         "username-must-not-be-blank": "Gebruikersnaam mag niet leeg zijn",
         "valid-url-not-provided": "Geldige URL niet verstrekt",
-        "email-is-required-for-public-claims": "Email is vereist voor publieke claims"
+        "email-is-required-for-public-claims": "Email is vereist voor publieke claims",
+        "oidc-error": "Authenticeren met OAuth is mislukt"
     },
     "general": {
         "add-a-description": "Voeg een beschrijving toe",
@@ -313,7 +324,9 @@
         "very-strong": "Erg sterk",
         "very-weak": "Erg zwak",
         "weak": "Zwak",
-        "wishlists-cleared": "Wenlijsten zijn opgeruimd."
+        "wishlists-cleared": "Wenlijsten zijn opgeruimd.",
+        "select-all": "Selecteer alles",
+        "oauth": "OAuth"
     },
     "setup": {
         "back": "Terug",
@@ -401,7 +414,7 @@
         "quantity": "Hoeveelheid",
         "quantity-claimed": "{quantity} geclaimd",
         "quantity-desired": "{quantity} gewenst",
-        "reorder": "Herstellen",
+        "reorder": "Volgorde aanpassen",
         "share": "Deellijst",
         "show-description": "Toon beschrijving",
         "supports-markdown": "Ondersteunt Markdown",
@@ -420,6 +433,16 @@
         "write": "Schrijven",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
         "hide-all-currencies": "verberg alle eenheden...",
-        "show-all-currencies": "Toon alle valuta's..."
+        "show-all-currencies": "Toon alle valuta's...",
+        "add-a-list-manager": "Voeg een lijst beheerder toe",
+        "add-a-list-manager-explainer": "Zoek naar een gebruiker in deze groep om als manager aan je lijst toe te voegen.",
+        "add-a-manager": "Beheerder toevoegen",
+        "list-managers": "Lijst beheerders",
+        "list-managers-tooltip": "Lijst beheerders kunnen alles doen wat je kunt doen inclusief het goedkeuren of afwijzen van suggesties, het bijwerken van lijsten, en het verwijderen van items van de lijst. Als jouw groep wordt toegewezen aan de verrassingsmodus, zullen alle items toegevoegd door een lijst beheerder zichtbaar voor je zijn.",
+        "no-managers": "Geen beheerders",
+        "claims": "{claimCount, plural, one {# claim} other {# claims}}",
+        "hide-claims": "Verberg claims",
+        "show-claims": "Toon claims",
+        "claimed-by-you-on-another-list": "Door jou geclaimd op een andere lijst"
     }
 }

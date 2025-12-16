@@ -1,22 +1,13 @@
-import type { Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
-import { UserMenu } from "../modules/user-menu";
 import { CreateItemPage } from "../pageObjects/create-item.page";
 import { ListPage } from "../pageObjects/list.page";
 import { ListsPage } from "../pageObjects/lists.page";
 import { randomString } from "../util";
-import type { Method } from "../modules/suggestions-settings";
+import { disableSuggestions, setSuggestionMethod } from "../helpers/suggestions";
 
 test("add item to another users list - disabled", async ({ page: user1Page, userData, additionalPage: user2Page }) => {
     // setup -- disable suggestions
-    await new UserMenu(user1Page)
-        .manageGroup()
-        .then((page) => page.clickSettingsTab())
-        .then(async (page) => {
-            await page.getSuggestionsSettings().then((s) => s.disable());
-            return page;
-        })
-        .then((page) => page.saveSettings());
+    await disableSuggestions(user1Page);
 
     const user1ListsPage = new ListsPage(user1Page);
     await user1ListsPage.goto();
@@ -40,7 +31,7 @@ test("add item to another users list - surprise", async ({
     additionalPage: user2Page,
     additionalUserData: user2
 }) => {
-    await enableMethod(user1Page, "surprise");
+    await setSuggestionMethod(user1Page, "surprise");
 
     const user1ListsPage = new ListsPage(user1Page);
     await user1ListsPage.goto();
@@ -77,7 +68,7 @@ test("add item to another users list - auto-approval", async ({
     additionalPage: user2Page,
     additionalUserData: user2
 }) => {
-    await enableMethod(user1Page, "auto-approval");
+    await setSuggestionMethod(user1Page, "auto-approval");
 
     const user1ListsPage = new ListsPage(user1Page);
     await user1ListsPage.goto();
@@ -116,7 +107,7 @@ test("add item to another users list - auto-approval", async ({
         additionalPage: user2Page,
         additionalUserData: user2
     }) => {
-        await enableMethod(user1Page, "approval");
+        await setSuggestionMethod(user1Page, "approval");
 
         const user1ListsPage = new ListsPage(user1Page);
         await user1ListsPage.goto();
@@ -165,20 +156,6 @@ test("add item to another users list - auto-approval", async ({
         }
     })
 );
-
-async function enableMethod(page: Page, method: Method) {
-    await new UserMenu(page)
-        .manageGroup()
-        .then((page) => page.clickSettingsTab())
-        .then(async (page) => {
-            await page
-                .getSuggestionsSettings()
-                .then((s) => s.enable())
-                .then((s) => s.selectMethod(method));
-            return page;
-        })
-        .then((page) => page.saveSettings());
-}
 
 async function createItemOnUser1List(page: ListPage, itemName: string, approvalNeeded = false) {
     await page.goto();

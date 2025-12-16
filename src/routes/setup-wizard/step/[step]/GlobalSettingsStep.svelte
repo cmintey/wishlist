@@ -4,7 +4,7 @@
     import { getContext, onMount } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Props } from "./steps";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { getFormatter } from "$lib/i18n";
@@ -17,7 +17,6 @@
     let groups: Group[] = $state(page.data.groups);
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
-    let saved = $state(false);
 
     const submit: Writable<() => void> = getContext("submit");
     $submit = () => {
@@ -88,7 +87,7 @@
             <!-- Settings -->
             <div class="w-full">
                 <General {config} {groups} hidden={currentHash !== options[0].hash} />
-                <Email {config} hidden={currentHash !== options[1].hash} {saved} {sending} />
+                <Email {config} hidden={currentHash !== options[1].hash} {sending} />
                 <Security {config} hidden={currentHash !== options[2].hash} />
             </div>
         </div>

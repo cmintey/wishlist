@@ -3,7 +3,7 @@ import { client } from "./prisma";
 import { claimFilter } from "./sort-filter-util";
 import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
 
 export interface GetItemsOptions {
@@ -12,6 +12,7 @@ export interface GetItemsOptions {
     sortDir: string | null;
     suggestionMethod: SuggestionMethod;
     listOwnerId: string;
+    listManagers?: Set<string>;
     loggedInUserId: string | null;
 }
 
@@ -134,6 +135,11 @@ export const getById = async (id: string) => {
                     name: true
                 }
             },
+            managers: {
+                select: {
+                    userId: true
+                }
+            },
             groupId: true,
             public: true,
             description: true
@@ -147,18 +153,29 @@ export const getById = async (id: string) => {
 export const getItems = async (listId: string, options: GetItemsOptions) => {
     const itemListFilter: Prisma.ListItemWhereInput = {};
 
-    // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner
+    // In "approval" mode, don't show items awaiting approval unless the logged in user is the owner or manager
     if (
         options.suggestionMethod === "approval" &&
         !options.loggedInUserId &&
-        options.loggedInUserId !== options.listOwnerId
+        options.loggedInUserId !== options.listOwnerId &&
+        !options.listManagers?.has(options.loggedInUserId || "")
     ) {
         itemListFilter.approved = true;
     }
 
-    // In "surprise" mode, only show the items the owner added
-    if (options.suggestionMethod === "surprise" && options.loggedInUserId === options.listOwnerId) {
-        itemListFilter.addedById = options.loggedInUserId;
+    // In "surprise" mode, only show the items the owner or other managers added
+    if (
+        options.suggestionMethod === "surprise" &&
+        (options.loggedInUserId === options.listOwnerId ||
+            (options.loggedInUserId && options.listManagers?.has(options.loggedInUserId)))
+    ) {
+        if (options.listManagers) {
+            itemListFilter.addedById = {
+                in: [options.listOwnerId, ...options.listManagers]
+            };
+        } else {
+            itemListFilter.addedById = options.loggedInUserId;
+        }
     }
 
     const list = await client.list.findUnique({
@@ -290,4 +307,38 @@ export const getAvailableLists = async (ownerId: string, loggedInUserId: string)
     }
 
     return listsAvailable;
+};
+
+export const getNextDisplayOrderForLists = async (listIds: string[], mostWanted = false) => {
+    if (mostWanted) {
+        return listIds.reduce(
+            (accum, listId) => {
+                accum[listId] = -1;
+                return accum;
+            },
+            {} as Record<string, number>
+        );
+    } else {
+        const maxDisplay = await client.listItem.groupBy({
+            by: ["listId"],
+            _max: {
+                displayOrder: true
+            },
+            _count: {
+                id: true
+            },
+            where: {
+                listId: {
+                    in: listIds
+                }
+            }
+        });
+        return maxDisplay.reduce(
+            (accum, curr) => {
+                accum[curr.listId] = curr._max.displayOrder ? curr._max.displayOrder + 1 : curr._count.id;
+                return accum;
+            },
+            {} as Record<string, number>
+        );
+    }
 };

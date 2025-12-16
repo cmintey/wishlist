@@ -1,6 +1,6 @@
 <script lang="ts">
     import TokenCopy from "$lib/components/TokenCopy.svelte";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { fade } from "svelte/transition";
     import { InviteUsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
@@ -53,8 +53,8 @@
                 defaultGroup,
                 smtpEnabled: config.smtp.enable
             },
-            async response(data: { group?: string; email?: string; method: InviteMethod }) {
-                await generateInvite(data);
+            async response(data?: { group?: string; email?: string; method: InviteMethod }) {
+                if (data) await generateInvite(data);
             },
             buttonTextCancel: $t("general.cancel")
         });
