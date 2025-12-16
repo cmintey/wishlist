@@ -2,7 +2,7 @@
     import { goto } from "$app/navigation";
     import { resolve } from "$app/paths";
     import { UserAPI } from "$lib/api/users";
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         user: LocalUser;
@@ -31,7 +31,7 @@
 </script>
 
 <button
-    class="variant-ghost-primary chip flex min-w-0 flex-shrink"
+    class="preset-tonal-primary border border-primary-500 chip flex min-w-0 shrink"
     data-testid="group-select-chip"
     use:popup={menuSettings}
 >

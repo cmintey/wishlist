@@ -126,7 +126,7 @@
         <Combobox.Trigger />
     </Combobox.Control>
     <Portal>
-        <Combobox.Positioner class="z-[1]!">
+        <Combobox.Positioner class="z-1!">
             <Combobox.Content class="grid h-64 max-w-full grid-cols-6 overflow-auto pl-2 md:grid-cols-12">
                 {#each filteredIcons as item (item)}
                     <Combobox.Item {item}>

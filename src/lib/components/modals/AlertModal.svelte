@@ -17,7 +17,7 @@
 <BaseModal {...rest}>
     {#snippet actions()}
         <div class="flex justify-end">
-            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" onclick={onConfirm}>
+            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onConfirm}>
                 {confirmText}
             </Dialog.CloseTrigger>
         </div>

@@ -51,7 +51,7 @@
         </span>
         {#if item.quantity && (user?.id !== item.userId || showClaimForOwner)}
             <span>·</span>
-            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
+            <span class="text-secondary-800-200 font-bold" data-testid="quantity-claimed">
                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
             </span>
         {/if}
@@ -60,7 +60,7 @@
 {#if showDetail && showClaimedName && item.claims.length > 0 && (item.userId !== user?.id || showClaimForOwner)}
     <div class="card text-sm">
         <button
-            class="flex w-full items-center !justify-start gap-2 p-2 !text-start text-sm"
+            class="flex w-full items-center justify-start! gap-2 p-2 text-start! text-sm"
             onclick={() => (expandClaims = !expandClaims)}
         >
             <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>

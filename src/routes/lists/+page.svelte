@@ -28,7 +28,7 @@
 <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
     <ListFilterChip {users} />
     <button
-        class="variant-ghost-secondary btn btn-sm h-fit items-center"
+        class="preset-tonal-secondary border border-secondary-500 btn btn-sm h-fit items-center"
         onclick={() => goto(resolve("/lists/create"))}
     >
         <iconify-icon icon="ion:add"></iconify-icon>

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton/optional/presets";
+@import "@skeletonlabs/skeleton/themes/cerberus";
+@import "@skeletonlabs/skeleton";
 @import "@skeletonlabs/skeleton-svelte";
 @import "./wishlist.css";
 @import "./styles/list.css";

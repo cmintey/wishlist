@@ -25,7 +25,7 @@
 </script>
 
 {#snippet trigger({ props }: { props: Record<string, unknown> })}
-    <button class="variant-filled-error btn w-fit" {...props}>{$t("admin.delete-group-title")}</button>
+    <button class="preset-filled-error-500 btn w-fit" {...props}>{$t("admin.delete-group-title")}</button>
 {/snippet}
 
 {#if isDefaultGroup}

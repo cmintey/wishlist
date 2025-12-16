@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
     import { setListViewPreference } from "$lib/stores/list-view-preference.svelte";
-    import { RadioGroup, RadioItem } from "@skeletonlabs/skeleton";
+    import { Segment } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         isTileView: boolean;
@@ -21,8 +21,8 @@
     });
 </script>
 
-<RadioGroup name="list-view-mode" class="h-fit" active="variant-filled-primary" padding="py-0 px-2" rounded="rounded">
-    <RadioItem
+<Segment name="list-view-mode" class="h-fit" active="preset-filled-primary-500" padding="py-0 px-2" rounded="rounded">
+    <Segment.Item
         name="list-view-mode"
         class="text-sm"
         title={$t("wishes.list-view")}
@@ -30,8 +30,8 @@
         bind:group={selectedValue}
     >
         <iconify-icon class="text-xs" icon="ion:list"></iconify-icon>
-    </RadioItem>
-    <RadioItem
+    </Segment.Item>
+    <Segment.Item
         name="list-view-mode"
         class="text-sm"
         title={$t("wishes.tile-view")}
@@ -39,5 +39,5 @@
         bind:group={selectedValue}
     >
         <iconify-icon class="text-xs" icon="ion:grid"></iconify-icon>
-    </RadioItem>
-</RadioGroup>
+    </Segment.Item>
+</Segment>

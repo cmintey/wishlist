@@ -225,10 +225,13 @@
                 </Dialog.CloseTrigger>
             {/if}
             <div class="flex flex-wrap gap-2">
-                <Dialog.CloseTrigger class="btn btn-sm md:btn-base variant-ghost-surface}" type="button">
+                <Dialog.CloseTrigger
+                    class="btn btn-sm md:btn-base preset-tonal-surface border-surface-500 border"
+                    type="button"
+                >
                     {$t("general.cancel")}
                 </Dialog.CloseTrigger>
-                <Dialog.CloseTrigger class="btn btn-sm md:btn-base variant-filled" form={formId} type="submit">
+                <Dialog.CloseTrigger class="btn btn-sm md:btn-base preset-filled" form={formId} type="submit">
                     {$t("wishes.claim")}
                 </Dialog.CloseTrigger>
             </div>

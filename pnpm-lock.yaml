@@ -127,7 +127,7 @@ importers:
         specifier: ^0.5.10
         version: 0.5.10(tailwindcss@4.1.18)
       '@tailwindcss/vite':
-        specifier: ^4.1.14
+        specifier: ^4.1.18
         version: 4.1.18(vite@7.2.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.43.1)(tsx@4.21.0))
       '@types/eslint':
         specifier: ^9.6.1
@@ -169,8 +169,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0(prettier@3.6.2)(svelte@5.43.12)
       prettier-plugin-tailwindcss:
-        specifier: ^0.7.0
-        version: 0.7.1(prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@5.43.12))(prettier@3.6.2)
+        specifier: ^0.7.2
+        version: 0.7.2(prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@5.43.12))(prettier@3.6.2)
       pulltorefreshjs:
         specifier: ^0.1.22
         version: 0.1.22
@@ -190,7 +190,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3(@babel/core@7.28.3)(postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.1)(typescript@5.9.3)))(postcss@8.5.6)(svelte@5.43.12)(typescript@5.9.3)
       tailwindcss:
-        specifier: ^4.1.14
+        specifier: ^4.1.18
         version: 4.1.18
       ts-node:
         specifier: ^10.9.2
@@ -4526,8 +4526,8 @@ packages:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
 
-  prettier-plugin-tailwindcss@0.7.1:
-    resolution: {integrity: sha512-Bzv1LZcuiR1Sk02iJTS1QzlFNp/o5l2p3xkopwOrbPmtMeh3fK9rVW5M3neBQzHq+kGKj/4LGQMTNcTH4NGPtQ==}
+  prettier-plugin-tailwindcss@0.7.2:
+    resolution: {integrity: sha512-LkphyK3Fw+q2HdMOoiEHWf93fNtYJwfamoKPl7UwtjFQdei/iIBoX11G6j706FzN3ymX9mPVi97qIY8328vdnA==}
     engines: {node: '>=20.19'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
@@ -10526,7 +10526,7 @@ snapshots:
       prettier: 3.6.2
       svelte: 5.43.12
 
-  prettier-plugin-tailwindcss@0.7.1(prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@5.43.12))(prettier@3.6.2):
+  prettier-plugin-tailwindcss@0.7.2(prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@5.43.12))(prettier@3.6.2):
     dependencies:
       prettier: 3.6.2
     optionalDependencies:

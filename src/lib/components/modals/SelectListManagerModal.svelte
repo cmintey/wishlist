@@ -2,7 +2,6 @@
     import { UsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
     import type { User } from "$lib/generated/prisma/client";
-    import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
 
     interface Props {
         parent: any;
@@ -56,7 +55,7 @@
     </label>
 
     {#if users.length > 0}
-        <ListBox class="border border-surface-500 p-4 rounded-container-token">
+        <ListBox class="border border-surface-500 p-4 rounded-container">
             {#each users as user}
                 <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
                     <div class="flex items-baseline gap-2">

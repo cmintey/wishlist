@@ -46,12 +46,9 @@
 
 <script lang="ts">
     import {
-        getDrawerStore,
-        getModalStore,
-        getToastStore,
         type DrawerSettings,
         type ModalSettings
-    } from "@skeletonlabs/skeleton";
+    } from "@skeletonlabs/skeleton-svelte";
     import type { User } from "$lib/generated/prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import { goto, invalidateAll } from "$app/navigation";
@@ -285,7 +282,7 @@
 
 {#snippet defaultImage(t: MessageFormatter, sizeClasses: ClassValue = ["w-24", "h-24", "md:w-40", "md:h-40"])}
     <div
-        class={["bg-surface-300-600-token grid flex-none place-items-center", sizeClasses]}
+        class={["bg-surface-300-700 grid flex-none place-items-center", sizeClasses]}
         aria-label={t("a11y.default-item-image")}
         data-testid="image"
         role="img"
@@ -312,7 +309,7 @@
 <div
     class="card block h-full w-full text-start"
     class:card-hover={!reorderActions}
-    class:variant-ghost-warning={!item.approved}
+    class:preset-tonal-warning border border-warning-500={!item.approved}
     aria-labelledby={`${id}-name`}
     onclick={() => {
         if (!reorderActions) launchDrawer();

@@ -320,7 +320,7 @@
     >
         <div class="flex items-end justify-between">
             <legend id="lists-label">{$t("wishes.lists")}</legend>
-            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">
+            <button class="preset-tonal-primary border border-primary-500 btn btn-sm" onclick={selectAll} type="button">
                 {$t("general.select-all")}
             </button>
         </div>

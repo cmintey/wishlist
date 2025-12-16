@@ -30,7 +30,7 @@
 
 {#snippet deleteButton()}
     <button
-        class="variant-filled-error btn btn-icon btn-icon-sm md:btn-icon-base"
+        class="preset-filled-error-500 btn btn-icon btn-icon-sm md:btn-icon-base"
         aria-label={$t("wishes.delete")}
         onclick={(e) => {
             e.stopPropagation();
@@ -45,7 +45,7 @@
 <div class="flex flex-row flex-wrap gap-2">
     {#if !item.approved}
         <button
-            class="variant-filled-error btn-icon btn-icon-sm md:btn-icon-base"
+            class="preset-filled-error-500 btn-icon btn-icon-sm md:btn-icon-base"
             aria-label={$t("wishes.deny")}
             onclick={(e) => {
                 e.stopPropagation();
@@ -56,7 +56,7 @@
             <iconify-icon icon="ion:close"></iconify-icon>
         </button>
         <button
-            class="variant-filled-success btn-icon btn-icon-sm md:btn-icon-base"
+            class="preset-filled-success-500 btn-icon btn-icon-sm md:btn-icon-base"
             aria-label={$t("wishes.approve")}
             onclick={(e) => {
                 e.stopPropagation();

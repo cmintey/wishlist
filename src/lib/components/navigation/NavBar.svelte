@@ -35,7 +35,7 @@
 
 <div class="app-bar bg-surface-200-800 flex gap-4 px-4 py-2 md:py-4">
     <!-- Header -->
-    <div class="flex flex-shrink-0 flex-grow content-center items-center gap-x-4 md:flex-grow-0">
+    <div class="flex shrink-0 grow content-center items-center gap-x-4 md:grow-0">
         {#if user}
             {#if !$isInstalled}
                 <button
@@ -56,7 +56,7 @@
 
     <!-- Nav items -->
     {#if user}
-        <div class="hidden flex-row items-center pt-0.5 pl-4 md:flex md:flex-grow">
+        <div class="hidden flex-row items-center pt-0.5 pl-4 md:flex md:grow">
             {#each navItems as navItem}
                 <a
                     class="list-option font-bold"

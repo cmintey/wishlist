@@ -2,7 +2,6 @@
     import { UsersAPI } from "$lib/api/users";
     import { getFormatter } from "$lib/i18n";
     import type { User } from "$lib/generated/prisma/client";
-    import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
     import BaseModal, { type BaseModalProps as BaseProps } from "./BaseModal.svelte";
     import { GroupAPI } from "$lib/api/groups";
     import { invalidateAll } from "$app/navigation";
@@ -68,7 +67,7 @@
 
     {#await doSearch(searchValue) then users}
         {#if users.length > 0}
-            <ListBox class="border-surface-500 rounded-container-token border p-4">
+            <ListBox class="border-surface-500 rounded-container border p-4">
                 {#each users as user}
                     <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
                         <span>{user.name}</span>
@@ -81,11 +80,11 @@
 
     {#snippet actions()}
         <div class="flex justify-between">
-            <Dialog.CloseTrigger class="variant-ghost-surface btn btn-sm md:btn-md">
+            <Dialog.CloseTrigger class="preset-tonal-surface border border-surface-500 btn btn-sm md:btn-md">
                 {$t("general.cancel")}
             </Dialog.CloseTrigger>
 
-            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
+            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
                 {$t("general.add-user")}
             </Dialog.CloseTrigger>
         </div>

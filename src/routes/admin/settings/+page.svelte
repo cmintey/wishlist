@@ -5,7 +5,7 @@
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { ProgressRadial } from "@skeletonlabs/skeleton";
+    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
     import { errorToast } from "$lib/components/toasts";
     import { toaster } from "$lib/components/toaster";
@@ -62,7 +62,7 @@
                 <ul>
                     {#each options as option}
                         <li>
-                            <a class={[currentHash === option.hash && "!preset-filled-primary-500"]} href={option.hash}>
+                            <a class={[currentHash === option.hash && "preset-filled-primary-500!"]} href={option.hash}>
                                 {option.label($t)}
                             </a>
                         </li>
@@ -92,7 +92,7 @@
             <div class="flex w-full flex-row justify-end pt-5">
                 <button class="preset-filled-primary-500 btn" disabled={saving} type="submit">
                     {#if saving}
-                        <ProgressRadial stroke={64} width="w-6" />
+                        <ProgressRing stroke={64} width="w-6" />
                     {/if}
                     <span>{$t("general.save")}</span>
                 </button>

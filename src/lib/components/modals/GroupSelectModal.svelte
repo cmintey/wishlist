@@ -32,11 +32,11 @@
 
     {#snippet actions()}
         <div class="flex flex-wrap justify-between gap-2">
-            <Dialog.CloseTrigger class="variant-ghost-surface btn btn-sm md:btn-md">
+            <Dialog.CloseTrigger class="preset-tonal-surface border border-surface-500 btn btn-sm md:btn-md">
                 {$t("general.cancel")}
             </Dialog.CloseTrigger>
 
-            <Dialog.CloseTrigger class="variant-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
+            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
                 {$t("general.change-group")}
             </Dialog.CloseTrigger>
         </div>

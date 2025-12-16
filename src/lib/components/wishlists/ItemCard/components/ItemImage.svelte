@@ -34,7 +34,7 @@
 
 <div class={[props.class, "relative"]}>
     {#if item.mostWanted}
-        <div class={["glow variant-filled-primary chip absolute start-1 top-1", badgeClass]}>
+        <div class={["glow preset-filled-primary-500 chip absolute start-1 top-1", badgeClass]}>
             <iconify-icon icon="ion:star"></iconify-icon>
             <span class={shrinkBadge ? "hidden md:block" : "block"}>{$t("wishes.most-wanted")}</span>
         </div>

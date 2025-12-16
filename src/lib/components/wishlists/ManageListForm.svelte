@@ -156,13 +156,13 @@
                         <p>{$t("wishes.list-managers-tooltip")}</p>
                     {/snippet}
                 </Tooltip>
-                <button class="variant-ghost-primary btn btn-sm" onclick={addManager} type="button">
+                <button class="preset-tonal-primary border border-primary-500 btn btn-sm" onclick={addManager} type="button">
                     {$t("wishes.add-a-manager")}
                 </button>
             </div>
 
             <div
-                class="border-surface-400-500-token border-token rounded-container-token flex h-36 flex-col space-y-2 overflow-y-scroll p-2"
+                class="border-surface-500 border rounded-container flex h-36 flex-col space-y-2 overflow-y-scroll p-2"
                 class:input-error={page.form?.errors?.managers}
                 data-testid="list-managers-list"
             >
@@ -186,7 +186,7 @@
                 {/each}
             </div>
             {#if page.form?.errors?.managers}
-                <p class="unstyled text-error-500-400-token text-xs">{page.form.errors.managers[0]}</p>
+                <p class="unstyled text-error-600-400 text-xs">{page.form.errors.managers[0]}</p>
             {/if}
         </fieldset>
 

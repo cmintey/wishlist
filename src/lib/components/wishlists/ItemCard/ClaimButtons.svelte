@@ -38,7 +38,7 @@
     {#if isClaimOnList}
         <div class="flex flex-row gap-2">
             <button
-                class="variant-ghost-secondary btn btn-sm md:btn"
+                class="preset-tonal-secondary border border-secondary-500 btn btn-sm md:btn"
                 onclick={(e) => {
                     e.stopPropagation();
                     onUnclaim?.();
@@ -49,8 +49,8 @@
             <button
                 class={[
                     "btn btn-icon btn-icon-sm md:btn-icon-base",
-                    userClaim.purchased && "variant-soft-secondary",
-                    !userClaim.purchased && "variant-ringed-secondary"
+                    userClaim.purchased && "preset-tonal-secondary",
+                    !userClaim.purchased && "preset-outlined-secondary-500"
                 ]}
                 aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
                 onclick={(e) => {
@@ -68,7 +68,7 @@
 {:else if item.isClaimable && item.userId !== user?.id}
     <div class="flex flex-row items-center gap-x-2">
         <button
-            class="variant-filled-secondary btn btn-sm md:btn"
+            class="preset-filled-secondary-500 btn btn-sm md:btn"
             onclick={(e) => {
                 e.stopPropagation();
                 onClaim?.();

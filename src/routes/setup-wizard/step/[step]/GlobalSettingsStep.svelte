@@ -66,7 +66,7 @@
                         {#each options as option}
                             <li>
                                 <a
-                                    class={[currentHash === option.hash && "!preset-filled-primary-500"]}
+                                    class={[currentHash === option.hash && "preset-filled-primary-500!"]}
                                     href={option.hash}
                                 >
                                     {option.label($t)}

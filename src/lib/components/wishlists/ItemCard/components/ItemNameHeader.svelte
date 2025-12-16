@@ -8,7 +8,7 @@
     {#if item.url}
         <a
             id={`${id}-name`}
-            class="line-clamp-1 dark:!text-primary-200"
+            class="line-clamp-1 dark:text-primary-200!"
             data-testid="name"
             href={item.url}
             onclick={(e) => e.stopPropagation()}

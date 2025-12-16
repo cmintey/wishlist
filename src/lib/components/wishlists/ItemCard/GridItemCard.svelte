@@ -30,10 +30,10 @@
 
 <div class="flex h-full flex-col">
     <!-- Image extends to card edges -->
-    <div class="relative h-48 w-full overflow-hidden p-[1px]">
-        <ItemImage class="h-full w-full object-cover rounded-tl-container-token rounded-tr-container-token" {item}>
+    <div class="relative h-48 w-full overflow-hidden p-px">
+        <ItemImage class="h-full w-full object-cover rounded-tl-container rounded-tr-container" {item}>
             {#snippet defaultImage(t)}
-                {@render _defaultImage(t, "rounded-tl-container-token rounded-tr-container-token  h-full w-full")}
+                {@render _defaultImage(t, "rounded-tl-container rounded-tr-container  h-full w-full")}
             {/snippet}
         </ItemImage>
     </div>
