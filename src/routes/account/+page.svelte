@@ -20,6 +20,7 @@
     let profileEditDisabled = $state(
         data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.user.oauthId !== null
     );
+    let avatarKey = $state(0);
 </script>
 
 <TabGroup>
@@ -31,7 +32,9 @@
         {#if tabSet === 0}
             <div class="flex w-fit flex-col items-center">
                 <div class="relative m-auto h-full w-full max-w-[150px]">
+                    {#key avatarKey}
                     <Avatar user={data.user} width="w-32" />
+                    {/key}
                     <form
                         class="absolute bottom-0 right-0 h-12 w-12"
                         action="?/profilePicture"
@@ -43,6 +46,8 @@
                                     errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
                                     return;
                                 }
+                                data.user.picture = result.data
+                                avatarKey++;
                             };
                         }}
                     >
