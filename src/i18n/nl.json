@@ -37,6 +37,8 @@
         "administration": "Administratie",
         "allow-public-lists": "Sta openbare lijsten toe",
         "allow-public-lists-tooltip": "Sta gebruikers toe om een lijst openbaar te maken. Heeft geen effect als de groep zich in de modus 'register' bevindt.",
+        "always-show-name": "Altijd naam tonen",
+        "always-show-name-tooltip": "Toont de naam van de gebruiker die de claim heeft gemaakt, ongeacht of de persoon tot de groep behoort of niet.",
         "build": "Build: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "build-date": "Bouwdatum: {buildDate}",
         "claims": "Claims",

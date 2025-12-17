@@ -105,6 +105,8 @@
         "password-reset-link": "Länk för återställning av lösenord",
         "allow-public-lists": "Tillåt publika listor",
         "allow-public-lists-tooltip": "Tillåt användare att göra listor publika. Har ingen effekt om gruppen är i \"Registrerings\"-läge.",
+        "always-show-name": "Visa alltid namn",
+        "always-show-name-tooltip": "Visar namnet på användaren som gjorde reservationen oavsett om personen tillhör gruppen eller inte.",
         "oidc-auto-redirect-tooltip": "När det är aktiverat omdirigeras inloggningssidan automatiskt till din identitetsleverantörs inloggningssida. För att kringgå detta kan '?direct=1' läggas till i URL:en.",
         "suggestions-auto-approve-tooltip": "Objekt läggs automatiskt till i listan, men listägaren kan se, ändra och ta bort objektet.",
         "wishlist-mode-wishlist-tooltip": "Flera användare och flera listor med anspråk och förslag på objekt. Listor kan offentliggöras om gruppen tillåter det.",

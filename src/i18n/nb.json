@@ -25,6 +25,8 @@
         "add-member": "Legg til medlem",
         "admin": "Admin",
         "administration": "Administrasjon",
+        "always-show-name": "Vis alltid navn",
+        "always-show-name-tooltip": "Viser navnet på brukeren som gjorde reservasjonen, uavhengig av om personen tilhører gruppen eller ikke.",
         "build": "Versjon: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\"></a>",
         "build-date": "Versjonsdato: {buildDate}",
         "claims": "Krav",

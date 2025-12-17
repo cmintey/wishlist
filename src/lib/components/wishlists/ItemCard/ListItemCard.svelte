@@ -13,6 +13,7 @@
         userCanManage = false,
         showClaimedName = false,
         showClaimForOwner = false,
+        showAlwaysClaimedName = false,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -57,6 +58,7 @@
     {onUnclaim}
     {reorderActions}
     {showClaimForOwner}
+    {showAlwaysClaimedName}
     {showClaimedName}
     {user}
     {userCanManage}

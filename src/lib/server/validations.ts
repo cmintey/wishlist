@@ -66,6 +66,7 @@ export const settingSchema = z.object({
     smtpFrom: z.string().optional(),
     smtpFromName: z.string().optional(),
     claimsShowName: z.coerce.boolean().default(false),
+    claimsAlwaysShowName: z.coerce.boolean().default(false),
     claimsShowForOwner: z.coerce.boolean().default(false),
     claimsRequireEmail: z.coerce.boolean().default(false),
     listMode: z.enum(["standard", "registry"]).default("standard"),

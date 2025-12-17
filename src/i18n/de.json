@@ -32,6 +32,8 @@
         "account": "Konto",
         "actions": "Aktionen",
         "add-member": "Mitglied hinzufügen",
+        "always-show-name": "Name immer anzeigen",
+        "always-show-name-tooltip": "Zeigt den Namen des Benutzers an, der die Reservierung vorgenommen hat, unabhängig davon, ob die Person zur Gruppe gehört oder nicht.",
         "unknown": "unbekannt",
         "security": "Sicherheit",
         "smtp": "SMTP",

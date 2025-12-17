@@ -8,6 +8,7 @@
         user?: PartialUser; // logged in user
         userCanManage?: boolean;
         showClaimedName?: boolean;
+        showAlwaysClaimedName?: boolean;
         showClaimForOwner?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
@@ -27,6 +28,7 @@
         user?: PartialUser;
         userCanManage?: boolean;
         showClaimedName?: boolean;
+        showAlwaysClaimedName?: boolean;
         showClaimForOwner?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
@@ -75,6 +77,7 @@
         user = undefined,
         userCanManage = false,
         showClaimedName = false,
+        showAlwaysClaimedName = false,
         showClaimForOwner = false,
         requireClaimEmail = true,
         showFor = false,
@@ -266,6 +269,7 @@
             user,
             userCanManage,
             showClaimedName,
+            showAlwaysClaimedName,
             showClaimForOwner,
             requireClaimEmail,
             onPublicList,
@@ -328,6 +332,7 @@
         onUnclaim={handleUnclaim}
         {reorderActions}
         {showClaimForOwner}
+        {showAlwaysClaimedName}
         {showClaimedName}
         {showFor}
         {user}

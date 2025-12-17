@@ -336,6 +336,7 @@
                         {item}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
+                        showAlwaysClaimedName={data.alwaysShowClaimedName}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
@@ -383,6 +384,7 @@
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
+                        showAlwaysClaimedName={data.alwaysShowClaimedName}
                         showClaimedName={data.showClaimedName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
@@ -404,6 +406,7 @@
                             onPublicList={!data.loggedInUser && data.list.public}
                             requireClaimEmail={data.requireClaimEmail}
                             showClaimForOwner={data.showClaimForOwner}
+                            showAlwaysClaimedName={data.alwaysShowClaimedName}
                             showClaimedName={data.showClaimedName}
                             user={data.loggedInUser}
                             userCanManage={data.list.isManager}

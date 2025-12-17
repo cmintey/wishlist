@@ -37,6 +37,8 @@
         "administration": "Správa",
         "allow-public-lists": "Povolit veřejné seznamy",
         "allow-public-lists-tooltip": "Povolit uživatelům zveřejňovat seznamy. Nefunguje, pokud je skupina v \"registry\" režimu.",
+        "always-show-name": "Vždy zobrazovat jméno",
+        "always-show-name-tooltip": "Zobrazuje jméno uživatele, který provedl rezervaci, bez ohledu na to, zda osoba patří do skupiny nebo ne.",
         "build": "Build: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "claims": "Rezervace",
         "claims-name-tooltip": "Zobraz uživatele, který si předmět zarezervoval.",

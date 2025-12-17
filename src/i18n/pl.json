@@ -337,7 +337,9 @@
         "allow-public-lists": "Zezwól na listy publiczne",
         "enable-default-list-creation": "Włącz listy domyślne",
         "list-creation": "Ustawienia listy",
-        "allow-public-lists-tooltip": "Pozwól użytkownikom tworzyć listy publiczne. Nie ma zastosowania jeżeli grupa jest w trybie \"spisu\"."
+        "allow-public-lists-tooltip": "Pozwól użytkownikom tworzyć listy publiczne. Nie ma zastosowania jeżeli grupa jest w trybie \"spisu\".",
+        "always-show-name": "Zawsze pokazuj imię",
+        "always-show-name-tooltip": "Wyświetla nazwę użytkownika, który dokonał rezerwacji, niezależnie od tego, czy osoba należy do grupy, czy nie."
     },
     "app": {
         "home": "Główna",

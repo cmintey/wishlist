@@ -43,6 +43,8 @@
         "add-remove-manager-message": "Tem a certeza de que pretende {isManager, select, true {add} other {remove}} este utilizador como gestor de grupo?",
         "admin": "Administrador",
         "add-member": "Adicionar membro",
+        "always-show-name": "Sempre mostrar nome",
+        "always-show-name-tooltip": "Mostra o nome do utilizador que fez a reivindicação, independentemente de a pessoa pertencer ao grupo ou não.",
         "dev": "dev",
         "password-strength-requirement": "Requisito de força da palavra-passe",
         "remove-admin": "Remover administrador",

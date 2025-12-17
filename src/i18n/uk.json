@@ -35,6 +35,8 @@
         "administration": "Адміністрація",
         "allow-public-lists": "Дозволити публічні списки",
         "allow-public-lists-tooltip": "Дозволити користувачам робити список публічним. Не має ефекту якщо група в режимі \"Реєстр\".",
+        "always-show-name": "Завжди показувати ім'я",
+        "always-show-name-tooltip": "Відображає ім'я користувача, який зробив резервування, незалежно від того, чи належить особа до групи чи ні.",
         "build": "Збірка: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "build-date": "Дата збірки: {buildDate}",
         "claims": "Бронювання",
