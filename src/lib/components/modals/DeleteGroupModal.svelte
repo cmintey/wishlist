@@ -4,6 +4,7 @@
     import { goto } from "$app/navigation";
     import AlertModal from "./AlertModal.svelte";
     import ConfirmModal from "./ConfirmModal.svelte";
+    import type { HTMLButtonAttributes } from "svelte/elements";
 
     interface Props {
         groupId: string;
@@ -24,7 +25,7 @@
     };
 </script>
 
-{#snippet trigger({ props }: { props: Record<string, unknown> })}
+{#snippet trigger(props: HTMLButtonAttributes)}
     <button class="preset-filled-error-500 btn w-fit" {...props}>{$t("admin.delete-group-title")}</button>
 {/snippet}
 

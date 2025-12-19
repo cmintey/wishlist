@@ -15,7 +15,7 @@
 
 <SettingsGroup title={$t("admin.groups")}>
     <Setting>
-        <label class="flex flex-col" for="defaultGroup">
+        <label class="label flex flex-col" for="defaultGroup">
             <span>{$t("admin.default-group")}</span>
             <select
                 id="defaultGroup"

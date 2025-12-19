@@ -8,7 +8,6 @@
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { resolve } from "$app/paths";
     import DeleteGroupModal from "$lib/components/modals/DeleteGroupModal.svelte";
     import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
     import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
@@ -38,7 +37,7 @@
 {#if data.config.listMode !== "registry"}
     <div class="flex flex-wrap gap-2 py-4">
         <AddUserModal groupId={data.group.id}>
-            {#snippet trigger({ props })}
+            {#snippet trigger(props)}
                 <button class="preset-filled-primary-500 btn" type="button" {...props}>
                     <iconify-icon icon="ion:person-add"></iconify-icon>
                     <span>{$t("admin.add-member")}</span>
@@ -87,7 +86,7 @@
                                 {#snippet description()}
                                     {$t("admin.add-remove-manager-message", { values: { isManager } })}
                                 {/snippet}
-                                {#snippet trigger({ props })}
+                                {#snippet trigger(props)}
                                     <button class="btn-icon" {...props}>
                                         <iconify-icon icon="ion:sparkles{!isManager ? '' : '-outline'}"></iconify-icon>
                                     </button>
@@ -102,7 +101,7 @@
                                 {#snippet description()}
                                     {@html $t("admin.remove-member-message")}
                                 {/snippet}
-                                {#snippet trigger({ props })}
+                                {#snippet trigger(props)}
                                     <button
                                         class="btn-icon"
                                         aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}

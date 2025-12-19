@@ -2,17 +2,13 @@
     import type { InternalItemCardProps } from "./ItemCard.svelte";
     import { getFormatter } from "$lib/i18n";
     import { getClaimedName, shouldShowName } from "../util";
+    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
+    import { ClaimAPI } from "$lib/api/claims";
+    import { toaster } from "$lib/components/toaster";
 
     type Props = Pick<
         InternalItemCardProps,
-        | "item"
-        | "user"
-        | "showClaimedName"
-        | "showClaimForOwner"
-        | "onPublicList"
-        | "onClaim"
-        | "onUnclaim"
-        | "onPurchased"
+        "item" | "user" | "showClaimedName" | "showClaimForOwner" | "onPublicList" | "groupId" | "requireClaimEmail"
     >;
 
     let {
@@ -21,15 +17,25 @@
         showClaimedName = false,
         showClaimForOwner = false,
         onPublicList = false,
-        onClaim,
-        onUnclaim,
-        onPurchased
+        groupId,
+        requireClaimEmail
     }: Props = $props();
 
     const t = getFormatter();
 
     const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
     const isClaimOnList = $derived(userClaim?.listId === item.listId);
+
+    const handlePurchased = async (purchased: boolean) => {
+        if (userClaim && isClaimOnList) {
+            const claimAPI = new ClaimAPI(userClaim?.claimId);
+            const resp = await (purchased ? claimAPI.purchase() : claimAPI.unpurchase());
+            if (resp.ok) {
+                toaster.info({ description: $t("wishes.purchased-toast", { values: { purchased } }) });
+                userClaim.purchased = purchased;
+            }
+        }
+    };
 </script>
 
 {#if !onPublicList && item.userId === user?.id && !showClaimForOwner}
@@ -37,15 +43,15 @@
 {:else if userClaim}
     {#if isClaimOnList}
         <div class="flex flex-row gap-2">
-            <button
-                class="preset-tonal-secondary border border-secondary-500 btn btn-sm md:btn"
-                onclick={(e) => {
-                    e.stopPropagation();
-                    onUnclaim?.();
-                }}
-            >
-                {item.quantity === 1 && userClaim.quantity === 1 ? $t("wishes.unclaim") : $t("wishes.update-claim")}
-            </button>
+            <ClaimItemModal claimId={userClaim.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
+                {#snippet trigger(props)}
+                    <button {...props} class="preset-tonal-secondary border-secondary-500 btn btn-sm md:btn border">
+                        {item.quantity === 1 && userClaim.quantity === 1
+                            ? $t("wishes.unclaim")
+                            : $t("wishes.update-claim")}
+                    </button>
+                {/snippet}
+            </ClaimItemModal>
             <button
                 class={[
                     "btn btn-icon btn-icon-sm md:btn-icon-base",
@@ -55,7 +61,7 @@
                 aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
                 onclick={(e) => {
                     e.stopPropagation();
-                    onPurchased?.(!userClaim.purchased);
+                    handlePurchased?.(!userClaim.purchased);
                 }}
                 title={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
             >
@@ -67,15 +73,13 @@
     {/if}
 {:else if item.isClaimable && item.userId !== user?.id}
     <div class="flex flex-row items-center gap-x-2">
-        <button
-            class="preset-filled-secondary-500 btn btn-sm md:btn"
-            onclick={(e) => {
-                e.stopPropagation();
-                onClaim?.();
-            }}
-        >
-            {$t("wishes.claim")}
-        </button>
+        <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
+            {#snippet trigger(props)}
+                <button {...props} class="btn btn-sm md:btn preset-filled-secondary-600-400">
+                    {$t("wishes.claim")}
+                </button>
+            {/snippet}
+        </ClaimItemModal>
     </div>
 {:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
     <div></div>

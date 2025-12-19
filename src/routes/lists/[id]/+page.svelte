@@ -25,7 +25,6 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
-    import { errorToast } from "$lib/components/toasts";
     import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
@@ -214,7 +213,9 @@
         const currentIdx = allItems.findIndex((it) => it.id === item.id);
 
         if (Number.isNaN(targetIdx) || targetIdx < 0 || targetIdx > allItems.length - 1) {
-            errorToast(toastStore, $t("errors.display-order-invalid", { values: { min: 1, max: allItems.length } }));
+            toaster.error({
+                description: $t("errors.display-order-invalid", { values: { min: 1, max: allItems.length } })
+            });
             if (item.displayOrder) {
                 const el = document.getElementById(`${item.id}-displayOrder`) as HTMLInputElement;
                 el.value = (item.displayOrder + 1).toString();
@@ -327,6 +328,7 @@
                         groupId={data.list.groupId}
                         {isTileView}
                         {item}
+                        onPublicList={!data.loggedInUser && data.list.public}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
@@ -373,6 +375,7 @@
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
                         onPriorityChange={handlePriorityInput}
+                        onPublicList={!data.loggedInUser && data.list.public}
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}

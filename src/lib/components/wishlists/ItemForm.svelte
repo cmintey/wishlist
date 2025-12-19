@@ -159,7 +159,7 @@
 </script>
 
 <div class="grid grid-cols-7 gap-4">
-    <label class="col-span-full" for="url">
+    <label class="label col-span-full" for="url">
         <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row gap-x-4">
             <div class="input-group w-full grid-cols-[auto_1fr_auto]">
@@ -209,7 +209,7 @@
         </div>
     </label>
 
-    <label class="col-span-full xl:col-span-3" for="name">
+    <label class="label col-span-full xl:col-span-3" for="name">
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="ig-cell preset-tonal">
@@ -231,12 +231,12 @@
         {/if}
     </label>
 
-    <label class="col-span-full sm:col-span-4 xl:col-span-2" for="price">
+    <label class="label col-span-full sm:col-span-4 xl:col-span-2" for="price">
         <span>{$t("wishes.price")}</span>
         <CurrencyInput id="price" name="price" currency={userCurrency} bind:value={price} />
     </label>
 
-    <div class="col-span-full sm:col-span-3 xl:col-span-2">
+    <div class="label col-span-full sm:col-span-3 xl:col-span-2">
         <label class="pb-1" for="quantity">
             <span>{$t("wishes.quantity")}</span>
         </label>
@@ -278,12 +278,12 @@
         {/if}
     </div>
 
-    <label class="col-span-full md:col-span-3" for="image">
+    <label class="label col-span-full md:col-span-3" for="image">
         <span>{$t("wishes.upload-image")}</span>
         <FileUpload name="image" class="py-1 pl-1" accept="image/*"></FileUpload>
     </label>
 
-    <label class="col-span-full md:col-span-4" for="imageUrl">
+    <label class="label col-span-full md:col-span-4" for="imageUrl">
         <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="ig-cell preset-tonal">
@@ -308,7 +308,7 @@
         <span class="subtext">{$t("wishes.most-wanted-description")}</span>
     </div>
 
-    <label class="col-span-full" for="note">
+    <label class="label col-span-full" for="note">
         <span>{$t("wishes.notes")}</span>
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
     </label>
@@ -320,7 +320,7 @@
     >
         <div class="flex items-end justify-between">
             <legend id="lists-label">{$t("wishes.lists")}</legend>
-            <button class="preset-tonal-primary border border-primary-500 btn btn-sm" onclick={selectAll} type="button">
+            <button class="preset-tonal-primary border-primary-500 btn btn-sm border" onclick={selectAll} type="button">
                 {$t("general.select-all")}
             </button>
         </div>
@@ -375,7 +375,7 @@
                     type="submit"
                 >
                     {#if saving && submitSrc == "submit-stay"}
-                        <ProgressRadial width="w-4" />
+                        <span class="loading loading-spinner loading-xs"></span>
                     {/if}
                     <span>{$t("wishes.create-and-add-another")}</span>
                 </button>
@@ -388,7 +388,7 @@
                 type="submit"
             >
                 {#if saving && submitSrc == "submit"}
-                    <ProgressRadial width="w-4" />
+                    <span class="loading loading-spinner loading-xs"></span>
                 {/if}
                 <span>{buttonText}</span>
             </button>

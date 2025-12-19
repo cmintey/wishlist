@@ -32,7 +32,7 @@
         </label>
         {#if enabled}
             <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
-                <label for="smtpHost">
+                <label class="label" for="smtpHost">
                     <span>{$t("admin.smtp-host")}</span>
                     <input
                         id="smtpHost"
@@ -44,7 +44,7 @@
                         bind:value={config.smtp.host}
                     />
                 </label>
-                <label for="smtpPort">
+                <label class="label" for="smtpPort">
                     <span>{$t("admin.smtp-port")}</span>
                     <input
                         id="smtpPort"
@@ -56,7 +56,7 @@
                         bind:value={config.smtp.port}
                     />
                 </label>
-                <label for="smtpUser">
+                <label class="label" for="smtpUser">
                     <span>{$t("general.user")}</span>
                     <input
                         id="smtpUser"
@@ -73,7 +73,7 @@
                     label={$t("auth.password")}
                     bind:value={config.smtp.pass}
                 />
-                <label for="smtpFrom">
+                <label class="label" for="smtpFrom">
                     <span>{$t("admin.smtp-from-email")}</span>
                     <input
                         id="smtpFrom"
@@ -85,7 +85,7 @@
                         bind:value={config.smtp.from}
                     />
                 </label>
-                <label for="smtpFromName">
+                <label class="label" for="smtpFromName">
                     <span>{$t("admin.smtp-from-name")}</span>
                     <input
                         id="smtpFromName"

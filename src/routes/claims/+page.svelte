@@ -59,6 +59,11 @@
     <ListViewModeChip {isTileView} />
 </div>
 
+<div class="">
+    <div class="chip preset-tonal-primary inset-ring-primary-500 inset-ring">Test</div>
+    <div class="chip preset-outlined-primary-500">Test</div>
+</div>
+
 {#if data.items.length === 0}
     <div class="flex flex-col items-center justify-center space-y-4 pt-4">
         <img class="w-3/4 md:w-1/3" alt={$t("a11y.a-person-looking-at-an-empty-board")} src={noClaims} />

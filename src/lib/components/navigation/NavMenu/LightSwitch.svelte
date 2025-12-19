@@ -41,8 +41,8 @@
         <SegmentedControl.Indicator />
         {#each options as { value, icon, text } (value)}
             <SegmentedControl.Item {value}>
-                <SegmentedControl.ItemText class="flex size-4 items-center" title={text}>
-                    <iconify-icon {icon}></iconify-icon>
+                <SegmentedControl.ItemText class="flex size-4" title={text}>
+                    <iconify-icon class="mt-0.5" {icon}></iconify-icon>
                     <span class="sr-only">{text}</span>
                 </SegmentedControl.ItemText>
                 <SegmentedControl.ItemHiddenInput />

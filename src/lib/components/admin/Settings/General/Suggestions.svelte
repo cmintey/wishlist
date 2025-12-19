@@ -33,7 +33,7 @@
 
     {#if enabled}
         <Setting>
-            <label class="flex flex-col pb-1" for="suggestionMethod">
+            <label class="label" for="suggestionMethod">
                 <Tooltip>
                     {#snippet label()}
                         <span>{$t("admin.suggestions-method")}</span>

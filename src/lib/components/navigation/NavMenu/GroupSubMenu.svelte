@@ -26,7 +26,6 @@
             const groupsAPI = new GroupsAPI();
             const group = await groupsAPI.create(name);
             if (user && userAPI) {
-                const activeGroup = await userAPI.activeGroup();
                 if (!activeGroup) await userAPI.setActiveGroup(group.id);
             }
             goto(resolve("/lists"), { invalidateAll: true });

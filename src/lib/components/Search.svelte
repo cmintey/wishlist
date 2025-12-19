@@ -23,7 +23,7 @@
     });
 </script>
 
-<label class="w-fit">
+<label class="label w-fit">
     <span>{$t("general.search")}</span>
     <div class="input-group grid-cols-[auto_1fr_auto]">
         <div class="ig-cell preset-tonal">

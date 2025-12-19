@@ -13,5 +13,8 @@
         "general.very-strong",
         "general.very-weak",
         "general.weak"
-    ]
+    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
 }

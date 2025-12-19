@@ -1,7 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { General } from "$lib/components/admin/Settings";
-    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { page } from "$app/state";
@@ -47,7 +46,7 @@
     <div class="flex w-full flex-row justify-end pt-6">
         <button class="preset-filled-primary-500 btn" disabled={saving} type="submit">
             {#if saving}
-                <ProgressRing stroke={64} width="w-6" />
+                <span class="loading loading-spinner loading-xs"></span>
             {/if}
             <span>{$t("general.save")}</span>
         </button>

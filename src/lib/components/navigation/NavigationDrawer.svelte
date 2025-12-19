@@ -9,7 +9,7 @@
     interface Props {
         trigger: DialogTriggerProps["element"];
         navItems: NavItem[];
-        user: LocalUser | undefined;
+        user: LocalUser | null;
     }
 
     const { trigger, navItems, user }: Props = $props();
@@ -25,6 +25,7 @@
         <Dialog.Positioner class="fixed inset-0 z-50 flex justify-start">
             <ModalContent>
                 <header class="flex items-center justify-between">
+                    <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
                     <Dialog.Title class="text-4xl font-bold">Wishlist</Dialog.Title>
                     <Dialog.CloseTrigger class="btn-icon preset-tonal">
                         <iconify-icon icon="ion:close" width="32"></iconify-icon>
@@ -37,9 +38,11 @@
                         {#each navItems as navItem}
                             <li>
                                 <a
-                                    class="list-option gap-x-1 font-bold"
-                                    class:preset-filled-primary-500={page.url.pathname + page.url.search ===
-                                        navItem.href(user)}
+                                    class={[
+                                        "list-option gap-x-1 font-bold",
+                                        page.url.pathname + page.url.search === navItem.href(user) &&
+                                            "preset-filled-primary-500"
+                                    ]}
                                     data-sveltekit-preload-data
                                     href={navItem.href(user)}
                                     onclick={() => (open = false)}

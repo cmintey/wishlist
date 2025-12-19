@@ -14,7 +14,7 @@
 <div class="flex items-center gap-2">
     {@render props.label()}
     <Popover>
-        <Popover.Trigger class="mt-0.5" aria-label="tooltip" type="button">
+        <Popover.Trigger aria-label="tooltip" type="button">
             <span class="flex content-center items-center">
                 {#if props.icon}
                     {@render props.icon()}

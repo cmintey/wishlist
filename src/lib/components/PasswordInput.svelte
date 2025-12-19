@@ -49,7 +49,7 @@
     };
 </script>
 
-<label for={id}>
+<label class="label" for={id}>
     <span>{label}</span>
     <div class="input-group grid-cols-[1fr_auto]">
         <input

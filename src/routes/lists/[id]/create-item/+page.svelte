@@ -19,6 +19,7 @@
     };
 
     let warningHidden = $state(false);
+    let saving = $state(false);
 
     const clearFields = () => {
         const fieldIds = [

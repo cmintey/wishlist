@@ -1,30 +1,6 @@
-<script lang="ts" module>
-    export interface ItemDrawerProps {
-        open: boolean;
-        item: ItemOnListDTO;
-        itemNameShort: string;
-        user: PartialUser | undefined;
-        userCanManage: boolean;
-        groupId: string;
-        showFor: boolean;
-        showClaimedName: boolean;
-        showClaimForOwner: boolean;
-        onPublicList: boolean;
-        handlePurchased: (v: boolean) => void;
-        handleEdit: VoidFunction;
-        defaultImage: Snippet<[MessageFormatter, ClassValue]>;
-        requireClaimEmail: boolean;
-    }
-</script>
-
 <script lang="ts">
-    import type { PartialUser } from "./ItemCard/ItemCard.svelte";
     import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
     import ManageButtons from "./ItemCard/ManageButtons.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import type { Snippet } from "svelte";
-    import type { ClassValue } from "svelte/elements";
-    import type { MessageFormatter } from "$lib/server/i18n";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
@@ -33,29 +9,18 @@
     import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
+    import type { InternalItemCardProps } from "./ItemCard/ItemCard.svelte";
 
+    type ItemDrawerProps = {
+        open: boolean;
+    };
     const t = getFormatter();
     let {
         open = $bindable(false),
-        item,
-        itemNameShort,
-        user,
-        userCanManage,
-        groupId,
-        showFor,
-        showClaimedName,
-        showClaimForOwner,
-        onPublicList,
-        handlePurchased,
-        handleEdit,
         defaultImage: _defaultImage,
-        requireClaimEmail
-    }: ItemDrawerProps = $props();
-
-    const onEdit = () => {
-        open = false;
-        handleEdit();
-    };
+        item,
+        ...props
+    }: InternalItemCardProps & ItemDrawerProps = $props();
 </script>
 
 <Dialog onOpenChange={(e) => (open = e.open)} {open}>
@@ -90,30 +55,11 @@
                     </a>
                 {/if}
 
-                <ItemAttributes
-                    fullNotes
-                    {item}
-                    {onPublicList}
-                    {showClaimForOwner}
-                    {showClaimedName}
-                    showDetail
-                    {showFor}
-                    {user}
-                />
+                <ItemAttributes {...props} fullNotes {item} showDetail />
 
                 <div class="flex flex-row justify-between pb-4">
-                    <ClaimButtons
-                        {groupId}
-                        {item}
-                        {onPublicList}
-                        onPurchased={handlePurchased}
-                        {requireClaimEmail}
-                        {showClaimForOwner}
-                        {showClaimedName}
-                        {user}
-                    />
-
-                    <ManageButtons {item} {onEdit} {user} {userCanManage} {itemNameShort} />
+                    <ClaimButtons {item} {...props} />
+                    <ManageButtons {item} {...props} onEdit={() => (open = false)} />
                 </div>
             </ModalContent>
         </Dialog.Positioner>

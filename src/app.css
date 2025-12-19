@@ -1,10 +1,8 @@
 @import "tailwindcss";
 @import "@skeletonlabs/skeleton";
-@import "@skeletonlabs/skeleton/optional/presets";
-@import "@skeletonlabs/skeleton/themes/cerberus";
-@import "@skeletonlabs/skeleton";
 @import "@skeletonlabs/skeleton-svelte";
 @import "./wishlist.css";
+@import "./wishlist-v2.css";
 @import "./styles/list.css";
 @import "./styles/loading.css";
 
@@ -143,10 +141,6 @@
         @apply text-primary-700 decoration-primary-500/20 hover:decoration-primary-500 dark:text-primary-500 underline decoration-dotted underline-offset-4;
     }
 
-    label:not(.checkbox-label) {
-        @apply space-y-1;
-    }
-
     .btn,
     .chip,
     .list-nav a,
@@ -165,22 +159,30 @@
 
 @layer utilities {
     input[type="checkbox"] {
-        @apply bg-surface-100-900 disabled:checked:bg-surface-500 disabled:cursor-not-allowed;
+        @apply bg-surface-200-800 disabled:checked:bg-surface-500 border-surface-300-700 disabled:cursor-not-allowed;
     }
 
     .checkbox-label {
         @apply flex flex-row items-center gap-x-2;
     }
+
+    .select,
+    .input,
+    .input-group,
+    .textarea {
+        background-color: var(--color-surface-200-800);
+        --tw-ring-color: var(--color-surface-300-700);
+    }
 }
 
 html,
 body {
-    @apply h-full;
+    height: 100%;
 }
 
 /*! purgecss start ignore */
 .ptr--icon,
 .ptr--text {
-    @apply text-primary-900 dark:text-primary-50;
+    color: var(--color-primary-950-50);
 }
 /*! purgecss end ignore */

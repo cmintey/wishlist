@@ -5,9 +5,7 @@
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
     import { getFormatter } from "$lib/i18n";
-    import { errorToast } from "$lib/components/toasts";
     import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
@@ -92,7 +90,7 @@
             <div class="flex w-full flex-row justify-end pt-5">
                 <button class="preset-filled-primary-500 btn" disabled={saving} type="submit">
                     {#if saving}
-                        <ProgressRing stroke={64} width="w-6" />
+                        <span class="loading loading-spinner loading-xs"></span>
                     {/if}
                     <span>{$t("general.save")}</span>
                 </button>
