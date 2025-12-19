@@ -43,7 +43,16 @@ const config: UserConfig = {
                         type: "image/png",
                         purpose: "any maskable"
                     }
-                ]
+                ],
+                share_target: {
+                    action: "/items/import",
+                    method: "GET",
+                    params: {
+                        url: "url",
+                        text: "text",
+                        title: "title"
+                    }
+                }
             },
             devOptions: {
                 enabled: true,
