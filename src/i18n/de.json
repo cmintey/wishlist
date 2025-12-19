@@ -233,7 +233,10 @@
         "switch-to-list-view": "Zur Listenansicht wechseln",
         "switch-to-tile-view": "Zur Kachelansicht wechseln",
         "tile-view": "Kachelansicht",
-        "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert"
+        "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert",
+        "display-order": "Anzeigereihenfolge",
+        "most-wanted": "Großer Wunsch",
+        "most-wanted-description": "Markiere diesen Artikel, um anderen mitzuteilen, dass es sich um einen großen Wunsch handelt."
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -306,7 +309,8 @@
         "language-is-required": "Sprache wird benötigt",
         "unable-to-update-preferred-language": "Ändern der bevorzugten Sprache nicht möglich",
         "email-is-required-for-public-claims": "Email Adresse ist notwendig für öffentliche Beanspruchung",
-        "oidc-error": "Authentifizierung mit OAuth fehlgeschlagen"
+        "oidc-error": "Authentifizierung mit OAuth fehlgeschlagen",
+        "display-order-invalid": "Die Anzeigereihenfolge muss zwischen {min} und {max} liegen"
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",

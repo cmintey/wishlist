@@ -70,7 +70,8 @@
         "unable-to-update-preferred-language": "Impossible de mettre à jour la langue préférée",
         "language-is-required": "La langue est requise",
         "email-is-required-for-public-claims": "Un email est nécessaire pour des réservation publiques",
-        "oidc-error": "Erreur lors de l'authentification OAuth"
+        "oidc-error": "Erreur lors de l'authentification OAuth",
+        "display-order-invalid": "L'ordre d'affichage doit être entre {min} et {max}"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -448,7 +449,10 @@
         "list-view": "Vue liste",
         "sort-by": "Trier par",
         "group-by": "Regrouper par",
-        "claimed-by-you-on-another-list": "Réservé par vous sur une autre liste"
+        "claimed-by-you-on-another-list": "Réservé par vous sur une autre liste",
+        "most-wanted-description": "Mettez en avant cet élément pour montrer aux autres que vous en avez énormément envie.",
+        "display-order": "Ordre d'affichage",
+        "most-wanted": "Le plus souhaité"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
