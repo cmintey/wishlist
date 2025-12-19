@@ -1,5 +1,5 @@
 import { Role } from "$lib/schema";
-import type { Group, Role as RoleModel } from "@prisma/client";
+import type { Group, Role as RoleModel } from "$lib/generated/prisma/client";
 
 export const toGroupInformation = (membership: {
     group: Group;

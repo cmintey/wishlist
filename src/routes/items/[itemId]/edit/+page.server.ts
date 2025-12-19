@@ -13,7 +13,7 @@ import { getAvailableLists, getNextDisplayOrderForLists } from "$lib/server/list
 import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemUpdateSchema } from "$lib/server/validations";
 import z from "zod";
-import type { List, Prisma } from "@prisma/client";
+import type { List, Prisma } from "$lib/generated/prisma/client";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();

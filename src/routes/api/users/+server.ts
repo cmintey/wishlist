@@ -3,7 +3,7 @@ import { requireLoginOrError, requireRole } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
 import { createUser } from "$lib/server/user";
 import { getSignupSchema } from "$lib/server/validations";
-import type { User } from "@prisma/client";
+import type { User } from "$lib/generated/prisma/client";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { treeifyError } from "zod";
 

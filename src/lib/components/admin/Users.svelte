@@ -3,7 +3,7 @@
     import { Table, tableMapperValues, tableSourceMapper, type TableSource } from "@skeletonlabs/skeleton";
     import Search from "../Search.svelte";
     import InviteUser from "./InviteUser.svelte";
-    import type { Group } from "@prisma/client";
+    import type { Group } from "$lib/generated/prisma/client";
     import { enhance } from "$app/forms";
     import { getFormatter } from "$lib/i18n";
 

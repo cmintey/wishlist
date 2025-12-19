@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { List, User } from "@prisma/client";
+    import type { List, User } from "$lib/generated/prisma/client";
     import Avatar from "./Avatar.svelte";
     import { getFormatter } from "$lib/i18n";
 

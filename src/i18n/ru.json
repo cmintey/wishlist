@@ -238,7 +238,8 @@
         "language-is-required": "Язык обязателен",
         "unable-to-update-preferred-language": "Не удалось обновить предпочтительный язык",
         "email-is-required-for-public-claims": "Эл. почта требуется для публичных запросов",
-        "oidc-error": "Не удалось пройти аутентификацию с помощью OAuth"
+        "oidc-error": "Не удалось пройти аутентификацию с помощью OAuth",
+        "display-order-invalid": "Порядок отображения должен быть между {min} и {max}"
     },
     "general": {
         "icon": "Значок",
@@ -361,7 +362,7 @@
         "create": "Создать желание",
         "create-for": "Создать желание для {listOwner}",
         "default-sort": "Приоритет",
-        "delete": "Убрать",
+        "delete": "Удалить",
         "deny": "Отказать",
         "item-approved": "{name} был {approved, select, true {approved} other {denied}}",
         "url-placeholder": "Введите URL-адрес для получения данных об элементе",
@@ -449,6 +450,9 @@
         "switch-to-tile-view": "Переключиться на вид плитки",
         "tile-view": "Плитки",
         "claimed-by-you-on-another-list": "Заявлено вами в другом списке",
-        "claims": "{claimCount, plural, one {# claim} other {# claims}}"
+        "claims": "{claimCount, plural, one {# claim} other {# claims}}",
+        "display-order": "Порядок отображения",
+        "most-wanted": "Самый желанный",
+        "most-wanted-description": "Отметьте этот предмет, чтобы другие знали, что это очень желанный подарок."
     }
 }

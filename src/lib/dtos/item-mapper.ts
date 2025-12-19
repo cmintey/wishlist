@@ -7,7 +7,7 @@ import type {
     User,
     SystemUser,
     UserGroupMembership
-} from "@prisma/client";
+} from "$lib/generated/prisma/client";
 
 type MinimalUser = Pick<User, "id" | "name">;
 

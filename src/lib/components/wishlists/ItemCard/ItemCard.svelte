@@ -52,7 +52,7 @@
         type DrawerSettings,
         type ModalSettings
     } from "@skeletonlabs/skeleton";
-    import type { User } from "@prisma/client";
+    import type { User } from "$lib/generated/prisma/client";
     import { ItemAPI } from "$lib/api/items";
     import { goto, invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
