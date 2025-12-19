@@ -1,4 +1,5 @@
 import { getRequestEvent } from "$app/server";
+import { defaultLang } from "$lib/i18n";
 import { t, waitLocale, format } from "svelte-i18n";
 import { get } from "svelte/store";
 
@@ -10,7 +11,7 @@ export type MessageFormatter = Awaited<ReturnType<typeof getFormatter>>;
 
 export async function getFormatter(locale?: string) {
     if (!locale) {
-        locale = getLocale();
+        locale = getLocale() || defaultLang.code;
     }
     await waitLocale(locale);
     return (id: string, options?: Omit<MessageObject, "id">) => {
