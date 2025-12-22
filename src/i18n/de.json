@@ -236,7 +236,12 @@
         "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert",
         "display-order": "Anzeigereihenfolge",
         "most-wanted": "Großer Wunsch",
-        "most-wanted-description": "Markiere diesen Artikel, um anderen mitzuteilen, dass es sich um einen großen Wunsch handelt."
+        "most-wanted-description": "Markiere diesen Artikel, um anderen mitzuteilen, dass es sich um einen großen Wunsch handelt.",
+        "import-error-text": "Wishlist konnte die Produkt-URL aus den angegebenen Parametern nicht ermitteln. Die Produkt-URL kann manuell kopiert und das Produkt mit dem normalen Prozess hinzugefügt werden.",
+        "import-error-title": "Artikel konnte nicht importiert werden",
+        "import-item": "Importiere Artikel",
+        "import-item-text": "Bevor ein Artikel importiert werden kann, muss eine Gruppe und eine Liste ausgewählt werden",
+        "select-a-list": "Liste auswählen"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -419,7 +424,9 @@
         "na": "N/V",
         "use-system-language": "Benutze Systemsprache",
         "select-all": "Alles auswählen",
-        "oauth": "OAuth"
+        "oauth": "OAuth",
+        "import": "Importieren",
+        "no-lists-available": "Keine Listen verfügbar"
     },
     "app": {
         "home": "Start",
