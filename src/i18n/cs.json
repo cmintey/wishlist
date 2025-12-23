@@ -257,7 +257,8 @@
         "username-already-in-use": "{username} je již registrován",
         "username-must-not-be-blank": "Uživatelské jméno nesmí být prázdné",
         "valid-url-not-provided": "Neplatné URL",
-        "oidc-error": "Přihlášení přes OAuth se nezdařilo"
+        "oidc-error": "Přihlášení přes OAuth se nezdařilo",
+        "display-order-invalid": "Řazení musí být mezi {min} a {max}"
     },
     "general": {
         "add-a-description": "Přidat popis",
@@ -451,6 +452,9 @@
         "list-view": "Řádkové zobrazení",
         "group-by": "Seskupit podle",
         "sort-by": "Seřadit podle",
-        "claimed-by-you-on-another-list": "Máte zarezervováno v jiném seznamu"
+        "claimed-by-you-on-another-list": "Máte zarezervováno v jiném seznamu",
+        "display-order": "Řazení",
+        "most-wanted": "Nejžádanější",
+        "most-wanted-description": "Zvýraznit položku a tím dát vědět, že je nejvíce chtěná."
     }
 }

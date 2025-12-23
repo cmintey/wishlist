@@ -434,7 +434,8 @@
         "sort-by": "Sortér efter",
         "switch-to-list-view": "Skift til listevisning",
         "switch-to-tile-view": "Skift til flisevisning",
-        "tile-view": "Flisevisning"
+        "tile-view": "Flisevisning",
+        "most-wanted-description": "Markér dette ønske for at vise at det er højt prioriteret."
     },
     "setup": {
         "global-settings-subtext": "Disse indstillinger vil blive anvendt til alle grupper, der er oprettet. Nogle indstillinger kan overskrives af individuelle grupper.",
