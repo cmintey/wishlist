@@ -37,8 +37,6 @@
         "administration": "Administration",
         "allow-public-lists": "Tillad offentlige lister",
         "allow-public-lists-tooltip": "Tillad brugere at gøre en liste offentlig. Har ingen indvirkning hvis gruppen er i 'Register'-tilstand.",
-        "always-show-name": "Vis altid navn",
-        "always-show-name-tooltip": "Viser navnet på den bruger, der foretog reservationen, uanset om personen tilhører gruppen eller ej.",
         "build": "Build: <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
         "build-date": "Byggedato: {buildDate}",
         "claims": "Reserveringer",

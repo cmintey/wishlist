@@ -98,8 +98,6 @@
         "remove-member-title": "Retirer le membre",
         "security": "Sécurité",
         "show-name": "Afficher le nom",
-        "always-show-name": "Toujours afficher le nom",
-        "always-show-name-tooltip": "Affiche le nom de l'utilisateur qui a réservé peu importe si la personne appartient au groupe ou non.",
         "smtp": "SMTP",
         "smtp-from-name": "Nom de l'expéditeur",
         "suggestions": "Suggestions",

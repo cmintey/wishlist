@@ -3,8 +3,6 @@
         "administration": "Administración",
         "settings": "Configuración",
         "show-name": "Ver nombre",
-        "always-show-name": "Mostrar siempre el nombre",
-        "always-show-name-tooltip": "Muestra el nombre del usuario que hizo la reserva independientemente de si la persona pertenece al grupo o no.",
         "smtp-port": "Puerto",
         "security": "Seguridad",
         "about": "Acerca de",

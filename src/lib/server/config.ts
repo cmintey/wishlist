@@ -87,7 +87,7 @@ const getDefaultConfig = (): Config => ({
     },
     claims: {
         showName: true,
-        alwaysShowName: true,
+        alwaysShowName: false,
         showForOwner: false,
         requireEmail: true
     },
