@@ -17,6 +17,7 @@ export const getClaimedName = ({ claimedBy, publicClaimedBy }: ClaimDTO) => {
 export const shouldShowName = (
     item: ItemOnListDTO,
     showNameConfig: boolean,
+    alwaysShowName: boolean,
     showForOwner: boolean,
     user: PartialUser | undefined,
     claim?: ClaimDTO
@@ -33,6 +34,9 @@ export const shouldShowName = (
     if (item.user.id === user.id && showForOwner) {
         return true;
     }
+    //Everyone can see who has claimed, regardless of the group.
+    if(alwaysShowName) return true;
+
     // Everyone else can only see claims by users in their group
     if (claim && (claim.publicClaimedBy || !claim.claimedBy?.groups.includes(user.activeGroupId))) {
         return false;

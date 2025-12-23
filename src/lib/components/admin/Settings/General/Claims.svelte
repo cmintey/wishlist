@@ -31,6 +31,22 @@
     <Setting>
         <label class="checkbox-label">
             <input
+                    id="claimsAlwaysShowName"
+                    name="claimsAlwaysShowName"
+                    class="checkbox"
+                    checked= {config.claims.alwaysShowName}
+                    type="checkbox"
+            />
+            <span>{$t("admin.always-show-name")}</span>
+        </label>
+
+        {#snippet description()}
+            {$t("admin.always-show-name-tooltip")}
+        {/snippet}
+    </Setting>
+    <Setting>
+        <label class="checkbox-label">
+            <input
                 id="claimsShowForOwner"
                 name="claimsShowForOwner"
                 class="checkbox"

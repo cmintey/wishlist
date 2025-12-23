@@ -10,6 +10,7 @@
         userCanManage,
         showClaimedName = false,
         showClaimForOwner = false,
+        showAlwaysClaimedName = false,
         onPublicList = false,
         reorderActions = false,
         onIncreasePriority,
@@ -40,6 +41,7 @@
             {onPurchased}
             {onUnclaim}
             {showClaimForOwner}
+            {showAlwaysClaimedName}
             {showClaimedName}
             {user}
         />
