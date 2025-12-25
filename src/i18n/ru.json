@@ -310,7 +310,9 @@
         "language": "Язык",
         "use-system-language": "Использовать язык системы",
         "oauth": "OAuth",
-        "select-all": "Выбрать все"
+        "select-all": "Выбрать все",
+        "import": "Импорт",
+        "no-lists-available": "Нет доступных списков"
     },
     "setup": {
         "complete": "Готово",
@@ -419,7 +421,7 @@
         "enter-the-quantity-to-claim": "Введите количество, которое необходимо заявить.",
         "quantity": "Количество",
         "quantity-claimed": "{quantity} заявлено",
-        "quantity-desired": "{quantity} желаемых покупок",
+        "quantity-desired": "Количество: {quantity}",
         "update-claim": "Обновление требований",
         "updated-claim": "Обновлённые требования",
         "view-item": "Просмотреть элементы",
@@ -453,6 +455,11 @@
         "claims": "{claimCount, plural, one {# claim} other {# claims}}",
         "display-order": "Порядок отображения",
         "most-wanted": "Самый желанный",
-        "most-wanted-description": "Отметьте этот предмет, чтобы другие знали, что это очень желанный подарок."
+        "most-wanted-description": "Отметьте этот предмет, чтобы другие знали, что это очень желанный подарок.",
+        "import-error-text": "Wishlist не смог определить URL продукта по заданным параметрам. Вы по-прежнему можете вручную скопировать URL-адрес продукта и добавить его, используя обычный процесс.",
+        "import-error-title": "Невозможно импортировать элемент",
+        "import-item": "Импортировать элемент",
+        "import-item-text": "Прежде чем импортировать элемент, вы должны выбрать группу и список",
+        "select-a-list": "Выбрать список"
     }
 }
