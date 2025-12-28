@@ -37,12 +37,12 @@
 
 <SegmentedControl {onValueChange} {value}>
     <SegmentedControl.Label>{$t("general.mode")}</SegmentedControl.Label>
-    <SegmentedControl.Control class="p-1">
+    <SegmentedControl.Control class="p-0.5">
         <SegmentedControl.Indicator />
         {#each options as { value, icon, text } (value)}
             <SegmentedControl.Item {value}>
                 <SegmentedControl.ItemText class="flex size-4" title={text}>
-                    <iconify-icon class="mt-0.5" {icon}></iconify-icon>
+                    <iconify-icon {icon}></iconify-icon>
                     <span class="sr-only">{text}</span>
                 </SegmentedControl.ItemText>
                 <SegmentedControl.ItemHiddenInput />

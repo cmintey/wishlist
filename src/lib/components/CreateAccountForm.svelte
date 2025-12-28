@@ -18,11 +18,11 @@
     let passwordConfirm = $state("");
 </script>
 
-<div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 inset-ring">
+<div class="bg-surface-100-900 card border-surface-200-800 flex flex-col space-y-4 border p-4">
     {#if data.id}
         <input id="tokenId" name="tokenId" class="hidden" value={data.id} />
     {/if}
-    <label for="name">
+    <label class="label" for="name">
         <span>{$t("auth.name")}</span>
         <input id="name" name="name" class="input" autocomplete="name" required type="text" />
         {#if formData?.errors?.name}
@@ -31,7 +31,7 @@
     </label>
 
     <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:gap-x-2">
-        <label for="username">
+        <label class="label" for="username">
             <span>{$t("auth.username")}</span>
             <input
                 id="username"
@@ -46,7 +46,7 @@
                 <span class="unstyled text-xs text-red-500">{formData.errors.username[0]}</span>
             {/if}
         </label>
-        <label for="email">
+        <label class="label" for="email">
             <span>{$t("auth.email")}</span>
             <input id="email" name="email" class="input" autocomplete="email" required type="email" />
             {#if formData?.errors?.email}
@@ -88,7 +88,7 @@
                 {/if}
                 <span>{$t("auth.create-account")}</span>
             </button>
-            <a href="/login">{$t("auth.sign-in")}</a>
+            <a class="anchor" href="/login">{$t("auth.sign-in")}</a>
         </div>
     {/if}
 </div>

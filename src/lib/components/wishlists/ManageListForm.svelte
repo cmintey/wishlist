@@ -71,7 +71,7 @@
 >
     <div class="grid grid-cols-12 gap-4 pb-4">
         <div class="col-span-full flex w-full flex-row flex-wrap gap-4">
-            <label class="grow" for="name">
+            <label class="label w-fit grow" for="name">
                 <span>{$t("auth.name")}</span>
                 <ClearableInput
                     id="name"
@@ -102,7 +102,7 @@
             {/if}
         </div>
 
-        <label class="col-span-full flex flex-col md:col-span-4" for="iconColor">
+        <label class="label col-span-full flex flex-col md:col-span-4" for="iconColor">
             <span>{$t("general.icon-bg-color")}</span>
             <div class="grid grid-cols-[auto_1fr] gap-2">
                 <input
@@ -132,7 +132,7 @@
         </div>
 
         <div class="col-span-full">
-            <label>
+            <label class="label">
                 <span>{$t("general.description")}</span>
                 <MarkdownEditor
                     id="description"
@@ -148,7 +148,7 @@
             aria-labelledby="list-managers-label"
         >
             <div class="flex items-end justify-between">
-                <Tooltip>
+                <Tooltip iconClass="mt-0.5">
                     {#snippet label()}
                         <legend id="list-managers-label">{$t("wishes.list-managers")}</legend>
                     {/snippet}
@@ -156,13 +156,17 @@
                         <p>{$t("wishes.list-managers-tooltip")}</p>
                     {/snippet}
                 </Tooltip>
-                <button class="preset-tonal-primary border border-primary-500 btn btn-sm" onclick={addManager} type="button">
+                <button
+                    class="preset-tonal-primary border-primary-500 btn btn-sm border"
+                    onclick={addManager}
+                    type="button"
+                >
                     {$t("wishes.add-a-manager")}
                 </button>
             </div>
 
             <div
-                class="border-surface-500 border rounded-container flex h-36 flex-col space-y-2 overflow-y-scroll p-2"
+                class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-y-scroll border p-2"
                 class:input-error={page.form?.errors?.managers}
                 data-testid="list-managers-list"
             >

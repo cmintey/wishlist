@@ -102,7 +102,7 @@
 
 <Combobox
     name={id || "name"}
-    class="w-full"
+    class="w-full gap-0"
     {collection}
     inputBehavior="autohighlight"
     {onInputValueChange}
@@ -110,16 +110,16 @@
     openOnClick
     placeholder="gift"
 >
-    <Combobox.Label>{title ?? $t("general.icon")}</Combobox.Label>
+    <Combobox.Label class="text-base">{title ?? $t("general.icon")}</Combobox.Label>
     <Combobox.Control>
         <!-- <Combobox.Input type="text" /> -->
         <Combobox.Input>
             {#snippet element(props)}
                 <div class="input-group grid grid-cols-[auto_1fr]">
                     <div class="ig-cell preset-tonal items-center">
-                        <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
+                        <iconify-icon icon={"ion:" + (iconValue || "gift")}></iconify-icon>
                     </div>
-                    <input {...props} />
+                    <input {...props} class="ig-input ring-0 focus:ring-1" />
                 </div>
             {/snippet}
         </Combobox.Input>

@@ -35,8 +35,7 @@
 <svelte:element
     this={elementTag}
     bind:this={element}
-    class="card preset-filled-surface-100-900"
-    class:card-hover={!preventNavigate}
+    class={["card preset-filled-surface-100-900", !preventNavigate && "card-hover"]}
 >
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div

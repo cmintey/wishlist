@@ -24,15 +24,25 @@
 </script>
 
 <SegmentedControl onValueChange={(e) => (selectedValue = e.value)} value={selectedValue}>
-    <SegmentedControl.Control class="h-6.5 p-px">
+    <SegmentedControl.Control class="h-6.5 gap-0 p-px">
         <SegmentedControl.Indicator class="preset-filled-primary-500" />
-        <SegmentedControl.Item aria-label={$t("wishes.list-view")} title={$t("wishes.list-view")} value="list">
+        <SegmentedControl.Item
+            class="w-1"
+            aria-label={$t("wishes.list-view")}
+            title={$t("wishes.list-view")}
+            value="list"
+        >
             <SegmentedControl.ItemText>
                 <iconify-icon class="text-xs" icon="ion:list"></iconify-icon>
             </SegmentedControl.ItemText>
             <SegmentedControl.ItemHiddenInput />
         </SegmentedControl.Item>
-        <SegmentedControl.Item aria-label={$t("wishes.tile-view")} title={$t("wishes.tile-view")} value="tile">
+        <SegmentedControl.Item
+            class="w-1"
+            aria-label={$t("wishes.tile-view")}
+            title={$t("wishes.tile-view")}
+            value="tile"
+        >
             <SegmentedControl.ItemText>
                 <iconify-icon class="text-xs" icon="ion:grid"></iconify-icon>
             </SegmentedControl.ItemText>

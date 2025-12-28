@@ -56,7 +56,7 @@
         }}
     >
         <div
-            class="rounded-container card preset-filled-surface-100-900 inset-ring-surface-200-800 flex flex-col space-y-4 p-4 inset-ring"
+            class="rounded-container card preset-filled-surface-100-900 border-surface-200-800 flex flex-col space-y-4 border p-4"
         >
             {#if data.isCallback}
                 <div class="flex flex-col items-center justify-center space-y-4">
@@ -65,7 +65,7 @@
                 </div>
             {:else}
                 {#if data.enableLogin}
-                    <label for="username">
+                    <label class="label" for="username">
                         <span>{$t("auth.username")}</span>
                         <input
                             id="username"
@@ -112,18 +112,21 @@
                                 <span>{$t("auth.sign-in")}</span>
                             </button>
                             {#if data.enableSignup}
-                                <a href="/signup">{$t("auth.create-an-account")}</a>
+                                <a class="anchor" href="/signup">{$t("auth.create-an-account")}</a>
                             {/if}
                         </div>
 
-                        <a class="absolute top-0 mt-0! pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
+                        <a
+                            class="anchor absolute top-0 mt-0! pt-0.5 text-sm ltr:right-0 rtl:left-0"
+                            href="/forgot-password"
+                        >
                             {$t("auth.forgot-password")}
                         </a>
                     </div>
                 {/if}
                 {#if data.oidcConfig?.ready}
                     {#if data.enableLogin}
-                        <div class="flex w-full items-center justify-center">
+                        <div class="-mt-4 flex w-full items-center justify-center">
                             <hr class="hr my-2 h-px w-3/4" />
                             <span class="preset-filled-surface-100-900 absolute left-1/2 -translate-x-1/2 px-2">
                                 {$t("auth.or")}

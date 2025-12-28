@@ -32,15 +32,15 @@
     </a>
 {/snippet}
 
-<div class="app-bar bg-surface-200-800 flex gap-4 px-4 py-2 md:py-4">
+<div class="bg-surface-200-800 flex gap-4 px-4 py-2 md:py-4">
     <!-- Header -->
-    <div class="flex shrink-0 grow content-center items-center gap-x-4 md:grow-0">
+    <div class="flex shrink-0 grow content-center items-center gap-x-2 md:grow-0">
         {#if user}
             {#if !$isInstalled}
                 <NavigationDrawer {navItems} {user}>
                     {#snippet trigger(props)}
-                        <button {...props} class="btn btn-sm p-0 pt-0.5 md:hidden" aria-label={$t("a11y.menu")}>
-                            <iconify-icon class="text-2xl" icon="ion:menu"></iconify-icon>
+                        <button {...props} class="btn btn-sm p-0! md:hidden" aria-label={$t("a11y.menu")}>
+                            <iconify-icon class="mt-1 text-2xl" icon="ion:menu"></iconify-icon>
                         </button>
                     {/snippet}
                 </NavigationDrawer>

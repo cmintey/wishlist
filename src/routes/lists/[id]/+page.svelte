@@ -419,13 +419,13 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="preset-tonal btn inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 rounded-full inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20"
+        class="preset-tonal btn btn-icon btn-icon-sm md:btn-icon-base inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 p-0! inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
         onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >
-        <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
+        <iconify-icon class="text-xl md:text-2xl" icon="ion:add"></iconify-icon>
     </button>
 {/if}
 

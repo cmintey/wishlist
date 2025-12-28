@@ -1,11 +1,13 @@
 <script lang="ts">
     import { Popover, Portal } from "@skeletonlabs/skeleton-svelte";
     import type { Snippet } from "svelte";
+    import type { ClassValue } from "svelte/elements";
 
     interface Props {
         label: Snippet;
         description: Snippet;
         icon?: Snippet;
+        iconClass?: ClassValue;
     }
 
     const props: Props = $props();
@@ -19,7 +21,10 @@
                 {#if props.icon}
                     {@render props.icon()}
                 {:else}
-                    <iconify-icon class="text-secondary-500" icon="ion:help-circle-outline"></iconify-icon>
+                    <iconify-icon
+                        class={["text-secondary-500", props.iconClass]}
+                        icon="ion:help-circle-outline"
+                    ></iconify-icon>
                 {/if}
             </span>
         </Popover.Trigger>

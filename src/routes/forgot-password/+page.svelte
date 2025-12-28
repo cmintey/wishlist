@@ -59,7 +59,7 @@
     <div class="flex flex-col items-center space-y-4">
         <h1 class="h1">{$t("auth.self-service-password-reset-unavailable")}</h1>
         <span class="text-xl">{$t("auth.contact-admin")}</span>
-        <a href="/login">{$t("auth.return-to-login")}</a>
+        <a class="anchor" href="/login">{$t("auth.return-to-login")}</a>
     </div>
 {/if}
 

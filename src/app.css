@@ -2,7 +2,6 @@
 @import "@skeletonlabs/skeleton";
 @import "@skeletonlabs/skeleton-svelte";
 @import "./wishlist.css";
-@import "./wishlist-v2.css";
 @import "./styles/list.css";
 @import "./styles/loading.css";
 
@@ -135,12 +134,6 @@
 }
 
 @layer components {
-    a:not(.unstyled):is(:not(.prose *)):not(.btn):not(.btn-icon):not(.app-bar a):not(.logo-item):not(a.card):not(
-            .list-nav a
-        ) {
-        @apply text-primary-700 decoration-primary-500/20 hover:decoration-primary-500 dark:text-primary-500 underline decoration-dotted underline-offset-4;
-    }
-
     .btn,
     .chip,
     .list-nav a,
@@ -172,6 +165,51 @@
     .textarea {
         background-color: var(--color-surface-200-800);
         --tw-ring-color: var(--color-surface-300-700);
+    }
+
+    .input,
+    .ig-input,
+    .textarea {
+        padding-block: calc(var(--spacing-input) * 1);
+        padding-inline: calc(var(--spacing-input) * 3);
+        &::placeholder {
+            color: var(--color-surface-600-400);
+        }
+    }
+
+    .btn,
+    .btn-base {
+        padding-block: --spacing(1.5);
+    }
+
+    .chip {
+        border-radius: 0.375rem;
+    }
+
+    .btn-sm {
+        padding-block: --spacing(1);
+    }
+
+    .btn-icon {
+        border-radius: 100%;
+        padding: --spacing(2);
+        @apply text-sm;
+    }
+
+    .anchor {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        @apply decoration-primary-500/50;
+        @variant hover {
+            text-decoration-style: dotted;
+        }
+    }
+
+    .card-hover {
+        @variant hover {
+            scale: 101% 101%;
+            box-shadow: var(--shadow-xl);
+        }
     }
 }
 

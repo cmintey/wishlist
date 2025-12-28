@@ -50,7 +50,7 @@
                 </div>
 
                 {#if item.url}
-                    <a class="dark:text-primary-200!" href={item.url} rel="noreferrer" target="_blank">
+                    <a class="anchor dark:text-primary-200!" href={item.url} rel="noreferrer" target="_blank">
                         {$t("wishes.view-item")}
                     </a>
                 {/if}
