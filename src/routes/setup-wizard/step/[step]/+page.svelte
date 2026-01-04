@@ -8,6 +8,7 @@
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
     import { resolve } from "$app/paths";
+    import { Steps } from "@skeletonlabs/skeleton-svelte";
 
     let locked = false;
 

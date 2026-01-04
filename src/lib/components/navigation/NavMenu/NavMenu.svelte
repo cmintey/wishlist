@@ -27,7 +27,7 @@
         <Popup>
             {#snippet trigger(props)}
                 <button class="size-10 md:size-12" {...props}>
-                    <Avatar class="size-10 md:size-12" {user} />
+                    <Avatar class="size-10 text-xs md:size-12 md:text-sm" {user} />
                     <span class="sr-only">User Menu</span>
                 </button>
             {/snippet}

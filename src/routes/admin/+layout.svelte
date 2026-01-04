@@ -38,6 +38,7 @@
                 {label}
             </Tabs.Trigger>
         {/each}
+        <Tabs.Indicator />
     </Tabs.List>
     <Tabs.Content value={selectedTab}>
         {@render children?.()}

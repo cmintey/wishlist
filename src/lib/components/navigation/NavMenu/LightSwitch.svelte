@@ -11,27 +11,22 @@
         { value: "dark", icon: "ion:moon-outline", text: $t("general.dark") }
     ];
 
-    const modeLocalStorage = new LocalStorage<string | null>("mode", "system");
+    const modeLocalStorage = new LocalStorage<string>("mode", "system");
 
     let value = $state("system");
 
     $effect(() => {
-        value = modeLocalStorage.current || "system";
+        value = modeLocalStorage.current;
         if (value === "system") {
-            document.documentElement.removeAttribute("data-mode");
+            const pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            document.documentElement.setAttribute("data-mode", pref);
         } else {
             document.documentElement.setAttribute("data-mode", value);
         }
     });
 
     const onValueChange: SegmentedControlRootProps["onValueChange"] = (details) => {
-        const mode = details.value;
-
-        if (!mode || mode === "system") {
-            modeLocalStorage.current = null;
-        } else {
-            modeLocalStorage.current = mode;
-        }
+        modeLocalStorage.current = details.value || "system";
     };
 </script>
 
@@ -52,14 +47,16 @@
 </SegmentedControl>
 
 <svelte:head>
-    <script lang="ts">
-        let mode =
-            typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem("mode")) || "system" : "system";
-
-        if (mode === "system") {
-            document.documentElement.removeAttribute("data-mode");
-        } else {
-            document.documentElement.setAttribute("data-mode", mode);
-        }
+    <script>
+        (function initMode() {
+            let mode =
+                typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem("mode")) || "system" : "system";
+            if (mode === "system") {
+                const pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                document.documentElement.setAttribute("data-mode", pref);
+            } else {
+                document.documentElement.setAttribute("data-mode", mode);
+            }
+        })();
     </script>
 </svelte:head>

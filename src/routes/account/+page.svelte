@@ -18,14 +18,15 @@
     );
 </script>
 
-<Tabs>
+<Tabs defaultValue="profile">
     <Tabs.List>
         <Tabs.Trigger value="profile">{$t("admin.profile")}</Tabs.Trigger>
         <Tabs.Trigger value="security">{$t("admin.security")}</Tabs.Trigger>
+        <Tabs.Indicator />
     </Tabs.List>
     <Tabs.Content class="flex w-fit flex-col items-center" value="profile">
-        <div class="relative m-auto h-full w-full max-w-[150px]">
-            <Avatar class="size-32" user={data.user} />
+        <div class="relative m-auto h-full w-full max-w-37.5">
+            <Avatar class="size-32 text-3xl" user={data.user} />
             <form
                 class="absolute right-0 bottom-0 h-12 w-12"
                 action="?/profilePicture"
@@ -41,8 +42,8 @@
                 }}
             >
                 <FileUpload name="profilePic" accept="image/*" onFileAccept={() => submitButton?.click()}>
-                    <FileUpload.Trigger class="btn-icon btn-icon-sm preset-tonal-secondary">
-                        <iconify-icon class="text-2xl" icon="ion:camera"></iconify-icon>
+                    <FileUpload.Trigger class="btn-icon preset-tonal-secondary">
+                        <iconify-icon class="text-lg" icon="ion:camera"></iconify-icon>
                         <span class="sr-only">{$t("a11y.upload-profile-image")}</span>
                     </FileUpload.Trigger>
                     <FileUpload.HiddenInput />

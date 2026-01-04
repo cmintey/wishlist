@@ -211,6 +211,10 @@
             box-shadow: var(--shadow-xl);
         }
     }
+
+    .text-tiny {
+        font-size: calc(0.6rem /* 12px */ * var(--text-scaling));
+    }
 }
 
 html,
