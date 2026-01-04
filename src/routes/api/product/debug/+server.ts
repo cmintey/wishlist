@@ -10,7 +10,6 @@ import { parseAcceptLanguageHeader } from "$lib/i18n";
 import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
 import { env } from "$env/dynamic/private";
-import { Impit } from "impit";
 
 const scraper = metascraper([shopping(), metascraperTitle(), metascraperImage()]);
 
@@ -23,14 +22,6 @@ const determineProxy = (url: URL) => {
 };
 
 const goShopping = async (targetUrl: URL, locales: string[]) => {
-    const impit = new Impit({
-        browser: "chrome",
-        proxyUrl: determineProxy(targetUrl),
-        ignoreTlsErrors: true
-    });
-    const iResp = await impit.fetch(targetUrl);
-    console.log(await iResp.text());
-
     const resp = await gotScraping({
         url: targetUrl,
         proxyUrl: determineProxy(targetUrl),
@@ -40,6 +31,7 @@ const goShopping = async (targetUrl: URL, locales: string[]) => {
         }
     });
     console.log(resp.body);
+
     const metadata = await scraper({ html: resp.body, url: resp.url });
     return metadata;
 };
@@ -58,16 +50,18 @@ const getUrlOrError = async (url: string) => {
     }
 };
 
-export const GET: RequestHandler = async ({ request, url }) => {
+export const POST: RequestHandler = async ({ request }) => {
     await requireLoginOrError();
     const $t = await getFormatter();
-    const encodedUrl = url.searchParams.get("url");
+    const requestJson = await request.json();
+    const url = requestJson.url as string | undefined;
+    const html = requestJson.html as string | undefined;
+
     const acceptLanguage = request.headers?.get("accept-language");
     const locales = parseAcceptLanguageHeader(acceptLanguage);
 
-    if (encodedUrl) {
-        const targetUrl = await getUrlOrError(decodeURI(encodedUrl));
-
+    if (url) {
+        const targetUrl = await getUrlOrError(url);
         let metadata = await goShopping(targetUrl, locales);
         if (isCaptchaResponse(metadata) && metadata.url) {
             // retry with the resolved URL
@@ -82,7 +76,12 @@ export const GET: RequestHandler = async ({ request, url }) => {
         }
 
         return new Response(JSON.stringify(metadata));
-    } else {
-        error(400, $t("errors.must-specify-url-in-query-parameters"));
     }
+
+    if (html) {
+        const metadata = await scraper({ html, url: url || "https://github.com/cmintey/wishlist" });
+        return new Response(JSON.stringify(metadata));
+    }
+
+    return error(422, "Must specify html or url in body");
 };

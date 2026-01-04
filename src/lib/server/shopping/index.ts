@@ -1,27 +1,9 @@
 /* eslint @typescript-eslint/ban-ts-comment: 0 */
 //@ts-nocheck
-import type { Check, CheckOptions, RuleSet } from "metascraper";
+import type { CheckOptions, Rules } from "metascraper";
 import { toPriceFormat, getHostname } from "./helpers";
 import pkg from "@metascraper/helpers";
 const { memoizeOne, $jsonld, toRule, title, $filter } = pkg;
-
-interface ShoppingMetadata {
-    brand: string;
-    name: string;
-    currency: string;
-    sku: string;
-    price: string;
-    condition: string;
-    mpn: string;
-    availability: string;
-    asin: string;
-    hostname: string;
-    retailer: string;
-}
-
-type ShoppingRuleSet = {
-    [C in keyof ShoppingMetadata]?: Array<Check>;
-} & RuleSet;
 
 const jsonLd = memoizeOne(($: CheckOptions["htmlDom"]) => {
     const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
@@ -68,7 +50,8 @@ const toTitle = toRule(title, { removeSeparator: false });
  *
  **/
 export default () => {
-    const rules: ShoppingRuleSet = {
+    const rules: Rules = {
+        pkgName: "metascraper-shopping",
         brand: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLd($);
@@ -150,6 +133,8 @@ export default () => {
             ({ htmlDom: $ }) => $('[property="og:price:currency"]').attr("content"),
             ({ htmlDom: $, url }) => $jsonld("offers.0.priceCurrency")($, url),
             ({ htmlDom: $, url }) => $jsonld("offers.priceCurrency")($, url),
+            ({ htmlDom: $, url }) => $jsonld("hasVariant.0.offers.0.priceCurrency")($, url),
+            ({ htmlDom: $, url }) => $jsonld("hasVariant.0.offers.priceCurrency")($, url),
             ({ htmlDom: $ }) => $("[data-asin-currency-code]").attr("data-asin-currency-code"), //amazon
             ({ htmlDom: $ }) => $('[property="product:price:currency"]').attr("content"),
             ({ htmlDom: $ }) => $("[itemprop=priceCurrency]").attr("content")
@@ -201,6 +186,8 @@ export default () => {
             ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.0.lowPrice")($, url)),
             ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.highPrice")($, url)),
             ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.0.highPrice")($, url)),
+            ({ htmlDom: $, url }) => toPriceFormat($jsonld("hasVariant.0.offers.0.price")($, url)),
+            ({ htmlDom: $, url }) => toPriceFormat($jsonld("hasVariant.0.offers.price")($, url)),
             ({ htmlDom: $ }) => toPriceFormat($("[data-asin-price]").attr("data-asin-price")), //amazon
             ({ htmlDom: $ }) => toPriceFormat($("[itemprop=price]").html()),
             ({ htmlDom: $ }) => toPriceFormat($("#attach-base-product-price").attr("value")),
@@ -214,6 +201,5 @@ export default () => {
         hostname: [({ url }) => getHostname(url)],
         retailer: [({ htmlDom: $ }) => $('[property="og:site_name"]').attr("content")]
     };
-    rules.pkgName = "metascraper-shopping";
     return rules;
 };
