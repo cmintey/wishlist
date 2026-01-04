@@ -1,4 +1,4 @@
-FROM node:24-slim@sha256:04d9cbb7297edb843581b9bb9bbed6d7efb459447d5b6ade8d8ef988e6737804 AS base
+FROM node:24-slim@sha256:b83af04d005d8e3716f542469a28ad2947ba382f6b4a76ddca0827a21446a540 AS base
 WORKDIR /usr/src/app
 RUN npm install -g pnpm@latest-10
 
