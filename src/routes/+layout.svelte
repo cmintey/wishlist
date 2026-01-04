@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../app.postcss";
+    import "../print.postcss";
 
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import { page } from "$app/state";
