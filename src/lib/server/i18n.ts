@@ -11,7 +11,7 @@ export type MessageFormatter = Awaited<ReturnType<typeof getFormatter>>;
 
 export async function getFormatter(locale?: string) {
     if (!locale) {
-        locale = getLocale() || defaultLang.code;
+        locale = getLocale();
     }
     await waitLocale(locale);
     return (id: string, options?: Omit<MessageObject, "id">) => {
@@ -24,5 +24,5 @@ export async function getFormatter(locale?: string) {
 }
 
 export function getLocale() {
-    return getRequestEvent().locals.locale;
+    return getRequestEvent().locals.locale || defaultLang.code;
 }
