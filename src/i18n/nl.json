@@ -255,7 +255,8 @@
         "username-must-not-be-blank": "Gebruikersnaam mag niet leeg zijn",
         "valid-url-not-provided": "Geldige URL niet verstrekt",
         "email-is-required-for-public-claims": "Email is vereist voor publieke claims",
-        "oidc-error": "Authenticeren met OAuth is mislukt"
+        "oidc-error": "Authenticeren met OAuth is mislukt",
+        "display-order-invalid": "Volgorde van weergave dient tussen {min} en {max} te zijn"
     },
     "general": {
         "add-a-description": "Voeg een beschrijving toe",
@@ -372,7 +373,7 @@
         "create-and-add-another": "Maak en voeg er nog een toe",
         "create-for": "Maak wens voor {listOwner}",
         "create-list": "Lijst maken",
-        "default-sort": "Standaard sorteren",
+        "default-sort": "Prioriteit",
         "delete": "Verwijderen",
         "delete-list-confirmation": "Weet u zeker dat u deze lijst wilt verwijderen? Alle items die niet aan een andere lijst zijn gekoppeld, worden ook verwijderd.",
         "deny": "Ontkennen",
@@ -388,7 +389,7 @@
         "image-url": "Afbeelding URL",
         "item-approved": "{name} is {approved, select, true {approved} other {denied}}",
         "item-name": "Itemnaam",
-        "item-url": "Item -URL",
+        "item-url": "Item-URL",
         "item-was-deleted": "{name} werd verwijderd",
         "item-was-removed-from-list": "{name} werd uit deze lijst verwijderd",
         "lists": "Lijsten",
@@ -443,6 +444,15 @@
         "claims": "{claimCount, plural, one {# claim} other {# claims}}",
         "hide-claims": "Verberg claims",
         "show-claims": "Toon claims",
-        "claimed-by-you-on-another-list": "Door jou geclaimd op een andere lijst"
+        "claimed-by-you-on-another-list": "Door jou geclaimd op een andere lijst",
+        "most-wanted-description": "Markeer dit item om anderen te laten weten dat het een zeer gewild item is.",
+        "display-order": "Volgorde van weergave",
+        "group-by": "Groeperen op",
+        "list-view": "Lijstweergave",
+        "most-wanted": "Meest gewild",
+        "sort-by": "Sorteren op",
+        "switch-to-list-view": "Schakel over naar lijstweergave",
+        "switch-to-tile-view": "Schakel over naar tegelweergave",
+        "tile-view": "Tegelweergave"
     }
 }

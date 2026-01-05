@@ -112,7 +112,7 @@
     <div class="input-group-shim">
         <iconify-icon icon="ion:pricetag"></iconify-icon>
     </div>
-    <div class="border-surface-400-500-token border-r focus:border-surface-400-500-token rtl:border-l">
+    <div class="border-surface-400-500-token border-r !p-0 focus:border-surface-400-500-token rtl:border-l">
         <input {id} {name} {disabled} type="hidden" bind:value />
         <input
             bind:this={inputElement}

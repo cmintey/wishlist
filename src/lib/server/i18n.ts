@@ -1,4 +1,5 @@
 import { getRequestEvent } from "$app/server";
+import { defaultLang } from "$lib/i18n";
 import { t, waitLocale, format } from "svelte-i18n";
 import { get } from "svelte/store";
 
@@ -23,5 +24,5 @@ export async function getFormatter(locale?: string) {
 }
 
 export function getLocale() {
-    return getRequestEvent().locals.locale;
+    return getRequestEvent().locals.locale || defaultLang.code;
 }

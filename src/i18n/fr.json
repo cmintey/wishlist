@@ -70,7 +70,8 @@
         "unable-to-update-preferred-language": "Impossible de mettre à jour la langue préférée",
         "language-is-required": "La langue est requise",
         "email-is-required-for-public-claims": "Un email est nécessaire pour des réservation publiques",
-        "oidc-error": "Erreur lors de l'authentification OAuth"
+        "oidc-error": "Erreur lors de l'authentification OAuth",
+        "display-order-invalid": "L'ordre d'affichage doit être entre {min} et {max}"
     },
     "admin": {
         "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
@@ -326,7 +327,9 @@
         "language": "Langue",
         "use-system-language": "Utiliser la langue du système",
         "oauth": "OAuth",
-        "select-all": "Sélectionner tout"
+        "select-all": "Sélectionner tout",
+        "import": "Importer",
+        "no-lists-available": "Aucune liste disponible"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -358,7 +361,7 @@
         "claimed-by": "Réservé par {name}",
         "approve": "Approuver",
         "approvals": "Approbations",
-        "add-item": "Ajouter un objet",
+        "add-item": "Ajouter l'élément",
         "approvals-waiting": "Vous avez {approvalCount, plural, one {# item} other {# items}} attendant votre approbation",
         "create": "Créer un souhait",
         "edit": "Éditer",
@@ -448,7 +451,15 @@
         "list-view": "Vue liste",
         "sort-by": "Trier par",
         "group-by": "Regrouper par",
-        "claimed-by-you-on-another-list": "Réservé par vous sur une autre liste"
+        "claimed-by-you-on-another-list": "Réservé par vous sur une autre liste",
+        "most-wanted-description": "Mettez en avant cet élément pour montrer aux autres que vous en avez énormément envie.",
+        "display-order": "Ordre d'affichage",
+        "most-wanted": "Le plus souhaité",
+        "import-error-text": "Wishlist n'a pas pu déterminer l'URL du produit à partir des paramètres fournis. Vous pouvez toujours copier manuellement l'URL et ajouter l'élément avec le process habituel.",
+        "import-error-title": "Impossible d'importer l'élément",
+        "import-item": "Importer l'élément",
+        "import-item-text": "Avant d'importer un élément, vous devez choisir un groupe et une liste",
+        "select-a-list": "Sélectionner une liste"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
