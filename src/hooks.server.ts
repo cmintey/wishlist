@@ -55,11 +55,14 @@ export const handle: Handle = async ({ event, resolve }) => {
         });
     }
 
-    return resolve(event, {
+    const response = await resolve(event, {
         transformPageChunk({ html }) {
             return transformForLang(html, lang);
         }
     });
+    response.headers.delete("link");
+
+    return response;
 };
 
 function transformForLang(html: string, lang: Lang) {
