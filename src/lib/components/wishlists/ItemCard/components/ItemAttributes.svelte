@@ -7,7 +7,7 @@
 
     interface Props extends Pick<
         ItemCardProps,
-        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showFor"
+        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
     > {
         showDetail?: boolean;
         fullNotes?: boolean;
@@ -19,6 +19,7 @@
         onPublicList,
         user,
         showClaimedName,
+        showNameAcrossGroups = false,
         showClaimForOwner = false,
         showFor,
         showDetail = false,
@@ -70,7 +71,14 @@
         {#if expandClaims}
             <div class="max-h-32 overflow-auto px-2 pb-2">
                 {#each item.claims as claim}
-                    {@const showName = shouldShowName(item, showClaimedName, showClaimForOwner, user, claim)}
+                    {@const showName = shouldShowName(
+                        item,
+                        showClaimedName,
+                        showNameAcrossGroups,
+                        showClaimForOwner,
+                        user,
+                        claim
+                    )}
                     <div class="flex items-center justify-between py-1">
                         <span>{showName ? getClaimedName(claim) : $t("wishes.anonymous")}</span>
                         <span>

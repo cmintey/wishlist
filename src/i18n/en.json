@@ -97,6 +97,8 @@
         "select-a-group-option": "Select a group",
         "settings": "Settings",
         "settings-saved-toast": "Settings saved successfully",
+        "show-name-across-groups": "Show name across groups",
+        "show-name-across-groups-tooltip": "Displays the name of the user who made the claim even if the user is not in your group.",
         "show-for-list-owner": "Show for list owner",
         "show-for-list-owner-description": "Allow list owners to view claims on their own lists.",
         "show-name": "Show name",

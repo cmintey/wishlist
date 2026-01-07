@@ -337,6 +337,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -384,6 +385,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -405,6 +407,7 @@
                             requireClaimEmail={data.requireClaimEmail}
                             showClaimForOwner={data.showClaimForOwner}
                             showClaimedName={data.showClaimedName}
+                            showNameAcrossGroups={data.showNameAcrossGroups}
                             user={data.loggedInUser}
                             userCanManage={data.list.isManager}
                         />

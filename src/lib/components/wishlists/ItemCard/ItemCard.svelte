@@ -8,6 +8,7 @@
         user?: PartialUser; // logged in user
         userCanManage?: boolean;
         showClaimedName?: boolean;
+        showNameAcrossGroups?: boolean;
         showClaimForOwner?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
@@ -27,6 +28,7 @@
         user?: PartialUser;
         userCanManage?: boolean;
         showClaimedName?: boolean;
+        showNameAcrossGroups?: boolean;
         showClaimForOwner?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
@@ -75,6 +77,7 @@
         user = undefined,
         userCanManage = false,
         showClaimedName = false,
+        showNameAcrossGroups = false,
         showClaimForOwner = false,
         requireClaimEmail = true,
         showFor = false,
@@ -266,6 +269,7 @@
             user,
             userCanManage,
             showClaimedName,
+            showNameAcrossGroups,
             showClaimForOwner,
             requireClaimEmail,
             onPublicList,
@@ -330,6 +334,7 @@
         {showClaimForOwner}
         {showClaimedName}
         {showFor}
+        {showNameAcrossGroups}
         {user}
         {userCanManage}
     />
