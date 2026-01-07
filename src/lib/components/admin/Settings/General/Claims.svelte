@@ -31,17 +31,17 @@
     <Setting>
         <label class="checkbox-label">
             <input
-                    id="claimsAlwaysShowName"
-                    name="claimsAlwaysShowName"
-                    class="checkbox"
-                    checked= {config.claims.alwaysShowName}
-                    type="checkbox"
+                id="claimsShowNameAcrossGroups"
+                name="claimsShowNameAcrossGroups"
+                class="checkbox"
+                checked={config.claims.showNameAcrossGroups}
+                type="checkbox"
             />
-            <span>{$t("admin.always-show-name")}</span>
+            <span>{$t("admin.show-name-across-groups")}</span>
         </label>
 
         {#snippet description()}
-            {$t("admin.always-show-name-tooltip")}
+            {$t("admin.show-name-across-groups-tooltip")}
         {/snippet}
     </Setting>
     <Setting>

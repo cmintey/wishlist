@@ -90,7 +90,7 @@
         "wishlist-mode-registry-tooltip": "Un usuario con una lista pública. Usuarios de otros grupos pueden hacer sugerencias si están habilitadas, y usuarios anónimos pueden reclamar objetos.",
         "wishlist-mode-wishlist-tooltip": "Múltiples usuarios y listas, con opción de reclamar y sugerir objetos. Las listas pueden hacerse públicas si el grupo lo permite.",
         "oidc-auto-register": "Auto Registro",
-        "oidc-auto-redirect-tooltip": "Al habilitarlo, la página de inicio de sesión redirigirá automáticamente a la de tu Proveedor de Identidad. Para saltarlo, se puede añadir '?direct=1' a la URL.",
+        "oidc-auto-redirect-tooltip": "Al habilitarlo, la página de inicio de sesión redirigirá automáticamente a la de tu Proveedor de Identidad. Para saltarlo, se puede añadir '?direct=1' a la URL."
     },
     "a11y": {
         "cancel-editing": "Cancelar edición",

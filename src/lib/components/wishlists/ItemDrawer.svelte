@@ -20,7 +20,7 @@
     const userCanManage: boolean = $drawerStore.meta.userCanManage;
     const showFor: boolean = $drawerStore.meta.showFor;
     const showClaimedName: boolean = $drawerStore.meta.showClaimedName;
-    const showAlwaysClaimedName: boolean = $drawerStore.meta.showAlwaysClaimedName;
+    const showNameAcrossGroups: boolean = $drawerStore.meta.showNameAcrossGroups;
     const showClaimForOwner: boolean = $drawerStore.meta.showClaimForOwner;
     const onPublicList: boolean = $drawerStore.meta.onPublicList;
     const handleClaim: (v?: boolean) => void = $drawerStore.meta.handleClaim;
@@ -66,7 +66,17 @@
         <a class="dark:!text-primary-200" href={item.url} rel="noreferrer" target="_blank">{$t("wishes.view-item")}</a>
     {/if}
 
-    <ItemAttributes fullNotes {item} {onPublicList} {showClaimForOwner} {showAlwaysClaimedName} {showClaimedName} showDetail {showFor} {user} />
+    <ItemAttributes
+        fullNotes
+        {item}
+        {onPublicList}
+        {showClaimForOwner}
+        {showClaimedName}
+        showDetail
+        {showFor}
+        {showNameAcrossGroups}
+        {user}
+    />
 
     <div class="flex flex-row justify-between pb-4">
         <ClaimButtons
@@ -76,8 +86,8 @@
             onPurchased={handlePurchased}
             onUnclaim={() => handleClaim(true)}
             {showClaimForOwner}
-            {showAlwaysClaimedName}
             {showClaimedName}
+            {showNameAcrossGroups}
             {user}
         />
 
