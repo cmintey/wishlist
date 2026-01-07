@@ -174,7 +174,9 @@
         "oidc-auto-redirect-description": "Rediriger automatiquement vers la page de connexion de votre fournisseur d'identité.",
         "profile-disabled": "Votre profil est géré par votre fournisseur OAuth.",
         "show-for-list-owner": "Afficher pour le propriétaire de la liste",
-        "show-for-list-owner-description": "Permet au propriétaire de la liste de voir les réservations sur leurs propres listes."
+        "show-for-list-owner-description": "Permet au propriétaire de la liste de voir les réservations sur leurs propres listes.",
+        "show-name-across-groups": "Afficher le nom dans tous les groupes",
+        "show-name-across-groups-tooltip": "Affiche le nom de l'utilisateur qui a effectué une réservation, même si cet utilisateur ne fait pas partie de votre groupe."
     },
     "auth": {
         "password": "Mot de passe",
