@@ -103,7 +103,7 @@
         "oidc-url": "Issuer URL",
         "password-strength-requirement-tooltip": "Die minimale Passwortstärke für ein Benutzerpasswort.",
         "settings-saved-toast": "Einstellungen erfolgreich gespeichert",
-        "suggestions-approval-required-tooltip": "Der Artikel benötigt eine Überprüfung durch den Besitzer der Liste. Wenn akzeptiert, kann der Beistzer den Artikel sehen, bearbeiten und löschen.",
+        "suggestions-approval-required-tooltip": "Der Artikel benötigt eine Überprüfung durch den Besitzer der Liste. Wenn akzeptiert, kann der Besitzer den Artikel sehen, bearbeiten und löschen.",
         "suggestions-auto-approve-tooltip": "Der Artikel wird automatisch der Liste hinzugefügt, jedoch kann der Besitzer ihn sehen, bearbeiten und löschen.",
         "suggestions-surprise-me-tooltip": "Der Artikel wir automatisch zur Liste hinzugefügt, ohne das der Besitzer es weiß.",
         "suggestions-tooltip": "Erlaube es Benutzern der selben Gruppe sich gegenseitig Vorschläge für Ihre Listen zu machen.",
