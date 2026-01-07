@@ -7,8 +7,10 @@
         config: Pick<Config, "claims">;
     }
 
-    const { config }: Props = $props();
+    const props: Props = $props();
     const t = getFormatter();
+
+    let config = $state(props.config);
 </script>
 
 <SettingsGroup title={$t("admin.claims")}>
@@ -18,8 +20,8 @@
                 id="claimsShowName"
                 name="claimsShowName"
                 class="checkbox"
-                checked={config.claims.showName}
                 type="checkbox"
+                bind:checked={config.claims.showName}
             />
             <span>{$t("admin.show-name")}</span>
         </label>
@@ -28,7 +30,7 @@
             {$t("admin.claims-name-tooltip")}
         {/snippet}
     </Setting>
-    <Setting>
+    <Setting class={[!config.claims.showName && "hidden"]}>
         <label class="checkbox-label">
             <input
                 id="claimsShowNameAcrossGroups"
