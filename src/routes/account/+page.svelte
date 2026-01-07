@@ -10,16 +10,22 @@
     import { getFormatter } from "$lib/i18n";
     import { errorToast } from "$lib/components/toasts";
 
-    const { data }: PageProps = $props();
+    let { data }: PageProps = $props();
     const t = getFormatter();
     const toastStore = getToastStore();
 
     let submitButton: HTMLElement | undefined = $state();
-
     let tabSet = $state(0);
     let profileEditDisabled = $state(
         data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.user.oauthId !== null
     );
+
+    function updatePicture(url: string) {
+        data = {
+            ...data,
+            user: { ...data.user, picture: url }
+        };
+    }
 </script>
 
 <TabGroup>
@@ -43,6 +49,8 @@
                                     errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
                                     return;
                                 }
+
+                                updatePicture(result.data);
                             };
                         }}
                     >
