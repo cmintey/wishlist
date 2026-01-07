@@ -29,14 +29,25 @@
 
     let userData: TableSource = $derived({
         head: [$t("auth.name"), $t("auth.username"), $t("auth.email"), $t("admin.admin"), $t("admin.groups")],
-        body: tableMapperValues(usersFiltered, ["name", "username", "email", "isAdmin", "groups"]),
-        meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin", "id"])
+        body: tableMapperValues(formatString(usersFiltered), ["name", "username", "email", "isAdmin", "groups"]),
+        meta: tableSourceMapper(formatString(usersFiltered), ["name", "username", "email", "isAdmin", "id"])
     });
 
     const selectionHandler = (meta: CustomEvent<string[]>) => {
         const user = meta.detail as unknown as User;
         goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
     };
+
+    function formatString(userFiltered) {
+        return userFiltered.map((u) => {
+            const clone = {
+                ...u,
+                isAdmin: u.isAdmin ? '<iconify-icon  class = "text-lg" icon = "ion:checkmark"></iconify-icon>' : ""
+            };
+
+            return clone;
+        });
+    }
 </script>
 
 <div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:gap-x-4 md:space-y-0">
