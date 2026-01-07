@@ -127,7 +127,8 @@
         "oidc-auto-redirect-description": "Omdiriger automatisk til din IdP’s login-side.",
         "profile-disabled": "Din profil administreres af din OAuth udbyder.",
         "show-for-list-owner": "Vis for listens ejer",
-        "show-for-list-owner-description": "Tillad listeejere at se reservationer på deres egne lister."
+        "show-for-list-owner-description": "Tillad listeejere at se reservationer på deres egne lister.",
+        "show-name-across-groups": "Vis altid navn"
     },
     "app": {
         "home": "Hjem",
