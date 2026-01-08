@@ -1,7 +1,7 @@
 import type { RulesTestOptions } from "metascraper";
 import { findJsonLdByType, isRecord, getProperty } from "./helpers";
 
-type CheerioAPI = RulesTestOptions["htmlDom"];
+type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * Extract a string field from JSON-LD data with type safety.
@@ -159,7 +159,7 @@ export const extractMpn = (data: unknown): string | undefined => {
  * 3. Apply optional fallback logic
  */
 export const extractFromJsonLd = (
-    htmlDom: CheerioAPI,
+    htmlDom: HtmlDomType,
     jsonType: string,
     extractor: (data: unknown) => string | undefined,
     fallback?: () => string | undefined
@@ -176,7 +176,7 @@ export const extractFromJsonLd = (
  * Used by domains like bol.com that have multiple product variants.
  */
 export const extractFromVariant = (
-    htmlDom: CheerioAPI,
+    htmlDom: HtmlDomType,
     variantSelector: (data: unknown) => boolean,
     extractor: (data: unknown) => string | undefined,
     fallback?: () => string | undefined
@@ -220,7 +220,7 @@ export const extractFromVariant = (
  * Used by domains like hm.com that have ProductGroup with hasVariant array.
  */
 export const extractFromProductGroup = (
-    htmlDom: CheerioAPI,
+    htmlDom: HtmlDomType,
     extractor: (data: unknown) => string | undefined,
     preferVariant: boolean = true
 ): string | undefined => {

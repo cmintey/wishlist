@@ -4,14 +4,21 @@ declare module "@samirrayani/metascraper-shopping" {
 
 declare module "@metascraper/helpers" {
     import type { RulesOptions, RulesTestOptions } from "metascraper";
-    type CheerioAPI = RulesTestOptions['htmlDom'];
-    type Element = ReturnType<CheerioAPI[""]>;
+
+    type HtmlDomType = RulesTestOptions["htmlDom"];
+    type Element = ReturnType<HtmlDomType[""]>;
 
     export function memoizeOne<T extends (...args: any[]) => any>(fn: T): T;
-    export function $jsonld(path: string): ($: CheerioAPI, url: string) => string | null | undefined;
-    export function toRule(fn: (value: string) => string, options?: { removeSeparator?: boolean }): (rule: ($: CheerioAPI, url: string) => string | null | undefined) => RulesOptions;
+    export function $jsonld(path: string): ($: HtmlDomType, url: string) => string | null | undefined;
+    export function toRule(
+        fn: (value: string) => string,
+        options?: { removeSeparator?: boolean }
+    ): (rule: ($: HtmlDomType, url: string) => string | null | undefined) => RulesOptions;
     export function title(value: string, options?: { removeSeparator?: boolean }): string;
-    export function $filter($: CheerioAPI, element: ReturnType<CheerioAPI[""]> | Element | Element[]): string | null | undefined;
+    export function $filter(
+        $: HtmlDomType,
+        element: ReturnType<HtmlDomType[""]> | Element | Element[]
+    ): string | null | undefined;
 }
 
 declare module "virtual:pwa-register" {

@@ -166,7 +166,9 @@ export default () => {
                 const offers = getProperty(jsonld, "offers");
                 if (isRecord(offers)) {
                     const price = getProperty(offers, "price");
-                    const formatted = toPriceFormat(typeof price === "string" || typeof price === "number" ? String(price) : undefined);
+                    const formatted = toPriceFormat(
+                        typeof price === "string" || typeof price === "number" ? String(price) : undefined
+                    );
                     return formatted !== undefined ? String(formatted) : undefined;
                 }
                 return undefined;

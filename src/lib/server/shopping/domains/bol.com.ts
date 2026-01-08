@@ -1,4 +1,4 @@
-import type { ShoppingDomainRules } from "../helpers";
+import type { ShoppingDomainRules, RulesTestOptions } from "../helpers";
 import { rulesForDomain } from "../helpers";
 import {
     extractStringField,
@@ -13,15 +13,15 @@ import {
 } from "../domain-helpers";
 
 /**
- * Extract the variant code from a bol.com URL.
+ * Extract variant code from a bol.com URL.
  * URL pattern: https://www.bol.com/nl/nl/p/{product-name}/{variant-code}/...
- * Returns the variant code (numeric string) or null if not found.
+ * Returns variant code (numeric string) or null if not found.
  */
 const extractVariantCodeFromUrl = (url: string): string | null => {
     try {
         const urlObj = new URL(url);
         const pathParts = urlObj.pathname.split("/").filter((p) => p);
-        // Look for a numeric variant code in the path
+        // Look for a numeric variant code in path
         // Typically it's after the product name, so we look for a long numeric string
         for (const part of pathParts) {
             // Variant codes are typically long numeric strings (e.g., 9300000142746725)
@@ -35,59 +35,14 @@ const extractVariantCodeFromUrl = (url: string): string | null => {
     return null;
 };
 
-import type { RulesTestOptions } from "metascraper";
-
-type CheerioAPI = RulesTestOptions["htmlDom"];
-
-/**
- * Find a Product JSON-LD entry by productID.
- * Scans all JSON-LD scripts and returns the first Product where productID matches.
- */
-const findProductByProductId = (productId: string, htmlDom: CheerioAPI): unknown | null => {
-    const scripts = htmlDom('script[type="application/ld+json"]');
-    for (let i = 0; i < scripts.length; i++) {
-        const el = scripts[i];
-        try {
-            const html = htmlDom(el).html();
-            if (!html) continue;
-            const json: unknown = JSON.parse(html);
-
-            // Handle both single objects and arrays
-            let items: unknown[] = [];
-            if (Array.isArray(json)) {
-                items = json;
-            } else if (typeof json === "object" && json !== null && "@graph" in json) {
-                const graph = json["@graph"];
-                items = Array.isArray(graph) ? graph : [json];
-            } else {
-                items = [json];
-            }
-
-            for (const item of items) {
-                if (
-                    typeof item === "object" &&
-                    item !== null &&
-                    "@type" in item &&
-                    item["@type"] === "Product" &&
-                    "productID" in item &&
-                    item.productID === productId
-                ) {
-                    return item;
-                }
-            }
-        } catch {
-            // ignore parse errors and keep scanning
-        }
-    }
-    return null;
-};
+type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * Helper function to extract a field from bol.com variant-specific JSON-LD.
  * This encapsulates the common pattern used across all fields in bol.com parser.
  */
 const extractBolField = (
-    htmlDom: CheerioAPI,
+    htmlDom: HtmlDomType,
     url: string,
     extractor: (data: unknown) => string | undefined,
     fallbackExtractor?: () => string | undefined

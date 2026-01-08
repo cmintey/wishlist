@@ -3,7 +3,7 @@ import pkg from "@metascraper/helpers";
 
 const { memoizeOne, toRule, title } = pkg;
 
-type CheerioAPI = RulesTestOptions["htmlDom"];
+type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * Type guard to check if a value is a record (object with string keys).
@@ -146,7 +146,7 @@ export const rulesForDomain = (
  * These mirror the logic used in the base shopping parser so domain parsers
  * can stay small and focused.
  */
-export const jsonLd = memoizeOne(($: CheerioAPI): unknown | null => {
+export const jsonLd = memoizeOne(($: HtmlDomType): unknown | null => {
     try {
         const html = $('script[type="application/ld+json"]').html();
         if (!html) return null;
@@ -168,7 +168,7 @@ export const jsonLd = memoizeOne(($: CheerioAPI): unknown | null => {
  *
  * Memoized so repeated lookups for the same (type, htmlDom) pair are cheap.
  */
-export const findJsonLdByType = memoizeOne((type: string, $: CheerioAPI): unknown | undefined => {
+export const findJsonLdByType = memoizeOne((type: string, $: HtmlDomType): unknown | undefined => {
     const scripts = $('script[type="application/ld+json"]');
     for (let i = 0; i < scripts.length; i++) {
         const el = scripts[i];
@@ -195,7 +195,7 @@ export const findJsonLdByType = memoizeOne((type: string, $: CheerioAPI): unknow
     return undefined;
 });
 
-export const jsonLdGraph = memoizeOne(($: CheerioAPI): unknown[] | null => {
+export const jsonLdGraph = memoizeOne(($: HtmlDomType): unknown[] | null => {
     try {
         const html = $('script[type="application/ld+json"]').html();
         if (!html) return null;
@@ -211,7 +211,7 @@ export const jsonLdGraph = memoizeOne(($: CheerioAPI): unknown[] | null => {
     }
 });
 
-export const jsonLdGraphProduct = memoizeOne(($: CheerioAPI): unknown | null => {
+export const jsonLdGraphProduct = memoizeOne(($: HtmlDomType): unknown | null => {
     const jsonld = jsonLdGraph($);
 
     if (jsonld) {
@@ -223,7 +223,7 @@ export const jsonLdGraphProduct = memoizeOne(($: CheerioAPI): unknown | null => 
     return null;
 });
 
-export const jsonLdLastBreadcrumb = memoizeOne(($: CheerioAPI): unknown | null => {
+export const jsonLdLastBreadcrumb = memoizeOne(($: HtmlDomType): unknown | null => {
     const jsonld = jsonLdGraph($);
     if (jsonld) {
         const breadcrumbs = jsonld.filter((i: unknown): i is { "@type": string; itemListElement?: unknown[] } => {
@@ -242,28 +242,6 @@ export const jsonLdLastBreadcrumb = memoizeOne(($: CheerioAPI): unknown | null =
 });
 
 export const toTitle = toRule(title, { removeSeparator: false });
-
-export const toPriceFormat = (price: string | undefined | null): number | undefined => {
-    if (!price) return undefined;
-
-    if (typeof price === "string") {
-        // Remove non-numeric characters and symbols like $, € and others others.
-        // except for '.' and ','
-        price = price.replace(/[^\d.,]/g, "");
-
-        price = /^(\d+\.?){1}(\.\d{2,3})*,\d{1,2}$/.test(price)
-            ? price.replace(/\./g, "").replace(",", ".") // case 1: price is formatted as '12.345,67'
-            : price.replace(/,/g, ""); // case 2: price is formatted as '12,345.67'
-    }
-
-    const num = parseFloat(price);
-
-    if (Number.isNaN(num)) {
-        return;
-    }
-
-    return +num.toFixed(2);
-};
 
 export const toPriceFormat = (price: string | undefined | null): number | undefined => {
     if (!price) return undefined;
