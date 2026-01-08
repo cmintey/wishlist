@@ -127,7 +127,9 @@
         "oidc-auto-redirect-description": "Omdirigera automatiskt till din IdP:s inloggningssida.",
         "profile-disabled": "Din profil hanteras av din OAuth-leverantör.",
         "show-for-list-owner": "Visa för listägaren",
-        "show-for-list-owner-description": "Tillåt listägare att se anspråk på sina egna listor."
+        "show-for-list-owner-description": "Tillåt listägare att se anspråk på sina egna listor.",
+        "show-name-across-groups": "Visa namn i alla grupper",
+        "show-name-across-groups-tooltip": "Visar namnet på användaren som gjorde reservationen även om användaren inte finns i din grupp."
     },
     "app": {
         "my-claims": "Mina reservationer",

@@ -127,7 +127,9 @@
         "oidc-url": "Issuer URL",
         "clear-lists": "Vymazat {groupSpecific, select, true {} other {všechny}} {claimedOnly, select, true {rezervované položky} other {seznamy}}",
         "clear-lists-confirmation": "Chceš vymazat {claimedOnly, select, true {rezervované položky} other {všechny seznamy přání}} {groupSpecific, select, true {v této skupině} other {napříč <b>všemi skupinami</b>}}? <b>Tato akce je nevratná!</b>",
-        "dev": "dev"
+        "dev": "dev",
+        "show-name-across-groups": "Zobrazovat jméno napříč skupinami",
+        "show-name-across-groups-tooltip": "Zobrazí jméno uživatele, který si předmět zarezervoval, i když uživatel není součástí vaší skupiny."
     },
     "app": {
         "home": "Domů",
