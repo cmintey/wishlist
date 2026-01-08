@@ -27,7 +27,7 @@
 
 <footer
     class={[
-        "card-footer flex flex-wrap items-center gap-2 px-4",
+        "card-footer flex flex-wrap items-center gap-2 px-4 print:hidden",
         reorderActions ? "justify-center pb-0" : "justify-between"
     ]}
 >

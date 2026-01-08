@@ -123,7 +123,7 @@
 <Drawer />
 
 <div class="min-h-screen">
-    <header class="sticky top-0 z-10">
+    <header class="sticky top-0 z-10 print:hidden">
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
@@ -137,7 +137,7 @@
         {@render children?.()}
     </main>
 
-    <footer class="sticky bottom-0 z-10">
+    <footer class="sticky bottom-0 z-10 print:hidden">
         <BottomTabs {navItems} user={data.user} />
     </footer>
 </div>
