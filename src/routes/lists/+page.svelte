@@ -25,7 +25,7 @@
     };
 </script>
 
-<div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
+<div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
     <ListFilterChip {users} />
     <button
         class="variant-ghost-secondary btn btn-sm h-fit items-center"

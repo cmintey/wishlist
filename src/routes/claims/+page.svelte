@@ -51,7 +51,7 @@
 </script>
 
 <!-- View mode toggle -->
-<div class="flex flex-wrap items-end justify-between gap-2 pb-4">
+<div class="flex flex-wrap items-end justify-between gap-2 pb-4 print:hidden">
     <div class="flex items-end gap-2">
         <ListFilterChip {users} />
         <ClaimsGroupBy bind:groupBy />

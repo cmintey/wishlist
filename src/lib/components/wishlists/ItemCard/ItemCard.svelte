@@ -304,7 +304,7 @@
 {/snippet}
 
 <div
-    class="card block h-full w-full text-start"
+    class="card block h-full w-full text-start print:shadow-none print:break-inside-avoid"
     class:card-hover={!reorderActions}
     class:variant-ghost-warning={!item.approved}
     aria-labelledby={`${id}-name`}
