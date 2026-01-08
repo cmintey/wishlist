@@ -2,6 +2,18 @@ declare module "@samirrayani/metascraper-shopping" {
     export default function rules(): import("metascraper").Rule;
 }
 
+declare module "@metascraper/helpers" {
+    import type { RulesOptions, RulesTestOptions } from "metascraper";
+    type CheerioAPI = RulesTestOptions['htmlDom'];
+    type Element = ReturnType<CheerioAPI[""]>;
+
+    export function memoizeOne<T extends (...args: any[]) => any>(fn: T): T;
+    export function $jsonld(path: string): ($: CheerioAPI, url: string) => string | null | undefined;
+    export function toRule(fn: (value: string) => string, options?: { removeSeparator?: boolean }): (rule: ($: CheerioAPI, url: string) => string | null | undefined) => RulesOptions;
+    export function title(value: string, options?: { removeSeparator?: boolean }): string;
+    export function $filter($: CheerioAPI, element: ReturnType<CheerioAPI[""]> | Element | Element[]): string | null | undefined;
+}
+
 declare module "virtual:pwa-register" {
     import type { RegisterSWOptions } from "vite-plugin-pwa/types";
 
