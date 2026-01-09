@@ -1,4 +1,4 @@
-import type { Rules, RulesOptions, RulesTestOptions } from "metascraper";
+import type { Rules, RulesOptions } from "metascraper";
 import type { HtmlDomType } from "./helpers";
 import {
     toPriceFormat,
