@@ -1,6 +1,5 @@
 import { findJsonLdByType, isRecord, getProperty } from "./helpers";
-import type { HtmlDomType } from './helpers';
-
+import type { HtmlDomType } from "./helpers";
 
 /**
  * Extract a string field from JSON-LD data with type safety.
