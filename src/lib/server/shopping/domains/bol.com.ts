@@ -1,4 +1,4 @@
-import type { ShoppingDomainRules, RulesTestOptions } from "../helpers";
+import type { ShoppingDomainRules, HtmlDomType } from "../helpers";
 import { rulesForDomain } from "../helpers";
 import {
     extractStringField,
@@ -34,8 +34,6 @@ const extractVariantCodeFromUrl = (url: string): string | null => {
     }
     return null;
 };
-
-type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * Helper function to extract a field from bol.com variant-specific JSON-LD.

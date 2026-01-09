@@ -1,7 +1,6 @@
-import type { RulesTestOptions } from "metascraper";
 import { findJsonLdByType, isRecord, getProperty } from "./helpers";
+import type { HtmlDomType } from './helpers';
 
-type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * Extract a string field from JSON-LD data with type safety.

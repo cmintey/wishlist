@@ -1,4 +1,5 @@
 import type { Rules, RulesOptions, RulesTestOptions } from "metascraper";
+import type { HtmlDomType } from "./helpers";
 import {
     toPriceFormat,
     getHostname,
@@ -16,7 +17,6 @@ import domainRules from "./domains";
 const { $jsonld, $filter } = pkg;
 
 type ShoppingRuleSet = Rules & ShoppingMetadataRules;
-type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * A set of rules we want to declare under the `metascraper-shopping` namespace.

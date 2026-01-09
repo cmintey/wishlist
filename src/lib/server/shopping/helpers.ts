@@ -3,7 +3,7 @@ import pkg from "@metascraper/helpers";
 
 const { memoizeOne, toRule, title } = pkg;
 
-type HtmlDomType = RulesTestOptions["htmlDom"];
+export type HtmlDomType = RulesTestOptions["htmlDom"];
 
 /**
  * Type guard to check if a value is a record (object with string keys).
