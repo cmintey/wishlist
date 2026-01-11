@@ -35,7 +35,7 @@
         "eslint": "^9.31.0",
         "eslint-plugin-svelte": "^3.11.0",
         "fuzzysort": "^3.1.0",
-        "globals": "^16.3.0",
+        "globals": "^17.0.0",
         "pino-pretty": "^13.1.1",
         "postcss": "^8.5.6",
         "postcss-load-config": "^6.0.1",
