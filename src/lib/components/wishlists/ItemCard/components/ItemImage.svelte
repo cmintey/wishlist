@@ -34,7 +34,12 @@
 
 <div class={[props.class, "relative"]}>
     {#if item.mostWanted}
-        <div class={["glow variant-filled-primary chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3", badgeClass]}>
+        <div
+            class={[
+                "glow variant-filled-primary chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
+                badgeClass
+            ]}
+        >
             <iconify-icon icon="ion:star"></iconify-icon>
             <span class={[shrinkBadge ? "hidden md:block" : "block", "print:inline"]}>{$t("wishes.most-wanted")}</span>
         </div>

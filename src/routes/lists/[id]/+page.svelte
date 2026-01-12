@@ -426,7 +426,7 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full print:hidden md:bottom-10 md:right-10 md:h-20 md:w-20"
+        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20 print:hidden"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
