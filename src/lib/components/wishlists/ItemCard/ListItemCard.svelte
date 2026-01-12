@@ -32,7 +32,7 @@
 
 <ItemNameHeader {id} {item} />
 
-<div class="flex flex-row gap-x-4 p-4">
+<div class="flex flex-row gap-x-4 p-4 print:pt-1">
     <ItemImage class="aspect-square h-24 w-24 rounded object-contain md:h-40 md:w-40" {item} shrinkBadge>
         {#snippet defaultImage(t: MessageFormatter)}
             {@render _defaultImage(t, "aspect-square size-24 rounded md:size-40")}
