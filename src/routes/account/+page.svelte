@@ -10,12 +10,11 @@
     import { getFormatter } from "$lib/i18n";
     import { errorToast } from "$lib/components/toasts";
 
-    const { data }: PageProps = $props();
+    let { data }: PageProps = $props();
     const t = getFormatter();
     const toastStore = getToastStore();
 
     let submitButton: HTMLElement | undefined = $state();
-
     let tabSet = $state(0);
     let profileEditDisabled = $state(
         data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.user.oauthId !== null
@@ -38,11 +37,13 @@
                         enctype="multipart/form-data"
                         method="POST"
                         use:enhance={() => {
-                            return async ({ result }) => {
+                            return async ({ result, update }) => {
                                 if (result.type === "error") {
                                     errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
                                     return;
                                 }
+
+                                update({ invalidateAll: true });
                             };
                         }}
                     >
