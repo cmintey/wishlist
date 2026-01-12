@@ -45,11 +45,15 @@ async function getClientConfig(fetch: RequestEvent["fetch"], config?: Config) {
     }
 
     if (oidcConfig === null || rediscover) {
-        oidcConfig = await client.discovery(new URL(discoveryUrl), clientId, clientSecret, undefined, {
-            /** @ts-expect-error Fetch API compatability*/
-            [client.customFetch]: fetch
-        });
-        return oidcConfig;
+        try {
+            oidcConfig = await client.discovery(new URL(discoveryUrl), clientId, clientSecret, undefined, {
+                /** @ts-expect-error Fetch API compatability*/
+                [client.customFetch]: fetch
+            });
+            return oidcConfig;
+        } catch (e) {
+            logger.warn(e, "Error during OIDC discovery");
+        }
     }
     return oidcConfig;
 }
