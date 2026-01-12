@@ -19,13 +19,6 @@
     let profileEditDisabled = $state(
         data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.user.oauthId !== null
     );
-
-    function updatePicture(url: string) {
-        data = {
-            ...data,
-            user: { ...data.user, picture: url }
-        };
-    }
 </script>
 
 <TabGroup>
@@ -44,13 +37,13 @@
                         enctype="multipart/form-data"
                         method="POST"
                         use:enhance={() => {
-                            return async ({ result }) => {
+                            return async ({ result, update }) => {
                                 if (result.type === "error") {
                                     errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
                                     return;
                                 }
 
-                                updatePicture(result.data);
+                                update({ invalidateAll: true });
                             };
                         }}
                     >
