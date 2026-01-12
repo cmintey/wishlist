@@ -49,7 +49,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.session = session;
     event.locals.locale = lang.code;
 
-    if (event.route.id && !(event.route.id in nonPrivateRoutes)) {
+    if (isPrivateRoute(event.route.id)) {
         event.setHeaders({
             "Cache-Control": "private"
         });
@@ -61,10 +61,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     });
 };
-
-function transformForLang(html: string, lang: Lang) {
-    return html.replace("%lang%", lang.code).replace("%dir%", lang.rtl ? "rtl" : "ltr");
-}
 
 export const handleError: HandleServerError = async ({ error: err, event, status, message }) => {
     logger.error(
@@ -85,5 +81,14 @@ const nonPrivateRoutes: RouteId[] = [
     "/setup-wizard/step",
     "/setup-wizard/step/[step]",
     "/reset-password",
-    "/group-error"
+    "/group-error",
+    "/api/assets/[id]"
 ];
+
+function transformForLang(html: string, lang: Lang) {
+    return html.replace("%lang%", lang.code).replace("%dir%", lang.rtl ? "rtl" : "ltr");
+}
+
+function isPrivateRoute(routeId: RouteId | null) {
+    return routeId && !nonPrivateRoutes.includes(routeId);
+}
