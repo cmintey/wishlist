@@ -273,7 +273,7 @@
             <Markdown source={data.list.description} />
         {/if}
         <button
-            class="text-sm text-primary-700 dark:text-primary-500"
+            class="text-sm text-primary-700 dark:text-primary-500 print:hidden"
             onclick={() => (hideDescription = !hideDescription)}
         >
             {hideDescription ? $t("wishes.show-description") : $t("wishes.hide-description")}
@@ -282,7 +282,7 @@
 {/if}
 
 <!-- chips -->
-<div class="flex flex-wrap items-end justify-between gap-2 pb-4">
+<div class="flex flex-wrap items-end justify-between gap-2 pb-4 print:hidden">
     <div class="flex flex-row flex-wrap items-end gap-2">
         {#if !data.list.owner.isMe}
             <ClaimFilterChip />
@@ -301,7 +301,7 @@
 </div>
 
 {#if data.list.owner.isMe || data.list.isManager}
-    <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
+    <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
         <ListStatistics {items} />
         {#if data.listMode === "registry" || data.list.public}
             <div class="flex flex-row gap-x-2">
@@ -320,7 +320,7 @@
 {/if}
 
 {#if (data.list.owner.isMe || data.list.isManager) && approvals.length > 0}
-    <div class="flex flex-col space-y-4 pb-4">
+    <div class="flex flex-col space-y-4 pb-4 print:hidden">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
         <div
             class={isTileView
@@ -418,7 +418,7 @@
     </div>
 
     <!-- spacer -->
-    <footer>
+    <footer class="print:hidden">
         <div class="h-16"></div>
     </footer>
 {/if}
@@ -426,7 +426,7 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20"
+        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20 print:hidden"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"

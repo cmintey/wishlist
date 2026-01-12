@@ -111,7 +111,7 @@
 {#if item.note}
     <div class="grid flex-none grid-cols-[auto_1fr] items-center gap-2">
         <iconify-icon icon="ion:reader"></iconify-icon>
-        <div class={["whitespace-pre-wrap", fullNotes ? "" : "line-clamp-2"]} data-testid="notes">
+        <div class={["whitespace-pre-wrap print:line-clamp-none", fullNotes ? "" : "line-clamp-2"]} data-testid="notes">
             <Markdown source={item.note} />
         </div>
     </div>

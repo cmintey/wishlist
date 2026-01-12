@@ -4,11 +4,11 @@
     const { id, item }: Pick<InternalItemCardProps, "id" | "item"> = $props();
 </script>
 
-<header class="card-header line-clamp-1 flex w-full px-4 pt-4 text-lg font-bold md:text-xl">
+<header class="card-header line-clamp-1 flex w-full px-4 pt-4 text-lg font-bold md:text-xl print:line-clamp-none">
     {#if item.url}
         <a
             id={`${id}-name`}
-            class="line-clamp-1 dark:!text-primary-200"
+            class="dark:!text-primary-200 print:!no-underline"
             data-testid="name"
             href={item.url}
             onclick={(e) => e.stopPropagation()}
@@ -17,8 +17,9 @@
         >
             {item.name}
         </a>
+        <span class="hidden text-xs font-normal print:block">{item.url}</span>
     {:else}
-        <span id={`${id}-name`} class="line-clamp-1" data-testid="name">
+        <span id={`${id}-name`} data-testid="name">
             {item.name}
         </span>
     {/if}

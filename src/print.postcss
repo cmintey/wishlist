@@ -1,0 +1,33 @@
+/* Minimal print styles - generic rules only */
+@media print {
+    /* Force black text for readability */
+    * {
+        color: black !important;
+        -webkit-text-fill-color: black !important;
+    }
+
+    /* White background */
+    html,
+    body {
+        background: white !important;
+    }
+
+    /* Tighten card spacing */
+    .card {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-bottom: 1px solid #ccc !important;
+    }
+
+    /* Reduce header padding */
+    .card-header {
+        padding: 0 1rem !important;
+    }
+
+    /* Page margins */
+    @page {
+        margin: 1cm;
+    }
+}
