@@ -15,8 +15,10 @@
         isAdmin: boolean;
     };
 
+    type UserWithGroups = User & { groups?: string[] };
+
     interface Props {
-        users: (User & { groups?: string[] })[];
+        users: UserWithGroups[];
         currentUser: User;
         config: Config;
         groups: Group[];
@@ -25,12 +27,12 @@
     const { users, currentUser, config, groups }: Props = $props();
     const t = getFormatter();
 
-    let usersFiltered: (User & { groups?: string[] })[] = $state(users);
+    let usersFiltered: UserWithGroups[] = $derived(users);
 
     let userData: TableSource = $derived({
         head: [$t("auth.name"), $t("auth.username"), $t("auth.email"), $t("admin.admin"), $t("admin.groups")],
         body: tableMapperValues(formatString(usersFiltered), ["name", "username", "email", "isAdmin", "groups"]),
-        meta: tableSourceMapper(formatString(usersFiltered), ["name", "username", "email", "isAdmin", "id"])
+        meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin", "id"])
     });
 
     const selectionHandler = (meta: CustomEvent<string[]>) => {
@@ -38,14 +40,12 @@
         goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
     };
 
-    function formatString(userFiltered) {
+    function formatString(userFiltered: UserWithGroups[]) {
         return userFiltered.map((u) => {
-            const clone = {
+            return {
                 ...u,
                 isAdmin: u.isAdmin ? '<iconify-icon  class = "text-lg" icon = "ion:checkmark"></iconify-icon>' : ""
             };
-
-            return clone;
         });
     }
 </script>
