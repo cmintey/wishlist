@@ -232,7 +232,7 @@
         "cannot-unclaim-an-item-you-did-not-claim": "Невозможно отозвать пункт, который вы не бронировали",
         "claimed-by-user-must-be-specified": "Должно быть указано, что заявлено пользователем",
         "in-registry-mode-you-can-only-have-one-list": "В режиме реестра у вас может быть только один список",
-        "unable-to-unclaim-item": "Невозможно отменить бронь",
+        "unable-to-unclaim-item": "Невозможно отменить бронирование",
         "public-lists-not-allowed": "Публичные списки в этой группе запрещены",
         "an-item-must-be-added-to-at-least-one-list": "Элемент должен быть добавлен хотя бы в один список",
         "registration-is-disabled": "Регистрация отключена",
