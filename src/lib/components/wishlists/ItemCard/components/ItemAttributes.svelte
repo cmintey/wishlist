@@ -5,17 +5,10 @@
     import { shouldShowName, getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    interface Props
-        extends Pick<
-            ItemCardProps,
-            | "item"
-            | "onPublicList"
-            | "user"
-            | "showClaimForOwner"
-            | "showClaimedName"
-            | "showNameAcrossGroups"
-            | "showFor"
-        > {
+    interface Props extends Pick<
+        ItemCardProps,
+        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
+    > {
         showDetail?: boolean;
         fullNotes?: boolean;
     }
@@ -103,13 +96,17 @@
     <iconify-icon icon="ion:person"></iconify-icon>
     <span class="text-wrap" data-testid="added-by">
         {#if showFor}
-            {@html $t("wishes.for", { values: { name: item.user.name } })}
+            {@html $t("wishes.for", { values: { name: item.user.name, class: "text-secondary-800-200 font-bold" } })}
         {:else if !onPublicList}
-            {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
+            {@html $t("wishes.added-by", {
+                values: { name: item.addedBy.name, class: "text-secondary-800-200 font-bold" }
+            })}
         {:else}
             {@html item.addedBy.id === item.user.id
-                ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                : $t("wishes.added-by-somebody-else")}
+                ? $t("wishes.added-by", {
+                      values: { name: item.addedBy.name, class: "text-secondary-800-200 font-bold" }
+                  })
+                : $t("wishes.added-by-somebody-else", { values: { class: "text-secondary-800-200 font-bold" } })}
         {/if}
     </span>
 </div>

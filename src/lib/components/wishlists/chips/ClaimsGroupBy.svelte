@@ -13,23 +13,25 @@
     const t = getFormatter();
 </script>
 
-<div class="flex flex-col gap-0.5">
-    <span class="text-xs">{$t("wishes.group-by")}</span>
-    <SegmentedControl onValueChange={(e) => (groupBy = e.value)} value={groupBy}>
-        <SegmentedControl.Control class="h-7 p-px">
-            <SegmentedControl.Indicator class="preset-filled-primary-500" />
-            <SegmentedControl.Item value="purchased">
-                <SegmentedControl.ItemText class="text-xs">
-                    {$t("wishes.purchased")}
-                </SegmentedControl.ItemText>
-                <SegmentedControl.ItemHiddenInput />
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value="user">
-                <SegmentedControl.ItemText class="text-xs">
-                    {$t("general.user")}
-                </SegmentedControl.ItemText>
-                <SegmentedControl.ItemHiddenInput />
-            </SegmentedControl.Item>
-        </SegmentedControl.Control>
-    </SegmentedControl>
-</div>
+<SegmentedControl class="gap-1" onValueChange={(e) => (groupBy = e.value)} value={groupBy}>
+    <SegmentedControl.Label>
+        {#snippet element(props)}
+            <span {...props} class="text-xs">{$t("wishes.group-by")}</span>
+        {/snippet}
+    </SegmentedControl.Label>
+    <SegmentedControl.Control class="rounded-container h-6.5 gap-1 p-px">
+        <SegmentedControl.Indicator class="preset-filled-primary-500 rounded-container" />
+        <SegmentedControl.Item value="purchased">
+            <SegmentedControl.ItemText class="text-xs">
+                {$t("wishes.purchased")}
+            </SegmentedControl.ItemText>
+            <SegmentedControl.ItemHiddenInput />
+        </SegmentedControl.Item>
+        <SegmentedControl.Item value="user">
+            <SegmentedControl.ItemText class="text-xs">
+                {$t("general.user")}
+            </SegmentedControl.ItemText>
+            <SegmentedControl.ItemHiddenInput />
+        </SegmentedControl.Item>
+    </SegmentedControl.Control>
+</SegmentedControl>

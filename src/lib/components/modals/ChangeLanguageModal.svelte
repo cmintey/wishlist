@@ -9,10 +9,9 @@
         currentLanguage?: string | null;
     }
 
-    const { trigger, currentLanguage = "" }: Props = $props();
+    const { trigger, currentLanguage }: Props = $props();
     const t = getFormatter();
     const formId = $props.id();
-    const selectedLanguage = $state(currentLanguage);
 
     let open = $state(false);
     let error = $state(false);
@@ -39,8 +38,10 @@
         id={formId}
         action="/?/language"
         method="POST"
-        use:enhance={() => {
+        use:enhance={(e) => {
+            console.log(e);
             return async ({ result, update }) => {
+                console.log(result);
                 if (result.type === "success") {
                     open = false;
                     window.location.reload();
@@ -54,9 +55,9 @@
             };
         }}
     >
-        <label for="language">
+        <label class="label" for="language">
             <span>{$t("general.language")}</span>
-            <select id="language" name="language" class="select" required value={selectedLanguage}>
+            <select id="language" name="language" class="select" value={currentLanguage || ""}>
                 <option value="">{$t("general.use-system-language")}</option>
                 {#each supportedLangs as lang}
                     {#if !lang.hidden}
@@ -68,9 +69,12 @@
                 <p class="text-error-500">{$t("errors.language-is-required")}</p>
             {/if}
         </label>
-        <p class="subtext">
+        <p class="subtext pt-2">
             {@html $t("general.dont-see-language", {
-                values: { href: "https://github.com/cmintey/wishlist/tree/main?tab=readme-ov-file#translations" }
+                values: {
+                    href: "https://github.com/cmintey/wishlist/tree/main?tab=readme-ov-file#translations",
+                    class: "anchor"
+                }
             })}
         </p>
     </form>

@@ -122,8 +122,9 @@
             <button
                 {...props}
                 class={[
-                    "preset-outlined-primary-500 chip h-fit w-fit",
-                    selectedOptions[0].value !== defaultOption.value && "preset-tonal-primary border-primary-500 border"
+                    "inset-ring-primary-500 chip h-fit w-fit inset-ring",
+                    selectedOptions[0].value !== defaultOption.value &&
+                        "preset-tonal-primary inset-ring-primary-500 inset-ring"
                 ]}
             >
                 {#if selectedOptions[0].direction === "asc"}

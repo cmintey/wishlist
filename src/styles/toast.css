@@ -1,0 +1,5 @@
+[data-scope="toast"][data-part="root"] {
+    &[data-type="info"] {
+        @apply preset-tonal-primary preset-outlined-primary-500;
+    }
+}
