@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- node v22.x
+- node v24.x
 - [pnpn](https://pnpm.io/installation) v10.x
 
 ## Install dependencies
