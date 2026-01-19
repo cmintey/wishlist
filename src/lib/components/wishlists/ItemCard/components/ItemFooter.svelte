@@ -9,7 +9,7 @@
 
 <footer
     class={[
-        "flex flex-wrap items-center gap-2 px-4",
+        "flex flex-wrap items-center gap-2 px-4 print:hidden",
         props.reorderActions ? "justify-center pb-0" : "justify-between pb-4"
     ]}
 >

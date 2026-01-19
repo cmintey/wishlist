@@ -90,6 +90,7 @@ type Config = {
     smtp: SMTPConfig;
     claims: {
         showName: boolean;
+        showNameAcrossGroups: boolean;
         showForOwner: boolean;
         requireEmail: boolean;
     };

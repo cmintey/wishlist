@@ -267,7 +267,7 @@
             <Markdown source={data.list.description} />
         {/if}
         <button
-            class="text-primary-700 dark:text-primary-500 text-sm"
+            class="text-primary-700 dark:text-primary-500 text-sm print:hidden"
             onclick={() => (hideDescription = !hideDescription)}
         >
             {hideDescription ? $t("wishes.show-description") : $t("wishes.hide-description")}
@@ -276,7 +276,7 @@
 {/if}
 
 <!-- chips -->
-<div class="flex flex-wrap items-end justify-between gap-2 pb-4">
+<div class="flex flex-wrap items-end justify-between gap-2 pb-4 print:hidden">
     <div class="flex flex-row flex-wrap items-end gap-2">
         {#if !data.list.owner.isMe}
             <ClaimFilterChip />
@@ -295,7 +295,7 @@
 </div>
 
 {#if data.list.owner.isMe || data.list.isManager}
-    <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
+    <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
         <ListStatistics {items} />
         {#if data.listMode === "registry" || data.list.public}
             <div class="flex flex-row gap-x-2">
@@ -314,7 +314,7 @@
 {/if}
 
 {#if (data.list.owner.isMe || data.list.isManager) && approvals.length > 0}
-    <div class="flex flex-col space-y-4 pb-4">
+    <div class="flex flex-col space-y-4 pb-4 print:hidden">
         <h2 class="h2">{$t("wishes.approvals")}</h2>
         <div
             class={isTileView
@@ -332,6 +332,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -380,6 +381,7 @@
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -401,6 +403,7 @@
                             requireClaimEmail={data.requireClaimEmail}
                             showClaimForOwner={data.showClaimForOwner}
                             showClaimedName={data.showClaimedName}
+                            showNameAcrossGroups={data.showNameAcrossGroups}
                             user={data.loggedInUser}
                             userCanManage={data.list.isManager}
                         />
@@ -411,7 +414,7 @@
     </div>
 
     <!-- spacer -->
-    <footer>
+    <footer class="print:hidden">
         <div class="h-16"></div>
     </footer>
 {/if}
@@ -419,7 +422,7 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="preset-tonal btn btn-icon btn-icon-sm md:btn-icon-base inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 p-0! inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20"
+        class="preset-tonal btn btn-icon btn-icon-sm md:btn-icon-base inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 p-0! inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20 print:hidden"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"

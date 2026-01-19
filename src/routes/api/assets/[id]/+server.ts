@@ -1,10 +1,8 @@
 import { getFormatter } from "$lib/server/i18n";
-import { requireLoginOrError } from "$lib/server/auth";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { readFileSync } from "fs";
 
 export const GET: RequestHandler = async ({ params }) => {
-    await requireLoginOrError();
     const $t = await getFormatter();
 
     if (!params.id) {
@@ -13,7 +11,11 @@ export const GET: RequestHandler = async ({ params }) => {
 
     try {
         const asset = readFileSync(`uploads/${params.id}`);
-        return new Response(asset);
+        return new Response(asset, {
+            headers: {
+                "Cache-Control": "public, max-age=31536000"
+            }
+        });
     } catch {
         error(404, $t("errors.asset-not-found"));
     }

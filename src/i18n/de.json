@@ -92,7 +92,7 @@
         "list-creation": "Listeneinstellungen",
         "allow-public-lists-tooltip": "Erlaube den Benutzern die Liste öffentlich verfügbar zu machen. Dies hat keinen Einfluss, wenn die Gruppe im \"Register-Modus\" ist.",
         "allow-public-lists": "Erlaube öffentliche Listen",
-        "claims-name-tooltip": "Zeige den Namen der Person, die den Artikel reserviert, hat auf der Detailseite an.",
+        "claims-name-tooltip": "Zeige den Namen der Person, die den Artikel reserviert hat, auf der Detailseite an.",
         "credentials": "Zugangsdaten",
         "default-group-tooltip": "Neue Benutzer werden automatisch zu dieser Gruppe hinzugefügt wenn sie keinen spezifischen Anmeldetoken erhalten haben.",
         "enable-signup": "Aktiviere Registrierung",
@@ -103,7 +103,7 @@
         "oidc-url": "Issuer URL",
         "password-strength-requirement-tooltip": "Die minimale Passwortstärke für ein Benutzerpasswort.",
         "settings-saved-toast": "Einstellungen erfolgreich gespeichert",
-        "suggestions-approval-required-tooltip": "Der Artikel benötigt eine Überprüfung durch den Besitzer der Liste. Wenn akzeptiert, kann der Beistzer den Artikel sehen, bearbeiten und löschen.",
+        "suggestions-approval-required-tooltip": "Der Artikel benötigt eine Überprüfung durch den Besitzer der Liste. Wenn akzeptiert, kann der Besitzer den Artikel sehen, bearbeiten und löschen.",
         "suggestions-auto-approve-tooltip": "Der Artikel wird automatisch der Liste hinzugefügt, jedoch kann der Besitzer ihn sehen, bearbeiten und löschen.",
         "suggestions-surprise-me-tooltip": "Der Artikel wir automatisch zur Liste hinzugefügt, ohne das der Besitzer es weiß.",
         "suggestions-tooltip": "Erlaube es Benutzern der selben Gruppe sich gegenseitig Vorschläge für Ihre Listen zu machen.",
@@ -121,13 +121,15 @@
         "claims-require-email": "Email benötigt",
         "claims-require-email-tooltip": "Es wird eine Email Adresse benötigt um dem Artikel anonym zu beanspruchen.",
         "disable-email-verification": "Email-Verifizierung deaktivieren",
-        "disable-email-verification-description": "Deaktiviere die Bedigung, dass die Email eines Nutzers mit dem IdP verifiziert werden muss, um einen Account zu erstellen oder zu verlinken.",
+        "disable-email-verification-description": "Deaktiviere die Bedingung, dass die Email eines Nutzers mit dem IdP verifiziert werden muss, um einen Account zu erstellen oder zu verlinken.",
         "enable-sync": "Synchronisierung aktivieren",
         "enable-sync-description": "Synchronisierung von Nutzerdaten wie Name und Email vom IdP aktivieren.",
         "oidc-auto-redirect-description": "Automatisch zur Anmeldeseite deines IdPs weiterleiten.",
         "profile-disabled": "Dein Profil wird von deinem OAuth-Provider verwaltet.",
         "show-for-list-owner": "Dem Listeninhaber anzeigen",
-        "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen."
+        "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen.",
+        "show-name-across-groups": "Zeige Name Gruppen-übergreifend",
+        "show-name-across-groups-tooltip": "Zeigt den Namen des Benutzers, der den Wunsch beansprucht hat, selbst wenn der Benutzer nicht in deiner Gruppe ist."
     },
     "wishes": {
         "filter": "Filter",
@@ -233,7 +235,15 @@
         "switch-to-list-view": "Zur Listenansicht wechseln",
         "switch-to-tile-view": "Zur Kachelansicht wechseln",
         "tile-view": "Kachelansicht",
-        "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert"
+        "claimed-by-you-on-another-list": "Von dir auf einer anderen Liste reserviert",
+        "display-order": "Anzeigereihenfolge",
+        "most-wanted": "Großer Wunsch",
+        "most-wanted-description": "Markiere diesen Artikel, um anderen mitzuteilen, dass es sich um einen großen Wunsch handelt.",
+        "import-error-text": "Wishlist konnte die Produkt-URL aus den angegebenen Parametern nicht ermitteln. Die Produkt-URL kann manuell kopiert und das Produkt mit dem normalen Prozess hinzugefügt werden.",
+        "import-error-title": "Artikel konnte nicht importiert werden",
+        "import-item": "Importiere Artikel",
+        "import-item-text": "Bevor ein Artikel importiert werden kann, muss eine Gruppe und eine Liste ausgewählt werden",
+        "select-a-list": "Liste auswählen"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -306,7 +316,8 @@
         "language-is-required": "Sprache wird benötigt",
         "unable-to-update-preferred-language": "Ändern der bevorzugten Sprache nicht möglich",
         "email-is-required-for-public-claims": "Email Adresse ist notwendig für öffentliche Beanspruchung",
-        "oidc-error": "Authentifizierung mit OAuth fehlgeschlagen"
+        "oidc-error": "Authentifizierung mit OAuth fehlgeschlagen",
+        "display-order-invalid": "Die Anzeigereihenfolge muss zwischen {min} und {max} liegen"
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
@@ -415,7 +426,9 @@
         "na": "N/V",
         "use-system-language": "Benutze Systemsprache",
         "select-all": "Alles auswählen",
-        "oauth": "OAuth"
+        "oauth": "OAuth",
+        "import": "Importieren",
+        "no-lists-available": "Keine Listen verfügbar"
     },
     "app": {
         "home": "Start",

@@ -8,13 +8,21 @@
 
     type Props = Pick<
         InternalItemCardProps,
-        "item" | "user" | "showClaimedName" | "showClaimForOwner" | "onPublicList" | "groupId" | "requireClaimEmail"
+        | "item"
+        | "user"
+        | "showClaimedName"
+        | "showNameAcrossGroups"
+        | "showClaimForOwner"
+        | "onPublicList"
+        | "groupId"
+        | "requireClaimEmail"
     >;
 
     let {
         item,
         user,
         showClaimedName = false,
+        showNameAcrossGroups = false,
         showClaimForOwner = false,
         onPublicList = false,
         groupId,
@@ -83,7 +91,7 @@
     </div>
 {:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
     <div></div>
-{:else if item.claims.length === 1 && shouldShowName(item, showClaimedName, showClaimForOwner, user, item.claims[0])}
+{:else if item.claims.length === 1 && shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, user, item.claims[0])}
     <span class="text-subtle line-clamp-2 truncate text-wrap">
         {$t("wishes.claimed-by", {
             values: {
@@ -91,7 +99,7 @@
             }
         })}
     </span>
-{:else if item.claims.length > 1 && shouldShowName(item, showClaimedName, showClaimForOwner, user)}
+{:else if item.claims.length > 1 && shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, user)}
     <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed")}</span>

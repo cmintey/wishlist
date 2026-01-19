@@ -9,7 +9,7 @@
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
 
-    const { data }: PageProps = $props();
+    let { data }: PageProps = $props();
     const t = getFormatter();
 
     let submitButton: HTMLElement | undefined = $state();
@@ -33,11 +33,13 @@
                 enctype="multipart/form-data"
                 method="POST"
                 use:enhance={() => {
-                    return async ({ result }) => {
+                    return async ({ result, update }) => {
                         if (result.type === "error") {
                             toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                             return;
                         }
+
+                        update({ invalidateAll: true });
                     };
                 }}
             >

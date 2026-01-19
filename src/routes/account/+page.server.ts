@@ -104,6 +104,7 @@ export const actions: Actions = {
                 await tryDeleteImage(user.picture);
             }
         }
+        return filename;
     },
 
     passwordchange: async ({ request, cookies, locals }) => {

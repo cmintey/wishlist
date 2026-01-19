@@ -10,6 +10,7 @@
         user: PartialUser | undefined; // logged in user
         userCanManage?: boolean;
         showClaimedName: boolean;
+        showNameAcrossGroups?: boolean;
         showClaimForOwner?: boolean;
         requireClaimEmail: boolean;
         groupId: string;
@@ -28,6 +29,7 @@
         user: PartialUser | undefined;
         userCanManage: boolean;
         showClaimedName: boolean;
+        showNameAcrossGroups: boolean;
         showClaimForOwner: boolean;
         requireClaimEmail: boolean;
         groupId: string;
@@ -59,6 +61,7 @@
         user = undefined,
         userCanManage = false,
         showClaimedName = false,
+        showNameAcrossGroups = false,
         showClaimForOwner = false,
         requireClaimEmail = true,
         showFor = false,
@@ -116,6 +119,7 @@
     {showClaimForOwner}
     {showClaimedName}
     {showFor}
+    {showNameAcrossGroups}
     {user}
     {userCanManage}
     bind:open={drawerOpen}
@@ -123,7 +127,7 @@
 
 <div
     class={[
-        "card preset-filled-surface-100-900 block h-full w-full text-start",
+        "card preset-filled-surface-100-900 block h-full w-full text-start print:break-inside-avoid print:shadow-none",
         !item.approved && "preset-tonal-warning border-warning-500 border",
         !reorderActions && "card-hover"
     ]}
@@ -150,6 +154,7 @@
         {showClaimForOwner}
         {showClaimedName}
         {showFor}
+        {showNameAcrossGroups}
         {user}
         {userCanManage}
     />

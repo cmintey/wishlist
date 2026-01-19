@@ -4,6 +4,7 @@
 @import "./wishlist.css";
 @import "./styles/list.css";
 @import "./styles/loading.css";
+@import "./styles/print.css";
 
 @plugin "@tailwindcss/forms";
 

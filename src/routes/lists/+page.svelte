@@ -25,10 +25,10 @@
     };
 </script>
 
-<div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4">
+<div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
     <ListFilterChip {users} />
     <button
-        class="preset-tonal-secondary border border-secondary-500 btn btn-sm h-fit items-center"
+        class="preset-tonal-secondary border-secondary-500 btn btn-sm h-fit items-center border"
         onclick={() => goto(resolve("/lists/create"))}
     >
         <iconify-icon icon="ion:add"></iconify-icon>

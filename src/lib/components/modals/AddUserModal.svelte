@@ -80,7 +80,7 @@
 
     {#snippet actions()}
         <div class="flex justify-between">
-            <Dialog.CloseTrigger class="preset-tonal-surface border border-surface-500 btn btn-sm md:btn-md">
+            <Dialog.CloseTrigger class="preset-tonal-surface border-surface-500 btn btn-sm md:btn-md border">
                 {$t("general.cancel")}
             </Dialog.CloseTrigger>
 

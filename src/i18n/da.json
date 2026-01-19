@@ -127,7 +127,8 @@
         "oidc-auto-redirect-description": "Omdiriger automatisk til din IdP’s login-side.",
         "profile-disabled": "Din profil administreres af din OAuth udbyder.",
         "show-for-list-owner": "Vis for listens ejer",
-        "show-for-list-owner-description": "Tillad listeejere at se reservationer på deres egne lister."
+        "show-for-list-owner-description": "Tillad listeejere at se reservationer på deres egne lister.",
+        "show-name-across-groups": "Vis altid navn"
     },
     "app": {
         "home": "Hjem",
@@ -432,7 +433,8 @@
         "sort-by": "Sortér efter",
         "switch-to-list-view": "Skift til listevisning",
         "switch-to-tile-view": "Skift til flisevisning",
-        "tile-view": "Flisevisning"
+        "tile-view": "Flisevisning",
+        "most-wanted-description": "Markér dette ønske for at vise at det er højt prioriteret."
     },
     "setup": {
         "global-settings-subtext": "Disse indstillinger vil blive anvendt til alle grupper, der er oprettet. Nogle indstillinger kan overskrives af individuelle grupper.",
