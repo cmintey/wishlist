@@ -127,7 +127,9 @@
         "oidc-auto-redirect-description": "Automatisch doorgestuurd naar de aanmeldpagina van uw IdP.",
         "profile-disabled": "Uw profiel wordt beheerd door uw OAuth-provider.",
         "show-for-list-owner": "Weergeven voor lijsteigenaar",
-        "show-for-list-owner-description": "Geef lijsteigenaren de mogelijkheid om claims op hun eigen lijsten te bekijken."
+        "show-for-list-owner-description": "Geef lijsteigenaren de mogelijkheid om claims op hun eigen lijsten te bekijken.",
+        "show-name-across-groups": "Toon naam tussen groepen",
+        "show-name-across-groups-tooltip": "Toont de naam van de gebruiker die de clain gemaakt heeft, zelfs als de gebruiker niet in jouw groep zit."
     },
     "app": {
         "home": "Start",
@@ -327,7 +329,9 @@
         "weak": "Zwak",
         "wishlists-cleared": "Wenlijsten zijn opgeruimd.",
         "select-all": "Selecteer alles",
-        "oauth": "OAuth"
+        "oauth": "OAuth",
+        "import": "Importeren",
+        "no-lists-available": "Geen lijsten beschikbaar"
     },
     "setup": {
         "back": "Terug",
@@ -453,6 +457,11 @@
         "sort-by": "Sorteren op",
         "switch-to-list-view": "Schakel over naar lijstweergave",
         "switch-to-tile-view": "Schakel over naar tegelweergave",
-        "tile-view": "Tegelweergave"
+        "tile-view": "Tegelweergave",
+        "import-error-text": "WIshlist was niet in staat om de product-url te bepalen met de gegeven parameters. Je kan de url nog steeds handmatig kopiëren en toevoegen via het normale proces.",
+        "import-error-title": "Kan item niet importeren",
+        "import-item": "Importeer item",
+        "import-item-text": "Voordat je een item kunt importeren, moet je een groep en een lijst kiezen",
+        "select-a-list": "Selecteer een lijst"
     }
 }

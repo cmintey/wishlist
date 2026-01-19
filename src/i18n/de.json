@@ -127,7 +127,9 @@
         "oidc-auto-redirect-description": "Automatisch zur Anmeldeseite deines IdPs weiterleiten.",
         "profile-disabled": "Dein Profil wird von deinem OAuth-Provider verwaltet.",
         "show-for-list-owner": "Dem Listeninhaber anzeigen",
-        "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen."
+        "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen.",
+        "show-name-across-groups": "Zeige Name Gruppen-übergreifend",
+        "show-name-across-groups-tooltip": "Zeigt den Namen des Benutzers, der den Wunsch beansprucht hat, selbst wenn der Benutzer nicht in deiner Gruppe ist."
     },
     "wishes": {
         "filter": "Filter",
