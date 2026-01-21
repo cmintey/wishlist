@@ -1,8 +1,7 @@
 services:
     app:
         container_name: wishlist-app
-        image: wishlist-local
-        build: .
+        image: ghcr.io/cmintey/wishlist
         ports:
             - 3280:3280
         volumes:
