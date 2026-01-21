@@ -422,7 +422,7 @@
         "claimed-by-multiple-users": "Забронировано несколькими пользователями",
         "enter-the-quantity-to-claim": "Введите количество для бронирования.",
         "quantity": "Количество",
-        "quantity-claimed": "{quantity} заявлено",
+        "quantity-claimed": "{quantity} забронировано",
         "quantity-desired": "Количество: {quantity}",
         "update-claim": "Обновление бронирований",
         "updated-claim": "Обновлённые бронирования",
