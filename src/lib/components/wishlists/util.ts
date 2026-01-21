@@ -19,12 +19,18 @@ export const shouldShowName = (
     showNameConfig: boolean,
     showNameAcrossGroups: boolean,
     showForOwner: boolean,
+    showPublicClaimName: boolean,
     user: PartialUser | undefined,
     claim?: ClaimDTO
 ) => {
     // Completely disabled
     if (!showNameConfig) {
         return false;
+    }
+    // Public claims can optionally surface the provided name for all viewers
+    if (claim?.publicClaimedBy) {
+        if (!showPublicClaimName) return false;
+        return true;
     }
     // No logged in user
     if (!user) {

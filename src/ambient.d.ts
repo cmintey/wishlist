@@ -92,6 +92,7 @@ type Config = {
         showName: boolean;
         showNameAcrossGroups: boolean;
         showForOwner: boolean;
+        showNamePublic: boolean;
         requireEmail: boolean;
     };
     listMode: ListMode;

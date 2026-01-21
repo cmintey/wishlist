@@ -11,6 +11,7 @@
         showClaimedName = false,
         showClaimForOwner = false,
         showNameAcrossGroups = false,
+        showPublicClaimName = false,
         onPublicList = false,
         reorderActions = false,
         onIncreasePriority,
@@ -43,6 +44,7 @@
             {showClaimForOwner}
             {showClaimedName}
             {showNameAcrossGroups}
+            {showPublicClaimName}
             {user}
         />
 

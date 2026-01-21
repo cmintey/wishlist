@@ -102,6 +102,8 @@
         "show-for-list-owner": "Show for list owner",
         "show-for-list-owner-description": "Allow list owners to view claims on their own lists.",
         "show-name": "Show name",
+        "show-name-publicly": "Show name publicly",
+        "show-name-publicly-tooltip": "When enabled, the name provided on a public claim is shown to everyone viewing the public list.",
         "smtp": "SMTP",
         "smtp-from-email": "From Email",
         "smtp-from-name": "From Name",

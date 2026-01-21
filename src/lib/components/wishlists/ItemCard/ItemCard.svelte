@@ -10,6 +10,7 @@
         showClaimedName?: boolean;
         showNameAcrossGroups?: boolean;
         showClaimForOwner?: boolean;
+        showPublicClaimName?: boolean;
         requireClaimEmail?: boolean;
         groupId?: string;
         showFor?: boolean;
@@ -30,6 +31,7 @@
         showClaimedName?: boolean;
         showNameAcrossGroups?: boolean;
         showClaimForOwner?: boolean;
+        showPublicClaimName?: boolean;
         showFor?: boolean;
         onPublicList?: boolean;
         reorderActions?: boolean;
@@ -79,6 +81,7 @@
         showClaimedName = false,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
+        showPublicClaimName = false,
         requireClaimEmail = true,
         showFor = false,
         onPublicList = false,
@@ -271,6 +274,7 @@
             showClaimedName,
             showNameAcrossGroups,
             showClaimForOwner,
+            showPublicClaimName,
             requireClaimEmail,
             onPublicList,
             handleClaim,
@@ -333,6 +337,7 @@
         {reorderActions}
         {showClaimForOwner}
         {showClaimedName}
+        {showPublicClaimName}
         {showFor}
         {showNameAcrossGroups}
         {user}
