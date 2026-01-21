@@ -37,7 +37,19 @@ Create a wish from a URL, or manually fill in the details
 
 ## Getting Started
 
-Getting started is simple with Docker Compose.
+### 1) Copy .env.example to .env
+```SHELL
+cp .env.example .env
+```
+
+### 2) Start docker compose
+```SHELL
+docker compose --file docker-compose.yaml up -d
+```
+
+### 3) Open http://127.0.0.1:3280 in your browser
+
+## Setup for production
 
 > [!NOTE]
 > A [Helm chart is available](https://github.com/mddeff/wishlist-charts) via a community contributor
