@@ -37,6 +37,7 @@ Create a wish from a URL, or manually fill in the details
 
 ## Getting Started
 
+Getting started is simple with Docker Compose.
 
 > [!NOTE]
 > A [Helm chart is available](https://github.com/mddeff/wishlist-charts) via a community contributor
