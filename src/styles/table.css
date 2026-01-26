@@ -1,0 +1,23 @@
+@layer utilities {
+    .table {
+        & thead {
+            @apply preset-filled-surface-200-800;
+
+            & th {
+                @apply font-bold;
+            }
+        }
+
+        & tbody {
+            @apply preset-filled-surface-100-900;
+        }
+    }
+
+    .table-hover {
+        & tbody > tr {
+            @variant hover {
+                @apply preset-tonal-primary cursor-pointer;
+            }
+        }
+    }
+}

@@ -20,7 +20,7 @@
                         <FileUpload.ItemDeleteTrigger />
                     </FileUpload.Item>
                 {:else}
-                    <span class="text-base">
+                    <span class="pl-2 text-base">
                         {$t("general.no-file-selected")}
                     </span>
                 {/if}

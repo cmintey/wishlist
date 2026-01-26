@@ -166,8 +166,10 @@
             </div>
 
             <div
-                class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-y-scroll border p-2"
-                class:input-error={page.form?.errors?.managers}
+                class={[
+                    "border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-y-scroll border p-2",
+                    page.form?.errors?.managers && "input-invalid!"
+                ]}
                 data-testid="list-managers-list"
             >
                 {#if managers.length === 0}
@@ -190,7 +192,7 @@
                 {/each}
             </div>
             {#if page.form?.errors?.managers}
-                <p class="unstyled text-error-600-400 text-xs">{page.form.errors.managers[0]}</p>
+                <p class="text-invalid">{page.form.errors.managers[0]}</p>
             {/if}
         </fieldset>
 

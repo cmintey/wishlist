@@ -38,12 +38,12 @@
 <div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
     <Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
     <form method="POST" use:enhance>
-        <!-- <InviteUser {config} {groups} /> -->
+        <InviteUser {config} {groups} />
     </form>
 </div>
 
-<div class="table-wrap">
-    <table class="table">
+<div class="table-wrap preset-outlined-surface-200-800 rounded-container">
+    <table class="table-hover table">
         <thead>
             <tr>
                 {#each headers as header}
@@ -51,13 +51,13 @@
                 {/each}
             </tr>
         </thead>
-        <tbody class="[&>tr]:hover:preset-tonal-primary">
+        <tbody>
             {#each usersFiltered as user}
                 <tr onclick={() => selectionHandler(user)}>
                     <td>{user.name}</td>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
-                    <td>
+                    <td class="text-center">
                         {#if user.isAdmin}
                             <iconify-icon class="text-lg" icon="ion:checkmark"></iconify-icon>
                         {/if}

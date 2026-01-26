@@ -32,23 +32,13 @@
 </script>
 
 <BaseModal {title} {...rest}>
-    {#snippet actions()}
-        <div class="flex justify-between">
-            <Dialog.CloseTrigger
-                class="preset-tonal btn btn-sm md:btn-base inset-ring"
-                onclick={onCancel}
-                {...cancelButtonProps}
-            >
-                {cancelText}
-            </Dialog.CloseTrigger>
+    {#snippet actions({ neutralStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} onclick={onCancel} {...cancelButtonProps}>
+            {cancelText}
+        </Dialog.CloseTrigger>
 
-            <Dialog.CloseTrigger
-                class="preset-filled btn btn-sm md:btn-base"
-                onclick={onConfirm}
-                {...confirmButtonProps}
-            >
-                {confirmText}
-            </Dialog.CloseTrigger>
-        </div>
+        <Dialog.CloseTrigger class={positiveStyle} onclick={onConfirm} {...confirmButtonProps}>
+            {confirmText}
+        </Dialog.CloseTrigger>
     {/snippet}
 </BaseModal>

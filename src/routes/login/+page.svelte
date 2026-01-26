@@ -70,15 +70,14 @@
                         <input
                             id="username"
                             name="username"
-                            class="input"
-                            class:input-error={form?.incorrect || form?.error}
+                            class={["input", (form?.incorrect || form?.error) && "input-invalid"]}
                             autocapitalize="off"
                             autocomplete="username"
                             required
                             type="text"
                         />
                         {#if form?.errors?.username}
-                            <span class="unstyled text-xs text-red-500">
+                            <span class="text-invalid">
                                 {form.errors.username[0]}
                             </span>
                         {/if}
@@ -94,12 +93,12 @@
                         />
 
                         {#if form?.incorrect}
-                            <span class="unstyled text-xs text-red-500">
+                            <span class="text-invalid">
                                 {$t("errors.invalid-credentials")}
                             </span>
                         {/if}
                         {#if form?.errors?.password}
-                            <span class="unstyled text-xs text-red-500">
+                            <span class="text-invalid">
                                 {form.errors.password[0]}
                             </span>
                         {/if}

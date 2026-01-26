@@ -44,7 +44,7 @@
                     </select>
 
                     {#if form?.group}
-                        <span class="text-xs text-red-500">{form.group}</span>
+                        <span class="text-invalid">{form.group}</span>
                     {/if}
                 </label>
 
@@ -68,7 +68,7 @@
                     </select>
 
                     {#if form?.list}
-                        <span class="text-xs text-red-500">{form.list}</span>
+                        <span class="text-invalid">{form.list}</span>
                     {/if}
                 </label>
 

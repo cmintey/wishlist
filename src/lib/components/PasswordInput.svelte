@@ -49,74 +49,76 @@
     };
 </script>
 
-<label class="label" for={id}>
-    <span>{label}</span>
-    <div class="input-group grid-cols-[1fr_auto]">
-        <input
-            {id}
-            {name}
-            class="ig-input"
-            class:input-error={error}
-            {autocomplete}
-            oninput={(e) => (value = e.currentTarget.value)}
-            {required}
-            type={visible ? "text" : "password"}
-            {value}
-            {...restProps}
-        />
-        <button
-            id="showpassword"
-            class="ig-cell border-l-0!"
-            aria-label={$t("a11y.toggle-password-visibility")}
-            onclick={handleClick}
-            onkeypress={(e) => e.preventDefault()}
-            tabindex="-1"
-            type="button"
-        >
-            <iconify-icon class="-mb-0.5" icon="ion:{visible ? 'eye-off' : 'eye'}"></iconify-icon>
-        </button>
-    </div>
-</label>
+<div class="flex w-full flex-col gap-y-1">
+    <label class="label" for={id}>
+        <span>{label}</span>
+        <div class="input-group grid-cols-[1fr_auto]">
+            <input
+                {id}
+                {name}
+                class={["ig-input", error && "input-invalid"]}
+                {autocomplete}
+                oninput={(e) => (value = e.currentTarget.value)}
+                {required}
+                type={visible ? "text" : "password"}
+                {value}
+                {...restProps}
+            />
+            <button
+                id="showpassword"
+                class="ig-cell border-l-0!"
+                aria-label={$t("a11y.toggle-password-visibility")}
+                onclick={handleClick}
+                onkeypress={(e) => e.preventDefault()}
+                tabindex="-1"
+                type="button"
+            >
+                <iconify-icon class="-mb-0.5" icon="ion:{visible ? 'eye-off' : 'eye'}"></iconify-icon>
+            </button>
+        </div>
+    </label>
 
-{#if strengthMeter && value !== "" && strength}
-    <div class="flex flex-row items-center gap-x-1 pt-1">
-        <Progress max={5} value={strength.score + 1}>
-            <Progress.Label class="sr-only">{$t("a11y.password-strength")}</Progress.Label>
-            <Progress.Track>
-                <Progress.Range class={meterLookup[strength.score.valueOf()]} />
-            </Progress.Track>
-        </Progress>
+    {#if strengthMeter && value !== "" && strength}
+        <div class="flex flex-col">
+            <div class="flex w-full flex-row items-center gap-x-2">
+                <Progress max={5} value={strength.score + 1} class="my-1">
+                    <Progress.Label class="sr-only">{$t("a11y.password-strength")}</Progress.Label>
+                    <Progress.Track>
+                        <Progress.Range class={meterLookup[strength.score.valueOf()]} />
+                    </Progress.Track>
+                </Progress>
 
-        <Popup>
-            {#snippet trigger(props)}
-                <button
-                    {...props}
-                    class="flex items-center"
-                    class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
-                >
-                    <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
-                </button>
-            {/snippet}
-            {#snippet content(props)}
-                <div {...props} class="card preset-filled p-4">
-                    {#if strength.feedback.warning}
-                        <div class="flex flex-row items-center gap-x-4 pb-1">
-                            <iconify-icon icon="ion:alert-circle"></iconify-icon>
-                            <p>{strength.feedback.warning}</p>
+                <Popup>
+                    {#snippet trigger(props)}
+                        <button
+                            {...props}
+                            class="flex items-center"
+                            class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
+                        >
+                            <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
+                        </button>
+                    {/snippet}
+                    {#snippet content(props)}
+                        <div {...props} class="card preset-filled p-4">
+                            {#if strength.feedback.warning}
+                                <div class="flex flex-row items-center gap-x-4 pb-1">
+                                    <iconify-icon icon="ion:alert-circle"></iconify-icon>
+                                    <p>{strength.feedback.warning}</p>
+                                </div>
+                            {/if}
+                            <ul class="list">
+                                {#each strength.feedback.suggestions as suggestion}
+                                    <li>
+                                        <iconify-icon icon="ion:arrow-forward"></iconify-icon>
+                                        <p>{suggestion}</p>
+                                    </li>
+                                {/each}
+                            </ul>
                         </div>
-                    {/if}
-                    <ul class="list">
-                        {#each strength.feedback.suggestions as suggestion}
-                            <li>
-                                <iconify-icon icon="ion:arrow-forward"></iconify-icon>
-                                <p>{suggestion}</p>
-                            </li>
-                        {/each}
-                    </ul>
-                </div>
-            {/snippet}
-        </Popup>
-    </div>
-
-    <p>{$t(meterLabel[strength?.score])}</p>
-{/if}
+                    {/snippet}
+                </Popup>
+            </div>
+            <span class="text-xs">{$t(meterLabel[strength?.score])}</span>
+        </div>
+    {/if}
+</div>

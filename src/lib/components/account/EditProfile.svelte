@@ -27,7 +27,7 @@
                 value={user.name}
             />
             {#if page.form?.errors?.name}
-                <span class="text-xs text-red-500">{page.form?.errors?.name[0]}</span>
+                <span class="text-invalid">{page.form?.errors?.name[0]}</span>
             {/if}
         </label>
 
@@ -44,7 +44,7 @@
                 value={user.username}
             />
             {#if page.form?.errors?.username}
-                <span class="text-xs text-red-500">{page.form?.errors?.username[0]}</span>
+                <span class="text-invalid">{page.form?.errors?.username[0]}</span>
             {/if}
         </label>
 
@@ -61,7 +61,7 @@
                 value={user.email}
             />
             {#if page.form?.errors?.email}
-                <span class="text-xs text-red-500">{page.form?.errors?.email[0]}</span>
+                <span class="text-invalid">{page.form?.errors?.email[0]}</span>
             {/if}
         </label>
 

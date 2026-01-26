@@ -22,16 +22,14 @@
         <p>{$t("general.choose-language-description")}</p>
     {/snippet}
 
-    {#snippet actions()}
-        <div class="flex justify-between">
-            <Dialog.CloseTrigger class="preset-tonal btn btn-sm md:btn-base inset-ring" type="button">
-                {$t("general.cancel")}
-            </Dialog.CloseTrigger>
+    {#snippet actions({ neutralStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} type="button">
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
 
-            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-base" form={formId} type="submit">
-                {$t("general.save")}
-            </Dialog.CloseTrigger>
-        </div>
+        <Dialog.CloseTrigger class={positiveStyle} form={formId} type="submit">
+            {$t("general.save")}
+        </Dialog.CloseTrigger>
     {/snippet}
 
     <form
@@ -66,7 +64,7 @@
                 {/each}
             </select>
             {#if error}
-                <p class="text-error-500">{$t("errors.language-is-required")}</p>
+                <p class="text-invalid">{$t("errors.language-is-required")}</p>
             {/if}
         </label>
         <p class="subtext pt-2">

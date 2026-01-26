@@ -55,10 +55,10 @@
             />
 
             {#if newPassword !== confirmPassword}
-                <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
+                <span class="text-invalid">{$t("auth.passwords-must-match")}</span>
             {/if}
             {#if form?.errors?.newPassword}
-                <span class="text-xs text-red-500">{form?.errors?.newPassword[0]}</span>
+                <span class="text-invalid">{form?.errors?.newPassword[0]}</span>
             {/if}
 
             <button

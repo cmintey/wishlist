@@ -42,18 +42,22 @@
     let error: string | undefined = $state();
 
     async function handleTrigger(e: MouseEvent) {
+        console.log("trigger");
         e.stopPropagation();
         if (!userId) {
             open = true;
             return;
         }
         if (claim && item.quantity === 1 && claim.quantity === 1) {
+            console.log("claim");
             return onUnclaim();
         }
         if (item.remainingQuantity === 1) {
+            console.log("remaining 1");
             quantity = 1;
             return onFormSubmit();
         }
+        console.log("fallback");
         open = true;
     }
 
@@ -185,7 +189,7 @@
                 <label class="w-fit">
                     <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
                     <input
-                        class={["input", error && "input-error"]}
+                        class={["input", error && "input-invalid"]}
                         inputmode="numeric"
                         max={item.remainingQuantity + (claim?.quantity || 0)}
                         min={claim ? 0 : 1}
@@ -196,7 +200,7 @@
                     />
                 </label>
                 {#if error}
-                    <span class="text-error-600-400 text-sm">{error}</span>
+                    <span class="text-invalid">{error}</span>
                 {/if}
                 {#if claim}
                     <span class="subtext">
@@ -213,28 +217,20 @@
             </div>
         {/if}
     </form>
-    {#snippet actions()}
-        <footer class={["flex flex-wrap gap-2 pt-2", claim ? "justify-between" : "justify-end"]}>
+    {#snippet actions({ neutralStyle, negativeStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} type="button">
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
+
+        <div class="flex flex-wrap gap-2">
             {#if claim}
-                <Dialog.CloseTrigger
-                    class="preset-filled-error-500 btn btn-sm md:btn-base"
-                    onclick={onUnclaim}
-                    type="button"
-                >
+                <Dialog.CloseTrigger class={negativeStyle} onclick={onUnclaim} type="button">
                     {$t("wishes.unclaim")}
                 </Dialog.CloseTrigger>
             {/if}
-            <div class="flex flex-wrap gap-2">
-                <Dialog.CloseTrigger
-                    class="btn btn-sm md:btn-base preset-tonal-surface border-surface-500 border"
-                    type="button"
-                >
-                    {$t("general.cancel")}
-                </Dialog.CloseTrigger>
-                <Dialog.CloseTrigger class="btn btn-sm md:btn-base preset-filled" form={formId} type="submit">
-                    {$t("wishes.claim")}
-                </Dialog.CloseTrigger>
-            </div>
-        </footer>
+            <Dialog.CloseTrigger class={positiveStyle} form={formId} type="submit">
+                {$t("wishes.claim")}
+            </Dialog.CloseTrigger>
+        </div>
     {/snippet}
 </BaseModal>

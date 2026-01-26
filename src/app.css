@@ -6,7 +6,7 @@
 @import "./styles/toast.css";
 @import "./styles/loading.css";
 @import "./styles/print.css";
-
+@import "./styles/table.css";
 @plugin "@tailwindcss/forms";
 
 /* The following are classes defined in i18n files and are used */
@@ -169,6 +169,14 @@
         --tw-ring-color: var(--color-surface-300-700);
     }
 
+    .input-group {
+        /* Dividers */
+        & > * + * {
+            border-left-width: 1px !important;
+            border-color: var(--color-surface-300-700);
+        }
+    }
+
     .input,
     .ig-input,
     .textarea {
@@ -216,6 +224,14 @@
 
     .text-tiny {
         font-size: calc(0.6rem /* 12px */ * var(--text-scaling));
+    }
+
+    .input-invalid {
+        @apply preset-outlined-error-700-300;
+    }
+
+    .text-invalid {
+        @apply text-error-700-300 text-xs;
     }
 }
 

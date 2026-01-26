@@ -45,7 +45,7 @@
                         />
                     </label>
                     {#if form?.errors?.email}
-                        <span class="text-error-800-200 text-xs">{$t("errors.invalid-email")}</span>
+                        <span class="text-invalid">{$t("errors.invalid-email")}</span>
                     {/if}
 
                     <div>

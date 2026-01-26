@@ -60,27 +60,25 @@
 </script>
 
 <BaseModal {description} title={$t("general.please-confirm")} {...props}>
-    {#snippet actions()}
-        <footer class="flex flex-wrap justify-between gap-y-2">
-            <Dialog.CloseTrigger class="preset-tonal-surface border-surface-500 btn btn-sm md:btn-md border">
-                {$t("general.cancel")}
-            </Dialog.CloseTrigger>
-            {#if item.listCount > 1}
-                <div class="flex flex-wrap gap-2">
-                    {#if !isOnlyManager}
-                        <Dialog.CloseTrigger class="preset-filled-error-500 btn btn-sm md:btn-md" onclick={onDelete}>
-                            {$t("wishes.all-lists")}
-                        </Dialog.CloseTrigger>
-                    {/if}
-                    <Dialog.CloseTrigger class="preset-filled-primary-500 btn btn-sm md:btn-md" onclick={onRemove}>
-                        {$t("wishes.this-list")}
+    {#snippet actions({ neutralStyle, negativeStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle}>
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
+        {#if item.listCount > 1}
+            <div class="flex flex-wrap gap-2">
+                {#if !isOnlyManager}
+                    <Dialog.CloseTrigger class={negativeStyle} onclick={onDelete}>
+                        {$t("wishes.all-lists")}
                     </Dialog.CloseTrigger>
-                </div>
-            {:else}
-                <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onDelete}>
-                    {$t("general.confirm")}
+                {/if}
+                <Dialog.CloseTrigger class={positiveStyle} onclick={onRemove}>
+                    {$t("wishes.this-list")}
                 </Dialog.CloseTrigger>
-            {/if}
-        </footer>
+            </div>
+        {:else}
+            <Dialog.CloseTrigger class={positiveStyle} onclick={onDelete}>
+                {$t("general.confirm")}
+            </Dialog.CloseTrigger>
+        {/if}
     {/snippet}
 </BaseModal>

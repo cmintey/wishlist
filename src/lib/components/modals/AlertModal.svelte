@@ -15,11 +15,9 @@
 </script>
 
 <BaseModal {...rest}>
-    {#snippet actions()}
-        <div class="flex justify-end">
-            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onConfirm}>
-                {confirmText}
-            </Dialog.CloseTrigger>
-        </div>
+    {#snippet actions({ positiveStyle })}
+        <Dialog.CloseTrigger class={[positiveStyle, "only-of-type:ml-auto"]} onclick={onConfirm}>
+            {confirmText}
+        </Dialog.CloseTrigger>
     {/snippet}
 </BaseModal>

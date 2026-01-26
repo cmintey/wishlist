@@ -24,9 +24,16 @@
     {/if}
     <label class="label" for="name">
         <span>{$t("auth.name")}</span>
-        <input id="name" name="name" class="input" autocomplete="name" required type="text" />
+        <input
+            id="name"
+            name="name"
+            class={["input", formData?.errors?.name && "input-invalid"]}
+            autocomplete="name"
+            required
+            type="text"
+        />
         {#if formData?.errors?.name}
-            <span class="unstyled text-xs text-red-500">{formData.errors.name[0]}</span>
+            <span class="text-invalid">{formData.errors.name[0]}</span>
         {/if}
     </label>
 
@@ -36,21 +43,28 @@
             <input
                 id="username"
                 name="username"
-                class="input"
+                class={["input", formData?.errors?.username && "input-invalid"]}
                 autocapitalize="off"
                 autocomplete="username"
                 required
                 type="text"
             />
             {#if formData?.errors?.username}
-                <span class="unstyled text-xs text-red-500">{formData.errors.username[0]}</span>
+                <span class="text-invalid">{formData.errors.username[0]}</span>
             {/if}
         </label>
         <label class="label" for="email">
             <span>{$t("auth.email")}</span>
-            <input id="email" name="email" class="input" autocomplete="email" required type="email" />
+            <input
+                id="email"
+                name="email"
+                class={["input", formData?.errors?.email && "input-invalid"]}
+                autocomplete="email"
+                required
+                type="email"
+            />
             {#if formData?.errors?.email}
-                <span class="unstyled text-xs text-red-500">{formData.errors.email[0]}</span>
+                <span class="text-invalid">{formData.errors.email[0]}</span>
             {/if}
         </label>
     </div>
@@ -66,14 +80,14 @@
     <PasswordInput id="confirmpassword" label={$t("auth.confirm-password")} required bind:value={passwordConfirm} />
 
     {#if password !== passwordConfirm}
-        <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
+        <span class="text-invalid">{$t("auth.passwords-must-match")}</span>
     {/if}
     {#if formData?.errors?.password}
-        <span class="unstyled text-xs text-red-500">{formData.errors.password[0]}</span>
+        <span class="text-invalid">{formData.errors.password[0]}</span>
     {/if}
 
     {#if formData?.error && formData?.message}
-        <span class="unstyled text-xs text-red-500">{formData.message}</span>
+        <span class="text-invalid">{formData.message}</span>
     {/if}
 
     {#if !hideActions}

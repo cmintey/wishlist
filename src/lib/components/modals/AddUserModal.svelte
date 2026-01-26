@@ -7,21 +7,22 @@
     import { invalidateAll } from "$app/navigation";
     import { debounce } from "$lib/util";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
+    import { Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
 
     interface Props extends Pick<BaseProps, "trigger"> {
         groupId: string;
+        excludedUserIds: string[];
     }
 
-    const { groupId, trigger }: Props = $props();
+    const { groupId, trigger, excludedUserIds }: Props = $props();
     const t = getFormatter();
 
     const groupAPI = $derived(new GroupAPI(groupId));
     const usersAPI = new UsersAPI();
 
-    let open = $state(false);
-
     function resetForm() {
         searchValue = undefined;
+        searchedUsers = [];
         selectedUser = undefined;
     }
 
@@ -30,24 +31,31 @@
             await groupAPI.addMember(selectedUser);
             await invalidateAll();
         }
+        resetForm();
     }
 
+    let searchedUsers: User[] = $state([]);
     let selectedUser: string | undefined = $state();
     let searchValue: string | undefined = $state();
 
-    // let users: User[] = $state([]);
     const doSearch = debounce(async (value: string | undefined) => {
         if (value) {
-            return await usersAPI.search(value).then((resp) => resp.json() as unknown as User[]);
+            searchedUsers = await usersAPI
+                .search(value, { excludedUserIds })
+                .then((resp) => resp.json() as unknown as User[]);
+        } else {
+            searchedUsers = [];
         }
-        return [];
     });
 
-    $effect(() => {
-        if (!open) {
-            resetForm();
-        }
-    });
+    const collection = $derived(
+        useListCollection({
+            items: searchedUsers,
+            itemToValue(item) {
+                return item.id;
+            }
+        })
+    );
 </script>
 
 <BaseModal title={$t("general.add-user")} {trigger}>
@@ -55,38 +63,47 @@
         {$t("general.search-for-user")}
     {/snippet}
 
-    <label class="w-fit">
-        <span>{$t("general.search")}</span>
-        <div class="input-group grid-cols-[auto_1fr_auto]">
-            <div class="ig-cell preset-tonal">
-                <iconify-icon class="text-lg" icon="ion:search"></iconify-icon>
-            </div>
-            <input class="ig-input" type="search" bind:value={searchValue} />
-        </div>
-    </label>
+    <Listbox {collection} onSelect={(e) => (selectedUser = e.value)}>
+        <Listbox.Label class="text-base">{$t("general.search")}</Listbox.Label>
+        <Listbox.Input>
+            {#snippet element(props)}
+                <div class="input-group grid-cols-[auto_1fr]">
+                    <div class="ig-cell preset-tonal">
+                        <iconify-icon icon="ion:search"></iconify-icon>
+                    </div>
+                    <input
+                        {...props}
+                        class="ig-input rounded-l-none ring-0 focus:focus-within:ring-1"
+                        oninput={(e) => doSearch(e.currentTarget.value)}
+                        type="search"
+                        bind:value={searchValue}
+                    />
+                </div>
+            {/snippet}
+        </Listbox.Input>
+        <Listbox.Content class="preset-filled-surface-200-800 preset-outlined-surface-300-700 pt-1">
+            {#if collection.items.length === 0}
+                <span class="px-2 pt-1">{$t("general.no-results")}</span>
+            {/if}
+            {#each collection.items as item (item.id)}
+                <Listbox.Item {item}>
+                    <Listbox.ItemText>
+                        <span>{item.name}</span>
+                        <span class="text-xs opacity-50">{item.username}</span>
+                    </Listbox.ItemText>
+                    <Listbox.ItemIndicator />
+                </Listbox.Item>
+            {/each}
+        </Listbox.Content>
+    </Listbox>
 
-    {#await doSearch(searchValue) then users}
-        {#if users.length > 0}
-            <ListBox class="border-surface-500 rounded-container border p-4">
-                {#each users as user}
-                    <ListBoxItem name={user.name} value={user.id} bind:group={selectedUser}>
-                        <span>{user.name}</span>
-                        <span class="subtext">{user.username}</span>
-                    </ListBoxItem>
-                {/each}
-            </ListBox>
-        {/if}
-    {/await}
+    {#snippet actions({ neutralStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} onclick={resetForm}>
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
 
-    {#snippet actions()}
-        <div class="flex justify-between">
-            <Dialog.CloseTrigger class="preset-tonal-surface border-surface-500 btn btn-sm md:btn-md border">
-                {$t("general.cancel")}
-            </Dialog.CloseTrigger>
-
-            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
-                {$t("general.add-user")}
-            </Dialog.CloseTrigger>
-        </div>
+        <Dialog.CloseTrigger class={positiveStyle} onclick={onFormSubmit}>
+            {$t("general.add-user")}
+        </Dialog.CloseTrigger>
     {/snippet}
 </BaseModal>

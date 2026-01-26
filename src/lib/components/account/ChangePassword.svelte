@@ -29,30 +29,29 @@
         };
     }}
 >
-    <div class="flex flex-col items-start space-y-4">
+    <div class="flex w-full flex-col items-start space-y-4 md:w-11/12 md:max-w-96">
         <h3 class="h3">{$t("admin.credentials")}</h3>
-        <div class="flex space-y-1">
+        <div class="flex w-full space-y-1">
             <PasswordInput
                 id="oldpassword"
                 name="oldPassword"
                 autocomplete="current-password"
+                error={page.form?.errors?.oldPassword}
                 label={$t("auth.current-password")}
                 bind:value={passwordReset.current}
             />
             {#if page.form?.errors?.oldPassword}
-                <span class="text-xs text-red-500">{page.form?.errors?.oldPassword[0]}</span>
+                <span class="text-invalid">{page.form?.errors?.oldPassword[0]}</span>
             {/if}
         </div>
 
-        <div>
-            <PasswordInput
-                id="newpassword"
-                autocomplete="new-password"
-                label={$t("auth.new-password")}
-                strengthMeter
-                bind:value={passwordReset.new}
-            />
-        </div>
+        <PasswordInput
+            id="newpassword"
+            autocomplete="new-password"
+            label={$t("auth.new-password")}
+            strengthMeter
+            bind:value={passwordReset.new}
+        />
 
         <PasswordInput
             id="confirmpassword"
@@ -62,10 +61,10 @@
             bind:value={passwordReset.confirm}
         />
         {#if passwordReset.new !== passwordReset.confirm}
-            <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
+            <span class="unstyled text-invalid">{$t("auth.passwords-must-match")}</span>
         {/if}
         {#if page.form?.errors?.newPassword}
-            <span class="text-xs text-red-500">{page.form?.errors?.newPassword[0]}</span>
+            <span class="text-invalid">{page.form?.errors?.newPassword[0]}</span>
         {/if}
 
         <label class="checkbox-label">

@@ -29,8 +29,13 @@ export class LocalStorage<T> {
     get current(): T {
         this.#version;
 
-        const root =
-            typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem(this.#key) as any) : this.#value;
+        let root;
+        try {
+            root =
+                typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem(this.#key) as any) : this.#value;
+        } catch {
+            root = this.#value;
+        }
 
         const proxies = new WeakMap();
 

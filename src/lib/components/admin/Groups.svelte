@@ -21,7 +21,7 @@
 
     const headers = [$t("auth.name"), $t("general.user-count")];
 
-    let groupsFiltered: Group[] = $state(groups);
+    let groupsFiltered: Group[] = $derived(groups);
 
     const selectionHandler = (group: Group) => {
         goto(`/admin/groups/${group.id}`);
@@ -63,8 +63,8 @@
     </PromptModal>
 </div>
 
-<div class="table-wrap">
-    <table class="table">
+<div class="table-wrap preset-outlined-surface-200-800 rounded-container">
+    <table class="table-hover table">
         <thead>
             <tr>
                 {#each headers as header}
@@ -72,7 +72,7 @@
                 {/each}
             </tr>
         </thead>
-        <tbody class="[&>tr]:hover:preset-tonal-primary">
+        <tbody>
             {#each groupsFiltered as group}
                 <tr onclick={() => selectionHandler(group)}>
                     <td>{group.name}</td>

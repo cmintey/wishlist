@@ -17,7 +17,7 @@
 
     type UserData = PageData["group"]["users"][number];
 
-    const groupAPI = new GroupAPI(data.group.id);
+    const groupAPI = $derived(new GroupAPI(data.group.id));
     const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];
     const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
 
@@ -36,7 +36,7 @@
 
 {#if data.config.listMode !== "registry"}
     <div class="flex flex-wrap gap-2 py-4">
-        <AddUserModal groupId={data.group.id}>
+        <AddUserModal excludedUserIds={data.group.users.map(({ id }) => id)} groupId={data.group.id}>
             {#snippet trigger(props)}
                 <button class="preset-filled-primary-500 btn" type="button" {...props}>
                     <iconify-icon icon="ion:person-add"></iconify-icon>
@@ -56,8 +56,8 @@
 {/if}
 
 <div class="flex flex-col space-y-2">
-    <div class="table-wrap">
-        <table class="table" role="grid">
+    <div class="table-wrap preset-outlined-surface-200-800 rounded-container">
+        <table class="table">
             <thead>
                 <tr>
                     {#each head as label}
@@ -69,12 +69,12 @@
                     <th>{$t("general.remove")}</th>
                 </tr>
             </thead>
-            <tbody class="[&>tr]:hover:preset-tonal-primary">
+            <tbody>
                 {#each data.group.users as user, row}
                     {@const isManager = !user.isGroupManager}
                     <tr aria-rowindex={row}>
                         {#each dataKeys as key, col}
-                            <td aria-colindex={col} role="gridcell" tabindex={col === 0 ? 0 : -1}>
+                            <td aria-colindex={col} tabindex={col === 0 ? 0 : -1}>
                                 {user[key]}
                             </td>
                         {/each}
@@ -93,7 +93,7 @@
                                 {/snippet}
                             </ConfirmModal>
                         </td>
-                        <td aria-colindex={dataKeys.length} role="gridcell" tabindex={-1}>
+                        <td aria-colindex={dataKeys.length} tabindex={-1}>
                             <ConfirmModal
                                 onConfirm={() => removeMember(user.id)}
                                 title={$t("admin.remove-member-title")}

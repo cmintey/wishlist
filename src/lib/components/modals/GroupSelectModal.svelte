@@ -18,11 +18,13 @@
         onSubmit(selectedGroup);
     }
 
-    const collection = useListCollection({
-        items: groups.toSorted((a, b) => a.name.localeCompare(b.name, locale)),
-        itemToString: (item) => item.name,
-        itemToValue: (item) => item.id
-    });
+    const collection = $derived(
+        useListCollection({
+            items: groups.toSorted((a, b) => a.name.localeCompare(b.name, locale)),
+            itemToString: (item) => item.name,
+            itemToValue: (item) => item.id
+        })
+    );
 </script>
 
 <BaseModal title={$t("general.select-group")} {...props}>
@@ -40,15 +42,13 @@
         </Listbox>
     {/snippet}
 
-    {#snippet actions()}
-        <div class="flex flex-wrap justify-between gap-2">
-            <Dialog.CloseTrigger class="preset-tonal-surface border-surface-500 btn btn-sm md:btn-md border">
-                {$t("general.cancel")}
-            </Dialog.CloseTrigger>
+    {#snippet actions({ neutralStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle}>
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
 
-            <Dialog.CloseTrigger class="preset-filled btn btn-sm md:btn-md" onclick={onFormSubmit}>
-                {$t("general.change-group")}
-            </Dialog.CloseTrigger>
-        </div>
+        <Dialog.CloseTrigger class={positiveStyle} onclick={onFormSubmit}>
+            {$t("general.change-group")}
+        </Dialog.CloseTrigger>
     {/snippet}
 </BaseModal>

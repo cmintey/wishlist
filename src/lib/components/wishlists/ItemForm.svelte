@@ -219,7 +219,7 @@
                 id="name"
                 name="name"
                 class="ig-input"
-                class:input-error={form?.errors?.name}
+                class:input-invalid={form?.errors?.name}
                 autocomplete="off"
                 required
                 type="text"
@@ -227,7 +227,7 @@
             />
         </div>
         {#if form?.errors?.name}
-            <p class="unstyled text-error-600-400 pt-2 text-xs">{form.errors.name[0]}</p>
+            <p class="text-invalid pt-2">{form.errors.name[0]}</p>
         {/if}
     </label>
 
@@ -274,7 +274,7 @@
             </label>
         </div>
         {#if form?.errors?.quantity}
-            <p class="unstyled text-error-600-400 text-xs">{form.errors.quantity[0]}</p>
+            <p class="text-invalid">{form.errors.quantity[0]}</p>
         {/if}
     </div>
 
@@ -327,7 +327,7 @@
 
         <div
             class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2"
-            class:input-error={form?.errors?.lists}
+            class:input-invalid={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
                 <label class="flex items-center gap-x-2" for={list.id}>
@@ -350,7 +350,7 @@
             {/each}
         </div>
         {#if form?.errors?.lists}
-            <p class="unstyled text-error-600-400 text-xs">{form.errors.lists[0]}</p>
+            <p class="text-invalid">{form.errors.lists[0]}</p>
         {/if}
     </fieldset>
 
