@@ -14,6 +14,7 @@
         showClaimedName = false,
         showClaimForOwner = false,
         showNameAcrossGroups = false,
+        showPublicClaimName = false,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -40,7 +41,15 @@
     </ItemImage>
 
     <div class="flex flex-col">
-        <ItemAttributes {item} {onPublicList} {showClaimForOwner} {showClaimedName} {showFor} {user} />
+        <ItemAttributes
+            {item}
+            {onPublicList}
+            {showClaimForOwner}
+            {showClaimedName}
+            {showPublicClaimName}
+            {showFor}
+            {user}
+        />
     </div>
 </div>
 
@@ -60,6 +69,7 @@
     {showClaimForOwner}
     {showClaimedName}
     {showNameAcrossGroups}
+    {showPublicClaimName}
     {user}
     {userCanManage}
 />

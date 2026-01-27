@@ -7,7 +7,14 @@
 
     interface Props extends Pick<
         ItemCardProps,
-        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
+        | "item"
+        | "onPublicList"
+        | "user"
+        | "showClaimForOwner"
+        | "showClaimedName"
+        | "showNameAcrossGroups"
+        | "showPublicClaimName"
+        | "showFor"
     > {
         showDetail?: boolean;
         fullNotes?: boolean;
@@ -21,6 +28,7 @@
         showClaimedName,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
+        showPublicClaimName = false,
         showFor,
         showDetail = false,
         fullNotes = false
@@ -76,6 +84,7 @@
                         showClaimedName,
                         showNameAcrossGroups,
                         showClaimForOwner,
+                        showPublicClaimName,
                         user,
                         claim
                     )}
