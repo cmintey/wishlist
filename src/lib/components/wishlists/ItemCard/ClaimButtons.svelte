@@ -83,8 +83,7 @@
     </div>
 {:else if item.claims.length === 0 || (item.userId === user?.id && item.isClaimable)}
     <div></div>
-{:else if item.claims.length === 1 &&
-    shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, showPublicClaimName, user, item.claims[0])}
+{:else if item.claims.length === 1 && shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, showPublicClaimName, user, item.claims[0])}
     <span class="text-subtle line-clamp-2 truncate text-wrap">
         {$t("wishes.claimed-by", {
             values: {
@@ -92,8 +91,7 @@
             }
         })}
     </span>
-{:else if item.claims.length > 1 &&
-    shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, showPublicClaimName, user)}
+{:else if item.claims.length > 1 && shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, showPublicClaimName, user)}
     <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-multiple-users")}</span>
 {:else}
     <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed")}</span>
