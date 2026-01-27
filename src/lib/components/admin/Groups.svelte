@@ -64,7 +64,7 @@
 </div>
 
 <div class="table-wrap preset-outlined-surface-200-800 rounded-container">
-    <table class="table-hover table">
+    <table class="table-hover table table-auto">
         <thead>
             <tr>
                 {#each headers as header}

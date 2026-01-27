@@ -54,7 +54,7 @@
         <tbody>
             {#each usersFiltered as user}
                 <tr onclick={() => selectionHandler(user)}>
-                    <td>{user.name}</td>
+                    <td class="text-nowrap">{user.name}</td>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td class="text-center">
@@ -62,7 +62,13 @@
                             <iconify-icon class="text-lg" icon="ion:checkmark"></iconify-icon>
                         {/if}
                     </td>
-                    <td>{user.groups}</td>
+                    <td class="flex flex-wrap gap-1">
+                        {#each user.groups?.toSorted() as group}
+                            <span class="badge preset-tonal-secondary inset-ring-secondary-500 inset-ring">
+                                {group}
+                            </span>
+                        {/each}
+                    </td>
                 </tr>
             {/each}
         </tbody>

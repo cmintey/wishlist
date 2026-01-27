@@ -88,7 +88,10 @@
                                 {/snippet}
                                 {#snippet trigger(props)}
                                     <button class="btn-icon" {...props}>
-                                        <iconify-icon icon="ion:sparkles{!isManager ? '' : '-outline'}"></iconify-icon>
+                                        <iconify-icon
+                                            class="text-primary-500"
+                                            icon="ion:sparkles{!isManager ? '' : '-outline'}"
+                                        ></iconify-icon>
                                     </button>
                                 {/snippet}
                             </ConfirmModal>
@@ -107,7 +110,7 @@
                                         aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
                                         {...props}
                                     >
-                                        <iconify-icon icon="ion:person-remove"></iconify-icon>
+                                        <iconify-icon class="text-error-500" icon="ion:person-remove"></iconify-icon>
                                     </button>
                                 {/snippet}
                             </ConfirmModal>

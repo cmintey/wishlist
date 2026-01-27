@@ -4,19 +4,23 @@
             @apply preset-filled-surface-200-800;
 
             & th {
-                @apply font-bold;
+                @apply p-4 font-bold;
             }
         }
 
         & tbody {
             @apply preset-filled-surface-100-900;
+
+            & td {
+                @apply p-4;
+            }
         }
     }
 
     .table-hover {
         & tbody > tr {
             @variant hover {
-                @apply preset-tonal-primary cursor-pointer;
+                @apply text-primary-950-50 bg-primary-500/10 cursor-pointer;
             }
         }
     }
