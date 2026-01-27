@@ -57,13 +57,13 @@
             <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
-            <span class="text-primary-800-200 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
+            <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
                 {listName}
             </span>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 <div class="flex flex-row items-center gap-2">
                     <Avatar class="text-tiny size-6" user={list.owner} />
-                    <span class="text-primary-800-200" data-testid="list-owner">{list.owner.name}</span>
+                    <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
 
                 {#if list.itemCount !== undefined}

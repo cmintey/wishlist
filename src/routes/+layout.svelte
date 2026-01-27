@@ -9,12 +9,11 @@
     import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
     import type { LayoutProps } from "./$types";
     import { onMount } from "svelte";
-    // import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
+    import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import PullToRefresh from "pulltorefreshjs";
     import { navItems } from "$lib/components/navigation/navigation";
     import { setFormatter, setLocale } from "$lib/i18n";
-    import SelectListManagerModal from "$lib/components/modals/SelectListManagerModal.svelte";
     import Toaster from "$lib/components/toaster/Toaster.svelte";
 
     const { data, children }: LayoutProps = $props();
@@ -99,7 +98,7 @@
     </main>
 
     <footer class="sticky bottom-0 z-10 print:hidden">
-        <!-- <BottomTabs {navItems} user={data.user} /> -->
+        <BottomTabs {navItems} user={data.user} />
     </footer>
 </div>
 

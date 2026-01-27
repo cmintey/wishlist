@@ -13,7 +13,7 @@
     const t = getFormatter();
 </script>
 
-<SegmentedControl class="gap-1" onValueChange={(e) => (groupBy = e.value)} value={groupBy}>
+<SegmentedControl class="z-5 gap-1" onValueChange={(e) => (groupBy = e.value)} value={groupBy}>
     <SegmentedControl.Label>
         {#snippet element(props)}
             <span {...props} class="text-xs">{$t("wishes.group-by")}</span>

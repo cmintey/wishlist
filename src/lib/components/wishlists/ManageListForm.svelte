@@ -9,9 +9,10 @@
     import { page } from "$app/state";
     import Tooltip from "../Tooltip.svelte";
     import ConfirmModal from "../modals/ConfirmModal.svelte";
+    import SelectListManagerModal from "../modals/SelectListManagerModal.svelte";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
-        owner: Pick<User, "name" | "username" | "picture">;
+        owner: Pick<User, "id" | "name" | "username" | "picture">;
         managers: Pick<User, "id" | "name" | "username">[];
     }
 
@@ -28,27 +29,13 @@
     const t = getFormatter();
     const formId: string = $props.id();
 
-    let list = $state(list_);
+    let list = $derived(list_);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived(
         colorElement ? getComputedStyle(colorElement).backgroundColor : list.iconColor || ""
     );
     let colorValue: string | null = $state((() => defaultColor)());
-    let managers = $state(list.managers);
-
-    const addManager = () => {
-        modalStore.trigger({
-            type: "component",
-            component: "selectListManager",
-            meta: {
-                groupId,
-                managers: [list.owner, ...managers]
-            },
-            response(user: { id: string; name: string; username: string }) {
-                managers = [...managers, user];
-            }
-        });
-    };
+    let managers = $derived(list.managers);
 
     const removeManager = (id: string) => {
         managers = managers.filter((user) => user.id !== id);
@@ -156,13 +143,22 @@
                         <p>{$t("wishes.list-managers-tooltip")}</p>
                     {/snippet}
                 </Tooltip>
-                <button
-                    class="preset-tonal-primary border-primary-500 btn btn-sm border"
-                    onclick={addManager}
-                    type="button"
+
+                <SelectListManagerModal
+                    {groupId}
+                    managers={[list.owner, ...managers]}
+                    onSubmit={(newManager) => (managers = [...managers, newManager])}
                 >
-                    {$t("wishes.add-a-manager")}
-                </button>
+                    {#snippet trigger(props)}
+                        <button
+                            {...props}
+                            class="preset-tonal-primary border-primary-500 btn btn-sm border"
+                            type="button"
+                        >
+                            {$t("wishes.add-a-manager")}
+                        </button>
+                    {/snippet}
+                </SelectListManagerModal>
             </div>
 
             <div

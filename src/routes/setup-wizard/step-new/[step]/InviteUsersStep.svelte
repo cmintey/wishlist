@@ -24,7 +24,7 @@
 <div class="flex flex-col items-center space-y-4">
     <h1 class="h1">{$t("setup.invite-users")}</h1>
     <span>{$t("setup.invite-users-subtext")}</span>
-    <!-- <InviteUser {config} defaultGroup={groups[0]} vertical /> -->
+    <InviteUser {config} defaultGroup={groups[0]} vertical />
 </div>
 
 <StepButtons nextButton={{ onclick: submit }} {submitting} />

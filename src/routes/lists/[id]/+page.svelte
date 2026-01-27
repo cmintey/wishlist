@@ -30,7 +30,7 @@
     const { data }: PageProps = $props();
     const t = getFormatter();
 
-    let allItems: ItemOnListDTO[] = $state(data.list.items);
+    let allItems: ItemOnListDTO[] = $derived(data.list.items);
     let reordering = $state(false);
     let publicListUrl: URL | undefined = $state();
     let approvals = $derived(allItems.filter((item) => !item.approved));
@@ -48,11 +48,12 @@
 
     // Initialize from server data (cookie) to prevent flicker
     // This value comes from the server, so SSR renders the correct view
+    // svelte-ignore state_referenced_locally
     initListViewPreference(data.initialViewPreference);
     let isTileView = $derived(getListViewPreference() === "tile");
 
     const flipDurationMs = 200;
-    const listAPI = new ListAPI(data.list.id);
+    const listAPI = $derived(new ListAPI(data.list.id));
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),

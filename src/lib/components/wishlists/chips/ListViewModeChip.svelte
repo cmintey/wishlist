@@ -10,7 +10,7 @@
     const { isTileView }: Props = $props();
     const t = getFormatter();
 
-    let selectedValue: string | null = $state(isTileView ? "tile" : "list");
+    let selectedValue: string | null = $derived(isTileView ? "tile" : "list");
 
     $effect(() => {
         if (selectedValue === "list" || selectedValue === "tile") {
@@ -23,7 +23,7 @@
     });
 </script>
 
-<SegmentedControl onValueChange={(e) => (selectedValue = e.value)} value={selectedValue}>
+<SegmentedControl class="z-5" onValueChange={(e) => (selectedValue = e.value)} value={selectedValue}>
     <SegmentedControl.Control class="rounded-container h-6.5 gap-0 p-px">
         <SegmentedControl.Indicator class="preset-filled-primary-500 rounded-container" />
         <SegmentedControl.Item

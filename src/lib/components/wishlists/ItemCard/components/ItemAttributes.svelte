@@ -5,10 +5,17 @@
     import { shouldShowName, getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    interface Props extends Pick<
-        ItemCardProps,
-        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
-    > {
+    interface Props
+        extends Pick<
+            ItemCardProps,
+            | "item"
+            | "onPublicList"
+            | "user"
+            | "showClaimForOwner"
+            | "showClaimedName"
+            | "showNameAcrossGroups"
+            | "showFor"
+        > {
         showDetail?: boolean;
         fullNotes?: boolean;
     }
@@ -52,7 +59,7 @@
         </span>
         {#if item.quantity && (user?.id !== item.userId || showClaimForOwner)}
             <span>·</span>
-            <span class="text-secondary-800-200 font-bold" data-testid="quantity-claimed">
+            <span class="text-secondary-900-100 font-bold" data-testid="quantity-claimed">
                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
             </span>
         {/if}
@@ -96,17 +103,17 @@
     <iconify-icon icon="ion:person"></iconify-icon>
     <span class="text-wrap" data-testid="added-by">
         {#if showFor}
-            {@html $t("wishes.for", { values: { name: item.user.name, class: "text-secondary-800-200 font-bold" } })}
+            {@html $t("wishes.for", { values: { name: item.user.name, class: "text-secondary-900-100 font-bold" } })}
         {:else if !onPublicList}
             {@html $t("wishes.added-by", {
-                values: { name: item.addedBy.name, class: "text-secondary-800-200 font-bold" }
+                values: { name: item.addedBy.name, class: "text-secondary-900-100 font-bold" }
             })}
         {:else}
             {@html item.addedBy.id === item.user.id
                 ? $t("wishes.added-by", {
-                      values: { name: item.addedBy.name, class: "text-secondary-800-200 font-bold" }
+                      values: { name: item.addedBy.name, class: "text-secondary-900-100 font-bold" }
                   })
-                : $t("wishes.added-by-somebody-else", { values: { class: "text-secondary-800-200 font-bold" } })}
+                : $t("wishes.added-by-somebody-else", { values: { class: "text-secondary-900-100 font-bold" } })}
         {/if}
     </span>
 </div>
