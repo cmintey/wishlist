@@ -21,7 +21,7 @@ RUN pnpm prisma generate
 COPY src/ ./src
 COPY templates/ ./templates
 COPY static/ ./static
-COPY vite.config.ts tsconfig.json tailwind.config.ts svelte.config.js postcss.config.cjs theme.ts ./
+COPY vite.config.ts tsconfig.json svelte.config.js ./
 ARG VERSION="unk"
 ARG SHA="unk"
 ENV VERSION=${VERSION}
