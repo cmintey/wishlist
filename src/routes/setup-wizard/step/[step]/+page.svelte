@@ -5,10 +5,10 @@
     import { steps } from "./steps";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
-    import { ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import type { RouteParams } from "./$types";
     import { resolve } from "$app/paths";
+    import { Steps } from "@skeletonlabs/skeleton-svelte";
 
     let locked = false;
 
@@ -59,18 +59,23 @@
 
     <div class="flex justify-between pt-4">
         <!-- Button: Back -->
-        <button class="variant-ghost btn" disabled={$stepperState.current <= 1} onclick={onBack} type="button">
+        <button
+            class="preset-tonal border-surface-500 btn border"
+            disabled={$stepperState.current <= 1}
+            onclick={onBack}
+            type="button"
+        >
             <iconify-icon icon="ion:arrow-back"></iconify-icon>
             <span>{$t("setup.back")}</span>
         </button>
         {#if $stepperState.current < $stepperState.total - 1}
             <!-- Button: Next -->
-            <button class="variant-filled btn" disabled={locked} onclick={submit} type="submit">
+            <button class="preset-filled btn" disabled={locked} onclick={submit} type="submit">
                 {#if locked}
                     <iconify-icon icon="ion:lock-closed"></iconify-icon>
                 {/if}
                 {#if submitting}
-                    <ProgressRadial width="w-4" />
+                    <span class="loading loading-spinner loading-xs"></span>
                 {/if}
                 <span>{$t("setup.next")}</span>
                 <iconify-icon icon="ion:arrow-forward"></iconify-icon>
@@ -78,7 +83,7 @@
         {:else}
             <!-- Button: Complete -->
             <button
-                class="variant-filled-primary btn"
+                class="preset-filled-primary-500 btn"
                 disabled={locked}
                 onclick={() => goto(resolve("/login"), { invalidateAll: true })}
                 type="submit"

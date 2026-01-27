@@ -1,6 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { Combobox, Portal, useListCollection, type ComboboxRootProps } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { VirtualList } from "svelte-virtuallists";
     import fuzzysort from "fuzzysort";
@@ -63,12 +63,6 @@
         return Promise.resolve();
     };
 
-    const iconSelectorPopup: PopupSettings = {
-        event: "focus-click",
-        target: "iconSelectorPopup",
-        placement: "bottom"
-    };
-
     const partition = <T,>(items: T[], partitionSize: number) => {
         let partitioned: T[][] = [];
         for (let i = 0; i < items.length; i += partitionSize) {
@@ -77,9 +71,77 @@
         }
         return partitioned;
     };
+
+    const collection = $derived(
+        useListCollection({
+            items: availableIcons
+        })
+    );
+
+    let filteredIcons: string[] = $state([]);
+
+    const onOpenChange = async () => {
+        await getAvailableIcons();
+        filteredIcons = availableIcons;
+    };
+
+    const onInputValueChange: ComboboxRootProps["onInputValueChange"] = (event) => {
+        if (event.reason === "item-select") {
+            iconValue = event.inputValue;
+            onIconSelected?.(iconValue);
+        }
+        search = event.inputValue;
+        filteredIcons = fuzzysort.go(event.inputValue, availableIcons, { all: true }).map((result) => result.target);
+        if (filteredIcons.find((i) => i === search)) {
+            iconValue = search;
+        }
+    };
+
+    $inspect(iconValue);
 </script>
 
-<label for={id || "name"} use:popup={iconSelectorPopup}>
+<Combobox
+    name={id || "name"}
+    class="w-full gap-0"
+    {collection}
+    inputBehavior="autohighlight"
+    {onInputValueChange}
+    {onOpenChange}
+    openOnClick
+    placeholder="gift"
+>
+    <Combobox.Label class="text-base">{title ?? $t("general.icon")}</Combobox.Label>
+    <Combobox.Control>
+        <!-- <Combobox.Input type="text" /> -->
+        <Combobox.Input>
+            {#snippet element(props)}
+                <div class="input-group grid grid-cols-[auto_1fr]">
+                    <div class="ig-cell preset-tonal items-center">
+                        <iconify-icon icon={"ion:" + (iconValue || "gift")}></iconify-icon>
+                    </div>
+                    <input {...props} class="ig-input ring-0 focus:ring-1" />
+                </div>
+            {/snippet}
+        </Combobox.Input>
+        <Combobox.Trigger />
+    </Combobox.Control>
+    <Portal>
+        <Combobox.Positioner class="z-1!">
+            <Combobox.Content class="grid h-64 max-w-full grid-cols-6 overflow-auto pl-2 md:grid-cols-12">
+                {#each filteredIcons as item (item)}
+                    <Combobox.Item {item}>
+                        <Combobox.ItemText>
+                            <!-- TODO: Use virtual list -->
+                            <iconify-icon class="text-xl" icon={"ion:" + item}></iconify-icon>
+                        </Combobox.ItemText>
+                    </Combobox.Item>
+                {/each}
+            </Combobox.Content>
+        </Combobox.Positioner>
+    </Portal>
+</Combobox>
+
+<!-- <label for={id || "name"} use:popup={iconSelectorPopup}>
     <span>{title ?? $t("general.icon")}</span>
     <ClearableInput
         id={id || "name"}
@@ -98,13 +160,13 @@
         value={iconValue}
     >
         {#snippet lead()}
-            <div class="input-group-shim items-center">
+            <div class="ig-cell preset-tonal items-center">
                 <iconify-icon class="text-xl" icon={"ion:" + (iconValue || "gift")}></iconify-icon>
             </div>
         {/snippet}
     </ClearableInput>
 </label>
-<div class="card z-50 h-64 w-[22rem] max-w-full overflow-auto pl-2" data-popup="iconSelectorPopup">
+<div class="card z-50 h-64 w-88 max-w-full overflow-auto pl-2" data-popup="iconSelectorPopup">
     {#await getAvailableIcons()}
         <span>{$t("general.loading")}</span>
     {:then}
@@ -132,10 +194,10 @@
     {:catch}
         <span>{$t("unable-to-load-icons")}</span>
     {/await}
-</div>
+</div> -->
 
-<style lang="postcss">
+<style lang="css">
     :global(.vtlist-inner) {
-        @apply justify-center;
+        justify-content: center;
     }
 </style>

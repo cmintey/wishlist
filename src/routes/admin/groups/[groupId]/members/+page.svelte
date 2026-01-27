@@ -1,112 +1,50 @@
 <script lang="ts">
-    import { goto, invalidateAll } from "$app/navigation";
+    import { invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
     import { GroupAPI } from "$lib/api/groups";
-    import { getModalStore, type ModalSettings } from "@skeletonlabs/skeleton";
     import type { PageData, PageProps } from "./$types";
     import InviteUser from "$lib/components/admin/InviteUser.svelte";
     import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
-    import { resolve } from "$app/paths";
+    import DeleteGroupModal from "$lib/components/modals/DeleteGroupModal.svelte";
+    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
+    import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
-    const modalStore = getModalStore();
-
     type UserData = PageData["group"]["users"][number];
 
-    const groupAPI = new GroupAPI(data.group.id);
+    const groupAPI = $derived(new GroupAPI(data.group.id));
     const head = [$t("auth.name"), $t("auth.username"), $t("auth.email")];
     const dataKeys = ["name", "username", "email"] as (keyof UserData)[];
 
-    const addUserModalSettings: ModalSettings = {
-        type: "component",
-        component: "addUser",
-        response: async (userId: string) => {
-            if (userId) {
-                await groupAPI.addMember(userId);
-                invalidateAll();
-            }
-        },
-        buttonTextCancel: $t("general.cancel")
-    };
-
     const toggleManager = async (userId: string, isManager: boolean) => {
-        modalStore.trigger({
-            type: "confirm",
-            title: $t("admin.add-remove-manager-title", { values: { isManager } }),
-            body: $t("admin.add-remove-manager-message", { values: { isManager } }),
-            async response(r) {
-                if (!r) return;
+        if (isManager) await groupAPI.makeManager(userId);
+        else await groupAPI.removeManager(userId);
 
-                if (isManager) await groupAPI.makeManager(userId);
-                else await groupAPI.removeManager(userId);
-
-                await invalidateAll();
-            },
-            buttonTextCancel: $t("general.cancel"),
-            buttonTextConfirm: $t("general.confirm")
-        });
+        await invalidateAll();
     };
 
-    const removeMember = (userId: string) => {
-        modalStore.trigger({
-            type: "confirm",
-            title: $t("admin.remove-member-title"),
-            body: $t("admin.remove-member-message"),
-            async response(r) {
-                if (!r) return;
-
-                await groupAPI.removeMember(userId);
-                await invalidateAll();
-            },
-            buttonTextCancel: $t("general.cancel"),
-            buttonTextConfirm: $t("general.confirm")
-        });
-    };
-
-    const deleteGroup = () => {
-        if (data.config.defaultGroup === page.params.groupId) {
-            modalStore.trigger({
-                type: "alert",
-                title: $t("errors.cannot-delete-default-group"),
-                body: $t("general.cannot-delete-default-group-msg"),
-                buttonTextCancel: $t("general.ok")
-            });
-            return;
-        }
-        modalStore.trigger({
-            type: "confirm",
-            title: $t("admin.delete-group-title"),
-            body: $t("admin.delete-group-message"),
-            async response(r) {
-                if (!r) return;
-
-                const group = await groupAPI.delete();
-                if (group) {
-                    await invalidateAll();
-                    goto(resolve("/lists"));
-                }
-            },
-            buttonTextCancel: $t("general.cancel"),
-            buttonTextConfirm: $t("general.confirm")
-        });
+    const removeMember = async (userId: string) => {
+        await groupAPI.removeMember(userId);
+        await invalidateAll();
     };
 </script>
 
 {#if data.config.listMode !== "registry"}
     <div class="flex flex-wrap gap-2 py-4">
-        <button
-            class="variant-filled-primary btn"
-            onclick={() => modalStore.trigger(addUserModalSettings)}
-            type="button"
-        >
-            <iconify-icon icon="ion:person-add"></iconify-icon>
-            <span>{$t("admin.add-member")}</span>
-        </button>
+        <AddUserModal excludedUserIds={data.group.users.map(({ id }) => id)} groupId={data.group.id}>
+            {#snippet trigger(props)}
+                <button class="preset-filled-primary-500 btn" type="button" {...props}>
+                    <iconify-icon icon="ion:person-add"></iconify-icon>
+                    <span>{$t("admin.add-member")}</span>
+                </button>
+            {/snippet}
+        </AddUserModal>
+
         <form method="POST" use:enhance>
             <InviteUser config={data.config} defaultGroup={data.group} />
         </form>
@@ -118,9 +56,9 @@
 {/if}
 
 <div class="flex flex-col space-y-2">
-    <div class="table-container">
-        <table class="table table-interactive" role="grid">
-            <thead class="table-head">
+    <div class="table-wrap preset-outlined-surface-200-800 rounded-container">
+        <table class="table">
+            <thead>
                 <tr>
                     {#each head as label}
                         <th>
@@ -131,33 +69,51 @@
                     <th>{$t("general.remove")}</th>
                 </tr>
             </thead>
-            <tbody class="table-body">
+            <tbody>
                 {#each data.group.users as user, row}
+                    {@const isManager = !user.isGroupManager}
                     <tr aria-rowindex={row}>
                         {#each dataKeys as key, col}
-                            <td aria-colindex={col} role="gridcell" tabindex={col === 0 ? 0 : -1}>
+                            <td aria-colindex={col} tabindex={col === 0 ? 0 : -1}>
                                 {user[key]}
                             </td>
                         {/each}
                         <td>
-                            <button
-                                class="btn-icon"
-                                aria-label={$t("a11y.toggle-manager", {
-                                    values: { isManager: user.isGroupManager, user: user.name }
-                                })}
-                                onclick={() => toggleManager(user.id, !user.isGroupManager)}
+                            <ConfirmModal
+                                onConfirm={() => toggleManager(user.id, isManager)}
+                                title={$t("admin.add-remove-manager-title", { values: { isManager } })}
                             >
-                                <iconify-icon icon="ion:sparkles{user.isGroupManager ? '' : '-outline'}"></iconify-icon>
-                            </button>
+                                {#snippet description()}
+                                    {$t("admin.add-remove-manager-message", { values: { isManager } })}
+                                {/snippet}
+                                {#snippet trigger(props)}
+                                    <button class="btn-icon" {...props}>
+                                        <iconify-icon
+                                            class="text-primary-500"
+                                            icon="ion:sparkles{!isManager ? '' : '-outline'}"
+                                        ></iconify-icon>
+                                    </button>
+                                {/snippet}
+                            </ConfirmModal>
                         </td>
-                        <td aria-colindex={dataKeys.length} role="gridcell" tabindex={-1}>
-                            <button
-                                class="btn-icon"
-                                aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
-                                onclick={() => removeMember(user.id)}
+                        <td aria-colindex={dataKeys.length} tabindex={-1}>
+                            <ConfirmModal
+                                onConfirm={() => removeMember(user.id)}
+                                title={$t("admin.remove-member-title")}
                             >
-                                <iconify-icon icon="ion:person-remove"></iconify-icon>
-                            </button>
+                                {#snippet description()}
+                                    {@html $t("admin.remove-member-message")}
+                                {/snippet}
+                                {#snippet trigger(props)}
+                                    <button
+                                        class="btn-icon"
+                                        aria-label={$t("a11y.remove-user-from-group", { values: { user: user.name } })}
+                                        {...props}
+                                    >
+                                        <iconify-icon class="text-error-500" icon="ion:person-remove"></iconify-icon>
+                                    </button>
+                                {/snippet}
+                            </ConfirmModal>
                         </td>
                     </tr>
                 {/each}
@@ -165,7 +121,7 @@
         </table>
     </div>
     <div class="flex flex-wrap gap-2">
-        <button class="variant-filled-error btn w-fit" onclick={deleteGroup}>{$t("admin.delete-group-title")}</button>
+        <DeleteGroupModal defaultGroup={data.config.defaultGroup} groupId={data.group.id} />
         <ClearListsButton groupId={page.params.groupId} />
         <ClearListsButton claimed groupId={page.params.groupId} />
     </div>

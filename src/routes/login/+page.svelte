@@ -2,18 +2,16 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
-    import { getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
     import Alert from "$lib/components/Alert.svelte";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import { toaster } from "$lib/components/toaster";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
-
-    const toastStore = getToastStore();
 
     let signingIn = $state(false);
     let oAuthError: Record<string, string> | undefined = $state();
@@ -51,37 +49,35 @@
                 if (result.type === "failure") {
                     form.formElement.reset();
                 } else if (result.type === "error") {
-                    toastStore.trigger({
-                        background: "variant-filled-error",
-                        message: result.error
-                    });
+                    toaster.error({ description: result.error });
                 }
                 await update();
             };
         }}
     >
-        <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+        <div
+            class="rounded-container card preset-filled-surface-100-900 border-surface-200-800 flex flex-col space-y-4 border p-4"
+        >
             {#if data.isCallback}
                 <div class="flex flex-col items-center justify-center space-y-4">
-                    <ProgressRadial width="w-12 md:w-16" />
+                    <span class="loading loading-spinner w-8 md:w-12"></span>
                     <span class="text-lg md:text-xl">{$t("auth.authenticating")}</span>
                 </div>
             {:else}
                 {#if data.enableLogin}
-                    <label for="username">
+                    <label class="label" for="username">
                         <span>{$t("auth.username")}</span>
                         <input
                             id="username"
                             name="username"
-                            class="input"
-                            class:input-error={form?.incorrect || form?.error}
+                            class={["input", (form?.incorrect || form?.error) && "input-invalid"]}
                             autocapitalize="off"
                             autocomplete="username"
                             required
                             type="text"
                         />
                         {#if form?.errors?.username}
-                            <span class="unstyled text-xs text-red-500">
+                            <span class="text-invalid">
                                 {form.errors.username[0]}
                             </span>
                         {/if}
@@ -97,45 +93,48 @@
                         />
 
                         {#if form?.incorrect}
-                            <span class="unstyled text-xs text-red-500">
+                            <span class="text-invalid">
                                 {$t("errors.invalid-credentials")}
                             </span>
                         {/if}
                         {#if form?.errors?.password}
-                            <span class="unstyled text-xs text-red-500">
+                            <span class="text-invalid">
                                 {form.errors.password[0]}
                             </span>
                         {/if}
 
                         <div class="flex items-center justify-center gap-x-4">
-                            <button class="variant-filled-primary btn w-min" disabled={signingIn}>
+                            <button class="preset-filled-primary-500 btn w-min" disabled={signingIn}>
                                 {#if signingIn}
-                                    <ProgressRadial width="w-4" />
+                                    <span class="loading loading-spinner loading-xs"></span>
                                 {/if}
                                 <span>{$t("auth.sign-in")}</span>
                             </button>
                             {#if data.enableSignup}
-                                <a href="/signup">{$t("auth.create-an-account")}</a>
+                                <a class="anchor" href="/signup">{$t("auth.create-an-account")}</a>
                             {/if}
                         </div>
 
-                        <a class="absolute top-0 !mt-0 pt-0.5 text-sm ltr:right-0 rtl:left-0" href="/forgot-password">
+                        <a
+                            class="anchor absolute top-0 mt-0! pt-0.5 text-sm ltr:right-0 rtl:left-0"
+                            href="/forgot-password"
+                        >
                             {$t("auth.forgot-password")}
                         </a>
                     </div>
                 {/if}
                 {#if data.oidcConfig?.ready}
                     {#if data.enableLogin}
-                        <div class="flex w-full items-center justify-center">
-                            <hr class="my-2 h-px w-3/4 border-0" />
-                            <span class="bg-surface-100-800-token absolute left-1/2 -translate-x-1/2 px-2">
+                        <div class="-mt-4 flex w-full items-center justify-center">
+                            <hr class="hr my-2 h-px w-3/4" />
+                            <span class="preset-filled-surface-100-900 absolute left-1/2 -translate-x-1/2 px-2">
                                 {$t("auth.or")}
                             </span>
                         </div>
                     {/if}
                     <div class="flex justify-center">
                         <button
-                            class="variant-filled-primary btn"
+                            class="preset-filled-primary-500 btn"
                             disabled={signingIn}
                             onclick={() => window.location.assign(`/login/oidc${page.url.search}`)}
                             type="button"

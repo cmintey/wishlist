@@ -14,8 +14,8 @@
     const variant = type === "info" ? "primary" : type === "warning" ? "warning" : "error";
 </script>
 
-<aside class="alert variant-ghost-{variant} mb-2 {clazz}" {...rest}>
-    <div class="alert-message flex flex-row items-center gap-x-4 space-y-0">
+<aside class="alert preset-tonal border border-surface-500-{variant} mb-2 {clazz}" {...rest}>
+    <div class="alert-message flex flex-row items-center space-y-0 gap-x-4">
         {#if !noicon}
             <span><iconify-icon class="text-4xl" icon="ion:{icon}"></iconify-icon></span>
         {/if}

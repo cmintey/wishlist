@@ -7,8 +7,8 @@
     import type { Group } from "$lib/generated/prisma/client";
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "$lib/components/toaster";
 
     const { onSuccess }: Props = $props();
     const t = getFormatter();
@@ -18,7 +18,6 @@
     let form: HTMLFormElement | undefined = $state();
     let sending = $state(false);
 
-    const toastStore = getToastStore();
     const submit: Writable<() => void> = getContext("submit");
     $submit = () => {
         form?.requestSubmit();
@@ -53,7 +52,7 @@
                 }
                 if (action.search.endsWith("?/send-test") && result.type === "success") {
                     sending = false;
-                    toastStore.trigger({ message: $t("admin.test-email-sent-toast") });
+                    toaster.info({ description: $t("admin.test-email-sent-toast") });
                 }
                 await applyAction(result);
             };
@@ -67,7 +66,7 @@
                         {#each options as option}
                             <li>
                                 <a
-                                    class={[currentHash === option.hash && "!variant-filled-primary"]}
+                                    class={[currentHash === option.hash && "preset-filled-primary-500!"]}
                                     href={option.hash}
                                 >
                                     {option.label($t)}

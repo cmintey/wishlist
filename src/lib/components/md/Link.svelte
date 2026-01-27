@@ -9,4 +9,4 @@
     const { href = "", title = undefined, children }: Props = $props();
 </script>
 
-<a {href} onclick={(e) => e.stopPropagation()} {title}>{@render children?.()}</a>
+<a class="aside" {href} onclick={(e) => e.stopPropagation()} {title}>{@render children?.()}</a>

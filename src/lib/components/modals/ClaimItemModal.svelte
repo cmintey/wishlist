@@ -1,32 +1,38 @@
 <script lang="ts">
     import { SystemUsersAPI } from "$lib/api/users";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton";
-    import { errorToast } from "../toasts";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
+    import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
+    import { Dialog } from "@skeletonlabs/skeleton-svelte";
 
-    interface Props {
-        parent: any;
-    }
-
-    interface Meta {
+    interface Props extends Omit<BaseModalProps, "title" | "description" | "actions" | "children" | "element"> {
         item: ItemOnListDTO;
         userId: string | undefined;
-        groupId: string | undefined;
-        claimId: string | undefined;
+        groupId: string;
         requireClaimEmail: boolean;
-        maxQuantity: number;
+        claimId?: string;
+        onSuccess?: VoidFunction;
+        onFailure?: VoidFunction;
     }
 
-    let { parent }: Props = $props();
+    let {
+        item,
+        userId,
+        groupId,
+        claimId,
+        requireClaimEmail,
+        onSuccess,
+        onFailure,
+        trigger: inputTrigger,
+        ...rest
+    }: Props = $props();
 
     const t = getFormatter();
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
-
-    const { item, userId, groupId, claimId, requireClaimEmail }: Meta = $modalStore[0].meta;
+    const formId = $props.id();
+    let open = $state(false);
 
     const claim = item.claims.find((claim) => claim.claimId === claimId);
 
@@ -34,6 +40,26 @@
     let name: string | undefined = $state();
     let quantity = $state(claim?.quantity || 1);
     let error: string | undefined = $state();
+
+    async function handleTrigger(e: MouseEvent) {
+        console.log("trigger");
+        e.stopPropagation();
+        if (!userId) {
+            open = true;
+            return;
+        }
+        if (claim && item.quantity === 1 && claim.quantity === 1) {
+            console.log("claim");
+            return onUnclaim();
+        }
+        if (item.remainingQuantity === 1) {
+            console.log("remaining 1");
+            quantity = 1;
+            return onFormSubmit();
+        }
+        console.log("fallback");
+        open = true;
+    }
 
     async function onUnclaim() {
         quantity = 0;
@@ -63,22 +89,18 @@
         const claimAPI = new ClaimAPI(claimId);
         const resp = await claimAPI.updateQuantity(quantity);
         if (resp.ok) {
-            let message;
+            let description;
             if (quantity === 0) {
-                message = $t("wishes.claimed-item", { values: { claimed: false } });
+                description = $t("wishes.claimed-item", { values: { claimed: false } });
             } else {
-                message = $t("wishes.updated-claim");
+                description = $t("wishes.updated-claim");
             }
-            toastStore.trigger({
-                message,
-                autohide: true,
-                timeout: 5000
-            });
-            $modalStore[0].response?.(true);
-            return modalStore.close();
+            toaster.info({ description });
+            onSuccess?.();
+            open = false;
         } else {
-            parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            onFailure?.();
+            toaster.error({ description: $t("general.oops") });
         }
     }
 
@@ -87,16 +109,14 @@
         const resp = await listItemAPI.claim(userId, quantity);
 
         if (resp.ok) {
-            toastStore.trigger({
-                message: $t("wishes.claimed-item", { values: { claimed: true } }),
-                autohide: true,
-                timeout: 5000
+            toaster.info({
+                description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
-            $modalStore[0].response?.(true);
-            return modalStore.close();
+            onSuccess?.();
+            open = false;
         } else {
-            parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            onFailure?.();
+            toaster.error({ description: $t("general.oops") });
         }
     }
 
@@ -106,8 +126,8 @@
         if (!userResp.ok) {
             const responseData = await userResp.json();
 
-            parent.onClose();
-            errorToast(toastStore, responseData.message || $t("general.oops"));
+            onFailure?.();
+            toaster.error({ description: responseData.message || $t("general.oops") });
             return;
         }
         const { id: publicUserId } = await userResp.json();
@@ -116,32 +136,38 @@
         const resp = await listItemAPI.claimPublic(publicUserId, quantity);
 
         if (resp.ok) {
-            toastStore.trigger({
-                message: $t("wishes.claimed-item", { values: { claimed: true } }),
-                autohide: true,
-                timeout: 5000
+            toaster.info({
+                description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
-            $modalStore[0].response?.(true);
-            return modalStore.close();
+            onSuccess?.();
+            open = false;
         } else {
-            parent.onClose();
-            errorToast(toastStore, $t("general.oops"));
+            onFailure?.();
+            toaster.error({ description: $t("general.oops") });
         }
     }
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("wishes.claim-details")}</header>
-    <form onsubmit={onFormSubmit}>
+<BaseModal
+    description={$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}
+    onOpenChange={(e) => (open = e.open)}
+    {open}
+    title={$t("wishes.claim-details")}
+    {...rest}
+>
+    {#snippet trigger(props)}
+        {@render inputTrigger({ ...props, onclick: handleTrigger })}
+    {/snippet}
+    <form id={formId} onsubmit={onFormSubmit}>
         {#if !userId}
             <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
             <label class="w-fit">
                 <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
-                    <div class="input-group-shim">
+                    <div class="ig-cell preset-tonal">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                     </div>
-                    <input class="input" type="text" bind:value={name} />
+                    <input class="ig-input" type="text" bind:value={name} />
                 </div>
             </label>
 
@@ -149,10 +175,10 @@
                 <label class="w-fit">
                     <span>{$t("auth.email")}</span>
                     <div class="input-group grid-cols-[auto_1fr_auto]">
-                        <div class="input-group-shim">
+                        <div class="ig-cell preset-tonal">
                             <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                         </div>
-                        <input class="input" required type="email" bind:value={username} />
+                        <input class="ig-input" required type="email" bind:value={username} />
                     </div>
                 </label>
             {/if}
@@ -163,7 +189,7 @@
                 <label class="w-fit">
                     <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
                     <input
-                        class={["input", error && "input-error"]}
+                        class={["input", error && "input-invalid"]}
                         inputmode="numeric"
                         max={item.remainingQuantity + (claim?.quantity || 0)}
                         min={claim ? 0 : 1}
@@ -174,7 +200,7 @@
                     />
                 </label>
                 {#if error}
-                    <span class="text-error-500-400-token text-sm">{error}</span>
+                    <span class="text-invalid">{error}</span>
                 {/if}
                 {#if claim}
                     <span class="subtext">
@@ -190,21 +216,21 @@
                 {/if}
             </div>
         {/if}
-
-        <footer class={["flex flex-wrap gap-2 pt-2", claim ? "justify-between" : "justify-end"]}>
-            {#if claim}
-                <button class="variant-filled-error btn btn-sm md:btn-base" onclick={onUnclaim} type="button">
-                    {$t("wishes.unclaim")}
-                </button>
-            {/if}
-            <div class="flex flex-wrap gap-2">
-                <button class="btn btn-sm md:btn-base {parent.buttonNeutral}" onclick={parent.onClose} type="button">
-                    {$t("general.cancel")}
-                </button>
-                <button class="btn btn-sm md:btn-base {parent.buttonPositive}" type="submit">
-                    {$t("wishes.claim")}
-                </button>
-            </div>
-        </footer>
     </form>
-</div>
+    {#snippet actions({ neutralStyle, negativeStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} type="button">
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
+
+        <div class="flex flex-wrap gap-2">
+            {#if claim}
+                <Dialog.CloseTrigger class={negativeStyle} onclick={onUnclaim} type="button">
+                    {$t("wishes.unclaim")}
+                </Dialog.CloseTrigger>
+            {/if}
+            <Dialog.CloseTrigger class={positiveStyle} form={formId} type="submit">
+                {$t("wishes.claim")}
+            </Dialog.CloseTrigger>
+        </div>
+    {/snippet}
+</BaseModal>

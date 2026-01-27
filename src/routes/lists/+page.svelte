@@ -20,7 +20,7 @@
         if (!list.items || list.items.length === 0) return false;
         const userHash = await hash(list.id);
         const currentHash = await hashItems(list.items);
-        const viewedHash = $viewedItems[userHash];
+        const viewedHash = viewedItems.current[userHash];
         return currentHash !== viewedHash;
     };
 </script>
@@ -28,7 +28,7 @@
 <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
     <ListFilterChip {users} />
     <button
-        class="variant-ghost-secondary btn btn-sm h-fit items-center"
+        class="preset-tonal-secondary border-secondary-500 btn btn-sm h-fit items-center border"
         onclick={() => goto(resolve("/lists/create"))}
     >
         <iconify-icon icon="ion:add"></iconify-icon>

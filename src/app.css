@@ -1,0 +1,248 @@
+@import "tailwindcss";
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton-svelte";
+@import "./wishlist.css";
+@import "./styles/list.css";
+@import "./styles/toast.css";
+@import "./styles/loading.css";
+@import "./styles/print.css";
+@import "./styles/table.css";
+@plugin "@tailwindcss/forms";
+
+/* The following are classes defined in i18n files and are used */
+@source inline("text-secondary-800-200");
+@source inline("font-bold");
+
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
+}
+
+@layer base {
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-Regular.woff2") format("woff2"),
+            url("/fonts/Lato-Regular.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-Light.woff2") format("woff2"),
+            url("/fonts/Lato-Light.woff") format("woff");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-LightItalic.woff2") format("woff2"),
+            url("/fonts/Lato-LightItalic.woff") format("woff");
+        font-weight: 300;
+        font-style: italic;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato Hairline";
+        src:
+            url("/fonts/Lato-Hairline.woff2") format("woff2"),
+            url("/fonts/Lato-Hairline.woff") format("woff");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-Italic.woff2") format("woff2"),
+            url("/fonts/Lato-Italic.woff") format("woff");
+        font-weight: normal;
+        font-style: italic;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-Bold.woff2") format("woff2"),
+            url("/fonts/Lato-Bold.woff") format("woff");
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato Hairline";
+        src:
+            url("/fonts/Lato-HairlineItalic.woff2") format("woff2"),
+            url("/fonts/Lato-HairlineItalic.woff") format("woff");
+        font-weight: 300;
+        font-style: italic;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-Black.woff2") format("woff2"),
+            url("/fonts/Lato-Black.woff") format("woff");
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-BlackItalic.woff2") format("woff2"),
+            url("/fonts/Lato-BlackItalic.woff") format("woff");
+        font-weight: 900;
+        font-style: italic;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src:
+            url("/fonts/Lato-BoldItalic.woff2") format("woff2"),
+            url("/fonts/Lato-BoldItalic.woff") format("woff");
+        font-weight: bold;
+        font-style: italic;
+        font-display: swap;
+    }
+}
+
+@layer components {
+    .btn,
+    .chip,
+    .list-nav a,
+    .list-nav .list-option {
+        @apply rtl:space-x-reverse;
+    }
+
+    .subtext {
+        @apply text-surface-900/70 dark:text-surface-50/50 text-sm;
+    }
+
+    .text-subtle {
+        @apply text-surface-900/70 dark:text-surface-50/50;
+    }
+}
+
+@layer utilities {
+    input[type="checkbox"] {
+        @apply bg-surface-200-800 disabled:checked:bg-surface-500 border-surface-300-700 disabled:cursor-not-allowed;
+    }
+
+    .checkbox-label {
+        @apply flex flex-row items-center gap-x-2;
+    }
+
+    .select,
+    .input,
+    .input-group,
+    .textarea {
+        background-color: var(--color-surface-200-800);
+        --tw-ring-color: var(--color-surface-300-700);
+    }
+
+    .input-group {
+        /* Dividers */
+        & > * + * {
+            border-left-width: 1px !important;
+            border-color: var(--color-surface-300-700);
+        }
+    }
+
+    .input,
+    .ig-input,
+    .textarea {
+        padding-block: calc(var(--spacing-input) * 1);
+        padding-inline: calc(var(--spacing-input) * 3);
+        &::placeholder {
+            color: var(--color-surface-600-400);
+        }
+    }
+
+    .btn,
+    .btn-base {
+        padding-block: --spacing(1.5);
+    }
+
+    .chip {
+        border-radius: 0.375rem;
+    }
+
+    .btn-sm {
+        padding-block: --spacing(1);
+    }
+
+    .btn-icon {
+        border-radius: 100%;
+        padding: --spacing(2);
+        @apply text-sm;
+    }
+
+    .anchor {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        @apply decoration-primary-500/50;
+        @variant hover {
+            text-decoration-style: dotted;
+        }
+    }
+
+    .card-hover {
+        @variant hover {
+            scale: 101% 101%;
+            box-shadow: var(--shadow-xl);
+        }
+    }
+
+    .text-tiny {
+        font-size: calc(0.6rem /* 12px */ * var(--text-scaling));
+    }
+
+    .input-invalid {
+        @apply preset-outlined-error-700-300;
+    }
+
+    .text-invalid {
+        @apply text-error-700-300 text-xs;
+    }
+}
+
+html,
+body {
+    height: 100%;
+}
+
+/*! purgecss start ignore */
+.ptr--icon,
+.ptr--text {
+    color: var(--color-primary-950-50);
+}
+/*! purgecss end ignore */

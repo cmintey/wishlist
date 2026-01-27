@@ -12,17 +12,13 @@
     let { value = $bindable(), onValueClear, showClearButton, clearButtonLabel, lead, ...props }: Props = $props();
 </script>
 
-<div
-    class="input-group input-group-divider grid"
-    class:grid-cols-[1fr_auto]={!lead}
-    class:grid-cols-[auto_1fr_auto]={lead}
->
+<div class="input-group grid" class:grid-cols-[1fr_auto]={!lead} class:grid-cols-[auto_1fr_auto]={lead}>
     {@render lead?.()}
-    <input bind:value {...props} />
+    <input bind:value {...props} class={["ig-input", props.class]} />
     {#if showClearButton()}
         <button
             id="reset-{props.id}"
-            class="items-center"
+            class="ig-cell items-center border-l-0! px-2"
             aria-label={clearButtonLabel}
             onclick={onValueClear}
             onkeypress={(e) => e.preventDefault()}

@@ -19,7 +19,7 @@
     <h1 class="h1 capitalize">{$t("auth.create-account")}</h1>
 
     <form
-        class="min-w-80 max-w-lg md:w-1/2 lg:w-2/3"
+        class="max-w-lg min-w-80 md:w-1/2 lg:w-2/3"
         method="POST"
         use:enhance={() => {
             signingIn = true;
