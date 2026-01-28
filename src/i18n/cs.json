@@ -463,5 +463,23 @@
         "import-item": "Importovat položku",
         "import-item-text": "Před importem vyberte skupinu a seznam",
         "select-a-list": "Vybrat seznam"
+    },
+    "account": {
+        "api-keys-tab": "API klíče",
+        "api-keys": "API klíče",
+        "create-api-key": "Vytvořit API klíč",
+        "api-key-name": "Název",
+        "api-key-name-placeholder": "např. Rozšíření prohlížeče",
+        "api-key-expires": "Vyprší",
+        "api-key-prefix": "Klíč",
+        "api-key-created": "Vytvořeno",
+        "api-key-last-used": "Naposledy použito",
+        "api-key-copied": "API klíč zkopírován do schránky",
+        "api-key-warning": "Ujistěte se, že jste si nyní zkopírovali svůj API klíč. Už ho neuvidíte!",
+        "copy-api-key": "Zkopírovat API klíč",
+        "delete-api-key": "Smazat API klíč",
+        "no-api-keys": "Zatím žádné API klíče. Vytvořte jeden pro použití s externími aplikacemi.",
+        "never": "Nikdy",
+        "create": "Vytvořit"
     }
 }

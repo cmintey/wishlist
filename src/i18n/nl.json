@@ -463,5 +463,23 @@
         "import-item": "Importeer item",
         "import-item-text": "Voordat je een item kunt importeren, moet je een groep en een lijst kiezen",
         "select-a-list": "Selecteer een lijst"
+    },
+    "account": {
+        "api-keys-tab": "API-sleutels",
+        "api-keys": "API-sleutels",
+        "create-api-key": "API-sleutel aanmaken",
+        "api-key-name": "Naam",
+        "api-key-name-placeholder": "bijv. Browserextensie",
+        "api-key-expires": "Verloopt",
+        "api-key-prefix": "Sleutel",
+        "api-key-created": "Aangemaakt",
+        "api-key-last-used": "Laatst gebruikt",
+        "api-key-copied": "API-sleutel gekopieerd naar klembord",
+        "api-key-warning": "Zorg ervoor dat je nu je API-sleutel kopieert. Je kunt hem niet meer zien!",
+        "copy-api-key": "API-sleutel kopiëren",
+        "delete-api-key": "API-sleutel verwijderen",
+        "no-api-keys": "Nog geen API-sleutels. Maak er een aan voor gebruik met externe applicaties.",
+        "never": "Nooit",
+        "create": "Aanmaken"
     }
 }

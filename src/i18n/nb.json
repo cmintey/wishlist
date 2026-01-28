@@ -421,5 +421,23 @@
         "view-item": "Vis ønsket",
         "write": "Skriv"
     },
-    "unable-to-load-icons": "Kunne ikke laste ikonene."
+    "unable-to-load-icons": "Kunne ikke laste ikonene.",
+    "account": {
+        "api-keys-tab": "API-nøkler",
+        "api-keys": "API-nøkler",
+        "create-api-key": "Opprett API-nøkkel",
+        "api-key-name": "Navn",
+        "api-key-name-placeholder": "f.eks. Nettleserutvidelse",
+        "api-key-expires": "Utløper",
+        "api-key-prefix": "Nøkkel",
+        "api-key-created": "Opprettet",
+        "api-key-last-used": "Sist brukt",
+        "api-key-copied": "API-nøkkel kopiert til utklippstavlen",
+        "api-key-warning": "Sørg for å kopiere API-nøkkelen nå. Du vil ikke kunne se den igjen!",
+        "copy-api-key": "Kopier API-nøkkel",
+        "delete-api-key": "Slett API-nøkkel",
+        "no-api-keys": "Ingen API-nøkler ennå. Opprett en for bruk med eksterne applikasjoner.",
+        "never": "Aldri",
+        "create": "Opprett"
+    }
 }

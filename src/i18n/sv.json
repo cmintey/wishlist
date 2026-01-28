@@ -463,5 +463,23 @@
         "sort-by": "Sortera efter",
         "supports-markdown": "Stöder Markdown"
     },
-    "unable-to-load-icons": "Det gick inte att ladda ikoner."
+    "unable-to-load-icons": "Det gick inte att ladda ikoner.",
+    "account": {
+        "api-keys-tab": "API-nycklar",
+        "api-keys": "API-nycklar",
+        "create-api-key": "Skapa API-nyckel",
+        "api-key-name": "Namn",
+        "api-key-name-placeholder": "t.ex. Webläsartillägg",
+        "api-key-expires": "Går ut",
+        "api-key-prefix": "Nyckel",
+        "api-key-created": "Skapad",
+        "api-key-last-used": "Senast använd",
+        "api-key-copied": "API-nyckel kopierad till urklipp",
+        "api-key-warning": "Se till att kopiera din API-nyckel nu. Du kommer inte kunna se den igen!",
+        "copy-api-key": "Kopiera API-nyckel",
+        "delete-api-key": "Ta bort API-nyckel",
+        "no-api-keys": "Ännu inga API-nycklar. Skapa en för användning med externa applikationer.",
+        "never": "Aldrig",
+        "create": "Skapa"
+    }
 }
