@@ -2,6 +2,7 @@
     import { enhance } from "$app/forms";
     import ChangePassword from "$lib/components/account/ChangePassword.svelte";
     import EditProfile from "$lib/components/account/EditProfile.svelte";
+    import ApiKeys from "$lib/components/account/ApiKeys.svelte";
     import Avatar from "$lib/components/Avatar.svelte";
     import { FileButton, getToastStore, Tab } from "@skeletonlabs/skeleton";
     import type { PageProps } from "./$types";
@@ -10,7 +11,7 @@
     import { getFormatter } from "$lib/i18n";
     import { errorToast } from "$lib/components/toasts";
 
-    let { data }: PageProps = $props();
+    let { data, form }: PageProps = $props();
     const t = getFormatter();
     const toastStore = getToastStore();
 
@@ -26,6 +27,7 @@
     {#if !data.isProxyUser}
         <Tab name="Security" value={1} bind:group={tabSet}>{$t("admin.security")}</Tab>
     {/if}
+    <Tab name="API Keys" value={2} bind:group={tabSet}>{$t("account.api-keys-tab")}</Tab>
     {#snippet panel()}
         {#if tabSet === 0}
             <div class="flex w-fit flex-col items-center">
@@ -73,6 +75,8 @@
                     <LinkOAuth oauthId={data.user.oauthId} providerName={data.oidcConfig.providerName} />
                 {/if}
             </div>
+        {:else if tabSet === 2}
+            <ApiKeys apiKeys={data.apiKeys} newApiKey={form?.newApiKey} />
         {/if}
     {/snippet}
 </TabGroup>

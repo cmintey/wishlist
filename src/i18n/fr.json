@@ -463,5 +463,23 @@
         "import-item-text": "Avant d'importer un élément, vous devez choisir un groupe et une liste",
         "select-a-list": "Sélectionner une liste"
     },
-    "unable-to-load-icons": "Impossible de charger les icônes."
+    "unable-to-load-icons": "Impossible de charger les icônes.",
+    "account": {
+        "api-keys-tab": "Clés API",
+        "api-keys": "Clés API",
+        "create-api-key": "Créer une clé API",
+        "api-key-name": "Nom",
+        "api-key-name-placeholder": "ex. Extension navigateur",
+        "api-key-expires": "Expiration",
+        "api-key-prefix": "Clé",
+        "api-key-created": "Créée le",
+        "api-key-last-used": "Dernière utilisation",
+        "api-key-copied": "Clé API copiée dans le presse-papiers",
+        "api-key-warning": "Assurez-vous de copier votre clé API maintenant. Vous ne pourrez plus la voir après !",
+        "copy-api-key": "Copier la clé API",
+        "delete-api-key": "Supprimer la clé API",
+        "no-api-keys": "Aucune clé API. Créez-en une pour utiliser des applications externes.",
+        "never": "Jamais",
+        "create": "Créer"
+    }
 }

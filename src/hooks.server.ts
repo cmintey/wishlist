@@ -17,10 +17,17 @@ import { sequence } from "@sveltejs/kit/hooks";
 /**
  * Custom CSRF protection hook to support multiple origins
  * Replaces SvelteKit's default CSRF verification
+ * API routes (/api/v1/*) are excluded as they use API key authentication
  */
 const csrfProtection: Handle = async ({ event, resolve }) => {
     const request = event.request;
     const method = request.method;
+    const pathname = event.url.pathname;
+    
+    // Skip CSRF for API routes - they use API key authentication
+    if (pathname.startsWith("/api/v1/")) {
+        return resolve(event);
+    }
     
     // CSRF verification only for methods that modify data
     if (method === "POST" || method === "PUT" || method === "PATCH" || method === "DELETE") {
