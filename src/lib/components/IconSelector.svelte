@@ -96,8 +96,6 @@
             iconValue = search;
         }
     };
-
-    $inspect(iconValue);
 </script>
 
 <Combobox

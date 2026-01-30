@@ -11,17 +11,17 @@
 
     const { user, groups }: Props = $props();
 
-    const userAPI = new UserAPI(user.id);
+    let open = $state(false);
+    const userAPI = $derived(new UserAPI(user.id));
 
     const onSelect = async (group: GroupInformation) => {
+        open = false;
         if (group.active) return;
         await userAPI.setActiveGroup(group.id);
         await goto(resolve("/lists"), { invalidateAll: true });
     };
 
     const activeGroup = $derived(groups.find((group) => group.active)!);
-
-    let open = $state(false);
 </script>
 
 <Popup bind:open>

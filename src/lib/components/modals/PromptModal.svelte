@@ -17,6 +17,13 @@
     let value: string | undefined = $state();
 </script>
 
-<ConfirmModal {confirmText} {...rest} onConfirm={() => onSubmit(value)}>
+<ConfirmModal
+    {confirmText}
+    {...rest}
+    onConfirm={() => {
+        onSubmit(value);
+        value = undefined;
+    }}
+>
     <input class="input" type="text" bind:value {...inputProps} />
 </ConfirmModal>

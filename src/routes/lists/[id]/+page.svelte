@@ -30,7 +30,8 @@
     const { data }: PageProps = $props();
     const t = getFormatter();
 
-    let allItems: ItemOnListDTO[] = $derived(data.list.items);
+    // svelte-ignore state_referenced_locally
+    let allItems: ItemOnListDTO[] = $state(data.list.items);
     let reordering = $state(false);
     let publicListUrl: URL | undefined = $state();
     let approvals = $derived(allItems.filter((item) => !item.approved));
@@ -76,6 +77,7 @@
     onMount(async () => {
         await updateHash();
     });
+
     onMount(() => {
         const eventSource = subscribeToEvents();
         return () => eventSource.close();
@@ -85,11 +87,9 @@
         allItems = data.list.items;
     });
 
-    $effect(() => {
-        if (reordering) {
-            allItems.forEach((it, idx) => (it.displayOrder = idx));
-        }
-    });
+    const updateDisplayOrder = (items: ItemOnListDTO[]) => {
+        items.forEach((it, idx) => (it.displayOrder = idx));
+    };
 
     const groupItems = (items: ItemOnListDTO[]) => {
         // When on own list, don't separate out claimed vs un-claimed
@@ -192,10 +192,12 @@
     }
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
-        allItems.forEach((item, idx) => (item.displayOrder = idx));
+        updateDisplayOrder(allItems);
     };
-    const swap = <T,>(arr: T[], a: number, b: number) => {
-        return arr.with(a, arr[b]).with(b, arr[a]);
+    const swap = (arr: ItemOnListDTO[], a: number, b: number) => {
+        const swapped = arr.with(a, arr[b]).with(b, arr[a]);
+        updateDisplayOrder(swapped);
+        return swapped;
     };
     const handleIncreasePriority = (itemId: number) => {
         const itemIdx = allItems.findIndex((item) => item.id === itemId);

@@ -6,16 +6,21 @@
 
     interface Props extends Omit<BaseModalProps, "title" | "description" | "actions" | "children"> {
         groups: Group[];
-        onSubmit: (groupId: string | undefined) => void;
+        onSubmit: (groupId: string | undefined) => void | Promise<void>;
     }
 
     const { groups, onSubmit, ...props }: Props = $props();
     const t = getFormatter();
     const locale = getLocale();
-    let selectedGroup: string | undefined = $state();
+    let selectedGroup: string[] | undefined = $state();
 
-    function onFormSubmit() {
-        onSubmit(selectedGroup);
+    function resetForm() {
+        selectedGroup = [];
+    }
+
+    async function onFormSubmit() {
+        await onSubmit(selectedGroup?.[0]);
+        resetForm();
     }
 
     const collection = $derived(
@@ -29,7 +34,7 @@
 
 <BaseModal title={$t("general.select-group")} {...props}>
     {#snippet description()}
-        <Listbox {collection}>
+        <Listbox {collection} deselectable onValueChange={(e) => (selectedGroup = e.value)} value={selectedGroup}>
             <Listbox.Label>{$t("admin.select-a-group-option")}</Listbox.Label>
             <Listbox.Content>
                 {#each collection.items as item (item.id)}
@@ -43,7 +48,7 @@
     {/snippet}
 
     {#snippet actions({ neutralStyle, positiveStyle })}
-        <Dialog.CloseTrigger class={neutralStyle}>
+        <Dialog.CloseTrigger class={neutralStyle} onclick={resetForm}>
             {$t("general.cancel")}
         </Dialog.CloseTrigger>
 

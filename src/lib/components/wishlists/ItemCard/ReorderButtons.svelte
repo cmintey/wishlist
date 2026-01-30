@@ -12,6 +12,7 @@
     let messageObj = $derived({ values: { name: item.name } });
 
     let isTileView = $derived(getListViewPreference() === "tile");
+    let displayOrder = $derived(item.displayOrder !== null ? item.displayOrder + 1 : null);
 </script>
 
 <div class="flex flex-col">
@@ -35,7 +36,7 @@
                 inputmode="numeric"
                 onchange={(e) => onPriorityChange?.(item, e.currentTarget.value)}
                 pattern="/d*"
-                value={item.displayOrder !== null ? item.displayOrder + 1 : null}
+                value={displayOrder}
             />
         </div>
         <button

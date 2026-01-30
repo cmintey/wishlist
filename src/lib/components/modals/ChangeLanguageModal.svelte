@@ -36,10 +36,8 @@
         id={formId}
         action="/?/language"
         method="POST"
-        use:enhance={(e) => {
-            console.log(e);
+        use:enhance={() => {
             return async ({ result, update }) => {
-                console.log(result);
                 if (result.type === "success") {
                     open = false;
                     window.location.reload();

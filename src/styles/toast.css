@@ -1,7 +1,7 @@
 [data-scope="toast"][data-part="root"] {
     &[data-type="info"],
     &[data-type="loading"] {
-        @apply preset-tonal-primary preset-outlined-primary-500;
+        @apply preset-tonal-secondary preset-outlined-secondary-500;
     }
 
     &[data-type="success"] {

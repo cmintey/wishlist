@@ -80,6 +80,9 @@
     });
 
     const webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
+
+    let footerHeight: number | undefined = $state();
+    let toasterYShift: number | undefined = $derived(footerHeight && footerHeight + 12);
 </script>
 
 <div class="min-h-screen">
@@ -97,12 +100,12 @@
         {@render children?.()}
     </main>
 
-    <footer class="sticky bottom-0 z-10 print:hidden">
+    <footer class="sticky bottom-0 z-10 print:hidden" bind:clientHeight={footerHeight}>
         <BottomTabs {navItems} user={data.user} />
     </footer>
 </div>
 
-<Toaster />
+<Toaster yShift={toasterYShift} />
 
 <svelte:head>
     {@html webManifestLink}

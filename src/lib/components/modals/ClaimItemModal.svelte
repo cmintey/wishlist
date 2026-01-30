@@ -31,33 +31,28 @@
     }: Props = $props();
 
     const t = getFormatter();
-    const formId = $props.id();
     let open = $state(false);
 
-    const claim = item.claims.find((claim) => claim.claimId === claimId);
+    const claim = $derived(item.claims.find((claim) => claim.claimId === claimId));
 
     let username: string | undefined = $state();
     let name: string | undefined = $state();
-    let quantity = $state(claim?.quantity || 1);
+    let quantity = $derived(claim?.quantity || 1);
     let error: string | undefined = $state();
 
     async function handleTrigger(e: MouseEvent) {
-        console.log("trigger");
         e.stopPropagation();
         if (!userId) {
             open = true;
             return;
         }
         if (claim && item.quantity === 1 && claim.quantity === 1) {
-            console.log("claim");
             return onUnclaim();
         }
-        if (item.remainingQuantity === 1) {
-            console.log("remaining 1");
+        if (!claim && item.remainingQuantity === 1) {
             quantity = 1;
             return onFormSubmit();
         }
-        console.log("fallback");
         open = true;
     }
 
@@ -95,9 +90,9 @@
             } else {
                 description = $t("wishes.updated-claim");
             }
+            open = false;
             toaster.info({ description });
             onSuccess?.();
-            open = false;
         } else {
             onFailure?.();
             toaster.error({ description: $t("general.oops") });
@@ -109,11 +104,11 @@
         const resp = await listItemAPI.claim(userId, quantity);
 
         if (resp.ok) {
+            open = false;
             toaster.info({
                 description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
             onSuccess?.();
-            open = false;
         } else {
             onFailure?.();
             toaster.error({ description: $t("general.oops") });
@@ -136,11 +131,11 @@
         const resp = await listItemAPI.claimPublic(publicUserId, quantity);
 
         if (resp.ok) {
+            open = false;
             toaster.info({
                 description: $t("wishes.claimed-item", { values: { claimed: true } })
             });
             onSuccess?.();
-            open = false;
         } else {
             onFailure?.();
             toaster.error({ description: $t("general.oops") });
@@ -158,65 +153,65 @@
     {#snippet trigger(props)}
         {@render inputTrigger({ ...props, onclick: handleTrigger })}
     {/snippet}
-    <form id={formId} onsubmit={onFormSubmit}>
-        {#if !userId}
-            <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
+
+    {#if !userId}
+        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
+        <label class="w-fit">
+            <span>{$t("general.name-optional")}</span>
+            <div class="input-group grid-cols-[auto_1fr_auto]">
+                <div class="ig-cell preset-tonal">
+                    <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                </div>
+                <input class="ig-input" type="text" bind:value={name} />
+            </div>
+        </label>
+
+        {#if requireClaimEmail}
             <label class="w-fit">
-                <span>{$t("general.name-optional")}</span>
+                <span>{$t("auth.email")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="ig-cell preset-tonal">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                     </div>
-                    <input class="ig-input" type="text" bind:value={name} />
+                    <input class="ig-input" required type="email" bind:value={username} />
                 </div>
             </label>
+        {/if}
+    {/if}
 
-            {#if requireClaimEmail}
-                <label class="w-fit">
-                    <span>{$t("auth.email")}</span>
-                    <div class="input-group grid-cols-[auto_1fr_auto]">
-                        <div class="ig-cell preset-tonal">
-                            <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
-                        </div>
-                        <input class="ig-input" required type="email" bind:value={username} />
-                    </div>
-                </label>
+    {#if item.remainingQuantity > 1 || claim}
+        <div class="flex flex-col gap-1">
+            <label class="w-fit">
+                <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
+                <input
+                    class={["input", error && "input-invalid"]}
+                    inputmode="numeric"
+                    max={item.remainingQuantity + (claim?.quantity || 0)}
+                    min={claim ? 0 : 1}
+                    required
+                    step="1"
+                    type="number"
+                    bind:value={quantity}
+                />
+            </label>
+            {#if error}
+                <span class="text-invalid">{error}</span>
             {/if}
-        {/if}
-
-        {#if item.remainingQuantity > 1 || claim}
-            <div class="flex flex-col gap-1">
-                <label class="w-fit">
-                    <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
-                    <input
-                        class={["input", error && "input-invalid"]}
-                        inputmode="numeric"
-                        max={item.remainingQuantity + (claim?.quantity || 0)}
-                        min={claim ? 0 : 1}
-                        required
-                        step="1"
-                        type="number"
-                        bind:value={quantity}
-                    />
-                </label>
-                {#if error}
-                    <span class="text-invalid">{error}</span>
-                {/if}
-                {#if claim}
-                    <span class="subtext">
-                        {$t("wishes.claimed-info-text", {
-                            values: { claimedQuantity: claim.quantity }
+            {#if claim}
+                <span class="subtext">
+                    {$t("wishes.claimed-info-text", {
+                        values: { claimedQuantity: claim.quantity }
+                    })}
+                    {#if item.quantity}
+                        {$t("wishes.additional-items-requested", {
+                            values: { remainingQuantity: item.remainingQuantity }
                         })}
-                        {#if item.quantity}
-                            {$t("wishes.additional-items-requested", {
-                                values: { remainingQuantity: item.remainingQuantity }
-                            })}
-                        {/if}
-                    </span>
-                {/if}
-            </div>
-        {/if}
-    </form>
+                    {/if}
+                </span>
+            {/if}
+        </div>
+    {/if}
+
     {#snippet actions({ neutralStyle, negativeStyle, positiveStyle })}
         <Dialog.CloseTrigger class={neutralStyle} type="button">
             {$t("general.cancel")}
@@ -224,13 +219,13 @@
 
         <div class="flex flex-wrap gap-2">
             {#if claim}
-                <Dialog.CloseTrigger class={negativeStyle} onclick={onUnclaim} type="button">
+                <button class={negativeStyle} onclick={onUnclaim} type="button">
                     {$t("wishes.unclaim")}
-                </Dialog.CloseTrigger>
+                </button>
             {/if}
-            <Dialog.CloseTrigger class={positiveStyle} form={formId} type="submit">
+            <button class={positiveStyle} onclick={onFormSubmit} type="button">
                 {$t("wishes.claim")}
-            </Dialog.CloseTrigger>
+            </button>
         </div>
     {/snippet}
 </BaseModal>
