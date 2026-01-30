@@ -2,6 +2,7 @@
     import { getFormatter } from "$lib/i18n";
     import { LocalStorage } from "$lib/local-storage.svelte";
     import { SegmentedControl, type SegmentedControlRootProps } from "@skeletonlabs/skeleton-svelte";
+    import { onMount } from "svelte";
 
     const t = getFormatter();
 
@@ -15,14 +16,26 @@
 
     let value = $state("system");
 
+    const setPreference = (pref: string) => {
+        document.documentElement.setAttribute("data-mode", pref);
+    };
+
     $effect(() => {
         value = modeLocalStorage.current;
         if (value === "system") {
             const pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-            document.documentElement.setAttribute("data-mode", pref);
+            setPreference(pref);
         } else {
-            document.documentElement.setAttribute("data-mode", value);
+            setPreference(value);
         }
+    });
+
+    onMount(() => {
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+            if (value === "system") {
+                setPreference(e.matches ? "dark" : "light");
+            }
+        });
     });
 
     const onValueChange: SegmentedControlRootProps["onValueChange"] = (details) => {
