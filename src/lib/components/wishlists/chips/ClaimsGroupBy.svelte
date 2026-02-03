@@ -19,8 +19,8 @@
             <span {...props} class="text-xs">{$t("wishes.group-by")}</span>
         {/snippet}
     </SegmentedControl.Label>
-    <SegmentedControl.Control class="rounded-container h-6.5 gap-1 p-px">
-        <SegmentedControl.Indicator class="preset-filled-primary-500 rounded-container" />
+    <SegmentedControl.Control class="h-6.5 gap-1 rounded p-0.5">
+        <SegmentedControl.Indicator class="preset-filled-primary-500 rounded" />
         <SegmentedControl.Item value="purchased">
             <SegmentedControl.ItemText class="text-xs">
                 {$t("wishes.purchased")}

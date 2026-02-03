@@ -22,14 +22,16 @@
     <Dialog.Trigger element={trigger}></Dialog.Trigger>
     <Portal>
         <ModalBackdrop></ModalBackdrop>
-        <Dialog.Positioner class="fixed inset-0 z-50 flex justify-start">
-            <ModalContent>
-                <header class="flex justify-between">
+        <Dialog.Positioner class="fixed inset-0 z-50 mr-4 flex max-w-72 min-w-fit justify-start">
+            <ModalContent
+                class="data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 starting:data-[state=closed]:translate-x-0 starting:data-[state=open]:-translate-x-full"
+            >
+                <header class="flex items-center justify-between">
                     <Dialog.Title class="flex flex-row items-center gap-2">
                         <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
                         <span class="text-primary-950-50 text-2xl font-bold">Wishlist</span>
                     </Dialog.Title>
-                    <Dialog.CloseTrigger class="btn btn-icon preset-tonal">
+                    <Dialog.CloseTrigger class="btn-icon preset-tonal">
                         <iconify-icon icon="ion:close"></iconify-icon>
                         <span class="sr-only">{$t("a11y.close")}</span>
                     </Dialog.CloseTrigger>

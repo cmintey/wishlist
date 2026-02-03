@@ -1,17 +1,19 @@
 @import "tailwindcss";
 @import "@skeletonlabs/skeleton";
 @import "@skeletonlabs/skeleton-svelte";
+@import "./styles/font.css";
 @import "./wishlist.css";
 @import "./styles/list.css";
 @import "./styles/toast.css";
 @import "./styles/loading.css";
 @import "./styles/print.css";
 @import "./styles/table.css";
+@import "./styles/button.css";
+@import "./styles/input.css";
+
 @plugin "@tailwindcss/forms";
 
-/* The following are classes defined in i18n files and are used */
-@source inline("text-secondary-800-200");
-@source inline("font-bold");
+@layer wishlist;
 
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 
@@ -33,108 +35,6 @@
     }
 }
 
-@layer base {
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-Regular.woff2") format("woff2"),
-            url("/fonts/Lato-Regular.woff") format("woff");
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-Light.woff2") format("woff2"),
-            url("/fonts/Lato-Light.woff") format("woff");
-        font-weight: 300;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-LightItalic.woff2") format("woff2"),
-            url("/fonts/Lato-LightItalic.woff") format("woff");
-        font-weight: 300;
-        font-style: italic;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato Hairline";
-        src:
-            url("/fonts/Lato-Hairline.woff2") format("woff2"),
-            url("/fonts/Lato-Hairline.woff") format("woff");
-        font-weight: 300;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-Italic.woff2") format("woff2"),
-            url("/fonts/Lato-Italic.woff") format("woff");
-        font-weight: normal;
-        font-style: italic;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-Bold.woff2") format("woff2"),
-            url("/fonts/Lato-Bold.woff") format("woff");
-        font-weight: bold;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato Hairline";
-        src:
-            url("/fonts/Lato-HairlineItalic.woff2") format("woff2"),
-            url("/fonts/Lato-HairlineItalic.woff") format("woff");
-        font-weight: 300;
-        font-style: italic;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-Black.woff2") format("woff2"),
-            url("/fonts/Lato-Black.woff") format("woff");
-        font-weight: 900;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-BlackItalic.woff2") format("woff2"),
-            url("/fonts/Lato-BlackItalic.woff") format("woff");
-        font-weight: 900;
-        font-style: italic;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Lato";
-        src:
-            url("/fonts/Lato-BoldItalic.woff2") format("woff2"),
-            url("/fonts/Lato-BoldItalic.woff") format("woff");
-        font-weight: bold;
-        font-style: italic;
-        font-display: swap;
-    }
-}
-
 @layer components {
     .btn,
     .chip,
@@ -153,57 +53,11 @@
 }
 
 @layer utilities {
-    input[type="checkbox"] {
-        @apply bg-surface-200-800 disabled:checked:bg-surface-500 border-surface-300-700 disabled:cursor-not-allowed;
-    }
-
-    .checkbox-label {
-        @apply flex flex-row items-center gap-x-2;
-    }
-
-    .select,
-    .input,
-    .input-group,
-    .textarea {
-        background-color: var(--color-surface-200-800);
-        --tw-ring-color: var(--color-surface-300-700);
-    }
-
-    .input-group {
-        /* Dividers */
-        & > * + * {
-            border-left-width: 1px !important;
-            border-color: var(--color-surface-300-700);
-        }
-    }
-
-    .input,
-    .ig-input,
-    .textarea {
-        padding-block: calc(var(--spacing-input) * 1);
-        padding-inline: calc(var(--spacing-input) * 3);
-        &::placeholder {
-            color: var(--color-surface-600-400);
-        }
-    }
-
-    .btn,
-    .btn-base {
-        padding-block: --spacing(1.5);
-    }
-
     .chip {
-        border-radius: 0.375rem;
-    }
-
-    .btn-sm {
-        padding-block: --spacing(1);
-    }
-
-    .btn-icon {
-        border-radius: 100%;
-        padding: --spacing(2);
-        @apply text-sm;
+        border-radius: 0.25rem;
+        /* padding-block: --spacing(1.5); */
+        font-size: var(--text-xs);
+        line-height: var(--text-xs--line-height);
     }
 
     .anchor {

@@ -90,7 +90,7 @@
         {@render approvalButton(false)}
     {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
         <button
-            class="preset-tonal-primary border-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base border"
+            class="preset-tonal-primary inset-ring-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base inset-ring"
             aria-label={$t("wishes.edit")}
             onclick={(e) => {
                 e.stopPropagation();

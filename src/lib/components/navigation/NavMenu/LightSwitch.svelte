@@ -45,8 +45,8 @@
 
 <SegmentedControl {onValueChange} {value}>
     <SegmentedControl.Label>{$t("general.mode")}</SegmentedControl.Label>
-    <SegmentedControl.Control class="p-0.5">
-        <SegmentedControl.Indicator />
+    <SegmentedControl.Control class="rounded-container p-0.5">
+        <SegmentedControl.Indicator class="rounded-container" />
         {#each options as { value, icon, text } (value)}
             <SegmentedControl.Item {value}>
                 <SegmentedControl.ItemText class="flex size-4" title={text}>

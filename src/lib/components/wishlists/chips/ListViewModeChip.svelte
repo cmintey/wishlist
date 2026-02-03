@@ -24,8 +24,8 @@
 </script>
 
 <SegmentedControl class="z-5" onValueChange={(e) => (selectedValue = e.value)} value={selectedValue}>
-    <SegmentedControl.Control class="rounded-container h-6.5 gap-0 p-px">
-        <SegmentedControl.Indicator class="preset-filled-primary-500 rounded-container" />
+    <SegmentedControl.Control class="h-6.5 gap-0 rounded p-0.5">
+        <SegmentedControl.Indicator class="preset-filled-primary-500 rounded" />
         <SegmentedControl.Item
             class="w-1"
             aria-label={$t("wishes.list-view")}

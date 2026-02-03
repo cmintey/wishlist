@@ -303,11 +303,11 @@
         {#if data.listMode === "registry" || data.list.public}
             <div class="flex flex-row gap-x-2">
                 {#if publicListUrl}
-                    <TokenCopy btnStyle="btn-sm" url={publicListUrl?.href}>
-                        <span>{$t("wishes.public-url")}</span>
+                    <TokenCopy btnStyle="btn-xs" url={publicListUrl?.href}>
+                        <span class="text-sm">{$t("wishes.public-url")}</span>
                     </TokenCopy>
                 {:else}
-                    <button class="preset-outlined-surface-500 btn btn-sm text-xs" onclick={getOrCreatePublicList}>
+                    <button class="btn btn-xs inset-ring-surface-500 inset-ring" onclick={getOrCreatePublicList}>
                         {$t("wishes.share")}
                     </button>
                 {/if}

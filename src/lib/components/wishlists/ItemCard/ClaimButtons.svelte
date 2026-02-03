@@ -53,7 +53,10 @@
         <div class="flex flex-row items-center gap-2">
             <ClaimItemModal claimId={userClaim.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
                 {#snippet trigger(props)}
-                    <button {...props} class="preset-tonal-secondary preset-outlined-secondary-500 btn btn-sm md:btn">
+                    <button
+                        {...props}
+                        class="preset-tonal-secondary inset-ring-secondary-500 btn btn-sm md:btn inset-ring"
+                    >
                         {item.quantity === 1 && userClaim.quantity === 1
                             ? $t("wishes.unclaim")
                             : $t("wishes.update-claim")}
@@ -63,8 +66,8 @@
             <button
                 class={[
                     "btn btn-icon btn-icon-sm md:btn-icon-base",
-                    userClaim.purchased && "preset-tonal-secondary preset-outlined-secondary-500",
-                    !userClaim.purchased && "preset-outlined-secondary-500"
+                    userClaim.purchased && "preset-tonal-secondary inset-ring-secondary-500 inset-ring",
+                    !userClaim.purchased && "inset-ring-secondary-500 inset-ring"
                 ]}
                 aria-label={userClaim.purchased ? $t("a11y.unpurchase") : $t("wishes.purchase")}
                 onclick={(e) => {

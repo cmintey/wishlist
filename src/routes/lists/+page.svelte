@@ -28,11 +28,11 @@
 <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
     <ListFilterChip {users} />
     <button
-        class="preset-tonal-secondary border-secondary-500 btn btn-sm h-fit items-center border"
+        class="preset-tonal-secondary inset-ring-secondary-500 btn btn-xs h-fit items-center inset-ring"
         onclick={() => goto(resolve("/lists/create"))}
     >
         <iconify-icon icon="ion:add"></iconify-icon>
-        <span class="text-xs">{$t("wishes.create-list")}</span>
+        <span>{$t("wishes.create-list")}</span>
     </button>
 </div>
 

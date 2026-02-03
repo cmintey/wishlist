@@ -36,9 +36,11 @@
     <Portal>
         <ModalBackdrop />
 
-        <Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalContent>
-                <Dialog.Title class="text-2xl font-bold">
+        <Dialog.Positioner class="fixed inset-0 z-50 mx-4 flex items-center justify-center">
+            <ModalContent
+                class="max-h-3/4 data-[state=closed]:scale-95 data-[state=open]:scale-100 starting:data-[state=closed]:scale-100 starting:data-[state=open]:scale-95"
+            >
+                <Dialog.Title class="text-xl font-bold md:text-2xl">
                     {title}
                 </Dialog.Title>
                 <Dialog.Description>

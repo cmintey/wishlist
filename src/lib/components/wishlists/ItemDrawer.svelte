@@ -14,26 +14,29 @@
     type ItemDrawerProps = {
         open: boolean;
     };
-    const t = getFormatter();
+
     let {
         open = $bindable(false),
         defaultImage: _defaultImage,
         item,
         ...props
     }: InternalItemCardProps & ItemDrawerProps = $props();
+    const t = getFormatter();
 </script>
 
 <Dialog onOpenChange={(e) => (open = e.open)} {open}>
     <Portal>
         <ModalBackdrop></ModalBackdrop>
-        <Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalContent>
+        <Dialog.Positioner class="fixed inset-0 z-50 flex items-end justify-center sm:mx-4 sm:items-center">
+            <ModalContent
+                class="max-h-3/4 data-[state=closed]:translate-y-1/2 data-[state=open]:translate-y-0 starting:data-[state=closed]:translate-y-0 starting:data-[state=open]:translate-y-1/2"
+            >
                 <div class="grid grid-cols-[1fr_auto] justify-between gap-2 pb-2">
-                    <Dialog.Title class="text-xl font-bold text-wrap wrap-break-word md:text-2xl">
+                    <Dialog.Title class="truncate text-xl font-bold text-wrap wrap-break-word md:text-2xl">
                         {item.name}
                     </Dialog.Title>
                     <Dialog.CloseTrigger
-                        class="preset-tonal-surface border-surface-500 btn btn-icon border"
+                        class="preset-tonal-surface border-surface-500 btn-icon border"
                         aria-label={$t("a11y.close")}
                         onclick={() => goto(page.url.pathname, { replaceState: true, noScroll: true })}
                     >
