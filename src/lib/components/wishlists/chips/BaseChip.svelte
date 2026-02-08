@@ -117,7 +117,7 @@
     {#if label}
         <span class="text-xs">{label}</span>
     {/if}
-    <Popup>
+    <Popup bind:open={menuOpen}>
         {#snippet trigger(props)}
             <button
                 {...props}
