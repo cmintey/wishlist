@@ -67,7 +67,7 @@
 </div>
 
 <Tabs onValueChange={({ value }) => onValueChange(value as TabOption)} value={selectedTab}>
-    <Tabs.List>
+    <Tabs.List class="flex overflow-auto">
         {#each Object.entries(tabs) as [value, { label }]}
             <Tabs.Trigger {value}>
                 {label}

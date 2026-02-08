@@ -30,7 +30,9 @@
         </Popover.Trigger>
         <Portal>
             <Popover.Positioner>
-                <Popover.Content class="card preset-filled-surface-500 z-20 w-80 p-4">
+                <Popover.Content
+                    class="card preset-filled-surface-500 z-20 w-80 p-4 transition-all transition-discrete data-[state=closed]:scale-95 data-[state=open]:scale-100 starting:data-[state=closed]:scale-100 starting:data-[state=open]:scale-95"
+                >
                     <Popover.Description>
                         {@render props.description()}
                     </Popover.Description>

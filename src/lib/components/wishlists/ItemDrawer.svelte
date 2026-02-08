@@ -29,7 +29,7 @@
         <ModalBackdrop></ModalBackdrop>
         <Dialog.Positioner class="fixed inset-0 z-50 flex items-end justify-center sm:mx-4 sm:items-center">
             <ModalContent
-                class="max-h-3/4 data-[state=closed]:translate-y-1/2 data-[state=open]:translate-y-0 starting:data-[state=closed]:translate-y-0 starting:data-[state=open]:translate-y-1/2"
+                class="max-h-3/4 data-[state=closed]:translate-y-full data-[state=open]:translate-y-0 starting:data-[state=closed]:translate-y-0 starting:data-[state=open]:translate-y-full"
             >
                 <div class="grid grid-cols-[1fr_auto] justify-between gap-2 pb-2">
                     <Dialog.Title class="truncate text-xl font-bold text-wrap wrap-break-word md:text-2xl">

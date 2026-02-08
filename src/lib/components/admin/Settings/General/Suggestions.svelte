@@ -67,7 +67,7 @@
                 <select
                     id="suggestionMethod"
                     name="suggestionMethod"
-                    class="select w-fit min-w-64"
+                    class="select w-full max-w-64"
                     value={config.suggestions.method}
                 >
                     <option value="surprise">{$t("admin.suggestions-surprise-me")}</option>

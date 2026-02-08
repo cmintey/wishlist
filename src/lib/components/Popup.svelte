@@ -16,7 +16,10 @@
     <Popover.Trigger element={trigger}></Popover.Trigger>
     <Portal>
         <Popover.Positioner class={zIndex}>
-            <Popover.Content element={content}></Popover.Content>
+            <Popover.Content
+                class="transition-all transition-discrete data-[state=closed]:scale-95 data-[state=open]:scale-100 starting:data-[state=closed]:scale-100 starting:data-[state=open]:scale-95"
+                element={content}
+            ></Popover.Content>
         </Popover.Positioner>
     </Portal>
 </Popover>

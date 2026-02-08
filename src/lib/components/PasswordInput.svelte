@@ -99,7 +99,7 @@
                         </button>
                     {/snippet}
                     {#snippet content(props)}
-                        <div {...props} class="card preset-filled p-4">
+                        <div {...props} class={["card preset-filled p-4", props?.class]}>
                             {#if strength.feedback.warning}
                                 <div class="flex flex-row items-center gap-x-4 pb-1">
                                     <iconify-icon icon="ion:alert-circle"></iconify-icon>

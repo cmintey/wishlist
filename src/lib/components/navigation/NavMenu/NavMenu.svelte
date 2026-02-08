@@ -17,6 +17,12 @@
 
     const { user, groups, isProxyUser }: Props = $props();
     const t = getFormatter();
+
+    let open = $state(false);
+
+    const closeMenu = () => {
+        open = false;
+    };
 </script>
 
 {#if user}
@@ -24,7 +30,7 @@
         {#if groups && groups?.length > 1}
             <GroupSelectChip {groups} {user} />
         {/if}
-        <Popup>
+        <Popup zIndex="z-10!" bind:open>
             {#snippet trigger(props)}
                 <button class="size-10 md:size-12" {...props}>
                     <Avatar class="size-10 text-xs md:size-12 md:text-sm" {user} />
@@ -32,21 +38,21 @@
                 </button>
             {/snippet}
             {#snippet content(props)}
-                <div {...props} class="z-10!">
+                <div {...props}>
                     <nav
                         class="card preset-filled-surface-100-900 list-nav p-4 shadow-xl"
                         data-testid="user menu navigation"
                     >
                         <ul>
                             <li>
-                                <a href="/account">
+                                <a href="/account" onclick={closeMenu}>
                                     <iconify-icon icon="ion:person"></iconify-icon>
                                     <span class="flex-auto">{$t("admin.account")}</span>
                                 </a>
                             </li>
                             {#if user.roleId == Role.ADMIN}
                                 <li>
-                                    <a href="/admin">
+                                    <a href="/admin" onclick={closeMenu}>
                                         <iconify-icon icon="ion:settings"></iconify-icon>
                                         <span class="flex-auto">{$t("admin.admin")}</span>
                                     </a>
@@ -54,13 +60,14 @@
                             {/if}
 
                             <hr class="hr" />
-                            <GroupSubMenu {groups} {user} />
+                            <GroupSubMenu {groups} onSelect={closeMenu} {user} />
                             {#if !isProxyUser}
                                 <hr class="hr" />
                                 <li>
                                     <button
                                         class="list-option w-full"
                                         onclick={async () => {
+                                            closeMenu();
                                             await fetch("/logout", { method: "POST" });
                                             invalidateAll();
                                         }}
@@ -74,7 +81,15 @@
                             <li>
                                 <ChangeLanguageModal currentLanguage={user.preferredLanguage}>
                                     {#snippet trigger(props)}
-                                        <button {...props} class="list-option w-full" type="button">
+                                        <button
+                                            {...props}
+                                            class="list-option w-full"
+                                            onclick={(e) => {
+                                                closeMenu();
+                                                props.onclick?.(e);
+                                            }}
+                                            type="button"
+                                        >
                                             <iconify-icon icon="ion:language"></iconify-icon>
                                             <p>{$t("general.language")}</p>
                                         </button>

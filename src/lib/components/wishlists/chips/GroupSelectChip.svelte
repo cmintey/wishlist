@@ -24,7 +24,7 @@
     const activeGroup = $derived(groups.find((group) => group.active)!);
 </script>
 
-<Popup bind:open>
+<Popup zIndex="z-20" bind:open>
     {#snippet trigger(props)}
         <button
             {...props}
@@ -40,7 +40,7 @@
         </button>
     {/snippet}
     {#snippet content(props)}
-        <div class="z-20" {...props}>
+        <div {...props}>
             <nav class="card preset-filled-surface-100-900 list-nav max-h-96 max-w-full p-4 shadow-xl">
                 <ul class="max-h-72 overflow-auto">
                     {#each groups as group (group.id)}

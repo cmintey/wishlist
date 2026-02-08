@@ -84,6 +84,7 @@
     const handleApply = (option?: Option) => {
         if (option) {
             selectedOptions = [option];
+            menuOpen = false;
         } else {
             selectedOptions = pendingSelectedOptions;
         }
@@ -153,7 +154,10 @@
         {/snippet}
 
         {#snippet content(props)}
-            <div {...props} class="card preset-filled-surface-100-900 list-nav z-10 max-h-96 p-4 shadow-xl">
+            <div
+                {...props}
+                class={["card preset-filled-surface-100-900 list-nav z-10 max-h-96 p-4 shadow-xl", props?.class]}
+            >
                 <nav>
                     <ul class="max-h-72 overflow-auto">
                         {#each options as option (option.value + option.direction)}

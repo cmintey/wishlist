@@ -19,7 +19,7 @@
 </script>
 
 <Tabs defaultValue="profile">
-    <Tabs.List>
+    <Tabs.List class="flex overflow-auto">
         <Tabs.Trigger value="profile">{$t("admin.profile")}</Tabs.Trigger>
         <Tabs.Trigger value="security">{$t("admin.security")}</Tabs.Trigger>
         <Tabs.Indicator />

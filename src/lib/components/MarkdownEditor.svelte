@@ -18,7 +18,7 @@
 
 <div class="card preset-filled-surface-100-900 p-2">
     <Tabs class="border-none" onValueChange={({ value }) => (currentTab = value)} value={currentTab}>
-        <Tabs.List>
+        <Tabs.List class="flex overflow-auto">
             <Tabs.Trigger value={"write"}>{$t("wishes.write")}</Tabs.Trigger>
             <Tabs.Trigger value={"preview"}>{$t("wishes.preview")}</Tabs.Trigger>
         </Tabs.List>

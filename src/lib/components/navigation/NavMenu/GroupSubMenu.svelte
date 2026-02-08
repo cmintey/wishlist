@@ -10,9 +10,10 @@
     interface Props {
         user: LocalUser | undefined;
         groups: GroupInformation[] | null;
+        onSelect: VoidFunction;
     }
 
-    const { user, groups }: Props = $props();
+    const { user, groups, onSelect }: Props = $props();
     const t = getFormatter();
 
     let userAPI: UserAPI | undefined = $derived.by(() => {
@@ -53,10 +54,10 @@
             {/if}
             {#if group.isManager}
                 <li>
-                    <button class="list-option w-full" onclick={() => goto(`/admin/groups/${group.id}`)}>
+                    <a href={resolve("/admin/groups/[groupId]", { groupId: group.id })} onclick={onSelect}>
                         <iconify-icon icon="ion:settings"></iconify-icon>
                         <span>{$t("general.manage-group")}</span>
-                    </button>
+                    </a>
                 </li>
             {/if}
         {/if}
@@ -65,7 +66,14 @@
         <li>
             <GroupSelectModal {groups} onSubmit={changeGroup}>
                 {#snippet trigger(props)}
-                    <button {...props} class="list-option w-full">
+                    <button
+                        {...props}
+                        class="list-option w-full"
+                        onclick={(e) => {
+                            onSelect();
+                            props.onclick?.(e);
+                        }}
+                    >
                         <iconify-icon icon="ion:swap-horizontal"></iconify-icon>
                         <span>{$t("general.change-group")}</span>
                     </button>
@@ -83,7 +91,14 @@
         title={$t("general.enter-group-name")}
     >
         {#snippet trigger(props)}
-            <button {...props} class="list-option w-full">
+            <button
+                {...props}
+                class="list-option w-full"
+                onclick={(e) => {
+                    onSelect();
+                    props.onclick?.(e);
+                }}
+            >
                 <iconify-icon icon="ion:add"></iconify-icon>
                 <span>{$t("general.create-group")}</span>
             </button>
