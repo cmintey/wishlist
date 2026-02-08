@@ -5,14 +5,11 @@
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
-    import { errorToast } from "$lib/components/toasts";
+    import { toaster } from "$lib/components/toaster";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
-
-    const toastStore = getToastStore();
 
     onMount(() => {
         if (!page.url.hash) {
@@ -40,17 +37,17 @@
         return ({ action, result }) => {
             if (action.search.endsWith("?/settings") && result.type === "success") {
                 saving = false;
-                toastStore.trigger({ message: $t("admin.settings-saved-toast") });
+                toaster.info({ description: $t("admin.settings-saved-toast") });
             }
             if (action.search.endsWith("?/send-test") && result.type === "success") {
                 sending = false;
                 if (!result.data?.success) {
-                    const message: string = result.data?.message
+                    const description: string = result.data?.message
                         ? (result.data.message as string)
                         : $t("errors.something-went-wrong");
-                    errorToast(toastStore, message);
+                    toaster.error({ description });
                 } else {
-                    toastStore.trigger({ message: $t("admin.test-email-sent-toast") });
+                    toaster.info({ description: $t("admin.test-email-sent-toast") });
                 }
             }
         };
@@ -63,7 +60,7 @@
                 <ul>
                     {#each options as option}
                         <li>
-                            <a class={[currentHash === option.hash && "!variant-filled-primary"]} href={option.hash}>
+                            <a class={[currentHash === option.hash && "preset-filled-primary-500!"]} href={option.hash}>
                                 {option.label($t)}
                             </a>
                         </li>
@@ -91,9 +88,9 @@
 
             <!-- Save buttons -->
             <div class="flex w-full flex-row justify-end pt-5">
-                <button class="variant-filled-primary btn" disabled={saving} type="submit">
+                <button class="preset-filled-primary-500 btn" disabled={saving} type="submit">
                     {#if saving}
-                        <ProgressRadial stroke={64} width="w-6" />
+                        <span class="loading loading-spinner loading-xs"></span>
                     {/if}
                     <span>{$t("general.save")}</span>
                 </button>

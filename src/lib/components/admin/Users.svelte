@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Table, tableMapperValues, tableSourceMapper, type TableSource } from "@skeletonlabs/skeleton";
     import Search from "../Search.svelte";
     import InviteUser from "./InviteUser.svelte";
     import type { Group } from "$lib/generated/prisma/client";
@@ -27,36 +26,51 @@
     const { users, currentUser, config, groups }: Props = $props();
     const t = getFormatter();
 
+    const headers = [$t("auth.name"), $t("auth.username"), $t("auth.email"), $t("admin.admin"), $t("admin.groups")];
+
     let usersFiltered: UserWithGroups[] = $derived(users);
 
-    let userData: TableSource = $derived({
-        head: [$t("auth.name"), $t("auth.username"), $t("auth.email"), $t("admin.admin"), $t("admin.groups")],
-        body: tableMapperValues(formatString(usersFiltered), ["name", "username", "email", "isAdmin", "groups"]),
-        meta: tableSourceMapper(usersFiltered, ["name", "username", "email", "isAdmin", "id"])
-    });
-
-    const selectionHandler = (meta: CustomEvent<string[]>) => {
-        const user = meta.detail as unknown as User;
+    const selectionHandler = (user: User) => {
         goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
     };
-
-    function formatString(userFiltered: UserWithGroups[]) {
-        return userFiltered.map((u) => {
-            return {
-                ...u,
-                isAdmin: u.isAdmin ? '<iconify-icon  class = "text-lg" icon = "ion:checkmark"></iconify-icon>' : ""
-            };
-        });
-    }
 </script>
 
-<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:gap-x-4 md:space-y-0">
+<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
     <Search data={users} keys={["name", "username"]} bind:result={usersFiltered} />
     <form method="POST" use:enhance>
         <InviteUser {config} {groups} />
     </form>
 </div>
 
-{#if userData}
-    <Table interactive source={userData} on:selected={selectionHandler} />
-{/if}
+<div class="table-wrap preset-outlined-surface-200-800 rounded-container">
+    <table class="table-hover table">
+        <thead>
+            <tr>
+                {#each headers as header}
+                    <th>{header}</th>
+                {/each}
+            </tr>
+        </thead>
+        <tbody>
+            {#each usersFiltered as user}
+                <tr onclick={() => selectionHandler(user)}>
+                    <td class="text-nowrap">{user.name}</td>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td class="text-center">
+                        {#if user.isAdmin}
+                            <iconify-icon class="text-lg" icon="ion:checkmark"></iconify-icon>
+                        {/if}
+                    </td>
+                    <td class="flex flex-wrap gap-1">
+                        {#each user.groups?.toSorted() as group}
+                            <span class="badge preset-tonal-secondary inset-ring-secondary-500 inset-ring">
+                                {group}
+                            </span>
+                        {/each}
+                    </td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>

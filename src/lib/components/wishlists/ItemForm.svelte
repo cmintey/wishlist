@@ -2,13 +2,14 @@
     import { page } from "$app/state";
     import type { Group, Item, ItemPrice, List, User } from "$lib/generated/prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import { FileButton, getToastStore, ProgressRadial } from "@skeletonlabs/skeleton";
     import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
     import { goto } from "$app/navigation";
     import MarkdownEditor from "../MarkdownEditor.svelte";
+    import FileUpload from "../FileUpload.svelte";
+    import { toaster } from "../toaster";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -38,12 +39,9 @@
     let url = $derived(page.url);
     let fetching = $state(false);
     let urlFetched = $state(false);
-    const toastStore = getToastStore();
     let price: number | null = $state(getPriceValue(productData));
     const defaultCurrency = getDefaultCurrency();
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
-    let files: FileList | undefined = $state();
-    let uploadedImageName: string | undefined = $derived(files?.item(0)?.name || $t("general.no-file-selected"));
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
     let submitSrc = $state("submit");
@@ -84,12 +82,7 @@
     };
 
     const triggerToast = () => {
-        toastStore.trigger({
-            message: $t("errors.unable-to-find-product-information"),
-            background: "variant-filled-warning",
-            autohide: true,
-            timeout: 5000
-        });
+        toaster.warning({ description: $t("errors.unable-to-find-product-information") });
     };
 
     const getInfo = async () => {
@@ -166,17 +159,17 @@
 </script>
 
 <div class="grid grid-cols-7 gap-4">
-    <label class="col-span-full" for="url">
+    <label class="label col-span-full" for="url">
         <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row gap-x-4">
-            <div class="input-group grid-cols-[auto_1fr_auto]">
-                <div class="input-group-shim">
+            <div class="input-group w-full grid-cols-[auto_1fr_auto]">
+                <div class="ig-cell preset-tonal">
                     <iconify-icon icon="ion:link"></iconify-icon>
                 </div>
                 <input
                     id="url"
                     name="url"
-                    class="input"
+                    class="ig-input"
                     onfocusout={() => getInfo()}
                     placeholder={$t("wishes.url-placeholder")}
                     type="url"
@@ -185,6 +178,7 @@
                 {#if productData.url}
                     <button
                         id="reset-field"
+                        class="ig-cell"
                         aria-label={$t("a11y.clear-url-field")}
                         onclick={() => (productData.url = null)}
                         onkeypress={(e) => e.preventDefault()}
@@ -198,7 +192,7 @@
             {#if productData.url}
                 <button
                     id="refresh-item"
-                    class="variant-ghost-primary btn btn-icon"
+                    class="preset-tonal-primary border-primary-500 btn btn-icon border"
                     aria-label={$t("a11y.refresh-item-data")}
                     onclick={(e) => {
                         e.preventDefault();
@@ -215,17 +209,17 @@
         </div>
     </label>
 
-    <label class="col-span-full xl:col-span-3" for="name">
+    <label class="label col-span-full xl:col-span-3" for="name">
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
-            <div class="input-group-shim">
+            <div class="ig-cell preset-tonal">
                 <iconify-icon icon="ion:bag-handle"></iconify-icon>
             </div>
             <input
                 id="name"
                 name="name"
-                class="input"
-                class:input-error={form?.errors?.name}
+                class="ig-input"
+                class:input-invalid={form?.errors?.name}
                 autocomplete="off"
                 required
                 type="text"
@@ -233,29 +227,29 @@
             />
         </div>
         {#if form?.errors?.name}
-            <p class="unstyled text-error-500-400-token pt-2 text-xs">{form.errors.name[0]}</p>
+            <p class="text-invalid pt-2">{form.errors.name[0]}</p>
         {/if}
     </label>
 
-    <label class="col-span-full sm:col-span-4 xl:col-span-2" for="price">
+    <label class="label col-span-full sm:col-span-4 xl:col-span-2" for="price">
         <span>{$t("wishes.price")}</span>
         <CurrencyInput id="price" name="price" currency={userCurrency} bind:value={price} />
     </label>
 
-    <div class="col-span-full sm:col-span-3 xl:col-span-2">
+    <div class="label col-span-full sm:col-span-3 xl:col-span-2">
         <label class="pb-1" for="quantity">
             <span>{$t("wishes.quantity")}</span>
         </label>
         <div class="flex flex-row items-center gap-2">
             <div class="grow">
                 <div class="input-group grid-cols-[auto_1fr]">
-                    <div class="input-group-shim">
+                    <div class="ig-cell preset-tonal">
                         <iconify-icon icon="ion:gift"></iconify-icon>
                     </div>
                     <input
                         id="quantity"
                         name="quantity"
-                        class="input w-0 min-w-full"
+                        class="ig-input w-0 min-w-full"
                         autocomplete="off"
                         defaultValue={1}
                         disabled={unlimited}
@@ -280,39 +274,25 @@
             </label>
         </div>
         {#if form?.errors?.quantity}
-            <p class="unstyled text-error-500-400-token text-xs">{form.errors.quantity[0]}</p>
+            <p class="text-invalid">{form.errors.quantity[0]}</p>
         {/if}
     </div>
 
-    <label class="col-span-full md:col-span-3" for="image">
+    <label class="label col-span-full md:col-span-3" for="image">
         <span>{$t("wishes.upload-image")}</span>
-        <div
-            class="bg-surface-200-700-token border-surface-400-500-token grid grid-cols-[auto_1fr] items-center gap-2 border-token rounded-token"
-        >
-            <FileButton
-                id="image"
-                name="image"
-                class="py-1 pl-1"
-                accept="image/*"
-                button="btn btn-sm variant-filled"
-                bind:files
-            >
-                {$t("general.select-file")}
-            </FileButton>
-            <span class="truncate">{uploadedImageName}</span>
-        </div>
+        <FileUpload name="image" class="py-1 pl-1" accept="image/*"></FileUpload>
     </label>
 
-    <label class="col-span-full md:col-span-4" for="imageUrl">
+    <label class="label col-span-full md:col-span-4" for="imageUrl">
         <span>{$t("wishes.image-url")}</span>
         <div class="input-group grid-cols-[auto_1fr]">
-            <div class="input-group-shim">
+            <div class="ig-cell preset-tonal">
                 <iconify-icon icon="ion:image"></iconify-icon>
             </div>
             <input
                 id="imageUrl"
                 name="imageUrl"
-                class="input"
+                class="ig-input"
                 autocomplete="off"
                 type="text"
                 bind:value={productData.imageUrl}
@@ -328,7 +308,7 @@
         <span class="subtext">{$t("wishes.most-wanted-description")}</span>
     </div>
 
-    <label class="col-span-full" for="note">
+    <label class="label col-span-full" for="note">
         <span>{$t("wishes.notes")}</span>
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
     </label>
@@ -340,14 +320,14 @@
     >
         <div class="flex items-end justify-between">
             <legend id="lists-label">{$t("wishes.lists")}</legend>
-            <button class="variant-ghost-primary btn btn-sm" onclick={selectAll} type="button">
+            <button class="preset-tonal-primary border-primary-500 btn btn-sm border" onclick={selectAll} type="button">
                 {$t("general.select-all")}
             </button>
         </div>
 
         <div
-            class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-auto p-2 border-token rounded-container-token"
-            class:input-error={form?.errors?.lists}
+            class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2"
+            class:input-invalid={form?.errors?.lists}
         >
             {#each lists as list (list.id)}
                 <label class="flex items-center gap-x-2" for={list.id}>
@@ -360,7 +340,7 @@
                         type="checkbox"
                         value={list.id}
                     />
-                    <div class="!mt-0 flex flex-row gap-x-2">
+                    <div class="mt-0! flex flex-row gap-x-2">
                         <span>
                             {list.name}
                         </span>
@@ -370,40 +350,45 @@
             {/each}
         </div>
         {#if form?.errors?.lists}
-            <p class="unstyled text-error-500-400-token text-xs">{form.errors.lists[0]}</p>
+            <p class="text-invalid">{form.errors.lists[0]}</p>
         {/if}
     </fieldset>
 
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
     <div class="col-span-full flex w-full flex-col-reverse gap-2 sm:w-full sm:flex-row sm:justify-between">
-        <button class="variant-ghost-secondary btn" disabled={fetching || saving} onclick={onCancel} type="button">
+        <button
+            class="preset-tonal-secondary border-secondary-500 btn border"
+            disabled={fetching || saving}
+            onclick={onCancel}
+            type="button"
+        >
             {$t("general.cancel")}
         </button>
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2">
             {#if !item.id}
                 <button
                     id="submit-stay"
-                    class="variant-outline-primary btn"
+                    class="btn preset-outlined-primary-500"
                     disabled={fetching || saving}
                     onclick={() => (submitSrc = "submit-stay")}
                     type="submit"
                 >
                     {#if saving && submitSrc == "submit-stay"}
-                        <ProgressRadial width="w-4" />
+                        <span class="loading loading-spinner loading-xs"></span>
                     {/if}
                     <span>{$t("wishes.create-and-add-another")}</span>
                 </button>
             {/if}
             <button
                 id="submit"
-                class="variant-filled-primary btn"
+                class="preset-filled-primary-500 btn"
                 disabled={fetching || saving}
                 onclick={() => (submitSrc = "submit")}
                 type="submit"
             >
                 {#if saving && submitSrc == "submit"}
-                    <ProgressRadial width="w-4" />
+                    <span class="loading loading-spinner loading-xs"></span>
                 {/if}
                 <span>{buttonText}</span>
             </button>

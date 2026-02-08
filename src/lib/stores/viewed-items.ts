@@ -1,8 +1,7 @@
+import { LocalStorage } from "$lib/local-storage.svelte";
 import type { Item } from "$lib/generated/prisma/client";
-import { localStorageStore } from "@skeletonlabs/skeleton";
-import type { Writable } from "svelte/store";
 
-export const viewedItems: Writable<Record<string, string>> = localStorageStore("viewedItems", {});
+export const viewedItems: LocalStorage<Record<string, string>> = new LocalStorage("viewedItems", {});
 
 export const hashItems = async (items: Partial<Item>[]): Promise<string> => {
     const itemIds = items
