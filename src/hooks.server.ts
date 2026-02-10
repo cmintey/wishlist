@@ -3,15 +3,44 @@ import { env } from "$env/dynamic/private";
 import { getClosestAvailableLocaleFromHeader, getClosestAvailablePreferredLanguage, type Lang } from "$lib/i18n";
 import {
     deleteSessionTokenCookie,
+    getAllowedOrigins,
+    isAllowedOrigin,
     sessionCookieName,
     setSessionTokenCookie,
     validateSessionToken
 } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
 import { loadLocale } from "$lib/server/validations";
-import type { Handle, HandleServerError } from "@sveltejs/kit";
+import { error, type Handle, type HandleServerError } from "@sveltejs/kit";
+import { sequence } from "@sveltejs/kit/hooks";
 
-export const handle: Handle = async ({ event, resolve }) => {
+/**
+ * Custom CSRF protection hook to support multiple origins
+ * Replaces SvelteKit's default CSRF verification
+ */
+const csrfProtection: Handle = async ({ event, resolve }) => {
+    const request = event.request;
+    const method = request.method;
+    
+    // CSRF verification only for methods that modify data
+    if (method === "POST" || method === "PUT" || method === "PATCH" || method === "DELETE") {
+        const origin = request.headers.get("origin");
+        
+        // If no Origin header, check Referer as fallback
+        if (origin) {
+            if (!isAllowedOrigin(origin)) {
+                logger.warn(
+                    `CSRF check failed: origin '${origin}' not in allowed origins: [${getAllowedOrigins().join(", ")}]`
+                );
+                error(403, "Cross-site request forbidden");
+            }
+        }
+    }
+    
+    return resolve(event);
+};
+
+const mainHandle: Handle = async ({ event, resolve }) => {
     let lang = getClosestAvailableLocaleFromHeader(event.request.headers.get("accept-language"));
 
     const sessionToken = event.cookies.get(sessionCookieName);
@@ -61,6 +90,9 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     });
 };
+
+// Combine hooks: CSRF first, then main handler
+export const handle = sequence(csrfProtection, mainHandle);
 
 export const handleError: HandleServerError = async ({ error: err, event, status, message }) => {
     logger.error(
