@@ -343,5 +343,23 @@
         "home": "Główna",
         "my-claims": "Moje rezerwacje"
     },
-    "unable-to-load-icons": "Nie udało się wczytać ikon."
+    "unable-to-load-icons": "Nie udało się wczytać ikon.",
+    "account": {
+        "api-keys-tab": "Klucze API",
+        "api-keys": "Klucze API",
+        "create-api-key": "Utwórz klucz API",
+        "api-key-name": "Nazwa",
+        "api-key-name-placeholder": "np. Rozszerzenie przeglądarki",
+        "api-key-expires": "Wygasa",
+        "api-key-prefix": "Klucz",
+        "api-key-created": "Utworzono",
+        "api-key-last-used": "Ostatnio użyty",
+        "api-key-copied": "Klucz API skopiowany do schowka",
+        "api-key-warning": "Upewnij się, że teraz skopiujesz swój klucz API. Nie będziesz mógł go ponownie zobaczyć!",
+        "copy-api-key": "Kopiuj klucz API",
+        "delete-api-key": "Usuń klucz API",
+        "no-api-keys": "Brak kluczy API. Utwórz jeden do użytku z zewnętrznymi aplikacjami.",
+        "never": "Nigdy",
+        "create": "Utwórz"
+    }
 }

@@ -384,5 +384,23 @@
         "test-body": "Si usted esta leyendo esto, Felicitaciones! La configuracion del correo electronico se ha realizado apropiadamente!",
         "pw-reset-body": "Si usted ha solicitado un reinicio de clave, haga click en el siguiente enlace. Si usted no realizó esta solicitud, puede ignorar este correo."
     },
-    "unable-to-load-icons": "No es posible cargar los iconos."
+    "unable-to-load-icons": "No es posible cargar los iconos.",
+    "account": {
+        "api-keys-tab": "Claves API",
+        "api-keys": "Claves API",
+        "create-api-key": "Crear clave API",
+        "api-key-name": "Nombre",
+        "api-key-name-placeholder": "ej. Extensión del navegador",
+        "api-key-expires": "Expira",
+        "api-key-prefix": "Clave",
+        "api-key-created": "Creada",
+        "api-key-last-used": "Último uso",
+        "api-key-copied": "Clave API copiada al portapapeles",
+        "api-key-warning": "Asegúrese de copiar su clave API ahora. ¡No podrá verla de nuevo!",
+        "copy-api-key": "Copiar clave API",
+        "delete-api-key": "Eliminar clave API",
+        "no-api-keys": "Aún no hay claves API. Cree una para usar con aplicaciones externas.",
+        "never": "Nunca",
+        "create": "Crear"
+    }
 }

@@ -463,5 +463,23 @@
         "invite-body": "Du wurdest eingeladen Wishlist beizutreten! Um die Einladung anzunehmen, klicke auf den untenstehenden Link.",
         "test-body": "Wenn du dies hier liest, dann Glückwunsch! Die E-Mail Einstellungen wurden korrekt konfiguriert!"
     },
-    "unable-to-load-icons": "Konnte Icons nicht laden."
+    "unable-to-load-icons": "Konnte Icons nicht laden.",
+    "account": {
+        "api-keys-tab": "API-Schlüssel",
+        "api-keys": "API-Schlüssel",
+        "create-api-key": "API-Schlüssel erstellen",
+        "api-key-name": "Name",
+        "api-key-name-placeholder": "z.B. Browser-Erweiterung",
+        "api-key-expires": "Läuft ab",
+        "api-key-prefix": "Schlüssel",
+        "api-key-created": "Erstellt",
+        "api-key-last-used": "Zuletzt verwendet",
+        "api-key-copied": "API-Schlüssel in die Zwischenablage kopiert",
+        "api-key-warning": "Kopieren Sie jetzt Ihren API-Schlüssel. Sie werden ihn nicht mehr sehen können!",
+        "copy-api-key": "API-Schlüssel kopieren",
+        "delete-api-key": "API-Schlüssel löschen",
+        "no-api-keys": "Noch keine API-Schlüssel. Erstellen Sie einen für externe Anwendungen.",
+        "never": "Nie",
+        "create": "Erstellen"
+    }
 }

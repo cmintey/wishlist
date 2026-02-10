@@ -17,16 +17,19 @@ import { getFormatter } from "$lib/server/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
 import { logger } from "$lib/server/logger";
+import { generateApiKey, listApiKeys, deleteApiKey } from "$lib/server/api-keys";
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
     const user = requireLogin();
 
     const oidcConfig = await getOIDCConfig(fetch);
+    const apiKeys = await listApiKeys(user.id);
 
     return {
         user,
         isProxyUser: locals.isProxyUser,
-        oidcConfig
+        oidcConfig,
+        apiKeys
     };
 };
 
@@ -186,5 +189,32 @@ export const actions: Actions = {
                 id: user.id
             }
         });
+    },
+
+    createApiKey: async ({ request }) => {
+        const user = requireLogin();
+        const formData = await request.formData();
+        const name = formData.get("name")?.toString() || "API Key";
+        
+        const expiresAtStr = formData.get("expiresAt")?.toString();
+        const expiresAt = expiresAtStr ? new Date(expiresAtStr) : undefined;
+
+        const { key } = await generateApiKey(user.id, name, expiresAt);
+
+        return {
+            newApiKey: key
+        };
+    },
+
+    deleteApiKey: async ({ request }) => {
+        const user = requireLogin();
+        const formData = await request.formData();
+        const id = formData.get("id")?.toString();
+
+        if (!id) {
+            return fail(400, { error: true });
+        }
+
+        await deleteApiKey(id, user.id);
     }
 };

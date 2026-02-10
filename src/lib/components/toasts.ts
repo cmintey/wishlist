@@ -8,3 +8,12 @@ export const errorToast = (toastStore: ToastStore, message: string) => {
         timeout: 5000
     });
 };
+
+export const successToast = (toastStore: ToastStore, message: string) => {
+    toastStore.trigger({
+        message,
+        background: "variant-filled-success",
+        autohide: true,
+        timeout: 3000
+    });
+};

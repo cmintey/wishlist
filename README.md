@@ -57,6 +57,7 @@ services:
     environment:
       # ORIGIN: https://wishlist.example.com
       ORIGIN: http://192.168.2.10:3280 # The URL your users will be connecting to
+      # ALLOWED_ORIGINS: http://localhost:3280,http://192.168.1.100:3280 # Additional origins (optional)
       TOKEN_TIME: 72 # hours until signup and password reset tokens expire
 ```
 
@@ -70,6 +71,8 @@ You can now connect to your application at `http://<host>:3280`.
 ### Environment Variables
 
 `ORIGIN`: The URL your users will connect to e.g. `https://wishlist.domain.com`, `http://192.168.2.10:3280`. **Note**, if this value is an IP address, then it must include the exposed port of the application
+
+`ALLOWED_ORIGINS`: Additional origins (comma-separated) that are allowed to access the application. Useful when you want to access via both a domain name and local IP address, e.g. `http://192.168.1.100:3280,http://localhost:3280`
 
 `TOKEN_TIME`: The amount of time (hours) that signup and password reset tokens are valid for
 

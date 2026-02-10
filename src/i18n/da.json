@@ -452,5 +452,23 @@
         "unable-to-update-password": "Kan ikke opdatere adgangskode",
         "welcome-to-wishlist": "Velkommen til Wishlist"
     },
-    "unable-to-load-icons": "Kan ikke indlæse ikoner."
+    "unable-to-load-icons": "Kan ikke indlæse ikoner.",
+    "account": {
+        "api-keys-tab": "API-nøgler",
+        "api-keys": "API-nøgler",
+        "create-api-key": "Opret API-nøgle",
+        "api-key-name": "Navn",
+        "api-key-name-placeholder": "f.eks. Browser-udvidelse",
+        "api-key-expires": "Udløber",
+        "api-key-prefix": "Nøgle",
+        "api-key-created": "Oprettet",
+        "api-key-last-used": "Sidst brugt",
+        "api-key-copied": "API-nøgle kopieret til udklipsholder",
+        "api-key-warning": "Sørg for at kopiere din API-nøgle nu. Du vil ikke kunne se den igen!",
+        "copy-api-key": "Kopiér API-nøgle",
+        "delete-api-key": "Slet API-nøgle",
+        "no-api-keys": "Ingen API-nøgler endnu. Opret en til brug med eksterne applikationer.",
+        "never": "Aldrig",
+        "create": "Opret"
+    }
 }
