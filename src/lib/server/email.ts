@@ -53,10 +53,18 @@ const sendEmail = async (options: Mail.Options) => {
         };
     }
 
+    // In general we will require SSL/TLS, but for local mail servers
+    // (e.g., postfix), we'll allow for insecure connections.
+
+    const isLocalhost = config.smtp.port === 25 && (config.smtp.host === "localhost" || config.smtp.host === "127.0.0.1");
+
     const transport = nodemailer.createTransport({
         port: config.smtp.port,
         host: config.smtp.host,
-        auth: config.smtp.user && config.smtp.pass ? { user: config.smtp.user, pass: config.smtp.pass } : undefined
+        auth: config.smtp.user && config.smtp.pass ? { user: config.smtp.user, pass: config.smtp.pass } : undefined,
+        ...(isLocalhost && {
+            tls: { rejectUnauthorized: false }
+        })
     });
 
     return await transport
