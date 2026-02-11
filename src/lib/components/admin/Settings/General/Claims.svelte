@@ -46,6 +46,22 @@
             {$t("admin.show-name-across-groups-tooltip")}
         {/snippet}
     </Setting>
+    <Setting class={[!config.claims.showName && "hidden"]}>
+        <label class="checkbox-label">
+            <input
+                id="claimsShowNamePublic"
+                name="claimsShowNamePublic"
+                class="checkbox"
+                checked={config.claims.showNamePublic}
+                type="checkbox"
+            />
+            <span>{$t("admin.show-name-publicly")}</span>
+        </label>
+
+        {#snippet description()}
+            {$t("admin.show-name-publicly-tooltip")}
+        {/snippet}
+    </Setting>
     <Setting>
         <label class="checkbox-label">
             <input

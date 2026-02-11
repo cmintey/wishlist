@@ -22,6 +22,7 @@
     const showClaimedName: boolean = $drawerStore.meta.showClaimedName;
     const showNameAcrossGroups: boolean = $drawerStore.meta.showNameAcrossGroups;
     const showClaimForOwner: boolean = $drawerStore.meta.showClaimForOwner;
+    const showPublicClaimName: boolean = $drawerStore.meta.showPublicClaimName;
     const onPublicList: boolean = $drawerStore.meta.onPublicList;
     const handleClaim: (v?: boolean) => void = $drawerStore.meta.handleClaim;
     const handleDelete: VoidFunction = $drawerStore.meta.handleDelete;
@@ -72,6 +73,7 @@
         {onPublicList}
         {showClaimForOwner}
         {showClaimedName}
+        {showPublicClaimName}
         showDetail
         {showFor}
         {showNameAcrossGroups}
@@ -87,6 +89,7 @@
             onUnclaim={() => handleClaim(true)}
             {showClaimForOwner}
             {showClaimedName}
+            {showPublicClaimName}
             {showNameAcrossGroups}
             {user}
         />
