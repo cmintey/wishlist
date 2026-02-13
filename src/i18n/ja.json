@@ -1,1 +1,10 @@
-{}
+{
+    "admin": {
+        "remove-member-message": "このユーザーをグループから削除してもよろしいですか？これにより、グループ内のユーザーのすべてのリストと、他のリストに属していない関連項目が削除されます。<b>この操作は元に戻せません！</b>",
+        "remove-member-title": "メンバーを削除",
+        "security": "セキュリティ",
+        "select-a-group-option": "グループを選択",
+        "settings": "設定",
+        "settings-saved-toast": "設定が正常に保存されました"
+    }
+}
