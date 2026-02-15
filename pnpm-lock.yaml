@@ -66,8 +66,8 @@ importers:
         specifier: ^5.49.1
         version: 5.49.21(@noble/hashes@2.0.1)
       nodemailer:
-        specifier: ^7.0.5
-        version: 7.0.13
+        specifier: ^8.0.0
+        version: 8.0.1
       openid-client:
         specifier: ^6.6.4
         version: 6.8.1
@@ -3858,8 +3858,8 @@ packages:
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
 
-  nodemailer@7.0.13:
-    resolution: {integrity: sha512-PNDFSJdP+KFgdsG3ZzMXCgquO7I6McjY2vlqILjtJd0hy8wEvtugS9xKRF2NWlPNGxvLCXlTNIae4serI7dinw==}
+  nodemailer@8.0.1:
+    resolution: {integrity: sha512-5kcldIXmaEjZcHR6F28IKGSgpmZHaF1IXLWFTG+Xh3S+Cce4MiakLtWY+PlBU69fLbRa8HlaGIrC/QolUpHkhg==}
     engines: {node: '>=6.0.0'}
 
   nopt@9.0.0:
@@ -8900,7 +8900,7 @@ snapshots:
 
   node-releases@2.0.27: {}
 
-  nodemailer@7.0.13: {}
+  nodemailer@8.0.1: {}
 
   nopt@9.0.0:
     dependencies:
