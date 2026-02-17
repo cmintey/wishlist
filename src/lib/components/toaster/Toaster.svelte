@@ -9,7 +9,7 @@
     let { yShift }: Props = $props();
 </script>
 
-<Toast.Group style={yShift ? `bottom: ${yShift}px` : undefined} {toaster}>
+<Toast.Group style={yShift ? `bottom: ${yShift}px; z-index: 0;` : undefined} {toaster}>
     {#snippet children(toast)}
         <Toast class="rounded-container" {toast}>
             <Toast.Message>

@@ -50,7 +50,10 @@
         {#snippet trigger(props)}
             <button
                 {...props}
-                class={["btn btn-sm md:btn-md", approve ? "preset-filled-success-500" : "preset-filled-error-500"]}
+                class={[
+                    "btn btn-icon btn-icon-sm md:btn-icon-base",
+                    approve ? "preset-filled-success-600-400" : "preset-filled-error-500"
+                ]}
                 aria-label={approve ? $t("wishes.approve") : $t("wishes.deny")}
                 onclick={(e) => {
                     e.stopPropagation();
@@ -58,7 +61,6 @@
                 }}
                 title={approve ? $t("wishes.approve") : $t("wishes.deny")}
             >
-                {approve ? $t("wishes.approve") : $t("wishes.deny")}
                 <iconify-icon icon={approve ? "ion:checkmark" : "ion:close"}></iconify-icon>
             </button>
         {/snippet}

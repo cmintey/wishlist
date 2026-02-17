@@ -79,6 +79,7 @@
                 {label}
             </Tabs.Trigger>
         {/each}
+        <Tabs.Indicator />
     </Tabs.List>
 </Tabs>
 

@@ -35,13 +35,16 @@
 <svelte:element
     this={elementTag}
     bind:this={element}
-    class={["card preset-filled-surface-100-900", !preventNavigate && "card-hover"]}
+    class={[
+        "card preset-filled-surface-100-900 inset-ring-surface-200-800 inset-ring",
+        !preventNavigate && "card-hover"
+    ]}
 >
     {#if list.unapprovedCount && list.unapprovedCount > 0}
         <div
-            class="preset-tonal-primary border-primary-500 rounded-tl-container rounded-tr-container flex flex-row items-center gap-x-2 border px-4 py-1"
+            class="preset-tonal-primary border-primary-500 rounded-tl-container rounded-tr-container flex flex-row items-center gap-x-2 border px-2 py-1"
         >
-            <iconify-icon class="text-xl" icon="ion:information-circle"></iconify-icon>
+            <iconify-icon class="text-lg" icon="ion:information-circle"></iconify-icon>
             <p class="text-sm">
                 {$t("wishes.approvals-waiting", { values: { approvalCount: list.unapprovedCount } })}
             </p>
@@ -54,7 +57,7 @@
             class="text-surface-50 flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold md:w-16"
             class:bg-primary-500={!iconColor}
         >
-            <iconify-icon icon={"ion:" + (list.icon ?? "gift")} width="1.5rem"></iconify-icon>
+            <iconify-icon class="text-2xl" icon={"ion:" + (list.icon ?? "gift")}></iconify-icon>
         </div>
         <div class="flex flex-col space-y-1">
             <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">

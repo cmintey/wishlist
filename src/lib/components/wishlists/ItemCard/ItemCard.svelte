@@ -127,8 +127,8 @@
 
 <div
     class={[
-        "card preset-filled-surface-100-900 block h-full w-full text-start print:break-inside-avoid print:shadow-none",
-        !item.approved && "preset-tonal-warning border-warning-500 border",
+        "card preset-filled-surface-100-900 inset-ring-surface-200-800 block h-full w-full text-start inset-ring print:break-inside-avoid print:shadow-none",
+        !item.approved && "preset-tonal-warning inset-ring-warning-500 inset-ring",
         !reorderActions && "card-hover"
     ]}
     aria-labelledby={`${id}-name`}

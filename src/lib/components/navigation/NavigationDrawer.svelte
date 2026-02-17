@@ -24,7 +24,7 @@
         <ModalBackdrop></ModalBackdrop>
         <Dialog.Positioner class="fixed inset-0 z-50 mr-4 flex max-w-72 min-w-fit justify-start">
             <ModalContent
-                class="data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 starting:data-[state=closed]:translate-x-0 starting:data-[state=open]:-translate-x-full"
+                class="rounded-l-none data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 starting:data-[state=closed]:translate-x-0 starting:data-[state=open]:-translate-x-full"
             >
                 <header class="flex items-center justify-between">
                     <Dialog.Title class="flex flex-row items-center gap-2">

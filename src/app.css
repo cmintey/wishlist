@@ -10,6 +10,8 @@
 @import "./styles/table.css";
 @import "./styles/button.css";
 @import "./styles/input.css";
+@import "./styles/tabs.css";
+@import "./styles/alert.css";
 
 @plugin "@tailwindcss/forms";
 
@@ -32,6 +34,33 @@
     ::backdrop,
     ::file-selector-button {
         border-color: var(--color-gray-200, currentcolor);
+    }
+}
+
+@layer base {
+    html {
+        /* Mobile Tap Highlight Color (WebKit only) --- */
+        /* IMPORTANT: this is useful for mobile accessibility. */
+        /* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
+        -webkit-tap-highlight-color: color-mix(in oklab, var(--color-surface-950-50) 30%, transparent);
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    /*! purgecss start ignore */
+    .ptr--icon,
+    .ptr--text {
+        color: var(--color-primary-950-50);
+    }
+    /*! purgecss end ignore */
+
+    iconify-icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
     }
 }
 
@@ -88,15 +117,3 @@
         @apply text-error-700-300 text-xs;
     }
 }
-
-html,
-body {
-    height: 100%;
-}
-
-/*! purgecss start ignore */
-.ptr--icon,
-.ptr--text {
-    color: var(--color-primary-950-50);
-}
-/*! purgecss end ignore */

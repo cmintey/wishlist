@@ -22,6 +22,10 @@
             @variant hover {
                 @apply text-primary-950-50 bg-primary-500/10 cursor-pointer;
             }
+
+            @variant active {
+                @apply text-primary-950-50 bg-primary-500/10;
+            }
         }
     }
 }

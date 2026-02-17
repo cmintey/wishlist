@@ -90,9 +90,7 @@
             } else {
                 description = $t("wishes.updated-claim");
             }
-            open = false;
-            toaster.info({ description });
-            onSuccess?.();
+            closeAndToast(description);
         } else {
             onFailure?.();
             toaster.error({ description: $t("general.oops") });
@@ -104,11 +102,7 @@
         const resp = await listItemAPI.claim(userId, quantity);
 
         if (resp.ok) {
-            open = false;
-            toaster.info({
-                description: $t("wishes.claimed-item", { values: { claimed: true } })
-            });
-            onSuccess?.();
+            closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
             onFailure?.();
             toaster.error({ description: $t("general.oops") });
@@ -131,15 +125,18 @@
         const resp = await listItemAPI.claimPublic(publicUserId, quantity);
 
         if (resp.ok) {
-            open = false;
-            toaster.info({
-                description: $t("wishes.claimed-item", { values: { claimed: true } })
-            });
-            onSuccess?.();
+            closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
             onFailure?.();
             toaster.error({ description: $t("general.oops") });
         }
+    }
+
+    function closeAndToast(description: string) {
+        open = false;
+        // wait for transition to finish before triggering toast
+        setTimeout(() => toaster.info({ description }), 250);
+        onSuccess?.();
     }
 </script>
 

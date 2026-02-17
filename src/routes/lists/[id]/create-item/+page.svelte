@@ -6,6 +6,7 @@
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
     import { goto } from "$app/navigation";
+    import Alert from "$lib/components/Alert.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -49,27 +50,14 @@
 </script>
 
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
-    <div class="pb-4">
-        <aside class="alert preset-tonal-warning border-warning-500 border">
-            <div class="alert-message flex flex-row items-center space-y-0 gap-x-4">
-                <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
-                <div>
-                    <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>
-                    <p class="text-sm">
-                        {$t("wishes.approval-required", { values: { listOwner: data.list.owner.name } })}
-                    </p>
-                </div>
-            </div>
-            <div class="alert-actions">
-                <button
-                    class="preset-tonal-warning border-warning-500 btn btn-sm border"
-                    onclick={() => (warningHidden = true)}
-                >
-                    {$t("general.ok")}
-                </button>
-            </div>
-        </aside>
-    </div>
+    <Alert title={$t("wishes.heads-up")} type="info">
+        {$t("wishes.approval-required", { values: { listOwner: data.list.owner.name } })}
+        {#snippet actions(variant)}
+            <button class={["btn btn-sm", variant]} onclick={() => (warningHidden = true)}>
+                {$t("general.ok")}
+            </button>
+        {/snippet}
+    </Alert>
 {/if}
 
 <form
