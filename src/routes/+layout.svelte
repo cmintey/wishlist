@@ -86,7 +86,7 @@
 </script>
 
 <div class="min-h-screen">
-    <header class="sticky top-0 z-10 print:hidden">
+    <header class="sticky top-0 z-15 print:hidden">
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}

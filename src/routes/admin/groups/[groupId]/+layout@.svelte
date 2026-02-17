@@ -5,6 +5,7 @@
     import { GroupAPI } from "$lib/api/groups";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import { onMount } from "svelte";
 
     const { data, children }: LayoutProps = $props();
     const t = getFormatter();
@@ -34,6 +35,11 @@
         selectedTab = value;
         return goto(tabs[value].href(), { replaceState: true });
     }
+
+    let dir: "ltr" | "rtl" = $state("ltr");
+    onMount(() => {
+        dir = (document.getRootNode() as HTMLDocument).dir as "ltr" | "rtl";
+    });
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,
@@ -66,7 +72,7 @@
     {/if}
 </div>
 
-<Tabs onValueChange={({ value }) => onValueChange(value as TabOption)} value={selectedTab}>
+<Tabs {dir} onValueChange={({ value }) => onValueChange(value as TabOption)} value={selectedTab}>
     <Tabs.List class="flex overflow-auto">
         {#each Object.entries(tabs) as [value, { label }]}
             <Tabs.Trigger {value}>

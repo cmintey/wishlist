@@ -4,6 +4,7 @@
     import type { LayoutProps, Snapshot } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import { onMount } from "svelte";
 
     const { children }: LayoutProps = $props();
     const t = getFormatter();
@@ -24,6 +25,11 @@
         selectedTab = value;
         return goto(tabs[value].href, { replaceState: true });
     }
+
+    let dir: "ltr" | "rtl" = $state("ltr");
+    onMount(() => {
+        dir = (document.getRootNode() as HTMLDocument).dir as "ltr" | "rtl";
+    });
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,

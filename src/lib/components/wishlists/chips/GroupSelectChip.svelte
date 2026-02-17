@@ -24,7 +24,7 @@
     const activeGroup = $derived(groups.find((group) => group.active)!);
 </script>
 
-<Popup zIndex="z-20" bind:open>
+<Popup zIndex="z-20!" bind:open>
     {#snippet trigger(props)}
         <button
             {...props}

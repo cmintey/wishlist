@@ -30,7 +30,7 @@
         {#if groups && groups?.length > 1}
             <GroupSelectChip {groups} {user} />
         {/if}
-        <Popup zIndex="z-10!" bind:open>
+        <Popup zIndex="z-20!" bind:open>
             {#snippet trigger(props)}
                 <button class="size-10 md:size-12" {...props}>
                     <Avatar class="size-10 text-xs md:size-12 md:text-sm" {user} />
@@ -108,5 +108,5 @@
         </Popup>
     </div>
 {:else}
-    <LightSwitch />
+    <LightSwitch sizeClass="w-10" />
 {/if}

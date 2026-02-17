@@ -70,6 +70,8 @@
                 </a>
             {/each}
         </div>
+    {:else}
+        <div class="md:flex md:grow"></div>
     {/if}
 
     <!-- Trail -->

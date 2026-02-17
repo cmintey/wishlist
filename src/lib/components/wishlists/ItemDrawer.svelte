@@ -22,14 +22,19 @@
         ...props
     }: InternalItemCardProps & ItemDrawerProps = $props();
     const t = getFormatter();
+
+    const transitionIn =
+        "data-[state=open]:translate-y-0 starting:data-[state=open]:translate-y-1/2 md:starting:data-[state=open]:translate-y-0 md:data-[state=open]:scale-100 md:starting:data-[state=open]:scale-90";
+    const transitionOut =
+        "data-[state=closed]:translate-y-1/2 starting:data-[state=closed]:translate-y-0 md:data-[state=closed]:translate-y-0 md:data-[state=closed]:scale-90 md:starting:data-[state=closed]:scale-100";
 </script>
 
 <Dialog onOpenChange={(e) => (open = e.open)} {open}>
     <Portal>
-        <ModalBackdrop></ModalBackdrop>
+        <ModalBackdrop class="duration-250 md:duration-150"></ModalBackdrop>
         <Dialog.Positioner class="fixed inset-0 z-50 flex items-end justify-center sm:mx-4 sm:items-center">
             <ModalContent
-                class="max-h-3/4 data-[state=closed]:translate-y-full data-[state=open]:translate-y-0 starting:data-[state=closed]:translate-y-0 starting:data-[state=open]:translate-y-full"
+                class="md:rounded-b-container max-h-3/4 translate-x-0 rounded-b-none duration-250 md:duration-150 {transitionIn} {transitionOut}"
             >
                 <div class="grid grid-cols-[1fr_auto] justify-between gap-2 pb-2">
                     <Dialog.Title class="truncate text-xl font-bold text-wrap wrap-break-word md:text-2xl">
@@ -60,7 +65,7 @@
 
                 <ItemAttributes {...props} fullNotes {item} showDetail />
 
-                <div class="flex flex-row justify-between pb-4">
+                <div class="flex flex-row justify-between">
                     <ClaimButtons {item} {...props} />
                     <ManageButtons {item} {...props} onEdit={() => (open = false)} />
                 </div>

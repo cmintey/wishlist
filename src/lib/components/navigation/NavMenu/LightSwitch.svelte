@@ -3,6 +3,13 @@
     import { LocalStorage } from "$lib/local-storage.svelte";
     import { SegmentedControl, type SegmentedControlRootProps } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
+    import type { ClassValue } from "svelte/elements";
+
+    interface Props {
+        sizeClass?: ClassValue;
+    }
+
+    let props: Props = $props();
 
     const t = getFormatter();
 
@@ -45,10 +52,10 @@
 
 <SegmentedControl {onValueChange} {value}>
     <SegmentedControl.Label>{$t("general.mode")}</SegmentedControl.Label>
-    <SegmentedControl.Control class="rounded-container p-0.5">
+    <SegmentedControl.Control class="rounded-container border-surface-300-700 gap-0 p-0.5">
         <SegmentedControl.Indicator class="rounded-container" />
         {#each options as { value, icon, text } (value)}
-            <SegmentedControl.Item {value}>
+            <SegmentedControl.Item class={props?.sizeClass} {value}>
                 <SegmentedControl.ItemText class="flex size-4" title={text}>
                     <iconify-icon {icon}></iconify-icon>
                     <span class="sr-only">{text}</span>
