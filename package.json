@@ -80,7 +80,7 @@
         "metascraper": "^5.49.1",
         "metascraper-image": "^5.49.1",
         "metascraper-title": "^5.49.1",
-        "nodemailer": "^7.0.5",
+        "nodemailer": "^8.0.0",
         "openid-client": "^6.6.4",
         "pino": "^10.0.0",
         "prisma": "^7.1.0",
