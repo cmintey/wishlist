@@ -13,6 +13,7 @@
         showClaimedName = false,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
+        showPublicClaimName = false,
         showFor = false,
         onPublicList = false,
         reorderActions = false,
@@ -44,7 +45,15 @@
 
     <!-- Content area with consistent padding -->
     <div class="flex flex-1 flex-col space-y-1 p-4">
-        <ItemAttributes {item} {onPublicList} {showClaimForOwner} {showClaimedName} {showFor} {user} />
+        <ItemAttributes
+            {item}
+            {onPublicList}
+            {showClaimForOwner}
+            {showClaimedName}
+            {showPublicClaimName}
+            {showFor}
+            {user}
+        />
     </div>
 
     <ItemFooter
@@ -62,6 +71,7 @@
         {showClaimForOwner}
         {showClaimedName}
         {showNameAcrossGroups}
+        {showPublicClaimName}
         {user}
         {userCanManage}
     />
