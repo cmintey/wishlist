@@ -463,5 +463,23 @@
         "view-wishes": "View Wishes",
         "wishes-for": "{listOwner}'s Wishes",
         "write": "Write"
+    },
+    "account": {
+        "api-keys-tab": "API Keys",
+        "api-keys": "API Keys",
+        "create-api-key": "Create API Key",
+        "api-key-name": "Name",
+        "api-key-name-placeholder": "e.g. Browser Extension",
+        "api-key-expires": "Expires",
+        "api-key-prefix": "Key",
+        "api-key-created": "Created",
+        "api-key-last-used": "Last Used",
+        "api-key-copied": "API key copied to clipboard",
+        "api-key-warning": "Make sure to copy your API key now. You won't be able to see it again!",
+        "copy-api-key": "Copy API key",
+        "delete-api-key": "Delete API key",
+        "no-api-keys": "No API keys yet. Create one to use with external applications.",
+        "never": "Never",
+        "create": "Create"
     }
 }

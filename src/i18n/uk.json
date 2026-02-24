@@ -421,5 +421,23 @@
         "wishes-for": "Бажання {listOwner}",
         "write": "Написати",
         "no-wishes-yet": "Немає побажань"
+    },
+    "account": {
+        "api-keys-tab": "API-ключі",
+        "api-keys": "API-ключі",
+        "create-api-key": "Створити API-ключ",
+        "api-key-name": "Назва",
+        "api-key-name-placeholder": "напр. Розширення браузера",
+        "api-key-expires": "Закінчується",
+        "api-key-prefix": "Ключ",
+        "api-key-created": "Створено",
+        "api-key-last-used": "Востаннє використано",
+        "api-key-copied": "API-ключ скопійовано до буфера обміну",
+        "api-key-warning": "Обов'язково скопіюйте свій API-ключ зараз. Ви більше не зможете його побачити!",
+        "copy-api-key": "Скопіювати API-ключ",
+        "delete-api-key": "Видалити API-ключ",
+        "no-api-keys": "API-ключів поки немає. Створіть один для використання із зовнішніми додатками.",
+        "never": "Ніколи",
+        "create": "Створити"
     }
 }

@@ -305,5 +305,23 @@
         "wishlists-cleared": "Wishlists limpas.",
         "success": "Sucesso!",
         "cannot-delete-default-group-msg": "Não é possível eliminar o grupo predefinido. Altere o grupo predefinido antes de eliminar este grupo."
+    },
+    "account": {
+        "api-keys-tab": "Chaves API",
+        "api-keys": "Chaves API",
+        "create-api-key": "Criar chave API",
+        "api-key-name": "Nome",
+        "api-key-name-placeholder": "ex. Extensão do navegador",
+        "api-key-expires": "Expira",
+        "api-key-prefix": "Chave",
+        "api-key-created": "Criada",
+        "api-key-last-used": "Último uso",
+        "api-key-copied": "Chave API copiada para a área de transferência",
+        "api-key-warning": "Certifique-se de copiar sua chave API agora. Você não poderá vê-la novamente!",
+        "copy-api-key": "Copiar chave API",
+        "delete-api-key": "Eliminar chave API",
+        "no-api-keys": "Ainda não há chaves API. Crie uma para usar com aplicações externas.",
+        "never": "Nunca",
+        "create": "Criar"
     }
 }

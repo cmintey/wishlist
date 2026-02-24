@@ -463,5 +463,23 @@
         "import-item": "Импортировать элемент",
         "import-item-text": "Прежде чем импортировать элемент, вы должны выбрать группу и список",
         "select-a-list": "Выбрать список"
+    },
+    "account": {
+        "api-keys-tab": "API-ключи",
+        "api-keys": "API-ключи",
+        "create-api-key": "Создать API-ключ",
+        "api-key-name": "Имя",
+        "api-key-name-placeholder": "напр. Расширение браузера",
+        "api-key-expires": "Истекает",
+        "api-key-prefix": "Ключ",
+        "api-key-created": "Создан",
+        "api-key-last-used": "Последнее использование",
+        "api-key-copied": "API-ключ скопирован в буфер обмена",
+        "api-key-warning": "Обязательно скопируйте свой API-ключ сейчас. Вы больше не сможете его увидеть!",
+        "copy-api-key": "Скопировать API-ключ",
+        "delete-api-key": "Удалить API-ключ",
+        "no-api-keys": "API-ключей пока нет. Создайте один для использования с внешними приложениями.",
+        "never": "Никогда",
+        "create": "Создать"
     }
 }

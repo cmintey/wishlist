@@ -15,5 +15,23 @@
         "add-member": "Гишүүн нэмэх",
         "account": "Бүртгэл",
         "about": "Тухай"
+    },
+    "account": {
+        "api-keys-tab": "API түлхүүрүүд",
+        "api-keys": "API түлхүүрүүд",
+        "create-api-key": "API түлхүүр үүсгэх",
+        "api-key-name": "Нэр",
+        "api-key-name-placeholder": "жнь. Хөтчийн өргөтгөл",
+        "api-key-expires": "Дуусах",
+        "api-key-prefix": "Түлхүүр",
+        "api-key-created": "Үүсгэсэн",
+        "api-key-last-used": "Сүүлд ашигласан",
+        "api-key-copied": "API түлхүүр хуулбарлагдлаа",
+        "api-key-warning": "API түлхүүрээ одоо хуулж аваарай. Дахин харах боломжгүй!",
+        "copy-api-key": "API түлхүүр хуулах",
+        "delete-api-key": "API түлхүүр устгах",
+        "no-api-keys": "API түлхүүр байхгүй байна. Гадаад програмуудад ашиглахаар нэгийг үүсгэнэ үү.",
+        "never": "Хэзээ ч үгүй",
+        "create": "Үүсгэх"
     }
 }
