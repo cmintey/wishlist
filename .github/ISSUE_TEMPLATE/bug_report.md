@@ -25,3 +25,9 @@ Provide relevant container and/or browser console logs.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
+
+**Device**
+Mobile/Desktop:
+OS/Version:
+Browser:
+App Version:
