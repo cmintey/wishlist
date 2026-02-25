@@ -5,17 +5,10 @@
     import { shouldShowName, getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    interface Props
-        extends Pick<
-            ItemCardProps,
-            | "item"
-            | "onPublicList"
-            | "user"
-            | "showClaimForOwner"
-            | "showClaimedName"
-            | "showNameAcrossGroups"
-            | "showFor"
-        > {
+    interface Props extends Pick<
+        ItemCardProps,
+        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
+    > {
         showDetail?: boolean;
         fullNotes?: boolean;
     }

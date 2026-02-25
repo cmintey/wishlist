@@ -81,7 +81,7 @@
     {#if strengthMeter && value !== "" && strength}
         <div class="flex flex-col">
             <div class="flex w-full flex-row items-center gap-x-2">
-                <Progress max={5} value={strength.score + 1} class="my-1">
+                <Progress class="my-1" max={5} value={strength.score + 1}>
                     <Progress.Label class="sr-only">{$t("a11y.password-strength")}</Progress.Label>
                     <Progress.Track>
                         <Progress.Range class={meterLookup[strength.score.valueOf()]} />
