@@ -2,23 +2,6 @@
     @variant active {
         scale: 95%;
     }
-
-    &:not(:disabled) {
-        &:hover {
-            /* disable skeleton hover state as it causes "sticky" hover state on mobile devices */
-            filter: none;
-            @variant dark {
-                filter: none;
-            }
-            /* only show hover state on devices that support hover */
-            @media (hover: hover) {
-                filter: brightness(125%);
-                @variant dark {
-                    filter: brightness(75%);
-                }
-            }
-        }
-    }
 }
 
 @utility btn-xs {
@@ -46,6 +29,9 @@
     width: var(--text-sm);
     height: var(--text-sm);
     padding: --spacing(2.5);
+    @variant active {
+        scale: 95%;
+    }
 }
 
 @utility btn-icon-sm {
