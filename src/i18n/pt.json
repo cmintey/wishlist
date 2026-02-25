@@ -224,7 +224,7 @@
         "edit-wish": "Editar desejo",
         "filter": "Filtro",
         "finish": "Terminar",
-        "for": "Para <span class=\"text-secondary-800-200 font-bold\">{name}</span>",
+        "for": "Para <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "hang-tight-gathering-product-data": "Aguentar firme, a recolher dados sobre o produto",
         "heads-up": "Atenção!",
         "image-url": "URL da imagem",
@@ -250,7 +250,7 @@
         "view-wishes": "Ver desejos",
         "url-placeholder": "Introduza um URL para ir buscar os dados do item",
         "wishes-for": "Os desejos de {listOwner}",
-        "added-by": "Adicionado por <span class=\"text-secondary-800-200 font-bold\">{name}</span>",
+        "added-by": "Adicionado por <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
         "approval-required": "{listOwner} terá de aprovar a sua sugestão antes de esta ser adicionada à sua lista.",
         "note-placeholder": "ou seja, tamanho, cor, etc."
     },
