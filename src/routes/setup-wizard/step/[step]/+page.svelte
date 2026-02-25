@@ -1,95 +1,37 @@
 <script lang="ts">
-    import { fade } from "svelte/transition";
-    import { getContext, onMount, setContext } from "svelte";
-    import { writable, type Writable } from "svelte/store";
-    import { steps } from "./steps";
     import { page } from "$app/state";
+    import { Steps, type StepsRootProps } from "@skeletonlabs/skeleton-svelte";
+    import { steps } from "./steps";
     import { goto } from "$app/navigation";
-    import { getFormatter } from "$lib/i18n";
-    import type { RouteParams } from "./$types";
     import { resolve } from "$app/paths";
-    import { Steps } from "@skeletonlabs/skeleton-svelte";
 
-    let locked = false;
+    let step = $derived(Number.parseInt(page.params.step || "1") - 1);
+    let Component = $derived(steps[step]);
 
-    interface StepperState {
-        current: number;
-        total: number;
-    }
-
-    const t = getFormatter();
-    const submit_ = writable(() => {});
-    setContext("submit", submit_);
-    const stepperState: Writable<StepperState> = getContext("state");
-    const SvelteComponent = $derived(steps[$stepperState.current]);
-    let submitting = $state(false);
-
-    onMount(() => {
-        $stepperState.total = steps.length;
-        $stepperState.current = Number.parseInt((page.params as RouteParams).step) - 1;
-    });
-
-    const submit = () => {
-        submitting = true;
-        $submit_();
-    };
-
-    const next = () => {
-        submitting = false;
-        if ($stepperState.current + 1 < $stepperState.total) {
-            $stepperState.current = $stepperState.current + 1;
-            goto(`/setup-wizard/step/${$stepperState.current + 1}`);
+    const onStepChange: StepsRootProps["onStepChange"] = (event) => {
+        if (event.step !== steps.length) {
+            goto(resolve("/setup-wizard/step-new/[step]", { step: (event.step + 1).toString() }));
         }
     };
-
-    const onBack = () => {
-        if ($stepperState.current >= 0) {
-            $stepperState.current = $stepperState.current - 1;
-            goto(`/setup-wizard/step/${$stepperState.current + 1}`);
-        }
-    };
-
-    $effect(() => {
-        if (page.error) submitting = false;
-    });
 </script>
 
-<div transition:fade>
-    <SvelteComponent onSuccess={next} />
+<Steps count={steps.length} linear {onStepChange} {step}>
+    <Steps.List>
+        {#each { length: steps.length }, index}
+            <Steps.Item {index}>
+                <Steps.Indicator>{index + 1}</Steps.Indicator>
+                {#if index < steps.length - 1}
+                    <Steps.Separator />
+                {/if}
+            </Steps.Item>
+        {/each}
+    </Steps.List>
 
-    <div class="flex justify-between pt-4">
-        <!-- Button: Back -->
-        <button
-            class="preset-tonal border-surface-500 btn border"
-            disabled={$stepperState.current <= 1}
-            onclick={onBack}
-            type="button"
-        >
-            <iconify-icon icon="ion:arrow-back"></iconify-icon>
-            <span>{$t("setup.back")}</span>
-        </button>
-        {#if $stepperState.current < $stepperState.total - 1}
-            <!-- Button: Next -->
-            <button class="preset-filled btn" disabled={locked} onclick={submit} type="submit">
-                {#if locked}
-                    <iconify-icon icon="ion:lock-closed"></iconify-icon>
-                {/if}
-                {#if submitting}
-                    <span class="loading loading-spinner loading-xs"></span>
-                {/if}
-                <span>{$t("setup.next")}</span>
-                <iconify-icon icon="ion:arrow-forward"></iconify-icon>
-            </button>
-        {:else}
-            <!-- Button: Complete -->
-            <button
-                class="preset-filled-primary-500 btn"
-                disabled={locked}
-                onclick={() => goto(resolve("/login"), { invalidateAll: true })}
-                type="submit"
-            >
-                {$t("setup.complete")}
-            </button>
-        {/if}
-    </div>
-</div>
+    <Steps.Content index={step}>
+        <Steps.Context>
+            {#snippet children(api)}
+                <Component onSuccess={() => api().goToNextStep()} />
+            {/snippet}
+        </Steps.Context>
+    </Steps.Content>
+</Steps>

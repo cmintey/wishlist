@@ -86,7 +86,7 @@
                 <Listbox.Label class="text-base">{$t("general.group")}</Listbox.Label>
                 <Listbox.Content
                     class={[
-                        "preset-filled-surface-200-800 preset-outlined-surface-300-700 pt-1",
+                        "preset-filled-surface-200-800 preset-outlined-surface-300-700 pt-3",
                         groupError && "input-invalid!"
                     ]}
                 >

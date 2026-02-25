@@ -1,27 +1,23 @@
 <script lang="ts">
     import { applyAction, enhance } from "$app/forms";
     import { page } from "$app/state";
-    import { getContext, onMount } from "svelte";
-    import type { Writable } from "svelte/store";
+    import { onMount } from "svelte";
     import type { Props } from "./steps";
     import type { Group } from "$lib/generated/prisma/client";
     import { goto } from "$app/navigation";
     import { Email, General, Security, options } from "$lib/components/admin/Settings";
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
+    import StepButtons from "./StepButtons.svelte";
 
     const { onSuccess }: Props = $props();
     const t = getFormatter();
+    const formId = "global-settings-form";
 
     let config: Config = $state(page.data.config);
     let groups: Group[] = $state(page.data.groups);
-    let form: HTMLFormElement | undefined = $state();
+    let submitting = $state(false);
     let sending = $state(false);
-
-    const submit: Writable<() => void> = getContext("submit");
-    $submit = () => {
-        form?.requestSubmit();
-    };
 
     onMount(() => {
         if (!page.url.hash) {
@@ -39,14 +35,17 @@
     </div>
 
     <form
-        bind:this={form}
+        id={formId}
         action="/admin/settings?/settings"
         method="POST"
         use:enhance={({ action }) => {
             if (action.search.endsWith("?/send-test")) {
                 sending = true;
+            } else {
+                submitting = true;
             }
             return async ({ action, result }) => {
+                submitting = false;
                 if (action.search.endsWith("?/settings") && result.type === "success" && result.data?.success) {
                     onSuccess();
                 }
@@ -93,3 +92,5 @@
         </div>
     </form>
 </div>
+
+<StepButtons nextButton={{ form: formId, type: "submit" }} prevButton={{ disabled: true }} {submitting} />
