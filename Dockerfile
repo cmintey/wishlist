@@ -1,4 +1,4 @@
-FROM node:24-slim@sha256:bf22df20270b654c4e9da59d8d4a3516cce6ba2852e159b27288d645b7a7eedc AS base
+FROM node:24-slim@sha256:a81a03dd965b4052269a57fac857004022b522a4bf06e7a739e25e18bce45af2 AS base
 WORKDIR /usr/src/app
 RUN npm install -g pnpm@latest-10
 
@@ -30,7 +30,7 @@ RUN pnpm run build
 RUN pnpm prune --prod
 
 # Download Caddy from github
-FROM --platform=$BUILDPLATFORM alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62 AS caddy
+FROM --platform=$BUILDPLATFORM alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659 AS caddy
 
 ARG TARGETPLATFORM
 ARG CADDY_VERSION=2.10.0
