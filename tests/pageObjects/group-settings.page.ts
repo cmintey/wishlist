@@ -33,8 +33,8 @@ export class GroupSettingsPage extends BasePage {
         this.header = page.getByRole("heading", { name: "Group Settings" });
         this.groupNameHeader = page.getByRole("heading", { level: 2, name: props?.name });
         this.editNameButton = page.getByRole("button", { name: "edit group name" });
-        this.membersTab = page.locator(".tab-label", { hasText: "Members" });
-        this.settingsTab = page.locator(".tab-label", { hasText: "Settings" });
+        this.membersTab = page.getByRole("tab", { name: "Members" });
+        this.settingsTab = page.getByRole("tab", { name: "Settings" });
         this.addMemberButton = page.getByRole("button", { name: "Add Member" });
         this.inviteUserButton = page.getByRole("button", { name: "Invite User" });
         this.deleteButton = page.getByRole("button", { name: "Delete Group" });

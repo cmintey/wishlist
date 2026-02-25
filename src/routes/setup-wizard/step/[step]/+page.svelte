@@ -10,7 +10,7 @@
 
     const onStepChange: StepsRootProps["onStepChange"] = (event) => {
         if (event.step !== steps.length) {
-            goto(resolve("/setup-wizard/step-new/[step]", { step: (event.step + 1).toString() }));
+            goto(resolve("/setup-wizard/step/[step]", { step: (event.step + 1).toString() }));
         }
     };
 </script>

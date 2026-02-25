@@ -13,11 +13,11 @@ export class AdminPage extends BasePage {
     constructor(page: Page) {
         super(page, "/admin");
         this.header = page.getByRole("heading", { name: "Administration" });
-        this.usersTab = page.locator(".tab-label", { hasText: "Users" });
-        this.groupsTab = page.locator(".tab-label", { hasText: "Groups" });
-        this.settingsTab = page.locator(".tab-label", { hasText: "Settings" });
-        this.actionsTab = page.locator(".tab-label", { hasText: "Actions" });
-        this.aboutTab = page.locator(".tab-label", { hasText: "About" });
+        this.usersTab = page.getByRole("tab", { name: "Users" });
+        this.groupsTab = page.getByRole("tab", { name: "Groups" });
+        this.settingsTab = page.getByRole("tab", { name: "Settings" });
+        this.actionsTab = page.getByRole("tab", { name: "Actions" });
+        this.aboutTab = page.getByRole("tab", { name: "About" });
     }
 
     async at() {

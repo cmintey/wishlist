@@ -13,7 +13,8 @@
         "format": "prettier --write .",
         "db:patch": "tsx prisma/patches/index.ts",
         "test": "playwright test",
-        "test:build": "docker compose -f tests/docker/docker-compose.yaml build"
+        "test:build": "docker compose -f tests/docker/docker-compose.yaml build",
+        "test:setup": "playwright install --with-deps chromium"
     },
     "devDependencies": {
         "@eslint/js": "^9.33.0",

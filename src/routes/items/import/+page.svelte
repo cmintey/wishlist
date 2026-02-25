@@ -28,7 +28,7 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <label class="w-full">
+                <label class="label w-full">
                     <span>{$t("admin.select-a-group-option")}</span>
 
                     <select
@@ -48,7 +48,7 @@
                     {/if}
                 </label>
 
-                <label class="w-full">
+                <label class="label w-full">
                     <span>{$t("wishes.select-a-list")}</span>
 
                     <select
@@ -76,7 +76,7 @@
             </div>
 
             <div class="flex flex-row-reverse">
-                <button class="variant-filled-primary btn">{$t("general.import")}</button>
+                <button class="preset-filled-primary-500 btn">{$t("general.import")}</button>
             </div>
         {/if}
     </form>
