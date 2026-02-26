@@ -102,6 +102,7 @@
                 />
                 <ClearableInput
                     clearButtonLabel={$t("a11y.clear-color-field")}
+                    disabled
                     onValueClear={() => {
                         colorValue = defaultColor;
                         list.iconColor = defaultColor;
@@ -119,15 +120,15 @@
         </div>
 
         <div class="col-span-full">
-            <label class="label">
+            <label class="label mb-1" for="description">
                 <span>{$t("general.description")}</span>
-                <MarkdownEditor
-                    id="description"
-                    name="description"
-                    placeholder={$t("general.add-a-description")}
-                    value={list.description}
-                />
             </label>
+            <MarkdownEditor
+                id="description"
+                name="description"
+                placeholder={$t("general.add-a-description")}
+                value={list.description}
+            />
         </div>
 
         <fieldset

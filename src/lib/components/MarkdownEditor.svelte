@@ -21,6 +21,7 @@
         <Tabs.List class="flex overflow-auto">
             <Tabs.Trigger value={"write"}>{$t("wishes.write")}</Tabs.Trigger>
             <Tabs.Trigger value={"preview"}>{$t("wishes.preview")}</Tabs.Trigger>
+            <Tabs.Indicator />
         </Tabs.List>
     </Tabs>
     <textarea {...rest} class="textarea" class:hidden={previewNote} rows="4" bind:value></textarea>
