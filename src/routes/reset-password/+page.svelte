@@ -4,11 +4,9 @@
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
-    import { getToastStore } from "@skeletonlabs/skeleton";
-
+    import { toaster } from "$lib/components/toaster";
     const { data, form }: PageProps = $props();
 
-    const toastStore = getToastStore();
     const t = getFormatter();
 
     let newPassword = $state("");
@@ -30,19 +28,15 @@
             formData.append("id", `${data.id}` || "0");
             return async ({ result, update }) => {
                 if (result.type === "redirect") {
-                    toastStore.trigger({
-                        message: $t("auth.your-password-was-reset")
-                    });
+                    toaster.info({ description: $t("auth.your-password-was-reset") });
                 } else if (result.type === "error") {
-                    toastStore.trigger({
-                        message: $t("general.oops")
-                    });
+                    toaster.error({ description: $t("general.oops") });
                 }
                 update();
             };
         }}
     >
-        <div class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token">
+        <div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 inset-ring">
             <PasswordInput
                 id="password"
                 name="password"
@@ -61,14 +55,14 @@
             />
 
             {#if newPassword !== confirmPassword}
-                <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
+                <span class="text-invalid">{$t("auth.passwords-must-match")}</span>
             {/if}
             {#if form?.errors?.newPassword}
-                <span class="text-xs text-red-500">{form?.errors?.newPassword[0]}</span>
+                <span class="text-invalid">{form?.errors?.newPassword[0]}</span>
             {/if}
 
             <button
-                class="variant-filled-primary btn w-fit"
+                class="preset-filled-primary-500 btn w-fit"
                 disabled={newPassword === "" || newPassword !== confirmPassword}
                 type="submit"
             >

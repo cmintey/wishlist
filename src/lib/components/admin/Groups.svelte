@@ -1,17 +1,10 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import {
-        Table,
-        tableMapperValues,
-        tableSourceMapper,
-        type TableSource,
-        getModalStore,
-        type ModalSettings,
-        getToastStore
-    } from "@skeletonlabs/skeleton";
     import Search from "../Search.svelte";
     import { GroupsAPI } from "$lib/api/groups";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
+    import PromptModal from "../modals/PromptModal.svelte";
 
     type Group = {
         id: string;
@@ -26,62 +19,66 @@
     const { groups }: Props = $props();
     const t = getFormatter();
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
+    const headers = [$t("auth.name"), $t("general.user-count")];
 
-    let groupsFiltered: Group[] = $state(groups);
+    let groupsFiltered: Group[] = $derived(groups);
 
-    let groupData: TableSource = $derived({
-        head: [$t("auth.name"), $t("general.user-count")],
-        body: tableMapperValues(groupsFiltered, ["name", "userCount"]),
-        meta: tableSourceMapper(groupsFiltered, ["name", "id"])
-    });
-
-    const selectionHandler = (meta: CustomEvent<string[]>) => {
-        const group: Group = meta.detail as unknown as Group;
+    const selectionHandler = (group: Group) => {
         goto(`/admin/groups/${group.id}`);
     };
 
-    const createGroup = () => {
-        const settings: ModalSettings = {
-            type: "prompt",
-            title: $t("general.enter-group-name"),
-            body: $t("general.provide-the-name-of-the-group-below"),
-            valueAttr: { type: "text", minlength: 3, maxlength: 32, required: true },
-            // Returns the updated response value
-            response: async (name: string) => {
-                if (!name) {
-                    return;
-                }
-                const groupsAPI = new GroupsAPI();
-                const group = await groupsAPI.create(name);
-                if (group) {
-                    toastStore.trigger({
-                        message: $t("general.group-created-successfully")
-                    });
-                } else {
-                    toastStore.trigger({
-                        message: $t("errors.create-group-unknown-error")
-                    });
-                }
-                await invalidateAll();
-            },
-            buttonTextCancel: $t("general.cancel"),
-            buttonTextSubmit: $t("general.submit")
-        };
-
-        modalStore.trigger(settings);
+    const createGroup = async (name: string | undefined) => {
+        if (!name) {
+            return;
+        }
+        const groupsAPI = new GroupsAPI();
+        const group = await groupsAPI.create(name);
+        if (group) {
+            toaster.info({
+                description: $t("general.group-created-successfully")
+            });
+        } else {
+            toaster.error({
+                description: $t("errors.create-group-unknown-error")
+            });
+        }
+        await invalidateAll();
     };
 </script>
 
-<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:gap-x-4 md:space-y-0">
+<div class="mb-4 flex flex-col space-y-4 md:flex-row md:items-end md:space-y-0 md:gap-x-4">
     <Search data={groups} keys={["name"]} bind:result={groupsFiltered} />
-    <button class="variant-filled-primary btn" onclick={createGroup}>
-        <iconify-icon icon="ion:add"></iconify-icon>
-        <p>{$t("general.create-group")}</p>
-    </button>
+    <PromptModal
+        description={$t("general.provide-the-name-of-the-group-below")}
+        inputProps={{ type: "text", minlength: 3, maxlength: 32, required: true }}
+        onSubmit={createGroup}
+        title={$t("general.enter-group-name")}
+    >
+        {#snippet trigger(props)}
+            <button class="preset-filled-primary-500 btn" {...props}>
+                <iconify-icon icon="ion:add"></iconify-icon>
+                <p>{$t("general.create-group")}</p>
+            </button>
+        {/snippet}
+    </PromptModal>
 </div>
 
-{#if groupData}
-    <Table interactive source={groupData} on:selected={selectionHandler} />
-{/if}
+<div class="table-wrap preset-outlined-surface-200-800 rounded-container">
+    <table class="table-hover table table-auto">
+        <thead>
+            <tr>
+                {#each headers as header}
+                    <th>{header}</th>
+                {/each}
+            </tr>
+        </thead>
+        <tbody>
+            {#each groupsFiltered as group}
+                <tr onclick={() => selectionHandler(group)}>
+                    <td>{group.name}</td>
+                    <td>{group.userCount}</td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>

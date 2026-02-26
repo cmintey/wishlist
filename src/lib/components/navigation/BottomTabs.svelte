@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
     import { isInstalled } from "$lib/stores/is-installed";
-    import { TabGroup, Tab } from "@skeletonlabs/skeleton";
+    import { Navigation } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -13,39 +12,30 @@
     const { navItems, user }: Props = $props();
     const t = getFormatter();
 
-    let tabsBottomNav: number | undefined = $state(
-        navItems.findIndex((n) => page.url.pathname.startsWith(n.href(user)))
-    );
+    const isSelected = (href: string) => {
+        return page.url.href.endsWith(href);
+    };
 </script>
 
 {#if user && $isInstalled}
-    <TabGroup
-        class="bottom-nav bg-surface-200-700-token w-full pt-4 md:hidden"
-        active="variant-glass-primary"
-        border=""
-        hover="hover:variant-soft-primary"
-        justify="justify-around"
-        padding="px-6 py-2"
-        rounded="rounded-full"
-    >
-        {#each navItems as navItem, value}
-            <Tab
-                name={$t(navItem.labelKey)}
-                {value}
-                bind:group={tabsBottomNav}
-                on:click={() => goto(navItem.href(user))}
-            >
-                <div class="flex flex-col">
+    <Navigation class="bg-surface-200-800 bottom-nav" layout="bar">
+        <Navigation.Menu class="flex justify-around">
+            {#each navItems as navItem (navItem.labelKey)}
+                {@const href = navItem.href(user)}
+                <Navigation.TriggerAnchor
+                    class={["hover:bg-primary-500/30 min-w-24 rounded-full", isSelected(href) && "bg-primary-500/20"]}
+                    {href}
+                >
                     <iconify-icon class="text-xl" icon={navItem.icon}></iconify-icon>
-                    <span class="text-xs">{$t(navItem.labelKey)}</span>
-                </div>
-            </Tab>
-        {/each}
-    </TabGroup>
+                    <Navigation.TriggerText>{$t(navItem.labelKey)}</Navigation.TriggerText>
+                </Navigation.TriggerAnchor>
+            {/each}
+        </Navigation.Menu>
+    </Navigation>
 {/if}
 
-<style global>
-    .bottom-nav {
+<style>
+    :global(.bottom-nav) {
         padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     }
 </style>

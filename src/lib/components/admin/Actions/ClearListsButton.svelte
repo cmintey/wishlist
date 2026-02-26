@@ -1,8 +1,9 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
     import { ItemsAPI } from "$lib/api/items";
+    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
+    import { toaster } from "$lib/components/toaster";
     import { getFormatter } from "$lib/i18n";
-    import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton";
 
     interface Props {
         groupId?: string | undefined;
@@ -12,47 +13,31 @@
     const { groupId = undefined, claimed = false }: Props = $props();
     const t = getFormatter();
 
-    const modalStore = getModalStore();
-    const toastStore = getToastStore();
     const itemsAPI = new ItemsAPI();
 
-    const handleDelete = async () => {
-        const settings: ModalSettings = {
-            type: "confirm",
-            title: $t("general.please-confirm"),
-            body: $t("admin.clear-lists-confirmation", {
-                values: { claimedOnly: claimed, groupSpecific: groupId !== undefined }
-            }),
-            // confirm = TRUE | cancel = FALSE
-            response: async (r: boolean) => {
-                if (r) {
-                    const resp = await itemsAPI.clearItemsFromLists(groupId, claimed);
+    let description = $derived(
+        $t("admin.clear-lists-confirmation", {
+            values: { claimedOnly: claimed, groupSpecific: groupId !== undefined }
+        })
+    );
 
-                    if (resp.ok) {
-                        invalidateAll();
+    const onConfirm = async () => {
+        const resp = await itemsAPI.clearItemsFromLists(groupId, claimed);
 
-                        toastStore.trigger({
-                            message: $t("general.wishlists-cleared"),
-                            autohide: true,
-                            timeout: 5000
-                        });
-                    } else {
-                        toastStore.trigger({
-                            message: $t("general.oops"),
-                            background: "variant-filled-warning",
-                            autohide: true,
-                            timeout: 5000
-                        });
-                    }
-                }
-            },
-            buttonTextCancel: $t("general.cancel"),
-            buttonTextConfirm: $t("general.confirm")
-        };
-        modalStore.trigger(settings);
+        if (resp.ok) {
+            invalidateAll();
+
+            toaster.info({ description: $t("general.wishlists-cleared") });
+        } else {
+            toaster.error({ description: $t("general.oops") });
+        }
     };
 </script>
 
-<button class="variant-filled-error btn w-fit" onclick={handleDelete} type="button">
-    {$t("admin.clear-lists", { values: { claimedOnly: claimed, groupSpecific: groupId !== undefined } })}
-</button>
+<ConfirmModal {description} {onConfirm} title={$t("general.please-confirm")}>
+    {#snippet trigger(props)}
+        <button class="preset-filled-error-500 btn w-fit" {...props} type="button">
+            {$t("admin.clear-lists", { values: { claimedOnly: claimed, groupSpecific: groupId !== undefined } })}
+        </button>
+    {/snippet}
+</ConfirmModal>

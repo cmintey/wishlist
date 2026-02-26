@@ -1,0 +1,49 @@
+@utility btn {
+    @variant active {
+        scale: 95%;
+    }
+}
+
+@utility btn-xs {
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+    padding-block: --spacing(1);
+    padding-inline: --spacing(3);
+}
+
+@utility btn-sm {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+}
+
+@utility btn-base {
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    padding-block: --spacing(1);
+    padding-inline: --spacing(4);
+}
+
+@utility btn-icon {
+    border-radius: 100%;
+    font-size: var(--text-sm);
+    width: var(--text-sm);
+    height: var(--text-sm);
+    padding: --spacing(2.5);
+    @variant active {
+        scale: 95%;
+    }
+}
+
+@utility btn-icon-sm {
+    padding: --spacing(2);
+    font-size: var(--text-xs);
+    width: var(--text-xs);
+    height: var(--text-xs);
+}
+
+@utility btn-icon-base {
+    font-size: var(--text-sm);
+    width: var(--text-sm);
+    height: var(--text-sm);
+    padding: --spacing(2.5);
+}

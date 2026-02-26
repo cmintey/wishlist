@@ -1,22 +1,29 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Tab } from "@skeletonlabs/skeleton";
+    import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import type { LayoutProps, Snapshot } from "./$types";
-    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { resolve } from "$app/paths";
 
     const { children }: LayoutProps = $props();
     const t = getFormatter();
 
-    const tabs = [
-        { href: "/users", label: $t("admin.users") },
-        { href: "/groups", label: $t("admin.groups") },
-        { href: "/settings", label: $t("admin.settings") },
-        { href: "/actions", label: $t("admin.actions") },
-        { href: "/about", label: $t("admin.about") }
-    ];
+    const tabs = {
+        users: { href: resolve("/admin/users"), label: $t("admin.users") },
+        groups: { href: resolve("/admin/groups"), label: $t("admin.groups") },
+        settings: { href: resolve("/admin/settings"), label: $t("admin.settings") },
+        actions: { href: resolve("/admin/actions"), label: $t("admin.actions") },
+        about: { href: resolve("/admin/about"), label: $t("admin.about") }
+    };
 
-    let selectedTab = $state(0);
+    type TabOption = keyof typeof tabs;
+
+    let selectedTab: TabOption = $state("users");
+
+    async function onValueChange(value: TabOption) {
+        selectedTab = value;
+        return goto(tabs[value].href, { replaceState: true });
+    }
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,
@@ -24,22 +31,19 @@
     };
 </script>
 
-<TabGroup>
-    {#each tabs as { label, href }, value}
-        <Tab
-            name={label}
-            {value}
-            bind:group={selectedTab}
-            on:change={() => goto(`/admin${href}`, { replaceState: true })}
-        >
-            {label}
-        </Tab>
-    {/each}
-
-    {#snippet panel()}
+<Tabs onValueChange={({ value }) => onValueChange(value as TabOption)} value={selectedTab}>
+    <Tabs.List class="flex overflow-auto">
+        {#each Object.entries(tabs) as [value, { label }]}
+            <Tabs.Trigger {value}>
+                {label}
+            </Tabs.Trigger>
+        {/each}
+        <Tabs.Indicator />
+    </Tabs.List>
+    <Tabs.Content value={selectedTab}>
         {@render children?.()}
-    {/snippet}
-</TabGroup>
+    </Tabs.Content>
+</Tabs>
 
 <svelte:head>
     <title>{$t("admin.administration")}</title>

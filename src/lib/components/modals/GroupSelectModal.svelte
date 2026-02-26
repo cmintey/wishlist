@@ -1,40 +1,59 @@
 <script lang="ts">
     import { getFormatter, getLocale } from "$lib/i18n";
-    import { ListBox, ListBoxItem, getModalStore } from "@skeletonlabs/skeleton";
+    import type { Group } from "$lib/generated/prisma/client";
+    import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
+    import { Dialog, Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
 
-    interface Props {
-        parent: any;
+    interface Props extends Omit<BaseModalProps, "title" | "description" | "actions" | "children"> {
+        groups: Group[];
+        onSubmit: (groupId: string | undefined) => void | Promise<void>;
     }
 
-    const { parent }: Props = $props();
+    const { groups, onSubmit, ...props }: Props = $props();
     const t = getFormatter();
     const locale = getLocale();
-    const modalStore = getModalStore();
-    let selectedGroup: string | undefined = $state();
-    let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];
+    let selectedGroup: string[] | undefined = $state();
 
-    function onFormSubmit(): void {
-        if (selectedGroup) {
-            if ($modalStore[0]?.response) $modalStore[0].response(selectedGroup);
-            modalStore.close();
-        }
+    function resetForm() {
+        selectedGroup = [];
     }
+
+    async function onFormSubmit() {
+        await onSubmit(selectedGroup?.[0]);
+        resetForm();
+    }
+
+    const collection = $derived(
+        useListCollection({
+            items: groups.toSorted((a, b) => a.name.localeCompare(b.name, locale)),
+            itemToString: (item) => item.name,
+            itemToValue: (item) => item.id
+        })
+    );
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("general.select-group")}</header>
-    <ListBox class="border border-surface-500 p-4 rounded-container-token">
-        {#each groups.toSorted((a, b) => a.name.localeCompare(b.name, locale)) as group}
-            <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
-                {group.name}
-            </ListBoxItem>
-        {/each}
-    </ListBox>
+<BaseModal title={$t("general.select-group")} {...props}>
+    {#snippet description()}
+        <Listbox {collection} deselectable onValueChange={(e) => (selectedGroup = e.value)} value={selectedGroup}>
+            <Listbox.Label>{$t("admin.select-a-group-option")}</Listbox.Label>
+            <Listbox.Content>
+                {#each collection.items as item (item.id)}
+                    <Listbox.Item {item}>
+                        <Listbox.ItemText>{item.name}</Listbox.ItemText>
+                        <Listbox.ItemIndicator />
+                    </Listbox.Item>
+                {/each}
+            </Listbox.Content>
+        </Listbox>
+    {/snippet}
 
-    <footer class="modal-footer {parent.regionFooter} flex-wrap gap-2">
-        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
-            {parent.buttonTextCancel}
-        </button>
-        <button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>{$t("general.change-group")}</button>
-    </footer>
-</div>
+    {#snippet actions({ neutralStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} onclick={resetForm}>
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
+
+        <Dialog.CloseTrigger class={positiveStyle} onclick={onFormSubmit}>
+            {$t("general.change-group")}
+        </Dialog.CloseTrigger>
+    {/snippet}
+</BaseModal>

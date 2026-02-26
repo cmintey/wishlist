@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton-svelte";
+@import "./styles/font.css";
+@import "./wishlist.css";
+@import "./styles/list.css";
+@import "./styles/toast.css";
+@import "./styles/loading.css";
+@import "./styles/print.css";
+@import "./styles/table.css";
+@import "./styles/button.css";
+@import "./styles/input.css";
+@import "./styles/tabs.css";
+@import "./styles/alert.css";
+
+@plugin "@tailwindcss/forms";
+
+@layer wishlist;
+
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
+}
+
+@layer base {
+    html {
+        /* Mobile Tap Highlight Color (WebKit only) --- */
+        /* IMPORTANT: this is useful for mobile accessibility. */
+        /* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
+        -webkit-tap-highlight-color: color-mix(in oklab, var(--color-surface-950-50) 30%, transparent);
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    /*! purgecss start ignore */
+    .ptr--icon,
+    .ptr--text {
+        color: var(--color-primary-950-50);
+    }
+    /*! purgecss end ignore */
+
+    iconify-icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+    }
+}
+
+@layer components {
+    .btn,
+    .chip,
+    .list-nav a,
+    .list-nav .list-option {
+        @apply rtl:space-x-reverse;
+    }
+
+    .subtext {
+        @apply text-surface-900/70 dark:text-surface-50/50 text-sm;
+    }
+
+    .text-subtle {
+        @apply text-surface-900/70 dark:text-surface-50/50;
+    }
+}
+
+@layer utilities {
+    .chip {
+        border-radius: 0.25rem;
+        /* padding-block: --spacing(1.5); */
+        font-size: var(--text-xs);
+        line-height: var(--text-xs--line-height);
+    }
+
+    .anchor {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        @apply decoration-primary-500/50;
+        @variant hover {
+            text-decoration-style: dotted;
+        }
+    }
+
+    .card-hover {
+        @variant hover {
+            scale: 101% 101%;
+            box-shadow: var(--shadow-xl);
+        }
+    }
+
+    .text-tiny {
+        font-size: calc(0.6rem /* 12px */ * var(--text-scaling));
+    }
+
+    .input-invalid {
+        @apply preset-outlined-error-700-300;
+    }
+
+    .text-invalid {
+        @apply text-error-700-300 text-xs;
+    }
+}

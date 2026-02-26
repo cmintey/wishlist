@@ -52,7 +52,7 @@
         </span>
         {#if item.quantity && (user?.id !== item.userId || showClaimForOwner)}
             <span>·</span>
-            <span class="text-secondary-700-200-token font-bold" data-testid="quantity-claimed">
+            <span class="text-secondary-900-100 font-bold" data-testid="quantity-claimed">
                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
             </span>
         {/if}
@@ -61,7 +61,7 @@
 {#if showDetail && showClaimedName && item.claims.length > 0 && (item.userId !== user?.id || showClaimForOwner)}
     <div class="card text-sm">
         <button
-            class="flex w-full items-center !justify-start gap-2 p-2 !text-start text-sm"
+            class="flex w-full items-center justify-start! gap-2 p-2 text-start! text-sm"
             onclick={() => (expandClaims = !expandClaims)}
         >
             <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
@@ -96,13 +96,17 @@
     <iconify-icon icon="ion:person"></iconify-icon>
     <span class="text-wrap" data-testid="added-by">
         {#if showFor}
-            {@html $t("wishes.for", { values: { name: item.user.name } })}
+            {@html $t("wishes.for", { values: { name: item.user.name, class: "text-secondary-900-100 font-bold" } })}
         {:else if !onPublicList}
-            {@html $t("wishes.added-by", { values: { name: item.addedBy.name } })}
+            {@html $t("wishes.added-by", {
+                values: { name: item.addedBy.name, class: "text-secondary-900-100 font-bold" }
+            })}
         {:else}
             {@html item.addedBy.id === item.user.id
-                ? $t("wishes.added-by", { values: { name: item.addedBy.name } })
-                : $t("wishes.added-by-somebody-else")}
+                ? $t("wishes.added-by", {
+                      values: { name: item.addedBy.name, class: "text-secondary-900-100 font-bold" }
+                  })
+                : $t("wishes.added-by-somebody-else", { values: { class: "text-secondary-900-100 font-bold" } })}
         {/if}
     </span>
 </div>

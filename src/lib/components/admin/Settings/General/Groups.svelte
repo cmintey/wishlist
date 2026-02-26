@@ -15,15 +15,15 @@
 
 <SettingsGroup title={$t("admin.groups")}>
     <Setting>
-        <label class="flex flex-col" for="defaultGroup">
+        <label class="label flex flex-col" for="defaultGroup">
             <span>{$t("admin.default-group")}</span>
             <select
                 id="defaultGroup"
                 name="defaultGroup"
-                class="select w-fit min-w-64"
+                class="select w-full max-w-fit"
                 value={config.defaultGroup || ""}
             >
-                <option value="">{$t("admin.select-a-group-option")}</option>
+                <option class="truncate" value="">{$t("admin.select-a-group-option")}</option>
                 {#each groups as group}
                     <option value={group.id}>{group.name}</option>
                 {/each}

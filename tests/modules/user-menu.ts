@@ -21,7 +21,7 @@ export class UserMenu {
         this.navList = page.getByTestId("user menu navigation");
         this.accountButton = page.getByRole("link", { name: "Account" });
         this.adminButton = page.getByRole("link", { name: "Admin", exact: true });
-        this.manageGroupButton = page.getByRole("button", { name: "Manage Group" });
+        this.manageGroupButton = page.getByRole("link", { name: "Manage Group" });
         this.changeGroupButton = page.getByRole("button", { name: "Change Group" });
         this.createGroupButton = page.getByRole("button", { name: "Create Group" });
         this.signOutButton = page.getByRole("button", { name: "Sign Out" });

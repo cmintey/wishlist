@@ -22,7 +22,7 @@
     </label>
     {#if enabled}
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
-            <label for="oidcDiscoveryUrl">
+            <label class="label" for="oidcDiscoveryUrl">
                 <span>{$t("admin.oidc-url")}</span>
                 <input
                     id="oidcDiscoveryUrl"
@@ -34,7 +34,7 @@
                     value={config.oidc.discoveryUrl}
                 />
             </label>
-            <label for="oidcProviderName">
+            <label class="label" for="oidcProviderName">
                 <span>{$t("admin.oidc-provider-name")}</span>
                 <input
                     id="oidcProviderName"
@@ -46,7 +46,7 @@
                     value={config.oidc.providerName}
                 />
             </label>
-            <label for="oidcClientId">
+            <label class="label" for="oidcClientId">
                 <span>{$t("admin.oidc-client-id")}</span>
                 <input
                     id="oidcClientId"

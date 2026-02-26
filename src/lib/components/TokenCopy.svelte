@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { clipboard, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { Portal, Tooltip } from "@skeletonlabs/skeleton-svelte";
     import { fade } from "svelte/transition";
     import { getFormatter } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
+    import { clipboard } from "$lib/clipboard.svelte";
 
     interface Props {
         url: string;
@@ -15,39 +16,44 @@
     const t = getFormatter();
 
     let copiedVisible = $state(false);
-
-    const tooltipSettings: PopupSettings = {
-        event: "hover",
-        target: "copy"
-    };
 </script>
 
-<div class="w-100 flex flex-row items-center">
+<div class="flex flex-row items-center">
     <span class="text-ellipsis">
-        <a href={url}>
+        <a class="aside" href={url}>
             {@render children?.()}
         </a>
-        <span data-clipboard="tokenUrl" hidden>{url}</span>
+        <span id="tokenUrl" hidden>{url}</span>
     </span>
     <div class="flex flex-row items-center">
-        <button
-            class="btn {btnStyle}"
-            aria-label={$t("general.copy-to-clipboard")}
-            onclick={() => {
-                onCopied?.();
-                copiedVisible = true;
-                setTimeout(() => (copiedVisible = false), 1000);
-            }}
-            type="button"
-            use:clipboard={{ element: "tokenUrl" }}
-            use:popup={tooltipSettings}
-        >
-            <iconify-icon icon="ion:copy"></iconify-icon>
-        </button>
-        <div class="card variant-filled-secondary z-20 p-2" data-popup="copy">
-            {$t("general.copy-to-clipboard")}
-            <div class="variant-filled-secondary arrow"></div>
-        </div>
+        <Tooltip>
+            <Tooltip.Trigger
+                class="btn {btnStyle}"
+                {@attach clipboard("tokenUrl")}
+                aria-label={$t("general.copy-to-clipboard")}
+                onclick={() => {
+                    onCopied?.();
+                    copiedVisible = true;
+                    setTimeout(() => (copiedVisible = false), 1000);
+                }}
+                type="button"
+            >
+                <iconify-icon icon="ion:copy"></iconify-icon>
+            </Tooltip.Trigger>
+            <Portal>
+                <Tooltip.Positioner>
+                    <Tooltip.Content class="card preset-filled-secondary-500 p-2">
+                        <span>{$t("general.copy-to-clipboard")}</span>
+                        <Tooltip.Arrow
+                            class="[--arrow-background:var(--color-secondary-500)] [--arrow-size:--spacing(2)]"
+                        >
+                            <Tooltip.ArrowTip />
+                        </Tooltip.Arrow>
+                    </Tooltip.Content>
+                </Tooltip.Positioner>
+            </Portal>
+        </Tooltip>
+
         {#if copiedVisible}
             <span out:fade>{$t("general.copied")}</span>
         {/if}

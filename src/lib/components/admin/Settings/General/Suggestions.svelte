@@ -33,7 +33,7 @@
 
     {#if enabled}
         <Setting>
-            <label class="flex flex-col pb-1" for="suggestionMethod">
+            <label class="label" for="suggestionMethod">
                 <Tooltip>
                     {#snippet label()}
                         <span>{$t("admin.suggestions-method")}</span>
@@ -67,7 +67,7 @@
                 <select
                     id="suggestionMethod"
                     name="suggestionMethod"
-                    class="select w-fit min-w-64"
+                    class="select w-full max-w-64"
                     value={config.suggestions.method}
                 >
                     <option value="surprise">{$t("admin.suggestions-surprise-me")}</option>

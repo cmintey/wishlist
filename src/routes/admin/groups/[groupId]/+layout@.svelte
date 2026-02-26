@@ -1,11 +1,11 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
-    import { Tab } from "@skeletonlabs/skeleton";
+    import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import type { LayoutProps, Snapshot } from "./$types";
     import { GroupAPI } from "$lib/api/groups";
-    import TabGroup from "$lib/components/Tab/TabGroup.svelte";
     import { getFormatter } from "$lib/i18n";
     import { resolve } from "$app/paths";
+    import { onMount } from "svelte";
 
     const { data, children }: LayoutProps = $props();
     const t = getFormatter();
@@ -22,12 +22,24 @@
     };
 
     const groupId = $derived(data.group.id);
-    const tabs = [
-        { href: () => resolve("/admin/groups/[groupId]/members", { groupId }), label: $t("admin.members") },
-        { href: () => resolve("/admin/groups/[groupId]/settings", { groupId }), label: $t("admin.settings") }
-    ];
+    const tabs = {
+        members: { href: () => resolve("/admin/groups/[groupId]/members", { groupId }), label: $t("admin.members") },
+        settings: { href: () => resolve("/admin/groups/[groupId]/settings", { groupId }), label: $t("admin.settings") }
+    };
 
-    let selectedTab = $state(0);
+    type TabOption = keyof typeof tabs;
+
+    let selectedTab: TabOption = $state("members");
+
+    async function onValueChange(value: TabOption) {
+        selectedTab = value;
+        return goto(tabs[value].href(), { replaceState: true });
+    }
+
+    let dir: "ltr" | "rtl" = $state("ltr");
+    onMount(() => {
+        dir = (document.getRootNode() as HTMLDocument).dir as "ltr" | "rtl";
+    });
 
     export const snapshot: Snapshot = {
         capture: () => selectedTab,
@@ -60,17 +72,18 @@
     {/if}
 </div>
 
-<TabGroup>
-    {#each tabs as { label, href }, value}
-        <Tab name={label} {value} bind:group={selectedTab} on:change={() => goto(href(), { replaceState: true })}>
-            {label}
-        </Tab>
-    {/each}
+<Tabs {dir} onValueChange={({ value }) => onValueChange(value as TabOption)} value={selectedTab}>
+    <Tabs.List class="flex overflow-auto">
+        {#each Object.entries(tabs) as [value, { label }]}
+            <Tabs.Trigger {value}>
+                {label}
+            </Tabs.Trigger>
+        {/each}
+        <Tabs.Indicator />
+    </Tabs.List>
+</Tabs>
 
-    {#snippet panel()}
-        {@render children?.()}
-    {/snippet}
-</TabGroup>
+{@render children?.()}
 
 <svelte:head>
     <title>{$t("admin.group-settings")}</title>

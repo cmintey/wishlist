@@ -2,7 +2,6 @@
     import SettingsGroup from "../SettingsGroup.svelte";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
-    import { ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
 
     interface Props {
@@ -33,7 +32,7 @@
         </label>
         {#if enabled}
             <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
-                <label for="smtpHost">
+                <label class="label" for="smtpHost">
                     <span>{$t("admin.smtp-host")}</span>
                     <input
                         id="smtpHost"
@@ -45,7 +44,7 @@
                         bind:value={config.smtp.host}
                     />
                 </label>
-                <label for="smtpPort">
+                <label class="label" for="smtpPort">
                     <span>{$t("admin.smtp-port")}</span>
                     <input
                         id="smtpPort"
@@ -57,7 +56,7 @@
                         bind:value={config.smtp.port}
                     />
                 </label>
-                <label for="smtpUser">
+                <label class="label" for="smtpUser">
                     <span>{$t("general.user")}</span>
                     <input
                         id="smtpUser"
@@ -74,7 +73,7 @@
                     label={$t("auth.password")}
                     bind:value={config.smtp.pass}
                 />
-                <label for="smtpFrom">
+                <label class="label" for="smtpFrom">
                     <span>{$t("admin.smtp-from-email")}</span>
                     <input
                         id="smtpFrom"
@@ -86,7 +85,7 @@
                         bind:value={config.smtp.from}
                     />
                 </label>
-                <label for="smtpFromName">
+                <label class="label" for="smtpFromName">
                     <span>{$t("admin.smtp-from-name")}</span>
                     <input
                         id="smtpFromName"
@@ -101,13 +100,13 @@
             </div>
             <div class="flex w-full flex-row justify-end">
                 <button
-                    class="variant-ghost-primary btn mt-2 h-min w-fit"
+                    class="preset-tonal-primary border-primary-500 btn mt-2 h-min w-fit border"
                     disabled={!allFilled || sending}
                     formaction="/admin/settings?/send-test"
                     type="submit"
                 >
                     {#if sending}
-                        <ProgressRadial stroke={64} width="w-6" />
+                        <span class="loading loading-spinner loading-xs"></span>
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

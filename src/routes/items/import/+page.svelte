@@ -28,7 +28,7 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <label class="w-full">
+                <label class="label w-full">
                     <span>{$t("admin.select-a-group-option")}</span>
 
                     <select
@@ -44,11 +44,11 @@
                     </select>
 
                     {#if form?.group}
-                        <span class="text-xs text-red-500">{form.group}</span>
+                        <span class="text-invalid">{form.group}</span>
                     {/if}
                 </label>
 
-                <label class="w-full">
+                <label class="label w-full">
                     <span>{$t("wishes.select-a-list")}</span>
 
                     <select
@@ -68,7 +68,7 @@
                     </select>
 
                     {#if form?.list}
-                        <span class="text-xs text-red-500">{form.list}</span>
+                        <span class="text-invalid">{form.list}</span>
                     {/if}
                 </label>
 
@@ -76,7 +76,7 @@
             </div>
 
             <div class="flex flex-row-reverse">
-                <button class="variant-filled-primary btn">{$t("general.import")}</button>
+                <button class="preset-filled-primary-500 btn">{$t("general.import")}</button>
             </div>
         {/if}
     </form>

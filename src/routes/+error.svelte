@@ -34,5 +34,5 @@
     <p class="text-4xl">{page.status}</p>
     <img class="w-3/4 md:w-1/3" alt={errorMessage} src={error.image} />
     <p class="text-2xl">{errorMessage}</p>
-    <a class="variant-filled-primary btn" href="/">{$t("general.return-home")}</a>
+    <a class="preset-filled-primary-500 btn" href="/">{$t("general.return-home")}</a>
 </div>

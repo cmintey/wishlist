@@ -33,8 +33,8 @@ export class ItemForm {
         this.mostWantedCheckbox = page.getByLabel("Most wanted");
         this.imageUrlField = page.getByLabel("Image URL");
         this.notesField = page.getByLabel("Notes");
-        this.notesWriteTab = page.locator(".tab-label", { hasText: "Write" });
-        this.notesPreviewTab = page.locator(".tab-label", { hasText: "Preview" });
+        this.notesWriteTab = page.getByRole("tab", { name: "Write" });
+        this.notesPreviewTab = page.getByRole("tab", { name: "Preview" });
         this.notesPreviewContainer = page.getByTestId("markdown-preview");
         this.listSelectorField = page.getByRole("group", { name: "Lists" });
         this.hangTightBackdrop = page.getByText("Hang tight, gathering product data");

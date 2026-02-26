@@ -36,7 +36,7 @@
     {#if item.mostWanted}
         <div
             class={[
-                "glow variant-filled-primary chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
+                "glow preset-filled-primary-500 chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
                 badgeClass
             ]}
         >
@@ -51,8 +51,9 @@
 
 <style>
     .glow {
-        box-shadow: 0px 0px 8px 1px rgb(var(--color-primary-500));
+        box-shadow: 0px 0px 8px 1px var(--color-primary-500);
     }
+
     @media print {
         .glow {
             box-shadow: none;

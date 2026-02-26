@@ -33,6 +33,7 @@ export const load = (async () => {
             name: null,
             icon: null,
             owner: {
+                id: user.id,
                 name: user.name,
                 username: user.username,
                 picture: user.picture || null

@@ -1,104 +1,140 @@
 <script lang="ts">
     import { getFormatter } from "$lib/i18n";
-    import { ListBox, ListBoxItem, getModalStore, popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { Dialog, Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
+    import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
+    import type { Group } from "$lib/generated/prisma/client";
+    import Popup from "../Popup.svelte";
 
     interface Props {
-        parent: any;
+        trigger: BaseModalProps["trigger"];
+        groups: Group[];
+        defaultGroup?: Group;
+        smtpEnabled: boolean;
+        onSubmit?: (data: { group?: string; email?: string; method: InviteMethod }) => Promise<void> | void;
     }
 
-    const { parent }: Props = $props();
+    const { trigger, groups, defaultGroup, smtpEnabled, onSubmit }: Props = $props();
     const t = getFormatter();
-    const modalStore = getModalStore();
 
-    // passed in via meta
-    let groups: Record<string, string>[] = $modalStore[0] ? $modalStore[0].meta?.groups : [];
-    let defaultGroup: Record<string, string> = $modalStore[0] ? $modalStore[0].meta?.defaultGroup : undefined;
-    let smtpEnabled: boolean = $modalStore[0] ? $modalStore[0].meta?.smtpEnabled : false;
-
+    let open = $state(false);
     let userEmail: string | undefined = $state();
-    let selectedGroup: string | undefined = $state(defaultGroup?.id || undefined);
+    let selectedGroup: string | undefined = $state(defaultGroup?.id);
+    let emailError = $state(false);
     let groupError = $state(false);
 
-    const onFormSubmit = (method: InviteMethod): void => {
-        if (selectedGroup) {
-            if ($modalStore[0].response)
-                $modalStore[0].response({
-                    group: selectedGroup,
-                    email: userEmail,
-                    method
-                });
-            modalStore.close();
+    const onFormSubmit = async (method: InviteMethod) => {
+        if (selectedGroup && selectedGroup[0] && (method === "link" || !smtpEnabled || userEmail)) {
+            onSubmit?.({ group: selectedGroup[0], email: userEmail, method });
+            resetForm();
+            open = false;
         } else {
-            groupError = true;
+            open = true;
+            emailError = smtpEnabled && !userEmail;
+            groupError = !selectedGroup;
         }
     };
 
-    const inviteViaPopupName = "inviteVia";
-    const inviteViaPopup: PopupSettings = {
-        event: "click",
-        target: inviteViaPopupName,
-        placement: "bottom"
-    };
+    const collection = $derived(
+        useListCollection({
+            items: groups,
+            itemToString(item) {
+                return item.name;
+            },
+            itemToValue(item) {
+                return item.id;
+            }
+        })
+    );
+
+    function resetForm() {
+        groupError = false;
+        emailError = false;
+        userEmail = undefined;
+    }
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
-    <header class="text-2xl font-bold">{$t("general.invite-user")}</header>
-
-    {#if smtpEnabled}
-        <span>{$t("general.enter-user-email")}</span>
-    {:else}
-        <span>{$t("general.select-user-group")}</span>
-    {/if}
-
-    {#if smtpEnabled}
-        <label class="w-fit" for="invite-email">
-            <span>{$t("auth.email")}</span>
-            <input
-                id="invite-email"
-                name="invite-email"
-                class="input"
-                autocomplete="off"
-                required
-                type="email"
-                bind:value={userEmail}
-            />
-        </label>
-    {/if}
-
-    {#if groups && groups.length > 0}
-        <label for="group">{$t("general.group")}</label>
-        <ListBox id="group" class="border border-surface-500 p-4 rounded-container-token">
-            {#each groups as group}
-                <ListBoxItem name={group.name} value={group.id} bind:group={selectedGroup}>
-                    {group.name}
-                </ListBoxItem>
-            {/each}
-        </ListBox>
-        {#if groupError}
-            <span class="text-error-500">{$t("errors.must-select-a-group")}</span>
-        {/if}
-    {/if}
-
-    <footer class="modal-footer {parent.regionFooter}">
-        <button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>
-            {parent.buttonTextCancel}
-        </button>
+<BaseModal onOpenChange={(e) => (open = e.open)} {open} title={$t("general.invite-user")} {trigger}>
+    {#snippet description()}
         {#if smtpEnabled}
-            <button class="btn {parent.buttonPositive}" use:popup={inviteViaPopup}>{$t("auth.invite-via")}</button>
-            <div class="card p-4 shadow-xl" data-popup={inviteViaPopupName}>
-                <div class="flex flex-row gap-x-4">
-                    <button class="variant-ghost-primary btn" onclick={() => onFormSubmit("link")}>
-                        {$t("general.invite-link")}
-                    </button>
-                    <button class="variant-filled-primary btn" onclick={() => onFormSubmit("email")}>
-                        {$t("auth.email")}
-                    </button>
-                </div>
-            </div>
+            <span>{$t("general.enter-user-email")}</span>
         {:else}
-            <button class="btn {parent.buttonPositive}" onclick={() => onFormSubmit("link")}>
-                {$t("general.invite")}
-            </button>
+            <span>{$t("general.select-user-group")}</span>
         {/if}
-    </footer>
-</div>
+    {/snippet}
+
+    <div class="flex flex-col gap-2">
+        {#if smtpEnabled}
+            <label class="label w-fit" for="invite-email">
+                <span>{$t("auth.email")}</span>
+                <input
+                    id="invite-email"
+                    name="invite-email"
+                    class={["input", emailError && "input-invalid"]}
+                    aria-invalid={emailError}
+                    autocomplete="off"
+                    required
+                    bind:value={userEmail}
+                />
+            </label>
+            {#if emailError}
+                <span class="text-invalid">Email is required</span>
+            {/if}
+        {/if}
+
+        {#if groups && groups.length > 0}
+            <Listbox aria-invalid={groupError} {collection} onSelect={(e) => (selectedGroup = e.value)}>
+                <Listbox.Label class="text-base">{$t("general.group")}</Listbox.Label>
+                <Listbox.Content
+                    class={[
+                        "preset-filled-surface-200-800 preset-outlined-surface-300-700 pt-3",
+                        groupError && "input-invalid!"
+                    ]}
+                >
+                    {#each collection.items as item (item.id)}
+                        <Listbox.Item {item}>
+                            <Listbox.ItemText>
+                                {item.name}
+                            </Listbox.ItemText>
+                            <Listbox.ItemIndicator />
+                        </Listbox.Item>
+                    {/each}
+                </Listbox.Content>
+            </Listbox>
+            {#if groupError}
+                <span class="text-invalid">{$t("errors.must-select-a-group")}</span>
+            {/if}
+        {/if}
+    </div>
+
+    {#snippet actions({ neutralStyle, positiveStyle })}
+        <Dialog.CloseTrigger class={neutralStyle} onclick={resetForm}>
+            {$t("general.cancel")}
+        </Dialog.CloseTrigger>
+        {#if smtpEnabled}
+            <Popup zIndex="z-60!">
+                {#snippet trigger(props)}
+                    <button {...props} class={positiveStyle}>{$t("auth.invite-via")}</button>
+                {/snippet}
+                {#snippet content(props)}
+                    <div {...props} class="card preset-filled-surface-100-900 p-4 shadow-xl">
+                        <div class="flex flex-row gap-x-4">
+                            <button
+                                class="preset-tonal-primary border-primary-500 btn border"
+                                onclick={() => onFormSubmit("link")}
+                            >
+                                {$t("general.invite-link")}
+                            </button>
+                            <button class="preset-filled-primary-500 btn" onclick={() => onFormSubmit("email")}>
+                                {$t("auth.email")}
+                            </button>
+                        </div>
+                    </div>
+                {/snippet}
+            </Popup>
+        {:else}
+            <Dialog.CloseTrigger class={positiveStyle} onclick={() => onFormSubmit("link")}>
+                {$t("general.invite")}
+            </Dialog.CloseTrigger>
+        {/if}
+    {/snippet}
+</BaseModal>

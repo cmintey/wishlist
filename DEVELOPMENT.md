@@ -28,6 +28,7 @@ export DATABASE_URL="file:$(pwd)//dev.db"
 
 ```sh
 source .env.development
+pnpm prisma generate
 pnpm prisma migrate dev
 pnpm prisma db seed
 pnpm db:patch

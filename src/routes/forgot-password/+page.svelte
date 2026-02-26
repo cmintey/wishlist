@@ -32,9 +32,7 @@
                     };
                 }}
             >
-                <div
-                    class="bg-surface-100-800-token ring-outline-token flex flex-col space-y-4 p-4 rounded-container-token"
-                >
+                <div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 inset-ring">
                     <label class="w-full" for="email">
                         <span>{$t("auth.email")}</span>
                         <input
@@ -47,11 +45,11 @@
                         />
                     </label>
                     {#if form?.errors?.email}
-                        <span class="text-error-700-200-token text-xs">{$t("errors.invalid-email")}</span>
+                        <span class="text-invalid">{$t("errors.invalid-email")}</span>
                     {/if}
 
                     <div>
-                        <button class="variant-filled-primary btn" type="submit">{$t("general.submit")}</button>
+                        <button class="preset-filled-primary-500 btn" type="submit">{$t("general.submit")}</button>
                     </div>
                 </div>
             </form>
@@ -61,7 +59,7 @@
     <div class="flex flex-col items-center space-y-4">
         <h1 class="h1">{$t("auth.self-service-password-reset-unavailable")}</h1>
         <span class="text-xl">{$t("auth.contact-admin")}</span>
-        <a href="/login">{$t("auth.return-to-login")}</a>
+        <a class="anchor" href="/login">{$t("auth.return-to-login")}</a>
     </div>
 {/if}
 
