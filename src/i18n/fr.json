@@ -74,7 +74,7 @@
         "display-order-invalid": "L'ordre d'affichage doit être entre {min} et {max}"
     },
     "admin": {
-        "version": "Version : <a href=\"https://github.com/cmintey/wishlist/releases/tag/{version}\">{version}</a>",
+        "version": "Version : <a class=\"{class}\" href=\"{href}\">{version}</a>",
         "groups": "Groupes",
         "default-group": "Groupe par défaut",
         "wishlist-mode-alert": "Il y a {memberCount} membres et {listCount} listes dans ce groupe, vous ne pouvez pas changer de mode tant que vous n'avez pas supprimé tous les membres et listes sauf un.",
@@ -121,7 +121,7 @@
         "clear-lists-confirmation": "Êtes-vous sûr de vouloir effacer {claimedOnly, select, true {éléments réservés} other {toutes les listes de souhait}} {groupSpecific, select, true {dans ce groupe} other {dans <b>tous les groupes</b>}} ? <b>Cette action est irréversible !</b>",
         "add-remove-manager-title": "{isManager, select, true {Add} other {Remove}} Administrateur",
         "build-date": "Date de déploiement : {buildDate}",
-        "build": "Build : <a href=\"https://github.com/cmintey/wishlist/commit/{sha}\">{sha}</a>",
+        "build": "Build : <a class=\"{class}\" href=\"{href}\">{sha}</a>",
         "clear-lists": "Effacer {groupSpecific, select, true {} other {toutes}} {claimedOnly, select, true {les réservations} other {les listes}}",
         "make-admin": "Promouvoir administrateur",
         "manager": "Administrateur",
@@ -325,7 +325,7 @@
         "choose-a-language": "Choisir une langue",
         "choose-language-description": "Choisissez votre langue préférée pour l'interface utilisateur. Ce paramètre est seulement appliqué pour vous et est persisté entre les différents navigateurs.",
         "description": "Description",
-        "dont-see-language": "Vous ne voyez pas votre langue ici ou vous constatez une traduction mauvaise ou absente ? <a href=\"{href}\" target=\"_blank\"> Allez voir la documentation sur comment contribuer.</a>",
+        "dont-see-language": "Vous ne voyez pas votre langue ici ou vous constatez une traduction mauvaise ou absente ? <a class=\"{class}\" href=\"{href}\" target=\"_blank\"> Allez voir la documentation sur comment contribuer.</a>",
         "language": "Langue",
         "use-system-language": "Utiliser la langue du système",
         "oauth": "OAuth",
@@ -350,7 +350,7 @@
         "unable-to-update-password": "Impossible de mettre à jour le mot de passe"
     },
     "wishes": {
-        "added-by": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "added-by": "Ajouté par <span class=\"{class}\">{name}</span>",
         "claimed": "Réservé",
         "claimed-item": "Elément {claimed, select, true {réservé} other {non réservé}}",
         "create-for": "Créer un souhait pour {listOwner}",
@@ -367,7 +367,7 @@
         "approvals-waiting": "Vous avez {approvalCount, plural, one {# élément} other {# éléments}} attendant votre approbation",
         "create": "Créer un souhait",
         "edit": "Éditer",
-        "for": "Pour <span class=\"text-secondary-700-200-token font-bold\">{name}</span>",
+        "for": "Pour <span class=\"{class}\">{name}</span>",
         "hang-tight-gathering-product-data": "Patientez un moment, récupération des données produit",
         "approval-needed": "Approbation requise",
         "approval-confirmation": "Êtes-vous certain d'<b>{approve, select, true {approve} other {deny}}</b> cette suggestion de {name}",
@@ -415,7 +415,7 @@
         "item-was-removed-from-list": "{name} a été retiré de la liste",
         "all-lists": "Toutes les listes",
         "this-list": "Cette liste",
-        "added-by-somebody-else": "Ajouté par <span class=\"text-secondary-700-200-token font-bold\">quelqu'un d'autre</span>",
+        "added-by-somebody-else": "Ajouté par <span class=\"{class}\">quelqu'un d'autre</span>",
         "claimed-by-multiple-users": "Réservé par plusieurs utilisateurs",
         "additional-items-requested": "{remainingQuantity, plural, =0 {Il n'y a pas d'objets supplémentaires disponibles.} one {Il y a # objet disponible.} other {Il y a # objets supplémentaires disponibles.}}",
         "claimed-info-text": "{claimedQuantity, plural, one {Vous avez réservé # élément.} other {Vous avez réservé # éléments.}}",
