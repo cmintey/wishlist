@@ -331,7 +331,11 @@
         "oauth": "OAuth",
         "select-all": "Markera alla",
         "use-system-language": "Använd systemspråk",
-        "na": "Inte tillgänglig"
+        "na": "Inte tillgänglig",
+        "dark": "Mörk",
+        "light": "Ljus",
+        "no-results": "Inga resultat.",
+        "system": "System"
     },
     "setup": {
         "complete": "Färdigt",
@@ -461,7 +465,8 @@
         "show-claims": "Visa reservationer",
         "show-description": "Visa beskrivning",
         "sort-by": "Sortera efter",
-        "supports-markdown": "Stöder Markdown"
+        "supports-markdown": "Stöder Markdown",
+        "item-created": "Artikel skapad"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
