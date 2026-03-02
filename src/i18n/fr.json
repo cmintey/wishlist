@@ -331,7 +331,11 @@
         "oauth": "OAuth",
         "select-all": "Sélectionner tout",
         "import": "Importer",
-        "no-lists-available": "Aucune liste disponible"
+        "no-lists-available": "Aucune liste disponible",
+        "dark": "Sombre",
+        "light": "Clair",
+        "no-results": "Aucun résultat.",
+        "system": "Système"
     },
     "setup": {
         "global-settings": "Paramètres Globaux",
@@ -461,7 +465,8 @@
         "import-error-title": "Impossible d'importer l'élément",
         "import-item": "Importer l'élément",
         "import-item-text": "Avant d'importer un élément, vous devez choisir un groupe et une liste",
-        "select-a-list": "Sélectionner une liste"
+        "select-a-list": "Sélectionner une liste",
+        "item-created": "Elément créé"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
