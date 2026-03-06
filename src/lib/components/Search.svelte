@@ -8,6 +8,7 @@
         result: Record<string, unknown>[];
     }
 
+    // eslint-disable-next-line no-useless-assignment
     let { data, keys, result = $bindable() }: Props = $props();
     const t = getFormatter();
 
