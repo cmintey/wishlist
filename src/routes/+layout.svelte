@@ -49,16 +49,36 @@
         }
     });
 
+    let shouldPullToRefresh = $state(true);
     onMount(() => {
         if (window.matchMedia("(display-mode: standalone)").matches) {
             $isInstalled = true;
+
+            // don't PTR inside of dialogs
+            document.body.addEventListener("touchstart", (ev) => {
+                let el = ev.target as HTMLElement | null;
+                while (el && el.parentNode && el !== document.body) {
+                    if (el.scrollTop > 0) {
+                        shouldPullToRefresh = false;
+                    }
+                    if (el.getAttribute("role") === "dialog") {
+                        shouldPullToRefresh = false;
+                        break;
+                    }
+                    el = el.parentNode as HTMLElement;
+                }
+            });
+            document.body.addEventListener("touchend", () => {
+                shouldPullToRefresh = true;
+            });
             const ptr = PullToRefresh.init({
                 mainElement: document.getElementById("main") as unknown as string,
                 distThreshold: 70,
                 resistanceFunction: (t) => Math.min(1, t / 4.5),
                 onRefresh() {
                     window.location.reload();
-                }
+                },
+                shouldPullToRefresh: () => !window.scrollY && shouldPullToRefresh
             });
             return () => ptr.destroy();
         }
