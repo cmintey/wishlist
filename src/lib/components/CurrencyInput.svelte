@@ -29,10 +29,6 @@
     let isMounted = $state(false);
     let previousCurrency = currency;
 
-    $inspect(localeConfig);
-    $inspect(value);
-    $inspect(inputtedValue);
-
     onMount(() => {
         isMounted = true;
     });
