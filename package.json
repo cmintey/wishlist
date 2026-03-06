@@ -17,7 +17,7 @@
         "test:setup": "playwright install --with-deps chromium"
     },
     "devDependencies": {
-        "@eslint/js": "^9.33.0",
+        "@eslint/js": "^10.0.0",
         "@floating-ui/dom": "^1.7.3",
         "@humanspeak/svelte-markdown": "^0.8.10",
         "@internationalized/date": "^3.10.0",
@@ -35,7 +35,7 @@
         "@types/pulltorefreshjs": "^0.1.7",
         "@vite-pwa/sveltekit": "^1.0.0",
         "autoprefixer": "^10.4.21",
-        "eslint": "^9.31.0",
+        "eslint": "^10.0.0",
         "eslint-plugin-svelte": "^3.11.0",
         "fuzzysort": "^3.1.0",
         "globals": "^17.0.0",
