@@ -2,8 +2,9 @@
     import { getFormatter as getPriceFormatter, getLocaleConfig } from "$lib/price-formatter";
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter, getLocale } from "$lib/i18n";
     import { toaster } from "./toaster";
+    import { getNumberFormatter } from "svelte-i18n";
 
     interface Props {
         value?: number | null;
@@ -15,15 +16,22 @@
 
     let { value = $bindable(null), currency = $bindable("USD"), name, id, disabled = false }: Props = $props();
     const t = getFormatter();
+    const locale = getLocale();
 
-    let formatter = $derived(getPriceFormatter(currency));
-    let localeConfig = $derived(getLocaleConfig(formatter));
-    let maximumFractionDigits = $derived(formatter.resolvedOptions().maximumFractionDigits || 2);
-    let inputtedValue = value !== null ? value.toString() : "";
+    let numberFormatter = getNumberFormatter({ locale });
+    let priceFormatter = $derived(getPriceFormatter(currency));
+    let localeConfig = $derived(getLocaleConfig(priceFormatter));
+    let maximumFractionDigits = $derived(priceFormatter.resolvedOptions().maximumFractionDigits || 2);
+    let inputtedValue = $state(value !== null ? numberFormatter.format(value) : "");
+    // svelte-ignore state_referenced_locally
     let displayValue = $state(inputtedValue);
     let inputElement: HTMLInputElement | undefined = $state();
     let isMounted = $state(false);
     let previousCurrency = currency;
+
+    $inspect(localeConfig);
+    $inspect(value);
+    $inspect(inputtedValue);
 
     onMount(() => {
         isMounted = true;
@@ -31,7 +39,7 @@
 
     $effect(() => {
         if (isMounted && document.activeElement !== inputElement && value !== null)
-            displayValue = formatter.format(value);
+            displayValue = priceFormatter.format(value);
     });
 
     // Checks if the key pressed is allowed
@@ -73,7 +81,7 @@
         }
         value = parseFloat(stringValue);
         inputtedValue = displayValue;
-        displayValue = formatter.format(value);
+        displayValue = priceFormatter.format(value);
     };
 
     const handleFocus = () => {
@@ -121,7 +129,7 @@
         onblur={handleBlur}
         onfocus={handleFocus}
         onkeydown={handleKeyDown}
-        placeholder={formatter.format(0)}
+        placeholder={priceFormatter.format(0)}
         type="text"
         bind:value={displayValue}
     />
