@@ -5,7 +5,7 @@
         "clear-color-field": "smazat barvu",
         "clear-icon-field": "smazat ikonu",
         "clear-name-field": "smazat jméno",
-        "clear-url-field": "smazat URL",
+        "clear-url-field": "smazat url",
         "close": "zavřít",
         "decrease-priority": "Snížit prioritu pro {name}",
         "default-item-image": "výchozí obrázek",
@@ -331,7 +331,11 @@
         "this-invite-link-is-only-valid-for-one-signup": "Tato pozvánka je platná pouze pro jednu registraci",
         "toggle-dark-mode": "Přepnout světlý/tmavý režim",
         "import": "Importovat",
-        "no-lists-available": "Není dostupný žádný seznam"
+        "no-lists-available": "Není dostupný žádný seznam",
+        "dark": "Tmavý",
+        "light": "Světlý",
+        "no-results": "Žádný výsledek.",
+        "system": "Systém"
     },
     "setup": {
         "back": "Zpět",
@@ -462,6 +466,7 @@
         "import-error-title": "Nepodařilo se importovat položku",
         "import-item": "Importovat položku",
         "import-item-text": "Před importem vyberte skupinu a seznam",
-        "select-a-list": "Vybrat seznam"
+        "select-a-list": "Vybrat seznam",
+        "item-created": "Položka vytvořena"
     }
 }
