@@ -68,17 +68,21 @@ type OIDCConfig =
           autoRegister?: boolean | null;
           enableSync?: boolean | null;
           disableEmailVerification?: boolean | null;
+          nameClaim?: string | null;
+          usernameClaim?: string | null;
       }
     | {
           enable: true;
           discoveryUrl: string;
           clientId: string;
           clientSecret: string;
-          providerName?: string | null;
+          providerName: string | null | undefined;
           autoRedirect: boolean;
           autoRegister: boolean;
           enableSync: boolean;
           disableEmailVerification: boolean;
+          nameClaim: string | null | undefined;
+          usernameClaim: string | null | undefined;
       };
 
 type Config = {

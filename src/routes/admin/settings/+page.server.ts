@@ -81,7 +81,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               autoRedirect: configData.oidcAutoRedirect,
               autoRegister: configData.oidcAutoRegister,
               enableSync: configData.oidcEnableSync,
-              disableEmailVerification: configData.oidcDisableEmailVerification
+              disableEmailVerification: configData.oidcDisableEmailVerification,
+              nameClaim: configData.oidcNameClaim,
+              usernameClaim: configData.oidcUsernameClaim
           }
         : {
               enable: false,
@@ -92,7 +94,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               autoRedirect: configData.oidcAutoRedirect,
               autoRegister: configData.oidcAutoRegister,
               enableSync: configData.oidcEnableSync,
-              disableEmailVerification: configData.oidcDisableEmailVerification
+              disableEmailVerification: configData.oidcDisableEmailVerification,
+              nameClaim: configData.oidcNameClaim,
+              usernameClaim: configData.oidcUsernameClaim
           };
 
     const newConfig: Config = {

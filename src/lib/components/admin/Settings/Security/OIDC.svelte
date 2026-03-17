@@ -67,6 +67,42 @@
                 value={config.oidc.clientSecret}
             />
 
+            <Setting>
+                <label class="label" for="oidcNameClaim">
+                    <span>Name claim</span>
+                    <input
+                        id="oidcNameClaim"
+                        name="oidcNameClaim"
+                        class="input"
+                        autocomplete="off"
+                        placeholder="name"
+                        type="text"
+                        value={config.oidc.nameClaim}
+                    />
+                </label>
+                {#snippet description()}
+                    The claim to use for setting the user's name.
+                {/snippet}
+            </Setting>
+
+            <Setting>
+                <label class="label" for="oidcUsernameClaim">
+                    <span>Username claim</span>
+                    <input
+                        id="oidcUsernameClaim"
+                        name="oidcUsernameClaim"
+                        class="input"
+                        autocomplete="off"
+                        placeholder="username"
+                        type="text"
+                        value={config.oidc.usernameClaim}
+                    />
+                </label>
+                {#snippet description()}
+                    The claim to use for setting the user's username.
+                {/snippet}
+            </Setting>
+
             <Setting class="col-span-full">
                 <label class="checkbox-label">
                     <input
