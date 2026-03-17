@@ -31,7 +31,9 @@ enum ConfigKey {
     OIDC_AUTO_REDIRECT = "oidc.autoRedirect",
     OIDC_AUTO_REGISTER = "oidc.autoRegister",
     OIDC_ENABLE_SYNC = "oidc.enableSync",
-    OIDC_DISABLE_EMAIL_VERIFICATION = "oidc.disableEmailVerification"
+    OIDC_DISABLE_EMAIL_VERIFICATION = "oidc.disableEmailVerification",
+    OIDC_NAME_CLAIM = "oidc.nameClaim",
+    OIDC_USERNAME_CLAIM = "oidc.usernameClaim"
 }
 
 type Transformer<T> = (val: string | null, shouldMask?: boolean) => T;
@@ -73,7 +75,9 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "oidc.autoRedirect": booleanTransformer,
     "oidc.autoRegister": booleanTransformer,
     "oidc.enableSync": booleanTransformer,
-    "oidc.disableEmailVerification": booleanTransformer
+    "oidc.disableEmailVerification": booleanTransformer,
+    "oidc.nameClaim": stringTransformer,
+    "oidc.usernameClaim": stringTransformer
 };
 
 const getDefaultConfig = (): Config => ({
