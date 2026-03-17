@@ -78,7 +78,7 @@
                         </span>
                         {#if hasNewItems}
                             <iconify-icon
-                                class="text-primary-800-200 opacity-40"
+                                class="text-primary-800-200 size-2 opacity-40"
                                 icon="ion:ellipse-sharp"
                                 width="0.5rem"
                             ></iconify-icon>
