@@ -23,8 +23,8 @@
     let groupError = $state(false);
 
     const onFormSubmit = async (method: InviteMethod) => {
-        if (selectedGroup && selectedGroup[0] && (method === "link" || !smtpEnabled || userEmail)) {
-            onSubmit?.({ group: selectedGroup[0], email: userEmail, method });
+        if (selectedGroup && (method === "link" || !smtpEnabled || userEmail)) {
+            onSubmit?.({ group: selectedGroup, email: userEmail, method });
             resetForm();
             open = false;
         } else {

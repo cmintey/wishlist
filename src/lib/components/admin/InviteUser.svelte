@@ -25,7 +25,7 @@
         if (data.method === "link") {
             const response = await inviteUsersAPI.invite(data);
             if (response.ok) {
-                const respData = await inviteUsersAPI.invite(data).then((resp) => resp.json());
+                const respData = await response.json();
                 if (respData.url) {
                     url = respData.url as string;
                 }
