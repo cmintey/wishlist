@@ -20,7 +20,7 @@
 
 <div class="flex flex-row items-center">
     <span class="text-ellipsis">
-        <a class="aside" href={url}>
+        <a class="anchor" href={url}>
             {@render children?.()}
         </a>
         <span id="tokenUrl" hidden>{url}</span>
