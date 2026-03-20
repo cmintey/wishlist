@@ -10,18 +10,21 @@ export const load: PageServerLoad = async ({ params }) => {
     const user = await requireRole(Role.ADMIN);
     const $t = await getFormatter();
 
-    if (user.username === params.id) {
-        redirect(303, "/account");
-    }
+    // if (user.username === params.id) {
+    //     redirect(303, "/account");
+    // }
 
-    const editingUser = await client.user.findUnique({
+    const { oauthId, ...editingUser } = await client.user.findUnique({
         where: {
             id: params.id
         },
         select: {
             username: true,
+            email: true,
             name: true,
             id: true,
+            picture: true,
+            oauthId: true,
             role: {
                 select: {
                     name: true
@@ -32,7 +35,13 @@ export const load: PageServerLoad = async ({ params }) => {
 
     if (!editingUser) error(404, $t("errors.user-not-found"));
 
-    return { editingUser, user };
+    return {
+        editingUser: {
+            ...editingUser,
+            isOauthManaged: oauthId !== null
+        },
+        user
+    };
 };
 
 export const actions: Actions = {
