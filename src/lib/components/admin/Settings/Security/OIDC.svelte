@@ -41,7 +41,7 @@
                     name="oidcProviderName"
                     class="input"
                     autocomplete="off"
-                    placeholder="OAuth"
+                    placeholder={$t("general.oauth")}
                     type="text"
                     value={config.oidc.providerName}
                 />
@@ -81,7 +81,7 @@
                     />
                 </label>
                 {#snippet description()}
-                    The claim to use for setting the user's name.
+                    {$t("admin.oidc-claim-name-description")}
                 {/snippet}
             </Setting>
 
@@ -93,13 +93,13 @@
                         name="oidcUsernameClaim"
                         class="input"
                         autocomplete="off"
-                        placeholder="username"
+                        placeholder="preferred_username"
                         type="text"
                         value={config.oidc.usernameClaim}
                     />
                 </label>
                 {#snippet description()}
-                    The claim to use for setting the user's username.
+                    {$t("admin.oidc-claim-username-description")}
                 {/snippet}
             </Setting>
 
