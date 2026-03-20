@@ -31,7 +31,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
             }
         });
 
-        if (!signup) error(400, $t("errors.reset-token-not-found"));
+        if (!signup) error(400, $t("errors.invite-code-invalid"));
 
         if (validateToken(signup.createdAt)) {
             return { valid: true, id: signup.id };

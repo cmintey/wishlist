@@ -16,11 +16,8 @@
 
 <form
     method="POST"
-    use:enhance={({ formData }) => {
+    use:enhance={() => {
         saving = true;
-        if (!config.enableDefaultListCreation) {
-            formData.append("enableDefaultListCreation", "");
-        }
 
         return ({ result }) => {
             saving = false;
