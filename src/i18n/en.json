@@ -78,6 +78,8 @@
         "oidc-auto-redirect-tooltip": "To bypass the automatic redirect, '?direct=1' can be added to the URL.",
         "oidc-auto-register": "Auto register",
         "oidc-auto-register-tooltip": "Enables new account creation for OAuth users signing in for the first time.",
+        "oidc-claim-name-description": "The claim to use for setting the user's name.",
+        "oidc-claim-username-description": "The claim to use for setting the user's username.",
         "oidc-client-id": "Client Id",
         "oidc-client-secret": "Client Secret",
         "oidc-provider-name": "Provider Name",
