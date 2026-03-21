@@ -129,7 +129,9 @@
         "show-for-list-owner": "Visa för listägaren",
         "show-for-list-owner-description": "Tillåt listägare att se anspråk på sina egna listor.",
         "show-name-across-groups": "Visa namn i alla grupper",
-        "show-name-across-groups-tooltip": "Visar namnet på användaren som gjorde reservationen även om användaren inte finns i din grupp."
+        "show-name-across-groups-tooltip": "Visar namnet på användaren som gjorde reservationen även om användaren inte finns i din grupp.",
+        "oidc-claim-name-description": "Anspråket som ska användas för att ange användarens namn.",
+        "oidc-claim-username-description": "Anspråket som ska användas för att ange användarens användarnamn."
     },
     "app": {
         "my-claims": "Mina reservationer",
