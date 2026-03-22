@@ -105,7 +105,17 @@
         "wishlist-mode-registry-tooltip": "En bruker med en offentlig liste. Brukere fra andre grupper kan komme med forslag hvis de har fått tilgang til de, og anonyme brukere kan gjøre krav på ønsket.",
         "wishlist-mode-wishlist-tooltip": "Flere brukere og flere lister med krav- og ønskeforslag. Listene kan gjøres offenlige hvis det tillates av gruppen.",
         "claims-require-email": "Kreve e-post",
-        "claims-require-email-tooltip": "Krev en e-postadresse for å anonymt gjøre krav på et ønske."
+        "claims-require-email-tooltip": "Krev en e-postadresse for å anonymt gjøre krav på et ønske.",
+        "disable-email-verification": "Skru av e-post verifisering",
+        "disable-email-verification-description": "Skru av kravet om at brukers e-post må verifiseres med ldp for kontosammenkobling og opprettelse.",
+        "enable-sync": "Skru på synkronisering",
+        "enable-sync-description": "Skru på synkronisering av brukeratributter fra ldp som f.eks. navn og e-post.",
+        "oidc-auto-redirect-description": "Omdiriger automatisk til din ldPs innloggingsside.",
+        "profile-disabled": "Profilen din styres av OAuth tilbyderen din.",
+        "show-for-list-owner": "Vis for listens eier",
+        "show-for-list-owner-description": "Tillat at listens eier ser reserveringer på deres egen ønskeliste.",
+        "show-name-across-groups": "Vis navn på tvers av grupper",
+        "show-name-across-groups-tooltip": "Vis navnet på brukeren som reserverte et ønske selv om brukeren ikke er i gruppen din."
     },
     "auth": {
         "update-password": "Oppdater passord",
@@ -215,7 +225,9 @@
         "language-is-required": "Språk er obligatorisk",
         "registration-is-disabled": "Registrering er skrudd av",
         "unable-to-update-preferred-language": "Kunne ikke oppdatere det foretrukne språket",
-        "email-is-required-for-public-claims": "E-postadresse kreves for å offentlig kunne gjøre krav på et ønske"
+        "email-is-required-for-public-claims": "E-postadresse kreves for å offentlig kunne gjøre krav på et ønske",
+        "display-order-invalid": "Visningsrekkefølgen må være mellom {min} og {max}",
+        "oidc-error": "Kunne ikke autentisere med OAuth"
     },
     "a11y": {
         "a-person-looking-at-an-empty-board": "En person som ser på en tom tavle",
@@ -240,7 +252,9 @@
         "menu": "meny",
         "toggle-manager": "{isManager, select, true {fjern} other {legg til}} {user} som administrator",
         "default-item-image": "Standard ønskebilde",
-        "unpurchase": "Marker ønsket som ikke kjøpt"
+        "unpurchase": "Marker ønsket som ikke kjøpt",
+        "remove-manager-name": "Fjern {name}",
+        "user-menu": "Brukermeny"
     },
     "app": {
         "home": "Hjem",
@@ -313,7 +327,15 @@
         "language": "Språk",
         "na": "Ikke aktuelt",
         "return-home": "Tilbake til start",
-        "use-system-language": "Bruk systemspråk"
+        "use-system-language": "Bruk systemspråk",
+        "dark": "Mørk",
+        "import": "Importer",
+        "light": "Lys",
+        "no-lists-available": "Ingen lister tilgjengelig",
+        "no-results": "Ingen resultat.",
+        "oauth": "OAuth",
+        "select-all": "Velg alle",
+        "system": "System"
     },
     "setup": {
         "back": "Tilbake",
@@ -419,7 +441,32 @@
         "update-claim": "Oppdater kravet",
         "updated-claim": "Oppdaterte kravet",
         "view-item": "Vis ønsket",
-        "write": "Skriv"
+        "write": "Skriv",
+        "add-a-list-manager": "Velg en listeadministrator",
+        "add-a-list-manager-explainer": "Søk etter en bruker med denne gruppen for å legge til som administrator i ønskelisen.",
+        "add-a-manager": "Legg til administrator",
+        "claimed-by-you-on-another-list": "Reservert av deg på en annen liste",
+        "claims": "{claimCount, plural, one {# claim} other {# claims}}",
+        "display-order": "Visningsrekkefølge",
+        "group-by": "Gruppert etter",
+        "hide-claims": "Skul reserveringer",
+        "import-error-text": "Whishlist kunne ikke hente produkturlen fra de oppgitte parameterne. Du kan fortsatt manuelt kopiere produkt-url og legge til ønske via den vanlige prosessen.",
+        "import-error-title": "Kunne ikke importere gjenstanden",
+        "import-item": "Importer gjenstand",
+        "import-item-text": "Før du kan importere en gjenstand, må du velge en gruppe og en ønskeliste",
+        "item-created": "Gjenstanden ble opprettet",
+        "list-managers": "Ønskelistens administratorer",
+        "list-managers-tooltip": "Ønskelistens administratorer kan gjøre alt du kan gjøre inkludert å godta og avslå forslag, oppdatere listeinnstillingene, og fjerne ønsker fra listen. Hvis listen står til \"Overraskelses\" modus, vil alle ønsker lagt til av administrator vises for deg.",
+        "list-view": "Listevisning",
+        "most-wanted": "Toppønsker",
+        "most-wanted-description": "Fremhev dette ønsket for å vise at dette er et topp-ønske.",
+        "no-managers": "Ingen administratorer",
+        "select-a-list": "Velg en ønskeliste",
+        "show-claims": "Vis reserveringer",
+        "sort-by": "Sorter etter",
+        "switch-to-list-view": "Bytt til listevisning",
+        "switch-to-tile-view": "Bytt til tittelvisning",
+        "tile-view": "Tittelvisning"
     },
     "unable-to-load-icons": "Kunne ikke laste ikonene."
 }
