@@ -100,8 +100,8 @@ importers:
         specifier: ^1.7.3
         version: 1.7.6
       '@humanspeak/svelte-markdown':
-        specifier: ^0.8.10
-        version: 0.8.17(svelte@5.53.9)
+        specifier: ^1.0.0
+        version: 1.0.5(svelte@5.53.9)
       '@internationalized/date':
         specifier: ^3.10.0
         version: 3.12.0
@@ -1195,14 +1195,18 @@ packages:
     resolution: {integrity: sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==}
     engines: {node: '>=18.18.0'}
 
-  '@humanspeak/memory-cache@1.0.5':
-    resolution: {integrity: sha512-bNo+xAL2KT8Zv9wHjeLloyQrbEv8aea9gjL2eHhNki3/1xapDRYm/W5gGgBQNvpdBJFoYcA6VQJcbm0ZjKML+g==}
+  '@humanspeak/memory-cache@1.0.6':
+    resolution: {integrity: sha512-8nS/7OIysYsjd5d64cprdwupgqzpMmFDHw25EWuPLRxxJw5q91K7Z+bjIcAPjikMU9vmptY5GyhsZDbcr1ym4Q==}
     engines: {node: '>=18.0.0'}
 
-  '@humanspeak/svelte-markdown@0.8.17':
-    resolution: {integrity: sha512-Ia7gR+EK/KuwnTnSgEQyNPBbPP7TjEpBxaTsbW0CDb6IKn7YHYK0wu1JpOaz124lhURM1B2Am7O/t4HFFhGU8A==}
+  '@humanspeak/svelte-markdown@1.0.5':
+    resolution: {integrity: sha512-1xToa6xqEyzerOjblOTjhD5HnrkcVNRV5SWrbTgLb+2UwYRXdp08aLNA9ejeVjwh7OM+s+BoxN/vIaDBkKLZug==}
     peerDependencies:
+      mermaid: '>=10.0.0'
       svelte: ^5.0.0
+    peerDependenciesMeta:
+      mermaid:
+        optional: true
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -3732,8 +3736,8 @@ packages:
     resolution: {integrity: sha512-vM2sG+wbVeVGYcCm16mM3d5fuem9oC28n436HjsGO3LcxoTI8LNVa4rwZDn3f76+cWyT4GGJDxjTYU1I2nr6zw==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  marked@17.0.3:
-    resolution: {integrity: sha512-jt1v2ObpyOKR8p4XaUJVk3YWRJ5n+i4+rjQopxvV32rSndTJXvIzuUdWWIy/1pFQMkQmvTXawzDNqOH/CUmx6A==}
+  marked@17.0.5:
+    resolution: {integrity: sha512-6hLvc0/JEbRjRgzI6wnT2P1XuM1/RrrDEX0kPt0N7jGm1133g6X7DlxFasUIx+72aKAr904GTxhSLDrd5DIlZg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -6111,14 +6115,14 @@ snapshots:
       '@humanfs/core': 0.19.1
       '@humanwhocodes/retry': 0.4.3
 
-  '@humanspeak/memory-cache@1.0.5': {}
+  '@humanspeak/memory-cache@1.0.6': {}
 
-  '@humanspeak/svelte-markdown@0.8.17(svelte@5.53.9)':
+  '@humanspeak/svelte-markdown@1.0.5(svelte@5.53.9)':
     dependencies:
-      '@humanspeak/memory-cache': 1.0.5
+      '@humanspeak/memory-cache': 1.0.6
       github-slugger: 2.0.0
       htmlparser2: 10.1.0
-      marked: 17.0.3
+      marked: 17.0.5
       svelte: 5.53.9
 
   '@humanwhocodes/module-importer@1.0.1': {}
@@ -8854,7 +8858,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  marked@17.0.3: {}
+  marked@17.0.5: {}
 
   math-intrinsics@1.1.0: {}
 
