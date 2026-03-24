@@ -3,6 +3,7 @@
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import Setting from "../Setting.svelte";
 
     interface Props {
         config: Pick<Config, "smtp">;
@@ -97,6 +98,41 @@
                         bind:value={config.smtp.fromName}
                     />
                 </label>
+
+                <Setting class="col-span-full">
+                    <label class="checkbox-label">
+                        <input
+                            id="smtpUseTls"
+                            name="smtpUseTls"
+                            class="checkbox"
+                            checked={config.smtp.useTls}
+                            type="checkbox"
+                        />
+                        <span>{$t("admin.smtp-use-tls")}</span>
+                    </label>
+                    {#snippet description()}
+                        <span>
+                            {$t("admin.smtp-use-tls-description")}
+                        </span>
+                    {/snippet}
+                </Setting>
+                <Setting class="col-span-full">
+                    <label class="checkbox-label">
+                        <input
+                            id="smtpIgnoreCertCheck"
+                            name="smtpIgnoreCertCheck"
+                            class="checkbox"
+                            checked={config.smtp.ignoreCertCheck}
+                            type="checkbox"
+                        />
+                        <span>{$t("admin.ignore-cert-check")}</span>
+                    </label>
+                    {#snippet description()}
+                        <span>
+                            {$t("admin.smtp-ignore-cert-check-description")}
+                        </span>
+                    {/snippet}
+                </Setting>
             </div>
             <div class="flex w-full flex-row justify-end">
                 <button
@@ -107,6 +143,7 @@
                 >
                     {#if sending}
                         <span class="loading loading-spinner loading-xs"></span>
+                        <span>{$t("admin.sending")}</span>
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

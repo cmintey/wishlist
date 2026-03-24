@@ -65,6 +65,8 @@ export const settingSchema = z.object({
     smtpPass: z.string().optional(),
     smtpFrom: z.string().optional(),
     smtpFromName: z.string().optional(),
+    smtpUseTls: z.coerce.boolean().default(false),
+    smtpIgnoreCertCheck: z.coerce.boolean().default(false),
     claimsShowName: z.coerce.boolean().default(false),
     claimsShowNameAcrossGroups: z.coerce.boolean().default(false),
     claimsShowForOwner: z.coerce.boolean().default(false),

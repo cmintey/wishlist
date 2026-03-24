@@ -13,6 +13,8 @@ enum ConfigKey {
     SMTP_PASS = "smtp.pass",
     SMTP_FROM = "smtp.from",
     SMTP_FROM_NAME = "smtp.fromName",
+    SMTP_USE_TLS = "smtp.useTls",
+    SMTP_IGNORE_CERT_CHECK = "smtp.ignoreCertCheck",
     CLAIMS_SHOW_NAME = "claims.showName",
     ClAIMS_SHOW_NAME_ACROSS_GROUPS = "claims.showNameAcrossGroups",
     CLAIMS_SHOW_FOR_OWNER = "claims.showForOwner",
@@ -57,6 +59,8 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "smtp.pass": maskableStringTransformer,
     "smtp.from": stringTransformer,
     "smtp.fromName": stringTransformer,
+    "smtp.useTls": booleanTransformer,
+    "smtp.ignoreCertCheck": booleanTransformer,
     "claims.showName": booleanTransformer,
     "claims.showNameAcrossGroups": booleanTransformer,
     "claims.showForOwner": booleanTransformer,
@@ -87,7 +91,9 @@ const getDefaultConfig = (): Config => ({
         method: "approval"
     },
     smtp: {
-        enable: false
+        enable: false,
+        useTls: false,
+        ignoreCertCheck: false
     },
     claims: {
         showName: true,
