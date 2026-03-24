@@ -7,10 +7,8 @@
         config: Pick<Config, "claims">;
     }
 
-    const props: Props = $props();
+    const { config }: Props = $props();
     const t = getFormatter();
-
-    let config = $state(props.config);
 </script>
 
 <SettingsGroup title={$t("admin.claims")}>

@@ -46,6 +46,8 @@ type SMTPConfig =
           pass?: string | null;
           from?: string | null;
           fromName?: string | null;
+          useTls?: boolean | null;
+          ignoreCertCheck?: boolean | null;
       }
     | {
           enable: true;
@@ -55,6 +57,9 @@ type SMTPConfig =
           pass?: string;
           from: string;
           fromName: string;
+
+          useTls?: boolean;
+          ignoreCertCheck?: boolean;
       };
 
 type OIDCConfig =

@@ -3,6 +3,7 @@
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
     import { getFormatter } from "$lib/i18n";
+    import Setting from "../Setting.svelte";
 
     interface Props {
         config: Pick<Config, "smtp">;
@@ -10,11 +11,10 @@
         hidden?: boolean;
     }
 
-    const { config: config_, sending, hidden = false }: Props = $props();
+    const { config, sending, hidden = false }: Props = $props();
     const t = getFormatter();
 
-    let config = $state(config_);
-    let enabled = $state(config.smtp.enable);
+    let enabled = $derived(config.smtp.enable);
     let allFilled = $derived(
         enabled && config.smtp.from && config.smtp.fromName && config.smtp.host && config.smtp.port
     );
@@ -97,6 +97,41 @@
                         bind:value={config.smtp.fromName}
                     />
                 </label>
+
+                <Setting class="col-span-full">
+                    <label class="checkbox-label">
+                        <input
+                            id="smtpUseTls"
+                            name="smtpUseTls"
+                            class="checkbox"
+                            checked={config.smtp.useTls}
+                            type="checkbox"
+                        />
+                        <span>{$t("admin.smtp-use-tls")}</span>
+                    </label>
+                    {#snippet description()}
+                        <span>
+                            {$t("admin.smtp-use-tls-description")}
+                        </span>
+                    {/snippet}
+                </Setting>
+                <Setting class="col-span-full">
+                    <label class="checkbox-label">
+                        <input
+                            id="smtpIgnoreCertCheck"
+                            name="smtpIgnoreCertCheck"
+                            class="checkbox"
+                            checked={config.smtp.ignoreCertCheck}
+                            type="checkbox"
+                        />
+                        <span>{$t("admin.ignore-cert-check")}</span>
+                    </label>
+                    {#snippet description()}
+                        <span>
+                            {$t("admin.smtp-ignore-cert-check-description")}
+                        </span>
+                    {/snippet}
+                </Setting>
             </div>
             <div class="flex w-full flex-row justify-end">
                 <button
@@ -107,6 +142,7 @@
                 >
                     {#if sending}
                         <span class="loading loading-spinner loading-xs"></span>
+                        <span>{$t("admin.sending")}</span>
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

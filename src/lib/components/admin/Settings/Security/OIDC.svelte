@@ -12,7 +12,7 @@
     const { config }: Props = $props();
     const t = getFormatter();
 
-    let enabled = $state(config.oidc.enable);
+    let enabled = $derived(config.oidc.enable);
 </script>
 
 <SettingsGroup title={$t("admin.oidc")}>
