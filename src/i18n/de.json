@@ -129,7 +129,14 @@
         "show-for-list-owner": "Dem Listeninhaber anzeigen",
         "show-for-list-owner-description": "Listeninhabern erlauben, beanspruchte Wünsche auf deren eigenen Listen zu sehen.",
         "show-name-across-groups": "Zeige Name Gruppen-übergreifend",
-        "show-name-across-groups-tooltip": "Zeigt den Namen des Benutzers, der den Wunsch beansprucht hat, selbst wenn der Benutzer nicht in deiner Gruppe ist."
+        "show-name-across-groups-tooltip": "Zeigt den Namen des Benutzers, der den Wunsch beansprucht hat, selbst wenn der Benutzer nicht in deiner Gruppe ist.",
+        "ignore-cert-check": "Ignoriere Zertifikatsfehler",
+        "oidc-claim-name-description": "Das Feld, in das der Name des Benutzers eingegeben wird.",
+        "oidc-claim-username-description": "Das Feld, in das der Benutzername des Benutzers eingegeben wird.",
+        "sending": "Senden",
+        "smtp-ignore-cert-check-description": "Das TLS-Zertifikat nicht validieren. Wird meist für lokale Verbindungen verwendet. Nicht empfohlen.",
+        "smtp-use-tls": "TLS verwenden",
+        "smtp-use-tls-description": "Stelle eine direkte Verbindung zum SMTP-Server über TLS her, anstatt STARTTLS zu verwenden. Wird meist mit Port 465 genutzt."
     },
     "wishes": {
         "filter": "Filter",
@@ -243,7 +250,8 @@
         "import-error-title": "Artikel konnte nicht importiert werden",
         "import-item": "Importiere Artikel",
         "import-item-text": "Bevor ein Artikel importiert werden kann, muss eine Gruppe und eine Liste ausgewählt werden",
-        "select-a-list": "Liste auswählen"
+        "select-a-list": "Liste auswählen",
+        "item-created": "Artikel erstellt"
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -428,7 +436,11 @@
         "select-all": "Alles auswählen",
         "oauth": "OAuth",
         "import": "Importieren",
-        "no-lists-available": "Keine Listen verfügbar"
+        "no-lists-available": "Keine Listen verfügbar",
+        "dark": "Dunkel",
+        "light": "Hell",
+        "no-results": "Keine Ergebnisse.",
+        "system": "System"
     },
     "app": {
         "home": "Start",
