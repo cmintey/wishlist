@@ -59,7 +59,7 @@ const sendEmail = async (options: Mail.Options) => {
         auth: config.smtp.user && config.smtp.pass ? { user: config.smtp.user, pass: config.smtp.pass } : undefined,
         secure: config.smtp.useTls || false,
         tls: {
-            rejectUnauthorized: config.smtp.ignoreCertCheck || false
+            rejectUnauthorized: config.smtp.ignoreCertCheck === true ? false : true
         }
     });
 
