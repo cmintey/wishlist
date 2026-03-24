@@ -8,7 +8,7 @@
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
 
-    const { data }: PageProps = $props();
+    let { data }: PageProps = $props();
     const t = getFormatter();
 
     onMount(() => {
@@ -18,9 +18,7 @@
     });
 
     const currentHash = $derived(page.url.hash);
-
-    let config = $state(data.config);
-    let groups = $state(data.groups);
+    let { config, groups } = $derived(data);
     let sending = $state(false);
     let saving = $state(false);
 </script>

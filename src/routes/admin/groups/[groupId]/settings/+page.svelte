@@ -9,7 +9,7 @@
     const { data }: PageProps = $props();
     const t = getFormatter();
 
-    const config = $state(data.config);
+    const { config } = $derived(data);
 
     let saving = $state(false);
 </script>

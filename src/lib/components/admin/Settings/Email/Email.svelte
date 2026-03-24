@@ -11,11 +11,10 @@
         hidden?: boolean;
     }
 
-    const { config: config_, sending, hidden = false }: Props = $props();
+    const { config, sending, hidden = false }: Props = $props();
     const t = getFormatter();
 
-    let config = $state(config_);
-    let enabled = $state(config.smtp.enable);
+    let enabled = $derived(config.smtp.enable);
     let allFilled = $derived(
         enabled && config.smtp.from && config.smtp.fromName && config.smtp.host && config.smtp.port
     );

@@ -11,7 +11,7 @@
     const { config }: Props = $props();
     const t = getFormatter();
 
-    let enabled = $state(config.suggestions.enable);
+    let enabled = $derived(config.suggestions.enable);
 </script>
 
 <SettingsGroup title={$t("admin.suggestions")}>
