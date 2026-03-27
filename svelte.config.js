@@ -8,7 +8,12 @@ const config = {
     preprocess: [sveltePreprocess()],
 
     kit: {
-        adapter: adapter()
+        adapter: adapter(),
+        // Disable default CSRF verification because we have our own
+        // implementation that supports multiple origins (ALLOWED_ORIGINS)
+        csrf: {
+            checkOrigin: false
+        }
     }
 };
 
