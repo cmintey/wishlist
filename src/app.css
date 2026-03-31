@@ -82,9 +82,9 @@
 }
 
 @layer utilities {
-    .chip {
+    .chip,
+    .badge {
         border-radius: 0.25rem;
-        /* padding-block: --spacing(1.5); */
         font-size: var(--text-xs);
         line-height: var(--text-xs--line-height);
     }
