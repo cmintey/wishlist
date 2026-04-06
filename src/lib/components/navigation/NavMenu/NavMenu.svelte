@@ -7,6 +7,7 @@
     import GroupSelectChip from "$lib/components/wishlists/chips/GroupSelectChip.svelte";
     import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
     import LightSwitch from "./LightSwitch.svelte";
+    import ThemePicker from "./ThemePicker.svelte";
     import Popup from "$lib/components/Popup.svelte";
 
     interface Props {
@@ -19,6 +20,7 @@
     const t = getFormatter();
 
     let open = $state(false);
+    let isDarkOnly = $state(false);
 
     const closeMenu = () => {
         open = false;
@@ -97,8 +99,13 @@
                                 </ChangeLanguageModal>
                             </li>
                             <li>
+                                <div class="flex w-full justify-around px-2 pt-1">
+                                    <ThemePicker bind:isDarkOnly />
+                                </div>
+                            </li>
+                            <li>
                                 <div class="flex w-full justify-around pt-1">
-                                    <LightSwitch />
+                                    <LightSwitch disabled={isDarkOnly} />
                                 </div>
                             </li>
                         </ul>
@@ -108,5 +115,8 @@
         </Popup>
     </div>
 {:else}
-    <LightSwitch sizeClass="w-10" />
+    <div class="flex items-center gap-4">
+        <ThemePicker bind:isDarkOnly />
+        <LightSwitch disabled={isDarkOnly} sizeClass="w-10" />
+    </div>
 {/if}

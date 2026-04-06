@@ -3,6 +3,11 @@
 @import "@skeletonlabs/skeleton-svelte";
 @import "./styles/font.css";
 @import "./wishlist.css";
+@import "./themes/catppuccin-mocha.css";
+@import "./themes/tokyo-night.css";
+@import "./themes/everforest.css";
+@import "./themes/gruvbox.css";
+@import "./themes/rose-pine.css";
 @import "./styles/list.css";
 @import "./styles/toast.css";
 @import "./styles/loading.css";

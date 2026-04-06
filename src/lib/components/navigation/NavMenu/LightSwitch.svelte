@@ -7,6 +7,7 @@
 
     interface Props {
         sizeClass?: ClassValue;
+        disabled?: boolean;
     }
 
     let props: Props = $props();
@@ -28,6 +29,7 @@
     };
 
     $effect(() => {
+        if (props.disabled) return;
         value = modeLocalStorage.current;
         if (value === "system") {
             const pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -50,7 +52,7 @@
     };
 </script>
 
-<SegmentedControl {onValueChange} {value}>
+<SegmentedControl disabled={props.disabled} {onValueChange} {value}>
     <SegmentedControl.Label>{$t("general.mode")}</SegmentedControl.Label>
     <SegmentedControl.Control class="rounded-container border-surface-300-700 gap-0 p-0.5">
         <SegmentedControl.Indicator class="rounded-container" />
@@ -69,10 +71,18 @@
 <svelte:head>
     <script>
         (function initMode() {
-            let mode =
+            var theme =
+                typeof localStorage !== "undefined"
+                    ? JSON.parse(localStorage.getItem("theme")) || "wishlist"
+                    : "wishlist";
+            if (theme !== "wishlist") {
+                document.documentElement.setAttribute("data-mode", "dark");
+                return;
+            }
+            var mode =
                 typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem("mode")) || "system" : "system";
             if (mode === "system") {
-                const pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                var pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
                 document.documentElement.setAttribute("data-mode", pref);
             } else {
                 document.documentElement.setAttribute("data-mode", mode);
