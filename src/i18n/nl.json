@@ -129,7 +129,14 @@
         "show-for-list-owner": "Weergeven voor lijsteigenaar",
         "show-for-list-owner-description": "Geef lijsteigenaren de mogelijkheid om claims op hun eigen lijsten te bekijken.",
         "show-name-across-groups": "Toon naam tussen groepen",
-        "show-name-across-groups-tooltip": "Toont de naam van de gebruiker die de clain gemaakt heeft, zelfs als de gebruiker niet in jouw groep zit."
+        "show-name-across-groups-tooltip": "Toont de naam van de gebruiker die de clain gemaakt heeft, zelfs als de gebruiker niet in jouw groep zit.",
+        "ignore-cert-check": "Negeer certificaatfouten",
+        "oidc-claim-name-description": "De claim om te gebruiken voor het vullen van de naam van de gebruiker.",
+        "oidc-claim-username-description": "De claim om te gebruiken voor de gebruikersnaam van de gebruiker.",
+        "sending": "Verzenden",
+        "smtp-ignore-cert-check-description": "Het TLS-certificaat niet valideren. Meestal gebruikt voor lokale verbindingen. Niet aangeraden.",
+        "smtp-use-tls": "Gebruik TLS",
+        "smtp-use-tls-description": "Verbind met de SMTP-server door direct TLS te gebruiken in plaats van STARTTLS. Meestal gebruikt met poort 465."
     },
     "app": {
         "home": "Start",

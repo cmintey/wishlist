@@ -129,7 +129,14 @@
         "clear-lists-confirmation": "Chceš vymazat {claimedOnly, select, true {rezervované položky} other {všechny seznamy přání}} {groupSpecific, select, true {v této skupině} other {napříč <b>všemi skupinami</b>}}? <b>Tato akce je nevratná!</b>",
         "dev": "dev",
         "show-name-across-groups": "Zobrazovat jméno napříč skupinami",
-        "show-name-across-groups-tooltip": "Zobrazí jméno uživatele, který si předmět zarezervoval, i když uživatel není součástí vaší skupiny."
+        "show-name-across-groups-tooltip": "Zobrazí jméno uživatele, který si předmět zarezervoval, i když uživatel není součástí vaší skupiny.",
+        "ignore-cert-check": "Ignorovat neplatný certifikát",
+        "oidc-claim-name-description": "Atribut, který se má použít pro nastavení jména.",
+        "oidc-claim-username-description": "Atribut, který se má použít pro nastavení uživatelského jména.",
+        "sending": "Posílám",
+        "smtp-ignore-cert-check-description": "Neověřovat TLS certifikát. Nejčastěji použito pro lokální připojení. Nedoporučeno.",
+        "smtp-use-tls": "Použít TLS",
+        "smtp-use-tls-description": "Připojovat se k SMTP serveru pomocí TLS namísto STARTTLS. Obvykle pro port 465."
     },
     "app": {
         "home": "Domů",

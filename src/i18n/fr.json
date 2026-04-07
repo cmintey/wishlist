@@ -176,7 +176,12 @@
         "show-for-list-owner": "Afficher pour le propriétaire de la liste",
         "show-for-list-owner-description": "Permet au propriétaire de la liste de voir les réservations sur leurs propres listes.",
         "show-name-across-groups": "Afficher le nom dans tous les groupes",
-        "show-name-across-groups-tooltip": "Affiche le nom de l'utilisateur qui a effectué une réservation, même si cet utilisateur ne fait pas partie de votre groupe."
+        "show-name-across-groups-tooltip": "Affiche le nom de l'utilisateur qui a effectué une réservation, même si cet utilisateur ne fait pas partie de votre groupe.",
+        "ignore-cert-check": "Ignorer les erreurs de certificat",
+        "sending": "Envoi",
+        "smtp-ignore-cert-check-description": "Ne pas valider le certificat TLS. Le plus souvent utilisé pour les connexions locales. Non recommandé.",
+        "smtp-use-tls": "Utiliser TLS",
+        "smtp-use-tls-description": "Se connecter au serveur SMTP directement en utilisant TLS au lieu d'utiliser STARTTLS. Le plus souvent utilisé avec le port 465."
     },
     "auth": {
         "password": "Mot de passe",
