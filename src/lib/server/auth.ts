@@ -8,10 +8,68 @@ import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
+import { logger } from "./logger";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
 const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
-const origin = new URL(env.ORIGIN || "localhost:3280");
+const origin = new URL(env.ORIGIN || "http://localhost:3280");
+
+/**
+ * Parse allowed origins from environment variables
+ * ORIGIN: main origin (required)
+ * ALLOWED_ORIGINS: additional origins separated by commas (optional)
+ */
+function parseAllowedOrigins(): Set<string> {
+    const origins = new Set<string>();
+    
+    // Main origin
+    if (env.ORIGIN) {
+        try {
+            const url = new URL(env.ORIGIN);
+            origins.add(url.origin);
+        } catch (e) {
+            logger.warn(`Invalid ORIGIN: ${env.ORIGIN}`);
+        }
+    }
+    
+    // Additional origins
+    if (env.ALLOWED_ORIGINS) {
+        const additionalOrigins = env.ALLOWED_ORIGINS.split(',').map(o => o.trim()).filter(Boolean);
+        for (const originStr of additionalOrigins) {
+            try {
+                const url = new URL(originStr);
+                origins.add(url.origin);
+            } catch (e) {
+                logger.warn(`Invalid origin in ALLOWED_ORIGINS: ${originStr}`);
+            }
+        }
+    }
+    
+    return origins;
+}
+
+const allowedOrigins = parseAllowedOrigins();
+
+/**
+ * Check if an origin is allowed
+ */
+export function isAllowedOrigin(requestOrigin: string | null): boolean {
+    if (!requestOrigin) return true; // No Origin header (same-origin request or navigation)
+    
+    try {
+        const url = new URL(requestOrigin);
+        return allowedOrigins.has(url.origin);
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Returns the list of allowed origins (for debug/logs)
+ */
+export function getAllowedOrigins(): string[] {
+    return Array.from(allowedOrigins);
+}
 
 export const sessionCookieName = "wishlist_session";
 
