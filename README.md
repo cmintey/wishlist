@@ -56,6 +56,7 @@ services:
       - ./data:/usr/src/app/data        # This is where the sqlite database will be stored
     environment:
       # ORIGIN: https://wishlist.example.com
+      # ORIGIN: https://wishlist.example.com,http://192.168.2.10:3280  # multi-origin (comma-separated)
       ORIGIN: http://192.168.2.10:3280 # The URL your users will be connecting to
       TOKEN_TIME: 72 # hours until signup and password reset tokens expire
 ```
@@ -69,7 +70,11 @@ You can now connect to your application at `http://<host>:3280`.
 
 ### Environment Variables
 
-`ORIGIN`: The URL your users will connect to e.g. `https://wishlist.domain.com`, `http://192.168.2.10:3280`. **Note**, if this value is an IP address, then it must include the exposed port of the application
+`ORIGIN`: The URL(s) your users will connect to. Supports comma-separated values for multiple origins (e.g., when accessed via both an external domain and an internal IP). The first value is used as the primary origin for email links. **Note**, if this value is an IP address, then it must include the exposed port of the application.
+
+Examples:
+- Single: `https://wishlist.domain.com`
+- Multiple: `https://wishlist.domain.com,http://192.168.1.10:3280`
 
 `TOKEN_TIME`: The amount of time (hours) that signup and password reset tokens are valid for
 

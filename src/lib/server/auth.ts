@@ -1,6 +1,5 @@
 import { dev } from "$app/environment";
 import { client } from "./prisma";
-import { env } from "$env/dynamic/private";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import type { Session, User } from "$lib/generated/prisma/client";
 import { sha256 } from "@oslojs/crypto/sha2";
@@ -8,11 +7,10 @@ import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
+import { getOriginConfig } from "./origin";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
 const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
-const origin = new URL(env.ORIGIN || "localhost:3280");
-
 export const sessionCookieName = "wishlist_session";
 
 export function generateSessionToken(): string {
@@ -93,7 +91,7 @@ export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt
         sameSite: "lax",
         expires: expiresAt,
         path: "/",
-        secure: !dev && origin.protocol === "https:"
+        secure: !dev && getOriginConfig().isSecure
     });
 }
 
@@ -103,7 +101,7 @@ export function deleteSessionTokenCookie(cookies: Cookies): void {
         sameSite: "lax",
         maxAge: 0,
         path: "/",
-        secure: !dev && origin.protocol === "https:"
+        secure: !dev && getOriginConfig().isSecure
     });
 }
 
