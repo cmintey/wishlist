@@ -1,15 +1,16 @@
 <script lang="ts">
+    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
     import type { ClaimDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
     import { getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    interface Props extends Pick<ItemCardProps, "item" | "user"> {
+    interface Props extends Pick<ItemCardProps, "item" | "user" | "groupId" | "requireClaimEmail"> {
         expand: boolean;
         showName: (claim?: ClaimDTO) => boolean;
     }
 
-    let { expand, showName, item, user }: Props = $props();
+    let { expand, showName, item, user, groupId, requireClaimEmail }: Props = $props();
     let t = getFormatter();
 
     let isForOwner = $derived(item.userId === user?.id);
@@ -30,7 +31,7 @@
                             {$t("wishes.claims", { values: { claimCount: claim.quantity } })}
                         </span>
                         {#if isForOwner}
-                            <button class="btn btn-icon btn-icon-sm inset-ring-error-500 preset-tonal-error inset-ring">
+                            <!-- <button class="btn btn-icon btn-icon-sm inset-ring-error-500 preset-tonal-error inset-ring">
                                 <iconify-icon class="text-lg" icon="ion:cog-outline"></iconify-icon>
                                 <span class="sr-only">Edit claim</span>
                             </button>
@@ -48,7 +49,24 @@
                                     icon="ion:close-circle-outline"
                                 ></iconify-icon>
                                 <span class="sr-only">Edit claim</span>
-                            </button>
+                            </button> -->
+                            <ClaimItemModal
+                                claimId={claim.claimId}
+                                {groupId}
+                                {item}
+                                {requireClaimEmail}
+                                userId={user?.id}
+                            >
+                                {#snippet trigger(props)}
+                                    <button
+                                        {...props}
+                                        class="btn btn-icon btn-icon-sm preset-tonal inset-ring-surface-500 p-1.5 inset-ring"
+                                    >
+                                        <iconify-icon class="" icon="ion:edit"></iconify-icon>
+                                        <span class="sr-only">Edit claim</span>
+                                    </button>
+                                {/snippet}
+                            </ClaimItemModal>
                         {/if}
                     </div>
                 </div>

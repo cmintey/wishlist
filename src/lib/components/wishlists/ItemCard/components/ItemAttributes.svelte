@@ -9,7 +9,15 @@
 
     interface Props extends Pick<
         ItemCardProps,
-        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
+        | "item"
+        | "onPublicList"
+        | "user"
+        | "requireClaimEmail"
+        | "showClaimForOwner"
+        | "showClaimedName"
+        | "showNameAcrossGroups"
+        | "showFor"
+        | "groupId"
     > {
         showDetail?: boolean;
         fullNotes?: boolean;
@@ -20,7 +28,9 @@
         item,
         onPublicList,
         user,
+        groupId,
         showClaimedName,
+        requireClaimEmail,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
         showFor,
@@ -73,7 +83,7 @@
     </div>
 </div>
 {#if showDetail}
-    <ClaimDetails expand={expandClaims} {item} showName={shouldShowClaimName} {user} />
+    <ClaimDetails expand={expandClaims} {groupId} {item} {requireClaimEmail} showName={shouldShowClaimName} {user} />
 {/if}
 
 <!-- Added by / For (claims page) -->
