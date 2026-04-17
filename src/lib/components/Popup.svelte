@@ -19,12 +19,18 @@
 
 <Popover autoFocus={false} onOpenChange={(e) => (open = e.open)} {open}>
     <Popover.Trigger element={trigger}></Popover.Trigger>
-    <Portal>
-        <Popover.Positioner class={zIndex}>
-            <Popover.Content
-                class="transition-all transition-discrete {transitionFade} {transitionScale}"
-                element={content}
-            ></Popover.Content>
-        </Popover.Positioner>
-    </Portal>
+    <Popover.Context>
+        {#snippet children(ctx)}
+            {#if ctx().open}
+                <Portal>
+                    <Popover.Positioner class={zIndex}>
+                        <Popover.Content
+                            class="transition-all transition-discrete {transitionFade} {transitionScale}"
+                            element={content}
+                        ></Popover.Content>
+                    </Popover.Positioner>
+                </Portal>
+            {/if}
+        {/snippet}
+    </Popover.Context>
 </Popover>
