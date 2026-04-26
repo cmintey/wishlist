@@ -35,7 +35,7 @@ jobs:
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
 
-            - uses: pnpm/action-setup@v5
+            - uses: pnpm/action-setup@v6
               name: Install pnpm
               id: pnpm-install
               with:
