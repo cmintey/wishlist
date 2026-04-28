@@ -35,6 +35,7 @@
 
     const claim = $derived(item.claims.find((claim) => claim.claimId === claimId));
 
+    let title = $derived(claim ? $t("wishes.update-claim") : $t("wishes.claim-item"));
     let username: string | undefined = $state();
     let name: string | undefined = $state();
     let quantity = $derived(claim?.quantity || 1);
@@ -133,47 +134,49 @@
     }
 
     function closeAndToast(description: string) {
-        open = false;
         // wait for transition to finish before triggering toast
-        setTimeout(() => toaster.info({ description }), 250);
+        setTimeout(() => toaster.info({ description }), open ? 275 : 0);
+        open = false;
+
         onSuccess?.();
     }
 </script>
 
-<BaseModal
-    description={$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}
-    onOpenChange={(e) => (open = e.open)}
-    {open}
-    title={$t("wishes.claim-details")}
-    {...rest}
->
+{#snippet description()}
+    {#if !userId}
+        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
+    {/if}
+{/snippet}
+
+<BaseModal {description} onOpenChange={(e) => (open = e.open)} {open} {title} {...rest}>
     {#snippet trigger(props)}
         {@render inputTrigger({ ...props, onclick: handleTrigger })}
     {/snippet}
 
     {#if !userId}
-        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
-        <label class="w-fit">
-            <span>{$t("general.name-optional")}</span>
-            <div class="input-group grid-cols-[auto_1fr_auto]">
-                <div class="ig-cell preset-tonal">
-                    <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
-                </div>
-                <input class="ig-input" type="text" bind:value={name} />
-            </div>
-        </label>
-
-        {#if requireClaimEmail}
+        <div>
             <label class="w-fit">
-                <span>{$t("auth.email")}</span>
+                <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="ig-cell preset-tonal">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                     </div>
-                    <input class="ig-input" required type="email" bind:value={username} />
+                    <input class="ig-input" type="text" bind:value={name} />
                 </div>
             </label>
-        {/if}
+
+            {#if requireClaimEmail}
+                <label class="w-fit">
+                    <span>{$t("auth.email")}</span>
+                    <div class="input-group grid-cols-[auto_1fr_auto]">
+                        <div class="ig-cell preset-tonal">
+                            <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                        </div>
+                        <input class="ig-input" required type="email" bind:value={username} />
+                    </div>
+                </label>
+            {/if}
+        </div>
     {/if}
 
     {#if item.remainingQuantity > 1 || claim}

@@ -31,8 +31,8 @@
 
     const t = getFormatter();
 
-    const userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
-    const isClaimOnList = $derived(userClaim?.listId === item.listId);
+    let userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
+    let isClaimOnList = $derived(userClaim?.listId === item.listId);
 
     const handlePurchased = async (purchased: boolean) => {
         if (userClaim && isClaimOnList) {
@@ -51,7 +51,7 @@
 {:else if userClaim}
     {#if isClaimOnList}
         <div class="flex flex-row items-center gap-2">
-            <ClaimItemModal claimId={userClaim.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
+            <ClaimItemModal claimId={userClaim?.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
                 {#snippet trigger(props)}
                     <button
                         {...props}
@@ -82,7 +82,7 @@
     {:else}
         <span class="text-subtle text-wrap">{$t("wishes.claimed-by-you-on-another-list")}</span>
     {/if}
-{:else if item.isClaimable && item.userId !== user?.id}
+{:else if item.isClaimable}
     <div class="flex flex-row items-center gap-x-2">
         <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
             {#snippet trigger(props)}

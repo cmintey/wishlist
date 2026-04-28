@@ -1,13 +1,23 @@
 <script lang="ts">
     import Markdown from "$lib/components/Markdown.svelte";
+    import type { ClaimDTO } from "$lib/dtos/item-dto";
     import { getFormatter } from "$lib/i18n";
     import { formatPrice } from "$lib/price-formatter";
-    import { shouldShowName, getClaimedName } from "../../util";
+    import { shouldShowName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
+    import ClaimDetails from "./ClaimDetails.svelte";
 
     interface Props extends Pick<
         ItemCardProps,
-        "item" | "onPublicList" | "user" | "showClaimForOwner" | "showClaimedName" | "showNameAcrossGroups" | "showFor"
+        | "item"
+        | "onPublicList"
+        | "user"
+        | "requireClaimEmail"
+        | "showClaimForOwner"
+        | "showClaimedName"
+        | "showNameAcrossGroups"
+        | "showFor"
+        | "groupId"
     > {
         showDetail?: boolean;
         fullNotes?: boolean;
@@ -18,7 +28,9 @@
         item,
         onPublicList,
         user,
+        groupId,
         showClaimedName,
+        requireClaimEmail,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
         showFor,
@@ -27,6 +39,9 @@
     }: Props = $props();
 
     let expandClaims = $state(false);
+    let shouldShowClaimName = $derived((claim?: ClaimDTO) =>
+        shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, user, claim)
+    );
 </script>
 
 <!-- Price with fallback -->
@@ -42,7 +57,7 @@
 <!-- Quantity with fallback -->
 <div class="flex items-center gap-2" data-testid="quantity">
     <iconify-icon icon="ion:gift"></iconify-icon>
-    <div class="flex flex-row flex-wrap gap-x-2">
+    <div class="flex flex-row flex-wrap items-end gap-x-2">
         <span data-testid="quantity-desired">
             {#if item.quantity}
                 {$t("wishes.quantity-desired", { values: { quantity: item.quantity } })}
@@ -55,40 +70,20 @@
             <span class="text-secondary-900-100 font-bold" data-testid="quantity-claimed">
                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
             </span>
+            {#if showDetail && item.claimedQuantity > 0}
+                <button class="subtext" onclick={() => (expandClaims = !expandClaims)}>
+                    <span>{expandClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}</span>
+                    <iconify-icon
+                        class="text-xs"
+                        icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}
+                    ></iconify-icon>
+                </button>
+            {/if}
         {/if}
     </div>
 </div>
-{#if showDetail && showClaimedName && item.claims.length > 0 && (item.userId !== user?.id || showClaimForOwner)}
-    <div class="card text-sm">
-        <button
-            class="flex w-full items-center justify-start! gap-2 p-2 text-start! text-sm"
-            onclick={() => (expandClaims = !expandClaims)}
-        >
-            <iconify-icon icon={expandClaims ? "ion:chevron-up" : "ion:chevron-down"}></iconify-icon>
-            <span>{expandClaims ? $t("wishes.hide-claims") : $t("wishes.show-claims")}</span>
-        </button>
-
-        {#if expandClaims}
-            <div class="max-h-32 overflow-auto px-2 pb-2">
-                {#each item.claims as claim}
-                    {@const showName = shouldShowName(
-                        item,
-                        showClaimedName,
-                        showNameAcrossGroups,
-                        showClaimForOwner,
-                        user,
-                        claim
-                    )}
-                    <div class="flex items-center justify-between py-1">
-                        <span>{showName ? getClaimedName(claim) : $t("wishes.anonymous")}</span>
-                        <span>
-                            {$t("wishes.claims", { values: { claimCount: claim.quantity } })}
-                        </span>
-                    </div>
-                {/each}
-            </div>
-        {/if}
-    </div>
+{#if showDetail}
+    <ClaimDetails expand={expandClaims} {groupId} {item} {requireClaimEmail} showName={shouldShowClaimName} {user} />
 {/if}
 
 <!-- Added by / For (claims page) -->
