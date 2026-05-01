@@ -113,7 +113,7 @@
         "version": "Versie: <a class=\"{class}\" href=\"{href}\">{version}</a>",
         "wishlist-mode": "Verlanglijstmodus",
         "wishlist-mode-alert": "Er zijn {memberCount} leden en {listCount} lijsten in deze groep, u kunt de modus niet schakelen totdat u alle behalve één lid en één lijst verwijdert.",
-        "wishlist-mode-display-text": "In de 'Wishlist' -modus kunt u meerdere gebruikers en lijsten hebben en items van andere gebruikers claimen. In de modus 'Registry' hebt u een enkele lijst die u publiekelijk kunt delen.",
+        "wishlist-mode-display-text": "In de 'Wunschlistä' -modus kunt u meerdere gebruikers en lijsten hebben en items van andere gebruikers claimen. In de modus 'Registry' hebt u een enkele lijst die u publiekelijk kunt delen.",
         "wishlist-mode-registry": "Register",
         "wishlist-mode-registry-tooltip": "Eén gebruiker met één openbare lijst. Gebruikers van andere groepen kunnen suggesties doen als toegestane en anonieme gebruikers items kunnen claimen.",
         "wishlist-mode-wishlist": "Verlanglijst",
@@ -181,17 +181,17 @@
         "your-password-was-reset": "Uw wachtwoord is gereset."
     },
     "email": {
-        "invite-body": "U bent uitgenodigd om lid te worden van Wishlist! Klik op de onderstaande link om de uitnodiging te accepteren.",
+        "invite-body": "U bent uitgenodigd om lid te worden van Wunschlistä! Klik op de onderstaande link om de uitnodiging te accepteren.",
         "invite-button": "Word lid van de verlanglijst",
         "invite-fallback-text": "Iemand heeft je uitgenodigd om lid te worden van hun verlanglijst! Volg de link naar aanmelding: {url}",
         "invite-footer": "Als u niet wilt meedoen of gelooft dat deze e -mail in de fout wordt verzonden, kunt u deze e -mail negeren.",
-        "invite-subject": "Wishlist-uitnodiging",
-        "invite-title": "Welkom bij Wishlist!",
+        "invite-subject": "Wunschlistä-uitnodiging",
+        "invite-title": "Welkom bij Wunschlistä!",
         "pw-reset-body": "Als u om een wachtwoord opnieuw instelt, klikt u op de onderstaande link om het proces te voltooien. Als u dit verzoek niet hebt ingediend, kunt u deze e -mail veilig negeren.",
         "pw-reset-fallback-text": "Volg de link om uw wachtwoord te resetten {resetUrl}",
         "pw-reset-title": "Reset wachtwoord",
         "test-body": "Als je dit leest, gefeliciteerd! E -mailconfiguratie lijkt goed te zijn ingesteld!",
-        "test-subject": "Test van Wishlist"
+        "test-subject": "Test van Wunschlistä"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "Een item moet worden toegevoegd aan ten minste één lijst",
@@ -358,7 +358,7 @@
         "lets-get-started": "Laten we beginnen",
         "next": "Volgende",
         "unable-to-update-password": "Niet in staat om het wachtwoord bij te werken",
-        "welcome-to-wishlist": "Welkom bij Wishlist"
+        "welcome-to-wishlist": "Welkom bij Wunschlistä"
     },
     "unable-to-load-icons": "Kan pictogrammen niet laden.",
     "wishes": {
@@ -469,7 +469,7 @@
         "switch-to-list-view": "Schakel over naar lijstweergave",
         "switch-to-tile-view": "Schakel over naar tegelweergave",
         "tile-view": "Tegelweergave",
-        "import-error-text": "Wishlist was niet in staat om de product-url te bepalen met de gegeven parameters. Je kan de url nog steeds handmatig kopiëren en toevoegen via het normale proces.",
+        "import-error-text": "Wunschlistä was niet in staat om de product-url te bepalen met de gegeven parameters. Je kan de url nog steeds handmatig kopiëren en toevoegen via het normale proces.",
         "import-error-title": "Kan item niet importeren",
         "import-item": "Importeer item",
         "import-item-text": "Voordat je een item kunt importeren, moet je een groep en een lijst kiezen",

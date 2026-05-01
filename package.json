@@ -1,5 +1,5 @@
 {
-    "name": "wishlist",
+    "name": "wunschlistae",
     "version": "0.0.1",
     "private": true,
     "scripts": {
@@ -91,18 +91,19 @@
         "zod": "^4.0.17"
     },
     "engines": {
-        "node": "^24.0.0",
+        "node": ">=24.0.0",
         "pnpm": "^10"
     },
     "pnpm": {
         "onlyBuiltDependencies": [
+            "@prisma/engines",
+            "@tailwindcss/oxide",
             "better-sqlite3",
             "es5-ext",
             "esbuild",
             "prisma",
             "re2",
-            "svelte-preprocess",
-            "@tailwindcss/oxide"
+            "svelte-preprocess"
         ]
     }
 }

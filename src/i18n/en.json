@@ -24,7 +24,7 @@
         "unpurchase": "Mark item as not purchased",
         "upload-profile-image": "upload profile image",
         "user-menu": "User Menu",
-        "wishlist-logo": "Wishlist Logo"
+        "wishlist-logo": "Wunschlistä Logo"
     },
     "admin": {
         "about": "About",
@@ -44,7 +44,7 @@
         "claims-require-email": "Require email",
         "claims-require-email-tooltip": "Require an email address to anonymously claim an item.",
         "clear-lists": "Clear {groupSpecific, select, true {} other {All}} {claimedOnly, select, true {Claimed Items} other {Lists}}",
-        "clear-lists-confirmation": "Are you sure you wish to clear {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}? <b>This action is irreversible!</b>",
+        "clear-lists-confirmation": "Are you sure you wish to clear {claimedOnly, select, true {claimed items} other {all wunschlistäs}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}? <b>This action is irreversible!</b>",
         "credentials": "Credentials",
         "default-group": "Default Group",
         "default-group-tooltip": "New users will be added to this group if they were not sent a group specific signup token.",
@@ -130,12 +130,12 @@
         "username-field": "Username: {username}",
         "users": "Users",
         "version": "Version: <a class=\"{class}\" href=\"{href}\">{version}</a>",
-        "wishlist-mode": "Wishlist mode",
+        "wishlist-mode": "Wunschlistä mode",
         "wishlist-mode-alert": "There are {memberCount} members and {listCount} lists in this group, you cannot switch the mode until you remove all but one member and one list.",
-        "wishlist-mode-display-text": "In 'Wishlist' mode, you can have multiple users and lists and claim items from other users. In 'Registry' mode, you have a single list which you can publicly share.",
+        "wishlist-mode-display-text": "In 'Wunschlistä' mode, you can have multiple users and lists and claim items from other users. In 'Registry' mode, you have a single list which you can publicly share.",
         "wishlist-mode-registry": "Registry",
         "wishlist-mode-registry-tooltip": "One user with one public list. Users from other groups can make suggestions if permitted and anonymous users can claim items.",
-        "wishlist-mode-wishlist": "Wishlist",
+        "wishlist-mode-wishlist": "Wunschlistä",
         "wishlist-mode-wishlist-tooltip": "Multiple users and multiple lists with claiming and item suggestions. Lists can be made public if permitted by the group."
     },
     "app": {
@@ -181,17 +181,17 @@
         "your-password-was-reset": "Your password was reset."
     },
     "email": {
-        "invite-body": "You've been invited to join Wishlist! To accept the invitation, click on the link below.",
-        "invite-button": "Join Wishlist",
-        "invite-fallback-text": "Somebody has invited you to join their Wishlist! Follow the link to signup: {url}",
+        "invite-body": "You've been invited to join Wunschlistä! To accept the invitation, click on the link below.",
+        "invite-button": "Join Wunschlistä",
+        "invite-fallback-text": "Somebody has invited you to join their Wunschlistä! Follow the link to signup: {url}",
         "invite-footer": "If you do not wish to join or believe this email to be sent in error, then you can ignore this email.",
-        "invite-subject": "Wishlist Invite",
-        "invite-title": "Welcome to Wishlist!",
+        "invite-subject": "Wunschlistä Invite",
+        "invite-title": "Welcome to Wunschlistä!",
         "pw-reset-body": "If you requested a password reset, click the link below to complete the process. If you didn't make this request, then you can safely ignore this email.",
         "pw-reset-fallback-text": "Follow the link to reset your password {resetUrl}",
         "pw-reset-title": "Reset Password",
         "test-body": "If you're reading this, then congratulations! Email configuration seems to have been set up properly!",
-        "test-subject": "Test from Wishlist"
+        "test-subject": "Test from Wunschlistä"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "An item must be added to at least one list",
@@ -342,7 +342,7 @@
         "very-strong": "Very Strong",
         "very-weak": "Very Weak",
         "weak": "Weak",
-        "wishlists-cleared": "Wishlists cleared."
+        "wishlists-cleared": "Wunschlistäs cleared."
     },
     "setup": {
         "back": "Back",
@@ -358,7 +358,7 @@
         "lets-get-started": "Let's get started",
         "next": "Next",
         "unable-to-update-password": "Unable to update password",
-        "welcome-to-wishlist": "Welcome to Wishlist"
+        "welcome-to-wishlist": "Welcome to Wunschlistä"
     },
     "unable-to-load-icons": "Unable to load icons.",
     "wishes": {
@@ -412,7 +412,7 @@
         "hide-claims": "Hide claims",
         "hide-description": "Hide description",
         "image-url": "Image URL",
-        "import-error-text": "Wishlist was unable to determine the product url from the given parameters. You can still manually copy the product url and add the item using the normal process.",
+        "import-error-text": "Wunschlistä was unable to determine the product url from the given parameters. You can still manually copy the product url and add the item using the normal process.",
         "import-error-title": "Unable to import item",
         "import-item": "Import item",
         "import-item-text": "Before you can import an item, you must choose a group and a list",
