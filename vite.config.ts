@@ -25,7 +25,7 @@ const config: UserConfig = {
                 name: "Wunschlistä",
                 short_name: "Wunschlistä",
                 description: "Christmas wunschlistä you can share with the whole family.",
-                theme_color: "#423654",
+                theme_color: "#34495E",
                 icons: [
                     {
                         src: "/android-chrome-192x192.png",

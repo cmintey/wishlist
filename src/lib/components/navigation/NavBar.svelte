@@ -1,11 +1,11 @@
 <script lang="ts">
-    import logo from "$lib/assets/logo.png";
     import { page } from "$app/state";
     import NavMenu from "./NavMenu/NavMenu.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import BackButton from "../BackButton.svelte";
     import { getFormatter } from "$lib/i18n";
     import NavigationDrawer from "./NavigationDrawer.svelte";
+    import Logo from "../Logo.svelte";
 
     interface Props {
         navItems: NavItem[];
@@ -20,7 +20,7 @@
 
 {#snippet wishlistHeader()}
     <a class="flex flex-row items-center gap-x-2" href="/">
-        <img class="size:h-12 aspect-square size-10 object-scale-down" alt="Wunschlistä Logo" src={logo} />
+        <Logo class="size:h-12 aspect-square size-10 object-scale-down" />
         <span
             class={[
                 "text-primary-950-50 text-2xl font-bold md:text-3xl",

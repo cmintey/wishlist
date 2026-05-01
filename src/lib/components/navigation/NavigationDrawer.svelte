@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
-    import logo from "$lib/assets/logo.png";
+    import Logo from "../Logo.svelte";
     import { Dialog, Portal, type DialogTriggerProps } from "@skeletonlabs/skeleton-svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
@@ -28,7 +28,7 @@
             >
                 <header class="flex items-center justify-between">
                     <div class="flex flex-row items-center gap-x-2">
-                    <img class="h-10 md:h-12" alt="Wunschlistä Logo" src={logo} />
+                    <Logo class="h-10 md:h-12" />
                     <span class="text-primary-950-50 text-2xl font-bold">Wunschlistä</span>
                     </div>
 

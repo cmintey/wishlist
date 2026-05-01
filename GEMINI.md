@@ -54,4 +54,5 @@ A self-hosted, sharable wunschlistä application built with SvelteKit, Prisma, a
 - **API Routes:** Prefer SvelteKit's standard `+server.ts` or `+page.server.ts` for backend logic.
 - **Error Handling:** Centralized in `src/hooks.server.ts` using `handleError`.
 - **Logging:** Uses `pino` for structured logging.
+- **Branding:** Use the `Logo.svelte` component for all logo displays to ensure theme-aware rendering (e.g., shark fin color changes in dark mode). Favicons use `favicon.svg` for dynamic theme support in browsers.
 - **Surgical Updates:** When modifying files, maintain existing patterns (naming, typing, and formatting).
