@@ -24,7 +24,7 @@
         "unpurchase": "Segna l'oggetto come non acquistato",
         "upload-profile-image": "Carica immagine di profilo",
         "user-menu": "Menu Utente",
-        "wishlist-logo": "Wishlist Logo"
+        "wishlist-logo": "Wunschlistä Logo"
     },
     "admin": {
         "about": "Circa",
@@ -43,7 +43,7 @@
         "claims-require-email": "Richiedi email",
         "claims-require-email-tooltip": "Richiedi un indirizzo di posta elettronica per rivendicare anonimente un oggetto.",
         "clear-lists": "Ripulisci {groupSpecific, select, true {} other {All}} {claimedOnly, select, true {Claimed Items} other {Lists}}",
-        "clear-lists-confirmation": "Sei sicuro di voler ripulire {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}?<b>Questa azione è irreversibile!</b>",
+        "clear-lists-confirmation": "Sei sicuro di voler ripulire {claimedOnly, select, true {claimed items} other {all wunschlistäs}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}?<b>Questa azione è irreversibile!</b>",
         "credentials": "Credenziali",
         "default-group": "Gruppo predefinito",
         "build": "Costruisci: <a class=\"{class}\" href=\"{href}\">{sha}</a>",

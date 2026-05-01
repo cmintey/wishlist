@@ -174,17 +174,17 @@
         "your-password-was-reset": "パスワードがリセットされました。"
     },
     "email": {
-        "invite-body": "Wishlist に招待されました！招待を承認するには、以下のリンクをクリックしてください。",
-        "invite-button": "Wishlist に参加する",
-        "invite-fallback-text": "誰かがあなたを自分の Wishlist に招待しています！次のリンクからサインアップしてください: {url}",
+        "invite-body": "Wunschlistä に招待されました！招待を承認するには、以下のリンクをクリックしてください。",
+        "invite-button": "Wunschlistä に参加する",
+        "invite-fallback-text": "誰かがあなたを自分の Wunschlistä に招待しています！次のリンクからサインアップしてください: {url}",
         "invite-footer": "参加を希望しない場合、またはこのメールが誤って送信されたと思われる場合は、このメールを無視してください。",
-        "invite-subject": "Wishlist への招待",
-        "invite-title": "Wishlist へようこそ！",
+        "invite-subject": "Wunschlistä への招待",
+        "invite-title": "Wunschlistä へようこそ！",
         "pw-reset-body": "パスワードのリセットをリクエストした場合は、以下のリンクをクリックして手続きを完了してください。このリクエストに心当たりがない場合は、このメールを無視してください。",
         "pw-reset-fallback-text": "以下のリンクからパスワードをリセットしてください: {resetUrl}",
         "pw-reset-title": "パスワードの再設定",
         "test-body": "このメッセージを読めているということは、おめでとうございます！メール設定は正しく構成されているようです！",
-        "test-subject": "Wishlist からのテスト"
+        "test-subject": "Wunschlistä からのテスト"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "商品は少なくとも一つのリストに追加する必要があります",

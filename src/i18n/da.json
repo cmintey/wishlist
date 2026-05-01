@@ -22,7 +22,7 @@
         "two-people-looking-in-an-empty-box": "To personer der kigger på en tom kasse",
         "unpurchase": "Markér ønske som ikke-købt",
         "upload-profile-image": "upload profilbillede",
-        "wishlist-logo": "Wishlist Logo",
+        "wishlist-logo": "Wunschlistä Logo",
         "user-menu": "Brugermenu",
         "remove-manager-name": "Fjern {name}"
     },
@@ -44,7 +44,7 @@
         "claims-require-email": "Kræv Email",
         "claims-require-email-tooltip": "Kræv en email-adresse for at kunne reservere et ønske anonymt.",
         "clear-lists": "Nulstil {groupSpecific, select, true {} other {alle}} {claimedOnly, select, true {reserverede ønsker} other {lister}}",
-        "clear-lists-confirmation": "Er du sikker på at du vil nulstille {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}? <b>Denne handling kan ikke omgøres!</b>",
+        "clear-lists-confirmation": "Er du sikker på at du vil nulstille {claimedOnly, select, true {claimed items} other {all wunschlistäs}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}? <b>Denne handling kan ikke omgøres!</b>",
         "credentials": "Brugeroplysninger",
         "default-group": "Standardgruppe",
         "default-group-tooltip": "Nye brugere vil blive tilføjet til denne gruppe, hvis de ikke har modtaget en gruppe-specifik tilmeldings-token.",
@@ -173,17 +173,17 @@
         "your-password-was-reset": "Din adgangskode blev nulstillet."
     },
     "email": {
-        "invite-body": "Du er blevet inviteret til at deltage i Wishlist! Hvis du vil acceptere, klik på linket herunder.",
-        "invite-button": "Deltag i Wishlist",
-        "invite-fallback-text": "Nogen har inviteret dig til at deltage i deres Wishlist! Følg linket for at tilmelde dig: {url}",
+        "invite-body": "Du er blevet inviteret til at deltage i Wunschlistä! Hvis du vil acceptere, klik på linket herunder.",
+        "invite-button": "Deltag i Wunschlistä",
+        "invite-fallback-text": "Nogen har inviteret dig til at deltage i deres Wunschlistä! Følg linket for at tilmelde dig: {url}",
         "invite-footer": "Hvis du ikke ønsker at deltage, eller tror at denne email er sendt ved en fejl, kan du ignorere den.",
-        "invite-subject": "Wishlist Invitation",
-        "invite-title": "Velkommen til Wishlist!",
+        "invite-subject": "Wunschlistä Invitation",
+        "invite-title": "Velkommen til Wunschlistä!",
         "pw-reset-body": "Hvis du har bedt om en nulstilling af adgangskode, klik på linket herunder for at fuldføre. Hvis du ikke bad om det, kan du ignorere denne email.",
         "pw-reset-fallback-text": "Følg linket for at nulstille din adgangskode: {resetUrl}",
         "pw-reset-title": "Nulstil adgangskode",
         "test-body": "Hvis du læser dette, tillykke. Email-indstillinger ser ud til at være korrekte!",
-        "test-subject": "Test fra Wishlist"
+        "test-subject": "Test fra Wunschlistä"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "Et ønske skal tilføjes til mindst én liste",
@@ -450,7 +450,7 @@
         "lets-get-started": "Lad os komme i gang",
         "next": "Næste",
         "unable-to-update-password": "Kan ikke opdatere adgangskode",
-        "welcome-to-wishlist": "Velkommen til Wishlist"
+        "welcome-to-wishlist": "Velkommen til Wunschlistä"
     },
     "unable-to-load-icons": "Kan ikke indlæse ikoner."
 }

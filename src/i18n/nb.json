@@ -2,15 +2,15 @@
     "email": {
         "invite-fallback-text": "Noen har invitert deg til å bli med i Ønskelisten deres! Følg linken for å registrere deg: {url}",
         "pw-reset-body": "Hvis du ba om tilbakestilling av passordet, klikk linken under for å fullføre prosessen. Hvis du ikke har bedt om nytt passord kan du se bort i fra denne e-posten.",
-        "invite-body": "Du har blitt invitert til å bli med i Wishlist. For å godta invitasjonen, klikk på linken under.",
-        "invite-button": "Bli med i Wishlist",
+        "invite-body": "Du har blitt invitert til å bli med i Wunschlistä. For å godta invitasjonen, klikk på linken under.",
+        "invite-button": "Bli med i Wunschlistä",
         "invite-footer": "Hvis du ikke ønsker å bli med eller tenker at denne e-posten ble sendt ved en feil, kan du ignorere denne e-posten.",
-        "invite-subject": "Invitajon til Wishlist",
-        "invite-title": "Velkommen til Wishlist!",
+        "invite-subject": "Invitajon til Wunschlistä",
+        "invite-title": "Velkommen til Wunschlistä!",
         "pw-reset-fallback-text": "Følg linken for å resette passordet ditt {resetUrl}",
         "pw-reset-title": "Reset passord",
         "test-body": "Hvis du leser dette, gratulerer! E-postoppsettet ser ut til å ha blitt satt opp riktig!",
-        "test-subject": "Test fra Wishlist"
+        "test-subject": "Test fra Wunschlistä"
     },
     "admin": {
         "group-name": "Gruppenavn",
@@ -253,7 +253,7 @@
         "toggle-password-visibility": "Veksle synlighet for passord",
         "two-people-looking-in-an-empty-box": "To personer som ser i en tom boks",
         "upload-profile-image": "Last opp profilbilde",
-        "wishlist-logo": "Wishlist Logo",
+        "wishlist-logo": "Wunschlistä Logo",
         "password-strength": "Passordstyrke",
         "decrease-priority": "reduser prioritet for {name}",
         "menu": "meny",
@@ -357,7 +357,7 @@
         "global-settings": "Offentlige innstillinger",
         "hi": "Hei!",
         "invite-users": "Inviter brukere",
-        "welcome-to-wishlist": "Velkommen til Wishlist",
+        "welcome-to-wishlist": "Velkommen til Wunschlistä",
         "invite-users-subtext": "Hvis du er klar, inviter flere brukere! Du kan legge til flere brukere senere fra admin- eller gruppeinstillingene."
     },
     "wishes": {

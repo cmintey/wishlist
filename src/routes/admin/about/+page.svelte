@@ -16,7 +16,7 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-    <h2 class="h2">Wishlist</h2>
+    <h2 class="h2">Wunschlistä</h2>
     <span>
         {@html $t("admin.version", { values: { version, href: versionHref, class: "anchor" } })}
     </span>

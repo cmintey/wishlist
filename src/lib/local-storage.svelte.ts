@@ -19,7 +19,7 @@ export class LocalStorage<T> {
         this.#key = key;
         this.#value = initial;
 
-        if (typeof localStorage !== "undefined") {
+        if (typeof localStorage !== "undefined" && typeof localStorage.getItem === "function") {
             if (localStorage.getItem(key) === null) {
                 localStorage.setItem(key, JSON.stringify(initial));
             }
@@ -32,7 +32,9 @@ export class LocalStorage<T> {
         let root;
         try {
             root =
-                typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem(this.#key) as any) : this.#value;
+                typeof localStorage !== "undefined" && typeof localStorage.getItem === "function"
+                    ? JSON.parse(localStorage.getItem(this.#key) as any)
+                    : this.#value;
         } catch {
             root = this.#value;
         }
@@ -56,7 +58,7 @@ export class LocalStorage<T> {
                         this.#version += 1;
                         Reflect.set(target, property, value);
 
-                        if (typeof localStorage !== "undefined") {
+                        if (typeof localStorage !== "undefined" && typeof localStorage.setItem === "function") {
                             localStorage.setItem(this.#key, JSON.stringify(root));
                         }
 
@@ -93,7 +95,7 @@ export class LocalStorage<T> {
     }
 
     set current(value: T) {
-        if (typeof localStorage !== "undefined") {
+        if (typeof localStorage !== "undefined" && typeof localStorage.setItem === "function") {
             localStorage.setItem(this.#key, JSON.stringify(value));
         }
 

@@ -23,7 +23,7 @@
         "unpurchase": "Označit jako nezakoupené",
         "upload-profile-image": "nahrát profilový obrázek",
         "user-menu": "Uživatelské menu",
-        "wishlist-logo": "Wishlist Logo",
+        "wishlist-logo": "Wunschlistä Logo",
         "drag-handle": "úchyt pro přetažení {name}"
     },
     "admin": {
@@ -114,10 +114,10 @@
         "version": "Verze: <a class=\"{class}\" href=\"{href}\">{version}</a>",
         "wishlist-mode": "Režim seznamu přání",
         "wishlist-mode-alert": "V této skupině je {memberCount} členů a {listCount} seznamů. Nemůžete přepnout režim, dokud neodstraníte všechny členy a seznamy kromě jednoho člena a jednoho seznamu.",
-        "wishlist-mode-display-text": "V režimu \"Wishlist/Seznam přání\" můžete mít více uživatelů a seznamů a rezervovat si položky od jiných uživatelů. V režimu \"Registry\" máte jeden seznam, který můžete veřejně sdílet.",
+        "wishlist-mode-display-text": "V režimu \"Wunschlistä/Seznam přání\" můžete mít více uživatelů a seznamů a rezervovat si položky od jiných uživatelů. V režimu \"Registry\" máte jeden seznam, který můžete veřejně sdílet.",
         "wishlist-mode-registry": "Registry",
         "wishlist-mode-registry-tooltip": "Jeden uživatel s jedním veřejným seznamem. Uživatelé z jiných skupin mohou navrhovat položky, pokud je to povoleno, a anonymní uživatelé mohou rezervovat položky.",
-        "wishlist-mode-wishlist": "Wishlist / seznam přání",
+        "wishlist-mode-wishlist": "Wunschlistä / seznam přání",
         "wishlist-mode-wishlist-tooltip": "Více uživatelů a více seznamů s možností rezervace a navrhování položek. Seznamy mohou být zveřejněny, pokud to skupina povoluje.",
         "build-date": "Datum buildu: {buildDate}",
         "oidc": "OpenID Connect (OIDC)",
@@ -181,17 +181,17 @@
         "no-callback-url-supplied": "Není zadáno callback URL"
     },
     "email": {
-        "invite-body": "Byl jste pozván, abyste se přidal do aplikace Wishlist. Pro přijmutí pozvánky klikněte na link níže.",
-        "invite-button": "Připojit se do aplikace Wishlist",
-        "invite-fallback-text": "Byl jste pozván do aplikace Wishlist. Klikněte na link pro registraci: {url}",
+        "invite-body": "Byl jste pozván, abyste se přidal do aplikace Wunschlistä. Pro přijmutí pozvánky klikněte na link níže.",
+        "invite-button": "Připojit se do aplikace Wunschlistä",
+        "invite-fallback-text": "Byl jste pozván do aplikace Wunschlistä. Klikněte na link pro registraci: {url}",
         "invite-footer": "Pokud se přidat nechcete a nebo si myslíte, že jste tento email dostal omylem, tento email ignorujte.",
         "invite-subject": "Pozvat",
-        "invite-title": "Vítejte v aplikaci Wishlist!",
+        "invite-title": "Vítejte v aplikaci Wunschlistä!",
         "pw-reset-body": "Pokud jste žádali o změnu hesla, klikněte na odkaz níže pro obnovení hesla. Pokud jste nežádali, tento email ignorujte.",
         "pw-reset-fallback-text": "Kliknete na odkaz pro obnovu hesla {resetUrl}",
         "pw-reset-title": "Obnovit heslo",
         "test-body": "Pokud čtete tyto řádky, nastavení emailu bylo úspěšné!",
-        "test-subject": "Testovací email z Wishlist"
+        "test-subject": "Testovací email z Wunschlistä"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "Položka musí být přidána alespoň na jeden seznam",

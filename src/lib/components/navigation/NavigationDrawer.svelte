@@ -27,10 +27,11 @@
                 class="rounded-l-none data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 starting:data-[state=closed]:translate-x-0 starting:data-[state=open]:-translate-x-full"
             >
                 <header class="flex items-center justify-between">
-                    <Dialog.Title class="flex flex-row items-center gap-2">
-                        <img class="h-10 md:h-12" alt="Wishlist Logo" src={logo} />
-                        <span class="text-primary-950-50 text-2xl font-bold">Wishlist</span>
-                    </Dialog.Title>
+                    <div class="flex flex-row items-center gap-x-2">
+                    <img class="h-10 md:h-12" alt="Wunschlistä Logo" src={logo} />
+                    <span class="text-primary-950-50 text-2xl font-bold">Wunschlistä</span>
+                    </div>
+
                     <Dialog.CloseTrigger class="btn-icon preset-tonal">
                         <iconify-icon icon="ion:close"></iconify-icon>
                         <span class="sr-only">{$t("a11y.close")}</span>

@@ -3,6 +3,7 @@ import { derived, type Readable } from "svelte/store";
 import type { MessageObject, MessageFormatter } from "./server/i18n";
 import { createContext } from "svelte";
 import { dev } from "$app/environment";
+import { env } from "$env/dynamic/public";
 
 export interface Lang {
     name: string;
@@ -88,8 +89,10 @@ export const [getLocale, setLocale] = createContext<string>();
 export const initLang = async (locale: string) => {
     supportedLangs.forEach((lang) => register(lang.code, lang.loader));
 
+    const fallback = env.PUBLIC_DEFAULT_LOCALE || (dev ? "dev" : defaultLang.code);
+
     await init({
-        fallbackLocale: dev ? "dev" : defaultLang.code,
+        fallbackLocale: fallback,
         initialLocale: locale
     });
 };
@@ -124,7 +127,7 @@ export const getClosestAvailableLocale = (langs: readonly string[]): Lang => {
             return supportedLangsByCode[lang];
         }
     }
-    return defaultLang;
+    return (env.PUBLIC_DEFAULT_LOCALE && supportedLangsByCode[env.PUBLIC_DEFAULT_LOCALE]) || defaultLang;
 };
 
 export const getPrimaryLang = (locale: string) => {

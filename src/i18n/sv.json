@@ -10,7 +10,7 @@
         "clear-icon-field": "rensa ikonfält",
         "two-people-looking-in-an-empty-box": "Två personer tittar i en tom låda",
         "toggle-manager": "{isManager, select, true {ta bort} other {lägg till}} {user} som ledare",
-        "wishlist-logo": "Wishlist Logotyp",
+        "wishlist-logo": "Wunschlistä Logotyp",
         "a-person-looking-at-an-empty-board": "En person som tittar på en tom tavla",
         "cancel-editing": "avbryt redigering",
         "clear-url-field": "rensa url-fält",
@@ -183,15 +183,15 @@
     "email": {
         "pw-reset-title": "Återställ lösenord",
         "invite-footer": "Om du inte vill gå med eller tror att detta e-postmeddelande skickas av misstag, kan du ignorera detta e-postmeddelande.",
-        "invite-body": "Du har blivit inbjuden att gå med i Wishlist! För att acceptera inbjudan, klicka på länken nedan.",
-        "invite-button": "Gå med i Wishlist",
+        "invite-body": "Du har blivit inbjuden att gå med i Wunschlistä! För att acceptera inbjudan, klicka på länken nedan.",
+        "invite-button": "Gå med i Wunschlistä",
         "invite-fallback-text": "Någon har bjudit in dig att gå med i deras önskelista! Följ länken för att registrera dig: {url}",
-        "invite-subject": "Wishlist Inbjudan",
-        "invite-title": "Välkommen till Wishlist!",
+        "invite-subject": "Wunschlistä Inbjudan",
+        "invite-title": "Välkommen till Wunschlistä!",
         "pw-reset-body": "Om du begärde en lösenordsåterställning klickar du på länken nedan för att slutföra processen. Om du inte gjorde denna begäran kan du ignorera det här e-postmeddelandet.",
         "pw-reset-fallback-text": "Följ länken för att återställa ditt lösenord {resetUrl}",
         "test-body": "Om du läser detta, så grattis! E-postkonfigurationen verkar ha konfigurerats korrekt!",
-        "test-subject": "Test från Wishlist"
+        "test-subject": "Test från Wunschlistä"
     },
     "errors": {
         "group-does-not-exist": "Gruppen finns inte",
@@ -355,7 +355,7 @@
         "global-settings": "Globala inställningar",
         "first-account-admin": "Ditt första konto kommer att vara administratör. Du kan alltid lägga till fler administratörer senare.",
         "global-settings-subtext": "Dessa inställningar kommer att tillämpas på alla grupper som skapas. Vissa inställningar kan åsidosättas av enskilda grupper.",
-        "welcome-to-wishlist": "Välkommen till Wishlist",
+        "welcome-to-wishlist": "Välkommen till Wunschlistä",
         "hi": "Hej!",
         "invite-users": "Bjud in användare",
         "invite-users-subtext": "Om du är redo, bjud in några fler användare! Du kan alltid bjuda in användare senare från administratörs- eller gruppinställningarna."
@@ -445,7 +445,7 @@
         "hide-all-currencies": "dölj alla valutor...",
         "hide-claims": "Dölj reservationer",
         "hide-description": "Dölj beskrivning",
-        "import-error-text": "Wishlist kunde inte fastställa produktadressen från de angivna parametrarna. Du kan fortfarande kopiera produktadressen manuellt och lägga till artikeln med den vanliga processen.",
+        "import-error-text": "Wunschlistä kunde inte fastställa produktadressen från de angivna parametrarna. Du kan fortfarande kopiera produktadressen manuellt och lägga till artikeln med den vanliga processen.",
         "import-error-title": "Det gick inte att importera artikeln",
         "import-item": "Importera artikel",
         "import-item-text": "Innan du kan importera en artikel måste du välja en grupp och en lista",
