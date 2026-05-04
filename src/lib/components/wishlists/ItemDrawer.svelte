@@ -6,22 +6,37 @@
     import { getFormatter } from "$lib/i18n";
     import ItemImage from "./ItemCard/components/ItemImage.svelte";
     import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
-    import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
+    import { Dialog, Portal, useDialog } from "@skeletonlabs/skeleton-svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import type { InternalItemCardProps } from "./ItemCard/ItemCard.svelte";
 
-    type ItemDrawerProps = {
-        open: boolean;
-    };
-
-    let {
-        open = $bindable(false),
-        defaultImage: _defaultImage,
-        item,
-        ...props
-    }: InternalItemCardProps & ItemDrawerProps = $props();
+    let { defaultImage: _defaultImage, item, ...props }: InternalItemCardProps = $props();
     const t = getFormatter();
+
+    const id = $props.id();
+    const dialog = useDialog({ id });
+
+    let mount = $state(false);
+
+    $effect(() => {
+        if (page.url.searchParams.get("item-id") === item.id.toString()) {
+            dialog().setOpen(true);
+        }
+    });
+
+    $effect(() => {
+        if (dialog().open) {
+            mount = true;
+        } else {
+            setTimeout(() => (mount = false), 250);
+        }
+    });
+
+    async function closeDialog() {
+        await goto(page.url.pathname, { replaceState: true, noScroll: true });
+        dialog().setOpen(false);
+    }
 
     const transitionIn =
         "data-[state=open]:translate-y-0 starting:data-[state=open]:translate-y-1/2 md:starting:data-[state=open]:translate-y-0 md:data-[state=open]:scale-100 md:starting:data-[state=open]:scale-90";
@@ -29,8 +44,8 @@
         "data-[state=closed]:translate-y-1/2 starting:data-[state=closed]:translate-y-0 md:data-[state=closed]:translate-y-0 md:data-[state=closed]:scale-90 md:starting:data-[state=closed]:scale-100";
 </script>
 
-<Dialog onOpenChange={(e) => (open = e.open)} {open}>
-    {#if open}
+<Dialog.Provider value={dialog}>
+    {#if mount}
         <Portal>
             <ModalBackdrop class="duration-250"></ModalBackdrop>
             <Dialog.Positioner class="fixed inset-0 z-50 flex items-end justify-center sm:mx-4 sm:items-center">
@@ -44,7 +59,7 @@
                         <Dialog.CloseTrigger
                             class="preset-tonal-surface border-surface-500 btn-icon border"
                             aria-label={$t("a11y.close")}
-                            onclick={() => goto(page.url.pathname, { replaceState: true, noScroll: true })}
+                            onclick={closeDialog}
                         >
                             <iconify-icon icon="ion:close"></iconify-icon>
                         </Dialog.CloseTrigger>
@@ -68,10 +83,10 @@
 
                     <div class="flex flex-row justify-between">
                         <ClaimButtons {item} {...props} />
-                        <ManageButtons {item} {...props} onEdit={() => (open = false)} />
+                        <ManageButtons {item} {...props} onEdit={() => dialog().setOpen(false)} />
                     </div>
                 </ModalContent>
             </Dialog.Positioner>
         </Portal>
     {/if}
-</Dialog>
+</Dialog.Provider>

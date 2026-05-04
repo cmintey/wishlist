@@ -46,7 +46,6 @@
 <script lang="ts">
     import type { User } from "$lib/generated/prisma/client";
     import { goto } from "$app/navigation";
-    import { page } from "$app/state";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/server/i18n";
@@ -75,20 +74,8 @@
 
     const id = $props.id();
 
-    let drawerOpen = $state(false);
-
-    $effect(() => {
-        if (page.url.searchParams.get("item-id") === item.id.toString()) {
-            openDrawer();
-        }
-    });
-
     function launchDrawer() {
         goto(`?item-id=${item.id}`, { replaceState: true, noScroll: true });
-    }
-
-    function openDrawer() {
-        drawerOpen = true;
     }
 
     const ItemCard = $derived(isTileView ? GridItemCard : ListItemCard);
@@ -122,7 +109,6 @@
     {showNameAcrossGroups}
     {user}
     {userCanManage}
-    bind:open={drawerOpen}
 />
 
 <div

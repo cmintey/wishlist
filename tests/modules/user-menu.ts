@@ -40,7 +40,7 @@ export class UserMenu {
     async close() {
         if (await this.navList.isVisible()) {
             await this.avatarButton.click();
-            await expect(this.navList).toBeVisible();
+            await expect(this.navList).not.toBeVisible();
         }
     }
 
