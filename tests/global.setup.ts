@@ -12,7 +12,6 @@ setup("setup wizard", async ({ page }) => {
     const setupWizardPage = new SetupWizardPage(page);
 
     await setupWizardPage.getStarted();
-    await setupWizardPage.createAdminAccount();
     await setupWizardPage.completeSteps();
 
     await expect(page.getByRole("heading", { name: "Lists" })).toBeVisible();

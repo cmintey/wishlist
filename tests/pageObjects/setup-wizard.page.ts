@@ -30,21 +30,31 @@ export class SetupWizardPage {
         await this.getStartedButton.click();
     }
 
-    async createAdminAccount() {
+    async fillAdmin() {
         await expect(this.createAccountHeader).toBeVisible();
         await this.createAccountForm.fill("Admin", "admin", "admin@example.com", randomString());
+    }
+
+    async next() {
         await this.nextButton.click();
-        await expect(this.createAccountHeader).not.toBeVisible();
+    }
+
+    async complete() {
+        await this.completeButton.click();
     }
 
     async completeSteps() {
-        while (await this.nextButton.isVisible()) {
-            await this.nextButton.click();
-            await this.page.waitForTimeout(200);
-        }
+        // Step 1: Admin
+        await this.fillAdmin();
+        await this.next();
+        await this.page.waitForURL("/setup-wizard/step/2", { waitUntil: "domcontentloaded" });
 
-        await expect(this.completeButton).toBeVisible();
-        await this.completeButton.click();
-        await this.page.waitForTimeout(100);
+        // Step 2: Settings
+        await this.next();
+        await this.page.waitForURL("/setup-wizard/step/3", { waitUntil: "domcontentloaded" });
+
+        // Step 3: Invite
+        await this.complete();
+        await this.page.waitForLoadState("load");
     }
 }
