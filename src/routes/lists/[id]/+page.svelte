@@ -91,23 +91,23 @@
         items.forEach((it, idx) => (it.displayOrder = idx));
     };
 
-    const groupItems = (items: ItemOnListDTO[]) => {
+    const sortItemsByClaimStatus = (items: ItemOnListDTO[]) => {
         // When on own list, don't separate out claimed vs un-claimed
         if (data.list.owner.isMe) {
-            return [items, []];
+            return items;
         }
-        return items.reduce(
-            (g, v) => {
-                const userHasClaimed = v.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
-                if (v.isClaimable && !userHasClaimed) {
-                    g[0].push(v);
-                } else {
-                    g[1].push(v);
-                }
-                return g;
-            },
-            [[], []] as ItemOnListDTO[][]
-        );
+        console.log(items);
+        return items.toSorted((a, b) => {
+            const userHasClaimedA = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
+            const userHasClaimedB = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
+            if (a.isClaimable && !userHasClaimedA && !(b.isClaimable && !userHasClaimedB)) {
+                return -1;
+            } else if (!(a.isClaimable && !userHasClaimedA) && b.isClaimable && !userHasClaimedB) {
+                return 1;
+            } else {
+                return a.id - b.id;
+            }
+        });
     };
 
     const updateHash = async () => {
@@ -391,27 +391,26 @@
                 </div>
             {/each}
         {:else}
-            {#each groupItems(items) as groupedItems}
-                {#each groupedItems as item (item.id)}
-                    <div
-                        in:receive={{ key: item.id }}
-                        out:send|local={{ key: item.id }}
-                        animate:flip={{ duration: flipDurationMs }}
-                    >
-                        <ItemCard
-                            groupId={data.list.groupId}
-                            {isTileView}
-                            {item}
-                            onPublicList={!data.loggedInUser && data.list.public}
-                            requireClaimEmail={data.requireClaimEmail}
-                            showClaimForOwner={data.showClaimForOwner}
-                            showClaimedName={data.showClaimedName}
-                            showNameAcrossGroups={data.showNameAcrossGroups}
-                            user={data.loggedInUser}
-                            userCanManage={data.list.isManager}
-                        />
-                    </div>
-                {/each}
+            {#each sortItemsByClaimStatus(items) as item (item.id)}
+                <div
+                    id="item-{item.id}-wrapper"
+                    in:receive={{ key: item.id }}
+                    out:send={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
+                    <ItemCard
+                        groupId={data.list.groupId}
+                        {isTileView}
+                        {item}
+                        onPublicList={!data.loggedInUser && data.list.public}
+                        requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
+                        showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
+                        user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
+                    />
+                </div>
             {/each}
         {/if}
     </div>

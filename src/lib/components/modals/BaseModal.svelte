@@ -28,7 +28,7 @@
     import ModalContent from "./parts/ModalContent.svelte";
     import type { ClassValue } from "svelte/elements";
 
-    let { trigger, title, description, actions, children, ...rest }: BaseModalProps = $props();
+    let { trigger, title, description, actions, children: content, ...rest }: BaseModalProps = $props();
 </script>
 
 <Dialog {...rest}>
@@ -50,7 +50,7 @@
                         {@render description()}
                     {/if}
                 </Dialog.Description>
-                {@render children?.()}
+                {@render content?.()}
                 <div class="flex flex-wrap justify-between gap-y-2">
                     {@render actions(actionProps)}
                 </div>

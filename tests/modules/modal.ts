@@ -22,18 +22,18 @@ export class Modal {
     }
 
     async assertTitle(title: string) {
-        await expect(this.modal).toBeVisible();
+        await this.modal.waitFor({ state: "visible", timeout: 5000 });
         await expect(this.modalHeader).toHaveText(title);
     }
 
     async cancel() {
-        await expect(this.modal).toBeVisible();
+        await this.modal.waitFor({ state: "visible", timeout: 5000 });
         await this.cancelButton.click();
     }
 
     async submit() {
-        await expect(this.modal).toBeVisible();
+        await this.modal.waitFor({ state: "visible", timeout: 5000 });
         await this.submitButton.click();
-        await expect(this.modal).not.toBeVisible();
+        await this.modal.waitFor({ state: "detached", timeout: 5000 });
     }
 }

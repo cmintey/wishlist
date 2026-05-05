@@ -16,7 +16,7 @@
         <div
             {...elProps}
             class={[
-                "card bg-surface-100-900 w-full max-w-xl space-y-4 overflow-y-auto p-4 shadow-xl transition-all transition-discrete data-[state=closed]:opacity-0 data-[state=open]:opacity-100 starting:data-[state=closed]:opacity-100 starting:data-[state=open]:opacity-0",
+                "card bg-surface-100-900 border-surface-200-800 w-full max-w-xl space-y-4 overflow-y-auto border p-4 shadow-xl transition-all transition-discrete data-[state=closed]:opacity-0 data-[state=open]:opacity-100 starting:data-[state=closed]:opacity-100 starting:data-[state=open]:opacity-0",
                 props.class
             ]}
         >
