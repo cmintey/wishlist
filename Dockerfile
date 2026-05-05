@@ -1,6 +1,6 @@
 FROM node:24-slim@sha256:03eae3ef7e88a9de535496fb488d67e02b9d96a063a8967bae657744ecd513f2 AS base
 WORKDIR /usr/src/app
-RUN npm install -g pnpm@latest-10
+RUN npm install -g pnpm@latest-11
 
 # Build step
 FROM base AS build
