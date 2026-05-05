@@ -77,18 +77,3 @@
     <!-- Trail -->
     <NavMenu {groups} {isProxyUser} {user} />
 </div>
-
-<svelte:head>
-    <script>
-        (function initMode() {
-            let mode =
-                typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem("mode")) || "system" : "system";
-            if (mode === "system") {
-                const pref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-                document.documentElement.setAttribute("data-mode", pref);
-            } else {
-                document.documentElement.setAttribute("data-mode", mode);
-            }
-        })();
-    </script>
-</svelte:head>

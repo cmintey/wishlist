@@ -23,59 +23,38 @@
 </script>
 
 <script lang="ts">
-    import {
-        Dialog,
-        Portal,
-        useDialog,
-        type DialogRootProps,
-        type DialogTriggerProps
-    } from "@skeletonlabs/skeleton-svelte";
+    import { Dialog, Portal, type DialogRootProps, type DialogTriggerProps } from "@skeletonlabs/skeleton-svelte";
     import ModalBackdrop from "./parts/ModalBackdrop.svelte";
     import ModalContent from "./parts/ModalContent.svelte";
     import type { ClassValue } from "svelte/elements";
 
     let { trigger, title, description, actions, children: content, ...rest }: BaseModalProps = $props();
-
-    const id = $props.id();
-    const dialog = $derived(useDialog({ id, ...rest }));
-
-    let mount = $state(false);
-
-    $effect(() => {
-        if (dialog().open) {
-            mount = true;
-        } else {
-            setTimeout(() => (mount = false), 200);
-        }
-    });
 </script>
 
-<Dialog.Provider value={dialog}>
+<Dialog {...rest}>
     <Dialog.Trigger element={trigger} />
-    {#if mount}
-        <Portal>
-            <ModalBackdrop />
+    <Portal>
+        <ModalBackdrop />
 
-            <Dialog.Positioner class="fixed inset-0 z-50 mx-4 flex items-center justify-center">
-                <ModalContent
-                    class="max-h-3/4 data-[state=closed]:scale-90 data-[state=open]:scale-100 starting:data-[state=closed]:scale-100 starting:data-[state=open]:scale-90"
-                >
-                    <Dialog.Title class="text-xl font-bold md:text-2xl">
-                        {title}
-                    </Dialog.Title>
-                    <Dialog.Description>
-                        {#if typeof description === "string"}
-                            {@html description}
-                        {:else}
-                            {@render description()}
-                        {/if}
-                    </Dialog.Description>
-                    {@render content?.()}
-                    <div class="flex flex-wrap justify-between gap-y-2">
-                        {@render actions(actionProps)}
-                    </div>
-                </ModalContent>
-            </Dialog.Positioner>
-        </Portal>
-    {/if}
-</Dialog.Provider>
+        <Dialog.Positioner class="fixed inset-0 z-50 mx-4 flex items-center justify-center">
+            <ModalContent
+                class="max-h-3/4 data-[state=closed]:scale-90 data-[state=open]:scale-100 starting:data-[state=closed]:scale-100 starting:data-[state=open]:scale-90"
+            >
+                <Dialog.Title class="text-xl font-bold md:text-2xl">
+                    {title}
+                </Dialog.Title>
+                <Dialog.Description>
+                    {#if typeof description === "string"}
+                        {@html description}
+                    {:else}
+                        {@render description()}
+                    {/if}
+                </Dialog.Description>
+                {@render content?.()}
+                <div class="flex flex-wrap justify-between gap-y-2">
+                    {@render actions(actionProps)}
+                </div>
+            </ModalContent>
+        </Dialog.Positioner>
+    </Portal>
+</Dialog>
