@@ -42,7 +42,7 @@
         "pino-pretty": "^13.1.1",
         "prettier": "^3.6.2",
         "prettier-plugin-svelte": "^3.4.0",
-        "prettier-plugin-tailwindcss": "^0.7.2",
+        "prettier-plugin-tailwindcss": "^0.8.0",
         "pulltorefreshjs": "^0.1.22",
         "svelte": "^5.38.2",
         "svelte-check": "^4.3.1",
