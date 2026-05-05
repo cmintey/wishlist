@@ -1,11 +1,19 @@
-engineStrict: true
+allowBuilds:
+  '@prisma/engines': set this to true or false
+  '@tailwindcss/oxide': true
+  better-sqlite3: true
+  es5-ext: true
+  esbuild: true
+  prisma: true
+  re2: true
+  sharp: false
+  svelte-preprocess: true
 autoInstallPeers: false
+engineStrict: true
 strictPeerDependencies: false
-ignoredBuiltDependencies:
-    - sharp
 supportedArchitectures:
-    os:
-        - linux
-    cpu:
-        - x64
-        - arm64
+  cpu:
+    - x64
+    - arm64
+  os:
+    - linux
