@@ -96,12 +96,16 @@
         if (data.list.owner.isMe) {
             return items;
         }
+        console.log(items);
         return items.toSorted((a, b) => {
-            const userHasClaimed = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
-            if (a.isClaimable && !userHasClaimed) {
+            const userHasClaimedA = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
+            const userHasClaimedB = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
+            if (a.isClaimable && !userHasClaimedA && !(b.isClaimable && !userHasClaimedB)) {
                 return -1;
-            } else {
+            } else if (!(a.isClaimable && !userHasClaimedA) && b.isClaimable && !userHasClaimedB) {
                 return 1;
+            } else {
+                return a.id - b.id;
             }
         });
     };
