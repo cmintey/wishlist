@@ -1,5 +1,5 @@
 allowBuilds:
-  '@prisma/engines': set this to true or false
+  '@prisma/engines': false
   '@tailwindcss/oxide': true
   better-sqlite3: true
   es5-ext: true
