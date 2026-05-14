@@ -152,33 +152,34 @@
     {/snippet}
 
     {#if !userId}
-        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
-        <label class="w-fit">
-            <span>{$t("general.name-optional")}</span>
-            <div class="input-group grid-cols-[auto_1fr_auto]">
-                <div class="ig-cell preset-tonal">
-                    <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
-                </div>
-                <input class="ig-input" type="text" bind:value={name} />
-            </div>
-        </label>
-
-        {#if requireClaimEmail}
-            <label class="w-fit">
-                <span>{$t("auth.email")}</span>
+        <div class="flex flex-col gap-2">
+            <label class="label w-fit">
+                <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="ig-cell preset-tonal">
                         <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
                     </div>
-                    <input class="ig-input" required type="email" bind:value={username} />
+                    <input class="ig-input" type="text" bind:value={name} />
                 </div>
             </label>
-        {/if}
+
+            {#if requireClaimEmail}
+                <label class="label w-fit">
+                    <span>{$t("auth.email")}</span>
+                    <div class="input-group grid-cols-[auto_1fr_auto]">
+                        <div class="ig-cell preset-tonal">
+                            <iconify-icon class="text-lg" icon="ion:person"></iconify-icon>
+                        </div>
+                        <input class="ig-input" required type="email" bind:value={username} />
+                    </div>
+                </label>
+            {/if}
+        </div>
     {/if}
 
     {#if item.remainingQuantity > 1 || claim}
         <div class="flex flex-col gap-1">
-            <label class="w-fit">
+            <label class="label w-fit">
                 <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
                 <input
                     class={["input", error && "input-invalid"]}

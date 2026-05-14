@@ -6,7 +6,7 @@
     import { getFormatter } from "$lib/i18n";
     import ItemImage from "./ItemCard/components/ItemImage.svelte";
     import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
-    import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
+    import { Dialog, Portal, type DialogRootProps } from "@skeletonlabs/skeleton-svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import type { InternalItemCardProps } from "./ItemCard/ItemCard.svelte";
@@ -27,13 +27,22 @@
         open = false;
     }
 
+    const onOpenChange: DialogRootProps["onOpenChange"] = async (details) => {
+        if (details.open) {
+            open = true;
+        } else {
+            open = false;
+            await goto(page.url.pathname, { replaceState: true, noScroll: true });
+        }
+    };
+
     const transitionIn =
         "data-[state=open]:translate-y-0 starting:data-[state=open]:translate-y-1/2 md:starting:data-[state=open]:translate-y-0 md:data-[state=open]:scale-100 md:starting:data-[state=open]:scale-90";
     const transitionOut =
         "data-[state=closed]:translate-y-1/2 starting:data-[state=closed]:translate-y-0 md:data-[state=closed]:translate-y-0 md:data-[state=closed]:scale-90 md:starting:data-[state=closed]:scale-100";
 </script>
 
-<Dialog onOpenChange={(e) => (open = e.open)} {open}>
+<Dialog {onOpenChange} {open}>
     <Portal>
         <ModalBackdrop class="duration-250"></ModalBackdrop>
         <Dialog.Positioner class="fixed inset-0 z-50 flex items-end justify-center sm:mx-4 sm:items-center">
