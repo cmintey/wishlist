@@ -5,6 +5,7 @@ import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
 import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
+import { comparePrice, compareDisplayOrder } from "$lib/comparators";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -211,12 +212,20 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
 
     if (options.sort === "price") {
         if (options.sortDir === "desc") {
-            itemDTOs.sort((a, b) => (b.itemPrice?.value ?? -Infinity) - (a.itemPrice?.value ?? -Infinity));
+            itemDTOs.sort((a, b) => {
+                const price = comparePrice(a, b, { reversed: true, nullsLast: true });
+                if (price !== 0) return price;
+                return compareDisplayOrder(a, b);
+            });
         } else {
-            itemDTOs.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
+            itemDTOs.sort((a, b) => {
+                const price = comparePrice(a, b);
+                if (price !== 0) return price;
+                return compareDisplayOrder(a, b);
+            });
         }
     } else {
-        itemDTOs.sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity));
+        itemDTOs.sort(compareDisplayOrder);
     }
 
     return itemDTOs;
