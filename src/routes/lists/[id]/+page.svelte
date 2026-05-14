@@ -26,6 +26,7 @@
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
     import { toaster } from "$lib/components/toaster";
+    import { compareClaimStatus } from "$lib/comparators";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -35,7 +36,10 @@
     let reordering = $state(false);
     let publicListUrl: URL | undefined = $state();
     let approvals = $derived(allItems.filter((item) => !item.approved));
-    let items = $derived(allItems.filter((item) => item.approved));
+    let items = $derived.by(() => {
+        const approvedItems = allItems.filter((item) => item.approved);
+        return sortItemsByClaimStatus(approvedItems);
+    });
     let listName = $derived.by(() => {
         if (data.list.name) {
             return data.list.name;
@@ -96,17 +100,9 @@
         if (data.list.owner.isMe) {
             return items;
         }
-        console.log(items);
         return items.toSorted((a, b) => {
-            const userHasClaimedA = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
-            const userHasClaimedB = a.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
-            if (a.isClaimable && !userHasClaimedA && !(b.isClaimable && !userHasClaimedB)) {
-                return -1;
-            } else if (!(a.isClaimable && !userHasClaimedA) && b.isClaimable && !userHasClaimedB) {
-                return 1;
-            } else {
-                return a.id - b.id;
-            }
+            const claimStatus = compareClaimStatus(a, b, data.user?.id);
+            return claimStatus;
         });
     };
 
@@ -391,7 +387,7 @@
                 </div>
             {/each}
         {:else}
-            {#each sortItemsByClaimStatus(items) as item (item.id)}
+            {#each items as item (item.id)}
                 <div
                     id="item-{item.id}-wrapper"
                     in:receive={{ key: item.id }}
