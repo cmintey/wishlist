@@ -1,19 +1,19 @@
 allowBuilds:
-  '@prisma/engines': false
-  '@tailwindcss/oxide': true
-  better-sqlite3: true
-  es5-ext: true
-  esbuild: true
-  prisma: true
-  re2: true
-  sharp: false
-  svelte-preprocess: true
+    "@prisma/engines": false
+    "@tailwindcss/oxide": true
+    better-sqlite3: true
+    es5-ext: true
+    esbuild: true
+    prisma: true
+    re2: true
+    sharp: false
+    svelte-preprocess: true
 autoInstallPeers: false
 engineStrict: true
 strictPeerDependencies: false
 supportedArchitectures:
-  cpu:
-    - x64
-    - arm64
-  os:
-    - linux
+    cpu:
+        - x64
+        - arm64
+    os:
+        - linux
