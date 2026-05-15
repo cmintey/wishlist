@@ -36,13 +36,13 @@
                         toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                         return;
                     }
-
+                    toaster.info({ description: "Profile photo uploaded" });
                     update({ invalidateAll: true });
                 };
             }}
         >
             <FileUpload name="profilePic" accept="image/*" onFileAccept={() => submitButton?.click()}>
-                <FileUpload.Trigger class="btn-icon preset-tonal-secondary">
+                <FileUpload.Trigger class="btn-icon preset-tonal-secondary" title={$t("a11y.upload-profile-image")}>
                     <iconify-icon class="text-lg" icon="ion:camera"></iconify-icon>
                     <span class="sr-only">{$t("a11y.upload-profile-image")}</span>
                 </FileUpload.Trigger>
@@ -53,7 +53,20 @@
         </form>
     </div>
 
-    <form method="POST" use:enhance>
+    <form
+        method="POST"
+        use:enhance={() => {
+            return async ({ result, update }) => {
+                if (result.type === "failure") {
+                    toaster.error({ description: (result.data?.message as string) || $t("general.oops") });
+                    return;
+                }
+
+                toaster.info({ description: "Profile info updated" });
+                update({ invalidateAll: true });
+            };
+        }}
+    >
         <div class="flex flex-col gap-4">
             <Label value={$t("auth.name")}>
                 <Input

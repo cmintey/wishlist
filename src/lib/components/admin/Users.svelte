@@ -31,8 +31,7 @@
     let usersFiltered: UserWithGroups[] = $derived(users);
 
     const selectionHandler = (user: User) => {
-        // goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
-        goto(`/admin/users/${user.id}`);
+        goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
     };
 </script>
 

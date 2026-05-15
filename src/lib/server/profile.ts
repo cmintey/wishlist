@@ -1,19 +1,9 @@
-import type { Prisma } from "$lib/generated/prisma/client";
 import { fail } from "@sveltejs/kit";
 import z from "zod";
 import { client } from "./prisma";
 import { getFormatter } from "./i18n";
 import { logger } from "./logger";
 import { createImage, tryDeleteImage } from "./image-util";
-import { getResetPasswordSchema } from "./validations";
-import { hashPassword, verifyPasswordHash } from "./password";
-import {
-    createSession,
-    generateSessionToken,
-    invalidateSession,
-    invalidateUserSessions,
-    setSessionTokenCookie
-} from "./auth";
 
 export const updateProfile = async (userId: string, formData: FormData) => {
     const $t = await getFormatter();
@@ -39,20 +29,10 @@ export const updateProfile = async (userId: string, formData: FormData) => {
                 id: userId
             }
         });
-    } catch (e) {
-        const err = e as Prisma.PrismaClientKnownRequestError;
-        logger.error({ err: e });
-        const targets = err.meta?.target as string[];
-        const errors = targets.reduce(
-            (prev, target) => ({
-                ...prev,
-                [target]: [$t("errors.username-already-in-use", { values: { username: target } })]
-            }),
-            {}
-        );
+    } catch (err) {
+        logger.error({ err });
         return fail(400, {
-            error: true,
-            errors
+            message: "Unable to update profile information. Check logs for details."
         });
     }
 };
