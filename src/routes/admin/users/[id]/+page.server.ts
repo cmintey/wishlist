@@ -5,16 +5,18 @@ import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/server/i18n";
 import { requireRole } from "$lib/server/auth";
+import { updatePicture, updateProfile } from "$lib/server/profile";
+import { fail } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = await requireRole(Role.ADMIN);
     const $t = await getFormatter();
 
-    // if (user.username === params.id) {
-    //     redirect(303, "/account");
-    // }
+    if (user.username === params.id) {
+        redirect(303, "/account");
+    }
 
-    const { oauthId, ...editingUser } = await client.user.findUnique({
+    const editingUser = await client.user.findUnique({
         where: {
             id: params.id
         },
@@ -38,13 +40,48 @@ export const load: PageServerLoad = async ({ params }) => {
     return {
         editingUser: {
             ...editingUser,
-            isOauthManaged: oauthId !== null
+            isOauthManaged: editingUser.oauthId !== null
         },
         user
     };
 };
 
 export const actions: Actions = {
+    profile: async ({ params, request }) => {
+        await requireRole(Role.ADMIN);
+        const user = await client.user.findUnique({
+            where: {
+                id: params.id
+            },
+            select: {
+                id: true
+            }
+        });
+
+        if (!user) {
+            return fail(404, "User not found");
+        }
+
+        return request.formData().then((fd) => updateProfile(user.id, fd));
+    },
+
+    profilePicture: async ({ params, request }) => {
+        await requireRole(Role.ADMIN);
+        const user = await client.user.findUnique({
+            where: {
+                id: params.id
+            },
+            select: {
+                id: true,
+                username: true
+            }
+        });
+
+        if (!user) {
+            return fail(404, "User not found");
+        }
+        return request.formData().then((fd) => updatePicture(user.id, user.username, fd));
+    },
     "reset-password": async ({ params, url }) => {
         await requireRole(Role.ADMIN);
         const $t = await getFormatter();
