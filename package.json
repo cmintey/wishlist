@@ -92,17 +92,6 @@
     },
     "engines": {
         "node": "^24.0.0",
-        "pnpm": "^10"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "better-sqlite3",
-            "es5-ext",
-            "esbuild",
-            "prisma",
-            "re2",
-            "svelte-preprocess",
-            "@tailwindcss/oxide"
-        ]
+        "pnpm": "^11"
     }
 }
