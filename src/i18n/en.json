@@ -45,6 +45,8 @@
         "claims-require-email-tooltip": "Require an email address to anonymously claim an item.",
         "clear-lists": "Clear {groupSpecific, select, true {} other {All}} {claimedOnly, select, true {Claimed Items} other {Lists}}",
         "clear-lists-confirmation": "Are you sure you wish to clear {claimedOnly, select, true {claimed items} other {all wishlists}} {groupSpecific, select, true {in this group} other {across <b>all groups</b>}}? <b>This action is irreversible!</b>",
+        "clear-sessions": "Clear user sessions",
+        "clear-sessions-confirmation": "Are you sure you wish to clear this user's sessions? The user will be logged out of all devices and will be required to log back in.",
         "credentials": "Credentials",
         "default-group": "Default Group",
         "default-group-tooltip": "New users will be added to this group if they were not sent a group specific signup token.",

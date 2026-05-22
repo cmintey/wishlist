@@ -69,13 +69,13 @@
         {/if}
 
         <ConfirmModal
-            description="Are you sure you wish to clear this user's sessions? The user will be logged out of all devices and will be required to log back in."
+            description={$t("admin.clear-sessions-confirmation")}
             onConfirm={handleDelete}
             title={$t("general.please-confirm")}
         >
             {#snippet trigger(props)}
                 <button class="preset-tonal-error inset-ring-error-500 btn w-full inset-ring sm:w-fit" {...props}>
-                    Clear user sessions
+                    {$t("admin.clear-sessions")}
                 </button>
             {/snippet}
         </ConfirmModal>
