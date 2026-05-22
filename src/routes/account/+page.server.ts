@@ -14,7 +14,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/server/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
-import { updatePicture, updateProfile } from "$lib/server/profile";
+import { unlinkOauth, updatePicture, updateProfile } from "$lib/server/profile";
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
     const user = requireLogin();
@@ -109,14 +109,6 @@ export const actions: Actions = {
 
     unlinkoauth: async () => {
         const user = requireLogin();
-
-        await client.user.update({
-            data: {
-                oauthId: null
-            },
-            where: {
-                id: user.id
-            }
-        });
+        await unlinkOauth(user.id);
     }
 };

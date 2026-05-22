@@ -65,3 +65,14 @@ export const updatePicture = async (userId: string, username: string, formData: 
     }
     return filename;
 };
+
+export const unlinkOauth = async (userId: string) => {
+    await client.user.update({
+        data: {
+            oauthId: null
+        },
+        where: {
+            id: userId
+        }
+    });
+};
