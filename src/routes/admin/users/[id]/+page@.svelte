@@ -13,6 +13,10 @@
     const { data, form }: PageProps = $props();
     const t = getFormatter();
 
+    const profileEditDisabled = $derived(
+        data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.editingUser.oauthId !== null
+    );
+
     const handleDelete = async () => {
         const userAPI = new UserAPI(data.editingUser.id);
         const resp = await userAPI.delete();
@@ -30,7 +34,7 @@
     };
 </script>
 
-<EditProfile autocomplete={false} disabled={data.editingUser.isOauthManaged} user={data.editingUser}></EditProfile>
+<EditProfile autocomplete={false} disabled={profileEditDisabled} user={data.editingUser}></EditProfile>
 
 <form class="mt-4 flex flex-col flex-wrap gap-4" method="POST" use:enhance>
     <div class="flex flex-wrap gap-4">
@@ -58,6 +62,12 @@
     </div>
 
     <div class="flex flex-wrap gap-4">
+        {#if data.editingUser.oauthId}
+            <button class="preset-filled-primary-500 btn w-fit" formaction="?/unlinkoauth">
+                {$t("auth.unlink-oauth", { values: { providerName: data.oidcConfig.providerName } })}
+            </button>
+        {/if}
+
         <ConfirmModal
             description="Are you sure you wish to clear this user's sessions? The user will be logged out of all devices and will be required to log back in."
             onConfirm={handleDelete}
