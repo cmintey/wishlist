@@ -136,7 +136,9 @@
         "sending": "Skickar",
         "smtp-ignore-cert-check-description": "Validera inte TLS-certifikatet. Används oftast för lokala anslutningar. Rekommenderas inte.",
         "smtp-use-tls": "Använd TLS",
-        "smtp-use-tls-description": "Anslut direkt till SMTP-servern med TLS istället för att använda STARTTLS. Vanligtvis används port 465."
+        "smtp-use-tls-description": "Anslut direkt till SMTP-servern med TLS istället för att använda STARTTLS. Vanligtvis används port 465.",
+        "clear-sessions": "Rensa användarsessioner",
+        "clear-sessions-confirmation": "Är du säker på att du vill rensa den här användarens sessioner? Användaren kommer att loggas ut från alla enheter och måste logga in igen."
     },
     "app": {
         "my-claims": "Mina reservationer",
