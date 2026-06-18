@@ -5,7 +5,7 @@ import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
 import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
-import { comparePrice, compareDisplayOrder } from "$lib/comparators";
+import { itemSorter } from "$lib/comparators";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -204,31 +204,18 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
         include: getItemInclusions(list.id)
     });
 
-    const itemDTOs = items
-        // need to filter out items not on a list because prisma generates a stupid query
-        .filter((item) => item.lists.length > 0)
+    return items
+        .filter((item) => item.lists.length > 0) // need to filter out items not on a list because prisma generates a stupid query
         .map((i) => toItemOnListDTO(i, list.id))
-        .filter(claimFilter(options.filter, options.loggedInUserId));
-
-    if (options.sort === "price") {
-        if (options.sortDir === "desc") {
-            itemDTOs.sort((a, b) => {
-                const price = comparePrice(a, b, { reversed: true, nullsLast: true });
-                if (price !== 0) return price;
-                return compareDisplayOrder(a, b);
-            });
-        } else {
-            itemDTOs.sort((a, b) => {
-                const price = comparePrice(a, b);
-                if (price !== 0) return price;
-                return compareDisplayOrder(a, b);
-            });
-        }
-    } else {
-        itemDTOs.sort(compareDisplayOrder);
-    }
-
-    return itemDTOs;
+        .filter(claimFilter(options.filter, options.loggedInUserId))
+        .toSorted(
+            itemSorter({
+                sort: options.sort,
+                dir: options.sortDir,
+                userId: options.loggedInUserId,
+                listOwnerId: options.listOwnerId
+            })
+        );
 };
 
 const availableListSelection: Prisma.ListFindManyArgs["select"] = {
