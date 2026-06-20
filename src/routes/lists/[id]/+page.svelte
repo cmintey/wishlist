@@ -26,7 +26,7 @@
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
     import { toaster } from "$lib/components/toaster";
-    import { compareClaimStatus } from "$lib/comparators";
+    import { itemSorter } from "$lib/comparators";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -36,10 +36,7 @@
     let reordering = $state(false);
     let publicListUrl: URL | undefined = $state();
     let approvals = $derived(allItems.filter((item) => !item.approved));
-    let items = $derived.by(() => {
-        const approvedItems = allItems.filter((item) => item.approved);
-        return sortItemsByClaimStatus(approvedItems);
-    });
+    let items = $derived(allItems.filter((item) => item.approved));
     let listName = $derived.by(() => {
         if (data.list.name) {
             return data.list.name;
@@ -91,19 +88,15 @@
         allItems = data.list.items;
     });
 
-    const updateDisplayOrder = (items: ItemOnListDTO[]) => {
-        items.forEach((it, idx) => (it.displayOrder = idx));
-    };
-
-    const sortItemsByClaimStatus = (items: ItemOnListDTO[]) => {
-        // When on own list, don't separate out claimed vs un-claimed
-        if (data.list.owner.isMe) {
-            return items;
-        }
-        return items.toSorted((a, b) => {
-            const claimStatus = compareClaimStatus(a, b, data.user?.id);
-            return claimStatus;
-        });
+    const sortItems = (items: ItemOnListDTO[]) => {
+        return items.toSorted(
+            itemSorter({
+                userId: data.user?.id,
+                sort: page.url.searchParams.get("sort"),
+                dir: page.url.searchParams.get("dir"),
+                listOwnerId: data.list.owner.id
+            })
+        );
     };
 
     const updateHash = async () => {
@@ -139,12 +132,13 @@
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);
         }
-        allItems = allItems.map((item) => {
+        const updatedItems = allItems.map((item) => {
             if (item.id === updatedItem.id) {
                 return { ...item, ...updatedItem };
             }
             return item;
         });
+        allItems = sortItems(updatedItems);
     };
 
     const removeItem = (removedItem: { id: number }) => {
@@ -155,7 +149,7 @@
         if (!(addedItem.approved || data.list.owner.isMe)) {
             return;
         }
-        allItems = [...allItems, addedItem];
+        allItems = sortItems([...allItems, addedItem]);
     };
 
     const getOrCreatePublicList = async () => {
@@ -186,6 +180,10 @@
             destroy: zone.destroy
         };
     }
+
+    const updateDisplayOrder = (items: ItemOnListDTO[]) => {
+        items.forEach((it, idx) => (it.displayOrder = idx));
+    };
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
         updateDisplayOrder(allItems);
