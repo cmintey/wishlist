@@ -44,7 +44,7 @@
             <span class={[shrinkBadge ? "hidden md:block" : "block", "print:inline"]}>{$t("wishes.most-wanted")}</span>
         </div>
     {/if}
-    <Image alt={item.name} data-testid="image" referrerpolicy="no-referrer" src={imageUrl}>
+    <Image class={props.class} alt={item.name} data-testid="image" referrerpolicy="no-referrer" src={imageUrl}>
         {@render defaultImage($t)}
     </Image>
 </div>
