@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - node v24.x
-- [pnpm](https://pnpm.io/installation) v10.x
+- [pnpm](https://pnpm.io/installation) v11.x
 
 ## Install dependencies
 
@@ -15,19 +15,22 @@ pnpm install
 
 ### Create an env file
 
-An example env file for local development. You might want to customize the database URL to your needs:
+Copy `.env.example` to `.env`. The Prisma config (`prisma.config.ts`), the Prisma
+client, and SvelteKit all load `.env` automatically via `dotenv`.
 
 ```sh
-#.env.development
+cp .env.example .env
+```
 
-export ORIGIN=http://localhost:3000
-export DATABASE_URL="file:$(pwd)//dev.db"
+Database URL needs to be an **absolute** `file:` URL.
+
+```sh
+echo "DATABASE_URL=\"file:$(pwd)/prisma/dev.db\"" >> .env
 ```
 
 ### First Time Run
 
 ```sh
-source .env.development
 pnpm prisma generate
 pnpm prisma migrate dev
 pnpm prisma db seed
