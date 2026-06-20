@@ -29,23 +29,6 @@ ENV SHA=${SHA}
 RUN pnpm run build
 RUN pnpm prune --prod
 
-# Download Caddy from github
-FROM --platform=$BUILDPLATFORM alpine:3.23.4@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11 AS caddy
-
-ARG TARGETPLATFORM
-ARG CADDY_VERSION=2.10.0
-
-WORKDIR /
-RUN apk add --no-cache curl tar
-RUN case "${TARGETPLATFORM}" in \
-    "linux/amd64") ARCH="amd64" ;; \
-    "linux/arm64") ARCH="arm64" ;; \
-    "linux/arm/v7") ARCH="armv7" ;; \
-    *) echo "Unsupported platform: ${TARGETPLATFORM}" && exit 1 ;; \
-    esac && \
-    curl -L "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_${ARCH}.tar.gz" \
-    | tar -xz
-
 # Bring everything together
 FROM base AS app
 ENV NODE_ENV=production
@@ -57,12 +40,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends openssl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=caddy /caddy /usr/bin/caddy
-COPY ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "entrypoint.sh", "prisma.config.ts", "Caddyfile", "./"]
+COPY ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "entrypoint.sh", "prisma.config.ts", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 
-RUN chmod +x entrypoint.sh && chmod +x /usr/bin/caddy
+RUN chmod +x entrypoint.sh
 
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/build ./build/
