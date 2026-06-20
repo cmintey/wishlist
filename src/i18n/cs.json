@@ -136,7 +136,9 @@
         "sending": "Posílám",
         "smtp-ignore-cert-check-description": "Neověřovat TLS certifikát. Nejčastěji použito pro lokální připojení. Nedoporučeno.",
         "smtp-use-tls": "Použít TLS",
-        "smtp-use-tls-description": "Připojovat se k SMTP serveru pomocí TLS namísto STARTTLS. Obvykle pro port 465."
+        "smtp-use-tls-description": "Připojovat se k SMTP serveru pomocí TLS namísto STARTTLS. Obvykle pro port 465.",
+        "clear-sessions": "Odhlásit uživatele ze všech zařízení",
+        "clear-sessions-confirmation": "Opravdu odhásit ze všech zařízení? Uživatl se pak musí přihlásit znovu."
     },
     "app": {
         "home": "Domů",
