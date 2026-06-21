@@ -68,6 +68,6 @@ docker build . --tag wishlist-dev:latest
 Specific platform, current linux/amd64 and linux/arm64 are confirmed supported
 
 ```sh
-docker build . --tag wishlist-dev:amd64  --platform linux/amd64
-docker build . --tag wishlist-dev:amd64  --platform linux/arm64
+docker build . --tag wishlist-dev:amd64 --platform linux/amd64
+docker build . --tag wishlist-dev:arm64 --platform linux/arm64
 ```
