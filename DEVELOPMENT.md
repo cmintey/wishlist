@@ -30,6 +30,14 @@ echo "DATABASE_URL=\"file:$(pwd)/prisma/dev.db\"" >> .env
 
 ### First Time Run
 
+Create the 'uploads' directory in the project root to store item images.
+
+```sh
+mkdir -p uploads
+```
+
+Setup Prisma ORM and development database:
+
 ```sh
 pnpm prisma generate
 pnpm prisma migrate dev
