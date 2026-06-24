@@ -74,7 +74,12 @@
                     <div class="flex flex-row items-center gap-x-2">
                         <iconify-icon icon="ion:gift"></iconify-icon>
                         <span data-testid="item-count">
-                            {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
+                            {#if hideCount}
+                                {list.itemCount} Requested
+                            {:else}
+                                {list.claimedCount} of {list.itemCount} Claimed
+                            {/if}
+
                         </span>
                         {#if hasNewItems}
                             <iconify-icon
