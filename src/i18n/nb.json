@@ -433,6 +433,7 @@
         "items-requested": "{itemCount, plural, one {# ønsket} other {# ønsket}}",
         "items-claimed": "{claimedCount} av {itemCount} reservert",
         "items-available": "{availableCount, plural, one {# tilgjengelig} other {# tilgjengelige}}",
+        "owner": "Eier",
         "create-and-add-another": "Opprett og legg til flere",
         "enter-the-quantity-to-claim": "Oppgi antalle du vil gjøre krav på.",
         "hide-all-currencies": "skjul valutaene...",

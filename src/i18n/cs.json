@@ -459,6 +459,7 @@
         "items-requested": "{itemCount, plural, one {# přát si} other {# přát si}}",
         "items-claimed": "{claimedCount} z {itemCount} zarezervováno",
         "items-available": "{availableCount, plural, one {# dostupný} few {# dostupné} many {# dostupných} other {# dostupných}}",
+        "owner": "Vlastník",
         "heads-up": "Pozor!",
         "quantity-desired": "Přeje si {quantity} ks",
         "supports-markdown": "Podporuje Markdown syntaxi",

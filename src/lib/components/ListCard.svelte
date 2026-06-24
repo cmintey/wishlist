@@ -66,12 +66,13 @@
             </span>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 <div class="flex flex-row items-center gap-2">
+                    {$t("wishes.owner")}:
                     <Avatar class="text-tiny size-6" user={list.owner} />
                     <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
-
+            </div>
+            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 {#if list.itemCount !== undefined}
-                    <span>·</span>
                     <div class="flex flex-row items-center gap-x-2">
                         <iconify-icon icon="ion:gift"></iconify-icon>
                         <span data-testid="item-count">

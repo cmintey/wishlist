@@ -29,7 +29,8 @@
     "wishes": {
         "items-requested": "{itemCount, plural, one {# richiesto} other {# richiesti}}",
         "items-claimed": "{claimedCount} di {itemCount} rivendicati",
-        "items-available": "{availableCount, plural, one {# disponibile} other {# disponibili}}"
+        "items-available": "{availableCount, plural, one {# disponibile} other {# disponibili}}",
+        "owner": "Proprietario"
     },
     "admin": {
         "about": "Circa",

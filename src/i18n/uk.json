@@ -357,6 +357,7 @@
         "items-requested": "{itemCount, plural, one {# запитано} few {# запитано} many {# запитано} other {# запитано}}",
         "items-claimed": "{claimedCount} з {itemCount} заброньовано",
         "items-available": "{availableCount, plural, one {# доступно} few {# доступно} many {# доступно} other {# доступно}}",
+        "owner": "Власник",
         "create": "Створити бажання",
         "create-and-add-another": "Створити й додати ще одне",
         "create-for": "Створити бажання для {listOwner}",

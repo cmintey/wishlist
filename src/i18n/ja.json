@@ -2,7 +2,8 @@
     "wishes": {
         "items-requested": "{itemCount, plural, other {#件リクエスト}}",
         "items-claimed": "{itemCount}件中{claimedCount}件購入予定",
-        "items-available": "{availableCount, plural, other {#件利用可能}}"
+        "items-available": "{availableCount, plural, other {#件利用可能}}",
+        "owner": "所有者"
     },
     "admin": {
         "remove-member-message": "このユーザーをグループから削除してもよろしいですか？これにより、グループ内のユーザーのすべてのリストと、他のリストに属していない関連項目が削除されます。<b>この操作は元に戻せません！</b>",

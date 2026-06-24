@@ -366,7 +366,8 @@
         "public": "Públicas",
         "items-requested": "{itemCount, plural, one {# pido} other {# pido}}",
         "items-claimed": "{claimedCount} de {itemCount} reclamados",
-        "items-available": "{availableCount, plural, one {# disponible} other {# disponibles}}"
+        "items-available": "{availableCount, plural, one {# disponible} other {# disponibles}}",
+        "owner": "Propietario"
     },
     "app": {
         "home": "Inicio",

@@ -8,7 +8,8 @@
     "wishes": {
         "items-requested": "{itemCount, plural, one {# yêu cầu} other {# yêu cầu}}",
         "items-claimed": "{claimedCount} trên {itemCount} đã nhận",
-        "items-available": "{availableCount, plural, other {# còn lại}}"
+        "items-available": "{availableCount, plural, other {# còn lại}}",
+        "owner": "Chủ sở hữu"
     },
     "admin": {
         "account": "Tài khoản",

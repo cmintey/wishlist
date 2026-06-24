@@ -430,6 +430,7 @@
         "items-requested": "{itemCount, plural, one {# demandé} other {# demandés}}",
         "items-claimed": "{claimedCount} sur {itemCount} réservés",
         "items-available": "{availableCount, plural, one {# disponible} other {# disponibles}}",
+        "owner": "Propriétaire",
         "create-and-add-another": "Créer et en ajouter un autre",
         "enter-the-quantity-to-claim": "Entrer la quantité à réserver.",
         "hide-all-currencies": "Cacher toutes les devises…",
