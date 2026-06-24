@@ -226,6 +226,8 @@
         "show-description": "Zeige Beschreibung",
         "count-items": "{itemCount, plural, one {# Artikel} other {# Artikel}}",
         "items-requested": "{itemCount, plural, one {# gewünscht} other {# gewünscht}}",
+        "items-claimed": "{claimedCount} von {itemCount} reserviert",
+        "items-available": "{availableCount, plural, one {# verfügbar} other {# verfügbar}}",
         "hide-all-currencies": "verberge alle Währungen...",
         "show-all-currencies": "zeige alle Währungen...",
         "add-a-list-manager": "Listen Manager hinzufügen",

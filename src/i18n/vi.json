@@ -6,7 +6,9 @@
         "decrease-priority": "giảm ưu tiên của {name}"
     },
     "wishes": {
-        "items-requested": "{itemCount, plural, one {# yêu cầu} other {# yêu cầu}}"
+        "items-requested": "{itemCount, plural, one {# yêu cầu} other {# yêu cầu}}",
+        "items-claimed": "{claimedCount} trên {itemCount} đã nhận",
+        "items-available": "{availableCount, plural, other {# còn lại}}"
     },
     "admin": {
         "account": "Tài khoản",

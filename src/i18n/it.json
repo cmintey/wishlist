@@ -27,7 +27,9 @@
         "wishlist-logo": "Wishlist Logo"
     },
     "wishes": {
-        "items-requested": "{itemCount, plural, one {# richiesto} other {# richiesti}}"
+        "items-requested": "{itemCount, plural, one {# richiesto} other {# richiesti}}",
+        "items-claimed": "{claimedCount} di {itemCount} rivendicati",
+        "items-available": "{availableCount, plural, one {# disponibile} other {# disponibili}}"
     },
     "admin": {
         "about": "Circa",

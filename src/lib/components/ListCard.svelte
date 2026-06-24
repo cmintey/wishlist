@@ -21,6 +21,7 @@
     const t = getFormatter();
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
+    let availableCount = $derived((list.itemCount ?? 0) - (list.claimedCount ?? 0));
     let iconColor = $derived(list.iconColor);
     let elementTag = $derived(preventNavigate ? "div" : "a");
     let element: HTMLElement | undefined = $state();
@@ -77,7 +78,11 @@
                             {#if hideCount}
                                 {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
                             {:else}
-                                {list.claimedCount} of {list.itemCount} Claimed
+                                <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
+                                ·
+                                {$t("wishes.items-claimed", {
+                                    values: { claimedCount: list.claimedCount, itemCount: list.itemCount }
+                                })}
                             {/if}
                         </span>
                         {#if hasNewItems}

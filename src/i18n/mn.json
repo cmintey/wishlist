@@ -12,7 +12,9 @@
         "a-person-looking-at-an-empty-board": "Хоосон байна"
     },
     "wishes": {
-        "items-requested": "{itemCount, plural, one {# хүссэн} other {# хүссэн}}"
+        "items-requested": "{itemCount, plural, one {# хүссэн} other {# хүссэн}}",
+        "items-claimed": "{itemCount}-аас {claimedCount} нь авсан",
+        "items-available": "{availableCount, plural, one {# боломжтой} other {# боломжтой}}"
     },
     "admin": {
         "add-member": "Гишүүн нэмэх",

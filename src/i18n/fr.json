@@ -428,6 +428,8 @@
         "claimed-info-text": "{claimedQuantity, plural, one {Vous avez réservé # élément.} other {Vous avez réservé # éléments.}}",
         "count-items": "{itemCount, plural, one {# élément} other {# éléments}}",
         "items-requested": "{itemCount, plural, one {# demandé} other {# demandés}}",
+        "items-claimed": "{claimedCount} sur {itemCount} réservés",
+        "items-available": "{availableCount, plural, one {# disponible} other {# disponibles}}",
         "create-and-add-another": "Créer et en ajouter un autre",
         "enter-the-quantity-to-claim": "Entrer la quantité à réserver.",
         "hide-all-currencies": "Cacher toutes les devises…",

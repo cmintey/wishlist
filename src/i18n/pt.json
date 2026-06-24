@@ -200,6 +200,8 @@
     "wishes": {
         "lists": "Listas",
         "items-requested": "{itemCount, plural, one {# solicitado} other {# solicitados}}",
+        "items-claimed": "{claimedCount} de {itemCount} reclamados",
+        "items-available": "{availableCount, plural, one {# disponível} other {# disponíveis}}",
         "unclaimed": "Não reclamado",
         "approvals": "Aprovações",
         "add-item": "Adicionar item",
