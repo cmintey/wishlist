@@ -203,6 +203,7 @@
         "items-claimed": "{claimedCount} de {itemCount} reclamados",
         "items-available": "{availableCount, plural, one {# disponível} other {# disponíveis}}",
         "owner": "Proprietário",
+        "hide-owner": "Ocultar proprietário",
         "unclaimed": "Não reclamado",
         "approvals": "Aprovações",
         "add-item": "Adicionar item",

@@ -418,6 +418,7 @@
         "items-claimed": "{claimedCount} af {itemCount} reserveret",
         "items-available": "{availableCount, plural, one {# tilgængelig} other {# tilgængelige}}",
         "owner": "Ejer",
+        "hide-owner": "Skjul ejer",
         "for": "For <span class=\"{class}\">{name}</span>",
         "unable-to-update-item-ordering": "Kan ikke opdatere ønske-bestillingen",
         "add-a-list-manager": "Tilføj en listeansvarlig",

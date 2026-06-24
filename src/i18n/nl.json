@@ -450,6 +450,7 @@
         "items-claimed": "{claimedCount} van {itemCount} geclaimd",
         "items-available": "{availableCount, plural, one {# beschikbaar} other {# beschikbaar}}",
         "owner": "Eigenaar",
+        "hide-owner": "Eigenaar verbergen",
         "hide-all-currencies": "verberg alle eenheden...",
         "show-all-currencies": "Toon alle valuta's...",
         "add-a-list-manager": "Voeg een lijst beheerder toe",

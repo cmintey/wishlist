@@ -12,12 +12,19 @@
 
     interface Props {
         hideCount?: boolean;
+        hideOwner?: boolean;
         list: ListWithCounts;
         hasNewItems?: boolean;
         preventNavigate?: boolean;
     }
 
-    const { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
+    const {
+        hideCount = false,
+        hideOwner = false,
+        hasNewItems = false,
+        list,
+        preventNavigate = false
+    }: Props = $props();
     const t = getFormatter();
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
@@ -64,13 +71,15 @@
             <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
                 {listName}
             </span>
-            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
-                <div class="flex flex-row items-center gap-2">
-                    {$t("wishes.owner")}:
-                    <Avatar class="text-tiny size-6" user={list.owner} />
-                    <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
+            {#if !hideOwner}
+                <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
+                    <div class="flex flex-row items-center gap-2">
+                        {$t("wishes.owner")}:
+                        <Avatar class="text-tiny size-6" user={list.owner} />
+                        <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
+                    </div>
                 </div>
-            </div>
+            {/if}
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 {#if list.itemCount !== undefined}
                     <div class="flex flex-row items-center gap-x-2">

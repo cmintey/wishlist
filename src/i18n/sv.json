@@ -443,6 +443,7 @@
         "items-claimed": "{claimedCount} av {itemCount} reserverade",
         "items-available": "{availableCount, plural, one {# tillgänglig} other {# tillgängliga}}",
         "owner": "Ägare",
+        "hide-owner": "Dölj ägare",
         "create-and-add-another": "Skapa och lägg till en annan",
         "display-order": "Visningsordning",
         "enter-the-quantity-to-claim": "Ange den kvantitet som ska reserveras.",

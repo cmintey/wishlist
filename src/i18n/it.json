@@ -30,7 +30,8 @@
         "items-requested": "{itemCount, plural, one {# richiesto} other {# richiesti}}",
         "items-claimed": "{claimedCount} di {itemCount} rivendicati",
         "items-available": "{availableCount, plural, one {# disponibile} other {# disponibili}}",
-        "owner": "Proprietario"
+        "owner": "Proprietario",
+        "hide-owner": "Nascondi proprietario"
     },
     "admin": {
         "about": "Circa",

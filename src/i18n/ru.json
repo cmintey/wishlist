@@ -452,6 +452,7 @@
         "items-claimed": "{claimedCount} из {itemCount} забронировано",
         "items-available": "{availableCount, plural, one {# доступно} few {# доступно} many {# доступно} other {# доступно}}",
         "owner": "Владелец",
+        "hide-owner": "Скрыть владельца",
         "hide-all-currencies": "скрыть все валюты...",
         "show-all-currencies": "показать все валюты...",
         "add-a-list-manager": "Добавить менеджер списков",

@@ -52,6 +52,7 @@ export const load = (async ({ url }) => {
             name: true,
             icon: true,
             iconColor: true,
+            hideOwner: true,
             owner: {
                 select: {
                     id: true,
@@ -110,6 +111,7 @@ export const load = (async ({ url }) => {
             name: true,
             icon: true,
             iconColor: true,
+            hideOwner: true,
             owner: {
                 select: {
                     id: true,
@@ -165,6 +167,7 @@ export const load = (async ({ url }) => {
                     name: list.name,
                     icon: list.icon,
                     iconColor: list.iconColor,
+                    hideOwner: list.hideOwner,
                     owner: list.owner,
                     claimedCount: undefined,
                     itemCount: list.items.reduce((accum, { item }) => accum + (item.quantity || 1), 0),
@@ -189,6 +192,7 @@ export const load = (async ({ url }) => {
                     name: list.name,
                     icon: list.icon,
                     iconColor: list.iconColor,
+                    hideOwner: list.hideOwner,
                     owner: list.owner,
                     claimedCount,
                     itemCount,

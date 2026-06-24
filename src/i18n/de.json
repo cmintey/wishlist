@@ -229,6 +229,7 @@
         "items-claimed": "{claimedCount} von {itemCount} reserviert",
         "items-available": "{availableCount, plural, one {# verfügbar} other {# verfügbar}}",
         "owner": "Besitzer",
+        "hide-owner": "Besitzer ausblenden",
         "hide-all-currencies": "verberge alle Währungen...",
         "show-all-currencies": "zeige alle Währungen...",
         "add-a-list-manager": "Listen Manager hinzufügen",
