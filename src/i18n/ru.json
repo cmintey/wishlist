@@ -448,6 +448,7 @@
         "hide-description": "Скрыть описание",
         "show-description": "Показать описание",
         "count-items": "{itemCount, plural, one {# предмет} other {# предметов}}",
+        "items-requested": "{itemCount, plural, one {# запрошен} few {# запрошено} many {# запрошено} other {# запрошено}}",
         "hide-all-currencies": "скрыть все валюты...",
         "show-all-currencies": "показать все валюты...",
         "add-a-list-manager": "Добавить менеджер списков",

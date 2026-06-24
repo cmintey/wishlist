@@ -75,11 +75,10 @@
                         <iconify-icon icon="ion:gift"></iconify-icon>
                         <span data-testid="item-count">
                             {#if hideCount}
-                                {list.itemCount} Requested
+                                {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
                             {:else}
                                 {list.claimedCount} of {list.itemCount} Claimed
                             {/if}
-
                         </span>
                         {#if hasNewItems}
                             <iconify-icon

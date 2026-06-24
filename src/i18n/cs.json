@@ -456,6 +456,7 @@
         "write": "Editace",
         "claims": "{claimCount, plural, one {# rezervace} other {# rezervace}}",
         "count-items": "{itemCount, plural, one {# ks} other {# ks}}",
+        "items-requested": "{itemCount, plural, one {# přát si} other {# přát si}}",
         "heads-up": "Pozor!",
         "quantity-desired": "Přeje si {quantity} ks",
         "supports-markdown": "Podporuje Markdown syntaxi",

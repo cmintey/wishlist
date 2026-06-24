@@ -11,6 +11,9 @@
         "upload-profile-image": "Профайл зураг байршуул",
         "a-person-looking-at-an-empty-board": "Хоосон байна"
     },
+    "wishes": {
+        "items-requested": "{itemCount, plural, one {# хүссэн} other {# хүссэн}}"
+    },
     "admin": {
         "add-member": "Гишүүн нэмэх",
         "account": "Бүртгэл",

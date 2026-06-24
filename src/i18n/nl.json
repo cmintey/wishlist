@@ -446,6 +446,7 @@
         "wishes-for": "{listOwner} 's wensen",
         "write": "Schrijven",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
+        "items-requested": "{itemCount, plural, one {# gevraagd} other {# gevraagd}}",
         "hide-all-currencies": "verberg alle eenheden...",
         "show-all-currencies": "Toon alle valuta's...",
         "add-a-list-manager": "Voeg een lijst beheerder toe",

@@ -180,6 +180,7 @@
     },
     "wishes": {
         "lists": "Listy",
+        "items-requested": "{itemCount, plural, one {# żądane} few {# żądane} many {# żądanych} other {# żądanych}}",
         "before-you-can-claim-the-item-we-just-need-one-thing-from-you": "Zanim zaklepiesz przedmiot, potrzebujemy jeszcze jednej informacji.",
         "delete": "Usuń",
         "edit-wish": "Edytuj życzenie",

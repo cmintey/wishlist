@@ -430,6 +430,7 @@
         "claimed-by-multiple-users": "Gjort krav på av flere brukere",
         "claimed-info-text": "{claimedQuantity, plural, one {Du har gjort krav på # ønsker.} other {Du har gjort krav på # ønsker.}}",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
+        "items-requested": "{itemCount, plural, one {# ønsket} other {# ønsket}}",
         "create-and-add-another": "Opprett og legg til flere",
         "enter-the-quantity-to-claim": "Oppgi antalle du vil gjøre krav på.",
         "hide-all-currencies": "skjul valutaene...",

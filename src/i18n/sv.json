@@ -439,6 +439,7 @@
         "claimed-info-text": "{claimedQuantity, plural, one {Du har reserverat # artikel.} other {Du har reserverat # artiklar.}}",
         "claims": "{claimCount, plural, one {# reservation} other {# reservationer}}",
         "count-items": "{itemCount, plural, one {# artikel} other {# artiklar}}",
+        "items-requested": "{itemCount, plural, one {# önskad} other {# önskade}}",
         "create-and-add-another": "Skapa och lägg till en annan",
         "display-order": "Visningsordning",
         "enter-the-quantity-to-claim": "Ange den kvantitet som ska reserveras.",

@@ -199,6 +199,7 @@
     },
     "wishes": {
         "lists": "Listas",
+        "items-requested": "{itemCount, plural, one {# solicitado} other {# solicitados}}",
         "unclaimed": "Não reclamado",
         "approvals": "Aprovações",
         "add-item": "Adicionar item",

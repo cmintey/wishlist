@@ -414,6 +414,7 @@
         "claimed-info-text": "{claimedQuantity, plural, one {Du har reserveret # ønske.} other {Du har reserveret # ønsker.}}",
         "claimed-item": "Ønske {claimed, select, true {Reserveret} other {Frigivet}}",
         "count-items": "{itemCount, plural, one {# ønske} other {# ønsker}}",
+        "items-requested": "{itemCount, plural, one {# ønsket} other {# ønsket}}",
         "for": "For <span class=\"{class}\">{name}</span>",
         "unable-to-update-item-ordering": "Kan ikke opdatere ønske-bestillingen",
         "add-a-list-manager": "Tilføj en listeansvarlig",

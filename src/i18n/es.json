@@ -363,7 +363,8 @@
         "delete-list-confirmation": "¿Está seguro de querer eliminar esta lista? Cualquier objeto no asociado con otra lista también será eliminado.",
         "my-lists": "Mis listas",
         "no-lists-yet": "No hay listas aún",
-        "public": "Públicas"
+        "public": "Públicas",
+        "items-requested": "{itemCount, plural, one {# pido} other {# pido}}"
     },
     "app": {
         "home": "Inicio",

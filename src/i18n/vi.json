@@ -5,6 +5,9 @@
         "edit-group-name": "sửa tên nhóm",
         "decrease-priority": "giảm ưu tiên của {name}"
     },
+    "wishes": {
+        "items-requested": "{itemCount, plural, one {# yêu cầu} other {# yêu cầu}}"
+    },
     "admin": {
         "account": "Tài khoản",
         "actions": "Hành động",

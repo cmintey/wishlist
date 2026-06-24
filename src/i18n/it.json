@@ -26,6 +26,9 @@
         "user-menu": "Menu Utente",
         "wishlist-logo": "Wishlist Logo"
     },
+    "wishes": {
+        "items-requested": "{itemCount, plural, one {# richiesto} other {# richiesti}}"
+    },
     "admin": {
         "about": "Circa",
         "account": "Account",

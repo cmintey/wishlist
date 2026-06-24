@@ -1,4 +1,7 @@
 {
+    "wishes": {
+        "items-requested": "{itemCount, plural, other {#件リクエスト}}"
+    },
     "admin": {
         "remove-member-message": "このユーザーをグループから削除してもよろしいですか？これにより、グループ内のユーザーのすべてのリストと、他のリストに属していない関連項目が削除されます。<b>この操作は元に戻せません！</b>",
         "remove-member-title": "メンバーを削除",

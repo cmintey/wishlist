@@ -390,6 +390,7 @@
         "claimed-item": "{claimed, select, true {Claimed} other {Unclaimed}} item",
         "claims": "{claimCount, plural, one {# claim} other {# claims}}",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
+        "items-requested": "{itemCount, plural, one {# Requested} other {# Requested}}",
         "create": "Create Wish",
         "create-and-add-another": "Create and add another",
         "create-for": "Create Wish for {listOwner}",
