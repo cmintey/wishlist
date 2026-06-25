@@ -179,10 +179,10 @@ export const load = (async ({ url }) => {
             .map((list) => {
                 const claimedCount = list.items
                     .filter((it) => it.approved)
-                    .filter(({ item }) => {
-                        const claimedCount = item.claims.map(({ quantity }) => quantity).reduce((a, b) => a + b, 0);
-                        return claimedCount === item.quantity;
-                    }).length;
+                    .reduce((accum, { item }) => {
+                        const itemClaimed = item.claims.reduce((a, { quantity }) => a + quantity, 0);
+                        return accum + Math.min(itemClaimed, item.quantity || 1);
+                    }, 0);
                 const itemCount = list.items
                     .filter((it) => it.approved)
                     .reduce((accum, { item }) => accum + (item.quantity || 1), 0);
