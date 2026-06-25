@@ -2,6 +2,7 @@
     "a11y": {
         "a-person-looking-at-an-empty-board": "Uma pessoa a olhar para uma placa vazia",
         "cancel-editing": "cancelar edição",
+        "claimed-progress": "Progresso reclamado",
         "clear-url-field": "limpar campo url",
         "close": "fechar",
         "decrease-priority": "reduzir prioridade para {name}",

@@ -2,6 +2,7 @@
     "a11y": {
         "a-person-looking-at-an-empty-board": "Человек, смотрящий на пустую доску",
         "cancel-editing": "отменить редактирование",
+        "claimed-progress": "Прогресс бронирования",
         "close": "закрыть",
         "decrease-priority": "понизить приоритет для {name}",
         "clear-url-field": "очистить поле URL",

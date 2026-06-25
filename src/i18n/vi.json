@@ -2,6 +2,7 @@
     "a11y": {
         "close": "đóng",
         "cancel-editing": "huỷ thay đổi",
+        "claimed-progress": "Tiến trình đã nhận",
         "edit-group-name": "sửa tên nhóm",
         "decrease-priority": "giảm ưu tiên của {name}"
     },

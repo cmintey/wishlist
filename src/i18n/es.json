@@ -94,6 +94,7 @@
     },
     "a11y": {
         "cancel-editing": "Cancelar edición",
+        "claimed-progress": "Progreso reclamado",
         "close": "Cerrar",
         "clear-url-field": "Limpiar campo url",
         "edit-group-name": "Editar nombre de grupo",

@@ -264,6 +264,7 @@
         "close": "zamknij",
         "clear-url-field": "wyczyść pole url",
         "cancel-editing": "anuluj edytowanie",
+        "claimed-progress": "Postęp zaklepywania",
         "decrease-priority": "zmniejsz priorytet {name}",
         "drag-handle": "przeciągnij {name} aby zmienić priorytet",
         "a-person-looking-at-an-empty-board": "Osoba patrząca na pustą tablicę",

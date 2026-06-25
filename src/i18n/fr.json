@@ -222,6 +222,7 @@
     "a11y": {
         "decrease-priority": "diminuer la priorité pour {name}",
         "cancel-editing": "annuler l'édition",
+        "claimed-progress": "Progression des réservations",
         "clear-url-field": "effacer le champ URL",
         "close": "fermer",
         "edit-group-name": "éditer le nom du groupe",

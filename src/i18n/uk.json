@@ -1,6 +1,7 @@
 {
     "a11y": {
         "cancel-editing": "скасувати редагування",
+        "claimed-progress": "Прогрес бронювання",
         "clear-color-field": "очистити поле кольору",
         "clear-icon-field": "очистити поле іконки",
         "clear-name-field": "очистити поле імені",

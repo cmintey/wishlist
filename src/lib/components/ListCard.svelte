@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { List, User } from "$lib/generated/prisma/client";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import Avatar from "./Avatar.svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -29,6 +30,11 @@
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
     let availableCount = $derived((list.itemCount ?? 0) - (list.claimedCount ?? 0));
+    let claimedPercent = $derived(
+        list.itemCount && list.itemCount > 0
+            ? Math.min(100, Math.round(((list.claimedCount ?? 0) / list.itemCount) * 100))
+            : 0
+    );
     let iconColor = $derived(list.iconColor);
     let elementTag = $derived(preventNavigate ? "div" : "a");
     let element: HTMLElement | undefined = $state();
@@ -79,6 +85,14 @@
                         <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                     </div>
                 </div>
+            {/if}
+            {#if !hideCount && list.itemCount !== undefined}
+                <Progress class="py-1" max={100} value={claimedPercent}>
+                    <Progress.Label class="sr-only">{$t("a11y.claimed-progress")}</Progress.Label>
+                    <Progress.Track>
+                        <Progress.Range class="bg-primary-500" />
+                    </Progress.Track>
+                </Progress>
             {/if}
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 {#if list.itemCount !== undefined}
