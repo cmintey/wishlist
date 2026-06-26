@@ -71,7 +71,7 @@
         "password-strength-requirement-tooltip": "Mindstekrav for adgangskode-styrke for en brugers adgangskode.",
         "profile": "Profil",
         "public-signup": "Offentlig tilmelding",
-        "remove-admin": "Fjern administratot",
+        "remove-admin": "Fjern som administrator",
         "remove-member-title": "Fjern medlem",
         "security": "Sikkerhed",
         "select-a-group-option": "Vælg en gruppe",
@@ -125,10 +125,20 @@
         "enable-sync": "Aktivér synkronisering",
         "enable-sync-description": "Aktivér synkronisering af brugerattributter fra din IdP, såsom navn og e-mail.",
         "oidc-auto-redirect-description": "Omdiriger automatisk til din IdP’s login-side.",
-        "profile-disabled": "Din profil administreres af din OAuth udbyder.",
+        "profile-disabled": "Denne profil administreres af din OAuth udbyder.",
         "show-for-list-owner": "Vis for listens ejer",
         "show-for-list-owner-description": "Tillad listeejere at se reservationer på deres egne lister.",
-        "show-name-across-groups": "Vis altid navn"
+        "show-name-across-groups": "Vis altid navn",
+        "clear-sessions": "Nulstil bruger-sessioner",
+        "clear-sessions-confirmation": "Er du sikker på at du vil nulstille denne brugers sessioner? Brugeren vil bliver logget ud på alle enheder og skal logge ind igen.",
+        "oidc-claim-name-description": "OIDC attribut (claim) der skal bruges som brugerens navn.",
+        "oidc-claim-username-description": "OIDC attributten (claim) der skal bruges som brugeres brugernavn.",
+        "sending": "Sender",
+        "show-name-across-groups-tooltip": "Viser navnet på den bruger som lavede reservationen, selv hvis brugeren ikke er i din gruppe.",
+        "smtp-ignore-cert-check-description": "Validér ikke TLS certifikatet. Oftest brugt ved lokale forbindelser. Ikke anbefalet.",
+        "smtp-use-tls": "Brug TLS",
+        "smtp-use-tls-description": "Forbind til SMTP serveren direkte ved brug af TLS i stedet for STARTTLS. Oftest brugt med port 465.",
+        "ignore-cert-check": "Ignorér certifikatfejl"
     },
     "app": {
         "home": "Hjem",
@@ -254,7 +264,8 @@
         "username-must-not-be-blank": "Brugernavn må ikke være blank",
         "valid-url-not-provided": "Gyldig url ikke angivet",
         "email-is-required-for-public-claims": "E-mail er påkrævet for offentlige reservationer",
-        "oidc-error": "OAuth-godkendelse fejlede"
+        "oidc-error": "OAuth-godkendelse fejlede",
+        "display-order-invalid": "Rækkefølge for visning skal være mellem {min} og {max}"
     },
     "general": {
         "smtp-not-enabled-implication": "Selvom opsætning af e-mail ikke er et krav, vil brugere ikke kunne nulstille deres adgangskoder via selvbetjening, og du vil selv skulle sende links til nulstilling af adgangskoder.",
@@ -325,7 +336,13 @@
         "weak": "Svag",
         "wishlists-cleared": "Ønskelister er ryddet.",
         "oauth": "Oauth",
-        "select-all": "Vælg alle"
+        "select-all": "Vælg alle",
+        "dark": "Mørk",
+        "import": "Importér",
+        "light": "Lys",
+        "no-lists-available": "Ingen lister er tilgængelige",
+        "no-results": "Ingen resultater.",
+        "system": "System"
     },
     "wishes": {
         "additional-items-requested": "{remainingQuantity, plural, =0 {Der er ingen ekstra ønsker til rådighed.} one {Der er # ekstra ønske til rådighed.} other {Der er # ekstra ønsker til rådighed.}}",
@@ -432,7 +449,15 @@
         "switch-to-list-view": "Skift til listevisning",
         "switch-to-tile-view": "Skift til flisevisning",
         "tile-view": "Flisevisning",
-        "most-wanted-description": "Markér dette ønske for at vise at det er højt prioriteret."
+        "most-wanted-description": "Markér dette ønske for at vise at det er højt prioriteret.",
+        "display-order": "Rækkefølge for visning",
+        "import-error-text": "Wishlist var ikke i stand til at fastslå produktets URL ud fra de givne parametre. Du kan stadigvæk manuelt kopiere produktets URL og tilføje varen på normal vis.",
+        "import-error-title": "Kan ikke importere varen",
+        "import-item": "Importér vare",
+        "import-item-text": "Du skal vælge en gruppe og en liste, før du kan importere en vare",
+        "item-created": "Ønske oprettet",
+        "most-wanted": "Mest eftertragtet",
+        "select-a-list": "Vælg en liste"
     },
     "setup": {
         "global-settings-subtext": "Disse indstillinger vil blive anvendt til alle grupper, der er oprettet. Nogle indstillinger kan overskrives af individuelle grupper.",
