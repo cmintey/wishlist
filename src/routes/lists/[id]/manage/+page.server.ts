@@ -3,6 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { client } from "$lib/server/prisma";
 import { getFormatter } from "$lib/server/i18n";
+import { Role } from "$lib/schema";
 import { getListPropertiesSchema } from "$lib/server/validations";
 import { trimToNull } from "$lib/util";
 import { deleteList } from "$lib/server/list";
@@ -55,7 +56,10 @@ export const load: PageServerLoad = async ({ params }) => {
         .then((list) => list ?? error(404, $t("errors.list-not-found")));
 
     // Logged in users must be in the correct group, or viewing a public list
-    if (list.owner.id !== user.id && !list.managers.find(({ user: manager }) => manager.id === user.id)) {
+    const isManager = !!list.managers.find(({ user: manager }) => manager.id === user.id);
+    const isAdmin = user.roleId === Role.ADMIN;
+    const isGroupManager = activeMembership.roleId === Role.GROUP_MANAGER;
+    if (list.owner.id !== user.id && !isManager && !isAdmin && !isGroupManager) {
         error(401, $t("errors.not-authorized"));
     }
     if (list.groupId !== activeMembership.groupId) {
@@ -169,7 +173,9 @@ export const actions: Actions = {
                 groupId: activeMembership.groupId
             }
         });
-        if (user.id !== listOwner?.ownerId) {
+        const isAdmin = user.roleId === Role.ADMIN;
+        const isGroupManager = activeMembership.roleId === Role.GROUP_MANAGER;
+        if (user.id !== listOwner?.ownerId && !isAdmin && !isGroupManager) {
             error(401, $t("errors.not-authorized"));
         }
 
@@ -204,7 +210,17 @@ async function canManage(id: string, user: LocalUser, groupId: string) {
     if (!list) {
         error(404, $t("errors.list-not-found"));
     }
-    if (user.id !== list.ownerId && !list.managers.find(({ userId }) => userId === user.id)) {
-        error(401, $t("errors.not-authorized"));
-    }
+    if (user.id === list.ownerId) return;
+    if (list.managers.find(({ userId }) => userId === user.id)) return;
+    if (user.roleId === Role.ADMIN) return;
+
+    const membership = await client.userGroupMembership.findFirst({
+        where: {
+            userId: user.id,
+            groupId
+        }
+    });
+    if (membership?.roleId === Role.GROUP_MANAGER) return;
+
+    error(401, $t("errors.not-authorized"));
 }
