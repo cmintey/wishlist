@@ -29,6 +29,16 @@ export class ListCard {
         return this;
     }
 
+    async assertAvailableCount(count: number) {
+        await expect(this.itemCount).toContainText(`${count} Available`);
+        return this;
+    }
+
+    async assertClaimedCount(claimedCount: number, itemCount: number) {
+        await expect(this.itemCount).toContainText(`${claimedCount} of ${itemCount} Claimed`);
+        return this;
+    }
+
     async click() {
         const name = await this.getName();
         expect(name).not.toBeNull();

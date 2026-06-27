@@ -3,6 +3,7 @@ import { EditItemPage } from "../pageObjects/edit-item.page";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
 import { DeleteItemModal } from "./delete-item-modal";
+import { ClaimItemModal } from "./claim-item-modal";
 
 export class ItemCard {
     private readonly card: Locator;
@@ -107,6 +108,15 @@ export class ItemCard {
 
     async assertDeleteButtonHidden() {
         await expect(this.deleteButton).not.toBeVisible();
+        return this;
+    }
+
+    async claim(quantity: number) {
+        await this.card.getByRole("button", { name: "Claim", exact: true }).click();
+        const modal = new ClaimItemModal(this.card.page());
+        await modal.at();
+        await modal.setQuantity(quantity);
+        await modal.submit();
         return this;
     }
 
