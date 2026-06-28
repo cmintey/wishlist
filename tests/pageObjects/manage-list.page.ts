@@ -51,6 +51,11 @@ export class ManageListPage extends BasePage {
         await this.listForm.makePublic();
     }
 
+    async setHideOwner(value = true) {
+        await this.listForm.setHideOwner(value);
+        return this;
+    }
+
     async cancel() {
         return this.listForm.cancel();
     }

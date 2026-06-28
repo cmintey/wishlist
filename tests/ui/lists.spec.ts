@@ -57,6 +57,27 @@ test("change list name", async ({ page }) => {
     await list.assertName(newListName);
 });
 
+test("hide owner removes the owner from the list card", async ({ page, userData }) => {
+    const listsPage = new ListsPage(page);
+    await listsPage.goto();
+
+    // The owner is shown on the card by default
+    const list = await listsPage.getListAt(0);
+    await list.assertOwner(userData.name);
+
+    // Enable "Hide Owner" in the manage form and save
+    await list
+        .click()
+        .then((listPage) => listPage.manage())
+        .then((manage) => manage.at())
+        .then((manage) => manage.setHideOwner(true))
+        .then((manage) => manage.save());
+
+    // The owner should no longer be rendered on the list card
+    await listsPage.goto();
+    await listsPage.getListAt(0).then((card) => card.assertOwnerHidden());
+});
+
 test("delete list", async ({ page }) => {
     const listsPage = new ListsPage(page);
     await listsPage.goto();
