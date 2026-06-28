@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { List, User } from "$lib/generated/prisma/client";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import Avatar from "./Avatar.svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -12,15 +13,28 @@
 
     interface Props {
         hideCount?: boolean;
+        hideOwner?: boolean;
         list: ListWithCounts;
         hasNewItems?: boolean;
         preventNavigate?: boolean;
     }
 
-    const { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
+    const {
+        hideCount = false,
+        hideOwner = false,
+        hasNewItems = false,
+        list,
+        preventNavigate = false
+    }: Props = $props();
     const t = getFormatter();
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
+    let availableCount = $derived((list.itemCount ?? 0) - (list.claimedCount ?? 0));
+    let claimedPercent = $derived(
+        list.itemCount && list.itemCount > 0
+            ? Math.min(100, Math.round(((list.claimedCount ?? 0) / list.itemCount) * 100))
+            : 0
+    );
     let iconColor = $derived(list.iconColor);
     let elementTag = $derived(preventNavigate ? "div" : "a");
     let element: HTMLElement | undefined = $state();
@@ -63,18 +77,37 @@
             <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
                 {listName}
             </span>
-            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
-                <div class="flex flex-row items-center gap-2">
-                    <Avatar class="text-tiny size-6" user={list.owner} />
-                    <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
+            {#if !hideOwner}
+                <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
+                    <div class="flex flex-row items-center gap-2">
+                        {$t("wishes.owner")}:
+                        <Avatar class="text-tiny size-6" user={list.owner} />
+                        <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
+                    </div>
                 </div>
-
+            {/if}
+            {#if !hideCount && list.itemCount !== undefined}
+                <Progress class="py-1" max={100} value={claimedPercent}>
+                    <Progress.Label class="sr-only">{$t("a11y.claimed-progress")}</Progress.Label>
+                    <Progress.Track>
+                        <Progress.Range class="bg-primary-500" />
+                    </Progress.Track>
+                </Progress>
+            {/if}
+            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 {#if list.itemCount !== undefined}
-                    <span>·</span>
                     <div class="flex flex-row items-center gap-x-2">
                         <iconify-icon icon="ion:gift"></iconify-icon>
                         <span data-testid="item-count">
-                            {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
+                            {#if hideCount}
+                                {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
+                            {:else}
+                                <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
+                                ·
+                                {$t("wishes.items-claimed", {
+                                    values: { claimedCount: list.claimedCount, itemCount: list.itemCount }
+                                })}
+                            {/if}
                         </span>
                         {#if hasNewItems}
                             <iconify-icon

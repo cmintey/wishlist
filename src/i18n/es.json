@@ -94,6 +94,7 @@
     },
     "a11y": {
         "cancel-editing": "Cancelar edición",
+        "claimed-progress": "Progreso reclamado",
         "close": "Cerrar",
         "clear-url-field": "Limpiar campo url",
         "edit-group-name": "Editar nombre de grupo",
@@ -363,7 +364,12 @@
         "delete-list-confirmation": "¿Está seguro de querer eliminar esta lista? Cualquier objeto no asociado con otra lista también será eliminado.",
         "my-lists": "Mis listas",
         "no-lists-yet": "No hay listas aún",
-        "public": "Públicas"
+        "public": "Públicas",
+        "items-requested": "{itemCount, plural, one {# pido} other {# pido}}",
+        "items-claimed": "{claimedCount} de {itemCount} reclamados",
+        "items-available": "{availableCount, plural, one {# disponible} other {# disponibles}}",
+        "owner": "Propietario",
+        "hide-owner": "Ocultar propietario"
     },
     "app": {
         "home": "Inicio",
