@@ -12,12 +12,13 @@
     let messageObj = $derived({ values: { name: item.name } });
 
     let isTileView = $derived(getListViewPreference() === "tile");
+    let displayOrder = $derived(item.displayOrder !== null ? item.displayOrder + 1 : null);
 </script>
 
 <div class="flex flex-col">
     <div class={["flex w-max items-center gap-x-2", isTileView && "md:flex-row-reverse"]}>
         <button
-            class="variant-outline-primary btn btn-icon btn-icon-sm size-[33px] md:btn-icon md:size-[43px]"
+            class="btn btn-icon btn-icon-sm md:btn-icon-base preset-outlined-primary-500"
             aria-label={$t("a11y.decrease-priority", messageObj)}
             onclick={(e) => {
                 e.stopPropagation();
@@ -31,15 +32,15 @@
             <label class="sr-only" for="displayOrder">{$t("wishes.display-order")}</label>
             <input
                 id={item.id + "-displayOrder"}
-                class="input h-[33px] w-16 text-center text-sm md:h-[43px] md:text-base"
+                class="input w-16 text-center text-sm md:text-base"
                 inputmode="numeric"
                 onchange={(e) => onPriorityChange?.(item, e.currentTarget.value)}
                 pattern="/d*"
-                value={item.displayOrder !== null ? item.displayOrder + 1 : null}
+                value={displayOrder}
             />
         </div>
         <button
-            class="variant-outline-primary btn btn-icon btn-icon-sm size-[33px] md:btn-icon md:size-[43px]"
+            class="btn btn-icon btn-icon-sm md:btn-icon-base preset-outlined-primary-500"
             aria-label={$t("a11y.increase-priority", messageObj)}
             onclick={(e) => {
                 e.stopPropagation();

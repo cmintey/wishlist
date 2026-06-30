@@ -3,16 +3,16 @@
     import IconSelector from "$lib/components/IconSelector.svelte";
     import { enhance } from "$app/forms";
     import ClearableInput from "$lib/components/ClearableInput.svelte";
-    import { rgbToHex } from "$lib/util";
     import type { List, User } from "$lib/generated/prisma/client";
-    import { getModalStore } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
     import MarkdownEditor from "../MarkdownEditor.svelte";
     import { page } from "$app/state";
     import Tooltip from "../Tooltip.svelte";
+    import ConfirmModal from "../modals/ConfirmModal.svelte";
+    import SelectListManagerModal from "../modals/SelectListManagerModal.svelte";
 
     interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
-        owner: Pick<User, "name" | "username" | "picture">;
+        owner: Pick<User, "id" | "name" | "username" | "picture">;
         managers: Pick<User, "id" | "name" | "username">[];
     }
 
@@ -27,53 +27,15 @@
 
     const { list: list_, persistButtonName, listMode, allowsPublicLists, groupId, editing = false }: Props = $props();
     const t = getFormatter();
-    const modalStore = getModalStore();
+    const formId: string = $props.id();
 
-    let list = $state(list_);
+    let list = $derived(list_);
     let colorElement: Element | undefined = $state();
-    let defaultColor: string = $derived.by(() => {
-        if (colorElement) {
-            const rgbColor = getComputedStyle(colorElement).backgroundColor;
-            const rgbValues = rgbColor.match(/\d+/g)?.map(Number.parseFloat);
-            return rgbValues ? rgbToHex(rgbValues[0], rgbValues[1], rgbValues[2]) : "";
-        }
-        return list.iconColor || "";
-    });
+    let defaultColor: string = $derived(
+        colorElement ? getComputedStyle(colorElement).backgroundColor : list.iconColor || ""
+    );
     let colorValue: string | null = $state((() => defaultColor)());
-    let managers = $state(list.managers);
-
-    const handleDelete = async () => {
-        return new Promise((resolve, reject) => {
-            return modalStore.trigger({
-                type: "confirm",
-                title: $t("general.please-confirm"),
-                body: $t("wishes.delete-list-confirmation"),
-                response(confirmed: boolean) {
-                    if (!confirmed) {
-                        reject();
-                    } else {
-                        resolve(null);
-                    }
-                },
-                buttonTextCancel: $t("general.cancel"),
-                buttonTextConfirm: $t("general.confirm")
-            });
-        });
-    };
-
-    const addManager = () => {
-        modalStore.trigger({
-            type: "component",
-            component: "selectListManager",
-            meta: {
-                groupId,
-                managers: [list.owner, ...managers]
-            },
-            response(user: { id: string; name: string; username: string }) {
-                managers = [...managers, user];
-            }
-        });
-    };
+    let managers = $derived(list.managers);
 
     const removeManager = (id: string) => {
         managers = managers.filter((user) => user.id !== id);
@@ -85,20 +47,18 @@
 </script>
 
 <form
+    id={formId}
     action="?/persist"
     method="POST"
     use:enhance={async (e) => {
         if (e.formData.get("iconColor") === defaultColor) {
             e.formData.delete("iconColor");
         }
-        if (e.action.search === "?/delete") {
-            await handleDelete().catch(() => e.cancel());
-        }
     }}
 >
     <div class="grid grid-cols-12 gap-4 pb-4">
         <div class="col-span-full flex w-full flex-row flex-wrap gap-4">
-            <label class="flex-grow" for="name">
+            <label class="label w-fit grow" for="name">
                 <span>{$t("auth.name")}</span>
                 <ClearableInput
                     id="name"
@@ -129,7 +89,7 @@
             {/if}
         </div>
 
-        <label class="col-span-full flex flex-col md:col-span-4" for="iconColor">
+        <label class="label col-span-full flex flex-col md:col-span-4" for="iconColor">
             <span>{$t("general.icon-bg-color")}</span>
             <div class="grid grid-cols-[auto_1fr] gap-2">
                 <input
@@ -141,8 +101,8 @@
                     bind:value={colorValue}
                 />
                 <ClearableInput
-                    class="input"
                     clearButtonLabel={$t("a11y.clear-color-field")}
+                    disabled
                     onValueClear={() => {
                         colorValue = defaultColor;
                         list.iconColor = defaultColor;
@@ -160,15 +120,15 @@
         </div>
 
         <div class="col-span-full">
-            <label>
+            <label class="label mb-1" for="description">
                 <span>{$t("general.description")}</span>
-                <MarkdownEditor
-                    id="description"
-                    name="description"
-                    placeholder={$t("general.add-a-description")}
-                    value={list.description}
-                />
             </label>
+            <MarkdownEditor
+                id="description"
+                name="description"
+                placeholder={$t("general.add-a-description")}
+                value={list.description}
+            />
         </div>
 
         <fieldset
@@ -176,7 +136,7 @@
             aria-labelledby="list-managers-label"
         >
             <div class="flex items-end justify-between">
-                <Tooltip>
+                <Tooltip iconClass="mt-0.5">
                     {#snippet label()}
                         <legend id="list-managers-label">{$t("wishes.list-managers")}</legend>
                     {/snippet}
@@ -184,14 +144,29 @@
                         <p>{$t("wishes.list-managers-tooltip")}</p>
                     {/snippet}
                 </Tooltip>
-                <button class="variant-ghost-primary btn btn-sm" onclick={addManager} type="button">
-                    {$t("wishes.add-a-manager")}
-                </button>
+
+                <SelectListManagerModal
+                    {groupId}
+                    managers={[list.owner, ...managers]}
+                    onSubmit={(newManager) => (managers = [...managers, newManager])}
+                >
+                    {#snippet trigger(props)}
+                        <button
+                            {...props}
+                            class="preset-tonal-primary border-primary-500 btn btn-sm border"
+                            type="button"
+                        >
+                            {$t("wishes.add-a-manager")}
+                        </button>
+                    {/snippet}
+                </SelectListManagerModal>
             </div>
 
             <div
-                class="border-surface-400-500-token flex h-36 flex-col space-y-2 overflow-y-scroll p-2 border-token rounded-container-token"
-                class:input-error={page.form?.errors?.managers}
+                class={[
+                    "border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-y-scroll border p-2",
+                    page.form?.errors?.managers && "input-invalid!"
+                ]}
                 data-testid="list-managers-list"
             >
                 {#if managers.length === 0}
@@ -214,7 +189,7 @@
                 {/each}
             </div>
             {#if page.form?.errors?.managers}
-                <p class="unstyled text-error-500-400-token text-xs">{page.form.errors.managers[0]}</p>
+                <p class="text-invalid">{page.form.errors.managers[0]}</p>
             {/if}
         </fieldset>
 
@@ -227,20 +202,31 @@
     </div>
 
     <div class="flex flex-row flex-wrap justify-between gap-4">
-        <button class="variant-ghost-secondary btn w-min" onclick={() => history.back()} type="button">
+        <button
+            class="preset-tonal-secondary border-secondary-500 btn w-min border"
+            onclick={() => history.back()}
+            type="button"
+        >
             {$t("general.cancel")}
         </button>
         <div class="flex flex-row gap-x-4">
             {#if editing}
-                <button class="variant-filled-error btn w-min" formaction="?/delete" type="submit">
-                    {$t("wishes.delete")}
-                </button>
+                <ConfirmModal
+                    confirmButtonProps={{ type: "submit", form: formId, formaction: "?/delete" }}
+                    description={$t("wishes.delete-list-confirmation")}
+                >
+                    {#snippet trigger(props)}
+                        <button {...props} class="preset-filled-error-500 btn w-min">
+                            {$t("wishes.delete")}
+                        </button>
+                    {/snippet}
+                </ConfirmModal>
             {/if}
-            <button class="variant-filled-primary btn w-min" type="submit">
+            <button class="preset-filled-primary-500 btn w-min" type="submit">
                 {persistButtonName}
             </button>
         </div>
     </div>
 </form>
 
-<div bind:this={colorElement} class="bg-primary-400-500-token hidden"></div>
+<div bind:this={colorElement} class="bg-primary-500 hidden"></div>

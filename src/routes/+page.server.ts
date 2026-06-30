@@ -9,7 +9,7 @@ import { getFormatter } from "$lib/server/i18n";
 export const load = (async () => {
     requireLogin();
 
-    redirect(302, "/lists");
+    redirect(308, "/lists");
 }) satisfies PageServerLoad;
 
 export const actions = {

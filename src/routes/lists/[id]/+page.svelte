@@ -16,7 +16,6 @@
     import { ListAPI } from "$lib/api/lists";
     import TokenCopy from "$lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
     import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
     import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
@@ -26,11 +25,13 @@
     import Markdown from "$lib/components/Markdown.svelte";
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
-    import { errorToast } from "$lib/components/toasts";
+    import { toaster } from "$lib/components/toaster";
+    import { itemSorter } from "$lib/comparators";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
+    // svelte-ignore state_referenced_locally
     let allItems: ItemOnListDTO[] = $state(data.list.items);
     let reordering = $state(false);
     let publicListUrl: URL | undefined = $state();
@@ -49,12 +50,12 @@
 
     // Initialize from server data (cookie) to prevent flicker
     // This value comes from the server, so SSR renders the correct view
+    // svelte-ignore state_referenced_locally
     initListViewPreference(data.initialViewPreference);
     let isTileView = $derived(getListViewPreference() === "tile");
 
     const flipDurationMs = 200;
-    const listAPI = new ListAPI(data.list.id);
-    const toastStore = getToastStore();
+    const listAPI = $derived(new ListAPI(data.list.id));
 
     const [send, receive] = crossfade({
         duration: (d) => Math.sqrt(d * 200),
@@ -77,6 +78,7 @@
     onMount(async () => {
         await updateHash();
     });
+
     onMount(() => {
         const eventSource = subscribeToEvents();
         return () => eventSource.close();
@@ -86,34 +88,20 @@
         allItems = data.list.items;
     });
 
-    $effect(() => {
-        if (reordering) {
-            allItems.forEach((it, idx) => (it.displayOrder = idx));
-        }
-    });
-
-    const groupItems = (items: ItemOnListDTO[]) => {
-        // When on own list, don't separate out claimed vs un-claimed
-        if (data.list.owner.isMe) {
-            return [items, []];
-        }
-        return items.reduce(
-            (g, v) => {
-                const userHasClaimed = v.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
-                if (v.isClaimable && !userHasClaimed) {
-                    g[0].push(v);
-                } else {
-                    g[1].push(v);
-                }
-                return g;
-            },
-            [[], []] as ItemOnListDTO[][]
+    const sortItems = (items: ItemOnListDTO[]) => {
+        return items.toSorted(
+            itemSorter({
+                userId: data.user?.id,
+                sort: page.url.searchParams.get("sort"),
+                dir: page.url.searchParams.get("dir"),
+                listOwnerId: data.list.owner.id
+            })
         );
     };
 
     const updateHash = async () => {
         const userHash = await hash(data.list.id);
-        $viewedItems[userHash] = await hashItems(allItems);
+        viewedItems.current[userHash] = await hashItems(allItems);
     };
 
     const subscribeToEvents = () => {
@@ -144,12 +132,13 @@
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);
         }
-        allItems = allItems.map((item) => {
+        const updatedItems = allItems.map((item) => {
             if (item.id === updatedItem.id) {
                 return { ...item, ...updatedItem };
             }
             return item;
         });
+        allItems = sortItems(updatedItems);
     };
 
     const removeItem = (removedItem: { id: number }) => {
@@ -160,7 +149,7 @@
         if (!(addedItem.approved || data.list.owner.isMe)) {
             return;
         }
-        allItems = [...allItems, addedItem];
+        allItems = sortItems([...allItems, addedItem]);
     };
 
     const getOrCreatePublicList = async () => {
@@ -168,11 +157,8 @@
             const listApi = new ListAPI(data.list.id);
             const resp = await listApi.makePublic();
             if (!resp.ok) {
-                const message = await resp.text();
-                toastStore.trigger({
-                    message,
-                    background: "variant-filled-error"
-                });
+                const description = await resp.text();
+                toaster.error({ description });
                 return;
             }
         }
@@ -194,12 +180,18 @@
             destroy: zone.destroy
         };
     }
+
+    const updateDisplayOrder = (items: ItemOnListDTO[]) => {
+        items.forEach((it, idx) => (it.displayOrder = idx));
+    };
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
-        allItems.forEach((item, idx) => (item.displayOrder = idx));
+        updateDisplayOrder(allItems);
     };
-    const swap = <T,>(arr: T[], a: number, b: number) => {
-        return arr.with(a, arr[b]).with(b, arr[a]);
+    const swap = (arr: ItemOnListDTO[], a: number, b: number) => {
+        const swapped = arr.with(a, arr[b]).with(b, arr[a]);
+        updateDisplayOrder(swapped);
+        return swapped;
     };
     const handleIncreasePriority = (itemId: number) => {
         const itemIdx = allItems.findIndex((item) => item.id === itemId);
@@ -218,7 +210,9 @@
         const currentIdx = allItems.findIndex((it) => it.id === item.id);
 
         if (Number.isNaN(targetIdx) || targetIdx < 0 || targetIdx > allItems.length - 1) {
-            errorToast(toastStore, $t("errors.display-order-invalid", { values: { min: 1, max: allItems.length } }));
+            toaster.error({
+                description: $t("errors.display-order-invalid", { values: { min: 1, max: allItems.length } })
+            });
             if (item.displayOrder) {
                 const el = document.getElementById(`${item.id}-displayOrder`) as HTMLInputElement;
                 el.value = (item.displayOrder + 1).toString();
@@ -258,10 +252,7 @@
         }));
         const response = await listAPI.updateItems(displayOrderUpdate);
         if (!response.ok) {
-            toastStore.trigger({
-                message: $t("wishes.unable-to-update-item-ordering"),
-                background: "variant-filled-error"
-            });
+            toaster.error({ description: $t("wishes.unable-to-update-item-ordering") });
             allItems = data.list.items;
         }
     };
@@ -273,7 +264,7 @@
             <Markdown source={data.list.description} />
         {/if}
         <button
-            class="text-sm text-primary-700 dark:text-primary-500 print:hidden"
+            class="text-primary-700 dark:text-primary-500 text-sm print:hidden"
             onclick={() => (hideDescription = !hideDescription)}
         >
             {hideDescription ? $t("wishes.show-description") : $t("wishes.hide-description")}
@@ -306,11 +297,11 @@
         {#if data.listMode === "registry" || data.list.public}
             <div class="flex flex-row gap-x-2">
                 {#if publicListUrl}
-                    <TokenCopy btnStyle="btn-sm" url={publicListUrl?.href}>
-                        <span>{$t("wishes.public-url")}</span>
+                    <TokenCopy btnStyle="btn-xs" url={publicListUrl?.href}>
+                        <span class="text-sm">{$t("wishes.public-url")}</span>
                     </TokenCopy>
                 {:else}
-                    <button class="variant-ringed-surface btn btn-sm text-xs" onclick={getOrCreatePublicList}>
+                    <button class="btn btn-xs inset-ring-surface-500 inset-ring" onclick={getOrCreatePublicList}>
                         {$t("wishes.share")}
                     </button>
                 {/if}
@@ -334,6 +325,7 @@
                         groupId={data.list.groupId}
                         {isTileView}
                         {item}
+                        onPublicList={!data.loggedInUser && data.list.public}
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
@@ -345,7 +337,7 @@
                 </div>
             {/each}
         </div>
-        <hr />
+        <hr class="hr" />
     </div>
 {/if}
 
@@ -367,7 +359,7 @@
             items,
             flipDurationMs,
             dragDisabled: false,
-            dropTargetClasses: ["variant-ringed-primary"],
+            dropTargetClasses: ["preset-outlined-primary-500"],
             dropTargetStyle: {}
         }}
     >
@@ -382,6 +374,7 @@
                         onDecreasePriority={handleDecreasePriority}
                         onIncreasePriority={handleIncreasePriority}
                         onPriorityChange={handlePriorityInput}
+                        onPublicList={!data.loggedInUser && data.list.public}
                         reorderActions
                         requireClaimEmail={data.requireClaimEmail}
                         showClaimForOwner={data.showClaimForOwner}
@@ -394,28 +387,28 @@
                 </div>
             {/each}
         {:else}
-            {#each groupItems(items) as groupedItems}
-                {#each groupedItems as item (item.id)}
-                    <div
-                        in:receive={{ key: item.id }}
-                        out:send|local={{ key: item.id }}
-                        animate:flip={{ duration: flipDurationMs }}
-                    >
-                        <ItemCard
-                            groupId={data.list.groupId}
-                            {isTileView}
-                            {item}
-                            onPublicList={!data.loggedInUser && data.list.public}
-                            requireClaimEmail={data.requireClaimEmail}
-                            showClaimForOwner={data.showClaimForOwner}
-                            showClaimedName={data.showClaimedName}
-                            showPublicClaimName={data.showPublicClaimName}
-                            showNameAcrossGroups={data.showNameAcrossGroups}
-                            user={data.loggedInUser}
-                            userCanManage={data.list.isManager}
-                        />
-                    </div>
-                {/each}
+
+            {#each items as item (item.id)}
+                <div
+                    id="item-{item.id}-wrapper"
+                    in:receive={{ key: item.id }}
+                    out:send={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
+                    <ItemCard
+                        groupId={data.list.groupId}
+                        {isTileView}
+                        {item}
+                        onPublicList={!data.loggedInUser && data.list.public}
+                        requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
+                        showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
+                        user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
+                    />
+                </div>
             {/each}
         {/if}
     </div>
@@ -429,13 +422,13 @@
 <!-- Add Item button -->
 {#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
     <button
-        class="z-90 variant-ghost-surface btn fixed right-4 h-16 w-16 rounded-full md:bottom-10 md:right-10 md:h-20 md:w-20 print:hidden"
+        class="preset-tonal btn btn-icon btn-icon-sm md:btn-icon-base inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 p-0! inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20 print:hidden"
         class:bottom-24={$isInstalled}
         class:bottom-4={!$isInstalled}
         aria-label="add item"
         onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >
-        <iconify-icon height="32" icon="ion:add" width="32"></iconify-icon>
+        <iconify-icon class="text-xl md:text-2xl" icon="ion:add"></iconify-icon>
     </button>
 {/if}
 

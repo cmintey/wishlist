@@ -12,7 +12,7 @@
     const { config }: Props = $props();
     const t = getFormatter();
 
-    let enabled = $state(config.oidc.enable);
+    let enabled = $derived(config.oidc.enable);
 </script>
 
 <SettingsGroup title={$t("admin.oidc")}>
@@ -22,7 +22,7 @@
     </label>
     {#if enabled}
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
-            <label for="oidcDiscoveryUrl">
+            <label class="label" for="oidcDiscoveryUrl">
                 <span>{$t("admin.oidc-url")}</span>
                 <input
                     id="oidcDiscoveryUrl"
@@ -34,19 +34,19 @@
                     value={config.oidc.discoveryUrl}
                 />
             </label>
-            <label for="oidcProviderName">
+            <label class="label" for="oidcProviderName">
                 <span>{$t("admin.oidc-provider-name")}</span>
                 <input
                     id="oidcProviderName"
                     name="oidcProviderName"
                     class="input"
                     autocomplete="off"
-                    placeholder="OAuth"
+                    placeholder={$t("general.oauth")}
                     type="text"
                     value={config.oidc.providerName}
                 />
             </label>
-            <label for="oidcClientId">
+            <label class="label" for="oidcClientId">
                 <span>{$t("admin.oidc-client-id")}</span>
                 <input
                     id="oidcClientId"
@@ -66,6 +66,42 @@
                 required
                 value={config.oidc.clientSecret}
             />
+
+            <Setting>
+                <label class="label" for="oidcNameClaim">
+                    <span>Name claim</span>
+                    <input
+                        id="oidcNameClaim"
+                        name="oidcNameClaim"
+                        class="input"
+                        autocomplete="off"
+                        placeholder="name"
+                        type="text"
+                        value={config.oidc.nameClaim}
+                    />
+                </label>
+                {#snippet description()}
+                    {$t("admin.oidc-claim-name-description")}
+                {/snippet}
+            </Setting>
+
+            <Setting>
+                <label class="label" for="oidcUsernameClaim">
+                    <span>Username claim</span>
+                    <input
+                        id="oidcUsernameClaim"
+                        name="oidcUsernameClaim"
+                        class="input"
+                        autocomplete="off"
+                        placeholder="preferred_username"
+                        type="text"
+                        value={config.oidc.usernameClaim}
+                    />
+                </label>
+                {#snippet description()}
+                    {$t("admin.oidc-claim-username-description")}
+                {/snippet}
+            </Setting>
 
             <Setting class="col-span-full">
                 <label class="checkbox-label">

@@ -4,13 +4,12 @@
     import type { Item } from "$lib/generated/prisma/client";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
-    import { getToastStore } from "@skeletonlabs/skeleton";
-    import { errorToast } from "$lib/components/toasts";
+    import { toaster } from "$lib/components/toaster";
     import { goto } from "$app/navigation";
+    import Alert from "$lib/components/Alert.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
-    const toastStore = getToastStore();
 
     let itemData: Pick<Item, "name" | "price" | "url" | "note" | "imageUrl"> = {
         name: "",
@@ -22,13 +21,6 @@
 
     let warningHidden = $state(false);
     let saving = $state(false);
-
-    const successToast = () =>
-        toastStore.trigger({
-            message: "Item created",
-            autohide: true,
-            timeout: 5000
-        });
 
     const clearFields = () => {
         const fieldIds = [
@@ -58,24 +50,14 @@
 </script>
 
 {#if data.suggestion && data.suggestionMethod === "approval" && !warningHidden}
-    <div class="pb-4">
-        <aside class="alert variant-ghost-warning">
-            <div class="alert-message flex flex-row items-center gap-x-4 space-y-0">
-                <span><iconify-icon class="text-4xl" icon="ion:warning"></iconify-icon></span>
-                <div>
-                    <span class="text-xl font-bold">{$t("wishes.heads-up")}</span>
-                    <p class="text-sm">
-                        {$t("wishes.approval-required", { values: { listOwner: data.list.owner.name } })}
-                    </p>
-                </div>
-            </div>
-            <div class="alert-actions">
-                <button class="variant-ghost-warning btn btn-sm" onclick={() => (warningHidden = true)}>
-                    {$t("general.ok")}
-                </button>
-            </div>
-        </aside>
-    </div>
+    <Alert title={$t("wishes.heads-up")} type="info">
+        {$t("wishes.approval-required", { values: { listOwner: data.list.owner.name } })}
+        {#snippet actions(variant)}
+            <button class={["btn btn-sm", variant]} onclick={() => (warningHidden = true)}>
+                {$t("general.ok")}
+            </button>
+        {/snippet}
+    </Alert>
 {/if}
 
 <form
@@ -86,11 +68,11 @@
         return async ({ result }) => {
             saving = false;
             if (result.type === "error") {
-                errorToast(toastStore, (result.error?.message as string) || $t("general.oops"));
+                toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                 return;
             }
             if (result.type === "redirect") {
-                successToast();
+                toaster.info({ description: $t("wishes.item-created") });
 
                 if (submitter?.id === "submit-stay") {
                     clearFields();

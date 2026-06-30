@@ -36,7 +36,7 @@
     {#if item.mostWanted}
         <div
             class={[
-                "glow variant-filled-primary chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
+                "glow preset-filled-primary-500 chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
                 badgeClass
             ]}
         >
@@ -44,15 +44,16 @@
             <span class={[shrinkBadge ? "hidden md:block" : "block", "print:inline"]}>{$t("wishes.most-wanted")}</span>
         </div>
     {/if}
-    <Image {...props} alt={item.name} data-testid="image" referrerpolicy="no-referrer" src={imageUrl}>
+    <Image class={props.class} alt={item.name} data-testid="image" referrerpolicy="no-referrer" src={imageUrl}>
         {@render defaultImage($t)}
     </Image>
 </div>
 
 <style>
     .glow {
-        box-shadow: 0px 0px 8px 1px rgb(var(--color-primary-500));
+        box-shadow: 0px 0px 8px 1px var(--color-primary-500);
     }
+
     @media print {
         .glow {
             box-shadow: none;

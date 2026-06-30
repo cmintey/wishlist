@@ -1,6 +1,6 @@
-FROM node:24-slim@sha256:bf22df20270b654c4e9da59d8d4a3516cce6ba2852e159b27288d645b7a7eedc AS base
+FROM node:24-slim@sha256:c2d5ade763cacfb03fe9cb8e8af5d1be5041ff331921fa26a9b231ca3a4f780a AS base
 WORKDIR /usr/src/app
-RUN npm install -g pnpm@latest-10
+RUN npm install -g pnpm@latest-11
 
 # Build step
 FROM base AS build
@@ -21,7 +21,7 @@ RUN pnpm prisma generate
 COPY src/ ./src
 COPY templates/ ./templates
 COPY static/ ./static
-COPY vite.config.ts tsconfig.json tailwind.config.ts svelte.config.js postcss.config.cjs theme.ts ./
+COPY vite.config.ts tsconfig.json svelte.config.js ./
 ARG VERSION="unk"
 ARG SHA="unk"
 ENV VERSION=${VERSION}
@@ -30,7 +30,7 @@ RUN pnpm run build
 RUN pnpm prune --prod
 
 # Download Caddy from github
-FROM --platform=$BUILDPLATFORM alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62 AS caddy
+FROM --platform=$BUILDPLATFORM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS caddy
 
 ARG TARGETPLATFORM
 ARG CADDY_VERSION=2.10.0
@@ -58,7 +58,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=caddy /caddy /usr/bin/caddy
-COPY ["package.json", "pnpm-lock.yaml", "entrypoint.sh", "prisma.config.ts", "Caddyfile", "./"]
+COPY ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "entrypoint.sh", "prisma.config.ts", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
 

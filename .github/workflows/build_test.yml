@@ -22,10 +22,10 @@ jobs:
 
             - name: Set up Docker
               id: buildx
-              uses: docker/setup-buildx-action@v3
+              uses: docker/setup-buildx-action@v4
 
             - name: Build image
-              uses: docker/build-push-action@v6
+              uses: docker/build-push-action@v7
               with:
                   context: ./
                   file: ./Dockerfile
@@ -35,11 +35,11 @@ jobs:
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v6
               name: Install pnpm
               id: pnpm-install
               with:
-                  version: 10
+                  version: 11
                   run_install: false
 
             - name: Install Node.js
@@ -65,12 +65,12 @@ jobs:
               run: pnpm install
 
             - name: Install Playwright Browsers
-              run: pnpm exec playwright install --with-deps
+              run: pnpm test:setup
 
             - name: Run Playwright tests
               run: pnpm test
 
-            - uses: actions/upload-artifact@v6
+            - uses: actions/upload-artifact@v7
               if: ${{ !cancelled() }}
               with:
                   name: playwright-report

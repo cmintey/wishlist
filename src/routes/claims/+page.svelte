@@ -83,7 +83,15 @@
             >
                 {#each sortedItems as item (item.id)}
                     <div transition:fade animate:flip={{ duration: 200 }}>
-                        <ItemCard {isTileView} {item} requireClaimEmail showClaimedName showFor user={data.user} />
+                        <ItemCard
+                            groupId={data.user.activeGroupId}
+                            {isTileView}
+                            {item}
+                            requireClaimEmail
+                            showClaimedName
+                            showFor
+                            user={data.user}
+                        />
                     </div>
                 {/each}
             </div>

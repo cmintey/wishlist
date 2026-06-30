@@ -1,0 +1,17 @@
+@layer components {
+    .alert {
+        @apply card flex items-center gap-4 p-2;
+    }
+
+    .alert-icon {
+        @apply flex shrink;
+    }
+
+    .alert-message {
+        @apply flex grow;
+    }
+
+    .alert-actions {
+        @apply flex shrink;
+    }
+}

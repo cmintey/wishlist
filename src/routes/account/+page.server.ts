@@ -11,12 +11,10 @@ import { getResetPasswordSchema } from "$lib/server/validations";
 import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
-import type { Prisma } from "$lib/generated/prisma/client";
-import { createImage, tryDeleteImage } from "$lib/server/image-util";
 import { getFormatter } from "$lib/server/i18n";
 import { hashPassword, verifyPasswordHash } from "$lib/server/password";
 import { getOIDCConfig } from "$lib/server/openid";
-import { logger } from "$lib/server/logger";
+import { unlinkOauth, updatePicture, updateProfile } from "$lib/server/profile";
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
     const user = requireLogin();
@@ -33,78 +31,12 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 export const actions: Actions = {
     profile: async ({ request }) => {
         const user = requireLogin();
-        const $t = await getFormatter();
-
-        const formData = Object.fromEntries(await request.formData());
-        const schema = z.object({
-            name: z.string().trim().min(1, $t("errors.name-must-not-be-blank")),
-            username: z.string().trim().min(1, $t("errors.username-must-not-be-blank")),
-            email: z.email()
-        });
-        const nameData = schema.safeParse(formData);
-        if (!nameData.success) {
-            return fail(400, { error: true, errors: z.flattenError(nameData.error).fieldErrors });
-        }
-
-        try {
-            await client.user.update({
-                data: {
-                    name: nameData.data.name,
-                    username: nameData.data.username,
-                    email: nameData.data.email
-                },
-                where: {
-                    username: user.username
-                }
-            });
-        } catch (e) {
-            const err = e as Prisma.PrismaClientKnownRequestError;
-            logger.error({ err: e });
-            const targets = err.meta?.target as string[];
-            const errors = targets.reduce(
-                (prev, target) => ({
-                    ...prev,
-                    [target]: [$t("errors.username-already-in-use", { values: { username: target } })]
-                }),
-                {}
-            );
-            return fail(400, {
-                error: true,
-                errors
-            });
-        }
+        return request.formData().then((fd) => updateProfile(user.id, fd));
     },
 
     profilePicture: async ({ request }) => {
         const authUser = requireLogin();
-
-        const form = await request.formData();
-        const image = form.get("profilePic") as File;
-
-        const filename = await createImage(authUser.username, image);
-
-        if (filename) {
-            const user = await client.user.findUniqueOrThrow({
-                select: {
-                    picture: true
-                },
-                where: {
-                    id: authUser.id
-                }
-            });
-            await client.user.update({
-                where: {
-                    id: authUser.id
-                },
-                data: {
-                    picture: filename
-                }
-            });
-            if (user.picture) {
-                await tryDeleteImage(user.picture);
-            }
-        }
-        return filename;
+        return request.formData().then((fd) => updatePicture(authUser.id, authUser.username, fd));
     },
 
     passwordchange: async ({ request, cookies, locals }) => {
@@ -177,14 +109,6 @@ export const actions: Actions = {
 
     unlinkoauth: async () => {
         const user = requireLogin();
-
-        await client.user.update({
-            data: {
-                oauthId: null
-            },
-            where: {
-                id: user.id
-            }
-        });
+        await unlinkOauth(user.id);
     }
 };

@@ -1,8 +1,8 @@
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
 import { getConfig, writeConfig } from "$lib/server/config";
-import { fail, type Actions } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { fail } from "@sveltejs/kit";
+import type { Action, Actions, PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
 import { settingSchema } from "$lib/server/validations";
 import { z } from "zod";
@@ -26,28 +26,32 @@ export const load: PageServerLoad = async () => {
     };
 };
 
+const saveSettings: Action = async ({ request }) => {
+    await requireRole(Role.ADMIN);
+
+    const formData = Object.fromEntries(await request.formData());
+    const configData = settingSchema.safeParse(formData);
+
+    if (!configData.success) {
+        return fail(400, { action: "settings", error: z.prettifyError(configData.error) });
+    }
+
+    const newConfig = generateConfig(configData.data);
+    await writeConfig(newConfig);
+
+    return { action: "settings", success: true };
+};
+
 export const actions: Actions = {
-    "send-test": async () => {
+    "send-test": async (event) => {
         const user = await requireRole(Role.ADMIN);
+
+        await saveSettings(event);
 
         const resp = await sendTest(user.email);
         return { action: "send-test", ...resp };
     },
-    settings: async ({ request }) => {
-        await requireRole(Role.ADMIN);
-
-        const formData = Object.fromEntries(await request.formData());
-        const configData = settingSchema.safeParse(formData);
-
-        if (!configData.success) {
-            return fail(400, { action: "settings", error: z.prettifyError(configData.error) });
-        }
-
-        const newConfig = generateConfig(configData.data);
-        await writeConfig(newConfig);
-
-        return { action: "settings", success: true };
-    }
+    settings: saveSettings
 };
 
 const generateConfig = (configData: z.infer<typeof settingSchema>) => {
@@ -59,7 +63,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               user: configData.smtpUser,
               pass: configData.smtpPass,
               from: configData.smtpFrom!,
-              fromName: configData.smtpFromName!
+              fromName: configData.smtpFromName!,
+              useTls: configData.smtpUseTls,
+              ignoreCertCheck: configData.smtpIgnoreCertCheck
           }
         : {
               enable: false,
@@ -68,7 +74,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               user: configData.smtpUser,
               pass: configData.smtpPass,
               from: configData.smtpFrom,
-              fromName: configData.smtpFromName
+              fromName: configData.smtpFromName,
+              useTls: configData.smtpUseTls,
+              ignoreCertCheck: configData.smtpIgnoreCertCheck
           };
 
     const oidcConfig: OIDCConfig = configData.enableOIDC
@@ -81,7 +89,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               autoRedirect: configData.oidcAutoRedirect,
               autoRegister: configData.oidcAutoRegister,
               enableSync: configData.oidcEnableSync,
-              disableEmailVerification: configData.oidcDisableEmailVerification
+              disableEmailVerification: configData.oidcDisableEmailVerification,
+              nameClaim: configData.oidcNameClaim,
+              usernameClaim: configData.oidcUsernameClaim
           }
         : {
               enable: false,
@@ -92,7 +102,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               autoRedirect: configData.oidcAutoRedirect,
               autoRegister: configData.oidcAutoRegister,
               enableSync: configData.oidcEnableSync,
-              disableEmailVerification: configData.oidcDisableEmailVerification
+              disableEmailVerification: configData.oidcDisableEmailVerification,
+              nameClaim: configData.oidcNameClaim,
+              usernameClaim: configData.oidcUsernameClaim
           };
 
     const newConfig: Config = {

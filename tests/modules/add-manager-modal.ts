@@ -7,13 +7,12 @@ export class AddManagerModal extends Modal {
 
     constructor(page: Page) {
         super(page, { submitButtonText: "Add manager" });
-        this.searchInput = this.modal.getByLabel("Search");
+        this.searchInput = this.modal.getByRole("searchbox");
         this.searchResultsContainer = this.modal.getByRole("listbox");
     }
 
     async searchAndSelect(name: string) {
-        await expect(this.modal).toBeVisible();
-        await expect(this.searchInput).toBeVisible();
+        await this.modal.waitFor({ state: "visible", timeout: 5000 });
         await this.searchInput.fill(name);
         const result = this.searchResultsContainer.getByRole("option", { name });
         await expect(result).toBeVisible();

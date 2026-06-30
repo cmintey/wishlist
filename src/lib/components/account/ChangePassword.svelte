@@ -1,12 +1,11 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
-    import { getToastStore } from "@skeletonlabs/skeleton";
     import PasswordInput from "../PasswordInput.svelte";
     import { getFormatter } from "$lib/i18n";
+    import { toaster } from "../toaster";
 
     const t = getFormatter();
-    const toastStore = getToastStore();
 
     let passwordReset = $state({
         current: "",
@@ -20,14 +19,8 @@
     use:enhance={() => {
         return async ({ result, update }) => {
             if (result.type === "success") {
-                const toastSettings = {
-                    message: $t("auth.password-updated-successfully"),
-                    autohide: true,
-                    timeout: 5000
-                };
-
                 passwordReset.current = "";
-                toastStore.trigger(toastSettings);
+                toaster.info({ description: $t("auth.password-updated-successfully") });
             }
 
             passwordReset.new = "";
@@ -36,30 +29,29 @@
         };
     }}
 >
-    <div class="flex flex-col items-start space-y-4">
+    <div class="flex w-full flex-col items-start space-y-4 md:w-11/12 md:max-w-96">
         <h3 class="h3">{$t("admin.credentials")}</h3>
-        <div class="flex space-y-1">
+        <div class="flex w-full space-y-1">
             <PasswordInput
                 id="oldpassword"
                 name="oldPassword"
                 autocomplete="current-password"
+                error={page.form?.errors?.oldPassword}
                 label={$t("auth.current-password")}
                 bind:value={passwordReset.current}
             />
             {#if page.form?.errors?.oldPassword}
-                <span class="text-xs text-red-500">{page.form?.errors?.oldPassword[0]}</span>
+                <span class="text-invalid">{page.form?.errors?.oldPassword[0]}</span>
             {/if}
         </div>
 
-        <div>
-            <PasswordInput
-                id="newpassword"
-                autocomplete="new-password"
-                label={$t("auth.new-password")}
-                strengthMeter
-                bind:value={passwordReset.new}
-            />
-        </div>
+        <PasswordInput
+            id="newpassword"
+            autocomplete="new-password"
+            label={$t("auth.new-password")}
+            strengthMeter
+            bind:value={passwordReset.new}
+        />
 
         <PasswordInput
             id="confirmpassword"
@@ -69,10 +61,10 @@
             bind:value={passwordReset.confirm}
         />
         {#if passwordReset.new !== passwordReset.confirm}
-            <span class="unstyled text-xs text-red-500">{$t("auth.passwords-must-match")}</span>
+            <span class="unstyled text-invalid">{$t("auth.passwords-must-match")}</span>
         {/if}
         {#if page.form?.errors?.newPassword}
-            <span class="text-xs text-red-500">{page.form?.errors?.newPassword[0]}</span>
+            <span class="text-invalid">{page.form?.errors?.newPassword[0]}</span>
         {/if}
 
         <label class="checkbox-label">
@@ -81,7 +73,7 @@
         </label>
 
         <button
-            class="variant-filled-primary btn w-fit"
+            class="preset-filled-primary-500 btn w-fit"
             disabled={passwordReset.current === "" ||
                 passwordReset.new === "" ||
                 passwordReset.new !== passwordReset.confirm}

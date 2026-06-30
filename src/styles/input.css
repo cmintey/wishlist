@@ -1,0 +1,35 @@
+@layer utilities {
+    input[type="checkbox"] {
+        @apply bg-surface-200-800 disabled:checked:bg-surface-500 border-surface-300-700 disabled:cursor-not-allowed;
+    }
+
+    .checkbox-label {
+        @apply flex flex-row items-center gap-x-2;
+    }
+
+    .select,
+    .input,
+    .input-group,
+    .textarea {
+        background-color: var(--color-surface-200-800);
+        --tw-ring-color: var(--color-surface-300-700);
+    }
+
+    .input-group {
+        /* Dividers */
+        & > * + * {
+            border-left-width: 1px !important;
+            border-color: var(--color-surface-300-700);
+        }
+    }
+
+    .input,
+    .ig-input,
+    .textarea {
+        padding-block: calc(var(--spacing-input) * 1);
+        padding-inline: calc(var(--spacing-input) * 3);
+        &::placeholder {
+            color: var(--color-surface-600-400);
+        }
+    }
+}

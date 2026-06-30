@@ -14,6 +14,7 @@ import type { UserInfoResponse } from "openid-client";
 export const POST: RequestHandler = async (event) => {
     const $t = await getFormatter();
     const userinfo = await handleCallback(event);
+    const config = await getConfig();
 
     logger.debug("Searching for existing user via oauthId: %s", userinfo.sub);
     // Find by oAuthId
@@ -30,12 +31,10 @@ export const POST: RequestHandler = async (event) => {
     });
     if (user) {
         logger.debug("Found existing user: %s", user.id);
-        await syncUserDetails(user, userinfo);
+        await syncUserDetails(user, userinfo, config);
         await authenticate(event, user.id);
     }
     logger.debug("No existing user found");
-
-    const config = await getConfig();
 
     if (!userinfo.email) {
         logger.error("No email found in userinfo");
@@ -72,7 +71,7 @@ export const POST: RequestHandler = async (event) => {
             }
         });
         logger.debug("Linked user account to OAuth via oauthId: %s", userinfo.sub);
-        await syncUserDetails(user, userinfo);
+        await syncUserDetails(user, userinfo, config);
         await authenticate(event, user.id);
     }
 
@@ -87,8 +86,8 @@ export const POST: RequestHandler = async (event) => {
     }
 
     const userData = {
-        name: userinfo.name ?? userinfo.email,
-        username: userinfo.preferred_username ?? userinfo.email,
+        name: extractClaim(config.oidc.nameClaim || "name", userinfo, userinfo.email)!,
+        username: extractClaim(config.oidc.usernameClaim || "preferred_username", userinfo, userinfo.email)!,
         email: userinfo.email,
         oauthId: userinfo.sub
     };
@@ -116,17 +115,35 @@ async function authenticate(event: RequestEvent, userId: string): Promise<never>
     redirect(302, redirectTo);
 }
 
-async function syncUserDetails(user: Pick<User, "id" | "name" | "email" | "username">, userinfo: UserInfoResponse) {
+function extractClaim(claim: string | null | undefined, userinfo: UserInfoResponse, fallback?: string) {
+    if (claim) {
+        const value = userinfo[claim];
+        if (value && typeof value === "string") {
+            return value;
+        }
+    }
+
+    logger.warn(`'${claim}' claim was not found in user's claims. Available claims: ${Object.keys(userinfo)}`);
+    return fallback;
+}
+
+async function syncUserDetails(
+    user: Pick<User, "id" | "name" | "email" | "username">,
+    userinfo: UserInfoResponse,
+    config: Config
+) {
     const updateData: Prisma.UserUpdateInput = {};
 
-    if (userinfo.name && user.name !== userinfo.name) {
-        updateData["name"] = userinfo.name;
-    }
     if (userinfo.email && user.email !== userinfo.email) {
         updateData["email"] = userinfo.email;
     }
-    if (userinfo.preferred_username && user.username !== userinfo.preferred_username) {
-        updateData["username"] = userinfo.preferred_username;
+    const name = extractClaim(config.oidc.nameClaim || "name", userinfo);
+    if (name && user.name !== name) {
+        updateData["name"] = name;
+    }
+    const username = extractClaim(config.oidc.usernameClaim || "preferred_username", userinfo);
+    if (username && user.username !== username) {
+        updateData["username"] = username;
     }
 
     if (Object.keys(updateData).length === 0) {
@@ -144,16 +161,13 @@ async function syncUserDetails(user: Pick<User, "id" | "name" | "email" | "usern
                 id: {
                     not: user.id
                 },
-                OR: [
-                    userinfo.email ? { email: userinfo.email } : {},
-                    userinfo.preferred_username ? { username: userinfo.preferred_username } : {}
-                ]
+                OR: [userinfo.email ? { email: userinfo.email } : {}, username ? { username } : {}]
             }
         });
 
         if (users.length > 0) {
             const conflictingEmail = users.find(({ email }) => email === userinfo.email) !== undefined;
-            const conflictingUsername = users.find(({ email }) => email === userinfo.preferred_username) !== undefined;
+            const conflictingUsername = users.find(({ email }) => email === username) !== undefined;
 
             const conflicts: Record<string, unknown> = {};
             if (conflictingEmail) {
@@ -161,7 +175,7 @@ async function syncUserDetails(user: Pick<User, "id" | "name" | "email" | "usern
                 updateData["email"] = undefined;
             }
             if (conflictingUsername) {
-                conflicts["username"] = userinfo.preferred_username;
+                conflicts["username"] = username;
                 updateData["username"] = undefined;
             }
             logger.warn("Unable to sync the following attributes due to conflicts: %s", conflicts);

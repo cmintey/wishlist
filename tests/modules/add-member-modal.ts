@@ -7,7 +7,7 @@ export class AddMemberModal extends Modal {
 
     constructor(page: Page) {
         super(page, { submitButtonText: "Add User" });
-        this.searchInput = page.getByLabel("Search");
+        this.searchInput = page.getByRole("searchbox");
         this.searchResultsContainer = page.getByRole("listbox");
     }
 

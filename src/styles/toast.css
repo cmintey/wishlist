@@ -1,0 +1,14 @@
+[data-scope="toast"][data-part="root"] {
+    &[data-type="info"],
+    &[data-type="loading"] {
+        @apply preset-tonal-secondary preset-outlined-secondary-500;
+    }
+
+    &[data-type="success"] {
+        @apply preset-tonal-success preset-outlined-success-500;
+    }
+
+    &[data-type="error"] {
+        @apply preset-tonal-error preset-outlined-error-500;
+    }
+}

@@ -56,7 +56,11 @@ const sendEmail = async (options: Mail.Options) => {
     const transport = nodemailer.createTransport({
         port: config.smtp.port,
         host: config.smtp.host,
-        auth: config.smtp.user && config.smtp.pass ? { user: config.smtp.user, pass: config.smtp.pass } : undefined
+        auth: config.smtp.user && config.smtp.pass ? { user: config.smtp.user, pass: config.smtp.pass } : undefined,
+        secure: config.smtp.useTls || false,
+        tls: {
+            rejectUnauthorized: config.smtp.ignoreCertCheck === true ? false : true
+        }
     });
 
     return await transport

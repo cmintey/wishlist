@@ -1,30 +1,20 @@
 <script lang="ts">
-    import "../app.postcss";
-    import "../print.postcss";
+    import "../app.css";
 
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import { page } from "$app/state";
-    import { Modal, Toast, storePopup, type ModalComponent, initializeStores } from "@skeletonlabs/skeleton";
-    import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
     import { pwaInfo } from "virtual:pwa-info";
 
     import NavBar from "$lib/components/navigation/NavBar.svelte";
     import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
-    import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
-    import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
-    import InviteUserModal from "$lib/components/modals/InviteUserModal.svelte";
     import type { LayoutProps } from "./$types";
     import { onMount } from "svelte";
     import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
     import { isInstalled } from "$lib/stores/is-installed";
     import PullToRefresh from "pulltorefreshjs";
     import { navItems } from "$lib/components/navigation/navigation";
-    import Drawer from "$lib/components/Drawer.svelte";
-    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
-    import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
-    import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
     import { setFormatter, setLocale } from "$lib/i18n";
-    import SelectListManagerModal from "$lib/components/modals/SelectListManagerModal.svelte";
+    import Toaster from "$lib/components/toaster/Toaster.svelte";
 
     const { data, children }: LayoutProps = $props();
 
@@ -59,18 +49,36 @@
         }
     });
 
-    initializeStores();
-
+    let shouldPullToRefresh = $state(true);
     onMount(() => {
         if (window.matchMedia("(display-mode: standalone)").matches) {
             $isInstalled = true;
+
+            // don't PTR inside of dialogs
+            document.body.addEventListener("touchstart", (ev) => {
+                let el = ev.target as HTMLElement | null;
+                while (el && el.parentNode && el !== document.body) {
+                    if (el.scrollTop > 0) {
+                        shouldPullToRefresh = false;
+                    }
+                    if (el.getAttribute("role") === "dialog") {
+                        shouldPullToRefresh = false;
+                        break;
+                    }
+                    el = el.parentNode as HTMLElement;
+                }
+            });
+            document.body.addEventListener("touchend", () => {
+                shouldPullToRefresh = true;
+            });
             const ptr = PullToRefresh.init({
                 mainElement: document.getElementById("main") as unknown as string,
                 distThreshold: 70,
                 resistanceFunction: (t) => Math.min(1, t / 4.5),
                 onRefresh() {
                     window.location.reload();
-                }
+                },
+                shouldPullToRefresh: () => !window.scrollY && shouldPullToRefresh
             });
             return () => ptr.destroy();
         }
@@ -91,39 +99,14 @@
         }
     });
 
-    storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-
-    const modalComponentRegistry: Record<string, ModalComponent> = {
-        addUser: {
-            ref: AddUserModal
-        },
-        groupSelect: {
-            ref: GroupSelectModal
-        },
-        inviteUser: {
-            ref: InviteUserModal
-        },
-        claimItemModal: {
-            ref: ClaimItemModal
-        },
-        deleteItem: {
-            ref: DeleteItemModal
-        },
-        chooseLanguage: {
-            ref: ChangeLanguageModal
-        },
-        selectListManager: {
-            ref: SelectListManagerModal
-        }
-    };
-
     const webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
+
+    let footerHeight: number | undefined = $state();
+    let toasterYShift: number | undefined = $derived(footerHeight && footerHeight + 12);
 </script>
 
-<Drawer />
-
 <div class="min-h-screen">
-    <header class="sticky top-0 z-10 print:hidden">
+    <header class="sticky top-0 z-15 print:hidden">
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
@@ -137,13 +120,12 @@
         {@render children?.()}
     </main>
 
-    <footer class="sticky bottom-0 z-10 print:hidden">
+    <footer class="sticky bottom-0 z-10 print:hidden" bind:clientHeight={footerHeight}>
         <BottomTabs {navItems} user={data.user} />
     </footer>
 </div>
 
-<Toast />
-<Modal components={modalComponentRegistry} />
+<Toaster yShift={toasterYShift} />
 
 <svelte:head>
     {@html webManifestLink}

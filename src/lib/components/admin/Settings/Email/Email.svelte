@@ -2,8 +2,8 @@
     import SettingsGroup from "../SettingsGroup.svelte";
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
-    import { ProgressRadial } from "@skeletonlabs/skeleton";
     import { getFormatter } from "$lib/i18n";
+    import Setting from "../Setting.svelte";
 
     interface Props {
         config: Pick<Config, "smtp">;
@@ -11,11 +11,10 @@
         hidden?: boolean;
     }
 
-    const { config: config_, sending, hidden = false }: Props = $props();
+    const { config, sending, hidden = false }: Props = $props();
     const t = getFormatter();
 
-    let config = $state(config_);
-    let enabled = $state(config.smtp.enable);
+    let enabled = $derived(config.smtp.enable);
     let allFilled = $derived(
         enabled && config.smtp.from && config.smtp.fromName && config.smtp.host && config.smtp.port
     );
@@ -33,7 +32,7 @@
         </label>
         {#if enabled}
             <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
-                <label for="smtpHost">
+                <label class="label" for="smtpHost">
                     <span>{$t("admin.smtp-host")}</span>
                     <input
                         id="smtpHost"
@@ -45,7 +44,7 @@
                         bind:value={config.smtp.host}
                     />
                 </label>
-                <label for="smtpPort">
+                <label class="label" for="smtpPort">
                     <span>{$t("admin.smtp-port")}</span>
                     <input
                         id="smtpPort"
@@ -57,7 +56,7 @@
                         bind:value={config.smtp.port}
                     />
                 </label>
-                <label for="smtpUser">
+                <label class="label" for="smtpUser">
                     <span>{$t("general.user")}</span>
                     <input
                         id="smtpUser"
@@ -74,7 +73,7 @@
                     label={$t("auth.password")}
                     bind:value={config.smtp.pass}
                 />
-                <label for="smtpFrom">
+                <label class="label" for="smtpFrom">
                     <span>{$t("admin.smtp-from-email")}</span>
                     <input
                         id="smtpFrom"
@@ -86,7 +85,7 @@
                         bind:value={config.smtp.from}
                     />
                 </label>
-                <label for="smtpFromName">
+                <label class="label" for="smtpFromName">
                     <span>{$t("admin.smtp-from-name")}</span>
                     <input
                         id="smtpFromName"
@@ -98,16 +97,52 @@
                         bind:value={config.smtp.fromName}
                     />
                 </label>
+
+                <Setting class="col-span-full">
+                    <label class="checkbox-label">
+                        <input
+                            id="smtpUseTls"
+                            name="smtpUseTls"
+                            class="checkbox"
+                            checked={config.smtp.useTls}
+                            type="checkbox"
+                        />
+                        <span>{$t("admin.smtp-use-tls")}</span>
+                    </label>
+                    {#snippet description()}
+                        <span>
+                            {$t("admin.smtp-use-tls-description")}
+                        </span>
+                    {/snippet}
+                </Setting>
+                <Setting class="col-span-full">
+                    <label class="checkbox-label">
+                        <input
+                            id="smtpIgnoreCertCheck"
+                            name="smtpIgnoreCertCheck"
+                            class="checkbox"
+                            checked={config.smtp.ignoreCertCheck}
+                            type="checkbox"
+                        />
+                        <span>{$t("admin.ignore-cert-check")}</span>
+                    </label>
+                    {#snippet description()}
+                        <span>
+                            {$t("admin.smtp-ignore-cert-check-description")}
+                        </span>
+                    {/snippet}
+                </Setting>
             </div>
             <div class="flex w-full flex-row justify-end">
                 <button
-                    class="variant-ghost-primary btn mt-2 h-min w-fit"
+                    class="preset-tonal-primary border-primary-500 btn mt-2 h-min w-fit border"
                     disabled={!allFilled || sending}
                     formaction="/admin/settings?/send-test"
                     type="submit"
                 >
                     {#if sending}
-                        <ProgressRadial stroke={64} width="w-6" />
+                        <span class="loading loading-spinner loading-xs"></span>
+                        <span>{$t("admin.sending")}</span>
                     {:else}
                         {$t("admin.test-email")}
                     {/if}

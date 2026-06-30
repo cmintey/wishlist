@@ -1,37 +1,48 @@
 <script lang="ts">
-    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+    import { Popover, Portal } from "@skeletonlabs/skeleton-svelte";
     import type { Snippet } from "svelte";
+    import type { ClassValue } from "svelte/elements";
 
     interface Props {
         label: Snippet;
         description: Snippet;
         icon?: Snippet;
+        iconClass?: ClassValue;
     }
 
     const props: Props = $props();
-    const id = $props.id();
-    const popupId = "tooltip-" + id;
-
-    const popupSettings: PopupSettings = {
-        event: "click",
-        target: popupId,
-        placement: "top"
-    };
 </script>
 
 <div class="flex items-center gap-2">
     {@render props.label()}
-    <button class="mt-0.5" aria-label="tooltip" type="button" use:popup={popupSettings}>
-        <span class="flex content-center items-center">
-            {#if props.icon}
-                {@render props.icon()}
-            {:else}
-                <iconify-icon class="text-secondary-500" icon="ion:help-circle-outline"></iconify-icon>
-            {/if}
-        </span>
-    </button>
-    <div class="card variant-filled-surface z-20 w-80 p-4" data-popup={popupId}>
-        {@render props.description()}
-        <div class="variant-filled-surface arrow"></div>
-    </div>
+    <Popover>
+        <Popover.Trigger aria-label="tooltip" type="button">
+            <span class="flex content-center items-center">
+                {#if props.icon}
+                    {@render props.icon()}
+                {:else}
+                    <iconify-icon
+                        class={["text-secondary-500", props.iconClass]}
+                        icon="ion:help-circle-outline"
+                    ></iconify-icon>
+                {/if}
+            </span>
+        </Popover.Trigger>
+        <Portal>
+            <Popover.Positioner>
+                <Popover.Content
+                    class="card preset-filled-surface-500 z-20 w-80 p-4 transition-all transition-discrete data-[state=closed]:scale-90 data-[state=open]:scale-100 starting:data-[state=closed]:scale-100 starting:data-[state=open]:scale-90"
+                >
+                    <Popover.Description>
+                        {@render props.description()}
+                    </Popover.Description>
+                    <Popover.Arrow
+                        style="--arrow-size: calc(var(--spacing) * 2); --arrow-background: var(--color-surface-500);"
+                    >
+                        <Popover.ArrowTip />
+                    </Popover.Arrow>
+                </Popover.Content>
+            </Popover.Positioner>
+        </Portal>
+    </Popover>
 </div>

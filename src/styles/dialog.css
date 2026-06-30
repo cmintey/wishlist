@@ -1,0 +1,8 @@
+[data-scope="dialog"][data-part="content"] {
+    &[data-has-nested] {
+        filter: blur(calc(4px * var(--nested-layer-count)));
+        @variant sm {
+            transform: scale(calc(1 - var(--nested-layer-count) * 0.05));
+        }
+    }
+}

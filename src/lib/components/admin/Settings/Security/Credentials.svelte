@@ -28,7 +28,7 @@
     </Setting>
 
     <Setting>
-        <label class="flex flex-col" for="passwordStrength">
+        <label class="label flex flex-col" for="passwordStrength">
             <Tooltip>
                 {#snippet label()}
                     <span>{$t("admin.password-strength-requirement")}</span>

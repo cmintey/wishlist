@@ -3,30 +3,38 @@ import { expect, type Locator, type Page } from "@playwright/test";
 export class Chip {
     protected readonly page: Page;
     private readonly triggerButton: Locator;
-    private readonly dropdown: Locator;
-    private readonly applyButton: Locator;
 
     constructor(page: Page, testId: string) {
         this.page = page;
-        const chipContainer = page.getByTestId(testId);
-        this.triggerButton = chipContainer.getByRole("button").first();
-        this.dropdown = chipContainer.getByRole("navigation");
-        this.applyButton = chipContainer.getByRole("button", { name: "Apply" });
+        this.triggerButton = page.getByTestId(testId).getByRole("button").first();
     }
 
     async open() {
         await this.triggerButton.click();
-        await expect(this.dropdown).toBeVisible();
+        const dropdown = await this.getDropdown();
+        await expect(dropdown).toBeVisible();
     }
 
     async selectOption(text: string) {
-        const option = this.dropdown.getByText(text);
+        const dropdown = await this.getDropdown();
+        const option = dropdown.getByText(text);
         await expect(option).toBeVisible();
         await option.click();
     }
 
     async applyFilter() {
-        await this.applyButton.click();
+        const dropdown = await this.getDropdown();
+        const applyButton = dropdown.getByText("Apply");
+        await applyButton.click();
         await this.page.waitForTimeout(200);
+    }
+
+    private async getDropdown() {
+        const id = await this.triggerButton.getAttribute("id");
+        if (!id) {
+            throw new Error("Couldn't find dropdown for chip");
+        }
+        const idParts = id.split(":");
+        return this.page.locator(`#popover\\:${idParts[1]}\\:content`);
     }
 }

@@ -19,7 +19,7 @@
     {#if oauthId}
         <form class="flex flex-col gap-4" action="?/unlinkoauth" method="POST" use:enhance>
             <span>{$t("auth.your-account-is-currently-linked-with-oauth", { values: { providerName } })}</span>
-            <button class="variant-filled-primary btn w-fit">
+            <button class="preset-filled-primary-500 btn w-fit">
                 {$t("auth.unlink-oauth", { values: { providerName } })}
             </button>
         </form>

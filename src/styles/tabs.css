@@ -1,0 +1,12 @@
+[data-scope="tabs"][data-part="trigger"] {
+    /* Reset skeleton style */
+    &:hover {
+        background-color: transparent;
+        color: inherit;
+    }
+
+    /* Reapply with hover variant */
+    @variant hover {
+        @apply preset-tonal-primary;
+    }
+}
