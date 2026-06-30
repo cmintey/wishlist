@@ -19,6 +19,7 @@ export const shouldShowName = (
     showNameConfig: boolean,
     showNameAcrossGroups: boolean,
     showForOwner: boolean,
+    showPublicClaimName: boolean,
     user: PartialUser | undefined,
     claim?: ClaimDTO
 ) => {
@@ -26,6 +27,16 @@ export const shouldShowName = (
     if (!showNameConfig) {
         return false;
     }
+    // Public claims: allow global visibility when enabled; otherwise fall back to
+    // authenticated visibility rules so owners/managers can still see names.
+    if (claim?.publicClaimedBy) {
+        if (showPublicClaimName) return true;
+        if (!user) return false;
+        if (item.user.id === user.id && showForOwner) return true;
+        if (showNameAcrossGroups) return true;
+        return true;
+    }
+
     // No logged in user
     if (!user) {
         return false;
