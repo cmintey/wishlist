@@ -61,6 +61,7 @@ COPY --from=caddy /caddy /usr/bin/caddy
 COPY ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "entrypoint.sh", "prisma.config.ts", "Caddyfile", "./"]
 COPY ./templates/ ./templates
 COPY ./prisma/ ./prisma/
+COPY ./scripts/ ./scripts
 
 RUN chmod +x entrypoint.sh && chmod +x /usr/bin/caddy
 

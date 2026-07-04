@@ -1,0 +1,26 @@
+services:
+    app:
+        container_name: wishlist
+        image: wishlist:test
+        build:
+            context: ../../
+        network_mode: host
+        environment:
+            ORIGIN: http://localhost:3280
+            DATABASE_URL: postgresql://wishlist:wishlist@localhost:5432/wishlist
+        depends_on:
+            postgres:
+                condition: service_healthy
+
+    postgres:
+        image: postgres:16
+        network_mode: host
+        environment:
+            POSTGRES_USER: wishlist
+            POSTGRES_PASSWORD: wishlist
+            POSTGRES_DB: wishlist
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U wishlist"]
+            interval: 2s
+            timeout: 3s
+            retries: 30
