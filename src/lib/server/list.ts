@@ -201,6 +201,11 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
                 every: itemListFilter
             }
         },
+        // Order by id so the JS itemSorter below (a stable sort) has a
+        // deterministic input for items that tie on displayOrder. Without an
+        // explicit orderBy, row order is insertion order on SQLite but
+        // arbitrary on Postgres, so tied items would render inconsistently.
+        orderBy: { id: "asc" },
         include: getItemInclusions(list.id)
     });
 

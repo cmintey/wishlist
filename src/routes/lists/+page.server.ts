@@ -44,8 +44,12 @@ export const load = (async ({ url }) => {
             ownerId: user.id,
             groupId: activeMembership.groupId
         },
+        // List.name is nullable (the auto-created default list has no name).
+        // Sort NULLs first so the default list stays at the top, matching
+        // SQLite's implicit NULLS FIRST behavior (Postgres defaults to NULLS
+        // LAST for ASC, which would otherwise flip list positions).
         orderBy: {
-            name: "asc"
+            name: { sort: "asc", nulls: "first" }
         },
         select: {
             id: true,
@@ -101,8 +105,10 @@ export const load = (async ({ url }) => {
                     name: "asc"
                 }
             },
+            // See note above: NULLS FIRST keeps nameless default lists ordered
+            // consistently between SQLite and Postgres.
             {
-                name: "asc"
+                name: { sort: "asc", nulls: "first" }
             }
         ],
         select: {

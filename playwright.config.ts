@@ -32,6 +32,19 @@ export default defineConfig({
         trace: "on-first-retry"
     },
 
+    /*
+     * Raise the default assertion timeout from Playwright's 5s. Several real-time
+     * UI assertions (toasts and live item/list updates delivered over SSE) are
+     * timing-sensitive, and 5s is too tight when the app runs against a slower
+     * backend - the Postgres e2e lane is ~2.5x slower than SQLite because every
+     * query is a TCP round-trip rather than an in-process call. Helpers that
+     * intentionally use a short timeout for negative assertions pass their own
+     * explicit timeout, so they are unaffected by this default.
+     */
+    expect: {
+        timeout: 15000
+    },
+
     /* Configure projects for major browsers */
     projects: [
         {
@@ -77,8 +90,10 @@ export default defineConfig({
 
     /* Run your local dev server before starting the tests */
     webServer: {
-        command:
-            "docker compose -f tests/docker/docker-compose.yaml up --remove-orphans --renew-anon-volumes --force-recreate",
+        // Defaults to the SQLite compose file. Set PLAYWRIGHT_DOCKER_COMPOSE_FILE
+        // to tests/docker/docker-compose.postgres.yaml to run the same suite
+        // against Postgres instead (see the "test-postgres" CI job).
+        command: `docker compose -f ${process.env.PLAYWRIGHT_DOCKER_COMPOSE_FILE ?? "tests/docker/docker-compose.yaml"} up --remove-orphans --renew-anon-volumes --force-recreate`,
         url: "http://localhost:3280",
         gracefulShutdown: {
             signal: "SIGTERM",

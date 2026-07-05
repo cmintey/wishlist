@@ -137,7 +137,12 @@ export class ItemCard {
         await this.approveButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
-        new Toast(this.card.page()).waitForToastWithText(`${name} was approved`);
+        // Await the toast so the caller doesn't navigate away before the
+        // approval round-trip completes. Without the await this is a floating
+        // promise whose rejection surfaces on a later step; when the round-trip
+        // is slow the next navigation destroys the toast before it is ever
+        // observed, making the test fail deterministically.
+        await new Toast(this.card.page()).waitForToastWithText(`${name} was approved`);
         return this;
     }
 
@@ -146,7 +151,9 @@ export class ItemCard {
         await this.denyButton.click();
         const modal = new Modal(this.card.page(), { modalName: "Please Confirm", submitButtonText: "Confirm" });
         await modal.submit();
-        new Toast(this.card.page()).waitForToastWithText(`${name} was denied`);
+        // See approve() above: await the toast to avoid a floating promise that
+        // races the next navigation (deterministic failure on slower backends).
+        await new Toast(this.card.page()).waitForToastWithText(`${name} was denied`);
         return this;
     }
 }

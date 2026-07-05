@@ -76,3 +76,129 @@ jobs:
                   name: playwright-report
                   path: playwright-report/
                   retention-days: 30
+
+    test-postgres:
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - name: Set up Docker
+              id: buildx
+              uses: docker/setup-buildx-action@v4
+
+            - name: Build image
+              uses: docker/build-push-action@v7
+              with:
+                  context: ./
+                  file: ./Dockerfile
+                  platforms: linux/amd64
+                  push: false
+                  tags: wishlist:test
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
+            - uses: pnpm/action-setup@v6
+              name: Install pnpm
+              id: pnpm-install
+              with:
+                  version: 11
+                  run_install: false
+
+            - name: Install Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+
+            - name: Get pnpm store directory
+              id: pnpm-cache
+              shell: bash
+              run: |
+                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+            - uses: actions/cache@v5
+              name: Setup pnpm cache
+              with:
+                  path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-store-
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Install Playwright Browsers
+              run: pnpm test:setup
+
+            - name: Run Playwright tests against Postgres
+              run: pnpm test
+              env:
+                  PLAYWRIGHT_DOCKER_COMPOSE_FILE: tests/docker/docker-compose.postgres.yaml
+
+            - uses: actions/upload-artifact@v7
+              if: ${{ !cancelled() }}
+              with:
+                  name: playwright-report-postgres
+                  path: playwright-report/
+                  retention-days: 30
+
+    migrations-check:
+        # Sanity check that both migration sets (SQLite and Postgres) apply
+        # cleanly from a completely empty database. This is much cheaper than
+        # the full e2e suites above and catches migration authoring mistakes
+        # (e.g. a migration that doesn't apply from scratch) quickly.
+        timeout-minutes: 15
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_USER: wishlist
+                    POSTGRES_PASSWORD: wishlist
+                    POSTGRES_DB: wishlist
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd "pg_isready -U wishlist"
+                    --health-interval 5s
+                    --health-timeout 5s
+                    --health-retries 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - uses: pnpm/action-setup@v6
+              name: Install pnpm
+              with:
+                  version: 11
+                  run_install: false
+
+            - name: Install Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Apply SQLite migrations from scratch
+              run: |
+                  rm -f prisma/dev.db
+                  node scripts/set-db-provider.mjs
+                  pnpm exec prisma migrate deploy
+              env:
+                  DATABASE_URL: file:./prisma/dev.db
+
+            - name: Apply Postgres migrations from scratch
+              run: |
+                  node scripts/set-db-provider.mjs
+                  pnpm exec prisma migrate deploy
+              env:
+                  DATABASE_URL: postgresql://wishlist:wishlist@localhost:5432/wishlist
+
+            - name: Restore schema.prisma to the committed SQLite provider
+              if: always()
+              run: git checkout -- prisma/schema.prisma

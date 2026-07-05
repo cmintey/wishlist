@@ -23,11 +23,18 @@
     let itemNameShort = $derived(item.name.length > 42 ? item.name.substring(0, 42) + "…" : item.name);
 
     const handleApproval = async (approve: boolean) => {
+        // Capture the derived name up front: a successful approve/deny triggers
+        // an SSE item update that moves this item out of the approvals list and
+        // unmounts this component. If we read `itemNameShort` (a $derived) only
+        // after awaiting the request, that re-render can win the race and leave
+        // the derived inert, producing a toast with a stale/empty name. This is
+        // timing-sensitive; a slower request round-trip makes it more likely.
+        const name = itemNameShort;
         const resp = await (approve ? listItemAPI.approve() : listItemAPI.deny());
 
         if (resp.ok) {
             toaster.info({
-                description: $t("wishes.item-approved", { values: { name: itemNameShort, approved: approve } })
+                description: $t("wishes.item-approved", { values: { name, approved: approve } })
             });
         } else {
             toaster.error({ description: $t("general.oops") });
