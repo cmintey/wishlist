@@ -1,39 +1,40 @@
-/* eslint @typescript-eslint/ban-ts-comment: 0 */
-//@ts-nocheck
-import type { Check, CheckOptions, RuleSet } from "metascraper";
+import type { Rules, RulesOptions, RulesTestOptions } from "metascraper";
 import { toPriceFormat, getHostname } from "./helpers";
 import pkg from "@metascraper/helpers";
 const { memoizeOne, $jsonld, toRule, title, $filter } = pkg;
 
-interface ShoppingMetadata {
-    brand: string;
-    name: string;
-    currency: string;
-    sku: string;
-    price: string;
-    condition: string;
-    mpn: string;
-    availability: string;
-    asin: string;
-    hostname: string;
-    retailer: string;
+interface ShoppingMetadataRules {
+    brand: Array<RulesOptions>;
+    name: Array<RulesOptions>;
+    image: Array<RulesOptions>;
+    currency: Array<RulesOptions>;
+    sku: Array<RulesOptions>;
+    price: Array<RulesOptions>;
+    condition: Array<RulesOptions>;
+    mpn: Array<RulesOptions>;
+    availability: Array<RulesOptions>;
+    asin: Array<RulesOptions>;
+    hostname: Array<RulesOptions>;
+    retailer: Array<RulesOptions>;
+    title: Array<RulesOptions>;
 }
 
-type ShoppingRuleSet = {
-    [C in keyof ShoppingMetadata]?: Array<Check>;
-} & RuleSet;
+type ShoppingRuleSet = Rules & ShoppingMetadataRules;
 
-const jsonLd = memoizeOne(($: CheckOptions["htmlDom"]) => {
-    const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
-    return jsonld;
+const jsonLd = memoizeOne(($: RulesTestOptions["htmlDom"]) => {
+    const jsonld = $('script[type="application/ld+json"]').html();
+    if (!jsonld) {
+        return null;
+    }
+    return JSON.parse(jsonld) as Record<any, unknown>;
 });
 
-const jsonLdGraph = memoizeOne(($: CheckOptions["htmlDom"]) => {
-    const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
+const jsonLdGraph = memoizeOne(($: RulesTestOptions["htmlDom"]) => {
+    const jsonld = jsonLd($);
     return jsonld && jsonld["@graph"];
 });
 
-const jsonLdGraphProduct = memoizeOne(($: CheckOptions["htmlDom"]) => {
+const jsonLdGraphProduct = memoizeOne(($: RulesTestOptions["htmlDom"]) => {
     const jsonld = jsonLdGraph($);
 
     if (jsonld) {
@@ -45,7 +46,7 @@ const jsonLdGraphProduct = memoizeOne(($: CheckOptions["htmlDom"]) => {
     return;
 });
 
-const jsonLdLastBreadcrumb = memoizeOne(($: CheckOptions["htmlDom"]) => {
+const jsonLdLastBreadcrumb = memoizeOne(($: RulesTestOptions["htmlDom"]) => {
     const jsonld = jsonLdGraph($);
     if (jsonld) {
         const breadcrumbs = jsonld.filter((i) => {
@@ -63,12 +64,9 @@ const jsonLdLastBreadcrumb = memoizeOne(($: CheckOptions["htmlDom"]) => {
 
 const toTitle = toRule(title, { removeSeparator: false });
 
-/**
- * A set of rules we want to declare under the `metascraper-shopping` namespace.
- *
- **/
 export default () => {
     const rules: ShoppingRuleSet = {
+        pkgName: "metascraper-shopping",
         brand: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLd($);
@@ -214,6 +212,5 @@ export default () => {
         hostname: [({ url }) => getHostname(url)],
         retailer: [({ htmlDom: $ }) => $('[property="og:site_name"]').attr("content")]
     };
-    rules.pkgName = "metascraper-shopping";
     return rules;
 };
