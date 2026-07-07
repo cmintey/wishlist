@@ -29,11 +29,7 @@ export const shouldShowName = (
     }
     // Public claims: allow global visibility when enabled; otherwise fall back to
     // authenticated visibility rules so owners/managers can still see names.
-    if (claim?.publicClaimedBy) {
-        if (showPublicClaimName) return true;
-        if (!user) return false;
-        if (item.user.id === user.id && showForOwner) return true;
-        if (showNameAcrossGroups) return true;
+    if (claim?.publicClaimedBy && showPublicClaimName) {
         return true;
     }
 
