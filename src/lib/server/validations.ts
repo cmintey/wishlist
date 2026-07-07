@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
-import { loadOptions, meterLabel } from "$lib/zxcvbn";
+import { init, meterLabel } from "$lib/zxcvbn";
 import { getConfig } from "./config";
 import { getFormatter } from "./i18n";
 import { getLocale } from "$lib/server/i18n";
@@ -15,14 +14,14 @@ export const loadLocale = async (locale_: string) => {
 };
 
 const passwordZxcvbn = async (minScore: number) => {
-    await loadOptions(getLocale()).then((options) => zxcvbnOptions.setOptions(options));
+    const zxcvbn = await init(getLocale());
     const $t = await getFormatter();
     const minStrength = $t(meterLabel[minScore]);
     const message = $t("errors.password-min-strength", { values: { minStrength } });
     return z
         .string()
         .min(1, $t("errors.password-must-not-be-blank"))
-        .refine((pass) => zxcvbn(pass).score >= minScore, { message });
+        .refine((pass) => zxcvbn.check(pass).score >= minScore, { message });
 };
 
 export const getLoginSchema = async () => {
