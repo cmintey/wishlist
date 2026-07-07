@@ -45,8 +45,8 @@ importers:
         specifier: ^4.0.0
         version: 4.1.1
       '@zxcvbn-ts/language-fr':
-        specifier: ^3.0.2
-        version: 3.0.2
+        specifier: ^4.0.0
+        version: 4.1.1
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -2577,8 +2577,8 @@ packages:
   '@zxcvbn-ts/language-es-es@4.1.1':
     resolution: {integrity: sha512-X7hptBCerni+441XS8KRF9FtCIZMRNhuAXmm5I34fgvpxRoWJVEfEcUkfJDWAtByiV/hWVI644H3rVLYteJk5g==}
 
-  '@zxcvbn-ts/language-fr@3.0.2':
-    resolution: {integrity: sha512-Tj9jS/Z8mNBAD21pn8Mp4O86CPrwImysO1fM3DG+fsfk8W79/MDzqpFDBHiqpu69Uo3LPPctMHEEteakFWt4Qg==}
+  '@zxcvbn-ts/language-fr@4.1.1':
+    resolution: {integrity: sha512-5LW8KMiXLWKG6fTv/BdQbe76sa2EjYmvd59sM3Re+hZMGYEPOdjnAT5qFChQ2Zj8WIaU3P197Y6A0X8OgfoiqQ==}
 
   abbrev@5.0.0:
     resolution: {integrity: sha512-/XrFJgzQQQHpti1raDJC6m4ws6aNktmjBlhk8Fdlk7LwCEuDoieEJJY9OFHjfiFJFFRM2tK+Ky/IsfbbmlMu1w==}
@@ -7635,7 +7635,9 @@ snapshots:
     dependencies:
       '@zxcvbn-ts/dictionary-compression': 3.0.1
 
-  '@zxcvbn-ts/language-fr@3.0.2': {}
+  '@zxcvbn-ts/language-fr@4.1.1':
+    dependencies:
+      '@zxcvbn-ts/dictionary-compression': 3.0.1
 
   abbrev@5.0.0: {}
 
