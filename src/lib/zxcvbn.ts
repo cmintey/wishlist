@@ -27,7 +27,7 @@ export const init = async (locale?: string): Promise<ZxcvbnFactory> => {
             ...langEn.translations,
             ...langUser?.translations
         }
-    })
+    });
 };
 
 export const meterLabel = [

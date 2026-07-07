@@ -14,7 +14,7 @@ export const loadLocale = async (locale_: string) => {
 };
 
 const passwordZxcvbn = async (minScore: number) => {
-    const zxcvbn = await init(getLocale())
+    const zxcvbn = await init(getLocale());
     const $t = await getFormatter();
     const minStrength = $t(meterLabel[minScore]);
     const message = $t("errors.password-min-strength", { values: { minStrength } });
