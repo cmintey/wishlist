@@ -387,7 +387,6 @@
                 </div>
             {/each}
         {:else}
-
             {#each items as item (item.id)}
                 <div
                     id="item-{item.id}-wrapper"
