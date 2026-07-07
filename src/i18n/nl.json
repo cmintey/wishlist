@@ -137,7 +137,8 @@
         "sending": "Verzenden",
         "smtp-ignore-cert-check-description": "Het TLS-certificaat niet valideren. Meestal gebruikt voor lokale verbindingen. Niet aangeraden.",
         "smtp-use-tls": "Gebruik TLS",
-        "smtp-use-tls-description": "Verbind met de SMTP-server door direct TLS te gebruiken in plaats van STARTTLS. Meestal gebruikt met poort 465."
+        "smtp-use-tls-description": "Verbind met de SMTP-server door direct TLS te gebruiken in plaats van STARTTLS. Meestal gebruikt met poort 465.",
+        "clear-sessions": "Wis gebruikerssessies"
     },
     "app": {
         "home": "Start",
@@ -333,7 +334,7 @@
         "very-strong": "Erg sterk",
         "very-weak": "Erg zwak",
         "weak": "Zwak",
-        "wishlists-cleared": "Wenlijsten zijn opgeruimd.",
+        "wishlists-cleared": "Wenslijsten zijn opgeruimd.",
         "select-all": "Selecteer alles",
         "oauth": "OAuth",
         "import": "Importeren",
