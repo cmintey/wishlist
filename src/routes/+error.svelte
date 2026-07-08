@@ -32,7 +32,7 @@
 
 <div class="flex flex-col items-center justify-center space-y-4 pt-4">
     <p class="text-4xl">{page.status}</p>
-    <img class="w-3/4 md:w-1/3" alt={errorMessage} src={error.image} />
-    <p class="text-2xl">{errorMessage}</p>
+    <img class="w-3/4 md:w-1/3" alt={$t(errorMessage)} src={error.image} />
+    <p class="text-2xl">{$t(errorMessage)}</p>
     <a class="preset-filled-primary-500 btn" href="/">{$t("general.return-home")}</a>
 </div>

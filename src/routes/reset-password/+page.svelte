@@ -5,12 +5,14 @@
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
+
     const { data, form }: PageProps = $props();
 
     const t = getFormatter();
 
     let newPassword = $state("");
     let confirmPassword = $state("");
+    let loading = $state(false);
 
     onMount(() => {
         window.history.replaceState({}, "", "/reset-password");
@@ -24,19 +26,21 @@
         class="w-80"
         method="POST"
         use:enhance={({ formData }) => {
-            formData.append("userId", data.userId || "");
-            formData.append("id", `${data.id}` || "0");
+            loading = true;
+            if (data.userId) formData.append("userId", data.userId);
+            if (data.id) formData.append("id", data.id);
             return async ({ result, update }) => {
+                loading = false;
                 if (result.type === "redirect") {
                     toaster.info({ description: $t("auth.your-password-was-reset") });
                 } else if (result.type === "error") {
-                    toaster.error({ description: $t("general.oops") });
+                    toaster.error({ description: result.error?.message || $t("general.oops") });
                 }
                 update();
             };
         }}
     >
-        <div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 inset-ring">
+        <div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 border border-surface-200-800">
             <PasswordInput
                 id="password"
                 name="password"
@@ -62,12 +66,22 @@
             {/if}
 
             <button
-                class="preset-filled-primary-500 btn w-fit"
-                disabled={newPassword === "" || newPassword !== confirmPassword}
+                class="preset-filled-primary-500 btn w-full"
+                disabled={newPassword === "" || newPassword !== confirmPassword || loading}
                 type="submit"
             >
+                {#if loading}
+                    <span class="loading loading-spinner loading-xs"></span>
+                {/if}
                 {$t("auth.update-password")}
             </button>
+
+            {#if form?.errors?.id}
+                <span class="text-invalid text-wrap">{form.errors.id}</span>
+            {/if}
+            {#if form?.errors?.userId}
+                <span class="text-invalid text-wrap">{form.errors.userId}</span>
+            {/if}
         </div>
     </form>
 </div>
