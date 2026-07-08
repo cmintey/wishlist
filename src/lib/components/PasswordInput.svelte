@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { zxcvbn, zxcvbnOptions, type ZxcvbnResult } from "@zxcvbn-ts/core";
-    import { loadOptions, meterLabel } from "$lib/zxcvbn";
+    import { ZxcvbnFactory } from "@zxcvbn-ts/core";
+    import { init, meterLabel } from "$lib/zxcvbn";
     import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
@@ -31,14 +31,13 @@
     }: Props = $props();
     const t = getFormatter();
 
+    let zxcvbn: ZxcvbnFactory | undefined = undefined;
     onMount(async () => {
         if (strengthMeter) {
-            const options = await loadOptions();
-            zxcvbnOptions.setOptions(options);
+            zxcvbn = await init();
         }
     });
 
-    let strength: ZxcvbnResult | undefined = $derived(value ? zxcvbn(value) : undefined);
     let visible = $state(false);
 
     const meterLookup = ["bg-error-500", "bg-error-500", "bg-warning-500", "bg-success-500", "bg-success-500"];
@@ -46,6 +45,10 @@
     const handleClick = (e: Event) => {
         e.preventDefault();
         visible = !visible;
+    };
+
+    const checkStrength = () => {
+        return value ? zxcvbn?.check(value) : undefined;
     };
 </script>
 
@@ -78,47 +81,50 @@
         </div>
     </label>
 
-    {#if strengthMeter && value !== "" && strength}
-        <div class="flex flex-col">
-            <div class="flex w-full flex-row items-center gap-x-2">
-                <Progress class="my-1" max={5} value={strength.score + 1}>
-                    <Progress.Label class="sr-only">{$t("a11y.password-strength")}</Progress.Label>
-                    <Progress.Track>
-                        <Progress.Range class={meterLookup[strength.score.valueOf()]} />
-                    </Progress.Track>
-                </Progress>
+    {#if strengthMeter && value !== ""}
+        {@const strength = checkStrength()}
+        {#if strength}
+            <div class="flex flex-col">
+                <div class="flex w-full flex-row items-center gap-x-2">
+                    <Progress class="my-1" max={5} value={strength.score + 1}>
+                        <Progress.Label class="sr-only">{$t("a11y.password-strength")}</Progress.Label>
+                        <Progress.Track>
+                            <Progress.Range class={meterLookup[strength.score.valueOf()]} />
+                        </Progress.Track>
+                    </Progress>
 
-                <Popup>
-                    {#snippet trigger(props)}
-                        <button
-                            {...props}
-                            class="flex items-center"
-                            class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
-                        >
-                            <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
-                        </button>
-                    {/snippet}
-                    {#snippet content(props)}
-                        <div {...props} class={["card preset-filled p-4", props?.class]}>
-                            {#if strength.feedback.warning}
-                                <div class="flex flex-row items-center gap-x-4 pb-1">
-                                    <iconify-icon icon="ion:alert-circle"></iconify-icon>
-                                    <p>{strength.feedback.warning}</p>
-                                </div>
-                            {/if}
-                            <ul class="list">
-                                {#each strength.feedback.suggestions as suggestion}
-                                    <li>
-                                        <iconify-icon icon="ion:arrow-forward"></iconify-icon>
-                                        <p>{suggestion}</p>
-                                    </li>
-                                {/each}
-                            </ul>
-                        </div>
-                    {/snippet}
-                </Popup>
+                    <Popup>
+                        {#snippet trigger(props)}
+                            <button
+                                {...props}
+                                class="flex items-center"
+                                class:hidden={strength.feedback.suggestions.length === 0 && !strength.feedback.warning}
+                            >
+                                <iconify-icon icon="ion:information-circle-outline"></iconify-icon>
+                            </button>
+                        {/snippet}
+                        {#snippet content(props)}
+                            <div {...props} class={["card preset-filled p-4", props?.class]}>
+                                {#if strength.feedback.warning}
+                                    <div class="flex flex-row items-center gap-x-4 pb-1">
+                                        <iconify-icon icon="ion:alert-circle"></iconify-icon>
+                                        <p>{strength.feedback.warning}</p>
+                                    </div>
+                                {/if}
+                                <ul class="list">
+                                    {#each strength.feedback.suggestions as suggestion}
+                                        <li>
+                                            <iconify-icon icon="ion:arrow-forward"></iconify-icon>
+                                            <p>{suggestion}</p>
+                                        </li>
+                                    {/each}
+                                </ul>
+                            </div>
+                        {/snippet}
+                    </Popup>
+                </div>
+                <span class="text-xs">{$t(meterLabel[strength?.score])}</span>
             </div>
-            <span class="text-xs">{$t(meterLabel[strength?.score])}</span>
-        </div>
+        {/if}
     {/if}
 </div>

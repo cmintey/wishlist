@@ -330,6 +330,7 @@
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -379,6 +380,7 @@
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -401,6 +403,7 @@
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />

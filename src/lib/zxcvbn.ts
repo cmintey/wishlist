@@ -1,7 +1,8 @@
 import { browser } from "$app/environment";
+import { ZxcvbnFactory } from "@zxcvbn-ts/core";
 import { getPrimaryLang, getLocale, defaultLang } from "./i18n";
 
-export const loadOptions = async (locale?: string) => {
+export const init = async (locale?: string): Promise<ZxcvbnFactory> => {
     const locale_ = locale ? locale : browser ? getLocale() : defaultLang.code;
 
     const langCommon = await import("@zxcvbn-ts/language-common");
@@ -15,7 +16,7 @@ export const loadOptions = async (locale?: string) => {
         langUser = await import("@zxcvbn-ts/language-de");
     }
 
-    return {
+    return new ZxcvbnFactory({
         dictionary: {
             ...langCommon.dictionary,
             ...langEn.dictionary,
@@ -26,7 +27,7 @@ export const loadOptions = async (locale?: string) => {
             ...langEn.translations,
             ...langUser?.translations
         }
-    };
+    });
 };
 
 export const meterLabel = [
