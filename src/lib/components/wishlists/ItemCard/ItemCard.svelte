@@ -32,6 +32,7 @@
         showClaimedName: boolean;
         showNameAcrossGroups: boolean;
         showClaimForOwner: boolean;
+        showPublicClaimName: boolean;
         requireClaimEmail: boolean;
         groupId: string;
         showFor: boolean;
@@ -109,6 +110,7 @@
     {showClaimedName}
     {showFor}
     {showNameAcrossGroups}
+    {showPublicClaimName}
     {user}
     {userCanManage}
 />
@@ -141,9 +143,9 @@
         {requireClaimEmail}
         {showClaimForOwner}
         {showClaimedName}
-        {showPublicClaimName}
         {showFor}
         {showNameAcrossGroups}
+        {showPublicClaimName}
         {user}
         {userCanManage}
     />
