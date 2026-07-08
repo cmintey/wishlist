@@ -3,9 +3,8 @@ import { client } from "$lib/server/prisma";
 import { getSignupSchema } from "$lib/server/validations";
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { hashToken } from "$lib/server/token";
+import { hashToken, isTokenTimeValid } from "$lib/server/token";
 import { getConfig } from "$lib/server/config";
-import { env } from "$env/dynamic/private";
 import { createUser } from "$lib/server/user";
 import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/server/i18n";
@@ -33,7 +32,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
         if (!signup) error(400, $t("errors.invite-code-invalid"));
 
-        if (validateToken(signup.createdAt)) {
+        if (isTokenTimeValid(signup.createdAt)) {
             return { valid: true, id: signup.id };
         }
         error(400, $t("errors.invite-code-invalid"));
@@ -71,7 +70,7 @@ export const actions: Actions = {
                 }
             });
 
-            if (!signup || signup.redeemed || !validateToken(signup.createdAt)) {
+            if (!signup || signup.redeemed || !isTokenTimeValid(signup.createdAt)) {
                 error(400, $t("errors.invite-code-invalid"));
             }
         }
@@ -102,9 +101,3 @@ export const actions: Actions = {
         }
     }
 };
-
-function validateToken(createdAt: Date) {
-    const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
-    const expiry = createdAt.getTime() + expiresIn;
-    return Date.now() < expiry;
-}

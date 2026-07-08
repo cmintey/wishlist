@@ -50,6 +50,7 @@ export const actions: Actions = {
             claimsShowName: true,
             claimsShowNameAcrossGroups: true,
             claimsShowForOwner: true,
+            claimsShowNamePublic: true,
             claimsRequireEmail: true,
             listMode: true,
             enableDefaultListCreation: true,
@@ -75,6 +76,7 @@ export const actions: Actions = {
                 showName: configData.data.claimsShowName,
                 showNameAcrossGroups: configData.data.claimsShowNameAcrossGroups,
                 showForOwner: configData.data.claimsShowForOwner,
+                showNamePublic: configData.data.claimsShowNamePublic,
                 requireEmail: configData.data.claimsRequireEmail
             },
             listMode: configData.data.listMode,

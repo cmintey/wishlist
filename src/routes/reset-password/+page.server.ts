@@ -1,11 +1,10 @@
 import { invalidateUserSessions } from "$lib/server/auth";
 import { client } from "$lib/server/prisma";
-import { hashToken } from "$lib/server/token";
+import { hashToken, isTokenTimeValid } from "$lib/server/token";
 import { getResetPasswordSchema } from "$lib/server/validations";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
-import { env } from "$env/dynamic/private";
 import { getFormatter } from "$lib/server/i18n";
 import { hashPassword } from "$lib/server/password";
 import { logger } from "$lib/server/logger";
@@ -27,11 +26,7 @@ export const load: PageServerLoad = async ({ url }) => {
             }
         });
 
-        if (!reset) error(400, $t("errors.reset-token-not-found"));
-
-        const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
-        const expiry = reset.createdAt.getTime() + expiresIn;
-        if (Date.now() < expiry) {
+        if (reset && isTokenTimeValid(reset.createdAt)) {
             return { userId: reset.userId, id: reset.id };
         }
     }
@@ -60,6 +55,17 @@ export const actions: Actions = {
             return fail(400, { error: true, errors: z.flattenError(pwdData.error).fieldErrors });
         }
 
+        const resetToken = await client.passwordReset.findUnique({
+            where: {
+                id: pwdData.data.id
+            },
+            select: {
+                redeemed: true,
+                userId: true,
+                createdAt: true
+            }
+        });
+
         const user = await client.user.findUnique({
             where: {
                 id: pwdData.data.userId
@@ -73,6 +79,18 @@ export const actions: Actions = {
         if (!user) {
             logger.error("Could not find user by id");
             error(404, $t("general.oops"));
+        }
+
+        if (
+            !resetToken ||
+            resetToken.userId !== user.id ||
+            resetToken.redeemed ||
+            !isTokenTimeValid(resetToken.createdAt)
+        ) {
+            logger.error(
+                "Unable to reset password using token. Token is either redeemed, expired, or does not match the userId of the request."
+            );
+            error(400, $t("setup.unable-to-update-password"));
         }
 
         try {
