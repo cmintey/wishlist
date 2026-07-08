@@ -32,7 +32,6 @@ export const load: PageServerLoad = async ({ url }) => {
     }
 
     error(400, $t("errors.reset-token-not-found"));
-
 };
 
 export const actions: Actions = {
