@@ -394,7 +394,7 @@
         "claims": "{claimCount, plural, one {# claim} other {# claims}}",
         "count-items": "{itemCount, plural, one {# item} other {# items}}",
         "items-requested": "{itemCount, plural, one {# Requested} other {# Requested}}",
-        "items-claimed": "{claimedCount} / {itemCount} Claimed",
+        "items-claimed": "{claimedCount} of {itemCount} Claimed",
         "items-available": "{availableCount, plural, one {# Available} other {# Available}}",
         "hide-owner": "Hide Owner",
         "create": "Create Wish",
