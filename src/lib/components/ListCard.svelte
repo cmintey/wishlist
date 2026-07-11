@@ -77,32 +77,36 @@
             <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
                 {listName}
             </span>
-            {#if !hideOwner}
-                <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
+            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
+                {#if !hideOwner}
                     <div class="flex flex-row items-center gap-2">
                         <Avatar class="text-tiny size-6" user={list.owner} />
                         <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                     </div>
-                </div>
-            {/if}
-            {#if !hideCount && list.itemCount !== undefined}
-                <Progress class="py-1" max={100} value={claimedPercent}>
-                    <Progress.Label class="sr-only">{$t("a11y.claimed-progress")}</Progress.Label>
-                    <Progress.Track>
-                        <Progress.Range class="bg-primary-500" />
-                    </Progress.Track>
-                </Progress>
-            {/if}
+                    ·
+                {/if}
+                <span>
+                    <iconify-icon icon="ion:gift"></iconify-icon>
+                    {#if hideCount}
+                        {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
+                    {:else}
+                        <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
+                    {/if}
+                </span>
+            </div>
             <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                 {#if list.itemCount !== undefined}
                     <div class="flex flex-row items-center gap-x-2">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
+                        {#if !hideCount}
+                            <Progress class="w-24 py-1" max={100} value={claimedPercent}>
+                                <Progress.Label class="sr-only">{$t("a11y.claimed-progress")}</Progress.Label>
+                                <Progress.Track>
+                                    <Progress.Range class="bg-primary-500" />
+                                </Progress.Track>
+                            </Progress>
+                        {/if}
                         <span data-testid="item-count">
-                            {#if hideCount}
-                                {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
-                            {:else}
-                                <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
-                                ·
+                            {#if !hideCount}
                                 {$t("wishes.items-claimed", {
                                     values: { claimedCount: list.claimedCount, itemCount: list.itemCount }
                                 })}
