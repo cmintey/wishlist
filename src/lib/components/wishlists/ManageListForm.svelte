@@ -123,6 +123,13 @@
         </div>
 
         <div class="col-span-full">
+            <label class="unstyled flex w-fit flex-row items-center gap-x-2" for="hideOwner">
+                <input id="hideOwner" name="hideOwner" class="checkbox" type="checkbox" bind:checked={hideOwner} />
+                <span>{$t("wishes.hide-owner")}</span>
+            </label>
+        </div>
+
+        <div class="col-span-full">
             <label class="label mb-1" for="description">
                 <span>{$t("general.description")}</span>
             </label>
@@ -195,13 +202,6 @@
                 <p class="text-invalid">{page.form.errors.managers[0]}</p>
             {/if}
         </fieldset>
-
-        <div class="col-span-full">
-            <label class="unstyled flex w-fit flex-row items-center gap-x-2" for="hideOwner">
-                <input id="hideOwner" name="hideOwner" class="checkbox" type="checkbox" bind:checked={hideOwner} />
-                <span>{$t("wishes.hide-owner")}</span>
-            </label>
-        </div>
 
         <div class="col-span-full">
             <div class="flex flex-col space-y-2">
