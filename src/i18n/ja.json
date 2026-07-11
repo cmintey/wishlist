@@ -1,11 +1,4 @@
 {
-    "wishes": {
-        "items-requested": "{itemCount, plural, other {#件リクエスト}}",
-        "items-claimed": "{itemCount}件中{claimedCount}件購入予定",
-        "items-available": "{availableCount, plural, other {#件利用可能}}",
-        "owner": "所有者",
-        "hide-owner": "所有者を非表示"
-    },
     "admin": {
         "remove-member-message": "このユーザーをグループから削除してもよろしいですか？これにより、グループ内のユーザーのすべてのリストと、他のリストに属していない関連項目が削除されます。<b>この操作は元に戻せません！</b>",
         "remove-member-title": "メンバーを削除",
@@ -114,7 +107,6 @@
     "a11y": {
         "a-person-looking-at-an-empty-board": "空のボードを見ている人",
         "cancel-editing": "編集を取り消す",
-        "claimed-progress": "購入予定の進捗",
         "clear-color-field": "色フィールドをクリアする",
         "clear-icon-field": "アイコンフィールドをクリアする",
         "clear-name-field": "名称フィールドをクリアする",

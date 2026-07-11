@@ -1,7 +1,6 @@
 {
     "a11y": {
         "cancel-editing": "скасувати редагування",
-        "claimed-progress": "Прогрес бронювання",
         "clear-color-field": "очистити поле кольору",
         "clear-icon-field": "очистити поле іконки",
         "clear-name-field": "очистити поле імені",
@@ -355,11 +354,6 @@
         "claimed-info-text": "{claimedQuantity, plural, one {Ви зарезервували # подарунок.} few {Ви зарезервували # подарунки.} many {Ви зарезервували # подарунків.} other {Ви зарезервували # подарунка.}}",
         "claimed-item": "{claimed, select, true {Зарезервований} other {Не зарезервований}} елемент",
         "count-items": "{itemCount, plural, one {# позиція} few {# позиції} many {# позицій} other {# позиції}}",
-        "items-requested": "{itemCount, plural, one {# запитано} few {# запитано} many {# запитано} other {# запитано}}",
-        "items-claimed": "{claimedCount} з {itemCount} заброньовано",
-        "items-available": "{availableCount, plural, one {# доступно} few {# доступно} many {# доступно} other {# доступно}}",
-        "owner": "Власник",
-        "hide-owner": "Сховати власника",
         "create": "Створити бажання",
         "create-and-add-another": "Створити й додати ще одне",
         "create-for": "Створити бажання для {listOwner}",

@@ -2,7 +2,6 @@
     "a11y": {
         "a-person-looking-at-an-empty-board": "Una persona che guarda una lavagna vuota",
         "cancel-editing": "Annulla modifiche",
-        "claimed-progress": "Avanzamento rivendicazioni",
         "clear-color-field": "Svuota campo colore",
         "clear-icon-field": "Svuota campo icona",
         "clear-name-field": "Svuota campo nome",
@@ -26,13 +25,6 @@
         "upload-profile-image": "Carica immagine di profilo",
         "user-menu": "Menu Utente",
         "wishlist-logo": "Wishlist Logo"
-    },
-    "wishes": {
-        "items-requested": "{itemCount, plural, one {# richiesto} other {# richiesti}}",
-        "items-claimed": "{claimedCount} di {itemCount} rivendicati",
-        "items-available": "{availableCount, plural, one {# disponibile} other {# disponibili}}",
-        "owner": "Proprietario",
-        "hide-owner": "Nascondi proprietario"
     },
     "admin": {
         "about": "Circa",

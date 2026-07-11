@@ -2,16 +2,8 @@
     "a11y": {
         "close": "đóng",
         "cancel-editing": "huỷ thay đổi",
-        "claimed-progress": "Tiến trình đã nhận",
         "edit-group-name": "sửa tên nhóm",
         "decrease-priority": "giảm ưu tiên của {name}"
-    },
-    "wishes": {
-        "items-requested": "{itemCount, plural, one {# yêu cầu} other {# yêu cầu}}",
-        "items-claimed": "{claimedCount} trên {itemCount} đã nhận",
-        "items-available": "{availableCount, plural, other {# còn lại}}",
-        "owner": "Chủ sở hữu",
-        "hide-owner": "Ẩn chủ sở hữu"
     },
     "admin": {
         "account": "Tài khoản",
