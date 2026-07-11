@@ -79,3 +79,7 @@ Specific platform, current linux/amd64 and linux/arm64 are confirmed supported
 docker build . --tag wishlist-dev:amd64 --platform linux/amd64
 docker build . --tag wishlist-dev:arm64 --platform linux/arm64
 ```
+
+## Internationalization (I18n)
+
+Edit only the en.json file. All other language translations will be handled via Weblate. [See README's Translation section for more infomraiton](README.md#translations)
