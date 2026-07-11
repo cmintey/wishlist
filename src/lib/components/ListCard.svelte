@@ -80,7 +80,6 @@
             {#if !hideOwner}
                 <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
                     <div class="flex flex-row items-center gap-2">
-                        {$t("wishes.owner")}:
                         <Avatar class="text-tiny size-6" user={list.owner} />
                         <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                     </div>
