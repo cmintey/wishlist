@@ -1,6 +1,7 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getConfig } from "$lib/server/config";
+import { Role } from "$lib/schema";
 import { getFormatter } from "$lib/server/i18n";
 import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
@@ -60,6 +61,8 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
                 activeGroupId: list.groupId
             },
             isManager: list.managers.find(({ userId }) => userId === locals.user?.id) !== undefined,
+            // Expose whether the current user is a site admin so the UI can show admin-only controls
+            isAdmin: locals.user ? locals.user.roleId === Role.ADMIN : false,
             items
         },
         loggedInUser: locals.user
@@ -67,7 +70,8 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
                   id: locals.user.id,
                   username: locals.user.username,
                   name: locals.user.name,
-                  activeGroupId: activeMembership!.groupId
+                  activeGroupId: activeMembership!.groupId,
+                  roleId: locals.user.roleId
               }
             : undefined,
         listMode: config.listMode,
