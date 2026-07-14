@@ -73,55 +73,49 @@
         >
             <iconify-icon class="text-2xl" icon={"ion:" + (list.icon ?? "gift")}></iconify-icon>
         </div>
-        <div class="flex flex-col space-y-1">
-            <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
+        <div class="flex flex-col gap-1">
+            <span class="text-primary-900-100 line-clamp-2 text-xl font-bold md:text-2xl" data-testid="list-name">
                 {listName}
             </span>
-            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
-                {#if !hideOwner}
-                    <div class="flex flex-row items-center gap-2">
-                        <Avatar class="text-tiny size-6" user={list.owner} />
-                        <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
-                    </div>
-                    ·
-                {/if}
+            {#if !hideOwner}
+                <div class="grid grid-cols-[1.125rem_auto] items-center gap-2">
+                    <Avatar class="text-tiny size-5" user={list.owner} />
+                    <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
+                </div>
+            {/if}
+            <div class="grid grid-cols-[1.125rem_auto_1fr] gap-2 items-center">
+                <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
                 <span>
-                    <iconify-icon icon="ion:gift"></iconify-icon>
                     {#if hideCount}
                         {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
                     {:else}
                         <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
                     {/if}
                 </span>
+                {#if hasNewItems}
+                    <iconify-icon
+                        class="text-primary-800-200 size-2 opacity-40 self-center"
+                        icon="ion:ellipse-sharp"
+                        width="0.5rem"
+                    ></iconify-icon>
+                {/if}
             </div>
-            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
-                {#if list.itemCount !== undefined}
-                    <div class="flex flex-row items-center gap-x-2">
-                        {#if !hideCount}
-                            <Progress class="w-24 py-1" max={100} value={claimedPercent}>
-                                <Progress.Label class="sr-only">{$t("a11y.claimed-progress")}</Progress.Label>
-                                <Progress.Track>
-                                    <Progress.Range class="bg-primary-500" />
-                                </Progress.Track>
-                            </Progress>
-                        {/if}
-                        <span data-testid="item-count">
-                            {#if !hideCount}
+            {#if list.itemCount !== undefined}
+                <div class="flex flex-row items-center gap-x-2 w-full">
+                    {#if !hideCount}
+                        <Progress class="flex items-center flex-row max-w-64 shrink" max={100} value={claimedPercent}>
+                            <Progress.Track>
+                                <Progress.Range class="bg-primary-500" />
+                            </Progress.Track>
+                            <Progress.Label>
                                 {$t("wishes.items-claimed", {
                                     values: { claimedCount: list.claimedCount, itemCount: list.itemCount }
                                 })}
-                            {/if}
-                        </span>
-                        {#if hasNewItems}
-                            <iconify-icon
-                                class="text-primary-800-200 size-2 opacity-40"
-                                icon="ion:ellipse-sharp"
-                                width="0.5rem"
-                            ></iconify-icon>
-                        {/if}
-                    </div>
-                {/if}
-            </div>
+                            </Progress.Label>
+                        </Progress>
+                    {/if}
+                </div>
+            {/if}
         </div>
     </div>
 </svelte:element>
