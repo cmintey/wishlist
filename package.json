@@ -92,6 +92,13 @@
     },
     "engines": {
         "node": "^24.0.0",
-        "pnpm": "^11"
+        "pnpm": "11.10.0"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "11.10.0",
+            "onFail": "download"
+        }
     }
 }
