@@ -83,26 +83,26 @@
                     <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
             {/if}
-            <div class="grid grid-cols-[1.125rem_auto_1fr] gap-2 items-center">
-                <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
-                <span>
-                    {#if hideCount}
-                        {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
-                    {:else}
-                        <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
+            <div class="contents" data-testid="item-count">
+                <div class="grid grid-cols-[1.125rem_auto_1fr] gap-2 items-center">
+                    <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
+                    <span>
+                        {#if hideCount}
+                            {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
+                        {:else}
+                            <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
+                        {/if}
+                    </span>
+                    {#if hasNewItems}
+                        <iconify-icon
+                            class="text-primary-800-200 size-2 opacity-40 self-center"
+                            icon="ion:ellipse-sharp"
+                            width="0.5rem"
+                        ></iconify-icon>
                     {/if}
-                </span>
-                {#if hasNewItems}
-                    <iconify-icon
-                        class="text-primary-800-200 size-2 opacity-40 self-center"
-                        icon="ion:ellipse-sharp"
-                        width="0.5rem"
-                    ></iconify-icon>
-                {/if}
-            </div>
-            {#if list.itemCount !== undefined}
-                <div class="flex flex-row items-center gap-x-2 w-full">
-                    {#if !hideCount}
+                </div>
+                {#if list.itemCount !== undefined && !hideCount}
+                    <div class="flex flex-row items-center gap-x-2 w-full">
                         <Progress class="flex items-center flex-row max-w-64 shrink" max={100} value={claimedPercent}>
                             <Progress.Track>
                                 <Progress.Range class="bg-primary-500" />
@@ -113,9 +113,9 @@
                                 })}
                             </Progress.Label>
                         </Progress>
-                    {/if}
-                </div>
-            {/if}
+                    </div>
+                {/if}
+            </div>
         </div>
     </div>
 </svelte:element>
