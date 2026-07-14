@@ -180,8 +180,9 @@ export const load = (async ({ url }) => {
                 const claimedCount = list.items
                     .filter((it) => it.approved)
                     .reduce((accum, { item }) => {
+                        if (item.quantity === null) return accum;
                         const itemClaimed = item.claims.reduce((a, { quantity }) => a + quantity, 0);
-                        return accum + Math.min(itemClaimed, item.quantity || 1);
+                        return accum + Math.min(itemClaimed, item.quantity);
                     }, 0);
                 const itemCount = list.items
                     .filter((it) => it.approved)
