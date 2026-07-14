@@ -17,3 +17,4 @@ supportedArchitectures:
         - arm64
     os:
         - linux
+        - darwin
