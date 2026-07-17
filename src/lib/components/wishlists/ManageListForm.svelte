@@ -11,7 +11,9 @@
     import ConfirmModal from "../modals/ConfirmModal.svelte";
     import SelectListManagerModal from "../modals/SelectListManagerModal.svelte";
 
-    interface ListProps extends Partial<Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description">> {
+    interface ListProps extends Partial<
+        Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description" | "hideOwner">
+    > {
         owner: Pick<User, "id" | "name" | "username" | "picture">;
         managers: Pick<User, "id" | "name" | "username">[];
     }
@@ -30,6 +32,7 @@
     const formId: string = $props.id();
 
     let list = $derived(list_);
+    let hideOwner = $state(list_.hideOwner ?? false);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived(
         colorElement ? getComputedStyle(colorElement).backgroundColor : list.iconColor || ""
@@ -120,6 +123,13 @@
         </div>
 
         <div class="col-span-full">
+            <label class="unstyled flex w-fit flex-row items-center gap-x-2" for="hideOwner">
+                <input id="hideOwner" name="hideOwner" class="checkbox" type="checkbox" bind:checked={hideOwner} />
+                <span>{$t("wishes.hide-owner")}</span>
+            </label>
+        </div>
+
+        <div class="col-span-full">
             <label class="label mb-1" for="description">
                 <span>{$t("general.description")}</span>
             </label>
@@ -196,7 +206,7 @@
         <div class="col-span-full">
             <div class="flex flex-col space-y-2">
                 <span>{$t("wishes.preview")}</span>
-                <ListCard hideCount {list} preventNavigate />
+                <ListCard hideCount {hideOwner} {list} preventNavigate />
             </div>
         </div>
     </div>

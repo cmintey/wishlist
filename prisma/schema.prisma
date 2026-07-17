@@ -92,6 +92,7 @@ model List {
     group       Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId     String
     public      Boolean       @default(false)
+    hideOwner   Boolean       @default(false)
     icon        String?
     iconColor   String?
     items       ListItem[]

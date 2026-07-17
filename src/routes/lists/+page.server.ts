@@ -52,6 +52,7 @@ export const load = (async ({ url }) => {
             name: true,
             icon: true,
             iconColor: true,
+            hideOwner: true,
             owner: {
                 select: {
                     id: true,
@@ -110,6 +111,7 @@ export const load = (async ({ url }) => {
             name: true,
             icon: true,
             iconColor: true,
+            hideOwner: true,
             owner: {
                 select: {
                     id: true,
@@ -165,6 +167,7 @@ export const load = (async ({ url }) => {
                     name: list.name,
                     icon: list.icon,
                     iconColor: list.iconColor,
+                    hideOwner: list.hideOwner,
                     owner: list.owner,
                     claimedCount: undefined,
                     itemCount: list.items.reduce((accum, { item }) => accum + (item.quantity || 1), 0),
@@ -176,10 +179,11 @@ export const load = (async ({ url }) => {
             .map((list) => {
                 const claimedCount = list.items
                     .filter((it) => it.approved)
-                    .filter(({ item }) => {
-                        const claimedCount = item.claims.map(({ quantity }) => quantity).reduce((a, b) => a + b, 0);
-                        return claimedCount === item.quantity;
-                    }).length;
+                    .reduce((accum, { item }) => {
+                        if (item.quantity === null) return accum;
+                        const itemClaimed = item.claims.reduce((a, { quantity }) => a + quantity, 0);
+                        return accum + Math.min(itemClaimed, item.quantity);
+                    }, 0);
                 const itemCount = list.items
                     .filter((it) => it.approved)
                     .reduce((accum, { item }) => accum + (item.quantity || 1), 0);
@@ -189,6 +193,7 @@ export const load = (async ({ url }) => {
                     name: list.name,
                     icon: list.icon,
                     iconColor: list.iconColor,
+                    hideOwner: list.hideOwner,
                     owner: list.owner,
                     claimedCount,
                     itemCount,
