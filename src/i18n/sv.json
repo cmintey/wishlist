@@ -475,7 +475,11 @@
         "show-description": "Visa beskrivning",
         "sort-by": "Sortera efter",
         "supports-markdown": "Stöder Markdown",
-        "item-created": "Artikel skapad"
+        "item-created": "Artikel skapad",
+        "hide-owner": "Dölj ägare",
+        "items-claimed": "{claimedCount} av {itemCount} reserverad",
+        "items-available": "{availableCount, plural, one {# Tillgänglig} other {# Tillgängliga}}",
+        "items-requested": "{itemCount, plural, one {# begärd} other {# begärda}}"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
