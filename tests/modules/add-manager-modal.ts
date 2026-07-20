@@ -12,8 +12,7 @@ export class AddManagerModal extends Modal {
     }
 
     async searchAndSelect(name: string) {
-        await expect(this.modal).toBeVisible();
-        await expect(this.searchInput).toBeVisible();
+        await this.modal.waitFor({ state: "visible", timeout: 5000 });
         await this.searchInput.fill(name);
         const result = this.searchResultsContainer.getByRole("option", { name });
         await expect(result).toBeVisible();

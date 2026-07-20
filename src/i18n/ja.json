@@ -207,7 +207,6 @@
         "in-registry-mode-you-can-only-have-one-list": "登録モードではリストは一つしか持てません",
         "incorrect-password": "パスワードが違います",
         "invalid-credentials": "資格情報が無効です！",
-        "invalid-currency-code": "通貨コードが無効です。有効な通貨コードの一覧は<a href=\"https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>で確認できます",
         "invalid-email": "有効なメールアドレスを入力してください。",
         "invite-code-invalid": "招待コードが無効であるか、既に使用されています",
         "invite-failed-to-send": "招待の送信に失敗しました: {errorMessage}",

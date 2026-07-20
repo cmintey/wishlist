@@ -6,22 +6,35 @@
     import { getFormatter } from "$lib/i18n";
     import ItemImage from "./ItemCard/components/ItemImage.svelte";
     import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
-    import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
+    import { Dialog, Portal, type DialogRootProps } from "@skeletonlabs/skeleton-svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import type { InternalItemCardProps } from "./ItemCard/ItemCard.svelte";
 
-    type ItemDrawerProps = {
-        open: boolean;
-    };
-
-    let {
-        open = $bindable(false),
-        defaultImage: _defaultImage,
-        item,
-        ...props
-    }: InternalItemCardProps & ItemDrawerProps = $props();
+    let { defaultImage: _defaultImage, item, ...props }: InternalItemCardProps = $props();
     const t = getFormatter();
+
+    let open = $state(false);
+
+    $effect(() => {
+        if (page.url.searchParams.get("item-id") === item.id.toString()) {
+            open = true;
+        }
+    });
+
+    async function closeDialog() {
+        await goto(page.url.pathname, { replaceState: true, noScroll: true });
+        open = false;
+    }
+
+    const onOpenChange: DialogRootProps["onOpenChange"] = async (details) => {
+        if (details.open) {
+            open = true;
+        } else {
+            open = false;
+            await goto(page.url.pathname, { replaceState: true, noScroll: true });
+        }
+    };
 
     const transitionIn =
         "data-[state=open]:translate-y-0 starting:data-[state=open]:translate-y-1/2 md:starting:data-[state=open]:translate-y-0 md:data-[state=open]:scale-100 md:starting:data-[state=open]:scale-90";
@@ -29,12 +42,12 @@
         "data-[state=closed]:translate-y-1/2 starting:data-[state=closed]:translate-y-0 md:data-[state=closed]:translate-y-0 md:data-[state=closed]:scale-90 md:starting:data-[state=closed]:scale-100";
 </script>
 
-<Dialog onOpenChange={(e) => (open = e.open)} {open}>
+<Dialog {onOpenChange} {open}>
     <Portal>
-        <ModalBackdrop class="duration-250 md:duration-150"></ModalBackdrop>
+        <ModalBackdrop class="duration-250"></ModalBackdrop>
         <Dialog.Positioner class="fixed inset-0 z-50 flex items-end justify-center sm:mx-4 sm:items-center">
             <ModalContent
-                class="md:rounded-b-container max-h-3/4 translate-x-0 rounded-b-none duration-250 md:duration-150 {transitionIn} {transitionOut}"
+                class="md:rounded-b-container max-h-3/4 translate-x-0 rounded-b-none duration-250 {transitionIn} {transitionOut}"
             >
                 <div class="grid grid-cols-[1fr_auto] justify-between gap-2 pb-2">
                     <Dialog.Title class="truncate text-xl font-bold text-wrap wrap-break-word md:text-2xl">
@@ -43,7 +56,7 @@
                     <Dialog.CloseTrigger
                         class="preset-tonal-surface border-surface-500 btn-icon border"
                         aria-label={$t("a11y.close")}
-                        onclick={() => goto(page.url.pathname, { replaceState: true, noScroll: true })}
+                        onclick={closeDialog}
                     >
                         <iconify-icon icon="ion:close"></iconify-icon>
                     </Dialog.CloseTrigger>

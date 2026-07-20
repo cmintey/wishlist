@@ -8,6 +8,7 @@ export class ListForm {
     private readonly cancelButton: Locator;
     private readonly nameField: Locator;
     private readonly publicCheckbox: Locator;
+    private readonly hideOwnerCheckbox: Locator;
     private readonly listManagers: ListManagersSelector;
 
     constructor(page: Page) {
@@ -17,11 +18,16 @@ export class ListForm {
         this.cancelButton = page.getByRole("button", { name: "Cancel" });
         this.nameField = page.getByLabel("Name", { exact: true });
         this.publicCheckbox = page.getByLabel("Public", { exact: true });
+        this.hideOwnerCheckbox = page.getByLabel("Hide Owner", { exact: true });
         this.listManagers = new ListManagersSelector(page);
     }
 
     async setName(name: string) {
         await this.nameField.fill(name);
+    }
+
+    async setHideOwner(value = true) {
+        await this.hideOwnerCheckbox.setChecked(value);
     }
 
     async getName() {

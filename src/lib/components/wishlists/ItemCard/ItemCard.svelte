@@ -11,6 +11,7 @@
         userCanManage?: boolean;
         showClaimedName: boolean;
         showNameAcrossGroups?: boolean;
+        showPublicClaimName?: boolean;
         showClaimForOwner?: boolean;
         requireClaimEmail: boolean;
         groupId: string;
@@ -31,6 +32,7 @@
         showClaimedName: boolean;
         showNameAcrossGroups: boolean;
         showClaimForOwner: boolean;
+        showPublicClaimName: boolean;
         requireClaimEmail: boolean;
         groupId: string;
         showFor: boolean;
@@ -46,7 +48,6 @@
 <script lang="ts">
     import type { User } from "$lib/generated/prisma/client";
     import { goto } from "$app/navigation";
-    import { page } from "$app/state";
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import type { ClassValue } from "svelte/elements";
     import type { MessageFormatter } from "$lib/server/i18n";
@@ -63,6 +64,7 @@
         showClaimedName = false,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
+        showPublicClaimName = false,
         requireClaimEmail = true,
         showFor = false,
         onPublicList = false,
@@ -75,20 +77,8 @@
 
     const id = $props.id();
 
-    let drawerOpen = $state(false);
-
-    $effect(() => {
-        if (page.url.searchParams.get("item-id") === item.id.toString()) {
-            openDrawer();
-        }
-    });
-
     function launchDrawer() {
         goto(`?item-id=${item.id}`, { replaceState: true, noScroll: true });
-    }
-
-    function openDrawer() {
-        drawerOpen = true;
     }
 
     const ItemCard = $derived(isTileView ? GridItemCard : ListItemCard);
@@ -120,9 +110,9 @@
     {showClaimedName}
     {showFor}
     {showNameAcrossGroups}
+    {showPublicClaimName}
     {user}
     {userCanManage}
-    bind:open={drawerOpen}
 />
 
 <div
@@ -155,6 +145,7 @@
         {showClaimedName}
         {showFor}
         {showNameAcrossGroups}
+        {showPublicClaimName}
         {user}
         {userCanManage}
     />

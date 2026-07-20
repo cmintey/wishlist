@@ -21,7 +21,7 @@ Features to test
     - [ ] Claim
         - [ ] Validate claimed name text
         - [ ] Claim multiple
-        - [ ] Claim partial
+        - [x] Claim partial
     - [ ] Purchase
 - [ ] Item reactivity
     - [ ] Create

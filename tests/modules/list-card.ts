@@ -24,8 +24,23 @@ export class ListCard {
         return this;
     }
 
+    async assertOwnerHidden() {
+        await expect(this.owner).toBeHidden();
+        return this;
+    }
+
     async assertItemCount(count: number) {
-        await expect(this.itemCount).toHaveText(count.toString());
+        await expect(this.itemCount).toHaveText(`${count} Requested`);
+        return this;
+    }
+
+    async assertAvailableCount(count: number) {
+        await expect(this.itemCount).toContainText(`${count} Available`);
+        return this;
+    }
+
+    async assertClaimedCount(claimedCount: number, itemCount: number) {
+        await expect(this.itemCount).toContainText(`${claimedCount} of ${itemCount} Claimed`);
         return this;
     }
 

@@ -5,6 +5,7 @@ import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
 import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
+import { itemSorter } from "$lib/comparators";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -21,6 +22,7 @@ export interface ListProperties {
     icon?: string | null;
     iconColor?: string | null;
     public?: boolean;
+    hideOwner?: boolean;
 }
 
 export const create = async (ownerId: string, groupId: string, otherData?: ListProperties) => {
@@ -203,23 +205,18 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
         include: getItemInclusions(list.id)
     });
 
-    const itemDTOs = items
-        // need to filter out items not on a list because prisma generates a stupid query
-        .filter((item) => item.lists.length > 0)
+    return items
+        .filter((item) => item.lists.length > 0) // need to filter out items not on a list because prisma generates a stupid query
         .map((i) => toItemOnListDTO(i, list.id))
-        .filter(claimFilter(options.filter, options.loggedInUserId));
-
-    if (options.sort === "price") {
-        if (options.sortDir === "desc") {
-            itemDTOs.sort((a, b) => (b.itemPrice?.value ?? -Infinity) - (a.itemPrice?.value ?? -Infinity));
-        } else {
-            itemDTOs.sort((a, b) => (a.itemPrice?.value ?? Infinity) - (b.itemPrice?.value ?? Infinity));
-        }
-    } else {
-        itemDTOs.sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity));
-    }
-
-    return itemDTOs;
+        .filter(claimFilter(options.filter, options.loggedInUserId))
+        .toSorted(
+            itemSorter({
+                sort: options.sort,
+                dir: options.sortDir,
+                userId: options.loggedInUserId,
+                listOwnerId: options.listOwnerId
+            })
+        );
 };
 
 const availableListSelection: Prisma.ListFindManyArgs["select"] = {

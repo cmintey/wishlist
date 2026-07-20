@@ -18,6 +18,7 @@ enum ConfigKey {
     CLAIMS_SHOW_NAME = "claims.showName",
     ClAIMS_SHOW_NAME_ACROSS_GROUPS = "claims.showNameAcrossGroups",
     CLAIMS_SHOW_FOR_OWNER = "claims.showForOwner",
+    CLAIMS_SHOW_NAME_PUBLIC = "claims.showNamePublic",
     CLAIMS_REQUIRE_EMAIL = "claims.requireEmail",
     LIST_MODE = "listMode",
     SECURITY_PASSWORD_STRENGTH = "security.passwordStrength",
@@ -64,6 +65,7 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "claims.showName": booleanTransformer,
     "claims.showNameAcrossGroups": booleanTransformer,
     "claims.showForOwner": booleanTransformer,
+    "claims.showNamePublic": booleanTransformer,
     "claims.requireEmail": booleanTransformer,
     listMode: stringTransformer,
     "security.passwordStrength": numberTransformer,
@@ -99,6 +101,7 @@ const getDefaultConfig = (): Config => ({
         showName: true,
         showNameAcrossGroups: false,
         showForOwner: false,
+        showNamePublic: false,
         requireEmail: true
     },
     listMode: "standard",
