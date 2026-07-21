@@ -1,105 +1,64 @@
-/* eslint @typescript-eslint/ban-ts-comment: 0 */
-//@ts-nocheck
-import type { Check, CheckOptions, RuleSet } from "metascraper";
-import { toPriceFormat, getHostname } from "./helpers";
+import type { Rules, RulesOptions } from "metascraper";
+import type { HtmlDomType } from "./helpers";
+import {
+    toPriceFormat,
+    getHostname,
+    jsonLd,
+    jsonLdLastBreadcrumb,
+    jsonLdGraphProduct,
+    toTitle,
+    type ShoppingMetadataRules,
+    isRecord,
+    getProperty
+} from "./helpers";
 import pkg from "@metascraper/helpers";
-const { memoizeOne, $jsonld, toRule, title, $filter } = pkg;
+import domainRules from "./domains";
 
-interface ShoppingMetadata {
-    brand: string;
-    name: string;
-    currency: string;
-    sku: string;
-    price: string;
-    condition: string;
-    mpn: string;
-    availability: string;
-    asin: string;
-    hostname: string;
-    retailer: string;
-}
+const { $jsonld, $filter } = pkg;
 
-type ShoppingRuleSet = {
-    [C in keyof ShoppingMetadata]?: Array<Check>;
-} & RuleSet;
-
-const jsonLd = memoizeOne(($: CheckOptions["htmlDom"]) => {
-    const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
-    return jsonld;
-});
-
-const jsonLdGraph = memoizeOne(($: CheckOptions["htmlDom"]) => {
-    const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
-    return jsonld && jsonld["@graph"];
-});
-
-const jsonLdGraphProduct = memoizeOne(($: CheckOptions["htmlDom"]) => {
-    const jsonld = jsonLdGraph($);
-
-    if (jsonld) {
-        const products = jsonld.filter((i) => {
-            return i["@type"] === "Product";
-        });
-        return products.length > 0 ? products[0] : null;
-    }
-    return;
-});
-
-const jsonLdLastBreadcrumb = memoizeOne(($: CheckOptions["htmlDom"]) => {
-    const jsonld = jsonLdGraph($);
-    if (jsonld) {
-        const breadcrumbs = jsonld.filter((i) => {
-            return i["@type"] === "BreadcrumbList";
-        });
-        const breadcrumb = breadcrumbs.length > 0 && breadcrumbs[0];
-        const items = breadcrumb.itemListElement;
-        if (items && items.length > 0) {
-            return items[items.length - 1];
-        }
-    }
-
-    return null;
-});
-
-const toTitle = toRule(title, { removeSeparator: false });
+type ShoppingRuleSet = Rules & ShoppingMetadataRules;
 
 /**
  * A set of rules we want to declare under the `metascraper-shopping` namespace.
  *
  **/
 export default () => {
+    // Base rules that apply to all domains.
     const rules: ShoppingRuleSet = {
         brand: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLd($);
-                let brand = jsonld && jsonld.brand;
-                if (brand && brand.name) {
-                    brand = brand.name;
+                if (!jsonld) return;
+                const brand = getProperty(jsonld, "brand");
+                if (isRecord(brand) && "name" in brand && typeof brand.name === "string") {
+                    return brand.name;
                 }
-                return brand;
+                return typeof brand === "string" ? brand : undefined;
             }
         ],
         name: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLd($);
-
-                return jsonld && jsonld.name;
+                const name = jsonld ? getProperty(jsonld, "name") : undefined;
+                return typeof name === "string" ? name : undefined;
             },
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLdLastBreadcrumb($);
-                return jsonld && jsonld.name;
+                const name = jsonld ? getProperty(jsonld, "name") : undefined;
+                return typeof name === "string" ? name : undefined;
             },
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLdGraphProduct($);
-                return jsonld && jsonld.name;
+                const name = jsonld ? getProperty(jsonld, "name") : undefined;
+                return typeof name === "string" ? name : undefined;
             },
             ({ htmlDom: $ }) => $('[property="og:title"]').attr("content")
         ],
         title: [
-            toTitle(($) => $filter($, $("#productTitle"))),
-            toTitle(($) => $filter($, $("#btAsinTitle"))),
-            toTitle(($) => $filter($, $("h1.a-size-large"))),
-            toTitle(($) => $filter($, $("#item_name")))
+            toTitle(($: HtmlDomType) => $filter($, $("#productTitle"))),
+            toTitle(($: HtmlDomType) => $filter($, $("#btAsinTitle"))),
+            toTitle(($: HtmlDomType) => $filter($, $("h1.a-size-large"))),
+            toTitle(($: HtmlDomType) => $filter($, $("#item_name")))
         ],
         url: [
             ({ url }) => url // We'll trust the url the user provides as it may have additional product metadata
@@ -116,17 +75,18 @@ export default () => {
             },
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLd($);
-                let image = jsonld && jsonld.image;
+                if (!jsonld) return;
+                let image = getProperty(jsonld, "image");
 
-                if (image && image["@type"] === "ImageObject") {
-                    image = image.image;
+                if (isRecord(image) && image["@type"] === "ImageObject") {
+                    image = getProperty(image, "image");
                 }
 
-                if (Array.isArray(image)) {
+                if (Array.isArray(image) && image.length > 0) {
                     image = image[0];
                 }
 
-                if (image) return image;
+                return typeof image === "string" ? image : undefined;
             },
             ({ htmlDom: $ }) => $('meta.swiftype[name="image"]').attr("content"),
             ({ htmlDom: $, url }) => {
@@ -145,7 +105,13 @@ export default () => {
         currency: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLdGraphProduct($);
-                return jsonld && jsonld.offers && jsonld.offers.priceCurrency;
+                if (!jsonld) return;
+                const offers = getProperty(jsonld, "offers");
+                if (isRecord(offers)) {
+                    const currency = getProperty(offers, "priceCurrency");
+                    return typeof currency === "string" ? currency : undefined;
+                }
+                return undefined;
             },
             ({ htmlDom: $ }) => $('[property="og:price:currency"]').attr("content"),
             ({ htmlDom: $, url }) => $jsonld("offers.0.priceCurrency")($, url),
@@ -162,7 +128,9 @@ export default () => {
         sku: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLdGraphProduct($);
-                return jsonld && jsonld.sku;
+                if (!jsonld) return;
+                const sku = getProperty(jsonld, "sku");
+                return typeof sku === "string" ? sku : undefined;
             },
             ({ htmlDom: $, url }) => $jsonld("sku")($, url),
             ({ htmlDom: $, url }) => $jsonld("offers.sku")($, url),
@@ -178,7 +146,13 @@ export default () => {
         availability: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLdGraphProduct($);
-                return jsonld && jsonld.offers && jsonld.offers.availability;
+                if (!jsonld) return;
+                const offers = getProperty(jsonld, "offers");
+                if (isRecord(offers)) {
+                    const availability = getProperty(offers, "availability");
+                    return typeof availability === "string" ? availability : undefined;
+                }
+                return undefined;
             },
             ({ htmlDom: $ }) => $('[property="og:availability"]').attr("content"),
             ({ htmlDom: $, url }) => $jsonld("offers.availability")($, url),
@@ -188,24 +162,81 @@ export default () => {
         price: [
             ({ htmlDom: $ }) => {
                 const jsonld = jsonLdGraphProduct($);
-                return jsonld && jsonld.offers && toPriceFormat(jsonld.offers.price);
+                if (!jsonld) return;
+                const offers = getProperty(jsonld, "offers");
+                if (isRecord(offers)) {
+                    const price = getProperty(offers, "price");
+                    const formatted = toPriceFormat(
+                        typeof price === "string" || typeof price === "number" ? String(price) : undefined
+                    );
+                    return formatted !== undefined ? String(formatted) : undefined;
+                }
+                return undefined;
             },
-            ({ htmlDom: $ }) => toPriceFormat($('[property="og:price:amount"]').attr("content")),
-            ({ htmlDom: $ }) => toPriceFormat($("[itemprop=price]").attr("content")),
-            ({ htmlDom: $ }) => toPriceFormat($('[property="product:price:amount"]').attr("content")),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("price")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.price")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.0.price")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("0.offers.price")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.lowPrice")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.0.lowPrice")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.highPrice")($, url)),
-            ({ htmlDom: $, url }) => toPriceFormat($jsonld("offers.0.highPrice")($, url)),
-            ({ htmlDom: $ }) => toPriceFormat($("[data-asin-price]").attr("data-asin-price")), //amazon
-            ({ htmlDom: $ }) => toPriceFormat($("[itemprop=price]").html()),
-            ({ htmlDom: $ }) => toPriceFormat($("#attach-base-product-price").attr("value")),
-            ({ htmlDom: $ }) => toPriceFormat($("span.a-offscreen", "span.a-price").html()),
-            ({ htmlDom: $ }) => toPriceFormat($("span.price-amount").html())
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($('[property="og:price:amount"]').attr("content"));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($("[itemprop=price]").attr("content"));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($('[property="product:price:amount"]').attr("content"));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("price")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("offers.price")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("offers.0.price")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("0.offers.price")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("offers.lowPrice")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("offers.0.lowPrice")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("offers.highPrice")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $, url }) => {
+                const formatted = toPriceFormat($jsonld("offers.0.highPrice")($, url));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($("[data-asin-price]").attr("data-asin-price")); //amazon
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($("[itemprop=price]").html());
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($("#attach-base-product-price").attr("value"));
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($("span.a-offscreen", "span.a-price").html());
+                return formatted !== undefined ? String(formatted) : undefined;
+            },
+            ({ htmlDom: $ }) => {
+                const formatted = toPriceFormat($("span.price-amount").html());
+                return formatted !== undefined ? String(formatted) : undefined;
+            }
         ],
         asin: [
             //unique amazon identifier
@@ -214,6 +245,26 @@ export default () => {
         hostname: [({ url }) => getHostname(url)],
         retailer: [({ htmlDom: $ }) => $('[property="og:site_name"]').attr("content")]
     };
+
+    /**
+     * Prepend any domain-specific rules so they are tried before the defaults.
+     * Each domain rule is responsible for deciding whether it applies to the
+     * current URL (e.g. using the `forDomains` helper). If it returns
+     * `undefined`, metascraper will fall back to these base rules.
+     */
+    (Object.keys(domainRules) as Array<keyof ShoppingMetadataRules>).forEach((key) => {
+        const domainChecks = domainRules[key];
+        if (!domainChecks || domainChecks.length === 0) return;
+
+        const baseChecks = (rules[key] ?? []) as RulesOptions[];
+        // Type assertion is safe here because we've verified key is in ShoppingMetadataRules
+        // and both domainChecks and baseChecks are RulesOptions[]
+        (rules as ShoppingRuleSet & Record<keyof ShoppingMetadataRules, RulesOptions[]>)[key] = [
+            ...domainChecks,
+            ...baseChecks
+        ];
+    });
+
     rules.pkgName = "metascraper-shopping";
     return rules;
 };
