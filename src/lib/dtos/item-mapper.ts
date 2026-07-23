@@ -75,7 +75,7 @@ export const toItemOnListDTO = (item: FullItem, listId: string) => {
             return this.quantity === null ? Infinity : this.quantity - this.claimedQuantity;
         },
         get isClaimable(): boolean {
-            return this.quantity === null || this.quantity > this.claimedQuantity;
+            return this.approved && (this.quantity === null || this.quantity > this.claimedQuantity);
         }
     } satisfies ItemOnListDTO;
 };

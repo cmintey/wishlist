@@ -36,7 +36,7 @@
     {#if item.mostWanted}
         <div
             class={[
-                "glow preset-filled-primary-500 chip absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
+                "glow preset-filled-primary-500 badge absolute start-1 top-1 print:start-0 print:top-0 print:-ml-3",
                 badgeClass
             ]}
         >

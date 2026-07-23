@@ -35,6 +35,7 @@
 
     const claim = $derived(item.claims.find((claim) => claim.claimId === claimId));
 
+    let title = $derived(claim ? $t("wishes.update-claim") : $t("wishes.claim-item"));
     let username: string | undefined = $state();
     let name: string | undefined = $state();
     let quantity = $derived(claim?.quantity || 1);
@@ -133,20 +134,21 @@
     }
 
     function closeAndToast(description: string) {
-        open = false;
         // wait for transition to finish before triggering toast
-        setTimeout(() => toaster.info({ description }), 250);
+        setTimeout(() => toaster.info({ description }), open ? 275 : 0);
+        open = false;
+
         onSuccess?.();
     }
 </script>
 
-<BaseModal
-    description={$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}
-    onOpenChange={(e) => (open = e.open)}
-    {open}
-    title={$t("wishes.claim-details")}
-    {...rest}
->
+{#snippet description()}
+    {#if !userId}
+        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
+    {/if}
+{/snippet}
+
+<BaseModal {description} onOpenChange={(e) => (open = e.open)} {open} {title} {...rest}>
     {#snippet trigger(props)}
         {@render inputTrigger({ ...props, onclick: handleTrigger })}
     {/snippet}
