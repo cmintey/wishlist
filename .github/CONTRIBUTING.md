@@ -66,6 +66,12 @@ Please ensure:
 
 ---
 
+## Internationalization (I18n)
+
+Edit only the en.json file. All other language translations will be handled via Weblate. [See README's Translation section for more infomraiton](README.md#translations)
+
+---
+
 ## Issues & Discussions
 
 Before opening a new issue:

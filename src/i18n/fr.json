@@ -27,7 +27,6 @@
         "username-already-in-use": "{username} est déjà utilisé",
         "user-is-not-a-member-of-the-group": "L'utilisateur n'est pas membre du groupe",
         "one-or-more-items-missing-an-id": "Un ou plusieurs objets n'ont pas d'identifiant",
-        "price-must-have-a-currency": "Vous devez indiquer une devise pour le prix",
         "password-min-strength": "Le mot de passe doit au moins comporter ''{minStrength}'' caractères",
         "product-information-not-available": "Les informations de l'article ne sont pas disponibles",
         "no-group-friendly-msg": "Si vous voyez cette page, c'est que vous ne faites encore partie d'aucun groupe ! Demandez à rejoindre un groupe ou créez le vôtre.",
@@ -37,7 +36,6 @@
         "unauthenticated": "Vous devez d'abord vous authentifier",
         "valid-url-not-provided": "Lien valide non fourni",
         "username-must-not-be-blank": "Le nom d'utilisateur ne peut pas être vide",
-        "invalid-currency-code": "Le code pour la devise est invalide. Vous pouvez trouver la liste des codes <a href=\"https://en.wikipedia.org/wiki/ISO_4217#Active_codes_(list_one)\" target=\"_blank\" rel=\"noopener noreferrer\">ici</a>",
         "must-specify-asset-id": "Vous devez spécifiez l'identifiant de l'objet",
         "must-specify-group-name-in-body": "Vous devez spécifier le nom du groupe",
         "must-specify-url-in-query-parameters": "Vous devez spécifiez l'url dans les paramètres de la requête",
@@ -176,7 +174,12 @@
         "show-for-list-owner": "Afficher pour le propriétaire de la liste",
         "show-for-list-owner-description": "Permet au propriétaire de la liste de voir les réservations sur leurs propres listes.",
         "show-name-across-groups": "Afficher le nom dans tous les groupes",
-        "show-name-across-groups-tooltip": "Affiche le nom de l'utilisateur qui a effectué une réservation, même si cet utilisateur ne fait pas partie de votre groupe."
+        "show-name-across-groups-tooltip": "Affiche le nom de l'utilisateur qui a effectué une réservation, même si cet utilisateur ne fait pas partie de votre groupe.",
+        "ignore-cert-check": "Ignorer les erreurs de certificat",
+        "sending": "Envoi",
+        "smtp-ignore-cert-check-description": "Ne pas valider le certificat TLS. Le plus souvent utilisé pour les connexions locales. Non recommandé.",
+        "smtp-use-tls": "Utiliser TLS",
+        "smtp-use-tls-description": "Se connecter au serveur SMTP directement en utilisant TLS au lieu d'utiliser STARTTLS. Le plus souvent utilisé avec le port 465."
     },
     "auth": {
         "password": "Mot de passe",

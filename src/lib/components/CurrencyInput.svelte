@@ -2,9 +2,9 @@
     import { getFormatter as getPriceFormatter, getLocaleConfig } from "$lib/price-formatter";
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
-    import { getFormatter, getLocale } from "$lib/i18n";
-    import { toaster } from "./toaster";
+    import { getLocale } from "$lib/i18n";
     import { getNumberFormatter } from "svelte-i18n";
+    import { Combobox, Portal, useListCollection, type ComboboxRootProps } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {
         value?: number | null;
@@ -15,7 +15,6 @@
     }
 
     let { value = $bindable(null), currency = $bindable("USD"), name, id, disabled = false }: Props = $props();
-    const t = getFormatter();
     const locale = getLocale();
 
     let numberFormatter = getNumberFormatter({ locale });
@@ -27,7 +26,6 @@
     let displayValue = $state(inputtedValue);
     let inputElement: HTMLInputElement | undefined = $state();
     let isMounted = $state(false);
-    let previousCurrency = currency;
 
     onMount(() => {
         isMounted = true;
@@ -84,29 +82,18 @@
         displayValue = inputtedValue;
     };
 
-    const validateCurrency = (
-        e: Event & {
-            currentTarget: EventTarget & HTMLInputElement;
-        }
-    ) => {
-        if (!e.currentTarget.value) {
-            currency = previousCurrency;
-            toaster.info({
-                description: $t("errors.price-must-have-a-currency")
-            });
-            return;
-        }
-        try {
-            Intl.NumberFormat(undefined, { style: "currency", currency: e.currentTarget.value });
-            currency = e.currentTarget.value.toUpperCase();
-        } catch {
-            e.currentTarget.value = previousCurrency;
-            toaster.warning({
-                description: $t("errors.invalid-currency-code")
-            });
-            return;
-        }
-        previousCurrency = currency;
+    const availableCurrencies = Intl.supportedValuesOf("currency");
+
+    let items = $state(availableCurrencies);
+    const currenciesCollection = $derived(
+        useListCollection({
+            items
+        })
+    );
+
+    const onInputValueChange: ComboboxRootProps["onInputValueChange"] = (event) => {
+        const filtered = availableCurrencies.filter((item) => item.includes(event.inputValue.toLocaleUpperCase()));
+        items = filtered;
     };
 </script>
 
@@ -129,15 +116,42 @@
         type="text"
         bind:value={displayValue}
     />
-    <input
-        class="ig-input w-[8ch] uppercase"
+    <Combobox
+        class="w-22"
+        alwaysSubmitOnEnter={false}
+        collection={currenciesCollection}
         data-testid="currency"
-        maxlength="3"
-        onchange={validateCurrency}
-        type="text"
-        value={currency}
-    />
+        inputBehavior="autohighlight"
+        {onInputValueChange}
+        onOpenChange={() => (items = availableCurrencies)}
+        onValueChange={(e) => (currency = e.value[0])}
+        openOnClick
+        required
+        value={[currency]}
+    >
+        <Combobox.Control>
+            <Combobox.Input>
+                {#snippet element(props)}
+                    <input {...props} name="currency" class="ig-input rounded-s-none uppercase ring-0 focus:ring-1" />
+                {/snippet}
+            </Combobox.Input>
+            <Combobox.Trigger class="bg-transparent" />
+        </Combobox.Control>
+        <Portal>
+            <Combobox.Positioner>
+                <Combobox.Content class="max-h-80 overflow-auto">
+                    {#each items as item (item)}
+                        <Combobox.Item {item}>
+                            <Combobox.ItemText>{item}</Combobox.ItemText>
+                            <Combobox.ItemIndicator />
+                        </Combobox.Item>
+                    {:else}
+                        <span>No currencies available.</span>
+                    {/each}
+                </Combobox.Content>
+            </Combobox.Positioner>
+        </Portal>
+    </Combobox>
 </div>
 
 <input {id} {name} {disabled} type="hidden" bind:value />
-<input id="currency" name="currency" type="hidden" bind:value={currency} />

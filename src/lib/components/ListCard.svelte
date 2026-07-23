@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { List, User } from "$lib/generated/prisma/client";
+    import { Progress } from "@skeletonlabs/skeleton-svelte";
     import Avatar from "./Avatar.svelte";
     import { getFormatter } from "$lib/i18n";
 
@@ -12,15 +13,28 @@
 
     interface Props {
         hideCount?: boolean;
+        hideOwner?: boolean;
         list: ListWithCounts;
         hasNewItems?: boolean;
         preventNavigate?: boolean;
     }
 
-    const { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
+    const {
+        hideCount = false,
+        hideOwner = false,
+        hasNewItems = false,
+        list,
+        preventNavigate = false
+    }: Props = $props();
     const t = getFormatter();
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
+    let availableCount = $derived((list.itemCount ?? 0) - (list.claimedCount ?? 0));
+    let claimedPercent = $derived(
+        list.itemCount && list.itemCount > 0
+            ? Math.min(100, Math.round(((list.claimedCount ?? 0) / list.itemCount) * 100))
+            : 0
+    );
     let iconColor = $derived(list.iconColor);
     let elementTag = $derived(preventNavigate ? "div" : "a");
     let element: HTMLElement | undefined = $state();
@@ -59,30 +73,46 @@
         >
             <iconify-icon class="text-2xl" icon={"ion:" + (list.icon ?? "gift")}></iconify-icon>
         </div>
-        <div class="flex flex-col space-y-1">
-            <span class="text-primary-900-100 line-clamp-2 text-2xl font-bold md:text-4xl" data-testid="list-name">
+        <div class="flex flex-col gap-1">
+            <span class="text-primary-900-100 line-clamp-2 text-xl font-bold md:text-2xl" data-testid="list-name">
                 {listName}
             </span>
-            <div class="flex flex-row flex-wrap items-center gap-2 text-lg">
-                <div class="flex flex-row items-center gap-2">
-                    <Avatar class="text-tiny size-6" user={list.owner} />
+            {#if !hideOwner}
+                <div class="grid grid-cols-[1.125rem_auto] items-center gap-2">
+                    <Avatar class="text-tiny size-5" user={list.owner} />
                     <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
-
-                {#if list.itemCount !== undefined}
-                    <span>·</span>
-                    <div class="flex flex-row items-center gap-x-2">
-                        <iconify-icon icon="ion:gift"></iconify-icon>
-                        <span data-testid="item-count">
-                            {!hideCount ? `${list.claimedCount}/` : ""}{list.itemCount}
-                        </span>
-                        {#if hasNewItems}
-                            <iconify-icon
-                                class="text-primary-800-200 size-2 opacity-40"
-                                icon="ion:ellipse-sharp"
-                                width="0.5rem"
-                            ></iconify-icon>
+            {/if}
+            <div class="contents" data-testid="item-count">
+                <div class="grid grid-cols-[1.125rem_auto_1fr] gap-2 items-center">
+                    <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
+                    <span>
+                        {#if hideCount}
+                            {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
+                        {:else}
+                            <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
                         {/if}
+                    </span>
+                    {#if hasNewItems}
+                        <iconify-icon
+                            class="text-primary-800-200 size-2 opacity-40 self-center"
+                            icon="ion:ellipse-sharp"
+                            width="0.5rem"
+                        ></iconify-icon>
+                    {/if}
+                </div>
+                {#if list.itemCount !== undefined && !hideCount}
+                    <div class="flex flex-row items-center gap-x-2 w-full">
+                        <Progress class="flex items-center flex-row max-w-64 shrink" max={100} value={claimedPercent}>
+                            <Progress.Track>
+                                <Progress.Range class="bg-primary-500" />
+                            </Progress.Track>
+                            <Progress.Label>
+                                {$t("wishes.items-claimed", {
+                                    values: { claimedCount: list.claimedCount, itemCount: list.itemCount }
+                                })}
+                            </Progress.Label>
+                        </Progress>
                     </div>
                 {/if}
             </div>

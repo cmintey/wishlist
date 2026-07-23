@@ -16,6 +16,7 @@
         | "showClaimForOwner"
         | "showClaimedName"
         | "showNameAcrossGroups"
+        | "showPublicClaimName"
         | "showFor"
         | "groupId"
     > {
@@ -33,6 +34,7 @@
         requireClaimEmail,
         showNameAcrossGroups = false,
         showClaimForOwner = false,
+        showPublicClaimName = false,
         showFor,
         showDetail = false,
         fullNotes = false

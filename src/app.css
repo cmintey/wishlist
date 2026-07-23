@@ -12,6 +12,7 @@
 @import "./styles/input.css";
 @import "./styles/tabs.css";
 @import "./styles/alert.css";
+@import "./styles/dialog.css";
 
 @plugin "@tailwindcss/forms";
 

@@ -1,4 +1,5 @@
 import { expect, test } from "../fixtures";
+import { Toast } from "../modules/toast";
 import { ListsPage } from "../pageObjects/lists.page";
 import { randomString } from "../util";
 
@@ -56,6 +57,27 @@ test("change list name", async ({ page }) => {
     await list.assertName(newListName);
 });
 
+test("hide owner removes the owner from the list card", async ({ page, userData }) => {
+    const listsPage = new ListsPage(page);
+    await listsPage.goto();
+
+    // The owner is shown on the card by default
+    const list = await listsPage.getListAt(0);
+    await list.assertOwner(userData.name);
+
+    // Enable "Hide Owner" in the manage form and save
+    await list
+        .click()
+        .then((listPage) => listPage.manage())
+        .then((manage) => manage.at())
+        .then((manage) => manage.setHideOwner(true))
+        .then((manage) => manage.save());
+
+    // The owner should no longer be rendered on the list card
+    await listsPage.goto();
+    await listsPage.getListAt(0).then((card) => card.assertOwnerHidden());
+});
+
 test("delete list", async ({ page }) => {
     const listsPage = new ListsPage(page);
     await listsPage.goto();
@@ -75,6 +97,85 @@ test("delete list", async ({ page }) => {
 
     await listsPage.at();
     await listsPage.expectListCount(countBefore);
+});
+
+test("list card counts a partially claimed multi-quantity item", async ({
+    page: ownerPage,
+    userData: owner,
+    additionalPage: claimerPage
+}) => {
+    // Owner adds an item with a desired quantity of 7 to their list
+    const ownerLists = new ListsPage(ownerPage);
+    await ownerLists.goto();
+    const ownerListPage = await ownerLists.getListAt(0).then((list) => list.click());
+    await ownerListPage.assertNoItems();
+
+    const itemName = randomString();
+    const createItemPage = await ownerListPage.createItem();
+    await createItemPage
+        .getForm()
+        .then((f) => f.fillName(itemName))
+        .then((f) => f.fillQuantity(7));
+    await createItemPage.create();
+    await ownerListPage.at();
+    await new Toast(ownerPage).waitForToastWithText("Item created");
+
+    // A different user claims 3 of the 7 (a partial claim)
+    const claimerLists = new ListsPage(claimerPage);
+    await claimerLists.goto();
+    await claimerLists
+        .getListByName(`${owner.name}'s Wishes`)
+        .then((card) => card.click())
+        .then((listPage) => listPage.getItemAt(0))
+        .then((item) => item.claim(3));
+
+    // The list card should reflect the partial claim: 4 Available, 3 of 7 Claimed.
+    // Regression guard: previously claimedCount only counted fully-claimed items,
+    // so this showed "7 Available, 0 of 7 Claimed" (see PR #281).
+    await claimerLists.goto();
+    await claimerLists
+        .getListByName(`${owner.name}'s Wishes`)
+        .then((card) => card.assertAvailableCount(4))
+        .then((card) => card.assertClaimedCount(3, 7));
+});
+
+test("list card does not count a claimed unlimited item as claimed", async ({
+    page: ownerPage,
+    userData: owner,
+    additionalPage: claimerPage
+}) => {
+    // Owner adds an item with no quantity limit (unlimited) to their list
+    const ownerLists = new ListsPage(ownerPage);
+    await ownerLists.goto();
+    const ownerListPage = await ownerLists.getListAt(0).then((list) => list.click());
+    await ownerListPage.assertNoItems();
+
+    const itemName = randomString();
+    const createItemPage = await ownerListPage.createItem();
+    await createItemPage
+        .getForm()
+        .then((f) => f.fillName(itemName))
+        .then((f) => f.checkNoLimit());
+    await createItemPage.create();
+    await ownerListPage.at();
+    await new Toast(ownerPage).waitForToastWithText("Item created");
+
+    // A different user claims the unlimited item
+    const claimerLists = new ListsPage(claimerPage);
+    await claimerLists.goto();
+    await claimerLists
+        .getListByName(`${owner.name}'s Wishes`)
+        .then((card) => card.click())
+        .then((listPage) => listPage.getItemAt(0))
+        .then((item) => item.claim(3));
+
+    // The unlimited item counts as 1 toward the total but never toward the claimed
+    // total, so the card shows "1 Available, 0 of 1 Claimed" even after the claim.
+    await claimerLists.goto();
+    await claimerLists
+        .getListByName(`${owner.name}'s Wishes`)
+        .then((card) => card.assertAvailableCount(1))
+        .then((card) => card.assertClaimedCount(0, 1));
 });
 
 test("multiple users and list filter", async ({

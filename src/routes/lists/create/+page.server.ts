@@ -39,6 +39,7 @@ export const load = (async () => {
                 picture: user.picture || null
             },
             description: null,
+            hideOwner: false,
             managers: []
         },
         listMode: config.listMode,
@@ -76,6 +77,7 @@ export const actions: Actions = {
             icon: form.get("icon"),
             iconColor: form.get("iconColor"),
             public: form.get("public"),
+            hideOwner: form.get("hideOwner"),
             description: form.get("description")
         });
         if (listProperties.error) {
@@ -102,6 +104,7 @@ export const actions: Actions = {
                 icon: trimToNull(listProperties.data.icon),
                 iconColor: trimToNull(listProperties.data.iconColor),
                 public: listProperties.data.public,
+                hideOwner: listProperties.data.hideOwner,
                 description: trimToNull(listProperties.data.description)
             };
             list = await create(user.id, activeMembership.groupId, data);

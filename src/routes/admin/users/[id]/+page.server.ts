@@ -5,8 +5,11 @@ import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/server/i18n";
 import { requireRole } from "$lib/server/auth";
+import { unlinkOauth, updatePicture, updateProfile } from "$lib/server/profile";
+import { fail } from "@sveltejs/kit";
+import { getOIDCConfig } from "$lib/server/openid";
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
     const user = await requireRole(Role.ADMIN);
     const $t = await getFormatter();
 
@@ -20,8 +23,11 @@ export const load: PageServerLoad = async ({ params }) => {
         },
         select: {
             username: true,
+            email: true,
             name: true,
             id: true,
+            picture: true,
+            oauthId: true,
             role: {
                 select: {
                     name: true
@@ -32,10 +38,68 @@ export const load: PageServerLoad = async ({ params }) => {
 
     if (!editingUser) error(404, $t("errors.user-not-found"));
 
-    return { editingUser, user };
+    return {
+        editingUser: {
+            ...editingUser
+        },
+        oidcConfig: await getOIDCConfig(fetch),
+        user
+    };
 };
 
 export const actions: Actions = {
+    profile: async ({ params, request }) => {
+        await requireRole(Role.ADMIN);
+        const user = await client.user.findUnique({
+            where: {
+                id: params.id
+            },
+            select: {
+                id: true
+            }
+        });
+
+        if (!user) {
+            return fail(404, "User not found");
+        }
+
+        return request.formData().then((fd) => updateProfile(user.id, fd));
+    },
+
+    profilePicture: async ({ params, request }) => {
+        await requireRole(Role.ADMIN);
+        const user = await client.user.findUnique({
+            where: {
+                id: params.id
+            },
+            select: {
+                id: true,
+                username: true
+            }
+        });
+
+        if (!user) {
+            return fail(404, "User not found");
+        }
+        return request.formData().then((fd) => updatePicture(user.id, user.username, fd));
+    },
+    unlinkoauth: async ({ params }) => {
+        await requireRole(Role.ADMIN);
+        const user = await client.user.findUnique({
+            where: {
+                id: params.id
+            },
+            select: {
+                id: true,
+                username: true
+            }
+        });
+
+        if (!user) {
+            return fail(404, "User not found");
+        }
+        await unlinkOauth(user.id);
+    },
     "reset-password": async ({ params, url }) => {
         await requireRole(Role.ADMIN);
         const $t = await getFormatter();

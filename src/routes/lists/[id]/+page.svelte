@@ -26,6 +26,7 @@
     import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
     import { toaster } from "$lib/components/toaster";
+    import { itemSorter } from "$lib/comparators";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -87,26 +88,14 @@
         allItems = data.list.items;
     });
 
-    const updateDisplayOrder = (items: ItemOnListDTO[]) => {
-        items.forEach((it, idx) => (it.displayOrder = idx));
-    };
-
-    const groupItems = (items: ItemOnListDTO[]) => {
-        // When on own list, don't separate out claimed vs un-claimed
-        if (data.list.owner.isMe) {
-            return [items, []];
-        }
-        return items.reduce(
-            (g, v) => {
-                const userHasClaimed = v.claims.find((c) => data.user?.id && c.claimedBy?.id === data.user.id);
-                if (v.isClaimable && !userHasClaimed) {
-                    g[0].push(v);
-                } else {
-                    g[1].push(v);
-                }
-                return g;
-            },
-            [[], []] as ItemOnListDTO[][]
+    const sortItems = (items: ItemOnListDTO[]) => {
+        return items.toSorted(
+            itemSorter({
+                userId: data.user?.id,
+                sort: page.url.searchParams.get("sort"),
+                dir: page.url.searchParams.get("dir"),
+                listOwnerId: data.list.owner.id
+            })
         );
     };
 
@@ -143,12 +132,13 @@
         if (!allItems.find((item) => item.id === updatedItem.id)) {
             addItem(updatedItem);
         }
-        allItems = allItems.map((item) => {
+        const updatedItems = allItems.map((item) => {
             if (item.id === updatedItem.id) {
                 return { ...item, ...updatedItem };
             }
             return item;
         });
+        allItems = sortItems(updatedItems);
     };
 
     const removeItem = (removedItem: { id: number }) => {
@@ -159,7 +149,7 @@
         if (!(addedItem.approved || data.list.owner.isMe)) {
             return;
         }
-        allItems = [...allItems, addedItem];
+        allItems = sortItems([...allItems, addedItem]);
     };
 
     const getOrCreatePublicList = async () => {
@@ -190,6 +180,10 @@
             destroy: zone.destroy
         };
     }
+
+    const updateDisplayOrder = (items: ItemOnListDTO[]) => {
+        items.forEach((it, idx) => (it.displayOrder = idx));
+    };
     const handleDnd = (e: CustomEvent) => {
         allItems = e.detail.items;
         updateDisplayOrder(allItems);
@@ -336,6 +330,7 @@
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
@@ -385,33 +380,34 @@
                         showClaimForOwner={data.showClaimForOwner}
                         showClaimedName={data.showClaimedName}
                         showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
                         user={data.loggedInUser}
                         userCanManage={data.list.isManager}
                     />
                 </div>
             {/each}
         {:else}
-            {#each groupItems(items) as groupedItems}
-                {#each groupedItems as item (item.id)}
-                    <div
-                        in:receive={{ key: item.id }}
-                        out:send|local={{ key: item.id }}
-                        animate:flip={{ duration: flipDurationMs }}
-                    >
-                        <ItemCard
-                            groupId={data.list.groupId}
-                            {isTileView}
-                            {item}
-                            onPublicList={!data.loggedInUser && data.list.public}
-                            requireClaimEmail={data.requireClaimEmail}
-                            showClaimForOwner={data.showClaimForOwner}
-                            showClaimedName={data.showClaimedName}
-                            showNameAcrossGroups={data.showNameAcrossGroups}
-                            user={data.loggedInUser}
-                            userCanManage={data.list.isManager}
-                        />
-                    </div>
-                {/each}
+            {#each items as item (item.id)}
+                <div
+                    id="item-{item.id}-wrapper"
+                    in:receive={{ key: item.id }}
+                    out:send={{ key: item.id }}
+                    animate:flip={{ duration: flipDurationMs }}
+                >
+                    <ItemCard
+                        groupId={data.list.groupId}
+                        {isTileView}
+                        {item}
+                        onPublicList={!data.loggedInUser && data.list.public}
+                        requireClaimEmail={data.requireClaimEmail}
+                        showClaimForOwner={data.showClaimForOwner}
+                        showClaimedName={data.showClaimedName}
+                        showNameAcrossGroups={data.showNameAcrossGroups}
+                        showPublicClaimName={data.showPublicClaimName}
+                        user={data.loggedInUser}
+                        userCanManage={data.list.isManager}
+                    />
+                </div>
             {/each}
         {/if}
     </div>

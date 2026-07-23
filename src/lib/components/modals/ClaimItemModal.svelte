@@ -154,8 +154,8 @@
     {/snippet}
 
     {#if !userId}
-        <div>
-            <label class="w-fit">
+        <div class="flex flex-col gap-2">
+            <label class="label w-fit">
                 <span>{$t("general.name-optional")}</span>
                 <div class="input-group grid-cols-[auto_1fr_auto]">
                     <div class="ig-cell preset-tonal">
@@ -166,7 +166,7 @@
             </label>
 
             {#if requireClaimEmail}
-                <label class="w-fit">
+                <label class="label w-fit">
                     <span>{$t("auth.email")}</span>
                     <div class="input-group grid-cols-[auto_1fr_auto]">
                         <div class="ig-cell preset-tonal">
@@ -181,7 +181,7 @@
 
     {#if item.remainingQuantity > 1 || claim}
         <div class="flex flex-col gap-1">
-            <label class="w-fit">
+            <label class="label w-fit">
                 <span>{$t("wishes.enter-the-quantity-to-claim")}</span>
                 <input
                     class={["input", error && "input-invalid"]}
