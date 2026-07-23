@@ -138,7 +138,9 @@
         "smtp-use-tls": "Använd TLS",
         "smtp-use-tls-description": "Anslut direkt till SMTP-servern med TLS istället för att använda STARTTLS. Vanligtvis används port 465.",
         "clear-sessions": "Rensa användarsessioner",
-        "clear-sessions-confirmation": "Är du säker på att du vill rensa den här användarens sessioner? Användaren kommer att loggas ut från alla enheter och måste logga in igen."
+        "clear-sessions-confirmation": "Är du säker på att du vill rensa den här användarens sessioner? Användaren kommer att loggas ut från alla enheter och måste logga in igen.",
+        "show-name-publicly": "Visa namn publikt",
+        "show-name-publicly-tooltip": "När det är aktiverat visas namnet som anges i ett offentligt anspråk för alla som tittar på den offentliga listan."
     },
     "app": {
         "my-claims": "Mina reservationer",
@@ -473,7 +475,11 @@
         "show-description": "Visa beskrivning",
         "sort-by": "Sortera efter",
         "supports-markdown": "Stöder Markdown",
-        "item-created": "Artikel skapad"
+        "item-created": "Artikel skapad",
+        "hide-owner": "Dölj ägare",
+        "items-claimed": "{claimedCount} av {itemCount} reserverad",
+        "items-available": "{availableCount, plural, one {# Tillgänglig} other {# Tillgängliga}}",
+        "items-requested": "{itemCount, plural, one {# begärd} other {# begärda}}"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }

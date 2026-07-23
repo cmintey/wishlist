@@ -138,7 +138,9 @@
         "smtp-use-tls": "Použít TLS",
         "smtp-use-tls-description": "Připojovat se k SMTP serveru pomocí TLS namísto STARTTLS. Obvykle pro port 465.",
         "clear-sessions": "Odhlásit uživatele ze všech zařízení",
-        "clear-sessions-confirmation": "Opravdu odhásit ze všech zařízení? Uživatl se pak musí přihlásit znovu."
+        "clear-sessions-confirmation": "Opravdu odhásit ze všech zařízení? Uživatl se pak musí přihlásit znovu.",
+        "show-name-publicly": "Zobrazit jméno veřejně",
+        "show-name-publicly-tooltip": "Zobrazí všem jméno toho, kdo si předmět rezervoval."
     },
     "app": {
         "home": "Domů",
