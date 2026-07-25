@@ -24,7 +24,8 @@
         "default-item-image": "standardbild för artikel",
         "remove-manager-name": "Ta bort {name}",
         "unpurchase": "Markera artikel som inte köpt",
-        "user-menu": "Användarmeny"
+        "user-menu": "Användarmeny",
+        "claimed-progress": "Reservationsframsteg"
     },
     "admin": {
         "dev": "dev",
