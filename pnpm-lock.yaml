@@ -308,8 +308,8 @@ importers:
         specifier: ^1.53.1
         version: 1.61.1
       '@skeletonlabs/skeleton':
-        specifier: ^4.12.0
-        version: 4.15.2(tailwindcss@4.3.2)
+        specifier: ^5.0.0
+        version: 5.0.0(tailwindcss@4.3.2)
       '@skeletonlabs/skeleton-svelte':
         specifier: ^4.12.0
         version: 4.15.2(svelte@5.56.5(@typescript-eslint/types@8.64.0))
@@ -1709,12 +1709,15 @@ packages:
 
   '@oslojs/asn1@1.0.0':
     resolution: {integrity: sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@oslojs/binary@1.0.0':
     resolution: {integrity: sha512-9RCU6OwXU6p67H4NODbuxv2S3eenuQ4/WFLrsq+K/k682xrznH5EVWA7N4VFk9VYVcbFtKqur5YQQZc0ySGhsQ==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@oslojs/crypto@1.0.1':
     resolution: {integrity: sha512-7n08G8nWjAr/Yu3vu9zzrd0L9XnrJfpMioQcvCMxBIiF5orECHe5/3J0jmXRVvgfqMm/+4oxlQ+Sq39COYLcNQ==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
@@ -2347,8 +2350,8 @@ packages:
     peerDependencies:
       svelte: ^5.29.0
 
-  '@skeletonlabs/skeleton@4.15.2':
-    resolution: {integrity: sha512-5O23Py76nw56aoieV2b2T7MJ6xS0DwDjUULpwLnCXxXOnmzADEoWoQxb/ABbqg04IMOygtRzK3HO22I1+kFsog==}
+  '@skeletonlabs/skeleton@5.0.0':
+    resolution: {integrity: sha512-kcUU77eZTNdbz59FgCxIjimH1d9DkZtMU3+IT2yBxoFQczZGPkJ0xw97ecHeJfzBp8Ah16NqPOcxHjXxO77O9w==}
     peerDependencies:
       tailwindcss: ^4.0.0
 
@@ -5572,7 +5575,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.4
+      browserslist: 4.28.6
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -7243,7 +7246,7 @@ snapshots:
       '@zag-js/tree-view': 1.39.1
       svelte: 5.56.5(@typescript-eslint/types@8.64.0)
 
-  '@skeletonlabs/skeleton@4.15.2(tailwindcss@4.3.2)':
+  '@skeletonlabs/skeleton@5.0.0(tailwindcss@4.3.2)':
     dependencies:
       tailwindcss: 4.3.2
 
