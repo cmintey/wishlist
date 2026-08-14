@@ -39,10 +39,10 @@
                             <button
                                 {...props}
                                 class="btn btn-icon btn-icon-sm preset-tonal inset-ring-surface-500 p-1.5 inset-ring"
-                                title="Edit claim"
+                                title={$t("wishes.edit-claim")}
                             >
                                 <iconify-icon class="text-tiny" icon="ion:edit"></iconify-icon>
-                                <span class="sr-only">Edit claim</span>
+                                <span class="sr-only">{$t("wishes.edit-claim")}</span>
                             </button>
                         {/snippet}
                     </ClaimItemModal>

@@ -57,7 +57,7 @@
     <div></div>
 {:else if userClaim}
     {#if isClaimOnList}
-        <div id="update-btns" class="flex flex-row items-center gap-2">
+        <div class="flex flex-row items-center gap-2">
             <ClaimItemModal claimId={userClaim?.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
                 {#snippet trigger(props)}
                     <button
@@ -91,7 +91,7 @@
     {/if}
 {:else if item.isClaimable && item.userId !== user?.id}
     <!--TODO: make claims on own list configurable-->
-    <div id="claim-btns" class="flex flex-row items-center gap-x-2">
+    <div class="flex flex-row items-center gap-x-2">
         <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
             {#snippet trigger(props)}
                 <button {...props} class="btn btn-sm md:btn preset-filled-secondary-300-700">
