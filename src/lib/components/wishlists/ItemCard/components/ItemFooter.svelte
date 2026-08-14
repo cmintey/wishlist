@@ -4,19 +4,28 @@
     import ManageButtons from "../ManageButtons.svelte";
     import ReorderButtons from "../ReorderButtons.svelte";
 
-    const props: Omit<InternalItemCardProps, "id" | "defaultImage"> = $props();
+    interface Props extends Omit<InternalItemCardProps, "id" | "defaultImage"> {
+        onEdit?: VoidFunction;
+        noPadding?: boolean;
+    }
+
+    const props: Props = $props();
+
+    let isClaimButtonVisible = $state(false);
 </script>
 
 <footer
     class={[
-        "flex flex-wrap items-center gap-2 px-4 print:hidden",
-        props.reorderActions ? "justify-center pb-0" : "justify-between pb-4"
+        "flex items-center gap-2 print:hidden",
+        props.noPadding ? "px-0" : "px-4",
+        props.reorderActions ? "justify-center pb-0" : "justify-between pb-4",
+        isClaimButtonVisible && "flex-wrap"
     ]}
 >
     {#if props.reorderActions}
         <ReorderButtons {...props} />
     {:else}
-        <ClaimButtons {...props} />
+        <ClaimButtons isClaimableOrClaimed={(ans) => (isClaimButtonVisible = ans)} {...props} />
         <ManageButtons {...props} />
     {/if}
 </footer>

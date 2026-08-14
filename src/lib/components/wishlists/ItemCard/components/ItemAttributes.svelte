@@ -42,7 +42,7 @@
 
     let expandClaims = $state(false);
     let shouldShowClaimName = $derived((claim?: ClaimDTO) =>
-        shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, user, claim)
+        shouldShowName(item, showClaimedName, showNameAcrossGroups, showClaimForOwner, showPublicClaimName, user, claim)
     );
 </script>
 
@@ -67,7 +67,7 @@
                 {$t("wishes.no-limit")}
             {/if}
         </span>
-        {#if item.quantity && (user?.id !== item.userId || showClaimForOwner)}
+        {#if user?.id !== item.userId || showClaimForOwner}
             <span>·</span>
             <span class="text-secondary-900-100 font-bold" data-testid="quantity-claimed">
                 {$t("wishes.quantity-claimed", { values: { quantity: item.claimedQuantity } })}
@@ -84,8 +84,8 @@
         {/if}
     </div>
 </div>
-{#if showDetail}
-    <ClaimDetails expand={expandClaims} {groupId} {item} {requireClaimEmail} showName={shouldShowClaimName} {user} />
+{#if item.claimedQuantity > 0 && showDetail && expandClaims}
+    <ClaimDetails {groupId} {item} {requireClaimEmail} showName={shouldShowClaimName} {user} />
 {/if}
 
 <!-- Added by / For (claims page) -->

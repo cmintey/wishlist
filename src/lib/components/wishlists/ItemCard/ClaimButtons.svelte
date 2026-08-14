@@ -6,7 +6,7 @@
     import { ClaimAPI } from "$lib/api/claims";
     import { toaster } from "$lib/components/toaster";
 
-    type Props = Pick<
+    interface Props extends Pick<
         InternalItemCardProps,
         | "item"
         | "user"
@@ -17,7 +17,9 @@
         | "onPublicList"
         | "groupId"
         | "requireClaimEmail"
-    >;
+    > {
+        isClaimableOrClaimed: (ans: boolean) => void;
+    }
 
     let {
         item,
@@ -28,13 +30,16 @@
         showPublicClaimName = false,
         onPublicList = false,
         groupId,
-        requireClaimEmail
+        requireClaimEmail,
+        isClaimableOrClaimed
     }: Props = $props();
 
     const t = getFormatter();
 
     let userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
     let isClaimOnList = $derived(userClaim?.listId === item.listId);
+
+    $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || false));
 
     const handlePurchased = async (purchased: boolean) => {
         if (userClaim && isClaimOnList) {
@@ -52,7 +57,7 @@
     <div></div>
 {:else if userClaim}
     {#if isClaimOnList}
-        <div class="flex flex-row items-center gap-2">
+        <div id="update-btns" class="flex flex-row items-center gap-2">
             <ClaimItemModal claimId={userClaim?.claimId} {groupId} {item} {requireClaimEmail} userId={user?.id}>
                 {#snippet trigger(props)}
                     <button
@@ -82,10 +87,11 @@
             </button>
         </div>
     {:else}
-        <span class="text-subtle text-wrap">{$t("wishes.claimed-by-you-on-another-list")}</span>
+        <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-you-on-another-list")}</span>
     {/if}
-{:else if item.isClaimable}
-    <div class="flex flex-row items-center gap-x-2">
+{:else if item.isClaimable && item.userId !== user?.id}
+    <!--TODO: make claims on own list configurable-->
+    <div id="claim-btns" class="flex flex-row items-center gap-x-2">
         <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
             {#snippet trigger(props)}
                 <button {...props} class="btn btn-sm md:btn preset-filled-secondary-300-700">

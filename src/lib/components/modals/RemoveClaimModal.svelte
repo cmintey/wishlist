@@ -7,6 +7,7 @@
     import { toaster } from "../toaster";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
+    import ConfirmModal from "./ConfirmModal.svelte";
 
     interface Props extends Omit<BaseModalProps, "title" | "description" | "actions" | "children" | "element"> {
         item: ItemOnListDTO;
@@ -16,8 +17,6 @@
         claimId?: string;
         onSuccess?: VoidFunction;
         onFailure?: VoidFunction;
-        claimName?: string;
-        alwaysShow?: boolean;
     }
 
     let {
@@ -29,8 +28,6 @@
         onSuccess,
         onFailure,
         trigger: inputTrigger,
-        claimName,
-        alwaysShow = false,
         ...rest
     }: Props = $props();
 
@@ -39,13 +36,7 @@
 
     const claim = $derived(item.claims.find((claim) => claim.claimId === claimId));
 
-    let title = $derived(
-        claim
-            ? claimName
-                ? $t("wishes.update-claim-for-name", { values: { name: claimName } })
-                : $t("wishes.update-claim")
-            : $t("wishes.claim-item")
-    );
+    let title = $derived(claim ? $t("wishes.update-claim") : $t("wishes.claim-item"));
     let username: string | undefined = $state();
     let name: string | undefined = $state();
     let quantity = $derived(claim?.quantity || 1);
@@ -53,7 +44,7 @@
 
     async function handleTrigger(e: MouseEvent) {
         e.stopPropagation();
-        if (!userId || alwaysShow) {
+        if (!userId) {
             open = true;
             return;
         }
@@ -103,8 +94,8 @@
             }
             closeAndToast(description);
         } else {
-            const respData = await resp.json();
-            errorAndToast(respData?.message);
+            onFailure?.();
+            toaster.error({ description: $t("general.oops") });
         }
     }
 
@@ -115,8 +106,8 @@
         if (resp.ok) {
             closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
-            const respData = await resp.json();
-            errorAndToast(respData?.message);
+            onFailure?.();
+            toaster.error({ description: $t("general.oops") });
         }
     }
 
@@ -125,7 +116,9 @@
         const userResp = await systemUsersAPI.create(username, name);
         if (!userResp.ok) {
             const responseData = await userResp.json();
-            errorAndToast(responseData?.message);
+
+            onFailure?.();
+            toaster.error({ description: responseData.message || $t("general.oops") });
             return;
         }
         const { id: publicUserId } = await userResp.json();
@@ -136,14 +129,9 @@
         if (resp.ok) {
             closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
-            const respData = await resp.json();
-            errorAndToast(respData?.message);
+            onFailure?.();
+            toaster.error({ description: $t("general.oops") });
         }
-    }
-
-    function errorAndToast(message?: string) {
-        onFailure?.();
-        toaster.error({ description: message || $t("general.oops") });
     }
 
     function closeAndToast(description: string) {
@@ -161,7 +149,15 @@
     {/if}
 {/snippet}
 
-<BaseModal {description} onOpenChange={(e) => (open = e.open)} {open} {title} {...rest}>
+<ConfirmModal trigger={inputTrigger} onConfirm={() => onUnclaim()}>
+    {#snippet description()}
+        <p>
+            Are you sure you want to remove the claim from this item? <strong>This action is irreversible!</strong>
+        </p>
+    {/snippet}
+</ConfirmModal>
+
+<!-- <BaseModal {description} onOpenChange={(e) => (open = e.open)} {open} {title} {...rest}>
     {#snippet trigger(props)}
         {@render inputTrigger({ ...props, onclick: handleTrigger })}
     {/snippet}
@@ -212,15 +208,9 @@
             {/if}
             {#if claim}
                 <span class="subtext">
-                    {#if claimName}
-                        {$t("wishes.claimed-info-text-for-name", {
-                            values: { claimedQuantity: claim.quantity, name: claimName }
-                        })}
-                    {:else}
-                        {$t("wishes.claimed-info-text", {
-                            values: { claimedQuantity: claim.quantity }
-                        })}
-                    {/if}
+                    {$t("wishes.claimed-info-text", {
+                        values: { claimedQuantity: claim.quantity }
+                    })}
                     {#if item.quantity}
                         {$t("wishes.additional-items-requested", {
                             values: { remainingQuantity: item.remainingQuantity }
@@ -247,4 +237,4 @@
             </button>
         </div>
     {/snippet}
-</BaseModal>
+</BaseModal> -->
