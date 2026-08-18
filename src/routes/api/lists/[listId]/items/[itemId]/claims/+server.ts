@@ -123,6 +123,6 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         return new Response(null, { status: 200 });
     } catch (err) {
         logger.error({ err }, "Error claiming item");
-        error(404, $t("errors.item-not-found"));
+        error(422, $t("general.oops"));
     }
 };
