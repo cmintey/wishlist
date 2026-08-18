@@ -14,6 +14,11 @@ import z from "zod";
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const $t = await getFormatter();
 
+    const itemId = parseInt(params.itemId);
+    if (isNaN(itemId)) {
+        error(400, $t("errors.item-id-must-be-a-number"));
+    }
+
     const body = (await request.json()) as Record<string, unknown>[];
     const updateData = listItemClaimSchema.safeParse(body);
 
@@ -27,7 +32,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const list = await client.list.findUnique({
         select: {
             id: true,
-            public: true
+            public: true,
+            allowSelfClaims: true
         },
         where: {
             id: params.listId
@@ -44,9 +50,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     if (updateData.data.publicClaimedById && !list.public) {
         error(404, $t("errors.list-not-found"));
     }
-
-    if (isNaN(parseInt(params.itemId))) {
-        error(400, $t("errors.item-id-must-be-a-number"));
+    if (updateData.data.claimedById === locals.user?.id && !list.allowSelfClaims) {
+        error(400, $t("errors.this-list-does-not-allow-self-claimed-items"));
     }
 
     const item = await client.item.findUnique({
@@ -60,7 +65,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             }
         },
         where: {
-            id: parseInt(params.itemId),
+            id: itemId,
             lists: {
                 some: {
                     listId: list.id

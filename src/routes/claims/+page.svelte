@@ -22,6 +22,7 @@
 
     // Initialize from server data (cookie) to prevent flicker
     // This value comes from the server, so SSR renders the correct view
+    // svelte-ignore state_referenced_locally
     initListViewPreference(data.initialViewPreference);
     let isTileView = $derived(getListViewPreference() === "tile");
 
@@ -88,6 +89,7 @@
                             {isTileView}
                             {item}
                             requireClaimEmail
+                            showClaimForOwner={data.config.claims.showForOwner}
                             showClaimedName
                             showFor
                             user={data.user}

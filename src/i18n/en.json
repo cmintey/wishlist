@@ -253,6 +253,7 @@
         "suggestions-are-disabled": "Suggestions are disabled",
         "the-page-you-were-looking-for-wasnt-found": "The page you were looking for wasn't found",
         "this-instance-is-invite-only": "This instance is invite only",
+        "this-list-does-not-allow-self-claimed-items": "This list does not allow self-claimed items.",
         "unable-to-create-list": "Unable to create list",
         "unable-to-delete-items": "Unable to delete items",
         "unable-to-delete-list": "Encountered an error while deleting the list",

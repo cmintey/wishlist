@@ -17,6 +17,7 @@
         | "onPublicList"
         | "groupId"
         | "requireClaimEmail"
+        | "isSelfClaimable"
     > {
         isClaimableOrClaimed: (ans: boolean) => void;
     }
@@ -31,13 +32,16 @@
         onPublicList = false,
         groupId,
         requireClaimEmail,
-        isClaimableOrClaimed
+        isClaimableOrClaimed,
+        isSelfClaimable
     }: Props = $props();
 
     const t = getFormatter();
 
     let userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
     let isClaimOnList = $derived(userClaim?.listId === item.listId);
+
+    $inspect(item.name, userClaim);
 
     $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || false));
 
@@ -89,8 +93,7 @@
     {:else}
         <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-you-on-another-list")}</span>
     {/if}
-{:else if item.isClaimable && item.userId !== user?.id}
-    <!--TODO: make claims on own list configurable-->
+{:else if item.isClaimable && (item.userId !== user?.id || isSelfClaimable)}
     <div class="flex flex-row items-center gap-x-2">
         <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
             {#snippet trigger(props)}
