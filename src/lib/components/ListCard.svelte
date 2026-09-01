@@ -84,7 +84,7 @@
                 </div>
             {/if}
             <div class="contents" data-testid="item-count">
-                <div class="grid grid-cols-[1.125rem_auto_1fr] gap-2 items-center">
+                <div class="grid grid-cols-[1.125rem_auto_1fr] items-center gap-2">
                     <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
                     <span>
                         {#if hideCount}
@@ -95,15 +95,15 @@
                     </span>
                     {#if hasNewItems}
                         <iconify-icon
-                            class="text-primary-800-200 size-2 opacity-40 self-center"
+                            class="text-primary-800-200 size-2 self-center opacity-40"
                             icon="ion:ellipse-sharp"
                             width="0.5rem"
                         ></iconify-icon>
                     {/if}
                 </div>
                 {#if list.itemCount !== undefined && !hideCount}
-                    <div class="flex flex-row items-center gap-x-2 w-full">
-                        <Progress class="flex items-center flex-row max-w-64 shrink" max={100} value={claimedPercent}>
+                    <div class="flex w-full flex-row items-center gap-x-2">
+                        <Progress class="flex max-w-64 shrink flex-row items-center" max={100} value={claimedPercent}>
                             <Progress.Track>
                                 <Progress.Range class="bg-primary-500" />
                             </Progress.Track>
