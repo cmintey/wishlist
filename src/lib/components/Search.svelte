@@ -13,14 +13,10 @@
     const t = getFormatter();
 
     let search = $state("");
+    let targets = $derived(fuzzysort.snapshot(data, { keys }));
 
     $effect(() => {
-        result = fuzzysort
-            .go(search, data, {
-                keys,
-                all: true
-            })
-            .map((result) => result.obj);
+        result = fuzzysort.go(search, targets, { limit: 0 }).map((result) => result.obj);
     });
 </script>
 
