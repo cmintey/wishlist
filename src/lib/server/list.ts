@@ -37,6 +37,27 @@ export const create = async (ownerId: string, groupId: string, otherData?: ListP
     });
 };
 
+export const adjustListManagers = async (listId: string, managers: string[] | null) => {
+    if (!managers) {
+        return;
+    }
+    const existingManagers = await client.listManager.findMany({
+        where: {
+            listId
+        }
+    });
+    const managersToDelete = existingManagers.filter(({ userId }) => !managers.includes(userId)).map(({ id }) => id);
+    const managersToCreate = managers.filter(
+        (userId) => existingManagers.find((manager) => manager.userId === userId) === undefined
+    );
+    await client.$transaction([
+        client.listManager.deleteMany({ where: { id: { in: managersToDelete } } }),
+        client.listManager.createMany({
+            data: managersToCreate.map((userId) => ({ listId, userId }))
+        })
+    ]);
+};
+
 export const deleteList = async (id: string) => {
     return client.$transaction(async (tx) => {
         const list = await tx.list.delete({
@@ -144,7 +165,8 @@ export const getById = async (id: string) => {
             },
             groupId: true,
             public: true,
-            description: true
+            description: true,
+            allowSelfClaims: true
         },
         where: {
             id

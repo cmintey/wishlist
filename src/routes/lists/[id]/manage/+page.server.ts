@@ -5,11 +5,12 @@ import { client } from "$lib/server/prisma";
 import { getFormatter } from "$lib/server/i18n";
 import { getListPropertiesSchema } from "$lib/server/validations";
 import { trimToNull } from "$lib/util";
-import { deleteList } from "$lib/server/list";
+import { adjustListManagers, deleteList } from "$lib/server/list";
 import { getConfig } from "$lib/server/config";
 import { requireLogin } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
 import z from "zod";
+import { resolve } from "$app/paths";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -30,6 +31,7 @@ export const load: PageServerLoad = async ({ params }) => {
                 iconColor: true,
                 public: true,
                 hideOwner: true,
+                allowSelfClaims: true,
                 owner: {
                     select: {
                         id: true,
@@ -70,6 +72,7 @@ export const load: PageServerLoad = async ({ params }) => {
         },
         listMode: config.listMode,
         allowsPublicLists: config.allowPublicLists,
+        claimsVisibleToOwner: config.claims.showForOwner,
         groupId: activeMembership.groupId
     };
 };
@@ -93,7 +96,8 @@ export const actions: Actions = {
             public: form.get("public"),
             hideOwner: form.get("hideOwner"),
             description: form.get("description"),
-            managers: form.getAll("managers")
+            managers: form.getAll("managers"),
+            allowSelfClaims: form.get("allowSelfClaims")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -111,6 +115,13 @@ export const actions: Actions = {
         if (!listProperties.data.public && config.listMode === "registry") {
             listProperties.data.public = true;
         }
+        if (listProperties.data.allowSelfClaims && !config.claims.showForOwner) {
+            return fail(400, {
+                action: "persist",
+                success: false,
+                message: $t("errors.self-claims-not-available")
+            });
+        }
 
         try {
             await client.list.update({
@@ -120,6 +131,7 @@ export const actions: Actions = {
                     iconColor: trimToNull(listProperties.data.iconColor),
                     public: listProperties.data.public,
                     hideOwner: listProperties.data.hideOwner,
+                    allowSelfClaims: listProperties.data.allowSelfClaims,
                     description: trimToNull(listProperties.data.description)
                 },
                 where: {
@@ -127,26 +139,7 @@ export const actions: Actions = {
                 }
             });
 
-            const managers = listProperties.data.managers;
-            if (managers) {
-                const existingManagers = await client.listManager.findMany({
-                    where: {
-                        listId: params.id
-                    }
-                });
-                const managersToDelete = existingManagers
-                    .filter(({ userId }) => !managers.includes(userId))
-                    .map(({ id }) => id);
-                const managersToCreate = managers.filter(
-                    (userId) => existingManagers.find((manager) => manager.userId === userId) === undefined
-                );
-                await client.$transaction([
-                    client.listManager.deleteMany({ where: { id: { in: managersToDelete } } }),
-                    client.listManager.createMany({
-                        data: managersToCreate.map((userId) => ({ listId: params.id, userId }))
-                    })
-                ]);
-            }
+            await adjustListManagers(params.id, listProperties.data.managers);
         } catch (err) {
             logger.error({ err }, "Unable to update list settings");
             return fail(500, {
@@ -156,7 +149,7 @@ export const actions: Actions = {
             });
         }
 
-        return redirect(302, `/lists/${params.id}`);
+        return redirect(302, resolve("/lists/[id]", { id: params.id }));
     },
     delete: async ({ params }) => {
         const user = requireLogin();
@@ -183,7 +176,7 @@ export const actions: Actions = {
             return fail(500, { action: "delete", success: false, message: $t("errors.unable-to-delete-list") });
         }
 
-        return redirect(302, `/lists`);
+        return redirect(302, resolve("/lists"));
     }
 };
 
