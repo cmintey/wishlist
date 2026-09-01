@@ -41,8 +41,6 @@
     let userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
     let isClaimOnList = $derived(userClaim?.listId === item.listId);
 
-    $inspect(item.name, userClaim);
-
     $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || false));
 
     const handlePurchased = async (purchased: boolean) => {
