@@ -16,6 +16,8 @@
         claimId?: string;
         onSuccess?: VoidFunction;
         onFailure?: VoidFunction;
+        claimName?: string;
+        alwaysShow?: boolean;
     }
 
     let {
@@ -27,6 +29,8 @@
         onSuccess,
         onFailure,
         trigger: inputTrigger,
+        claimName,
+        alwaysShow = false,
         ...rest
     }: Props = $props();
 
@@ -35,6 +39,13 @@
 
     const claim = $derived(item.claims.find((claim) => claim.claimId === claimId));
 
+    let title = $derived(
+        claim
+            ? claimName
+                ? $t("wishes.update-claim-for-name", { values: { name: claimName } })
+                : $t("wishes.update-claim")
+            : $t("wishes.claim-item")
+    );
     let username: string | undefined = $state();
     let name: string | undefined = $state();
     let quantity = $derived(claim?.quantity || 1);
@@ -42,7 +53,7 @@
 
     async function handleTrigger(e: MouseEvent) {
         e.stopPropagation();
-        if (!userId) {
+        if (!userId || alwaysShow) {
             open = true;
             return;
         }
@@ -92,8 +103,8 @@
             }
             closeAndToast(description);
         } else {
-            onFailure?.();
-            toaster.error({ description: $t("general.oops") });
+            const respData = await resp.json();
+            errorAndToast(respData?.message);
         }
     }
 
@@ -104,8 +115,8 @@
         if (resp.ok) {
             closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
-            onFailure?.();
-            toaster.error({ description: $t("general.oops") });
+            const respData = await resp.json();
+            errorAndToast(respData?.message);
         }
     }
 
@@ -114,9 +125,7 @@
         const userResp = await systemUsersAPI.create(username, name);
         if (!userResp.ok) {
             const responseData = await userResp.json();
-
-            onFailure?.();
-            toaster.error({ description: responseData.message || $t("general.oops") });
+            errorAndToast(responseData?.message);
             return;
         }
         const { id: publicUserId } = await userResp.json();
@@ -127,26 +136,32 @@
         if (resp.ok) {
             closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
-            onFailure?.();
-            toaster.error({ description: $t("general.oops") });
+            const respData = await resp.json();
+            errorAndToast(respData?.message);
         }
     }
 
+    function errorAndToast(message?: string) {
+        onFailure?.();
+        toaster.error({ description: message || $t("general.oops") });
+    }
+
     function closeAndToast(description: string) {
-        open = false;
         // wait for transition to finish before triggering toast
-        setTimeout(() => toaster.info({ description }), 250);
+        setTimeout(() => toaster.info({ description }), open ? 275 : 0);
+        open = false;
+
         onSuccess?.();
     }
 </script>
 
-<BaseModal
-    description={$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}
-    onOpenChange={(e) => (open = e.open)}
-    {open}
-    title={$t("wishes.claim-details")}
-    {...rest}
->
+{#snippet description()}
+    {#if !userId}
+        <span>{$t("wishes.before-you-can-claim-the-item-we-just-need-one-thing-from-you")}</span>
+    {/if}
+{/snippet}
+
+<BaseModal {description} onOpenChange={(e) => (open = e.open)} {open} {title} {...rest}>
     {#snippet trigger(props)}
         {@render inputTrigger({ ...props, onclick: handleTrigger })}
     {/snippet}
@@ -197,9 +212,15 @@
             {/if}
             {#if claim}
                 <span class="subtext">
-                    {$t("wishes.claimed-info-text", {
-                        values: { claimedQuantity: claim.quantity }
-                    })}
+                    {#if claimName}
+                        {$t("wishes.claimed-info-text-for-name", {
+                            values: { claimedQuantity: claim.quantity, name: claimName }
+                        })}
+                    {:else}
+                        {$t("wishes.claimed-info-text", {
+                            values: { claimedQuantity: claim.quantity }
+                        })}
+                    {/if}
                     {#if item.quantity}
                         {$t("wishes.additional-items-requested", {
                             values: { remainingQuantity: item.remainingQuantity }

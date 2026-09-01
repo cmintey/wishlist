@@ -9,11 +9,14 @@ import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
 import z from "zod";
+import type { ItemClaimModel, ItemModel } from "$lib/generated/prisma/models";
 
 // Unclaim an item on a list
 export const DELETE: RequestHandler = async ({ params }) => {
     const user = await requireLoginOrError();
-    return deleteClaim(params.claimId, user);
+    const claim = await findClaim(params.claimId, user);
+
+    return deleteClaim(claim);
 };
 
 // Update a claim -- set or unset purchased
@@ -21,26 +24,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     const user = await requireLoginOrError();
     const $t = await getFormatter();
 
-    const claim = await client.itemClaim.findUnique({
-        select: {
-            id: true,
-            itemId: true,
-            claimedById: true,
-            publicClaimedById: true
-        },
-        where: {
-            id: params.claimId
-        }
-    });
-
-    if (!claim) {
-        error(404, $t("errors.claim-was-not-found"));
-    }
-
-    if (claim.claimedById && claim.claimedById !== user.id) {
-        error(401, $t("errors.cannot-update-a-claim-that-is-not-yours"));
-    }
-
+    const claim = await findClaim(params.claimId, user);
     const updateData = await request.json().then((d) => listItemClaimUpdateSchema.safeParse(d));
 
     if (updateData.error) {
@@ -49,7 +33,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
 
     try {
         if (updateData.data?.quantity === 0) {
-            return deleteClaim(claim.id, user);
+            return deleteClaim(claim);
         }
 
         if (
@@ -70,7 +54,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
             });
             const updatedItem = await client.item.findUnique({
                 where: {
-                    id: claim.itemId
+                    id: claim.item.id
                 },
                 include: getItemInclusions()
             });
@@ -83,19 +67,27 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     }
 };
 
-async function deleteClaim(id: string, user: LocalUser) {
+interface ItemClaim extends Pick<ItemClaimModel, "id" | "claimedById" | "publicClaimedById"> {
+    item: Pick<ItemModel, "id" | "userId">;
+}
+
+async function findClaim(claimId: string, user: LocalUser): Promise<ItemClaim> {
     const $t = await getFormatter();
 
     const claim = await client.itemClaim.findUnique({
         select: {
             id: true,
-            itemId: true,
-            listId: true,
             claimedById: true,
-            publicClaimedById: true
+            publicClaimedById: true,
+            item: {
+                select: {
+                    id: true,
+                    userId: true
+                }
+            }
         },
         where: {
-            id
+            id: claimId
         }
     });
 
@@ -103,9 +95,16 @@ async function deleteClaim(id: string, user: LocalUser) {
         error(404, $t("errors.claim-was-not-found"));
     }
 
-    if (claim.claimedById && claim.claimedById !== user.id) {
-        error(401, $t("errors.cannot-unclaim-an-item-you-did-not-claim"));
+    // Item owners and claimers can update claims
+    if (claim.claimedById !== user.id && user.id !== claim.item.userId) {
+        error(403, $t("errors.cannot-update-a-claim-that-is-not-yours"));
     }
+
+    return claim;
+}
+
+async function deleteClaim(claim: ItemClaim) {
+    const $t = await getFormatter();
 
     try {
         await client.itemClaim.delete({
@@ -116,7 +115,7 @@ async function deleteClaim(id: string, user: LocalUser) {
 
         const item = await client.item.findUnique({
             where: {
-                id: claim.itemId
+                id: claim.item.id
             },
             include: getItemInclusions()
         });
@@ -124,7 +123,7 @@ async function deleteClaim(id: string, user: LocalUser) {
 
         return new Response();
     } catch (err) {
-        logger.error({ err }, "Unable to claim item");
+        logger.error({ err }, "Unable to unclaim item");
         error(500, $t("errors.unable-to-unclaim-item"));
     }
 }

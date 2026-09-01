@@ -1,6 +1,4 @@
 <script lang="ts">
-    import ClaimButtons from "./ItemCard/ClaimButtons.svelte";
-    import ManageButtons from "./ItemCard/ManageButtons.svelte";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { getFormatter } from "$lib/i18n";
@@ -10,6 +8,7 @@
     import ModalContent from "../modals/parts/ModalContent.svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import type { InternalItemCardProps } from "./ItemCard/ItemCard.svelte";
+    import ItemFooter from "./ItemCard/components/ItemFooter.svelte";
 
     let { defaultImage: _defaultImage, item, ...props }: InternalItemCardProps = $props();
     const t = getFormatter();
@@ -78,10 +77,7 @@
 
                 <ItemAttributes {...props} fullNotes {item} showDetail />
 
-                <div class="flex flex-row justify-between">
-                    <ClaimButtons {item} {...props} />
-                    <ManageButtons {item} {...props} onEdit={() => (open = false)} />
-                </div>
+                <ItemFooter {...props} {item} noPadding onEdit={() => (open = false)}></ItemFooter>
             </ModalContent>
         </Dialog.Positioner>
     </Portal>
