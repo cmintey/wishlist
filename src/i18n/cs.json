@@ -24,7 +24,8 @@
         "upload-profile-image": "nahrát profilový obrázek",
         "user-menu": "Uživatelské menu",
         "wishlist-logo": "Wishlist Logo",
-        "drag-handle": "úchyt pro přetažení {name}"
+        "drag-handle": "úchyt pro přetažení {name}",
+        "claimed-progress": "Již rezervováno"
     },
     "admin": {
         "about": "O programu",
@@ -476,6 +477,10 @@
         "import-item": "Importovat položku",
         "import-item-text": "Před importem vyberte skupinu a seznam",
         "select-a-list": "Vybrat seznam",
-        "item-created": "Položka vytvořena"
+        "item-created": "Položka vytvořena",
+        "hide-owner": "Skrýt vlastníka",
+        "items-claimed": "{claimedCount} z {itemCount} rezervováno",
+        "items-requested": "{itemCount, plural, one {# požadován} other {# požadováno}}",
+        "items-available": "{availableCount, plural, one {# dostupný} other {# dostupných}}"
     }
 }
