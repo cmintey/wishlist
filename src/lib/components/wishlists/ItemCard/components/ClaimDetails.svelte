@@ -15,7 +15,7 @@
     let isForOwner = $derived(item.userId === user?.id);
 </script>
 
-<div class="card text-sm max-h-32 overflow-auto px-2 py-1 bg-surface-200-800">
+<div class="card bg-surface-200-800 max-h-32 overflow-auto px-2 py-1 text-sm">
     {#each item.claims as claim}
         {const name =
             showName(claim) || claim.claimedBy?.id === user?.id ? getClaimedName(claim) : $t("wishes.anonymous")}
