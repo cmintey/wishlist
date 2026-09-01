@@ -9,6 +9,7 @@ import shopping from "$lib/server/shopping";
 import { parseAcceptLanguageHeader } from "$lib/i18n";
 import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 import { env } from "$env/dynamic/private";
 
 const scraper = metascraper([shopping(), metascraperTitle(), metascraperImage()]);
@@ -31,11 +32,20 @@ const goShopping = async (targetUrl: URL, locales: string[]) => {
         }
     });
     const metadata = await scraper({ html: resp.body, url: resp.url });
+    logger.debug(
+        { url: targetUrl.toString(), status: resp.statusCode, bodyLength: resp.body?.length },
+        "Scraped product URL"
+    );
     return metadata;
 };
 
 const isCaptchaResponse = (metadata: Metadata) => {
     return metadata.image && metadata.image.toLocaleLowerCase().indexOf("captcha") >= 0;
+};
+
+const hasUsableMetadata = (metadata: Metadata) => {
+    const { name, title, image } = metadata as Metadata & { name?: string | null };
+    return Boolean(name || title || image);
 };
 
 const getUrlOrError = async (url: string) => {
@@ -64,6 +74,10 @@ export const GET: RequestHandler = async ({ request, url }) => {
             metadata = await getUrlOrError(metadata.url).then((url) => goShopping(url, locales));
         }
         if (isCaptchaResponse(metadata)) {
+            error(424, $t("errors.product-information-not-available"));
+        }
+
+        if (!hasUsableMetadata(metadata)) {
             error(424, $t("errors.product-information-not-available"));
         }
 
