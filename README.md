@@ -40,7 +40,8 @@ Create a wish from a URL, or manually fill in the details
 Getting started is simple with Docker Compose.
 
 > [!NOTE]
-> A [Helm chart is available](https://github.com/mddeff/wishlist-charts) via a community contributor
+> A [Helm chart is available](https://github.com/fox1e-dev/wishlist-charts) via a community contributor  
+> (This is a fork of the [inactive original helm chart](https://github.com/mddeff/wishlist-charts))
 
 Create a `docker-compose.yaml` file:
 
