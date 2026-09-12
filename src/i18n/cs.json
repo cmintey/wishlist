@@ -406,7 +406,7 @@
         "for": "Pro <span class=\"{class}\">{name}</span>",
         "hang-tight-gathering-product-data": "Počkejte, stahuji data",
         "hide-all-currencies": "Skrýt všechny měny...",
-        "hide-claims": "Skrýt rezervace",
+        "hide-claims": "Skrýt detaily",
         "hide-description": "Skrýt popisky",
         "image-url": "URL obrázku",
         "item-approved": "{name} {approved, select, true {povolil} other {zamítl}}",
@@ -442,7 +442,7 @@
         "reorder": "Uspořádat",
         "share": "Sdílet seznam",
         "show-all-currencies": "zobraz všechny měny...",
-        "show-claims": "Zobrazit rezervace",
+        "show-claims": "Zobrazit detaily",
         "show-description": "Zobrazit popisky",
         "this-list": "Tento seznam",
         "unable-to-update-item-ordering": "Nepodařilo se aktualizovat pořadí",
@@ -481,6 +481,10 @@
         "hide-owner": "Skrýt vlastníka",
         "items-claimed": "{claimedCount} z {itemCount} rezervováno",
         "items-requested": "{itemCount, plural, one {# požadován} other {# požadováno}}",
-        "items-available": "{availableCount, plural, one {# dostupný} other {# dostupných}}"
+        "items-available": "{availableCount, plural, one {# dostupný} other {# dostupných}}",
+        "claim-item": "Rezervovat položku",
+        "edit-claim": "Editovat rezervaci",
+        "update-claim-for-name": "Aktualizovat rezervaci pro {name}",
+        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} byla rezervována # položka.} other {{name} bylo rezervováno # položek.}}"
     }
 }

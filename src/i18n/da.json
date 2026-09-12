@@ -24,7 +24,8 @@
         "upload-profile-image": "upload profilbillede",
         "wishlist-logo": "Wishlist Logo",
         "user-menu": "Brugermenu",
-        "remove-manager-name": "Fjern {name}"
+        "remove-manager-name": "Fjern {name}",
+        "claimed-progress": "Reserveret"
     },
     "admin": {
         "about": "Om",
@@ -138,7 +139,9 @@
         "smtp-ignore-cert-check-description": "Validér ikke TLS certifikatet. Oftest brugt ved lokale forbindelser. Ikke anbefalet.",
         "smtp-use-tls": "Brug TLS",
         "smtp-use-tls-description": "Forbind til SMTP serveren direkte ved brug af TLS i stedet for STARTTLS. Oftest brugt med port 465.",
-        "ignore-cert-check": "Ignorér certifikatfejl"
+        "ignore-cert-check": "Ignorér certifikatfejl",
+        "show-name-publicly": "Vis navn offentligt",
+        "show-name-publicly-tooltip": "Vis navn for en offentlig reservation til alle der ser den offentlige liste."
     },
     "app": {
         "home": "Hjem",
@@ -379,7 +382,7 @@
         "filter": "Filtrér",
         "finish": "Fuldfør",
         "hang-tight-gathering-product-data": "Hæng i, vi indsamler produktdata",
-        "heads-up": "Heads up!",
+        "heads-up": "Vær opmærksom!",
         "hide-all-currencies": "skjul alle valutaer...",
         "hide-description": "Skjul beskrivelse",
         "image-url": "Billed URL",
@@ -439,12 +442,12 @@
         "claimed-by-you-on-another-list": "Reserveret af dig på en anden liste",
         "claims": "{claimCount, plural, one {# reservation} other {# reservationer}}",
         "group-by": "Gruppér efter",
-        "hide-claims": "Skjul reservationer",
+        "hide-claims": "Skjul detaljer",
         "list-managers": "Listeansvarlige",
         "list-managers-tooltip": "Listeansvarlige kan alt, hvad du kan, herunder godkende eller afvise forslag, opdatere listeindstillinger og fjerne elementer fra listen. Hvis din gruppe er sat til ‘overraskelses’-tilstand, vil alle elementer, som tilføjes af en listeansvarlig, være synlige for dig.",
         "no-managers": "Ingen listeansvarlige",
         "list-view": "Listevisning",
-        "show-claims": "Vis reservationer",
+        "show-claims": "Vis detaljer",
         "sort-by": "Sortér efter",
         "switch-to-list-view": "Skift til listevisning",
         "switch-to-tile-view": "Skift til flisevisning",
@@ -457,7 +460,15 @@
         "import-item-text": "Du skal vælge en gruppe og en liste, før du kan importere en vare",
         "item-created": "Ønske oprettet",
         "most-wanted": "Mest eftertragtet",
-        "select-a-list": "Vælg en liste"
+        "select-a-list": "Vælg en liste",
+        "update-claim-for-name": "Opdater reservation for {name}",
+        "claim-item": "Reserver ønske",
+        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} har reserveret # item.} other {{name} har reserveret # items.}}",
+        "edit-claim": "Rediger reservation",
+        "hide-owner": "Skjul ejer",
+        "items-available": "{availableCount, plural, one {# tilgængelige} other {# tilgængelig}}",
+        "items-claimed": "{claimedCount} of {itemCount} Reserveret",
+        "items-requested": "{itemCount, plural, one {# efterspurgt} other {# efterspurgt}}"
     },
     "setup": {
         "global-settings-subtext": "Disse indstillinger vil blive anvendt til alle grupper, der er oprettet. Nogle indstillinger kan overskrives af individuelle grupper.",

@@ -479,6 +479,8 @@
         "select-a-list": "Выбрать список",
         "item-created": "Объект создан",
         "hide-owner": "Скрыть владельца",
-        "items-claimed": "{claimedCount} из {itemCount} заявлено"
+        "items-claimed": "{claimedCount} из {itemCount} заявлено",
+        "claim-item": "Заявить права на предмет",
+        "edit-claim": "Редактировать претензию"
     }
 }
