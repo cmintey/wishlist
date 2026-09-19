@@ -1,14 +1,13 @@
 import { getFormatter } from "$lib/server/i18n";
 import { Role } from "$lib/schema";
-import { requireLoginOrError } from "$lib/server/auth";
+import { requireRole } from "$lib/server/auth";
 import { tryDeleteImage } from "$lib/server/image-util";
 import { client } from "$lib/server/prisma";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async ({ params }) => {
-    const authUser = await requireLoginOrError();
+    const authUser = await requireRole(Role.ADMIN);
     const $t = await getFormatter();
-    if (authUser.roleId !== Role.ADMIN) error(401, $t("errors.not-authorized"));
 
     if (!params.userId) {
         error(400, $t("errors.must-specify-an-item-to-delete"));
