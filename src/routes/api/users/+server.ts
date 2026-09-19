@@ -1,5 +1,7 @@
 import { Role } from "$lib/schema";
 import { requireLoginOrError, requireRole } from "$lib/server/auth";
+import { getFormatter } from "$lib/server/i18n";
+import { logger } from "$lib/server/logger";
 import { client } from "$lib/server/prisma";
 import { createUser } from "$lib/server/user";
 import { getSignupSchema } from "$lib/server/validations";
@@ -7,7 +9,16 @@ import { error, type RequestHandler } from "@sveltejs/kit";
 import { treeifyError } from "zod";
 
 export const GET: RequestHandler = async ({ url }) => {
-    await requireLoginOrError();
+    const loggedInUser = await requireLoginOrError();
+    const $t = await getFormatter();
+
+    if (
+        !url.searchParams.has("groupId") &&
+        !(loggedInUser.roleId === Role.ADMIN || loggedInUser.roleId === Role.GROUP_MANAGER)
+    ) {
+        logger.error({ userId: loggedInUser.id }, "User tried to list all users but is not an admin or group manager");
+        error(403, $t("errors.not-authorized"));
+    }
 
     const users = await client.user.findMany({
         select: {

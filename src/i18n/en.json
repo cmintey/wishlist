@@ -198,6 +198,10 @@
         "test-body": "If you're reading this, then congratulations! Email configuration seems to have been set up properly!",
         "test-subject": "Test from Wishlist"
     },
+    "error": {
+        "no-claim-on-behalf-of": "Cannot claim an item on behalf of another user",
+        "this-list-is-not-part-of-your-active-group": "This list is not part of your active group"
+    },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "An item must be added to at least one list",
         "asset-not-found": "Asset not found",
