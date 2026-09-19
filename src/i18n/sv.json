@@ -446,7 +446,7 @@
         "display-order": "Visningsordning",
         "enter-the-quantity-to-claim": "Ange den kvantitet som ska reserveras.",
         "hide-all-currencies": "dölj alla valutor...",
-        "hide-claims": "Dölj reservationer",
+        "hide-claims": "Dölj detaljer",
         "hide-description": "Dölj beskrivning",
         "import-error-text": "Wishlist kunde inte fastställa produktadressen från de angivna parametrarna. Du kan fortfarande kopiera produktadressen manuellt och lägga till artikeln med den vanliga processen.",
         "import-error-title": "Det gick inte att importera artikeln",
@@ -472,7 +472,7 @@
         "quantity-claimed": "{quantity} reserverad",
         "quantity-desired": "{quantity} önskad",
         "show-all-currencies": "visa alla valutor...",
-        "show-claims": "Visa reservationer",
+        "show-claims": "Visa detaljer",
         "show-description": "Visa beskrivning",
         "sort-by": "Sortera efter",
         "supports-markdown": "Stöder Markdown",
@@ -480,7 +480,11 @@
         "hide-owner": "Dölj ägare",
         "items-claimed": "{claimedCount} av {itemCount} reserverad",
         "items-available": "{availableCount, plural, one {# Tillgänglig} other {# Tillgängliga}}",
-        "items-requested": "{itemCount, plural, one {# begärd} other {# begärda}}"
+        "items-requested": "{itemCount, plural, one {# begärd} other {# begärda}}",
+        "claim-item": "Reservera artikel",
+        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} har reserverat # artikel.} other {{name} har reserverat # artiklar.}}",
+        "edit-claim": "Redigera reservation",
+        "update-claim-for-name": "Uppdatera reservation för {name}"
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
