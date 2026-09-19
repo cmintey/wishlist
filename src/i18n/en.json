@@ -198,6 +198,9 @@
         "test-body": "If you're reading this, then congratulations! Email configuration seems to have been set up properly!",
         "test-subject": "Test from Wishlist"
     },
+    "error": {
+        "invalid-asset-path": "Invalid asset path"
+    },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "An item must be added to at least one list",
         "asset-not-found": "Asset not found",
