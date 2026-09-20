@@ -200,7 +200,8 @@
     },
     "error": {
         "no-claim-on-behalf-of": "Cannot claim an item on behalf of another user",
-        "this-list-is-not-part-of-your-active-group": "This list is not part of your active group"
+        "this-list-is-not-part-of-your-active-group": "This list is not part of your active group",
+        "invalid-asset-path": "Invalid asset path"
     },
     "errors": {
         "an-item-must-be-added-to-at-least-one-list": "An item must be added to at least one list",
