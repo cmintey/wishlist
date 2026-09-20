@@ -214,6 +214,9 @@ importers:
       handlebars:
         specifier: ^4.7.8
         version: 4.7.9
+      ipaddr.js:
+        specifier: ^2.5.0
+        version: 2.5.0
       metascraper:
         specifier: ^5.49.1
         version: 5.56.2(@noble/hashes@2.4.0)(debug@4.4.3)
@@ -3859,6 +3862,10 @@ packages:
     resolution: {integrity: sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==}
     engines: {node: '>=8'}
 
+  ipaddr.js@2.5.0:
+    resolution: {integrity: sha512-aq+t5NAc+cS6rZQQVWC2x98CPqGtKKTMDd4Gaodv0wShnItdKg/51djkGJ1hqH+Oy0ivDftCbSLCQob8zso01w==}
+    engines: {node: '>= 10'}
+
   is-absolute-url@4.0.1:
     resolution: {integrity: sha512-/51/TKE88Lmm7Gc4/8btclNXWS+g50wXhYJq8HWIBAGUBnoAdRu1aXeh364t/O7wXDAcTJDP8PNuNKWUDWie+A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -5752,7 +5759,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.6
+      browserslist: 4.29.0
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -9362,6 +9369,8 @@ snapshots:
       tslib: 2.8.1
 
   ip-regex@4.3.0: {}
+
+  ipaddr.js@2.5.0: {}
 
   is-absolute-url@4.0.1: {}
 
