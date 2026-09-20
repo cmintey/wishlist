@@ -5,11 +5,12 @@ import type { Actions, PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/server/i18n";
 import { trimToNull } from "$lib/util";
 import { getListPropertiesSchema } from "$lib/server/validations";
-import { create } from "$lib/server/list";
+import { adjustListManagers, create } from "$lib/server/list";
 import { client } from "$lib/server/prisma";
 import { requireLogin } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
 import z from "zod";
+import { resolve } from "$app/paths";
 
 export const load = (async () => {
     const user = requireLogin();
@@ -44,6 +45,7 @@ export const load = (async () => {
         },
         listMode: config.listMode,
         allowsPublicLists: config.allowPublicLists,
+        claimsVisibleToOwner: config.claims.showForOwner,
         groupId: activeMembership.groupId
     };
 }) satisfies PageServerLoad;
@@ -78,7 +80,9 @@ export const actions: Actions = {
             iconColor: form.get("iconColor"),
             public: form.get("public"),
             hideOwner: form.get("hideOwner"),
-            description: form.get("description")
+            description: form.get("description"),
+            managers: form.getAll("managers"),
+            allowSelfClaims: form.get("allowSelfClaims")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -96,6 +100,13 @@ export const actions: Actions = {
         if (!listProperties.data.public && config.listMode === "registry") {
             listProperties.data.public = true;
         }
+        if (listProperties.data.allowSelfClaims && !config.claims.showForOwner) {
+            return fail(400, {
+                action: "create",
+                success: false,
+                message: $t("errors.self-claims-not-available")
+            });
+        }
 
         let list;
         try {
@@ -105,14 +116,16 @@ export const actions: Actions = {
                 iconColor: trimToNull(listProperties.data.iconColor),
                 public: listProperties.data.public,
                 hideOwner: listProperties.data.hideOwner,
+                allowSelfClaims: listProperties.data.allowSelfClaims,
                 description: trimToNull(listProperties.data.description)
             };
             list = await create(user.id, activeMembership.groupId, data);
+            await adjustListManagers(list.id, listProperties.data.managers);
         } catch (err) {
             logger.error({ err }, "Unable to create list");
             return fail(500, { success: false, error: $t("errors.unable-to-create-list") });
         }
 
-        return redirect(302, `/lists/${list.id}`);
+        return redirect(302, resolve("/lists/[id]", { id: list.id }));
     }
 };

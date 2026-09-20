@@ -4,7 +4,7 @@
     import Avatar from "./Avatar.svelte";
     import { getFormatter } from "$lib/i18n";
 
-    interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor">> {
+    interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor" | "hideOwner">> {
         owner: Pick<User, "name" | "username" | "picture">;
         itemCount?: number;
         claimedCount?: number;
@@ -13,19 +13,12 @@
 
     interface Props {
         hideCount?: boolean;
-        hideOwner?: boolean;
         list: ListWithCounts;
         hasNewItems?: boolean;
         preventNavigate?: boolean;
     }
 
-    const {
-        hideCount = false,
-        hideOwner = false,
-        hasNewItems = false,
-        list,
-        preventNavigate = false
-    }: Props = $props();
+    const { hideCount = false, hasNewItems = false, list, preventNavigate = false }: Props = $props();
     const t = getFormatter();
 
     let listName = $derived(list.name || $t("wishes.wishes-for", { values: { listOwner: list.owner.name } }));
@@ -77,7 +70,7 @@
             <span class="text-primary-900-100 line-clamp-2 text-xl font-bold md:text-2xl" data-testid="list-name">
                 {listName}
             </span>
-            {#if !hideOwner}
+            {#if !list.hideOwner}
                 <div class="grid grid-cols-[1.125rem_auto] items-center gap-2">
                     <Avatar class="text-tiny size-5" user={list.owner} />
                     <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>

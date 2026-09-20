@@ -4,11 +4,13 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { toItemOnListDTO } from "$lib/dtos/item-mapper";
 import { requireLogin } from "$lib/server/auth";
 import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
+import { getConfig } from "$lib/server/config";
 
 export const load: PageServerLoad = async ({ url, cookies }) => {
     const user = requireLogin();
 
     const activeMembership = await getActiveMembership(user);
+    const config = await getConfig(activeMembership.groupId);
 
     // Read view preference from cookie (for SSR to prevent flicker)
     const viewPreference = cookies.get("listViewPreference") as "list" | "tile" | undefined;
@@ -111,6 +113,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
             activeGroupId: activeMembership.groupId
         },
         items: itemDTOs,
-        initialViewPreference: viewPreference || "list"
+        initialViewPreference: viewPreference || "list",
+        config
     };
 };
