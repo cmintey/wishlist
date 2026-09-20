@@ -12,14 +12,14 @@ export const GET: RequestHandler = async ({ params }) => {
 
     const normalizedPath = path.normalize(params.id);
     if (path.isAbsolute(normalizedPath)) {
-        error(400, $t("error.invalid-asset-path"));
+        error(400, $t("errors.invalid-asset-path"));
     }
 
     const baseUploadsPath = path.resolve("uploads/");
     const resolvedPath = path.resolve("uploads/" + normalizedPath);
 
     if (!resolvedPath?.startsWith(baseUploadsPath)) {
-        error(400, $t("error.invalid-asset-path"));
+        error(400, $t("errors.invalid-asset-path"));
     }
 
     try {

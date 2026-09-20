@@ -44,7 +44,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         if (!locals.user) {
             error(401, $t("errors.unauthenticated"));
         } else if (locals.user.id !== updateData.data.claimedById) {
-            error(403, $t("error.no-claim-on-behalf-of"));
+            error(403, $t("errors.no-claim-on-behalf-of"));
         }
     }
     if (updateData.data.publicClaimedById && !list.public) {
@@ -82,7 +82,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     if (locals.user) {
         const activeGroupId = (await getActiveMembership(locals.user)).groupId;
         if (activeGroupId !== list.groupId) {
-            error(403, $t("error.this-list-is-not-part-of-your-active-group"));
+            error(403, $t("errors.this-list-is-not-part-of-your-active-group"));
         }
     }
 
