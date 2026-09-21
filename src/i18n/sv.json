@@ -486,8 +486,5 @@
         "edit-claim": "Redigera reservation",
         "update-claim-for-name": "Uppdatera reservation för {name}"
     },
-    "unable-to-load-icons": "Det gick inte att ladda ikoner.",
-    "error": {
-        "invalid-asset-path": "Ogiltig sökväg till tillgång"
-    }
+    "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
