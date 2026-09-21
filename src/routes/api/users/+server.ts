@@ -1,5 +1,6 @@
 import { Role } from "$lib/schema";
 import { requireLoginOrError, requireRole } from "$lib/server/auth";
+import { getActiveMembership } from "$lib/server/group-membership";
 import { getFormatter } from "$lib/server/i18n";
 import { logger } from "$lib/server/logger";
 import { client } from "$lib/server/prisma";
@@ -10,14 +11,26 @@ import { treeifyError } from "zod";
 
 export const GET: RequestHandler = async ({ url }) => {
     const loggedInUser = await requireLoginOrError();
+    const activeGroup = await getActiveMembership(loggedInUser);
+
     const $t = await getFormatter();
 
     if (
         !url.searchParams.has("groupId") &&
-        !(loggedInUser.roleId === Role.ADMIN || loggedInUser.roleId === Role.GROUP_MANAGER)
+        !(loggedInUser.roleId === Role.ADMIN || activeGroup.roleId === Role.GROUP_MANAGER)
     ) {
-        logger.error({ userId: loggedInUser.id }, "User tried to list all users but is not an admin or group manager");
+        logger.error(
+            { userId: loggedInUser.id, role: loggedInUser.roleId },
+            "User tried to list all users but is not an admin or group manager"
+        );
         error(403, $t("errors.not-authorized"));
+    }
+
+    if (url.searchParams.has("groupId") && loggedInUser.roleId === Role.USER) {
+        if (activeGroup.groupId !== url.searchParams.get("groupId")) {
+            logger.error({ userId: loggedInUser.id }, "User tried to list users in a group they are not part of");
+            error(403, $t("errors.not-authorized"));
+        }
     }
 
     const users = await client.user.findMany({
