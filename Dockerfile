@@ -1,6 +1,6 @@
 FROM node:24-slim@sha256:ba849c60be29959425b8734d57b8b4b7d56f98edd9504c9af091d5281095a71e AS base
 WORKDIR /usr/src/app
-RUN corepack enable
+RUN npm install -g pnpm@latest-11
 
 # Build step
 FROM base AS build
@@ -50,6 +50,7 @@ RUN case "${TARGETPLATFORM}" in \
 FROM base AS app
 ENV NODE_ENV=production
 ENV BODY_SIZE_LIMIT=5000000
+ENV PRISMA_HIDE_UPDATE_MESSAGE=1
 
 WORKDIR /usr/src/app
 
