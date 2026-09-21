@@ -68,53 +68,55 @@
     <div class="grid grid-cols-[auto_1fr] items-center gap-4 p-4">
         <div
             style="background-color: {iconColor};"
-            class="text-surface-50 flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold md:w-16"
+            class="text-surface-50 flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full font-semibold md:w-14"
             class:bg-primary-500={!iconColor}
         >
             <iconify-icon class="text-2xl" icon={"ion:" + (list.icon ?? "gift")}></iconify-icon>
         </div>
         <div class="flex flex-col gap-1">
-            <span class="text-primary-900-100 line-clamp-2 text-xl font-bold md:text-2xl" data-testid="list-name">
+            <span class="text-primary-900-100 line-clamp-2 text-xl font-bold" data-testid="list-name">
                 {listName}
             </span>
             {#if !hideOwner}
-                <div class="grid grid-cols-[1.125rem_auto] items-center gap-2">
-                    <Avatar class="text-tiny size-5" user={list.owner} />
+                <div class="grid grid-cols-[1.5rem_auto] items-center gap-2 text-sm md:text-base">
+                    <Avatar class="text-tiny size-5 justify-self-center md:size-6" user={list.owner} />
                     <span class="text-surface-800-200" data-testid="list-owner">{list.owner.name}</span>
                 </div>
             {/if}
             <div class="contents" data-testid="item-count">
-                <div class="grid grid-cols-[1.125rem_auto_1fr] items-center gap-2">
-                    <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
-                    <span>
-                        {#if hideCount}
-                            {$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}
-                        {:else}
-                            <strong>{$t("wishes.items-available", { values: { availableCount } })}</strong>
-                        {/if}
-                    </span>
+                <div class="grid grid-cols-[1.5rem_auto_1fr] items-center gap-2 text-sm md:text-base">
+                    {#if hideCount}
+                        <iconify-icon class="justify-self-center" icon="ion:gift"></iconify-icon>
+                        <span>{$t("wishes.items-requested", { values: { itemCount: list.itemCount } })}</span>
+                    {:else}
+                        <Progress class="relative w-fit justify-self-center" value={claimedPercent}>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <iconify-icon
+                                    class="flex size-2.5 items-center justify-center"
+                                    height="none"
+                                    icon="ion:gift"
+                                    width="none"
+                                ></iconify-icon>
+                            </div>
+                            <Progress.Circle
+                                class="[--size:--spacing(5)] [--thickness:calc(var(--size)/8)] md:[--size:--spacing(6)]"
+                            >
+                                <Progress.CircleTrack />
+                                <Progress.CircleRange />
+                            </Progress.Circle>
+                        </Progress>
+                        <span class="font-bold">{$t("wishes.items-available", { values: { availableCount } })}</span>
+                    {/if}
+
                     {#if hasNewItems}
                         <iconify-icon
-                            class="text-primary-800-200 size-2 self-center opacity-40"
+                            class="text-primary-800-200 flex size-2 justify-center opacity-40"
+                            height="none"
                             icon="ion:ellipse-sharp"
-                            width="0.5rem"
+                            width="none"
                         ></iconify-icon>
                     {/if}
                 </div>
-                {#if list.itemCount !== undefined && !hideCount}
-                    <div class="flex w-full flex-row items-center gap-x-2">
-                        <Progress class="flex max-w-64 shrink flex-row items-center" max={100} value={claimedPercent}>
-                            <Progress.Track>
-                                <Progress.Range class="bg-primary-500" />
-                            </Progress.Track>
-                            <Progress.Label>
-                                {$t("wishes.items-claimed", {
-                                    values: { claimedCount: list.claimedCount, itemCount: list.itemCount }
-                                })}
-                            </Progress.Label>
-                        </Progress>
-                    </div>
-                {/if}
             </div>
         </div>
     </div>
