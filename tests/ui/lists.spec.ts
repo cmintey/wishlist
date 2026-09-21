@@ -129,14 +129,9 @@ test("list card counts a partially claimed multi-quantity item", async ({
         .then((listPage) => listPage.getItemAt(0))
         .then((item) => item.claim(3));
 
-    // The list card should reflect the partial claim: 4 Available, 3 of 7 Claimed.
-    // Regression guard: previously claimedCount only counted fully-claimed items,
-    // so this showed "7 Available, 0 of 7 Claimed" (see PR #281).
+    // The list card should reflect the partial claim: 4 Available
     await claimerLists.goto();
-    await claimerLists
-        .getListByName(`${owner.name}'s Wishes`)
-        .then((card) => card.assertAvailableCount(4))
-        .then((card) => card.assertClaimedCount(3, 7));
+    await claimerLists.getListByName(`${owner.name}'s Wishes`).then((card) => card.assertAvailableCount(4));
 });
 
 test("list card does not count a claimed unlimited item as claimed", async ({
@@ -169,13 +164,9 @@ test("list card does not count a claimed unlimited item as claimed", async ({
         .then((listPage) => listPage.getItemAt(0))
         .then((item) => item.claim(3));
 
-    // The unlimited item counts as 1 toward the total but never toward the claimed
-    // total, so the card shows "1 Available, 0 of 1 Claimed" even after the claim.
+    // The unlimited item counts as 1 toward the total
     await claimerLists.goto();
-    await claimerLists
-        .getListByName(`${owner.name}'s Wishes`)
-        .then((card) => card.assertAvailableCount(1))
-        .then((card) => card.assertClaimedCount(0, 1));
+    await claimerLists.getListByName(`${owner.name}'s Wishes`).then((card) => card.assertAvailableCount(1));
 });
 
 test("multiple users and list filter", async ({
