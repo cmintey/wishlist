@@ -268,7 +268,10 @@
         "username-must-not-be-blank": "Uživatelské jméno nesmí být prázdné",
         "valid-url-not-provided": "Neplatné URL",
         "oidc-error": "Přihlášení přes OAuth se nezdařilo",
-        "display-order-invalid": "Řazení musí být mezi {min} a {max}"
+        "display-order-invalid": "Řazení musí být mezi {min} a {max}",
+        "no-claim-on-behalf-of": "Není možné rezervovat dárek jako jiný uživatel",
+        "this-list-is-not-part-of-your-active-group": "Seznam není součástí vaší aktivní skupiny",
+        "invalid-asset-path": "Nevalidní cesta"
     },
     "general": {
         "add-a-description": "Přidat popis",
