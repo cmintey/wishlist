@@ -268,7 +268,10 @@
         "oidc-error": "Misslyckades med autentisering med OAuth",
         "unable-to-update-preferred-language": "Det gick inte att uppdatera önskat språk",
         "email-is-required-for-public-claims": "E-postadress krävs för publika anspråk",
-        "display-order-invalid": "Visningsordningen måste vara mellan {min} och {max}"
+        "display-order-invalid": "Visningsordningen måste vara mellan {min} och {max}",
+        "no-claim-on-behalf-of": "Kan inte göra anspråk på ett objekt å en annan användares vägnar",
+        "this-list-is-not-part-of-your-active-group": "Den här listan ingår inte i din aktiva grupp",
+        "invalid-asset-path": "Ogiltig sökväg till tillgång"
     },
     "general": {
         "enable": "Aktivera",
