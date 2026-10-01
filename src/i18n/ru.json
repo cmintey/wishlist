@@ -251,7 +251,10 @@
         "unable-to-update-preferred-language": "Не удалось обновить предпочтительный язык",
         "email-is-required-for-public-claims": "Эл. почта требуется для публичных запросов",
         "oidc-error": "Не удалось пройти аутентификацию с помощью OAuth",
-        "display-order-invalid": "Порядок отображения должен быть между {min} и {max}"
+        "display-order-invalid": "Порядок отображения должен быть между {min} и {max}",
+        "no-claim-on-behalf-of": "Невозможно заявить права на предмет от имени другого пользователя",
+        "this-list-is-not-part-of-your-active-group": "Этот список не входит в вашу активную группу",
+        "invalid-asset-path": "Неверный путь к активу"
     },
     "general": {
         "icon": "Значок",
