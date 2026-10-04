@@ -23,6 +23,7 @@ export interface ListProperties {
     iconColor?: string | null;
     public?: boolean;
     hideOwner?: boolean;
+    showClaimsForOwner?: boolean;
 }
 
 export const create = async (ownerId: string, groupId: string, otherData?: ListProperties) => {
@@ -144,6 +145,7 @@ export const getById = async (id: string) => {
             },
             groupId: true,
             public: true,
+            showClaimsForOwner: true,
             description: true
         },
         where: {

@@ -9,6 +9,7 @@ export class ListForm {
     private readonly nameField: Locator;
     private readonly publicCheckbox: Locator;
     private readonly hideOwnerCheckbox: Locator;
+    private readonly showClaimsForOwnerCheckbox: Locator;
     private readonly listManagers: ListManagersSelector;
 
     constructor(page: Page) {
@@ -19,6 +20,7 @@ export class ListForm {
         this.nameField = page.getByLabel("Name", { exact: true });
         this.publicCheckbox = page.getByLabel("Public", { exact: true });
         this.hideOwnerCheckbox = page.getByLabel("Hide Owner", { exact: true });
+        this.showClaimsForOwnerCheckbox = page.getByLabel("Show claims to list owner", { exact: true });
         this.listManagers = new ListManagersSelector(page);
     }
 
@@ -28,6 +30,10 @@ export class ListForm {
 
     async setHideOwner(value = true) {
         await this.hideOwnerCheckbox.setChecked(value);
+    }
+
+    async setShowClaimsForOwner(value = true) {
+        await this.showClaimsForOwnerCheckbox.setChecked(value);
     }
 
     async getName() {

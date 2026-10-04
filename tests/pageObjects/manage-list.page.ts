@@ -56,6 +56,11 @@ export class ManageListPage extends BasePage {
         return this;
     }
 
+    async setShowClaimsForOwner(value = true) {
+        await this.listForm.setShowClaimsForOwner(value);
+        return this;
+    }
+
     async cancel() {
         return this.listForm.cancel();
     }

@@ -78,6 +78,51 @@ test("hide owner removes the owner from the list card", async ({ page, userData 
     await listsPage.getListAt(0).then((card) => card.assertOwnerHidden());
 });
 
+test("show claims to list owner reveals claims on that list", async ({
+    page: ownerPage,
+    userData: owner,
+    additionalPage: claimerPage
+}) => {
+    // Owner adds an item to their list
+    const ownerLists = new ListsPage(ownerPage);
+    await ownerLists.goto();
+    const ownerListPage = await ownerLists.getListAt(0).then((list) => list.click());
+    await ownerListPage.assertNoItems();
+
+    const itemName = randomString();
+    const createItemPage = await ownerListPage.createItem();
+    await createItemPage
+        .getForm()
+        .then((f) => f.fillName(itemName))
+        .then((f) => f.fillQuantity(2));
+    await createItemPage.create();
+    await ownerListPage.at();
+    await new Toast(ownerPage).waitForToastWithText("Item created");
+
+    // A different user claims the item
+    const claimerLists = new ListsPage(claimerPage);
+    await claimerLists.goto();
+    await claimerLists
+        .getListByName(`${owner.name}'s Wishes`)
+        .then((card) => card.click())
+        .then((listPage) => listPage.getItemAt(0))
+        .then((item) => item.claim(1));
+
+    // Claims are hidden from the owner by default
+    await ownerLists.goto();
+    const listPage = await ownerLists.getListAt(0).then((list) => list.click());
+    await listPage.getItemAt(0).then((item) => item.assertClaimedQuantityHidden());
+
+    // Enable "Show claims to list owner" and save
+    await listPage
+        .manage()
+        .then((manage) => manage.at())
+        .then((manage) => manage.setShowClaimsForOwner(true))
+        .then((manage) => manage.save())
+        .then((lp) => lp.getItemAt(0))
+        .then((item) => item.assertClaimedQuantity(1));
+});
+
 test("delete list", async ({ page }) => {
     const listsPage = new ListsPage(page);
     await listsPage.goto();

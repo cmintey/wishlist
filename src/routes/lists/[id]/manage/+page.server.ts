@@ -30,6 +30,7 @@ export const load: PageServerLoad = async ({ params }) => {
                 iconColor: true,
                 public: true,
                 hideOwner: true,
+                showClaimsForOwner: true,
                 owner: {
                     select: {
                         id: true,
@@ -92,6 +93,7 @@ export const actions: Actions = {
             iconColor: form.get("iconColor"),
             public: form.get("public"),
             hideOwner: form.get("hideOwner"),
+            showClaimsForOwner: form.get("showClaimsForOwner"),
             description: form.get("description"),
             managers: form.getAll("managers")
         });
@@ -120,6 +122,7 @@ export const actions: Actions = {
                     iconColor: trimToNull(listProperties.data.iconColor),
                     public: listProperties.data.public,
                     hideOwner: listProperties.data.hideOwner,
+                    showClaimsForOwner: listProperties.data.showClaimsForOwner,
                     description: trimToNull(listProperties.data.description)
                 },
                 where: {

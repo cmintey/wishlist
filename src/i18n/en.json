@@ -469,6 +469,7 @@
         "share": "Share List",
         "show-all-currencies": "show all currencies...",
         "show-claims": "Show details",
+        "show-claims-for-owner": "Show claims to list owner",
         "show-description": "Show description",
         "sort-by": "Sort by",
         "supports-markdown": "Supports Markdown",

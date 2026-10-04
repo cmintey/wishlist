@@ -12,7 +12,7 @@
     import SelectListManagerModal from "../modals/SelectListManagerModal.svelte";
 
     interface ListProps extends Partial<
-        Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description" | "hideOwner">
+        Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description" | "hideOwner" | "showClaimsForOwner">
     > {
         owner: Pick<User, "id" | "name" | "username" | "picture">;
         managers: Pick<User, "id" | "name" | "username">[];
@@ -33,6 +33,7 @@
 
     let list = $derived(list_);
     let hideOwner = $state(list_.hideOwner ?? false);
+    let showClaimsForOwner = $state(list_.showClaimsForOwner ?? false);
     let colorElement: Element | undefined = $state();
     let defaultColor: string = $derived(
         colorElement ? getComputedStyle(colorElement).backgroundColor : list.iconColor || ""
@@ -126,6 +127,19 @@
             <label class="unstyled flex w-fit flex-row items-center gap-x-2" for="hideOwner">
                 <input id="hideOwner" name="hideOwner" class="checkbox" type="checkbox" bind:checked={hideOwner} />
                 <span>{$t("wishes.hide-owner")}</span>
+            </label>
+        </div>
+
+        <div class="col-span-full">
+            <label class="unstyled flex w-fit flex-row items-center gap-x-2" for="showClaimsForOwner">
+                <input
+                    id="showClaimsForOwner"
+                    name="showClaimsForOwner"
+                    class="checkbox"
+                    type="checkbox"
+                    bind:checked={showClaimsForOwner}
+                />
+                <span>{$t("wishes.show-claims-for-owner")}</span>
             </label>
         </div>
 

@@ -73,7 +73,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
         showNameAcrossGroups: config.claims.showNameAcrossGroups,
-        showClaimForOwner: config.claims.showForOwner,
+        showClaimForOwner: config.claims.showForOwner || list.showClaimsForOwner,
         showPublicClaimName: config.claims.showNamePublic,
         requireClaimEmail: config.claims.requireEmail,
         suggestionsEnabled: config.suggestions.enable,
