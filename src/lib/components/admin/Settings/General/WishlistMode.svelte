@@ -17,7 +17,7 @@
 <SettingsGroup title={$t("admin.wishlist-mode")}>
     <Setting>
         {@const disabled = groupUserCount > 1 || listCount > 1}
-        <label class="flex flex-col" for="listMode">
+        <label class="label" for="listMode">
             <Tooltip>
                 {#snippet label()}
                     <span>{$t("admin.wishlist-mode")}</span>

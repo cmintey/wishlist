@@ -9,7 +9,9 @@ import shopping from "$lib/server/shopping";
 import { parseAcceptLanguageHeader } from "$lib/i18n";
 import { getFormatter } from "$lib/server/i18n";
 import { requireLoginOrError } from "$lib/server/auth";
+import { logger } from "$lib/server/logger";
 import { env } from "$env/dynamic/private";
+import { getSafeUrl } from "$lib/server/safeurl";
 
 const scraper = metascraper([shopping(), metascraperTitle(), metascraperImage()]);
 
@@ -28,9 +30,26 @@ const goShopping = async (targetUrl: URL, locales: string[]) => {
         headerGeneratorOptions: {
             devices: ["desktop"],
             locales
+        },
+        hooks: {
+            beforeRedirect: [
+                async (options) => {
+                    if (options.url) {
+                        const safeUrl = await getSafeUrl(options.url);
+                        if (safeUrl === null) {
+                            throw new Error("The resolved IP of the domain is reserved");
+                        }
+                        options.url = safeUrl;
+                    }
+                }
+            ]
         }
     });
     const metadata = await scraper({ html: resp.body, url: resp.url });
+    logger.debug(
+        { url: targetUrl.toString(), resolvedUrl: resp.url, status: resp.statusCode, bodyLength: resp.body?.length },
+        "Scraped product URL"
+    );
     return metadata;
 };
 
@@ -38,14 +57,18 @@ const isCaptchaResponse = (metadata: Metadata) => {
     return metadata.image && metadata.image.toLocaleLowerCase().indexOf("captcha") >= 0;
 };
 
+const hasUsableMetadata = (metadata: Metadata) => {
+    const { name, title, image } = metadata as Metadata & { name?: string | null };
+    return Boolean(name || title || image);
+};
+
 const getUrlOrError = async (url: string) => {
     const $t = await getFormatter();
-
-    try {
-        return new URL(url);
-    } catch {
+    const safeUrl = await getSafeUrl(url);
+    if (safeUrl === null) {
         error(400, $t("errors.valid-url-not-provided"));
     }
+    return safeUrl;
 };
 
 export const GET: RequestHandler = async ({ request, url }) => {
@@ -64,6 +87,10 @@ export const GET: RequestHandler = async ({ request, url }) => {
             metadata = await getUrlOrError(metadata.url).then((url) => goShopping(url, locales));
         }
         if (isCaptchaResponse(metadata)) {
+            error(424, $t("errors.product-information-not-available"));
+        }
+
+        if (!hasUsableMetadata(metadata)) {
             error(424, $t("errors.product-information-not-available"));
         }
 

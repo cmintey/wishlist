@@ -9,6 +9,8 @@
 
     const { config }: Props = $props();
     const t = getFormatter();
+
+    let showClaimName = $derived(config.claims.showName);
 </script>
 
 <SettingsGroup title={$t("admin.claims")}>
@@ -19,7 +21,7 @@
                 name="claimsShowName"
                 class="checkbox"
                 type="checkbox"
-                bind:checked={config.claims.showName}
+                bind:checked={showClaimName}
             />
             <span>{$t("admin.show-name")}</span>
         </label>
@@ -28,7 +30,7 @@
             {$t("admin.claims-name-tooltip")}
         {/snippet}
     </Setting>
-    <Setting class={[!config.claims.showName && "hidden"]}>
+    <Setting class={[!showClaimName && "hidden"]}>
         <label class="checkbox-label">
             <input
                 id="claimsShowNameAcrossGroups"
@@ -44,7 +46,7 @@
             {$t("admin.show-name-across-groups-tooltip")}
         {/snippet}
     </Setting>
-    <Setting class={[!config.claims.showName && "hidden"]}>
+    <Setting class={[!showClaimName && "hidden"]}>
         <label class="checkbox-label">
             <input
                 id="claimsShowNamePublic"

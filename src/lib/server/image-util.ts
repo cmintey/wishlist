@@ -1,13 +1,13 @@
 import sharp from "sharp";
 import { unlink } from "fs/promises";
 import { logger } from "$lib/server/logger";
-import { getRequestEvent } from "$app/server";
 import { Readable } from "stream";
 import { finished } from "stream/promises";
 import { ReadableStream } from "stream/web";
 import { createWriteStream } from "node:fs";
 import { error } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
+import { getSafeUrl } from "./safeurl";
 
 const DEFAULT_MAX_IMAGE_SIZE = 5000000;
 
@@ -23,16 +23,27 @@ const slugify = (str: string) => {
         .replace(/-+/g, "-"); // remove consecutive hyphens
 };
 
-const fetchImage = async (imageUrl: string) => {
+const fetchImage = async (imageUrl: string, redirectNum: number = 0) => {
+    if (redirectNum === 5) {
+        logger.error("Unable to fetch image after 5 redirects");
+        return null;
+    }
     try {
-        const url = new URL(imageUrl);
-        const resp = await getRequestEvent().fetch(url);
-        if (resp.ok && resp.body) {
+        const url = await getSafeUrl(imageUrl);
+        if (!url) {
+            logger.error("URL resolved to a private access - blocking the request.");
+            return null;
+        }
+        const resp = await fetch(url, { redirect: "manual" });
+        if (resp.type === "opaqueredirect" && resp.headers.has("Location")) {
+            fetchImage(resp.headers.get("Location")!, redirectNum + 1);
+        } else if (resp.ok && resp.body) {
             return Readable.fromWeb(resp.body as unknown as ReadableStream<any>);
         } else {
             return null;
         }
-    } catch {
+    } catch (err) {
+        logger.error({ err }, "Failed to fetch image");
         return null;
     }
 };

@@ -24,7 +24,8 @@
         "upload-profile-image": "nahrát profilový obrázek",
         "user-menu": "Uživatelské menu",
         "wishlist-logo": "Wishlist Logo",
-        "drag-handle": "úchyt pro přetažení {name}"
+        "drag-handle": "úchyt pro přetažení {name}",
+        "claimed-progress": "Již rezervováno"
     },
     "admin": {
         "about": "O programu",
@@ -267,7 +268,10 @@
         "username-must-not-be-blank": "Uživatelské jméno nesmí být prázdné",
         "valid-url-not-provided": "Neplatné URL",
         "oidc-error": "Přihlášení přes OAuth se nezdařilo",
-        "display-order-invalid": "Řazení musí být mezi {min} a {max}"
+        "display-order-invalid": "Řazení musí být mezi {min} a {max}",
+        "no-claim-on-behalf-of": "Není možné rezervovat dárek jako jiný uživatel",
+        "this-list-is-not-part-of-your-active-group": "Seznam není součástí vaší aktivní skupiny",
+        "invalid-asset-path": "Nevalidní cesta"
     },
     "general": {
         "add-a-description": "Přidat popis",
@@ -405,7 +409,7 @@
         "for": "Pro <span class=\"{class}\">{name}</span>",
         "hang-tight-gathering-product-data": "Počkejte, stahuji data",
         "hide-all-currencies": "Skrýt všechny měny...",
-        "hide-claims": "Skrýt rezervace",
+        "hide-claims": "Skrýt detaily",
         "hide-description": "Skrýt popisky",
         "image-url": "URL obrázku",
         "item-approved": "{name} {approved, select, true {povolil} other {zamítl}}",
@@ -441,7 +445,7 @@
         "reorder": "Uspořádat",
         "share": "Sdílet seznam",
         "show-all-currencies": "zobraz všechny měny...",
-        "show-claims": "Zobrazit rezervace",
+        "show-claims": "Zobrazit detaily",
         "show-description": "Zobrazit popisky",
         "this-list": "Tento seznam",
         "unable-to-update-item-ordering": "Nepodařilo se aktualizovat pořadí",
@@ -476,6 +480,14 @@
         "import-item": "Importovat položku",
         "import-item-text": "Před importem vyberte skupinu a seznam",
         "select-a-list": "Vybrat seznam",
-        "item-created": "Položka vytvořena"
+        "item-created": "Položka vytvořena",
+        "hide-owner": "Skrýt vlastníka",
+        "items-claimed": "{claimedCount} z {itemCount} rezervováno",
+        "items-requested": "{itemCount, plural, one {# požadován} other {# požadováno}}",
+        "items-available": "{availableCount, plural, one {# dostupný} other {# dostupných}}",
+        "claim-item": "Rezervovat položku",
+        "edit-claim": "Editovat rezervaci",
+        "update-claim-for-name": "Aktualizovat rezervaci pro {name}",
+        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} byla rezervována # položka.} other {{name} bylo rezervováno # položek.}}"
     }
 }

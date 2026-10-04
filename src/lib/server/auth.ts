@@ -140,7 +140,7 @@ export async function requireRole(role: Role) {
     const { locals } = getRequestEvent();
     if (user.roleId !== role) {
         const $t = await getFormatter(locals.locale);
-        error(401, $t("errors.not-authorized"));
+        error(403, $t("errors.not-authorized"));
     }
     return user;
 }
@@ -167,5 +167,5 @@ export async function requireAdminOrManager(groupId: string) {
 
     const { locals } = getRequestEvent();
     const $t = await getFormatter(locals.locale);
-    error(401, $t("errors.not-authorized"));
+    error(403, $t("errors.not-authorized"));
 }

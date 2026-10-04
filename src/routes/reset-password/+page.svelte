@@ -40,7 +40,7 @@
             };
         }}
     >
-        <div class="bg-surface-100-900 rounded-container flex flex-col space-y-4 p-4 border border-surface-200-800">
+        <div class="bg-surface-100-900 rounded-container border-surface-200-800 flex flex-col space-y-4 border p-4">
             <PasswordInput
                 id="password"
                 name="password"
