@@ -94,6 +94,7 @@ model List {
     public          Boolean       @default(false)
     hideOwner       Boolean       @default(false)
     allowSelfClaims Boolean       @default(false)
+    notForMe        Boolean       @default(false)
     icon            String?
     iconColor       String?
     items           ListItem[]

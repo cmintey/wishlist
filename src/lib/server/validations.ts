@@ -102,6 +102,7 @@ export const getListPropertiesSchema = () => {
         public: z.coerce.boolean().default(false),
         hideOwner: z.coerce.boolean().default(false),
         allowSelfClaims: z.coerce.boolean().default(false),
+        notForMe: z.coerce.boolean().default(false),
         description: z.string().max(10000).nullable(),
         managers: z.string().array().nullable().default([])
     });

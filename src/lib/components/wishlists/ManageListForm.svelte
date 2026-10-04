@@ -13,7 +13,18 @@
     import Checkbox from "../Checkbox.svelte";
 
     interface ListProps extends Partial<
-        Pick<List, "id" | "icon" | "iconColor" | "name" | "public" | "description" | "hideOwner" | "allowSelfClaims">
+        Pick<
+            List,
+            | "id"
+            | "icon"
+            | "iconColor"
+            | "name"
+            | "public"
+            | "description"
+            | "hideOwner"
+            | "allowSelfClaims"
+            | "notForMe"
+        >
     > {
         owner: Pick<User, "id" | "name" | "username" | "picture">;
         managers: Pick<User, "id" | "name" | "username">[];
@@ -143,12 +154,27 @@
         </div>
 
         <div class="col-span-full">
-            <Checkbox name="allowSelfClaims" disabled={!claimsVisibleToOwner} bind:checked={list.allowSelfClaims}>
+            <Checkbox name="notForMe" bind:checked={list.notForMe}>
+                <span>{$t("wishes.list-not-for-me")}</span>
+                {#snippet description()}
+                    <span>
+                        {$t("wishes.list-not-for-me-description")}
+                    </span>
+                {/snippet}
+            </Checkbox>
+        </div>
+
+        <div class="col-span-full">
+            <Checkbox
+                name="allowSelfClaims"
+                disabled={!claimsVisibleToOwner || list.notForMe}
+                bind:checked={list.allowSelfClaims}
+            >
                 <span>{$t("wishes.list-allow-self-claims")}</span>
                 {#snippet description()}
                     <span>{$t("wishes.list-allow-self-claims-description")}</span>
                     {#if !claimsVisibleToOwner}
-                        <span class="italic text-invalid">
+                        <span class="text-invalid italic">
                             {$t("wishes.list-allow-self-claims-description-helper-text")}
                         </span>
                     {/if}

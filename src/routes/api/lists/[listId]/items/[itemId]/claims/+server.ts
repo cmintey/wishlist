@@ -35,7 +35,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             id: true,
             public: true,
             groupId: true,
-            allowSelfClaims: true
+            allowSelfClaims: true,
+            notForMe: true
         },
         where: {
             id: params.listId
@@ -56,7 +57,9 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     if (updateData.data.publicClaimedById && !list.public) {
         error(404, $t("errors.list-not-found"));
     }
-    if (updateData.data.claimedById === locals.user?.id && !list.allowSelfClaims) {
+
+    const isSelfClaimable = list.allowSelfClaims || list.notForMe;
+    if (updateData.data.claimedById === locals.user?.id && !isSelfClaimable) {
         error(400, $t("errors.this-list-does-not-allow-self-claimed-items"));
     }
 

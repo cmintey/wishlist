@@ -32,6 +32,7 @@ export const load: PageServerLoad = async ({ params }) => {
                 public: true,
                 hideOwner: true,
                 allowSelfClaims: true,
+                notForMe: true,
                 owner: {
                     select: {
                         id: true,
@@ -97,7 +98,8 @@ export const actions: Actions = {
             hideOwner: form.get("hideOwner"),
             description: form.get("description"),
             managers: form.getAll("managers"),
-            allowSelfClaims: form.get("allowSelfClaims")
+            allowSelfClaims: form.get("allowSelfClaims"),
+            notForMe: form.get("notForMe")
         });
         if (listProperties.error) {
             return fail(422, {
@@ -132,6 +134,7 @@ export const actions: Actions = {
                     public: listProperties.data.public,
                     hideOwner: listProperties.data.hideOwner,
                     allowSelfClaims: listProperties.data.allowSelfClaims,
+                    notForMe: listProperties.data.notForMe,
                     description: trimToNull(listProperties.data.description)
                 },
                 where: {

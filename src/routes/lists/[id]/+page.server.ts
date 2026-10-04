@@ -54,6 +54,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
     return {
         list: {
             ...list,
+            isSelfClaimable: list.allowSelfClaims || list.notForMe,
             owner: {
                 ...list.owner,
                 isMe: list.owner.id === locals.user?.id,
@@ -73,7 +74,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
         listMode: config.listMode,
         showClaimedName: config.claims.showName,
         showNameAcrossGroups: config.claims.showNameAcrossGroups,
-        showClaimForOwner: config.claims.showForOwner,
+        showClaimForOwner: config.claims.showForOwner || list.notForMe,
         showPublicClaimName: config.claims.showNamePublic,
         requireClaimEmail: config.claims.requireEmail,
         suggestionsEnabled: config.suggestions.enable,

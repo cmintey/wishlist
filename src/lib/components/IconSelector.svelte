@@ -19,7 +19,7 @@
     let availableIcons: string[] = $state([]);
     let targets = $derived(fuzzysort.snapshot(availableIcons));
 
-    let iconValue = $state(icon);
+    let iconValue = $state(icon || undefined);
     let search = $state("");
 
     onMount(() => {
@@ -93,6 +93,7 @@
     {onOpenChange}
     openOnClick
     placeholder="gift"
+    defaultInputValue={iconValue}
 >
     <Combobox.Label class="text-base">{title ?? $t("general.icon")}</Combobox.Label>
     <Combobox.Control>

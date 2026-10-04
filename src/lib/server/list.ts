@@ -166,7 +166,8 @@ export const getById = async (id: string) => {
             groupId: true,
             public: true,
             description: true,
-            allowSelfClaims: true
+            allowSelfClaims: true,
+            notForMe: true
         },
         where: {
             id
