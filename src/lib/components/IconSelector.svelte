@@ -88,12 +88,12 @@
     name={id || "name"}
     class="w-full gap-0"
     {collection}
+    defaultInputValue={iconValue}
     inputBehavior="autohighlight"
     {onInputValueChange}
     {onOpenChange}
     openOnClick
     placeholder="gift"
-    defaultInputValue={iconValue}
 >
     <Combobox.Label class="text-base">{title ?? $t("general.icon")}</Combobox.Label>
     <Combobox.Control>
