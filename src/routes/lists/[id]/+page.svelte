@@ -396,6 +396,7 @@
                 >
                     <ItemCard
                         groupId={data.list.groupId}
+                        isSelfClaimable={data.list.isSelfClaimable}
                         {isTileView}
                         {item}
                         onPublicList={!data.loggedInUser && data.list.public}

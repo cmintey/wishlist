@@ -44,14 +44,14 @@
 {:else}
     <div class="flex flex-col space-y-4" data-testid="list-container" in:fade>
         {#each data.myLists as list (list.id)}
-            <ListCard hideCount hideOwner={list.hideOwner} {list} />
+            <ListCard hideCount {list} />
         {/each}
 
         {#each data.otherLists as list (list.id)}
             {#await hasNewItems(list)}
-                <ListCard hideOwner={list.hideOwner} {list} />
+                <ListCard {list} />
             {:then hasNewItems}
-                <ListCard {hasNewItems} hideOwner={list.hideOwner} {list} />
+                <ListCard {hasNewItems} {list} />
             {/await}
         {/each}
     </div>

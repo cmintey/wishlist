@@ -1,4 +1,4 @@
-import { type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 import { ListManagersSelector } from "./list-managers-selector";
 
 export class ListForm {
@@ -9,6 +9,8 @@ export class ListForm {
     private readonly nameField: Locator;
     private readonly publicCheckbox: Locator;
     private readonly hideOwnerCheckbox: Locator;
+    private readonly notForMeCheckbox: Locator;
+    private readonly allowOwnerClaimsCheckbox: Locator;
     private readonly listManagers: ListManagersSelector;
 
     constructor(page: Page) {
@@ -19,6 +21,8 @@ export class ListForm {
         this.nameField = page.getByLabel("Name", { exact: true });
         this.publicCheckbox = page.getByLabel("Public", { exact: true });
         this.hideOwnerCheckbox = page.getByLabel("Hide Owner", { exact: true });
+        this.notForMeCheckbox = page.getByLabel("This list is for someone else", { exact: true });
+        this.allowOwnerClaimsCheckbox = page.getByLabel("Allow owner to claim items", { exact: true });
         this.listManagers = new ListManagersSelector(page);
     }
 
@@ -42,6 +46,18 @@ export class ListForm {
     async makePublic() {
         await this.publicCheckbox.check();
         await this.save();
+    }
+
+    async setNotForMe(value = true) {
+        await this.notForMeCheckbox.setChecked(value);
+    }
+
+    async setAllowOwnerClaims(value = true) {
+        await this.allowOwnerClaimsCheckbox.setChecked(value);
+    }
+
+    async assertAllowOwnerClaimsDisabled() {
+        await expect(this.allowOwnerClaimsCheckbox).toBeDisabled();
     }
 
     async save() {

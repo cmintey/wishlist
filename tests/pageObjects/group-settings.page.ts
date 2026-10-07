@@ -67,6 +67,13 @@ export class GroupSettingsPage extends BasePage {
         return this.saveSettings();
     }
 
+    async setShowForListOwner(value = true) {
+        await this.clickSettingsTab();
+        const listSettings = new ListSettings(this.page);
+        await listSettings.setShowForListOwner(value);
+        return this.saveSettings();
+    }
+
     async addMember(name: string) {
         await this.clickMembersTab();
         await this.addMemberButton.click();

@@ -19,7 +19,7 @@
     let availableIcons: string[] = $state([]);
     let targets = $derived(fuzzysort.snapshot(availableIcons));
 
-    let iconValue = $state(icon);
+    let iconValue = $state(icon || undefined);
     let search = $state("");
 
     onMount(() => {
@@ -88,6 +88,7 @@
     name={id || "name"}
     class="w-full gap-0"
     {collection}
+    defaultInputValue={iconValue}
     inputBehavior="autohighlight"
     {onInputValueChange}
     {onOpenChange}

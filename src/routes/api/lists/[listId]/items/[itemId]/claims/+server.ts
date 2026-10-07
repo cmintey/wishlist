@@ -15,6 +15,11 @@ import { getActiveMembership } from "$lib/server/group-membership";
 export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const $t = await getFormatter();
 
+    const itemId = parseInt(params.itemId);
+    if (isNaN(itemId)) {
+        error(400, $t("errors.item-id-must-be-a-number"));
+    }
+
     const body = (await request.json()) as Record<string, unknown>[];
     const updateData = listItemClaimSchema.safeParse(body);
 
@@ -29,7 +34,10 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         select: {
             id: true,
             public: true,
-            groupId: true
+            groupId: true,
+            allowSelfClaims: true,
+            notForMe: true,
+            ownerId: true
         },
         where: {
             id: params.listId
@@ -51,8 +59,9 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         error(404, $t("errors.list-not-found"));
     }
 
-    if (isNaN(parseInt(params.itemId))) {
-        error(400, $t("errors.item-id-must-be-a-number"));
+    const isSelfClaimable = list.allowSelfClaims || list.notForMe;
+    if (updateData.data.claimedById === list.ownerId && !isSelfClaimable) {
+        error(400, $t("errors.this-list-does-not-allow-self-claimed-items"));
     }
 
     const item = await client.item.findUnique({
@@ -66,7 +75,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             }
         },
         where: {
-            id: parseInt(params.itemId),
+            id: itemId,
             lists: {
                 some: {
                     listId: list.id
@@ -136,6 +145,6 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         return new Response(null, { status: 200 });
     } catch (err) {
         logger.error({ err }, "Error claiming item");
-        error(404, $t("errors.item-not-found"));
+        error(422, $t("general.oops"));
     }
 };

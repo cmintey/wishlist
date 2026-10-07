@@ -79,6 +79,7 @@ export class ListPage extends BasePage {
 
     async createItem() {
         await this.createItemButton.click();
+        await this.page.waitForLoadState();
         return new CreateItemPage(this.page, { listId: this.id });
     }
 
