@@ -1,19 +1,14 @@
 import { type Locator, type Page } from "@playwright/test";
+import { Modal } from "./modal";
 
-export class ClaimItemModal {
-    private readonly modal: Locator;
+export class ClaimItemModal extends Modal {
     private readonly quantityField: Locator;
     private readonly claimButton: Locator;
 
     constructor(page: Page) {
-        this.modal = page.getByRole("dialog");
+        super(page, { submitButtonText: "Claim" });
         this.quantityField = this.modal.getByLabel("Enter the quantity to claim");
         this.claimButton = this.modal.getByRole("button", { name: "Claim" });
-    }
-
-    async at() {
-        await this.modal.waitFor({ state: "visible", timeout: 5000 });
-        return this;
     }
 
     async setQuantity(quantity: number) {

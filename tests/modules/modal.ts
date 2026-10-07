@@ -21,6 +21,11 @@ export class Modal {
         this.submitButton = this.modal.getByRole("button", { name: props?.submitButtonText ?? "Submit" });
     }
 
+    async visible() {
+        await this.modal.waitFor({ state: "visible", timeout: 5000 });
+        return this;
+    }
+
     async assertTitle(title: string) {
         await this.modal.waitFor({ state: "visible", timeout: 5000 });
         await expect(this.modalHeader).toHaveText(title);

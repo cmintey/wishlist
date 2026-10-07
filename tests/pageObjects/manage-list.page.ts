@@ -42,6 +42,10 @@ export class ManageListPage extends BasePage {
         return await listPage.waitForNavigate();
     }
 
+    async getForm() {
+        return this.listForm;
+    }
+
     async setName(name: string) {
         await this.listForm.setName(name);
         return this;
@@ -53,6 +57,16 @@ export class ManageListPage extends BasePage {
 
     async setHideOwner(value = true) {
         await this.listForm.setHideOwner(value);
+        return this;
+    }
+
+    async setNotForMe(value = true) {
+        await this.listForm.setNotForMe(value);
+        return this;
+    }
+
+    async setAllowOwnerClaims(value = true) {
+        await this.listForm.setAllowOwnerClaims(value);
         return this;
     }
 

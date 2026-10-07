@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import { ItemForm } from "../modules/item-form";
+import { Toast } from "../modules/toast";
 
 interface Props {
     listId?: string;
@@ -34,6 +35,7 @@ export class CreateItemPage extends BasePage {
 
     async create() {
         await this.createButton.click();
+        await new Toast(this.page).waitForToastWithText("Item created");
     }
 
     async createAndStay() {
