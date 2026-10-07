@@ -23,7 +23,15 @@
     {#if enabled}
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 pb-1 md:grid-cols-2">
             <label class="label" for="oidcDiscoveryUrl">
-                <span>{$t("admin.oidc-url")}</span>
+                <Tooltip>
+                    {#snippet label()}
+                        <span>{$t("admin.oidc-url")}</span>
+                    {/snippet}
+                    {#snippet description()}
+                        <span>{$t("admin.oidc-url-description")}</span>
+                    {/snippet}
+                </Tooltip>
+
                 <input
                     id="oidcDiscoveryUrl"
                     name="oidcDiscoveryUrl"
@@ -34,6 +42,7 @@
                     value={config.oidc.discoveryUrl}
                 />
             </label>
+
             <label class="label" for="oidcProviderName">
                 <span>{$t("admin.oidc-provider-name")}</span>
                 <input

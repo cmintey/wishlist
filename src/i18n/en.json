@@ -88,6 +88,7 @@
         "oidc-client-secret": "Client Secret",
         "oidc-provider-name": "Provider Name",
         "oidc-url": "Issuer URL",
+        "oidc-url-description": "The URL of your OAuth provider or the URL of the specific realm/application within your provider. This is also commonly referred to as a discovery URL.",
         "password-reset-link": "Password reset link",
         "password-strength-requirement": "Password Strength Requirement",
         "password-strength-requirement-tooltip": "The minium required password strength for a user's password.",
