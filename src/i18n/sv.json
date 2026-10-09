@@ -141,7 +141,8 @@
         "clear-sessions": "Rensa användarsessioner",
         "clear-sessions-confirmation": "Är du säker på att du vill rensa den här användarens sessioner? Användaren kommer att loggas ut från alla enheter och måste logga in igen.",
         "show-name-publicly": "Visa namn publikt",
-        "show-name-publicly-tooltip": "När det är aktiverat visas namnet som anges i ett offentligt anspråk för alla som tittar på den offentliga listan."
+        "show-name-publicly-tooltip": "När det är aktiverat visas namnet som anges i ett offentligt anspråk för alla som tittar på den offentliga listan.",
+        "oidc-url-description": "URL:en till din OAuth-leverantör eller URL:en till den specifika domänen (realm) eller applikationen hos leverantören. Detta kallas ofta även för en discovery-URL."
     },
     "app": {
         "my-claims": "Mina reservationer",
@@ -271,7 +272,9 @@
         "display-order-invalid": "Visningsordningen måste vara mellan {min} och {max}",
         "no-claim-on-behalf-of": "Kan inte göra anspråk på ett objekt å en annan användares vägnar",
         "this-list-is-not-part-of-your-active-group": "Den här listan ingår inte i din aktiva grupp",
-        "invalid-asset-path": "Ogiltig sökväg till tillgång"
+        "invalid-asset-path": "Ogiltig sökväg till tillgång",
+        "self-claims-not-available": "Det går inte att tillåta att användare gör anspråk på objekt när dessa anspråk inte syns för ägarna i deras egna listor",
+        "this-list-does-not-allow-self-claimed-items": "Denna lista tillåter inte anspråk på egna artiklar."
     },
     "general": {
         "enable": "Aktivera",
@@ -487,7 +490,14 @@
         "claim-item": "Reservera artikel",
         "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} har reserverat # artikel.} other {{name} har reserverat # artiklar.}}",
         "edit-claim": "Redigera reservation",
-        "update-claim-for-name": "Uppdatera reservation för {name}"
+        "update-claim-for-name": "Uppdatera reservation för {name}",
+        "list-allow-self-claims": "Tillåt ägaren att göra anspråk på föremål",
+        "list-allow-self-claims-description": "Tillåter listägaren att göra anspråk på artiklar i listan.",
+        "list-allow-self-claims-description-helper-text": "Det går inte att aktivera den här inställningen om inte anspråk är synliga för listägare (gruppinställning).",
+        "list-hide-owner-description": "Döljer ägaren på listkortet.",
+        "list-not-for-me": "Den här listan är till någon annan",
+        "list-not-for-me-description": "Om du hanterar den här listan åt någon annan gör den här inställningen att listägaren kan se anspråk och enskilda anspråksposter på listan.",
+        "public-list-option-description": "Gör det möjligt för andra att se listan och göra anspråk på artiklar från den."
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }
