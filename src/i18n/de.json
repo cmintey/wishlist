@@ -141,7 +141,8 @@
         "clear-sessions": "Benutzersitzungen löschen",
         "show-name-publicly": "Namen öffentlich anzeigen",
         "show-name-publicly-tooltip": "Zeigt den Namen der Person, die den Artikel reserviert hat, auf der Detailseite auch bei einer öffentlichen Liste an.",
-        "clear-sessions-confirmation": "Bist du sicher, dass du alle Sitzungen dieses Nutzers löschen möchtest? Der Benutzer wird auf allen Geräten ausgeloggt und muss sich neu einloggen."
+        "clear-sessions-confirmation": "Bist du sicher, dass du alle Sitzungen dieses Nutzers löschen möchtest? Der Benutzer wird auf allen Geräten ausgeloggt und muss sich neu einloggen.",
+        "oidc-url-description": "Die URL deines OAuth-Anbieters oder die URL des jeweiligen Realms bzw. der jeweiligen Anwendung innerhalb deines Anbieters. Diese wird häufig auch als „Discovery-URL“ bezeichnet."
     },
     "wishes": {
         "filter": "Filter",
@@ -264,7 +265,14 @@
         "claim-item": "Artikel reservieren",
         "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} hat # Artikel reserviert.} other {{name} hat # Artikel reserviert.}}",
         "edit-claim": "Reservierung bearbeiten",
-        "update-claim-for-name": "Aktualisere Reservierung für {name}"
+        "update-claim-for-name": "Aktualisere Reservierung für {name}",
+        "public-list-option-description": "Ermöglicht den öffentlichen Zugriff auf diese Liste zum Anzeigen und Beanspruchen.",
+        "list-allow-self-claims": "Dem Eigentümer erlauben, Artikel zu beanspruchen",
+        "list-allow-self-claims-description": "Ermöglicht es dem Listeninhaber, Einträge auf der Liste für sich zu beanspruchen.",
+        "list-allow-self-claims-description-helper-text": "Diese Einstellung kann nur aktiviert werden, wenn Ansprüche für Listenbesitzer sichtbar sind (Gruppeneinstellung).",
+        "list-hide-owner-description": "Blendet den Eigentümer auf der Listenkarte aus.",
+        "list-not-for-me": "Diese Liste ist für jemand anderen bestimmt",
+        "list-not-for-me-description": "Wenn du diese Liste für eine andere Person verwaltest, ermöglicht diese Einstellung dem Listeneigentümer, Ansprüche und Anspruchspositionen in der Liste einzusehen."
     },
     "errors": {
         "group-is-not-in-registry-mode-cannot-get-a-public-link": "Gruppe ist nicht im Registermodus. Kein öffentlicher Link vorhanden",
@@ -339,7 +347,9 @@
         "display-order-invalid": "Die Anzeigereihenfolge muss zwischen {min} und {max} liegen",
         "no-claim-on-behalf-of": "Ein Artikel kann nicht im Auftrag eines anderen Benutzers reserviert werden",
         "this-list-is-not-part-of-your-active-group": "Diese Liste ist kein Teil deiner aktiven Gruppe",
-        "invalid-asset-path": "Ungültiger Ressourcen-Pfad"
+        "invalid-asset-path": "Ungültiger Ressourcen-Pfad",
+        "self-claims-not-available": "Selbstansprüche dürfen nicht zugelassen werden, wenn die Ansprüche für die Eigentümer in deiner eigenen Liste nicht sichtbar sind",
+        "this-list-does-not-allow-self-claimed-items": "Diese Liste lässt keine selbst gemeldeten Einträge zu."
     },
     "auth": {
         "return-to-login": "Zurück zur Anmeldung",
