@@ -69,7 +69,12 @@
         "language-is-required": "La langue est requise",
         "email-is-required-for-public-claims": "Un email est nécessaire pour des réservation publiques",
         "oidc-error": "Erreur lors de l'authentification OAuth",
-        "display-order-invalid": "L'ordre d'affichage doit être entre {min} et {max}"
+        "display-order-invalid": "L'ordre d'affichage doit être entre {min} et {max}",
+        "invalid-asset-path": "Chemin de la ressource invalide",
+        "no-claim-on-behalf-of": "Impossible de réserver un souhait au nom d'un autre utilisateur",
+        "self-claims-not-available": "Impossible d'autoriser les réservations pour soi lorsque les réservations ne sont pas visibles aux propriétaires sur leur propre liste",
+        "this-list-does-not-allow-self-claimed-items": "Cette liste n'autorise pas les réservations pour soi-même.",
+        "this-list-is-not-part-of-your-active-group": "Cette liste ne fait pas partie de votre groupe actif"
     },
     "admin": {
         "version": "Version : <a class=\"{class}\" href=\"{href}\">{version}</a>",
@@ -129,7 +134,7 @@
         "profile": "Profil",
         "public-signup": "Inscription publique",
         "registry-mode-alert-text": "Ce groupe est en <b>mode Liste publique</b>. Aucun membre supplémentaire ne peut être ajouté dans ce mode. Vous pouvez obtenir un lien public vers votre liste sur la page de celle-ci.",
-        "remove-admin": "Retirer l'administrateur",
+        "remove-admin": "Déchoir en tant qu'administrateur",
         "remove-member-message": "Êtes-vous sûr de vouloir supprimer cet utilisateur du groupe ? Cela supprimera toutes les listes de l'utilisateur dans le groupe et tous les éléments associés qui ne sont pas sur une autre liste. <b>Cette action est irréversible !</b>",
         "password-reset-link": "Lien de réinitialisation du mot de passe",
         "list-creation": "Paramètres de liste",
@@ -170,7 +175,7 @@
         "enable-sync": "Activer la synchronisation",
         "enable-sync-description": "Activer la synchronisation des attributs utilisateur depuis votre fournisseur d'identité comme le nom et l'email.",
         "oidc-auto-redirect-description": "Rediriger automatiquement vers la page de connexion de votre fournisseur d'identité.",
-        "profile-disabled": "Votre profil est géré par votre fournisseur OAuth.",
+        "profile-disabled": "Ce profil est géré par votre fournisseur OAuth.",
         "show-for-list-owner": "Afficher pour le propriétaire de la liste",
         "show-for-list-owner-description": "Permet au propriétaire de la liste de voir les réservations sur leurs propres listes.",
         "show-name-across-groups": "Afficher le nom dans tous les groupes",
@@ -179,7 +184,14 @@
         "sending": "Envoi",
         "smtp-ignore-cert-check-description": "Ne pas valider le certificat TLS. Le plus souvent utilisé pour les connexions locales. Non recommandé.",
         "smtp-use-tls": "Utiliser TLS",
-        "smtp-use-tls-description": "Se connecter au serveur SMTP directement en utilisant TLS au lieu d'utiliser STARTTLS. Le plus souvent utilisé avec le port 465."
+        "smtp-use-tls-description": "Se connecter au serveur SMTP directement en utilisant TLS au lieu d'utiliser STARTTLS. Le plus souvent utilisé avec le port 465.",
+        "clear-sessions": "Vider les sessions utilisateur",
+        "clear-sessions-confirmation": "Êtes-vous sûr de vouloir effacer les sessions de cet utilisateur? L'utilisateur sera déconnecté de tous les appareils et devra se reconnecter.",
+        "oidc-url-description": "L'URL de votre fournisseur OAuth ou l'URL du domaine/application spécifique de votre fournisseur. Ceci est également communément appelé URL de découverte.",
+        "show-name-publicly": "Afficher le nom publiquement",
+        "show-name-publicly-tooltip": "Une fois activé, le nom fourni sur une demande publique est indiqué à tous ceux qui regardent la liste publique.",
+        "oidc-claim-name-description": "Le champ à utiliser pour définir le nom d'utilisateur.",
+        "oidc-claim-username-description": "Le champ à utiliser pour définir le nom d'utilisateur."
     },
     "auth": {
         "password": "Mot de passe",
@@ -244,7 +256,8 @@
         "default-item-image": "image de l'élément par défaut",
         "unpurchase": "Marquer l'élément comme non acheté",
         "user-menu": "Menu utilisateur",
-        "remove-manager-name": "Supprimer {name}"
+        "remove-manager-name": "Supprimer {name}",
+        "claimed-progress": "Avancement des réservations"
     },
     "app": {
         "my-claims": "Mes réservations",
@@ -449,11 +462,11 @@
         "add-a-list-manager-explainer": "Recherchez un utilisateur dans le groupe à ajouter en tant que gestionnaire à la liste.",
         "add-a-manager": "Ajouter gestionnaire",
         "claims": "{claimCount, plural, one {# réservation} other {# réservations}}",
-        "hide-claims": "Masquer les réservations",
+        "hide-claims": "Masquer les détails",
         "list-managers": "Gestionnaires de liste",
         "list-managers-tooltip": "Les gestionnaires de liste peuvent faire tout ce que vous pouvez faire, y compris approuver ou refuser des suggestions, modifier les paramètres de la liste, et supprimer des éléments de la liste. Si votre groupe est en mode 'surprise', vous pourrez voir tout élément ajouté par un gestionnaire de liste.",
         "no-managers": "Aucun gestionnaire",
-        "show-claims": "Afficher les réservations",
+        "show-claims": "Afficher les détails",
         "switch-to-list-view": "Passer en vue liste",
         "switch-to-tile-view": "Passer en vue tuile",
         "tile-view": "Vue tuile",
@@ -469,7 +482,22 @@
         "import-item": "Importer l'élément",
         "import-item-text": "Avant d'importer un élément, vous devez choisir un groupe et une liste",
         "select-a-list": "Sélectionner une liste",
-        "item-created": "Elément créé"
+        "item-created": "Elément créé",
+        "claim-item": "Réserver l'élément",
+        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} a réservé # élément.} other {{name} a réservé # éléments.}}",
+        "edit-claim": "Modifier la réservation",
+        "hide-owner": "Masquer le propriétaire",
+        "items-available": "{availableCount, plural, one {# disponible} other {# disponibles}}",
+        "items-claimed": "{claimedCount} sur {itemCount} réservés",
+        "items-requested": "{itemCount, plural, one {# demandé} other {# demandés}}",
+        "list-allow-self-claims": "Permettre au propriétaire de réserver des éléments",
+        "list-allow-self-claims-description": "Permet au propriétaire de la liste de réserver des éléments sur la liste.",
+        "list-allow-self-claims-description-helper-text": "Impossible d'activer ce réglage à moins que les réservations ne soient visibles pour les propriétaires de listes (configuration de groupe).",
+        "list-hide-owner-description": "Cache le propriétaire sur la liste.",
+        "list-not-for-me": "Cette liste est pour quelqu'un d'autre",
+        "list-not-for-me-description": "Si vous gérez cette liste pour quelqu'un d'autre, ce paramètre permettra au propriétaire de la liste de voir les réservations et de demander des éléments sur la liste.",
+        "public-list-option-description": "Permet à cette liste d'être publiquement consultable et réservable.",
+        "update-claim-for-name": "Mettre à jour la réservation pour {name}"
     },
     "unable-to-load-icons": "Impossible de charger les icônes."
 }
