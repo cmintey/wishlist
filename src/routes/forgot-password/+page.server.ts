@@ -35,10 +35,8 @@ export const actions: Actions = {
             }
         });
 
-        let token = null;
-
         if (user) {
-            token = await generateToken();
+            const token = await generateToken();
             const tokenUrl = new URL(`/reset-password?token=${token}`, url);
 
             await client.passwordReset.create({
@@ -53,6 +51,6 @@ export const actions: Actions = {
             }
         }
 
-        return { success: true, token };
+        return { success: true };
     }
 };
