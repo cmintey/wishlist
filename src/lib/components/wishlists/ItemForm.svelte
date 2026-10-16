@@ -25,13 +25,16 @@
             itemPrice?: ItemPrice | null;
             lists?: ExistingListProps[];
         };
-        lists?: ListProps[];
+        lists?: {
+            usersLists: ListProps[];
+            managedLists: ListProps[];
+        };
         currentList?: string;
         buttonText: string;
         saving: boolean;
     }
 
-    let { item = $bindable(), buttonText, lists: otherLists = [], currentList, saving = false }: Props = $props();
+    let { item = $bindable(), buttonText, lists: otherLists, currentList, saving = false }: Props = $props();
     const t = getFormatter();
 
     let productData = $state(item);
@@ -57,20 +60,27 @@
               )
             : { [currentList || ""]: true };
     });
-    const lists = $derived(
-        otherLists
-            .map((l) => ({
-                ...l,
-                name: l.name || $t("wishes.wishes-for", { values: { listOwner: l.owner.name } })
-            }))
-            .toSorted((a, b) =>
-                listsHavingItem[a.id] !== undefined
-                    ? -Infinity
-                    : listsHavingItem[b.id] !== undefined
-                      ? Infinity
-                      : a.name?.localeCompare(b.name)
-            )
-    );
+    const lists = $derived.by(() => {
+        function nameAndSortLists(lists: ListProps[] | undefined) {
+            if (!lists) return [];
+            return lists
+                .map((l) => ({
+                    ...l,
+                    name: l.name || $t("wishes.wishes-for", { values: { listOwner: l.owner.name } })
+                }))
+                .toSorted((a, b) =>
+                    listsHavingItem[a.id] !== undefined
+                        ? -Infinity
+                        : listsHavingItem[b.id] !== undefined
+                          ? Infinity
+                          : a.name?.localeCompare(b.name)
+                );
+        }
+        return {
+            usersLists: nameAndSortLists(otherLists?.usersLists),
+            managedLists: nameAndSortLists(otherLists?.managedLists)
+        };
+    });
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -315,7 +325,7 @@
 
     <fieldset
         class="col-span-full flex flex-col space-y-2 md:col-span-5"
-        class:hidden={lists.length <= 1}
+        class:hidden={lists.usersLists.length + lists.managedLists.length <= 1}
         aria-labelledby="lists-label"
     >
         <div class="flex items-end justify-between">
@@ -329,7 +339,7 @@
             class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2"
             class:input-invalid={form?.errors?.lists}
         >
-            {#each lists as list (list.id)}
+            {#snippet displayList(list: ListProps)}
                 <label class="flex items-center gap-x-2" for={list.id}>
                     <input
                         id={list.id}
@@ -347,6 +357,15 @@
                         <span class="font-bold italic">({list.group.name})</span>
                     </div>
                 </label>
+            {/snippet}
+            {#each lists.usersLists as list (list.id)}
+                {@render displayList(list)}
+            {/each}
+            {#each lists.managedLists as list, i (list.id)}
+                {#if i === 0}
+                    <span class="text-subtle">Managed lists</span>
+                {/if}
+                {@render displayList(list)}
             {/each}
         </div>
         {#if form?.errors?.lists}

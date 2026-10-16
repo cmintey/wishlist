@@ -263,18 +263,46 @@ const availableListSelection: Prisma.ListFindManyArgs["select"] = {
 
 /**
  * Returns all lists that are owned by ownerId that can be accessed by loggedInUserId.
- * Accessed in this context means the logged in user is either in the same group as the list
- * or the list is public. In both scenarios, suggestions must be enabled for the group
+ * Accessed in this context means the logged in user is either in the same group as the list,
+ * the list is public, or is a manager of the list. In the first two scenarios,
+ * suggestions must be enabled for the group.
  */
 export const getAvailableLists = async (ownerId: string, loggedInUserId: string) => {
     if (ownerId === loggedInUserId) {
-        return await client.list.findMany({
+        // TODO: also add managed lists here
+        const usersLists = await client.list.findMany({
             select: availableListSelection,
             where: {
                 ownerId
             }
         });
+        const managedLists = await client.list.findMany({
+            select: availableListSelection,
+            where: {
+                managers: {
+                    some: {
+                        userId: ownerId
+                    }
+                }
+            }
+        });
+        return {
+            usersLists,
+            managedLists
+        };
     }
+
+    const managedLists = await client.list.findMany({
+        select: availableListSelection,
+        where: {
+            ownerId,
+            managers: {
+                some: {
+                    userId: loggedInUserId
+                }
+            }
+        }
+    });
 
     const overlappingGroups = await Promise.all([
         client.userGroupMembership.findMany({
@@ -320,15 +348,20 @@ export const getAvailableLists = async (ownerId: string, loggedInUserId: string)
         }
     });
 
-    const listsAvailable = [];
+    const distinctLists: Set<string> = new Set(managedLists.map(({ id }) => id));
+    const listsAvailable = [...managedLists];
     for (const list of [...ownersListsInCommonGroups, ...ownersPublicLists]) {
         const groupConfig = await getConfig(list.group.id);
-        if (groupConfig.suggestions.enable) {
+        if (groupConfig.suggestions.enable && !distinctLists.has(list.id)) {
             listsAvailable.push(list);
+            distinctLists.add(list.id);
         }
     }
 
-    return listsAvailable;
+    return {
+        usersLists: listsAvailable,
+        managedLists: []
+    };
 };
 
 export const getNextDisplayOrderForLists = async (listIds: string[], mostWanted = false) => {
