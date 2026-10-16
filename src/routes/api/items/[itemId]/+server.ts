@@ -78,7 +78,7 @@ export const DELETE: RequestHandler = async ({ params }) => {
     // item is not created by the user or for the user and
     // item is not on a list which is managed by the user
     if (user.id !== item.createdById && user.id !== item.userId && !isItemOnManagedList(item, user)) {
-        error(401, $t("errors.not-authorized"));
+        error(403, $t("errors.not-authorized"));
     }
 
     try {

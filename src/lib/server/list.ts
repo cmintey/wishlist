@@ -6,6 +6,8 @@ import { getItemInclusions } from "./items";
 import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
 import { itemSorter } from "$lib/comparators";
+import { error } from "@sveltejs/kit";
+import { getFormatter } from "./i18n";
 
 export interface GetItemsOptions {
     filter: string | null;
@@ -360,5 +362,22 @@ export const getNextDisplayOrderForLists = async (listIds: string[], mostWanted 
             },
             {} as Record<string, number>
         );
+    }
+};
+
+type ListForManageCheck = {
+    owner: {
+        id: string;
+    };
+    managers: {
+        userId: string;
+    }[];
+};
+export const verifyUserCanManageList = async (userId: string, list: ListForManageCheck) => {
+    const $t = await getFormatter();
+
+    const managerIds = new Set(list.managers.map(({ userId }) => userId));
+    if (list.owner.id !== userId && !managerIds.has(userId)) {
+        error(403, $t("errors.not-authorized"));
     }
 };

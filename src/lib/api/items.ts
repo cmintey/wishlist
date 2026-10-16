@@ -44,8 +44,4 @@ export class ItemsAPI {
         if (claimed) searchParams.append("claimed", `${claimed}`);
         return await this._makeRequest("DELETE", "?" + searchParams.toString());
     };
-
-    updateMany = async (items: (Record<string, unknown> & { id: number })[]) => {
-        return await this._makeRequest("PATCH", "", items);
-    };
 }
