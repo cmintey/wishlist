@@ -7,10 +7,19 @@ import { listItemsUpdateSchema } from "$lib/server/validations";
 import { ItemEvent } from "$lib/events";
 import { requireLoginOrError } from "$lib/server/auth";
 import { logger } from "$lib/server/logger";
+import { getById, verifyUserCanManageList } from "$lib/server/list";
 
 export const PATCH: RequestHandler = async ({ request, params }) => {
-    await requireLoginOrError();
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
+
+    const list = await getById(params.listId);
+
+    if (!list) {
+        error(404, $t("errors.list-not-found"));
+    }
+
+    await verifyUserCanManageList(user.id, list);
 
     const body = (await request.json()) as Record<string, unknown>[];
     const updateData = listItemsUpdateSchema.array().safeParse(body);

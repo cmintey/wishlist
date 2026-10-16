@@ -3,19 +3,21 @@ import { publicListCreateSchema } from "$lib/server/validations";
 import { error } from "@sveltejs/kit";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
-import { getById } from "$lib/server/list";
+import { getById, verifyUserCanManageList } from "$lib/server/list";
 import type { Prisma } from "$lib/generated/prisma/client";
 import type { RequestHandler } from "./$types";
 import { requireLoginOrError } from "$lib/server/auth";
 
 export const PATCH: RequestHandler = async ({ request, params }) => {
-    await requireLoginOrError();
+    const user = await requireLoginOrError();
     const $t = await getFormatter();
 
     const list = await getById(params.listId);
     if (!list) {
         error(404, $t("errors.list-not-found"));
     }
+
+    await verifyUserCanManageList(user.id, list);
 
     const config = await getConfig(list.groupId);
     if (config.listMode !== "registry") {
