@@ -94,7 +94,8 @@
                 userId: data.user?.id,
                 sort: page.url.searchParams.get("sort"),
                 dir: page.url.searchParams.get("dir"),
-                listOwnerId: data.list.owner.id
+                listOwnerId: data.list.owner.id,
+                isSelfClaimable: data.list.isSelfClaimable
             })
         );
     };
@@ -275,7 +276,7 @@
 <!-- chips -->
 <div class="flex flex-wrap items-end justify-between gap-2 pb-4 print:hidden">
     <div class="flex flex-row flex-wrap items-end gap-2">
-        {#if !data.list.owner.isMe}
+        {#if !data.list.owner.isMe || data.list.isSelfClaimable}
             <ClaimFilterChip />
         {/if}
         <SortBy />

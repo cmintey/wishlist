@@ -15,6 +15,7 @@ export interface GetItemsOptions {
     listOwnerId: string;
     listManagers?: Set<string>;
     loggedInUserId: string | null;
+    isSelfClaimable?: boolean;
 }
 
 export interface ListProperties {
@@ -237,7 +238,8 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
                 sort: options.sort,
                 dir: options.sortDir,
                 userId: options.loggedInUserId,
-                listOwnerId: options.listOwnerId
+                listOwnerId: options.listOwnerId,
+                isSelfClaimable: options.isSelfClaimable
             })
         );
 };

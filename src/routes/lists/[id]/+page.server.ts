@@ -34,6 +34,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
 
     const config = await getConfig(list.groupId);
 
+    const isSelfClaimable = list.allowSelfClaims || list.notForMe;
     const options: GetItemsOptions = {
         filter: url.searchParams.get("filter"),
         sort: url.searchParams.get("sort"),
@@ -41,7 +42,8 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
         suggestionMethod: config.suggestions.method,
         listOwnerId: list.owner.id,
         listManagers: new Set(list.managers.map(({ userId }) => userId)),
-        loggedInUserId: locals.user?.id || null
+        loggedInUserId: locals.user?.id || null,
+        isSelfClaimable
     };
 
     const items = await getItems(list.id, options);
@@ -54,7 +56,7 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
     return {
         list: {
             ...list,
-            isSelfClaimable: list.allowSelfClaims || list.notForMe,
+            isSelfClaimable,
             owner: {
                 ...list.owner,
                 isMe: list.owner.id === locals.user?.id,
