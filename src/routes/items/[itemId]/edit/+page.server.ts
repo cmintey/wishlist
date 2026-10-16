@@ -28,14 +28,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
     const item = await client.item.findUnique({
         where: {
-            id: parseInt(params.itemId),
-            lists: {
-                some: {
-                    list: {
-                        groupId: activeMembership.groupId
-                    }
-                }
-            }
+            id: parseInt(params.itemId)
         },
         include: {
             itemPrice: true,
