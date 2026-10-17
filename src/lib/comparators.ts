@@ -5,12 +5,13 @@ interface SortOptions {
     dir: string | null;
     userId?: string | null;
     listOwnerId: string;
+    isSelfClaimable?: boolean;
 }
 
 export function itemSorter(opts: SortOptions) {
     return (a: ItemOnListDTO, b: ItemOnListDTO) => {
         // Don't perform claim status sorting if on your own list
-        if (opts.listOwnerId !== opts.userId) {
+        if (opts.listOwnerId !== opts.userId || opts.isSelfClaimable) {
             const claimStatus = compareClaimStatus(a, b, opts.userId);
             if (claimStatus != 0) return claimStatus;
         }
