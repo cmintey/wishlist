@@ -32,6 +32,16 @@
             toaster.info({ description: $t("general.oops") });
         }
     };
+
+    const handleClearSessions = async () => {
+        const resp = await fetch(`/api/users/${data.editingUser.id}/sessions`, { method: "DELETE" });
+
+        if (resp.ok) {
+            invalidateAll();
+        } else {
+            toaster.info({ description: $t("general.oops") });
+        }
+    };
 </script>
 
 <EditProfile autocomplete={false} disabled={profileEditDisabled} user={data.editingUser}></EditProfile>
@@ -70,7 +80,7 @@
 
         <ConfirmModal
             description={$t("admin.clear-sessions-confirmation")}
-            onConfirm={handleDelete}
+            onConfirm={handleClearSessions}
             title={$t("general.please-confirm")}
         >
             {#snippet trigger(props)}
