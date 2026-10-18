@@ -21,6 +21,7 @@
     }
 
     interface Props {
+        userId: string;
         item: Partial<Item> & {
             itemPrice?: ItemPrice | null;
             lists?: ExistingListProps[];
@@ -34,7 +35,7 @@
         saving: boolean;
     }
 
-    let { item = $bindable(), buttonText, lists: otherLists, currentList, saving = false }: Props = $props();
+    let { userId, item = $bindable(), buttonText, lists: otherLists, currentList, saving = false }: Props = $props();
     const t = getFormatter();
 
     let productData = $state(item);
@@ -324,20 +325,35 @@
     </label>
 
     <fieldset
-        class="col-span-full flex flex-col space-y-2 md:col-span-5"
-        class:hidden={lists.usersLists.length + lists.managedLists.length <= 1}
+        class={[
+            "col-span-full flex flex-col space-y-2 md:col-span-5",
+            lists.usersLists.length + lists.managedLists.length <= 1 && "hidden"
+        ]}
         aria-labelledby="lists-label"
     >
         <div class="flex items-end justify-between">
             <legend id="lists-label">{$t("wishes.lists")}</legend>
-            <button class="preset-tonal-primary border-primary-500 btn btn-sm border" onclick={selectAll} type="button">
-                {$t("general.select-all")}
-            </button>
+            {#if !item.createdById || item.createdById === userId}
+                <button
+                    class="preset-tonal-primary border-primary-500 btn btn-sm border"
+                    onclick={selectAll}
+                    type="button"
+                >
+                    {$t("general.select-all")}
+                </button>
+            {/if}
         </div>
 
+        {#if item.createdById && item.createdById !== userId}
+            <p class="text-warning-800-200 text-sm">{$t("wishes.cannot-update-lists-of-item")}</p>
+        {/if}
+
         <div
-            class="border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2"
-            class:input-invalid={form?.errors?.lists}
+            class={[
+                "border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2",
+                form?.errors?.lists && "input-invalid",
+                item.createdById && item.createdById !== userId && "disabled"
+            ]}
         >
             {#snippet displayList(list: ListProps)}
                 <label class="flex items-center gap-x-2" for={list.id}>

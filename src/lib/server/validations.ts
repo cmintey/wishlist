@@ -159,7 +159,8 @@ export const getItemUpdateSchema = async () => {
             z.object({
                 url: z.string().nullish().default(null),
                 imageUrl: z.string().nullish().default(null),
-                note: z.string().nullish().default(null)
+                note: z.string().nullish().default(null),
+                lists: z.optional(itemCreateSchema.shape.lists)
             }).shape
         )
     );

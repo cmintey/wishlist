@@ -41,6 +41,17 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
             lists: {
                 select: {
                     listId: true,
+                    list: {
+                        select: {
+                            id: true,
+                            ownerId: true,
+                            managers: {
+                                select: {
+                                    userId: true
+                                }
+                            }
+                        }
+                    },
                     approved: true,
                     displayOrder: true,
                     addedBy: {

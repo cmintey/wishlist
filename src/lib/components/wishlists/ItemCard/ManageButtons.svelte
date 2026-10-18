@@ -8,6 +8,7 @@
     import { resolve } from "$app/paths";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import { userCanEdit } from "$lib/item-util";
 
     interface Props extends Pick<InternalItemCardProps, "item" | "user" | "userCanManage"> {
         onEdit?: VoidFunction;
@@ -15,7 +16,7 @@
 
     const { item, user, userCanManage, onEdit }: Props = $props();
     const t = getFormatter();
-    const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
+    const listItemAPI = $derived(new ListItemAPI(item.list.id, item.id));
 
     let isOnlyManager = $derived(
         (user?.id !== item.user?.id && user?.id !== item.addedBy?.id && userCanManage) || false
@@ -90,7 +91,9 @@
     {#if !item.approved}
         {@render approvalButton(true)}
         {@render approvalButton(false)}
-    {:else if user?.id === item.user?.id || user?.id === item.addedBy?.id}
+        <!-- TODO: need to be able to edit items added to my own list by a manager. These items are not "for me", but they are on my list -->
+        <!-- TODO: Need to be able to edit items on a list that I manage -->
+    {:else if userCanEdit(item, user?.id)}
         <button
             class="preset-tonal-primary inset-ring-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base inset-ring"
             aria-label={$t("wishes.edit")}

@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
+    import { applyAction, enhance } from "$app/forms";
     import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
     import type { PageProps } from "./$types";
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "$lib/components/toaster";
+    import { goto } from "$app/navigation";
 
     const { data }: PageProps = $props();
 
@@ -18,19 +19,20 @@
         method="POST"
         use:enhance={() => {
             saving = true;
-            return async ({ result, update }) => {
+            return async ({ result }) => {
                 saving = false;
                 if (result.type === "error") {
                     toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
                     return;
-                } else {
+                } else if (result.type === "redirect") {
                     toaster.info({ description: $t("wishes.updated-success") });
-                    update();
+                    return goto(result.location, { invalidateAll: true, replaceState: true });
                 }
+                await applyAction(result);
             };
         }}
     >
-        <ItemForm buttonText={$t("general.save")} item={data.item} lists={data.lists} {saving} />
+        <ItemForm buttonText={$t("general.save")} item={data.item} lists={data.lists} {saving} userId={data.user.id} />
     </form>
 {/if}
 

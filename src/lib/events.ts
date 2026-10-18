@@ -37,7 +37,7 @@ export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListD
     }
 
     predicate(data: FullItem) {
-        return data.lists.map((l) => l.listId).includes(this.listId);
+        return data.lists.map((l) => l.list.id).includes(this.listId);
     }
 
     static listen(source: EventSource, callback: (data: ItemOnListDTO) => void) {
@@ -64,7 +64,7 @@ export class ItemCreateHandler implements BaseEventHandler<FullItem, ItemOnListD
     }
 
     predicate(data: FullItem) {
-        return data.lists.map((l) => l.listId).includes(this.listId);
+        return data.lists.map((l) => l.list.id).includes(this.listId);
     }
 
     static listen(source: EventSource, callback: (data: ItemOnListDTO) => void) {

@@ -91,6 +91,7 @@
         item={itemData}
         lists={data.lists}
         {saving}
+        userId={data.user.id}
     />
 </form>
 
