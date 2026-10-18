@@ -13,6 +13,8 @@
     const { data, form }: PageProps = $props();
     const t = getFormatter();
 
+    let formEl: HTMLFormElement | undefined = $state();
+
     const profileEditDisabled = $derived(
         data.oidcConfig.ready && data.oidcConfig.enableSync === true && data.editingUser.oauthId !== null
     );
@@ -29,14 +31,38 @@
                 description: $t("admin.user-was-deleted", { values: { username: data.editingUser.username } })
             });
         } else {
-            toaster.info({ description: $t("general.oops") });
+            toaster.error({ description: $t("general.oops") });
+        }
+    };
+
+    const handleClearSessions = () => {
+        if (formEl) {
+            formEl.action = "?/clear-sessions";
+            formEl.requestSubmit();
+            formEl.action = "";
         }
     };
 </script>
 
 <EditProfile autocomplete={false} disabled={profileEditDisabled} user={data.editingUser}></EditProfile>
 
-<form class="mt-4 flex flex-col flex-wrap gap-4" method="POST" use:enhance>
+<form
+    bind:this={formEl}
+    class="mt-4 flex flex-col flex-wrap gap-4"
+    method="POST"
+    use:enhance={() => {
+        return ({ action, result, update }) => {
+            if (action.search === "?/clear-sessions" && result.type === "success") {
+                toaster.info({
+                    description: $t("admin.clear-sessions-success")
+                });
+            } else if (result.type === "error") {
+                toaster.error({ description: $t("general.oops") });
+            }
+            update();
+        };
+    }}
+>
     <div class="flex flex-wrap gap-4">
         <button class="preset-filled-primary-500 btn w-full sm:w-fit" formaction="?/reset-password">
             {$t("admin.generate-reset-password-link")}
@@ -70,7 +96,7 @@
 
         <ConfirmModal
             description={$t("admin.clear-sessions-confirmation")}
-            onConfirm={handleDelete}
+            onConfirm={handleClearSessions}
             title={$t("general.please-confirm")}
         >
             {#snippet trigger(props)}

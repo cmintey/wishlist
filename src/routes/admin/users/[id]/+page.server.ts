@@ -4,7 +4,7 @@ import generateToken, { hashToken } from "$lib/server/token";
 import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { getFormatter } from "$lib/server/i18n";
-import { requireRole } from "$lib/server/auth";
+import { invalidateUserSessions, requireRole } from "$lib/server/auth";
 import { unlinkOauth, updatePicture, updateProfile } from "$lib/server/profile";
 import { fail } from "@sveltejs/kit";
 import { getOIDCConfig } from "$lib/server/openid";
@@ -153,6 +153,13 @@ export const actions: Actions = {
                 roleId: Role.USER
             }
         });
+
+        return { success: true, url: null };
+    },
+    "clear-sessions": async ({ params }) => {
+        await requireRole(Role.ADMIN);
+
+        await invalidateUserSessions(params.id);
 
         return { success: true, url: null };
     }
