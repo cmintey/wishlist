@@ -258,8 +258,6 @@
     };
 </script>
 
-<span>Owner: {data.list.owner.name}</span>
-
 {#if data.list.description}
     <div class="w-full pb-4">
         {#if !hideDescription}
