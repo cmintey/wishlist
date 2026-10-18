@@ -2,7 +2,6 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { client } from "$lib/server/prisma";
 import { getConfig } from "$lib/server/config";
-import { getActiveMembership } from "$lib/server/group-membership";
 import { createImage, isValidImage, tryDeleteImage } from "$lib/server/image-util";
 import { itemEmitter } from "$lib/server/events/emitters";
 import { getMinorUnits } from "$lib/price-formatter";
@@ -14,6 +13,7 @@ import { requireLogin } from "$lib/server/auth";
 import { extractFormData, getItemUpdateSchema } from "$lib/server/validations";
 import z from "zod";
 import type { List, Prisma } from "$lib/generated/prisma/client";
+import { userCanEditOnSomeList } from "$lib/item-util";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();
@@ -23,15 +23,18 @@ export const load: PageServerLoad = async ({ params }) => {
         error(400, $t("errors.item-id-must-be-a-number"));
     }
 
-    const activeMembership = await getActiveMembership(user);
-    const config = await getConfig(activeMembership.groupId);
-
     const item = await client.item.findUnique({
         where: {
             id: parseInt(params.itemId)
         },
         include: {
             itemPrice: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
             lists: {
                 select: {
                     addedById: true,
@@ -53,17 +56,14 @@ export const load: PageServerLoad = async ({ params }) => {
 
     if (!item) error(404, $t("errors.item-not-found"));
 
-    if (config.suggestions.method === "surprise" && user.id !== item.createdById) {
-        error(401, $t("errors.cannot-edit-item-that-you-did-not-create"));
-    }
-
-    if (user.id !== item.userId && user.id !== item.createdById) {
-        error(400, $t("errors.item-invalid-ownership", { values: { username: user.username } }));
+    if (!userCanEditOnSomeList(item, user.id)) {
+        error(403, $t("errors.user-is-not-allowed-to-edit-this-item"));
     }
 
     const lists = await getAvailableLists(item.userId, user.id);
 
     return {
+        user,
         item: {
             ...item,
             lists: item.lists.map(({ list, addedById }) => ({
@@ -81,6 +81,7 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
     default: async ({ request, params, url: requestUrl }) => {
         const user = requireLogin();
+        const $t = await getFormatter();
 
         const itemFormSchema = await getItemUpdateSchema();
         const form = await request.formData().then(extractFormData).then(itemFormSchema.safeParse);
@@ -92,6 +93,12 @@ export const actions: Actions = {
 
         const item = await client.item.findUniqueOrThrow({
             include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
                 lists: {
                     select: {
                         id: true,
@@ -100,7 +107,12 @@ export const actions: Actions = {
                         list: {
                             select: {
                                 id: true,
-                                ownerId: true
+                                ownerId: true,
+                                managers: {
+                                    select: {
+                                        userId: true
+                                    }
+                                }
                             }
                         }
                     }
@@ -110,6 +122,10 @@ export const actions: Actions = {
                 id: parseInt(params.itemId)
             }
         });
+
+        if (!userCanEditOnSomeList(item, user.id)) {
+            return fail(403, $t("errors.user-is-not-allowed-to-edit-this-item"));
+        }
 
         let newImageFile: string | undefined | null;
         if (image && isValidImage(image)) {
@@ -130,69 +146,10 @@ export const actions: Actions = {
                 .then((itemPrice) => (itemPriceId = itemPrice.id));
         }
 
-        const desiredLists = await client.list.findMany({
-            select: {
-                id: true,
-                ownerId: true,
-                groupId: true,
-                managers: {
-                    select: {
-                        userId: true
-                    }
-                }
-            },
-            where: {
-                id: {
-                    in: lists
-                }
-            }
-        });
-
-        const desiredListIds = new Set(desiredLists.map(({ id }) => id));
-
-        const nextDisplayOrderByList = await getNextDisplayOrderForLists([...desiredListIds], mostWanted);
-
-        const listItemsToDelete = item.lists
-            // only the list owner or the person who added the item can remove it from the list
-            .filter(
-                (listItem) =>
-                    !desiredListIds.has(listItem.list.id) &&
-                    (listItem.addedById === user.id || listItem.list.ownerId === user.id)
-            )
-            .map(({ id }) => id);
-
-        const listItemsToCreate = await Promise.all(
-            desiredLists
-                // only create list items which are not already existing
-                .filter((l) => item.lists.find(({ list }) => list.id === l.id) === undefined)
-                .map(async (l) => {
-                    const config = await getConfig(l.groupId);
-                    return {
-                        listId: l.id,
-                        addedById: user.id,
-                        approved: determineApprovalStatus(config, l, user),
-                        displayOrder: nextDisplayOrderByList[l.id] || 0
-                    };
-                })
-        );
-
-        let listItemsToUpdate: Prisma.ListItemUpdateWithWhereUniqueWithoutItemInput[] | undefined = undefined;
-        // If item is newly most wanted, then update existing lists
-        if (!item.mostWanted && mostWanted) {
-            listItemsToUpdate = desiredLists
-                // existing lists only
-                .filter((l) => item.lists.find(({ list }) => list.id === l.id) !== undefined)
-                .map((list) => ({
-                    data: {
-                        displayOrder: -1
-                    },
-                    where: {
-                        listId_itemId: {
-                            itemId: parseInt(params.itemId),
-                            listId: list.id
-                        }
-                    }
-                }));
+        const listsToUpdate: Prisma.ListItemUpdateManyWithoutItemNestedInput | undefined | null =
+            await determineListsForUpdate(user, item, lists, mostWanted);
+        if (listsToUpdate === null) {
+            return fail(400, { errors: { lists: [$t("errors.an-item-must-be-added-to-at-least-one-list")] } });
         }
 
         const updatedItem = await client.item.update({
@@ -207,15 +164,7 @@ export const actions: Actions = {
                 itemPriceId,
                 quantity,
                 mostWanted,
-                lists: {
-                    create: listItemsToCreate,
-                    update: listItemsToUpdate,
-                    deleteMany: {
-                        id: {
-                            in: listItemsToDelete
-                        }
-                    }
-                }
+                lists: listsToUpdate
             },
             include: getItemInclusions()
         });
@@ -250,4 +199,106 @@ const determineApprovalStatus = (config: Config, list: PartialList, user: LocalU
     }
 
     return list.managers.some(({ userId }) => userId === user.id);
+};
+
+interface ItemForListDetermination {
+    id: number;
+    createdById: string;
+    mostWanted: boolean;
+    lists: {
+        id: string;
+        addedById: string;
+        list: {
+            id: string;
+            ownerId: string;
+        };
+    }[];
+}
+const determineListsForUpdate = async (
+    user: LocalUser,
+    item: ItemForListDetermination,
+    lists: string[] | undefined,
+    mostWanted: boolean
+) => {
+    // User who did not create the item cannot update the lists
+    if (item.createdById !== user.id) {
+        return undefined;
+    }
+    if (lists === undefined) {
+        return null;
+    }
+
+    const desiredLists = await client.list.findMany({
+        select: {
+            id: true,
+            ownerId: true,
+            groupId: true,
+            managers: {
+                select: {
+                    userId: true
+                }
+            }
+        },
+        where: {
+            id: {
+                in: lists
+            }
+        }
+    });
+
+    const desiredListIds = new Set(desiredLists.map(({ id }) => id));
+
+    const nextDisplayOrderByList = await getNextDisplayOrderForLists([...desiredListIds], mostWanted);
+
+    const listItemsToDelete = item.lists
+        // only the list owner or the person who added the item can remove it from the list
+        .filter(
+            (listItem) =>
+                !desiredListIds.has(listItem.list.id) &&
+                (listItem.addedById === user.id || listItem.list.ownerId === user.id)
+        )
+        .map(({ id }) => id);
+
+    const listItemsToCreate = await Promise.all(
+        desiredLists
+            // only create list items which are not already existing
+            .filter((l) => item.lists.find(({ list }) => list.id === l.id) === undefined)
+            .map(async (l) => {
+                const config = await getConfig(l.groupId);
+                return {
+                    listId: l.id,
+                    addedById: user.id,
+                    approved: determineApprovalStatus(config, l, user),
+                    displayOrder: nextDisplayOrderByList[l.id] || 0
+                };
+            })
+    );
+
+    let listItemsToUpdate: Prisma.ListItemUpdateWithWhereUniqueWithoutItemInput[] | undefined = undefined;
+    // If item is newly most wanted, then update existing lists
+    if (!item.mostWanted && mostWanted) {
+        listItemsToUpdate = desiredLists
+            // existing lists only
+            .filter((l) => item.lists.find(({ list }) => list.id === l.id) !== undefined)
+            .map((list) => ({
+                data: {
+                    displayOrder: -1
+                },
+                where: {
+                    listId_itemId: {
+                        itemId: item.id,
+                        listId: list.id
+                    }
+                }
+            }));
+    }
+    return {
+        create: listItemsToCreate,
+        update: listItemsToUpdate,
+        deleteMany: {
+            id: {
+                in: listItemsToDelete
+            }
+        }
+    } satisfies Prisma.ListItemUpdateManyWithoutItemNestedInput;
 };

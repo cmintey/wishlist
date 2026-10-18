@@ -421,11 +421,12 @@
 {/if}
 
 <!-- Add Item button -->
-{#if data.loggedInUser && (data.list.owner.isMe || data.suggestionsEnabled)}
+{#if data.loggedInUser && (data.list.owner.isMe || data.list.isManager || data.suggestionsEnabled)}
     <button
-        class="preset-tonal btn btn-icon btn-icon-sm md:btn-icon-base inset-ring-surface-200-800 fixed right-4 z-30 h-16 w-16 p-0! inset-ring md:right-10 md:bottom-10 md:h-20 md:w-20 print:hidden"
-        class:bottom-24={$isInstalled}
-        class:bottom-4={!$isInstalled}
+        class={[
+            "preset-tonal btn btn-icon btn-icon-sm md:btn-icon-base inset-ring-surface-200-800 fixed right-4 z-30 size-16 p-0! inset-ring md:right-10 md:bottom-10 md:size-20 print:hidden",
+            $isInstalled ? "bottom-24" : "bottom-4"
+        ]}
         aria-label="add item"
         onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >

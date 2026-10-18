@@ -39,7 +39,7 @@
     const t = getFormatter();
 
     let userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
-    let isClaimOnList = $derived(userClaim?.listId === item.listId);
+    let isClaimOnList = $derived(userClaim?.listId === item.list.id);
 
     $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || false));
 

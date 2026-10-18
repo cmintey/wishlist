@@ -26,8 +26,18 @@ interface PubliclyClaimed extends BaseClaim {
 
 export type ClaimDTO = Claimed | PubliclyClaimed;
 
+interface MinimalManager {
+    userId: string;
+}
+
+interface List {
+    id: string;
+    ownerId: string;
+    managers: MinimalManager[];
+}
+
 interface ListItem {
-    listId: string;
+    list: List;
     addedBy: MinimalUser;
     approved: boolean;
     displayOrder: number | null;

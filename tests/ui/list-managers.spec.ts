@@ -234,6 +234,147 @@ test("manager can only remove item from list not delete from all lists", async (
     });
 });
 
+test("manager can edit item added by owner", async ({ userFactory }) => {
+    const { groupOwner: listOwner, groupUser: listManager } = await userFactory.createMultiUserPages();
+    await addManager(listOwner.page, listManager.user.name);
+
+    const itemName = randomString();
+    await test.step("owner creates item on list", async () => {
+        const createItemPage = await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.getListAt(0))
+            .then((l) => l.click())
+            .then((list) => list.createItem());
+        await createItemPage.getForm().then((form) => form.fillName(itemName));
+        await createItemPage.create();
+    });
+
+    await test.step("manager can edit item", async () => {
+        const editItemPage = await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.edit());
+
+        await editItemPage.getForm().then((f) => f.fillPrice(20));
+        await editItemPage.save();
+    });
+
+    await test.step("list owner sees edit", async () => {
+        await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertPrice("$20.00"));
+    });
+});
+
+test("owner can edit item added by manager", async ({ userFactory }) => {
+    const { groupOwner: listOwner, groupUser: listManager } = await userFactory.createMultiUserPages();
+    await addManager(listOwner.page, listManager.user.name);
+
+    const itemName = randomString();
+    await test.step("manager creates item list", async () => {
+        const createItemPage = await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((l) => l.click())
+            .then((list) => list.createItem());
+        await createItemPage.getForm().then((form) => form.fillName(itemName));
+        await createItemPage.create();
+    });
+
+    await test.step("owner can edit item", async () => {
+        const editItemPage = await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.edit());
+
+        await editItemPage.getForm().then((f) => f.fillPrice(20));
+        await editItemPage.save();
+    });
+
+    await test.step("list owner sees edit", async () => {
+        await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertPrice("$20.00"));
+    });
+
+    await test.step("manager sees edit", async () => {
+        await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertPrice("$20.00"));
+    });
+});
+
+test("user can add item from their own list to a list they manage", async ({ userFactory }) => {
+    const { groupOwner: listOwner, groupUser: listManager } = await userFactory.createMultiUserPages();
+    await addManager(listOwner.page, listManager.user.name);
+
+    const itemName = randomString();
+    await test.step("manager creates item on own list with managed list selected", async () => {
+        const createItemPage = await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListAt(0))
+            .then((l) => l.click())
+            .then((list) => list.createItem());
+        await createItemPage
+            .getForm()
+            .then((form) => form.fillName(itemName))
+            .then((form) => form.selectList(listOwner.user.name));
+        await createItemPage.create();
+    });
+
+    await test.step("manager sees item on the managed list", async () => {
+        await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertName(itemName));
+    });
+
+    await test.step("owner can see and edit item", async () => {
+        const editItemPage = await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.edit());
+
+        await editItemPage.getForm().then((f) => f.fillPrice(20));
+        await editItemPage.save();
+    });
+
+    await test.step("list owner sees edit", async () => {
+        await new ListsPage(listOwner.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertPrice("$20.00"));
+    });
+
+    await test.step("manager sees edit", async () => {
+        await new ListsPage(listManager.page)
+            .goto()
+            .then((lists) => lists.getListByName(listOwner.user.name))
+            .then((lc) => lc.click())
+            .then((list) => list.getItemAt(0))
+            .then((ic) => ic.assertPrice("$20.00"));
+    });
+});
+
 async function addManager(ownerPage: Page, managerName: string) {
     await test.step("add manager", async () => {
         const manageListPage = await new ListsPage(ownerPage)

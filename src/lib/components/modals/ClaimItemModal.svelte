@@ -109,7 +109,7 @@
     }
 
     async function handleUserClaim(userId: string) {
-        const listItemAPI = new ListItemAPI(item.listId, item.id);
+        const listItemAPI = new ListItemAPI(item.list.id, item.id);
         const resp = await listItemAPI.claim(userId, quantity);
 
         if (resp.ok) {
@@ -130,7 +130,7 @@
         }
         const { id: publicUserId } = await userResp.json();
 
-        const listItemAPI = new ListItemAPI(item.listId, item.id);
+        const listItemAPI = new ListItemAPI(item.list.id, item.id);
         const resp = await listItemAPI.claimPublic(publicUserId, quantity);
 
         if (resp.ok) {

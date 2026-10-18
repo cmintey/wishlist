@@ -3,6 +3,8 @@ import type {
     Item,
     ListItem as PrismaListItem,
     ItemClaim as PrismaItemClaim,
+    List as PrismaList,
+    ListManager as PrismaListManager,
     ItemPrice,
     User,
     SystemUser,
@@ -20,7 +22,14 @@ interface ItemClaim extends Pick<PrismaItemClaim, "id" | "purchased" | "quantity
     publicClaimedBy: Pick<SystemUser, "id" | "name"> | null;
 }
 
-interface ListItem extends Pick<PrismaListItem, "listId" | "approved" | "displayOrder"> {
+type ListManager = Pick<PrismaListManager, "userId">;
+
+interface List extends Pick<PrismaList, "id" | "ownerId"> {
+    managers: ListManager[];
+}
+
+interface ListItem extends Pick<PrismaListItem, "approved" | "displayOrder"> {
+    list: List;
     addedBy: MinimalUser;
 }
 
@@ -38,7 +47,7 @@ export interface FullItem extends Item {
 
 export const toItemOnListDTO = (item: FullItem, listId: string) => {
     const { lists, claims, _count, ...restOfItem } = item;
-    const list = lists.find((l) => l.listId === listId);
+    const list = lists.find((l) => l.list.id === listId);
     if (!list) {
         throw new Error(`Couldn't find related list with id=${listId} on item with id=${item.id}`);
     }

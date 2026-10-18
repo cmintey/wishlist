@@ -4,7 +4,17 @@ export const getItemInclusions = (listId?: string) => {
     return {
         lists: {
             select: {
-                listId: true,
+                list: {
+                    select: {
+                        id: true,
+                        ownerId: true,
+                        managers: {
+                            select: {
+                                userId: true
+                            }
+                        }
+                    }
+                },
                 approved: true,
                 displayOrder: true,
                 addedBy: {

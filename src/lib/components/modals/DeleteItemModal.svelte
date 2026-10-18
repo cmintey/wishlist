@@ -21,7 +21,7 @@
 
     const t = getFormatter();
     const itemAPI = $derived(new ItemAPI(item.id));
-    const listItemAPI = $derived(new ListItemAPI(item.listId, item.id));
+    const listItemAPI = $derived(new ListItemAPI(item.list.id, item.id));
 
     let description = $derived(
         $t(
