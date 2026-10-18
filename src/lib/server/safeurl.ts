@@ -13,7 +13,11 @@ interface RangeList<T> {
     [rangeName: string]: [T, number] | [T, number][];
 }
 
-export async function getSafeUrl(url: string | URL): Promise<URL | null> {
+export async function getSafeUrl(url: string | URL | null): Promise<URL | null> {
+    if (!url) {
+        return null;
+    }
+
     let parsedUrl;
     try {
         parsedUrl = new URL(url);
