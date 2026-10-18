@@ -2,16 +2,15 @@ import { dev } from "$app/environment";
 import { env } from "$env/dynamic/private";
 import pino from "pino";
 
-const transport = dev
-    ? {
-          target: "pino-pretty",
-          options: {
-              colorize: true
-          }
-      }
-    : undefined;
+async function resolveStream() {
+    if (dev) {
+        return await import("pino-pretty").then((m) => m.build({ colorize: true }));
+    }
+}
 
-export const logger = pino({
+const stream = await resolveStream();
+
+const options: pino.LoggerOptions<never, boolean> = {
     level: env.LOG_LEVEL ?? "info",
     formatters: {
         level(label) {
@@ -19,8 +18,9 @@ export const logger = pino({
         }
     },
     base: undefined,
-    timestamp: pino.stdTimeFunctions.isoTime,
-    transport
-});
+    timestamp: pino.stdTimeFunctions.isoTime
+};
+
+export const logger = pino(options, stream);
 
 export const oidcLogger = logger.child({}, { msgPrefix: "[OIDC] " });
