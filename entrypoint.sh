@@ -10,4 +10,4 @@ pnpm prisma migrate deploy && \
 pnpm prisma db seed && \
 pnpm db:patch
 
-exec pnpm start
+exec node build
