@@ -91,8 +91,6 @@
     {#if !item.approved}
         {@render approvalButton(true)}
         {@render approvalButton(false)}
-        <!-- TODO: need to be able to edit items added to my own list by a manager. These items are not "for me", but they are on my list -->
-        <!-- TODO: Need to be able to edit items on a list that I manage -->
     {:else if userCanEdit(item, user?.id)}
         <button
             class="preset-tonal-primary inset-ring-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base inset-ring"
