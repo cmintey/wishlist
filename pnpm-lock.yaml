@@ -166,9 +166,9 @@ importers:
 
   .:
     dependencies:
-      '@metascraper/helpers':
-        specifier: ^5.49.1
-        version: 5.58.4(@noble/hashes@2.4.0)(debug@4.4.3)
+      '@cmintey/metascraper-ecommerce':
+        specifier: ^1.0.0
+        version: 1.1.0(@noble/hashes@2.4.0)(debug@4.4.3)(metascraper@5.58.4(@noble/hashes@2.4.0)(debug@4.4.3))
       '@noble/hashes':
         specifier: ^2.0.0
         version: 2.4.0
@@ -963,6 +963,11 @@ packages:
 
   '@cacheable/utils@2.5.0':
     resolution: {integrity: sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==}
+
+  '@cmintey/metascraper-ecommerce@1.1.0':
+    resolution: {integrity: sha512-iUtdvsejC34kwkiIUmCkS1j+kvrAa1ekRlJak2xxrPfFmiGpsm5afnav8E/tF8+X5M5U/48gbRQahpD7cW+UyA==}
+    peerDependencies:
+      metascraper: ^5.58.5
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -6507,6 +6512,15 @@ snapshots:
     dependencies:
       hashery: 1.5.1
       keyv: 5.6.0
+
+  '@cmintey/metascraper-ecommerce@1.1.0(@noble/hashes@2.4.0)(debug@4.4.3)(metascraper@5.58.4(@noble/hashes@2.4.0)(debug@4.4.3))':
+    dependencies:
+      '@metascraper/helpers': 5.58.4(@noble/hashes@2.4.0)(debug@4.4.3)
+      metascraper: 5.58.4(@noble/hashes@2.4.0)(debug@4.4.3)
+    transitivePeerDependencies:
+      - '@noble/hashes'
+      - canvas
+      - debug
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
