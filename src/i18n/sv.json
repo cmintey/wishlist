@@ -274,7 +274,8 @@
         "this-list-is-not-part-of-your-active-group": "Den här listan ingår inte i din aktiva grupp",
         "invalid-asset-path": "Ogiltig sökväg till tillgång",
         "self-claims-not-available": "Det går inte att tillåta att användare gör anspråk på objekt när dessa anspråk inte syns för ägarna i deras egna listor",
-        "this-list-does-not-allow-self-claimed-items": "Denna lista tillåter inte anspråk på egna artiklar."
+        "this-list-does-not-allow-self-claimed-items": "Denna lista tillåter inte anspråk på egna artiklar.",
+        "user-is-not-allowed-to-edit-this-item": "Användaren har inte behörighet att redigera den här artikeln"
     },
     "general": {
         "enable": "Aktivera",
@@ -497,7 +498,8 @@
         "list-hide-owner-description": "Döljer ägaren på listkortet.",
         "list-not-for-me": "Den här listan är till någon annan",
         "list-not-for-me-description": "Om du hanterar den här listan åt någon annan gör den här inställningen att listägaren kan se anspråk och enskilda anspråksposter på listan.",
-        "public-list-option-description": "Gör det möjligt för andra att se listan och göra anspråk på artiklar från den."
+        "public-list-option-description": "Gör det möjligt för andra att se listan och göra anspråk på artiklar från den.",
+        "cannot-update-lists-of-item": "Det går inte att uppdatera listor av en artikel som du inte har skapat. Du kan dock fortfarande ta bort det från en lista som du äger eller hanterar genom att använda knappen ”ta bort” i listan."
     },
     "unable-to-load-icons": "Det gick inte att ladda ikoner."
 }

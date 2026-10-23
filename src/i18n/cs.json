@@ -141,7 +141,8 @@
         "clear-sessions": "Odhlásit uživatele ze všech zařízení",
         "clear-sessions-confirmation": "Opravdu odhásit ze všech zařízení? Uživatl se pak musí přihlásit znovu.",
         "show-name-publicly": "Zobrazit jméno veřejně",
-        "show-name-publicly-tooltip": "Zobrazí všem jméno toho, kdo si předmět rezervoval."
+        "show-name-publicly-tooltip": "Zobrazí všem jméno toho, kdo si předmět rezervoval.",
+        "oidc-url-description": "URL vašeho oAuth providera a nebo URL na konkrétní realm/aplikaci nebo discovery URL."
     },
     "app": {
         "home": "Domů",
@@ -271,7 +272,10 @@
         "display-order-invalid": "Řazení musí být mezi {min} a {max}",
         "no-claim-on-behalf-of": "Není možné rezervovat dárek jako jiný uživatel",
         "this-list-is-not-part-of-your-active-group": "Seznam není součástí vaší aktivní skupiny",
-        "invalid-asset-path": "Nevalidní cesta"
+        "invalid-asset-path": "Nevalidní cesta",
+        "this-list-does-not-allow-self-claimed-items": "Seznam nedovoluje rezervace na sebe.",
+        "user-is-not-allowed-to-edit-this-item": "Uživatel nemá oprávnění k editaci",
+        "self-claims-not-available": "Nemůřete povolit self rezervace, pokud předměty k rezervaci nejsou viditelné pro vlastníka seznamu"
     },
     "general": {
         "add-a-description": "Přidat popis",
@@ -488,6 +492,14 @@
         "claim-item": "Rezervovat položku",
         "edit-claim": "Editovat rezervaci",
         "update-claim-for-name": "Aktualizovat rezervaci pro {name}",
-        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} byla rezervována # položka.} other {{name} bylo rezervováno # položek.}}"
+        "claimed-info-text-for-name": "{claimedQuantity, plural, one {{name} byla rezervována # položka.} other {{name} bylo rezervováno # položek.}}",
+        "list-allow-self-claims": "Povolit uživateli si rezervovat předměty",
+        "list-allow-self-claims-description": "Povolit vlastníkovi seznamu si rezervovat předmety.",
+        "list-allow-self-claims-description-helper-text": "Nelze povolit nastavení, pokud nejsou rezervace viditelné vlastníkům seznamu (nastavení skupiny).",
+        "list-hide-owner-description": "Skryje vlastníka na seznamu.",
+        "list-not-for-me": "Tento seznam je pro někoho jiného",
+        "list-not-for-me-description": "Pokud spravujete seznam za někoho, toto nastavení dovolí vlastníkovi seznamu zobrazit rezervace a předměty k rezervaci ze seznamu.",
+        "public-list-option-description": "Nastaví seznam jako věřejný a kdokoli z něj může rezervovat.",
+        "cannot-update-lists-of-item": "Nemůžete editovat popis předmětu, který jste nevytvořili. Můžete ho ale smazat ze seznamu, který spravujete tlačítkem delete."
     }
 }
