@@ -15,7 +15,7 @@ export class Modal {
 
     constructor(page: Page, props?: Props) {
         this.page = page;
-        this.modal = page.getByRole("dialog");
+        this.modal = page.getByRole("dialog").and(page.locator("[aria-modal='true']"));
         this.modalHeader = this.modal.getByRole("heading", { name: props?.modalName });
         this.cancelButton = this.modal.getByRole("button", { name: props?.cancelButtonText ?? "Cancel" });
         this.submitButton = this.modal.getByRole("button", { name: props?.submitButtonText ?? "Submit" });
