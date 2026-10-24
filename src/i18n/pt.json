@@ -94,7 +94,8 @@
         "enable-default-list-creation": "Abilitar criação de lista padrão",
         "claims-name-tooltip": "Mostrar nome do utilizador ao qual pertence a lista.",
         "claims-require-email": "Email necessário",
-        "default-group-tooltip": "Novos utilizadores iram ser adicionados a este grupo, se eles não lhes foi enviado um token de grupo especifico."
+        "default-group-tooltip": "Novos utilizadores iram ser adicionados a este grupo, se eles não lhes foi enviado um token de grupo especifico.",
+        "disable-password-login-tooltip": "Disabilitar login com senha. Apenas autenticação por Header e OAuth será permitida."
     },
     "auth": {
         "sign-out-of-all-devices": "Terminar a sessão em todos os dispositivos?",
