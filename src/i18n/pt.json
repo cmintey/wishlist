@@ -22,7 +22,8 @@
         "default-item-image": "imagem padrão do item",
         "remove-manager-name": "Remover {name}",
         "unpurchase": "Marca o item como não comprado",
-        "user-menu": "Menu utilizador"
+        "user-menu": "Menu utilizador",
+        "clear-name-field": "limpar nome do campo"
     },
     "admin": {
         "account": "Conta",
@@ -90,7 +91,10 @@
         "credentials": "Credencias",
         "disable-email-verification": "Disibilitar verificação de email",
         "disable-password-login": "Disabilitar login por password",
-        "enable-default-list-creation": "Abilitar criação de lista padrão"
+        "enable-default-list-creation": "Abilitar criação de lista padrão",
+        "claims-name-tooltip": "Mostrar nome do utilizador ao qual pertence a lista.",
+        "claims-require-email": "Email necessário",
+        "default-group-tooltip": "Novos utilizadores iram ser adicionados a este grupo, se eles não lhes foi enviado um token de grupo especifico."
     },
     "auth": {
         "sign-out-of-all-devices": "Terminar a sessão em todos os dispositivos?",
