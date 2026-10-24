@@ -10,6 +10,8 @@ allowBuilds:
     svelte-preprocess: true
 autoInstallPeers: false
 engineStrict: true
+minimumReleaseAgeExclude:
+    - "@cmintey/metascraper-ecommerce"
 strictPeerDependencies: false
 supportedArchitectures:
     cpu:
