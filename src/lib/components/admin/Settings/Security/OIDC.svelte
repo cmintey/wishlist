@@ -7,17 +7,31 @@
 
     interface Props {
         config: Pick<Config, "oidc">;
+        envManagedKeys?: string[];
     }
 
-    const { config }: Props = $props();
+    const { config, envManagedKeys = [] }: Props = $props();
     const t = getFormatter();
+
+    const locked = (key: keyof OIDCConfig) => envManagedKeys.includes(`oidc.${key}`);
+    const anyLocked = $derived(envManagedKeys.some((key) => key.startsWith("oidc.")));
 
     let enabled = $derived(config.oidc.enable);
 </script>
 
 <SettingsGroup title={$t("admin.oidc")}>
+    {#if anyLocked}
+        <span class="text-sm">{$t("admin.oidc-env-managed")}</span>
+    {/if}
     <label class="checkbox-label">
-        <input id="enableOIDC" name="enableOIDC" class="checkbox" type="checkbox" bind:checked={enabled} />
+        <input
+            id="enableOIDC"
+            name="enableOIDC"
+            class="checkbox"
+            disabled={locked("enable")}
+            type="checkbox"
+            bind:checked={enabled}
+        />
         <span>{$t("general.enable")}</span>
     </label>
     {#if enabled}
@@ -37,6 +51,7 @@
                     name="oidcDiscoveryUrl"
                     class="input"
                     autocomplete="off"
+                    disabled={locked("discoveryUrl")}
                     required
                     type="url"
                     value={config.oidc.discoveryUrl}
@@ -50,6 +65,7 @@
                     name="oidcProviderName"
                     class="input"
                     autocomplete="off"
+                    disabled={locked("providerName")}
                     placeholder={$t("general.oauth")}
                     type="text"
                     value={config.oidc.providerName}
@@ -62,6 +78,7 @@
                     name="oidcClientId"
                     class="input"
                     autocomplete="off"
+                    disabled={locked("clientId")}
                     required
                     type="text"
                     value={config.oidc.clientId}
@@ -71,6 +88,7 @@
                 id="oidcClientSecret"
                 name="oidcClientSecret"
                 autocomplete="off"
+                disabled={locked("clientSecret")}
                 label={$t("admin.oidc-client-secret")}
                 required
                 value={config.oidc.clientSecret}
@@ -84,6 +102,7 @@
                         name="oidcNameClaim"
                         class="input"
                         autocomplete="off"
+                        disabled={locked("nameClaim")}
                         placeholder="name"
                         type="text"
                         value={config.oidc.nameClaim}
@@ -102,6 +121,7 @@
                         name="oidcUsernameClaim"
                         class="input"
                         autocomplete="off"
+                        disabled={locked("usernameClaim")}
                         placeholder="preferred_username"
                         type="text"
                         value={config.oidc.usernameClaim}
@@ -112,6 +132,43 @@
                 {/snippet}
             </Setting>
 
+            <Setting>
+                <label class="label" for="oidcGroupsClaim">
+                    <span>{$t("admin.oidc-groups-claim")}</span>
+                    <input
+                        id="oidcGroupsClaim"
+                        name="oidcGroupsClaim"
+                        class="input"
+                        autocomplete="off"
+                        disabled={locked("groupsClaim")}
+                        placeholder="groups"
+                        type="text"
+                        value={config.oidc.groupsClaim}
+                    />
+                </label>
+                {#snippet description()}
+                    {$t("admin.oidc-groups-claim-description")}
+                {/snippet}
+            </Setting>
+
+            <Setting>
+                <label class="label" for="oidcAdminGroup">
+                    <span>{$t("admin.oidc-admin-group")}</span>
+                    <input
+                        id="oidcAdminGroup"
+                        name="oidcAdminGroup"
+                        class="input"
+                        autocomplete="off"
+                        disabled={locked("adminGroup")}
+                        type="text"
+                        value={config.oidc.adminGroup}
+                    />
+                </label>
+                {#snippet description()}
+                    {$t("admin.oidc-admin-group-description")}
+                {/snippet}
+            </Setting>
+
             <Setting class="col-span-full">
                 <label class="checkbox-label">
                     <input
@@ -119,6 +176,7 @@
                         name="oidcAutoRedirect"
                         class="checkbox"
                         checked={config.oidc.autoRedirect}
+                        disabled={locked("autoRedirect")}
                         type="checkbox"
                     />
                     <Tooltip>
@@ -142,6 +200,7 @@
                         name="oidcAutoRegister"
                         class="checkbox"
                         checked={config.oidc.autoRegister}
+                        disabled={locked("autoRegister")}
                         type="checkbox"
                     />
                     <span>{$t("admin.oidc-auto-register")}</span>
@@ -158,6 +217,7 @@
                         name="oidcEnableSync"
                         class="checkbox"
                         checked={config.oidc.enableSync}
+                        disabled={locked("enableSync")}
                         type="checkbox"
                     />
                     <span>{$t("admin.enable-sync")}</span>
@@ -174,6 +234,7 @@
                         name="oidcDisableEmailVerification"
                         class="checkbox"
                         checked={config.oidc.disableEmailVerification}
+                        disabled={locked("disableEmailVerification")}
                         type="checkbox"
                     />
                     <span>{$t("admin.disable-email-verification")}</span>

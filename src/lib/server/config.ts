@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { client } from "./prisma";
 
 const GLOBAL = "global";
@@ -36,8 +37,34 @@ enum ConfigKey {
     OIDC_ENABLE_SYNC = "oidc.enableSync",
     OIDC_DISABLE_EMAIL_VERIFICATION = "oidc.disableEmailVerification",
     OIDC_NAME_CLAIM = "oidc.nameClaim",
-    OIDC_USERNAME_CLAIM = "oidc.usernameClaim"
+    OIDC_USERNAME_CLAIM = "oidc.usernameClaim",
+    OIDC_GROUPS_CLAIM = "oidc.groupsClaim",
+    OIDC_ADMIN_GROUP = "oidc.adminGroup"
 }
+
+const ENV_CONFIG_KEYS: ConfigKey[] = [
+    ConfigKey.SIGNUP_ENABLE,
+    ConfigKey.SECURITY_DISABLE_PASSWORD_LOGIN,
+    ConfigKey.OIDC_ENABLE,
+    ConfigKey.OIDC_DISCOVERY_URL,
+    ConfigKey.OIDC_CLIENT_ID,
+    ConfigKey.OIDC_CLIENT_SECRET,
+    ConfigKey.OIDC_PROVIDER_NAME,
+    ConfigKey.OIDC_AUTO_REDIRECT,
+    ConfigKey.OIDC_AUTO_REGISTER,
+    ConfigKey.OIDC_ENABLE_SYNC,
+    ConfigKey.OIDC_DISABLE_EMAIL_VERIFICATION,
+    ConfigKey.OIDC_NAME_CLAIM,
+    ConfigKey.OIDC_USERNAME_CLAIM,
+    ConfigKey.OIDC_GROUPS_CLAIM,
+    ConfigKey.OIDC_ADMIN_GROUP
+];
+
+export const toEnvName = (key: string) =>
+    key
+        .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+        .replace(/\./g, "_")
+        .toUpperCase();
 
 type Transformer<T> = (val: string | null, shouldMask?: boolean) => T;
 
@@ -83,7 +110,9 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "oidc.enableSync": booleanTransformer,
     "oidc.disableEmailVerification": booleanTransformer,
     "oidc.nameClaim": stringTransformer,
-    "oidc.usernameClaim": stringTransformer
+    "oidc.usernameClaim": stringTransformer,
+    "oidc.groupsClaim": stringTransformer,
+    "oidc.adminGroup": stringTransformer
 };
 
 const getDefaultConfig = (): Config => ({
@@ -172,6 +201,19 @@ function flatten(
     return result;
 }
 
+const getEnvConfigMap = (): Record<string, string> => {
+    const configMap: Record<string, string> = {};
+    for (const key of ENV_CONFIG_KEYS) {
+        const value = env[toEnvName(key)];
+        if (value !== undefined && value !== "") {
+            configMap[key] = value;
+        }
+    }
+    return configMap;
+};
+
+export const getEnvManagedKeys = (): string[] => Object.keys(getEnvConfigMap());
+
 export const getConfig = async (groupId?: string, includeSensitive = false): Promise<Config> => {
     const configItems = await client.systemConfig.findMany({
         where: {
@@ -188,7 +230,8 @@ export const getConfig = async (groupId?: string, includeSensitive = false): Pro
     if (groupId) groupConfigMap = await getGroupConfig(groupId);
     configMap = {
         ...configMap,
-        ...groupConfigMap
+        ...groupConfigMap,
+        ...getEnvConfigMap()
     };
 
     return buildConfig(configMap, includeSensitive);
@@ -211,26 +254,29 @@ const getGroupConfig = async (groupId: string): Promise<Record<string, string | 
 
 export const writeConfig = async (config: Partial<Config>, groupId = GLOBAL) => {
     const configMap: Record<string, string | null | undefined> = flatten(config);
+    const envManagedKeys = getEnvManagedKeys();
 
     await client.$transaction(
-        Object.entries(configMap).map(([key, value]) =>
-            client.systemConfig.upsert({
-                where: {
-                    key_groupId: {
+        Object.entries(configMap)
+            .filter(([key]) => !envManagedKeys.includes(key))
+            .map(([key, value]) =>
+                client.systemConfig.upsert({
+                    where: {
+                        key_groupId: {
+                            key,
+                            groupId
+                        }
+                    },
+                    create: {
                         key,
-                        groupId
+                        groupId,
+                        value
+                    },
+                    update: {
+                        value
                     }
-                },
-                create: {
-                    key,
-                    groupId,
-                    value
-                },
-                update: {
-                    value
-                }
-            })
-        )
+                })
+            )
     );
 };
 
