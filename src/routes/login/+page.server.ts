@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url, fetc
     }
 
     const userCount = await client.user.count();
-    if (userCount === 0) {
+    if (userCount === 0 && !config.security.disablePasswordLogin) {
         redirect(302, "/setup-wizard");
     }
 
