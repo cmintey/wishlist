@@ -1,7 +1,7 @@
-FROM node:24.22.1-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205 AS base
+FROM node:26.12.1-slim@sha256:36793bcbb160a6a16cede1e62b93f84e26b78a972a8a4c0b879c1c12f22761ec AS base
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
     COREPACK_HOME=/usr/bin/corepack
-RUN corepack enable pnpm
+RUN npm install --global corepack@0.36.0 && corepack enable pnpm
 
 WORKDIR /usr/src/app
 
@@ -12,13 +12,16 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 openssl git \
     && rm -rf /var/lib/apt/lists/*
 
-# Build flags for compatibility on older systems
-ENV RUSTFLAGS="-C target-cpu=x86-64 -C target-feature=-sse4.1,-sse4.2,-avx,-avx2" \
-    CFLAGS="-march=x86-64 -mtune=generic" \
-    CXXFLAGS="-march=x86-64 -mtune=generic"
+# Build flags for compatibility on older x86 systems
+ARG TARGETARCH
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+        export RUSTFLAGS="-C target-cpu=x86-64 -C target-feature=-sse4.1,-sse4.2,-avx,-avx2" \
+            CFLAGS="-march=x86-64 -mtune=generic" \
+            CXXFLAGS="-march=x86-64 -mtune=generic"; \
+    fi \
+    && pnpm install --frozen-lockfile
 COPY prisma/ ./prisma/
 RUN pnpm prisma generate
 COPY src/ ./src
