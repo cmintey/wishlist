@@ -11,11 +11,15 @@ export const load: PageServerLoad = async ({ params }) => {
         return redirect(302, resolve("/setup-wizard/step/1"));
     }
 
+    const [config, groups] = await Promise.all([getConfig(), client.group.findMany()]);
+
+    if (userCount === 0 && config.security.disablePasswordLogin) {
+        return redirect(302, resolve("/login"));
+    }
+
     if (userCount > 0 && step === 1) {
         return redirect(302, resolve("/setup-wizard/step/2"));
     }
-
-    const [config, groups] = await Promise.all([getConfig(), client.group.findMany()]);
 
     return { config, groups };
 };
