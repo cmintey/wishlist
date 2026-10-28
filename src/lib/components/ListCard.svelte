@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { List, User } from "$lib/generated/prisma/client";
+    import type { List, User } from "#lib/generated/prisma/client.js";
     import { Progress } from "@skeletonlabs/skeleton-svelte";
     import Avatar from "./Avatar.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface ListWithCounts extends Partial<Pick<List, "id" | "name" | "icon" | "iconColor" | "hideOwner">> {
         owner: Pick<User, "name" | "username" | "picture">;

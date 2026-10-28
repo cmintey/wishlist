@@ -1,9 +1,9 @@
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { client } from "$lib/server/prisma";
+import { client } from "#lib/server/prisma.js";
 import { requireAccessToGroup } from "./auth";
-import { getFormatter } from "$lib/server/i18n";
-import { deleteLists } from "$lib/server/list";
+import { getFormatter } from "#lib/server/i18n.js";
+import { deleteLists } from "#lib/server/list.js";
 
 export const DELETE: RequestHandler = async ({ params }) => {
     const $t = await getFormatter();

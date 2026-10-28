@@ -2,7 +2,7 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { resolve } from "$app/paths";
 
     const t = getFormatter();
@@ -34,7 +34,7 @@
             <button
                 style:visibility={introStep < 2 ? "hidden" : ""}
                 class="preset-filled-primary-500 btn"
-                onclick={() => goto(resolve("/setup-wizard/step/1"))}
+                onclick={() => goto(resolve("setup-wizard/step/1"))}
                 type="button"
                 in:fade={{ delay: 1200 }}
             >

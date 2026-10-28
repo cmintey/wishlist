@@ -1,7 +1,7 @@
 import { lookup } from "dns/promises";
 import { logger as baseLogger } from "./logger";
-import ipaddr, { IPv4, IPv6 } from "ipaddr.js";
-import { env } from "$env/dynamic/private";
+import ipaddr from "ipaddr.js";
+import { ALLOWED_IPS } from "$app/env/private";
 
 const logger = baseLogger.child({}, { msgPrefix: "[SAFEURL] " });
 
@@ -73,20 +73,17 @@ export async function getSafeUrl(url: string | URL): Promise<URL | null> {
     return null;
 }
 
-function parseAllowableIps(): RangeList<IPv4 | IPv6> {
-    const allowedIpStrings = env.ALLOWED_IPS?.split(",") || [];
-    const allowedIps = allowedIpStrings
-        .map((ip) => {
-            if (ipaddr.isValid(ip)) {
-                return [ipaddr.parse(ip), 32] as [IPv4 | IPv6, number];
-            } else if (ipaddr.isValidCIDR(ip)) {
-                return ipaddr.parseCIDR(ip);
-            } else {
-                logger.warn({ ip }, "IP address specified in ALLOWED_IPS is not a valid IPv4 or IPv6 address or CIDR");
-                return null;
-            }
-        })
-        .filter((ip) => ip !== null);
+function parseAllowableIps(): RangeList<ipaddr.IPv4 | ipaddr.IPv6> {
+    const allowedIps = ALLOWED_IPS.map((ip) => {
+        if (ipaddr.isValid(ip)) {
+            return [ipaddr.parse(ip), 32] as [ipaddr.IPv4 | ipaddr.IPv6, number];
+        } else if (ipaddr.isValidCIDR(ip)) {
+            return ipaddr.parseCIDR(ip);
+        } else {
+            logger.warn({ ip }, "IP address specified in ALLOWED_IPS is not a valid IPv4 or IPv6 address or CIDR");
+            return null;
+        }
+    }).filter((ip) => ip !== null);
     return {
         allowList: allowedIps
     };

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Tooltip from "$lib/components/Tooltip.svelte";
-    import { getFormatter } from "$lib/i18n";
-    import { strengthOptions } from "$lib/zxcvbn";
+    import Tooltip from "#lib/components/Tooltip.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import { strengthOptions } from "#lib/zxcvbn.js";
     import Setting from "../Setting.svelte";
     import SettingsGroup from "../SettingsGroup.svelte";
 

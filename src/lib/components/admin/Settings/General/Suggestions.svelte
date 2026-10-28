@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Tooltip from "$lib/components/Tooltip.svelte";
+    import Tooltip from "#lib/components/Tooltip.svelte";
     import SettingsGroup from "../SettingsGroup.svelte";
     import Setting from "../Setting.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         config: Pick<Config, "suggestions">;

@@ -1,10 +1,10 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import PasswordInput from "#lib/components/PasswordInput.svelte";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
 
     const { data, form }: PageProps = $props();
 

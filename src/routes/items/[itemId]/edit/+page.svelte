@@ -1,9 +1,9 @@
 <script lang="ts">
     import { applyAction, enhance } from "$app/forms";
-    import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
+    import ItemForm from "#lib/components/wishlists/ItemForm.svelte";
     import type { PageProps } from "./$types";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
     import { goto } from "$app/navigation";
 
     const { data }: PageProps = $props();
@@ -26,7 +26,7 @@
                     return;
                 } else if (result.type === "redirect") {
                     toaster.info({ description: $t("wishes.updated-success") });
-                    return goto(result.location, { invalidateAll: true, replaceState: true });
+                    return goto(result.location, { refreshAll: true, replace: true });
                 }
                 await applyAction(result);
             };

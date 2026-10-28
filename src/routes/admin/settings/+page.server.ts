@@ -1,12 +1,12 @@
-import { Role } from "$lib/schema";
-import { client } from "$lib/server/prisma";
-import { getConfig, writeConfig } from "$lib/server/config";
+import { Role } from "#lib/schema.js";
+import { client } from "#lib/server/prisma.js";
+import { getConfig, writeConfig } from "#lib/server/config.js";
 import { fail } from "@sveltejs/kit";
 import type { Action, Actions, PageServerLoad } from "./$types";
-import { sendTest } from "$lib/server/email";
-import { settingSchema } from "$lib/server/validations";
+import { sendTest } from "#lib/server/email.js";
+import { settingSchema } from "#lib/server/validations.js";
 import { z } from "zod";
-import { requireRole } from "$lib/server/auth";
+import { requireRole } from "#lib/server/auth.js";
 
 export const load: PageServerLoad = async () => {
     await requireRole(Role.ADMIN);

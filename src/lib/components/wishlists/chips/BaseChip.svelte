@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import Popup from "$lib/components/Popup.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import Popup from "#lib/components/Popup.svelte";
+    import { getFormatter } from "#lib/i18n.js";
     import { Popover } from "@skeletonlabs/skeleton-svelte";
     import type { ClassValue } from "svelte/elements";
 
@@ -33,7 +33,9 @@
 
     let filter = $derived(page.url.searchParams.get(searchParam));
     let direction = $derived(directionParam ? page.url.searchParams.get(searchParam) : null);
+    // svelte-ignore state_referenced_locally
     let selectedOptions: Option[] = $state([defaultOption]);
+    // svelte-ignore state_referenced_locally
     let pendingSelectedOptions: Option[] = $state([defaultOption]);
     $effect(() => {
         if (multiselect && filter) {
@@ -89,7 +91,7 @@
             selectedOptions = pendingSelectedOptions;
         }
 
-        const newUrl = new URL(page.url);
+        const newUrl = new URL(page.url.href);
 
         if (isOnlyDefaultOptionSelected(selectedOptions)) {
             newUrl.searchParams.delete(searchParam);
@@ -103,7 +105,7 @@
         }
 
         goto(newUrl, {
-            replaceState: true
+            replace: true
         });
     };
     const handleCancel = () => {

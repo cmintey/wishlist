@@ -1,10 +1,10 @@
-import { Role } from "$lib/schema";
-import { client } from "$lib/server/prisma";
+import { Role } from "#lib/schema.js";
+import { client } from "#lib/server/prisma.js";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { requireAccessToGroup } from "../../auth";
-import { create, deleteLists } from "$lib/server/list";
-import { getConfig } from "$lib/server/config";
+import { create, deleteLists } from "#lib/server/list.js";
+import { getConfig } from "#lib/server/config.js";
 
 export const GET: RequestHandler = async ({ params }) => {
     const { authenticated, user } = await requireAccessToGroup(params.groupId);

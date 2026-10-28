@@ -1,10 +1,10 @@
 import type { PageServerLoad } from "./$types";
-import { client } from "$lib/server/prisma";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { toItemOnListDTO } from "$lib/dtos/item-mapper";
-import { requireLogin } from "$lib/server/auth";
-import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
-import { getConfig } from "$lib/server/config";
+import { client } from "#lib/server/prisma.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { toItemOnListDTO } from "#lib/dtos/item-mapper.js";
+import { requireLogin } from "#lib/server/auth.js";
+import { decodeMultiValueFilter } from "#lib/server/sort-filter-util.js";
+import { getConfig } from "#lib/server/config.js";
 
 export const load: PageServerLoad = async ({ url, cookies }) => {
     const user = requireLogin();

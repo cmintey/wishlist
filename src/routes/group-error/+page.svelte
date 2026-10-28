@@ -1,6 +1,6 @@
 <script lang="ts">
-    import noGroup from "$lib/assets/no_group.svg";
-    import { getFormatter } from "$lib/i18n";
+    import noGroup from "#lib/assets/no_group.svg";
+    import { getFormatter } from "#lib/i18n.js";
 
     const t = getFormatter();
 </script>

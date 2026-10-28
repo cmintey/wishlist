@@ -1,15 +1,15 @@
-import { getFormatter } from "$lib/server/i18n";
+import { getFormatter } from "#lib/server/i18n.js";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { client } from "$lib/server/prisma";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { getItemInclusions } from "$lib/server/items";
-import { listItemClaimUpdateSchema } from "$lib/server/validations";
-import { ItemEvent } from "$lib/events";
-import { requireLoginOrError } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
+import { client } from "#lib/server/prisma.js";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { getItemInclusions } from "#lib/server/items.js";
+import { listItemClaimUpdateSchema } from "#lib/server/validations.js";
+import { ItemEvent } from "#lib/events.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
-import type { ItemClaimModel, ItemModel } from "$lib/generated/prisma/models";
+import type { ItemClaimModel, ItemModel } from "#lib/generated/prisma/models.js";
 
 // Unclaim an item on a list
 export const DELETE: RequestHandler = async ({ params }) => {

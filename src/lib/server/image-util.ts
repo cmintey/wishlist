@@ -1,15 +1,13 @@
 import sharp from "sharp";
 import { unlink } from "fs/promises";
-import { logger } from "$lib/server/logger";
+import { logger } from "#lib/server/logger.js";
 import { Readable } from "stream";
 import { finished } from "stream/promises";
 import { ReadableStream } from "stream/web";
 import { createWriteStream } from "node:fs";
 import { error } from "@sveltejs/kit";
-import { env } from "$env/dynamic/private";
+import { MAX_IMAGE_SIZE } from "$app/env/private";
 import { getSafeUrl } from "./safeurl";
-
-const DEFAULT_MAX_IMAGE_SIZE = 5000000;
 
 const slugify = (str: string) => {
     return str
@@ -49,10 +47,7 @@ const fetchImage = async (imageUrl: string, redirectNum: number = 0) => {
 };
 
 export const isValidImage = (image: File) => {
-    const maxImageSize = env.MAX_IMAGE_SIZE
-        ? Number.parseInt(env.MAX_IMAGE_SIZE) || DEFAULT_MAX_IMAGE_SIZE
-        : DEFAULT_MAX_IMAGE_SIZE;
-    return image.size > 0 && image.size <= maxImageSize;
+    return image.size > 0 && image.size <= MAX_IMAGE_SIZE;
 };
 
 export const createImage = async (filename: string, image: File | string | null | undefined) => {

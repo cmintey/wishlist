@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import ItemImage from "./ItemCard/components/ItemImage.svelte";
     import ItemAttributes from "./ItemCard/components/ItemAttributes.svelte";
     import { Dialog, Portal, type DialogRootProps } from "@skeletonlabs/skeleton-svelte";
@@ -22,7 +22,7 @@
     });
 
     async function closeDialog() {
-        await goto(page.url.pathname, { replaceState: true, noScroll: true });
+        await goto(page.url.pathname, { replace: true, reset: false });
         open = false;
     }
 
@@ -31,7 +31,7 @@
             open = true;
         } else {
             open = false;
-            await goto(page.url.pathname, { replaceState: true, noScroll: true });
+            await goto(page.url.pathname, { replace: true, reset: false });
         }
     };
 

@@ -1,4 +1,4 @@
-import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
 
 export const claimFilter = (filter: string | null, userId: string | null) => {
     if (filter === "unclaimed") {

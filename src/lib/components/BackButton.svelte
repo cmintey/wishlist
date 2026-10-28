@@ -1,7 +1,7 @@
 <script lang="ts">
     import { afterNavigate } from "$app/navigation";
     import { page } from "$app/state";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { Snippet } from "svelte";
 
     interface Props {
@@ -23,7 +23,9 @@
 
     let disabled = $state(true);
 
-    afterNavigate(() => {
+    afterNavigate(({ shallow, type }) => {
+        if (shallow && type === "goto") return;
+
         disabled = disabledUrls.find((url) => page.url.pathname.match(url)) !== undefined;
     });
 </script>

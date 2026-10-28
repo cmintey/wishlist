@@ -5,21 +5,21 @@ import { gotScraping } from "got-scraping";
 import metascraper, { type Metadata } from "metascraper";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
-import shopping from "$lib/server/shopping";
-import { parseAcceptLanguageHeader } from "$lib/i18n";
-import { getFormatter } from "$lib/server/i18n";
-import { requireLoginOrError } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
-import { env } from "$env/dynamic/private";
-import { getSafeUrl } from "$lib/server/safeurl";
+import shopping from "#lib/server/shopping/index.js";
+import { parseAcceptLanguageHeader } from "#lib/i18n.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
+import { http_proxy, HTTP_PROXY, https_proxy, HTTPS_PROXY } from "$app/env/private";
+import { getSafeUrl } from "#lib/server/safeurl.js";
 
 const scraper = metascraper([shopping(), metascraperTitle(), metascraperImage()]);
 
 const determineProxy = (url: URL) => {
     if (url.protocol === "http:") {
-        return env.http_proxy || env.HTTP_PROXY;
+        return http_proxy || HTTP_PROXY;
     } else if (url.protocol === "https:") {
-        return env.https_proxy || env.HTTPS_PROXY;
+        return https_proxy || HTTPS_PROXY;
     }
 };
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
-    import { LocalStorage } from "$lib/local-storage.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import { LocalStorage } from "#lib/local-storage.svelte.js";
     import { SegmentedControl, type SegmentedControlRootProps } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
     import type { ClassValue } from "svelte/elements";

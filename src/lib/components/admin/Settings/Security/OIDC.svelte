@@ -1,7 +1,7 @@
 <script lang="ts">
-    import PasswordInput from "$lib/components/PasswordInput.svelte";
-    import Tooltip from "$lib/components/Tooltip.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import PasswordInput from "#lib/components/PasswordInput.svelte";
+    import Tooltip from "#lib/components/Tooltip.svelte";
+    import { getFormatter } from "#lib/i18n.js";
     import Setting from "../Setting.svelte";
     import SettingsGroup from "../SettingsGroup.svelte";
 

@@ -1,8 +1,8 @@
-import { env } from "$env/dynamic/public";
-import type { ItemPrice } from "$lib/generated/prisma/client";
+import { PUBLIC_DEFAULT_CURRENCY } from "$app/env/public";
+import type { ItemPrice } from "#lib/generated/prisma/client.js";
 import { getNumberFormatter } from "svelte-i18n";
 import { defaultLang, getLocale } from "./i18n";
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 
 type ItemWithPrice = {
     price?: string | null;
@@ -21,24 +21,11 @@ const getMaximumFractionDigits = (currency: string, locale?: string) => {
     return getFormatter(currency, locale).resolvedOptions().maximumFractionDigits || 2;
 };
 
-export const getDefaultCurrency = () => {
-    if (!env.PUBLIC_DEFAULT_CURRENCY) {
-        return "USD";
-    }
-    try {
-        new Intl.NumberFormat("en-US", { currency: env.PUBLIC_DEFAULT_CURRENCY });
-    } catch {
-        console.warn("Invalid currency: ", env.PUBLIC_DEFAULT_CURRENCY);
-        return "USD";
-    }
-    return env.PUBLIC_DEFAULT_CURRENCY;
-};
-
 export const getFormatter = (currency: string | null, locale?: string) => {
     return getNumberFormatter({
         locale: locale ?? (browser ? getLocale() : defaultLang.code),
         style: "currency",
-        currency: currency || getDefaultCurrency(),
+        currency: currency || PUBLIC_DEFAULT_CURRENCY,
         currencyDisplay: "narrowSymbol"
     });
 };

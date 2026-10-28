@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { getFormatter, supportedLangs } from "$lib/i18n";
+    import { getFormatter, supportedLangs } from "#lib/i18n.js";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
 

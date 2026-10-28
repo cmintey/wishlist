@@ -1,10 +1,10 @@
-import { getFormatter } from "$lib/server/i18n";
-import { Role } from "$lib/schema";
-import { requireLoginOrError } from "$lib/server/auth";
-import { getConfig } from "$lib/server/config";
-import { sendSignupLink } from "$lib/server/email";
-import { client } from "$lib/server/prisma";
-import generateToken, { hashToken } from "$lib/server/token";
+import { getFormatter } from "#lib/server/i18n.js";
+import { Role } from "#lib/schema.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { getConfig } from "#lib/server/config.js";
+import { sendSignupLink } from "#lib/server/email.js";
+import { client } from "#lib/server/prisma.js";
+import generateToken, { hashToken } from "#lib/server/token.js";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { z } from "zod";
 

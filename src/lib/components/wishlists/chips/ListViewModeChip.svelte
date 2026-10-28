@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
-    import { setListViewPreference } from "$lib/stores/list-view-preference.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import { setListViewPreference } from "#lib/stores/list-view-preference.svelte.js";
     import { SegmentedControl } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {

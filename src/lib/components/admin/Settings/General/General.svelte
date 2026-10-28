@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Group } from "$lib/generated/prisma/client";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import WishlistMode from "./WishlistMode.svelte";
     import Suggestions from "./Suggestions.svelte";
     import Claims from "./Claims.svelte";
     import Lists from "./Lists.svelte";
     import Groups from "./Groups.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         config: Pick<

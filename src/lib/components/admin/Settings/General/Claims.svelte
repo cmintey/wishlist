@@ -1,7 +1,7 @@
 <script lang="ts">
     import SettingsGroup from "../SettingsGroup.svelte";
     import Setting from "../Setting.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         config: Pick<Config, "claims">;

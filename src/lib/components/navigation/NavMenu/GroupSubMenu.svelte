@@ -1,11 +1,11 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { resolve } from "$app/paths";
-    import { GroupsAPI } from "$lib/api/groups";
-    import { UserAPI } from "$lib/api/users";
-    import GroupSelectModal from "$lib/components/modals/GroupSelectModal.svelte";
-    import PromptModal from "$lib/components/modals/PromptModal.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { GroupsAPI } from "#lib/api/groups.js";
+    import { UserAPI } from "#lib/api/users.js";
+    import GroupSelectModal from "#lib/components/modals/GroupSelectModal.svelte";
+    import PromptModal from "#lib/components/modals/PromptModal.svelte";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         user: LocalUser | undefined;
@@ -29,14 +29,14 @@
             if (user && userAPI) {
                 if (!activeGroup) await userAPI.setActiveGroup(group.id);
             }
-            goto(resolve("/lists"), { invalidateAll: true });
+            goto(resolve("lists"), { refreshAll: true });
         }
     };
 
     const changeGroup = async (groupId: string | undefined) => {
         if (groupId) {
             await userAPI?.setActiveGroup(groupId);
-            goto(resolve("/lists"), { invalidateAll: true });
+            goto(resolve("lists"), { refreshAll: true });
         }
     };
 </script>

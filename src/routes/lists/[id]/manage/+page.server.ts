@@ -1,14 +1,14 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { client } from "$lib/server/prisma";
-import { getFormatter } from "$lib/server/i18n";
-import { getListPropertiesSchema } from "$lib/server/validations";
-import { trimToNull } from "$lib/util";
-import { adjustListManagers, deleteList } from "$lib/server/list";
-import { getConfig } from "$lib/server/config";
-import { requireLogin } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { client } from "#lib/server/prisma.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { getListPropertiesSchema } from "#lib/server/validations.js";
+import { trimToNull } from "#lib/util.js";
+import { adjustListManagers, deleteList } from "#lib/server/list.js";
+import { getConfig } from "#lib/server/config.js";
+import { requireLogin } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
 import { resolve } from "$app/paths";
 
@@ -179,7 +179,7 @@ export const actions: Actions = {
             return fail(500, { action: "delete", success: false, message: $t("errors.unable-to-delete-list") });
         }
 
-        return redirect(302, resolve("/lists"));
+        return redirect(302, resolve("lists"));
     }
 };
 

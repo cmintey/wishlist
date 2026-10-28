@@ -1,5 +1,5 @@
-import { LocalStorage } from "$lib/local-storage.svelte";
-import type { Item } from "$lib/generated/prisma/client";
+import { LocalStorage } from "#lib/local-storage.svelte.js";
+import type { Item } from "#lib/generated/prisma/client.js";
 
 export const viewedItems: LocalStorage<Record<string, string>> = new LocalStorage("viewedItems", {});
 

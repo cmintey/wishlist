@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { invalidateAll } from "$app/navigation";
+    import { refreshAll } from "$app/navigation";
 
-    import { ItemAPI } from "$lib/api/items";
-    import { ListItemAPI } from "$lib/api/lists";
+    import { ItemAPI } from "#lib/api/items.js";
+    import { ListItemAPI } from "#lib/api/lists.js";
 
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
 
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
     import { toaster } from "../toaster";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
@@ -36,7 +36,7 @@
         const resp = await listItemAPI.delete();
 
         if (resp.ok) {
-            invalidateAll();
+            refreshAll();
 
             toaster.info({
                 description: $t("wishes.item-was-removed-from-list", { values: { name: itemNameShort } })
@@ -50,7 +50,7 @@
         const resp = await itemAPI.delete();
 
         if (resp.ok) {
-            invalidateAll();
+            refreshAll();
 
             toaster.info({ description: $t("wishes.item-was-deleted", { values: { name: itemNameShort } }) });
         } else {

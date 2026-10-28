@@ -10,7 +10,7 @@ declare global {
         interface Locals {
             user: LocalUser | null;
             isProxyUser: boolean;
-            session: import("$lib/generated/prisma/client").Session | null;
+            session: import("#lib/generated/prisma/client.js").Session | null;
             locale: string;
         }
     }

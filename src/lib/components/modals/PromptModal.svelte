@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { HTMLInputAttributes } from "svelte/elements";
     import ConfirmModal from "./ConfirmModal.svelte";
     import type { ConfirmModalProps } from "./ConfirmModal.svelte";

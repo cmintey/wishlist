@@ -1,6 +1,6 @@
-import { getLocale } from "$lib/server/i18n";
-import { getMinorUnits } from "$lib/price-formatter";
-import type { Prisma } from "$lib/generated/prisma/client";
+import { getLocale } from "#lib/server/i18n.js";
+import { getMinorUnits } from "#lib/price-formatter.js";
+import type { Prisma } from "#lib/generated/prisma/client.js";
 
 export const patchItem = (body: Record<string, unknown>) => {
     const data: Prisma.ItemUpdateInput & { id?: number } = {

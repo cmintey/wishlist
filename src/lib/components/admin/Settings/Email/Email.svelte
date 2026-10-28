@@ -1,8 +1,8 @@
 <script lang="ts">
     import SettingsGroup from "../SettingsGroup.svelte";
-    import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import PasswordInput from "#lib/components/PasswordInput.svelte";
     import SmtpAlert from "../../SMTPAlert.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import Setting from "../Setting.svelte";
 
     interface Props {

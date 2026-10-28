@@ -1,7 +1,7 @@
-import { Role } from "$lib/schema";
+import { Role } from "#lib/schema.js";
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { requireRole } from "$lib/server/auth";
+import { requireRole } from "#lib/server/auth.js";
 
 export const load: PageServerLoad = async () => {
     await requireRole(Role.ADMIN);

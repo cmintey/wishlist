@@ -48,11 +48,11 @@
 </script>
 
 <script lang="ts">
-    import type { User } from "$lib/generated/prisma/client";
+    import type { User } from "#lib/generated/prisma/client.js";
     import { goto } from "$app/navigation";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+    import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
     import type { ClassValue } from "svelte/elements";
-    import type { MessageFormatter } from "$lib/server/i18n";
+    import type { MessageFormatter } from "#lib/server/i18n.js";
     import GridItemCard from "./GridItemCard.svelte";
     import ListItemCard from "./ListItemCard.svelte";
     import type { Snippet } from "svelte";
@@ -81,7 +81,7 @@
     const id = $props.id();
 
     function launchDrawer() {
-        goto(`?item-id=${item.id}`, { replaceState: true, noScroll: true });
+        goto(`?item-id=${item.id}`, { replace: true, reset: false });
     }
 
     const ItemCard = $derived(isTileView ? GridItemCard : ListItemCard);

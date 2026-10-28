@@ -1,4 +1,4 @@
-import { getFormatter } from "$lib/server/i18n";
+import { getFormatter } from "#lib/server/i18n.js";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { readFileSync } from "fs";
 import path from "path";

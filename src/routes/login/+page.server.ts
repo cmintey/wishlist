@@ -1,15 +1,17 @@
 import { error, fail, redirect, type Cookies } from "@sveltejs/kit";
-import { env } from "$env/dynamic/private";
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
-import { getLoginSchema } from "$lib/server/validations";
-import { getConfig } from "$lib/server/config";
-import { Role } from "$lib/schema";
-import { client } from "$lib/server/prisma";
+
+import { HEADER_AUTH_ENABLED, HEADER_USERNAME, HEADER_EMAIL, HEADER_NAME } from "$app/env/private";
+
+import { createSession, generateSessionToken, setSessionTokenCookie } from "#lib/server/auth.js";
+import { getLoginSchema } from "#lib/server/validations.js";
+import { getConfig } from "#lib/server/config.js";
+import { Role } from "#lib/schema.js";
+import { client } from "#lib/server/prisma.js";
 import type { PageServerLoad, Actions } from "./$types";
-import { createUser } from "$lib/server/user";
-import { verifyPasswordHash } from "$lib/server/password";
-import { getOIDCConfig } from "$lib/server/openid";
-import { logger } from "$lib/server/logger";
+import { createUser } from "#lib/server/user.js";
+import { verifyPasswordHash } from "#lib/server/password.js";
+import { getOIDCConfig } from "#lib/server/openid.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
 
 export const load: PageServerLoad = async ({ locals, request, cookies, url, fetch }) => {
@@ -30,39 +32,25 @@ export const load: PageServerLoad = async ({ locals, request, cookies, url, fetc
     }
 
     /* Header authentication */
-    if ((env.HEADER_AUTH_ENABLED ?? "false") == "true" && !!env.HEADER_USERNAME) {
-        const username = request.headers.get(env.HEADER_USERNAME);
+    if (HEADER_AUTH_ENABLED && !!HEADER_USERNAME) {
+        const username = request.headers.get(HEADER_USERNAME);
         if (username) {
-            let user = await client.user.findUnique({
-                select: {
-                    id: true
-                },
-                where: {
-                    username: username
-                }
-            });
+            let user = await client.user.findUnique({ select: { id: true }, where: { username } });
 
             if (!user) {
-                if (!env.HEADER_EMAIL || !env.HEADER_NAME) {
+                if (!HEADER_EMAIL || !HEADER_NAME) {
                     logger.error("Missing required environment variables for header authentication");
-                    return fail(400, { username: username, password: "", incorrect: true });
+                    return fail(400, { username, password: "", incorrect: true });
                 }
-                const name = request.headers.get(env.HEADER_NAME);
-                const email = request.headers.get(env.HEADER_EMAIL);
+                const name = request.headers.get(HEADER_NAME);
+                const email = request.headers.get(HEADER_EMAIL);
                 if (!name || !email) {
                     logger.error("Missing required headers for header authentication");
-                    return fail(400, { username: username, password: "", incorrect: true });
+                    return fail(400, { username, password: "", incorrect: true });
                 }
                 const userCount = await client.user.count();
-                user = await createUser(
-                    {
-                        username: username,
-                        email: email,
-                        name: name
-                    },
-                    userCount > 0 ? Role.USER : Role.ADMIN,
-                    ""
-                );
+
+                user = await createUser({ username, email, name }, userCount > 0 ? Role.USER : Role.ADMIN, "");
 
                 if (config.defaultGroup) {
                     await client.userGroupMembership.create({

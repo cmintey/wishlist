@@ -1,10 +1,10 @@
 <script lang="ts">
-    import logo from "$lib/assets/logo.png";
+    import logo from "#lib/assets/logo.png";
     import { page } from "$app/state";
     import NavMenu from "./NavMenu/NavMenu.svelte";
-    import { isInstalled } from "$lib/stores/is-installed";
+    import { isInstalled } from "#lib/stores/is-installed.js";
     import BackButton from "../BackButton.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import NavigationDrawer from "./NavigationDrawer.svelte";
 
     interface Props {

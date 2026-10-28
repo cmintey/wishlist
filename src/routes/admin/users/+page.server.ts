@@ -1,8 +1,8 @@
-import { Role } from "$lib/schema";
-import { getConfig } from "$lib/server/config";
-import { client } from "$lib/server/prisma";
+import { Role } from "#lib/schema.js";
+import { getConfig } from "#lib/server/config.js";
+import { client } from "#lib/server/prisma.js";
 import type { PageServerLoad } from "./$types";
-import { requireRole } from "$lib/server/auth";
+import { requireRole } from "#lib/server/auth.js";
 
 export const load: PageServerLoad = async () => {
     const user = await requireRole(Role.ADMIN);

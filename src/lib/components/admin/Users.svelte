@@ -2,9 +2,10 @@
     import { goto } from "$app/navigation";
     import Search from "../Search.svelte";
     import InviteUser from "./InviteUser.svelte";
-    import type { Group } from "$lib/generated/prisma/client";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import { enhance } from "$app/forms";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
+    import { resolve } from "$app/paths";
 
     type User = {
         id: string;
@@ -31,7 +32,9 @@
     let usersFiltered: UserWithGroups[] = $derived(users);
 
     const selectionHandler = (user: User) => {
-        goto(user.username === currentUser.username ? "/account" : `/admin/users/${user.id}`);
+        const route =
+            user.username === currentUser.username ? resolve("account") : resolve("/admin/users/[id]", { id: user.id });
+        goto(route);
     };
 </script>
 

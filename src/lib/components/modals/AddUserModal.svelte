@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { UsersAPI } from "$lib/api/users";
-    import { getFormatter } from "$lib/i18n";
-    import type { User } from "$lib/generated/prisma/client";
+    import { UsersAPI } from "#lib/api/users.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import type { User } from "#lib/generated/prisma/client.js";
     import BaseModal, { type BaseModalProps as BaseProps } from "./BaseModal.svelte";
-    import { GroupAPI } from "$lib/api/groups";
-    import { invalidateAll } from "$app/navigation";
-    import { debounce } from "$lib/util";
+    import { GroupAPI } from "#lib/api/groups.js";
+    import { refreshAll } from "$app/navigation";
+    import { debounce } from "#lib/util.js";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
     import { Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
 
@@ -29,7 +29,7 @@
     async function onFormSubmit() {
         if (selectedUser) {
             await groupAPI.addMember(selectedUser);
-            await invalidateAll();
+            await refreshAll();
         }
         resetForm();
     }
