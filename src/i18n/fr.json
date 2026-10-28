@@ -192,7 +192,8 @@
         "show-name-publicly": "Afficher le nom publiquement",
         "show-name-publicly-tooltip": "Une fois activé, le nom fourni sur une demande publique est indiqué à tous ceux qui regardent la liste publique.",
         "oidc-claim-name-description": "Le champ à utiliser pour définir le nom d'utilisateur.",
-        "oidc-claim-username-description": "Le champ à utiliser pour définir le nom d'utilisateur."
+        "oidc-claim-username-description": "Le champ à utiliser pour définir le nom d'utilisateur.",
+        "clear-sessions-success": "Les sessions de cet utilisateur ont été supprimées. L'utilisateur devra s'authentifier à nouveau."
     },
     "auth": {
         "password": "Mot de passe",
