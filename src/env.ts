@@ -1,3 +1,4 @@
+import { building } from "$app/env";
 import { defineEnvVars } from "@sveltejs/kit/env";
 import type { LevelWithSilent } from "pino";
 import z from "zod";
@@ -22,10 +23,10 @@ export const variables = defineEnvVars({
             .pipe(z.enum(Intl.supportedValuesOf("currency")))
             .default("USD")
     },
-    ORIGIN: { schema: z.url() },
+    ORIGIN: { schema: building ? z.string().optional() : z.url() },
     MAX_IMAGE_SIZE: { schema: z.string().pipe(z.coerce.number()).default(5000000) },
     LOG_LEVEL: { schema: z.string().pipe(z.enum(LEVELS)).default("info") },
-    DATABASE_URL: { schema: z.url() },
+    DATABASE_URL: { schema: building ? z.string().optional() : z.url() },
     ALLOWED_IPS: {
         schema: z
             .string()
