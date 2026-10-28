@@ -142,7 +142,8 @@
         "clear-sessions-confirmation": "Är du säker på att du vill rensa den här användarens sessioner? Användaren kommer att loggas ut från alla enheter och måste logga in igen.",
         "show-name-publicly": "Visa namn publikt",
         "show-name-publicly-tooltip": "När det är aktiverat visas namnet som anges i ett offentligt anspråk för alla som tittar på den offentliga listan.",
-        "oidc-url-description": "URL:en till din OAuth-leverantör eller URL:en till den specifika domänen (realm) eller applikationen hos leverantören. Detta kallas ofta även för en discovery-URL."
+        "oidc-url-description": "URL:en till din OAuth-leverantör eller URL:en till den specifika domänen (realm) eller applikationen hos leverantören. Detta kallas ofta även för en discovery-URL.",
+        "clear-sessions-success": "Rensade den här användarens sessioner. Användaren kommer att behöva logga in på nytt."
     },
     "app": {
         "my-claims": "Mina reservationer",
