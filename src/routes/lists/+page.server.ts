@@ -1,10 +1,10 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { client } from "$lib/server/prisma";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { getConfig } from "$lib/server/config";
-import { decodeMultiValueFilter } from "$lib/server/sort-filter-util";
-import { requireLogin } from "$lib/server/auth";
+import { client } from "#lib/server/prisma.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { getConfig } from "#lib/server/config.js";
+import { decodeMultiValueFilter } from "#lib/server/sort-filter-util.js";
+import { requireLogin } from "#lib/server/auth.js";
 
 export const load = (async ({ url }) => {
     const user = requireLogin();

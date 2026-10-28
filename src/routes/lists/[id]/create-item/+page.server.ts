@@ -1,19 +1,19 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { client } from "$lib/server/prisma";
-import { getConfig } from "$lib/server/config";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { createImage, isValidImage } from "$lib/server/image-util";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { getMinorUnits } from "$lib/price-formatter";
-import { getFormatter, getLocale } from "$lib/server/i18n";
-import { getAvailableLists, getById, getNextDisplayOrderForLists } from "$lib/server/list";
-import { ItemEvent } from "$lib/events";
-import { getItemInclusions } from "$lib/server/items";
-import { requireLogin } from "$lib/server/auth";
-import { extractFormData, getItemCreateSchema } from "$lib/server/validations";
+import { client } from "#lib/server/prisma.js";
+import { getConfig } from "#lib/server/config.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { createImage, isValidImage } from "#lib/server/image-util.js";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { getMinorUnits } from "#lib/price-formatter.js";
+import { getFormatter, getLocale } from "#lib/server/i18n.js";
+import { getAvailableLists, getById, getNextDisplayOrderForLists } from "#lib/server/list.js";
+import { ItemEvent } from "#lib/events.js";
+import { getItemInclusions } from "#lib/server/items.js";
+import { requireLogin } from "#lib/server/auth.js";
+import { extractFormData, getItemCreateSchema } from "#lib/server/validations.js";
 import z from "zod";
-import type { List, Prisma } from "$lib/generated/prisma/client";
+import type { List, Prisma } from "#lib/generated/prisma/client.js";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();

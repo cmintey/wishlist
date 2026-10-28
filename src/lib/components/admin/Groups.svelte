@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { goto, invalidateAll } from "$app/navigation";
+    import { goto, refreshAll } from "$app/navigation";
     import Search from "../Search.svelte";
-    import { GroupsAPI } from "$lib/api/groups";
-    import { getFormatter } from "$lib/i18n";
+    import { GroupsAPI } from "#lib/api/groups.js";
+    import { getFormatter } from "#lib/i18n.js";
     import { toaster } from "../toaster";
     import PromptModal from "../modals/PromptModal.svelte";
+    import { resolve } from "$app/paths";
 
     type Group = {
         id: string;
@@ -24,7 +25,7 @@
     let groupsFiltered: Group[] = $derived(groups);
 
     const selectionHandler = (group: Group) => {
-        goto(`/admin/groups/${group.id}`);
+        goto(resolve("/admin/groups/[groupId]", { groupId: group.id }));
     };
 
     const createGroup = async (name: string | undefined) => {
@@ -42,7 +43,7 @@
                 description: $t("errors.create-group-unknown-error")
             });
         }
-        await invalidateAll();
+        await refreshAll();
     };
 </script>
 

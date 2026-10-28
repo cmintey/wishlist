@@ -1,11 +1,12 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import type { Group, Item, ItemPrice, List, User } from "$lib/generated/prisma/client";
-    import Backdrop from "$lib/components/Backdrop.svelte";
-    import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
+    import type { Group, Item, ItemPrice, List, User } from "#lib/generated/prisma/client.js";
+    import Backdrop from "#lib/components/Backdrop.svelte";
+    import { getPriceValue } from "#lib/price-formatter.js";
+    import { PUBLIC_DEFAULT_CURRENCY } from "$app/env/public";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { goto } from "$app/navigation";
     import MarkdownEditor from "../MarkdownEditor.svelte";
     import FileUpload from "../FileUpload.svelte";
@@ -44,8 +45,7 @@
     let fetching = $state(false);
     let urlFetched = $state(false);
     let price: number | null = $state(getPriceValue(productData));
-    const defaultCurrency = getDefaultCurrency();
-    let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
+    let userCurrency: string = $derived(productData.itemPrice?.currency || PUBLIC_DEFAULT_CURRENCY);
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
     let submitSrc = $state("submit");
@@ -125,7 +125,7 @@
                 if (newProductData.price) {
                     productData.itemPrice = {
                         id: "temp-id",
-                        currency: newProductData.currency || defaultCurrency,
+                        currency: newProductData.currency || PUBLIC_DEFAULT_CURRENCY,
                         value: newProductData.price
                     };
                     price = newProductData.price;
@@ -149,7 +149,7 @@
     onMount(() => {
         const callback = async (_event: PopStateEvent) => {
             if (page.url.searchParams.has("redirectTo")) {
-                await goto(page.url.searchParams.get("redirectTo")!, { invalidateAll: true });
+                await goto(page.url.searchParams.get("redirectTo")!, { refreshAll: true });
             }
         };
         addEventListener("popstate", callback, { once: true });
@@ -158,7 +158,7 @@
 
     const onCancel = () => {
         if (page.url.searchParams.has("redirectTo")) {
-            goto(page.url.searchParams.get("redirectTo")!, { replaceState: true });
+            goto(page.url.searchParams.get("redirectTo")!, { replace: true });
         } else {
             history.back();
         }

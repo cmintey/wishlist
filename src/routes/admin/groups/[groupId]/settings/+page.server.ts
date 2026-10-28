@@ -1,9 +1,9 @@
-import { getConfig, writeConfig } from "$lib/server/config";
-import { client } from "$lib/server/prisma";
+import { getConfig, writeConfig } from "#lib/server/config.js";
+import { client } from "#lib/server/prisma.js";
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
-import { settingSchema } from "$lib/server/validations";
-import { requireAdminOrManager } from "$lib/server/auth";
+import { settingSchema } from "#lib/server/validations.js";
+import { requireAdminOrManager } from "#lib/server/auth.js";
 import z from "zod";
 
 export const load = (async ({ params }) => {

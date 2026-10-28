@@ -1,13 +1,13 @@
-import { invalidateUserSessions } from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
-import { hashToken, isTokenTimeValid } from "$lib/server/token";
-import { getResetPasswordSchema } from "$lib/server/validations";
+import { invalidateUserSessions } from "#lib/server/auth.js";
+import { client } from "#lib/server/prisma.js";
+import { hashToken, isTokenTimeValid } from "#lib/server/token.js";
+import { getResetPasswordSchema } from "#lib/server/validations.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/server/i18n";
-import { hashPassword } from "$lib/server/password";
-import { logger } from "$lib/server/logger";
+import { getFormatter } from "#lib/server/i18n.js";
+import { hashPassword } from "#lib/server/password.js";
+import { logger } from "#lib/server/logger.js";
 
 export const load: PageServerLoad = async ({ url }) => {
     const $t = await getFormatter();

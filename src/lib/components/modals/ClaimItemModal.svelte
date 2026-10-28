@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { SystemUsersAPI } from "$lib/api/users";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { ListItemAPI } from "$lib/api/lists";
-    import { ClaimAPI } from "$lib/api/claims";
-    import { getFormatter } from "$lib/i18n";
+    import { SystemUsersAPI } from "#lib/api/users.js";
+    import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
+    import { ListItemAPI } from "#lib/api/lists.js";
+    import { ClaimAPI } from "#lib/api/claims.js";
+    import { getFormatter } from "#lib/i18n.js";
     import { toaster } from "../toaster";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";

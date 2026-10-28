@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { PageProps } from "./$types";
 
     const props: PageProps = $props();

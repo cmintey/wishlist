@@ -2,11 +2,11 @@
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { Email, General, Security, options } from "$lib/components/admin/Settings";
+    import { Email, General, Security, options } from "#lib/components/admin/Settings/index.js";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
 
     let { data }: PageProps = $props();
     const t = getFormatter();

@@ -1,4 +1,4 @@
-import type { ItemOnListDTO } from "$lib/dtos/item-dto";
+import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
 import type {
     Item,
     ListItem as PrismaListItem,
@@ -9,7 +9,7 @@ import type {
     User,
     SystemUser,
     UserGroupMembership
-} from "$lib/generated/prisma/client";
+} from "#lib/generated/prisma/client.js";
 
 type MinimalUser = Pick<User, "id" | "name">;
 

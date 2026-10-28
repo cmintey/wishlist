@@ -1,9 +1,9 @@
 <script lang="ts">
-    import TokenCopy from "$lib/components/TokenCopy.svelte";
-    import type { Group } from "$lib/generated/prisma/client";
+    import TokenCopy from "#lib/components/TokenCopy.svelte";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import { fade } from "svelte/transition";
-    import { InviteUsersAPI } from "$lib/api/users";
-    import { getFormatter } from "$lib/i18n";
+    import { InviteUsersAPI } from "#lib/api/users.js";
+    import { getFormatter } from "#lib/i18n.js";
     import { toaster } from "../toaster";
     import InviteUserModal from "../modals/InviteUserModal.svelte";
 

@@ -1,10 +1,10 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getConfig } from "$lib/server/config";
-import { getFormatter } from "$lib/server/i18n";
-import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
-import { getActiveMembership } from "$lib/server/group-membership";
-import type { UserGroupMembership } from "$lib/generated/prisma/client";
+import { getConfig } from "#lib/server/config.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { getById, getItems, type GetItemsOptions } from "#lib/server/list.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import type { UserGroupMembership } from "#lib/generated/prisma/client.js";
 
 export const load = (async ({ params, url, locals, depends, cookies }) => {
     const $t = await getFormatter();

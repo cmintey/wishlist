@@ -1,17 +1,17 @@
-import { dev } from "$app/environment";
+import { dev } from "$app/env";
 import { client } from "./prisma";
-import { env } from "$env/dynamic/private";
+import { ORIGIN } from "$app/env/private";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import type { Session, User } from "$lib/generated/prisma/client";
+import type { Session, User } from "#lib/generated/prisma/client.js";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { error, redirect, type Cookies } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
-import { getFormatter } from "$lib/server/i18n";
-import { Role } from "$lib/schema";
+import { getFormatter } from "#lib/server/i18n.js";
+import { Role } from "#lib/schema.js";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 30; // 30 days
 const REFRESH_TIME = 1000 * 60 * 60 * 24 * 15; // 15 days
-const origin = new URL(env.ORIGIN || "localhost:3280");
+const origin = new URL(ORIGIN || "localhost:3280");
 
 export const sessionCookieName = "wishlist_session";
 
@@ -108,7 +108,11 @@ export function deleteSessionTokenCookie(cookies: Cookies): void {
 }
 
 export type SessionValidationResult =
-    | { session: Session; user: Omit<User, "hashedPassword">; fresh: boolean }
+    | {
+          session: Session;
+          user: Omit<User, "hashedPassword">;
+          fresh: boolean;
+      }
     | { session: null; user: null; fresh: false };
 
 export function requireLogin() {
@@ -152,13 +156,8 @@ export async function requireAdminOrManager(groupId: string) {
     }
 
     const userGroupMembership = await client.userGroupMembership.findFirst({
-        where: {
-            userId: user.id,
-            groupId: groupId
-        },
-        select: {
-            roleId: true
-        }
+        where: { userId: user.id, groupId },
+        select: { roleId: true }
     });
 
     if (userGroupMembership && userGroupMembership.roleId === Role.GROUP_MANAGER) {

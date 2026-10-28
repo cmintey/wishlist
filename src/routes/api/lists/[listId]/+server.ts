@@ -1,12 +1,12 @@
-import { client } from "$lib/server/prisma";
-import { publicListCreateSchema } from "$lib/server/validations";
+import { client } from "#lib/server/prisma.js";
+import { publicListCreateSchema } from "#lib/server/validations.js";
 import { error } from "@sveltejs/kit";
-import { getConfig } from "$lib/server/config";
-import { getFormatter } from "$lib/server/i18n";
-import { getById, verifyUserCanManageList } from "$lib/server/list";
-import type { Prisma } from "$lib/generated/prisma/client";
+import { getConfig } from "#lib/server/config.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { getById, verifyUserCanManageList } from "#lib/server/list.js";
+import type { Prisma } from "#lib/generated/prisma/client.js";
 import type { RequestHandler } from "./$types";
-import { requireLoginOrError } from "$lib/server/auth";
+import { requireLoginOrError } from "#lib/server/auth.js";
 
 export const PATCH: RequestHandler = async ({ request, params }) => {
     const user = await requireLoginOrError();

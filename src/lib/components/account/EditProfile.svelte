@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { FileUpload } from "@skeletonlabs/skeleton-svelte";
     import Avatar from "../Avatar.svelte";
     import { toaster } from "../toaster";
@@ -37,7 +37,7 @@
                         return;
                     }
                     toaster.info({ description: "Profile photo uploaded" });
-                    update({ invalidateAll: true });
+                    update({ refreshAll: true });
                 };
             }}
         >
@@ -63,7 +63,7 @@
                 }
 
                 toaster.info({ description: "Profile info updated" });
-                update({ invalidateAll: true });
+                update({ refreshAll: true });
             };
         }}
     >

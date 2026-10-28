@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { MouseEventHandler } from "svelte/elements";
 
     interface Props {

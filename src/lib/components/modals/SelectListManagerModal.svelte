@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { UsersAPI } from "$lib/api/users";
-    import { getFormatter } from "$lib/i18n";
-    import type { User } from "$lib/generated/prisma/client";
+    import { UsersAPI } from "#lib/api/users.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import type { User } from "#lib/generated/prisma/client.js";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
     import { Dialog, Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
-    import { debounce } from "$lib/util";
+    import { debounce } from "#lib/util.js";
 
     interface Props {
         trigger: BaseModalProps["trigger"];

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { getFormatter } from "$lib/i18n";
-    import { isInstalled } from "$lib/stores/is-installed";
+    import { getFormatter } from "#lib/i18n.js";
+    import { isInstalled } from "#lib/stores/is-installed.js";
     import { Navigation } from "@skeletonlabs/skeleton-svelte";
 
     interface Props {

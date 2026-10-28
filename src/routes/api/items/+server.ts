@@ -1,12 +1,12 @@
-import { Role } from "$lib/schema";
-import { client } from "$lib/server/prisma";
+import { Role } from "#lib/schema.js";
+import { client } from "#lib/server/prisma.js";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { requireAccessToGroup } from "../groups/[groupId]/auth";
-import { tryDeleteImage } from "$lib/server/image-util";
-import { getFormatter } from "$lib/server/i18n";
-import { requireLoginOrError } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
+import { tryDeleteImage } from "#lib/server/image-util.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
 
 export const DELETE: RequestHandler = async ({ url }) => {
     const $t = await getFormatter();

@@ -1,6 +1,6 @@
 import { error, redirect } from "@sveltejs/kit";
 import { client } from "./prisma";
-import type { UserGroupMembership } from "$lib/generated/prisma/client";
+import type { UserGroupMembership } from "#lib/generated/prisma/client.js";
 import { getFormatter } from "./i18n";
 
 export const getActiveMembership = async (user: LocalUser) => {

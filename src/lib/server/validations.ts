@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { init, meterLabel } from "$lib/zxcvbn";
+import { init, meterLabel } from "#lib/zxcvbn.js";
 import { getConfig } from "./config";
 import { getFormatter } from "./i18n";
-import { getLocale } from "$lib/server/i18n";
+import { getLocale } from "#lib/server/i18n.js";
 
 export const loadLocale = async (locale_: string) => {
     try {

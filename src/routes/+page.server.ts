@@ -1,10 +1,10 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { requireLogin, requireLoginOrError } from "$lib/server/auth";
+import { requireLogin, requireLoginOrError } from "#lib/server/auth.js";
 import { z } from "zod";
-import { client } from "$lib/server/prisma";
-import { logger } from "$lib/server/logger";
-import { getFormatter } from "$lib/server/i18n";
+import { client } from "#lib/server/prisma.js";
+import { logger } from "#lib/server/logger.js";
+import { getFormatter } from "#lib/server/i18n.js";
 
 export const load = (async () => {
     requireLogin();

@@ -1,5 +1,5 @@
-import { toGroupInformation } from "$lib/dtos/group-mapper";
-import { client } from "$lib/server/prisma";
+import { toGroupInformation } from "#lib/dtos/group-mapper.js";
+import { client } from "#lib/server/prisma.js";
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({ locals }) => {

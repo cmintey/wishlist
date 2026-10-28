@@ -2,7 +2,7 @@
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
     import PasswordInput from "../PasswordInput.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { toaster } from "../toaster";
 
     const t = getFormatter();

@@ -1,14 +1,14 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { page } from "$app/state";
-    import PasswordInput from "$lib/components/PasswordInput.svelte";
+    import PasswordInput from "#lib/components/PasswordInput.svelte";
     import type { PageProps } from "./$types";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
-    import Alert from "$lib/components/Alert.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import Alert from "#lib/components/Alert.svelte";
+    import { getFormatter } from "#lib/i18n.js";
     import { resolve } from "$app/paths";
-    import { toaster } from "$lib/components/toaster";
+    import { toaster } from "#lib/components/toaster/index.js";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
@@ -24,12 +24,12 @@
             if (!resp.ok) {
                 oAuthError = await resp.json();
                 goto(
-                    resolve("/login") +
+                    resolve("login") +
                         "?" +
                         new URLSearchParams({ error: oAuthError?.message || $t("general.oops") }).toString()
                 );
             } else if (resp.redirected) {
-                goto(resp.url, { invalidateAll: true });
+                goto(resp.url, { refreshAll: true });
             }
         }
     });

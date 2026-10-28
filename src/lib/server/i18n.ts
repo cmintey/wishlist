@@ -1,5 +1,5 @@
 import { getRequestEvent } from "$app/server";
-import { defaultLang } from "$lib/i18n";
+import { defaultLang } from "#lib/i18n.js";
 import { t, waitLocale, format } from "svelte-i18n";
 import { get } from "svelte/store";
 

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { applyAction, enhance } from "$app/forms";
-    import CreateAccountForm from "$lib/components/CreateAccountForm.svelte";
+    import CreateAccountForm from "#lib/components/CreateAccountForm.svelte";
     import type { Props } from "./steps";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import StepButtons from "./StepButtons.svelte";
 
     const { onSuccess }: Props = $props();

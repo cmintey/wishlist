@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
+    import { defaultLang, getFormatter, getLocale } from "#lib/i18n.js";
     import { getDateFormatter } from "svelte-i18n";
 
     const t = getFormatter();

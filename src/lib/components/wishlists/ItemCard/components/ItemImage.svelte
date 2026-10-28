@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { ClassValue } from "svelte/elements";
-    import Image from "$lib/components/Image.svelte";
+    import Image from "#lib/components/Image.svelte";
     import { resolve } from "$app/paths";
-    import type { MessageFormatter } from "$lib/server/i18n";
+    import type { MessageFormatter } from "#lib/server/i18n.js";
     import type { InternalItemCardProps } from "../ItemCard.svelte";
     import type { Snippet } from "svelte";
 

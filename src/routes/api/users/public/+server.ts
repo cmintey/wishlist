@@ -1,9 +1,9 @@
-import { client } from "$lib/server/prisma";
+import { client } from "#lib/server/prisma.js";
 import { type RequestHandler } from "@sveltejs/kit";
-import { getConfig } from "$lib/server/config";
+import { getConfig } from "#lib/server/config.js";
 import { error } from "@sveltejs/kit";
-import { getFormatter } from "$lib/server/i18n";
-import { createPublicUserSchema } from "$lib/server/validations";
+import { getFormatter } from "#lib/server/i18n.js";
+import { createPublicUserSchema } from "#lib/server/validations.js";
 import { prettifyError } from "zod";
 
 export const POST: RequestHandler = async ({ request }) => {

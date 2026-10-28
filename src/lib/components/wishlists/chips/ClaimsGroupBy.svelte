@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { SegmentedControl } from "@skeletonlabs/skeleton-svelte";
     import type { ClassValue } from "svelte/elements";
 

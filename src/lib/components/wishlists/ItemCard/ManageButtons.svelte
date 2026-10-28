@@ -1,14 +1,14 @@
 <script lang="ts">
     import type { InternalItemCardProps } from "./ItemCard.svelte";
-    import { getFormatter } from "$lib/i18n";
-    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
-    import DeleteItemModal from "$lib/components/modals/DeleteItemModal.svelte";
-    import { ListItemAPI } from "$lib/api/lists";
-    import { toaster } from "$lib/components/toaster";
+    import { getFormatter } from "#lib/i18n.js";
+    import ConfirmModal from "#lib/components/modals/ConfirmModal.svelte";
+    import DeleteItemModal from "#lib/components/modals/DeleteItemModal.svelte";
+    import { ListItemAPI } from "#lib/api/lists.js";
+    import { toaster } from "#lib/components/toaster/index.js";
     import { resolve } from "$app/paths";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { userCanEdit } from "$lib/item-util";
+    import { userCanEdit } from "#lib/item-util.js";
 
     interface Props extends Pick<InternalItemCardProps, "item" | "user" | "userCanManage"> {
         onEdit?: VoidFunction;
@@ -38,7 +38,7 @@
     const handleEdit = () => {
         onEdit?.();
         goto(resolve("/items/[itemId]/edit", { itemId: item.id.toString() }) + `?redirectTo=${page.url.pathname}`, {
-            replaceState: true
+            replace: true
         });
     };
 </script>

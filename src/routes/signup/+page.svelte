@@ -2,8 +2,8 @@
     import { enhance } from "$app/forms";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import CreateAccountForm from "$lib/components/CreateAccountForm.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import CreateAccountForm from "#lib/components/CreateAccountForm.svelte";
+    import { getFormatter } from "#lib/i18n.js";
 
     const { data }: PageProps = $props();
     const t = getFormatter();

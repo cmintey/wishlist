@@ -1,14 +1,14 @@
-import { getFormatter } from "$lib/server/i18n";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { client } from "$lib/server/prisma";
+import { getFormatter } from "#lib/server/i18n.js";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { client } from "#lib/server/prisma.js";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
-import { listItemUpdateSchema } from "$lib/server/validations";
-import { getItemInclusions } from "$lib/server/items";
-import { ItemEvent } from "$lib/events";
-import { tryDeleteImage } from "$lib/server/image-util";
-import { requireLoginOrError } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
+import { listItemUpdateSchema } from "#lib/server/validations.js";
+import { getItemInclusions } from "#lib/server/items.js";
+import { ItemEvent } from "#lib/events.js";
+import { tryDeleteImage } from "#lib/server/image-util.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
 
 // Approve an item on a list

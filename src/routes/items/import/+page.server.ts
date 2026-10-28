@@ -1,9 +1,9 @@
-import { requireLogin, requireLoginOrError } from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
+import { requireLogin, requireLoginOrError } from "#lib/server/auth.js";
+import { client } from "#lib/server/prisma.js";
 import z from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail } from "@sveltejs/kit";
-import { setActiveMembership } from "$lib/server/group-membership";
+import { setActiveMembership } from "#lib/server/group-membership.js";
 import { redirect } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 

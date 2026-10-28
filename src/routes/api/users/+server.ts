@@ -1,11 +1,11 @@
-import { Role } from "$lib/schema";
-import { requireLoginOrError, requireRole } from "$lib/server/auth";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { getFormatter } from "$lib/server/i18n";
-import { logger } from "$lib/server/logger";
-import { client } from "$lib/server/prisma";
-import { createUser } from "$lib/server/user";
-import { getSignupSchema } from "$lib/server/validations";
+import { Role } from "#lib/schema.js";
+import { requireLoginOrError, requireRole } from "#lib/server/auth.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { logger } from "#lib/server/logger.js";
+import { client } from "#lib/server/prisma.js";
+import { createUser } from "#lib/server/user.js";
+import { getSignupSchema } from "#lib/server/validations.js";
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { treeifyError } from "zod";
 

@@ -1,12 +1,12 @@
 <script lang="ts">
     import { applyAction, enhance } from "$app/forms";
-    import ItemForm from "$lib/components/wishlists/ItemForm.svelte";
-    import type { Item } from "$lib/generated/prisma/client";
+    import ItemForm from "#lib/components/wishlists/ItemForm.svelte";
+    import type { Item } from "#lib/generated/prisma/client.js";
     import type { PageProps } from "./$types";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
     import { goto } from "$app/navigation";
-    import Alert from "$lib/components/Alert.svelte";
+    import Alert from "#lib/components/Alert.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -79,7 +79,7 @@
                     window.scrollTo({ top: 0 });
                     return;
                 }
-                return goto(result.location, { invalidateAll: true, replaceState: true });
+                return goto(result.location, { refreshAll: true, replace: true });
             }
             await applyAction(result);
         };

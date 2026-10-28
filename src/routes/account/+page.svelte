@@ -1,10 +1,10 @@
 <script lang="ts">
-    import ChangePassword from "$lib/components/account/ChangePassword.svelte";
-    import EditProfile from "$lib/components/account/EditProfile.svelte";
+    import ChangePassword from "#lib/components/account/ChangePassword.svelte";
+    import EditProfile from "#lib/components/account/EditProfile.svelte";
     import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import type { PageProps } from "./$types";
-    import LinkOAuth from "$lib/components/account/LinkOAuth.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import LinkOAuth from "#lib/components/account/LinkOAuth.svelte";
+    import { getFormatter } from "#lib/i18n.js";
 
     let { data }: PageProps = $props();
     const t = getFormatter();

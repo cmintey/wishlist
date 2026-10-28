@@ -1,4 +1,4 @@
-import type { listItemsUpdateSchema } from "$lib/server/validations";
+import type { listItemsUpdateSchema } from "#lib/server/validations.js";
 import { z } from "zod";
 
 export class ListAPI {
