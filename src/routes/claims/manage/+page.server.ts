@@ -14,11 +14,13 @@ const claimSelect = {
     itemId: true,
     item: {
         select: {
-            name: true
+            name: true,
+            imageUrl: true
         }
     },
     list: {
         select: {
+            id: true,
             name: true,
             public: true
         }
@@ -27,6 +29,18 @@ const claimSelect = {
         select: {
             name: true
         }
+    }
+};
+
+// Mirrors ItemImage.svelte: an absolute URL is used as-is, anything else is an
+// upload id served by /api/assets
+const toImageUrl = (imageUrl: string | null) => {
+    if (!imageUrl) return undefined;
+    try {
+        return new URL(imageUrl).href;
+    } catch {
+        if (imageUrl.startsWith("/") || imageUrl.endsWith("/")) return undefined;
+        return `/api/assets/${imageUrl}`;
     }
 };
 
@@ -56,6 +70,8 @@ export const load: PageServerLoad = async ({ url }) => {
 
     return {
         itemName: claim.item.name,
+        itemImageUrl: toImageUrl(claim.item.imageUrl),
+        listId: claim.list.id,
         listName: claim.list.name,
         quantity: claim.quantity
     };

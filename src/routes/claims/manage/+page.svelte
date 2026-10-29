@@ -11,13 +11,28 @@
 
     let loading = $state(false);
     let released = $state(false);
+    let imageFailed = $state(false);
 </script>
 
 <div class="flex flex-col items-center space-y-4">
     <h1 class="h1">{$t("wishes.manage-claim")}</h1>
 
     <div class="bg-surface-100-900 rounded-container border-surface-200-800 flex w-80 flex-col space-y-4 border p-4">
+        {#if data.itemImageUrl && !imageFailed}
+            <img
+                class="rounded-container max-h-40 w-full object-contain"
+                alt={data.itemName}
+                onerror={() => (imageFailed = true)}
+                referrerpolicy="no-referrer"
+                src={data.itemImageUrl}
+            />
+        {/if}
+
         <span class="text-lg font-bold">{data.itemName}</span>
+
+        <a class="anchor w-fit" href="/lists/{data.listId}">
+            {$t("email.claim-view-list", { values: { listName: data.listName ?? $t("wishes.a-wishlist") } })}
+        </a>
 
         {#if released}
             <span>{$t("wishes.claim-released", { values: { itemName: data.itemName } })}</span>

@@ -22,6 +22,19 @@ type PasswordResetTemplateData = Omit<InviteTemplateData, "footerText">;
 
 type ClaimConfirmationTemplateData = InviteTemplateData & {
     itemName: string;
+    itemImageUrl?: string;
+    listName: string;
+    listUrl: string;
+    listLinkText: string;
+};
+
+type ClaimConfirmationOptions = {
+    manageUrl: string;
+    listUrl: string;
+    listName: string | null;
+    itemName: string;
+    itemImageUrl?: string;
+    locale?: string;
 };
 
 // Compiled on first use and cached. Loading these at module load would race
@@ -135,10 +148,14 @@ export const sendPasswordReset = async (to: string, resetUrl: string) => {
     });
 };
 
-export const sendClaimConfirmation = async (to: string, manageUrl: string, itemName: string) => {
-    const $t = await getFormatter();
+export const sendClaimConfirmation = async (to: string, options: ClaimConfirmationOptions) => {
+    const { manageUrl, listUrl, listName, itemName, itemImageUrl, locale } = options;
+    // The claimer has no account, so the language comes from the list rather
+    // than from the request that happened to create the claim
+    const $t = await getFormatter(locale);
     const claimConfirmationTempl = await getTemplate<ClaimConfirmationTemplateData>("claim-confirmation");
     if (!claimConfirmationTempl) return templateMissing("claim-confirmation");
+    const listDisplayName = listName ?? $t("wishes.a-wishlist");
     const html = claimConfirmationTempl({
         url: manageUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
@@ -146,6 +163,10 @@ export const sendClaimConfirmation = async (to: string, manageUrl: string, itemN
         previewText: $t("email.claim-title"),
         titleText: $t("email.claim-title"),
         itemName,
+        itemImageUrl,
+        listName: listDisplayName,
+        listUrl,
+        listLinkText: $t("email.claim-view-list", { values: { listName: listDisplayName } }),
         bodyText: $t("email.claim-body"),
         buttonText: $t("email.claim-button"),
         footerText: $t("email.claim-footer")
@@ -154,7 +175,9 @@ export const sendClaimConfirmation = async (to: string, manageUrl: string, itemN
         to,
         subject: $t("email.claim-subject"),
         html,
-        text: $t("email.claim-fallback-text", { values: { url: manageUrl, itemName } })
+        text: $t("email.claim-fallback-text", {
+            values: { url: manageUrl, itemName, listName: listDisplayName, listUrl }
+        })
     });
 };
 

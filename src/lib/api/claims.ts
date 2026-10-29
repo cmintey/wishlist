@@ -37,3 +37,16 @@ export class ClaimAPI {
         return await this._makeRequest("DELETE");
     };
 }
+
+// Releasing a claim made without an account: the SystemUser id is only known
+// to the browser that made the claim, so it stands in for a session here.
+export const unclaimPublic = async (claimId: string, publicClaimedById: string) => {
+    return await fetch("/api/claims/public", {
+        method: "DELETE",
+        headers: {
+            "content-type": "application/json",
+            accept: "application/json"
+        },
+        body: JSON.stringify({ claimId, publicClaimedById })
+    });
+};

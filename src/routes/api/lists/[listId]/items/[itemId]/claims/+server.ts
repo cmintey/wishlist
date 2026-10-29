@@ -14,6 +14,18 @@ import { getConfig } from "$lib/server/config";
 import { sendClaimConfirmation } from "$lib/server/email";
 import generateToken, { hashToken } from "$lib/server/token";
 
+// Mirrors ItemImage.svelte: an absolute URL is used as-is, anything else is an
+// upload id. Emails need absolute URLs, so relative ones are resolved here.
+const toAbsoluteImageUrl = (imageUrl: string | null, base: URL) => {
+    if (!imageUrl) return undefined;
+    try {
+        return new URL(imageUrl).href;
+    } catch {
+        if (imageUrl.startsWith("/") || imageUrl.endsWith("/")) return undefined;
+        return new URL(`/api/assets/${imageUrl}`, base).href;
+    }
+};
+
 // Claim an item on a list
 export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
     const $t = await getFormatter();
@@ -36,11 +48,17 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
     const list = await client.list.findUnique({
         select: {
             id: true,
+            name: true,
             public: true,
             groupId: true,
             allowSelfClaims: true,
             notForMe: true,
-            ownerId: true
+            ownerId: true,
+            owner: {
+                select: {
+                    preferredLanguage: true
+                }
+            }
         },
         where: {
             id: params.listId
@@ -71,6 +89,7 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
         select: {
             id: true,
             name: true,
+            imageUrl: true,
             quantity: true,
             claims: {
                 select: {
@@ -173,7 +192,17 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
             const config = await getConfig(list.groupId);
             if (config.smtp.enable) {
                 const manageUrl = new URL(`/claims/manage?token=${claimToken}`, url);
-                const { success, message } = await sendClaimConfirmation(publicClaimerEmail, manageUrl.href, item.name);
+                const listUrl = new URL(`/lists/${list.id}`, url);
+                const { success, message } = await sendClaimConfirmation(publicClaimerEmail, {
+                    manageUrl: manageUrl.href,
+                    listUrl: listUrl.href,
+                    listName: list.name,
+                    itemName: item.name,
+                    itemImageUrl: toAbsoluteImageUrl(item.imageUrl, url),
+                    // The claimer has no account, so the owner's language is the
+                    // best guess at the language of the list they were looking at
+                    locale: list.owner.preferredLanguage ?? undefined
+                });
                 if (!success) {
                     logger.error({ message }, "Unable to send claim confirmation email");
                 }

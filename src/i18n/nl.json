@@ -184,10 +184,11 @@
     "email": {
         "claim-body": "Bedankt voor het claimen van dit item! Bedenk je je later, dan kun je via de onderstaande link je claim weer vrijgeven, zodat iemand anders het cadeau kan geven.",
         "claim-button": "Mijn claim beheren",
-        "claim-fallback-text": "Je hebt “{itemName}” geclaimd. Volg de link om je claim te beheren of vrij te geven: {url}",
+        "claim-fallback-text": "Je hebt “{itemName}” geclaimd van de lijst “{listName}”. Volg de link om je claim te beheren of vrij te geven: {url}",
         "claim-footer": "Heb je dit item niet geclaimd, dan kun je deze e-mail negeren.",
         "claim-subject": "Wishlist | Bevestiging van je claim",
         "claim-title": "Je hebt een item geclaimd",
+        "claim-view-list": "Bekijk de lijst “{listName}”",
         "invite-body": "U bent uitgenodigd om lid te worden van Wishlist! Klik op de onderstaande link om de uitnodiging te accepteren.",
         "invite-button": "Word lid van de verlanglijst",
         "invite-fallback-text": "Iemand heeft je uitgenodigd om lid te worden van hun verlanglijst! Volg de link naar aanmelding: {url}",
@@ -367,6 +368,7 @@
     },
     "unable-to-load-icons": "Kan pictogrammen niet laden.",
     "wishes": {
+        "a-wishlist": "een verlanglijst",
         "add-item": "Maak een item",
         "added-by": "Toegevoegd door <span class=\"{class}\">{name}</span>",
         "added-by-somebody-else": "Toegevoegd door <span class=\"{class}\">Iemand anders</span>",

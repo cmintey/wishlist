@@ -1,3 +1,8 @@
+<!--
+  After recompiling this with mjml, re-wrap the compiled item image <tr> in
+  {{#if itemImageUrl}} ... {{/if}}: mjml drops handlebars conditionals that sit
+  between its tags, and without it an item with no image renders a broken image.
+-->
 <mjml>
   <mj-head>
     <mj-font name="Lato" href="https://fonts.googleapis.com/css2?family=Lato&display=swap"></mj-font>
@@ -18,7 +23,11 @@
     <mj-section padding-top="0px" padding-bottom="0px">
       <mj-column>
         <mj-text align="center" font-size="28px">{{titleText}}</mj-text>
+        {{#if itemImageUrl}}
+        <mj-image src="{{itemImageUrl}}" alt="{{itemName}}" width="160px" padding-bottom="8px" rel="notrack"></mj-image>
+        {{/if}}
         <mj-text align="center" font-size="20px" font-weight="bold" color="#531f5e">{{itemName}}</mj-text>
+        <mj-text align="center" font-size="16px"><a href="{{listUrl}}" rel="noreferrer" style="color:#a940bf;">{{listLinkText}}</a></mj-text>
         <mj-text align="center" font-size="16px">{{bodyText}}</mj-text>
         <mj-button href="{{url}}" rel="noreferrer" border-radius="12px" background-color="#a940bf" color="#ffffff" inner-padding="9px 20px" font-size="16px">{{buttonText}}</mj-button>
       </mj-column>
