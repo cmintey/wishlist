@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import Handlebars from "handlebars";
-import { readFile } from "fs";
+import { readFile } from "fs/promises";
 import type Mail from "nodemailer/lib/mailer";
 import { getConfig } from "$lib/server/config";
 import { env } from "$env/dynamic/private";
@@ -24,32 +24,27 @@ type ClaimConfirmationTemplateData = InviteTemplateData & {
     itemName: string;
 };
 
-let passResetTempl: HandlebarsTemplateDelegate<PasswordResetTemplateData>;
-let inviteTempl: HandlebarsTemplateDelegate<InviteTemplateData>;
-let claimConfirmationTempl: HandlebarsTemplateDelegate<ClaimConfirmationTemplateData>;
+// Compiled on first use and cached. Loading these at module load would race
+// with the first email sent after startup, which fails if it wins.
+const templateCache = new Map<string, HandlebarsTemplateDelegate<any>>();
 
-readFile("templates/password-reset.html", "utf-8", (err, data) => {
-    if (err) {
-        logger.error({ err }, "Error reading password reset email template");
-    } else {
-        passResetTempl = Handlebars.compile(data);
-    }
-});
+const getTemplate = async <T>(name: string): Promise<HandlebarsTemplateDelegate<T> | null> => {
+    const cached = templateCache.get(name);
+    if (cached) return cached;
 
-readFile("templates/invite.html", "utf-8", (err, data) => {
-    if (err) {
-        logger.error({ err }, "Error reading invite email template");
-    } else {
-        inviteTempl = Handlebars.compile(data);
+    try {
+        const template = Handlebars.compile<T>(await readFile(`templates/${name}.html`, "utf-8"));
+        templateCache.set(name, template);
+        return template;
+    } catch (err) {
+        logger.error({ err }, `Error reading ${name} email template`);
+        return null;
     }
-});
+};
 
-readFile("templates/claim-confirmation.html", "utf-8", (err, data) => {
-    if (err) {
-        logger.error({ err }, "Error reading claim confirmation email template");
-    } else {
-        claimConfirmationTempl = Handlebars.compile(data);
-    }
+const templateMissing = (name: string) => ({
+    success: false,
+    message: `Unable to load the ${name} email template`
 });
 
 const sendEmail = async (options: Mail.Options) => {
@@ -99,6 +94,8 @@ const sendEmail = async (options: Mail.Options) => {
 
 export const sendSignupLink = async (to: string, inviteUrl: string) => {
     const $t = await getFormatter();
+    const inviteTempl = await getTemplate<InviteTemplateData>("invite");
+    if (!inviteTempl) return templateMissing("invite");
     const html = inviteTempl({
         url: inviteUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
@@ -119,6 +116,8 @@ export const sendSignupLink = async (to: string, inviteUrl: string) => {
 
 export const sendPasswordReset = async (to: string, resetUrl: string) => {
     const $t = await getFormatter();
+    const passResetTempl = await getTemplate<PasswordResetTemplateData>("password-reset");
+    if (!passResetTempl) return templateMissing("password-reset");
     const html = passResetTempl({
         url: resetUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
@@ -138,6 +137,8 @@ export const sendPasswordReset = async (to: string, resetUrl: string) => {
 
 export const sendClaimConfirmation = async (to: string, manageUrl: string, itemName: string) => {
     const $t = await getFormatter();
+    const claimConfirmationTempl = await getTemplate<ClaimConfirmationTemplateData>("claim-confirmation");
+    if (!claimConfirmationTempl) return templateMissing("claim-confirmation");
     const html = claimConfirmationTempl({
         url: manageUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
