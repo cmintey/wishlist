@@ -10,9 +10,12 @@ import { ItemEvent } from "$lib/events";
 import { logger } from "$lib/server/logger";
 import z from "zod";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { getConfig } from "$lib/server/config";
+import { sendClaimConfirmation } from "$lib/server/email";
+import generateToken, { hashToken } from "$lib/server/token";
 
 // Claim an item on a list
-export const PUT: RequestHandler = async ({ locals, request, params }) => {
+export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
     const $t = await getFormatter();
 
     const itemId = parseInt(params.itemId);
@@ -67,6 +70,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const item = await client.item.findUnique({
         select: {
             id: true,
+            name: true,
             quantity: true,
             claims: {
                 select: {
@@ -105,6 +109,18 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         );
     }
 
+    // Public claimers have no account, so they get a tokenized link emailed to them
+    // as their only way back to the claim
+    const publicClaimerEmail = updateData.data.publicClaimedById
+        ? (
+              await client.systemUser.findUnique({
+                  select: { username: true },
+                  where: { id: updateData.data.publicClaimedById }
+              })
+          )?.username
+        : null;
+    const claimToken = publicClaimerEmail ? await generateToken() : undefined;
+
     try {
         const data: Prisma.ItemClaimCreateInput = {
             item: {
@@ -133,6 +149,10 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             };
         }
 
+        if (claimToken) {
+            data.hashedToken = hashToken(claimToken);
+        }
+
         await client.itemClaim.create({ data });
         const updatedItem = await client.item.findUnique({
             where: {
@@ -141,10 +161,27 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             include: getItemInclusions()
         });
         if (updatedItem) itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
-
-        return new Response(null, { status: 200 });
     } catch (err) {
         logger.error({ err }, "Error claiming item");
         error(422, $t("general.oops"));
     }
+
+    // The claim is already saved at this point, so a failure to send the
+    // confirmation must not fail the request
+    if (claimToken && publicClaimerEmail) {
+        try {
+            const config = await getConfig(list.groupId);
+            if (config.smtp.enable) {
+                const manageUrl = new URL(`/claims/manage?token=${claimToken}`, url);
+                const { success, message } = await sendClaimConfirmation(publicClaimerEmail, manageUrl.href, item.name);
+                if (!success) {
+                    logger.error({ message }, "Unable to send claim confirmation email");
+                }
+            }
+        } catch (err) {
+            logger.error({ err }, "Unable to send claim confirmation email");
+        }
+    }
+
+    return new Response(null, { status: 200 });
 };

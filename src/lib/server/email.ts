@@ -20,8 +20,13 @@ type InviteTemplateData = {
 
 type PasswordResetTemplateData = Omit<InviteTemplateData, "footerText">;
 
+type ClaimConfirmationTemplateData = InviteTemplateData & {
+    itemName: string;
+};
+
 let passResetTempl: HandlebarsTemplateDelegate<PasswordResetTemplateData>;
 let inviteTempl: HandlebarsTemplateDelegate<InviteTemplateData>;
+let claimConfirmationTempl: HandlebarsTemplateDelegate<ClaimConfirmationTemplateData>;
 
 readFile("templates/password-reset.html", "utf-8", (err, data) => {
     if (err) {
@@ -36,6 +41,14 @@ readFile("templates/invite.html", "utf-8", (err, data) => {
         logger.error({ err }, "Error reading invite email template");
     } else {
         inviteTempl = Handlebars.compile(data);
+    }
+});
+
+readFile("templates/claim-confirmation.html", "utf-8", (err, data) => {
+    if (err) {
+        logger.error({ err }, "Error reading claim confirmation email template");
+    } else {
+        claimConfirmationTempl = Handlebars.compile(data);
     }
 });
 
@@ -120,6 +133,27 @@ export const sendPasswordReset = async (to: string, resetUrl: string) => {
         subject: "Wishlist | " + $t("email.pw-reset-title"),
         html,
         text: $t("email.pw-reset-fallback-text", { values: { url: resetUrl } })
+    });
+};
+
+export const sendClaimConfirmation = async (to: string, manageUrl: string, itemName: string) => {
+    const $t = await getFormatter();
+    const html = claimConfirmationTempl({
+        url: manageUrl,
+        baseUrl: env.ORIGIN || "http://localhost:5173",
+        wishlistLogoText: $t("a11y.wishlist-logo"),
+        previewText: $t("email.claim-title"),
+        titleText: $t("email.claim-title"),
+        itemName,
+        bodyText: $t("email.claim-body"),
+        buttonText: $t("email.claim-button"),
+        footerText: $t("email.claim-footer")
+    });
+    return await sendEmail({
+        to,
+        subject: $t("email.claim-subject"),
+        html,
+        text: $t("email.claim-fallback-text", { values: { url: manageUrl, itemName } })
     });
 };
 
