@@ -5,7 +5,7 @@
     import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
     import { ClaimAPI, unclaimPublic } from "$lib/api/claims";
     import { toaster } from "$lib/components/toaster";
-    import { isOwnPublicClaim } from "$lib/publicClaimer";
+    import { publicClaimTokens } from "$lib/publicClaimer";
 
     interface Props extends Pick<
         InternalItemCardProps,
@@ -45,16 +45,16 @@
     // A claim this browser made without an account. It is only remembered for
     // the session; the emailed link is what works after that.
     let ownPublicClaim = $derived(
-        user ? undefined : item.claims.find((claim) => isOwnPublicClaim(claim.publicClaimedBy?.id))
+        user ? undefined : item.claims.find((claim) => claim.publicClaimedBy && $publicClaimTokens[claim.claimId])
     );
 
     $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || !!ownPublicClaim || false));
 
     const handlePublicUnclaim = async () => {
-        const publicClaimedById = ownPublicClaim?.publicClaimedBy?.id;
-        if (!ownPublicClaim || !publicClaimedById) return;
+        const token = ownPublicClaim && $publicClaimTokens[ownPublicClaim.claimId];
+        if (!token) return;
 
-        const resp = await unclaimPublic(ownPublicClaim.claimId, publicClaimedById);
+        const resp = await unclaimPublic(token);
         if (resp.ok) {
             toaster.info({ description: $t("wishes.claimed-item", { values: { claimed: false } }) });
         } else {

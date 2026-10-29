@@ -128,8 +128,9 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
         );
     }
 
-    // Public claimers have no account, so they get a tokenized link emailed to them
-    // as their only way back to the claim
+    // Public claimers have no account, so a token is their only way back to the
+    // claim: it is returned to the browser that made the claim and, when they
+    // gave an email address, sent to them as a link
     const publicClaimerEmail = updateData.data.publicClaimedById
         ? (
               await client.systemUser.findUnique({
@@ -138,8 +139,9 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
               })
           )?.username
         : null;
-    const claimToken = publicClaimerEmail ? await generateToken() : undefined;
+    const claimToken = updateData.data.publicClaimedById ? await generateToken() : undefined;
 
+    let claimId: string;
     try {
         const data: Prisma.ItemClaimCreateInput = {
             item: {
@@ -172,7 +174,7 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
             data.hashedToken = hashToken(claimToken);
         }
 
-        await client.itemClaim.create({ data });
+        ({ id: claimId } = await client.itemClaim.create({ data, select: { id: true } }));
         const updatedItem = await client.item.findUnique({
             where: {
                 id: item.id
@@ -214,5 +216,11 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
         }
     }
 
+    if (claimToken) {
+        return new Response(JSON.stringify({ claimId, token: claimToken }), {
+            status: 200,
+            headers: { "content-type": "application/json" }
+        });
+    }
     return new Response(null, { status: 200 });
 };

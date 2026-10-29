@@ -4,23 +4,25 @@ import { getFormatter } from "$lib/server/i18n";
 import { getItemInclusions } from "$lib/server/items";
 import { logger } from "$lib/server/logger";
 import { client } from "$lib/server/prisma";
+import { publicClaimByToken } from "$lib/server/public-claims";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import z from "zod";
 
 const publicUnclaimSchema = z.object({
-    claimId: z.uuid(),
-    publicClaimedById: z.string().min(1)
+    token: z.string().min(1)
 });
 
 // Release a claim made without an account, from the browser that made it.
-// Knowing the claim's SystemUser id is what authorizes this: it is generated
-// per claim and only returned to the claimer. Claims belonging to a registered
-// user are never matched here, so this cannot touch them.
+// The claim's token is what authorizes this: it is returned only in the
+// response to the claim request, never with the list's items.
 export const DELETE: RequestHandler = async ({ request }) => {
     const $t = await getFormatter();
 
-    const body = await request.json().then((d) => publicUnclaimSchema.safeParse(d));
+    const body = await request
+        .json()
+        .catch(() => undefined)
+        .then((d) => publicUnclaimSchema.safeParse(d));
     if (body.error) {
         error(422, JSON.stringify(z.flattenError(body.error).fieldErrors));
     }
@@ -28,20 +30,12 @@ export const DELETE: RequestHandler = async ({ request }) => {
     const claim = await client.itemClaim.findFirst({
         select: {
             id: true,
-            itemId: true,
-            list: {
-                select: {
-                    public: true
-                }
-            }
+            itemId: true
         },
-        where: {
-            id: body.data.claimId,
-            publicClaimedById: body.data.publicClaimedById
-        }
+        where: publicClaimByToken(body.data.token)
     });
 
-    if (!claim || !claim.list.public) {
+    if (!claim) {
         error(404, $t("errors.claim-was-not-found"));
     }
 

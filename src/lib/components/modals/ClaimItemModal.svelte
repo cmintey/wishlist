@@ -3,7 +3,7 @@
     import type { ItemOnListDTO } from "$lib/dtos/item-dto";
     import { ListItemAPI } from "$lib/api/lists";
     import { ClaimAPI } from "$lib/api/claims";
-    import { rememberPublicClaimer } from "$lib/publicClaimer";
+    import { rememberPublicClaim } from "$lib/publicClaimer";
     import { getFormatter } from "$lib/i18n";
     import { toaster } from "../toaster";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
@@ -136,7 +136,8 @@
 
         if (resp.ok) {
             // Lets this browser still recognise the claim as its own on the list
-            rememberPublicClaimer(publicUserId);
+            const { claimId, token } = await resp.json().catch(() => ({}));
+            if (claimId && token) rememberPublicClaim(claimId, token);
             closeAndToast($t("wishes.claimed-item", { values: { claimed: true } }));
         } else {
             const respData = await resp.json();

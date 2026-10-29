@@ -4,7 +4,7 @@ import { getFormatter } from "$lib/server/i18n";
 import { getItemInclusions } from "$lib/server/items";
 import { logger } from "$lib/server/logger";
 import { client } from "$lib/server/prisma";
-import { hashToken } from "$lib/server/token";
+import { publicClaimByToken } from "$lib/server/public-claims";
 import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
@@ -51,12 +51,7 @@ const findClaimByToken = async (token: string | null) => {
 
     return await client.itemClaim.findFirst({
         select: claimSelect,
-        where: {
-            hashedToken: hashToken(token),
-            publicClaimedById: {
-                not: null
-            }
-        }
+        where: publicClaimByToken(token)
     });
 };
 
