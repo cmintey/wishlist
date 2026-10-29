@@ -15,11 +15,9 @@ export async function getFormatter(locale?: string) {
     }
     await waitLocale(locale);
     return (id: string, options?: Omit<MessageObject, "id">) => {
-        let options_: Omit<MessageObject, "id"> = { locale };
-        if (options) {
-            options_ = { ...options };
-        }
-        return get(format)(id, options_);
+        // Keep the requested locale: spreading options over it dropped the
+        // locale, so any message with values fell back to the request's language
+        return get(format)(id, { locale, ...options });
     };
 }
 
