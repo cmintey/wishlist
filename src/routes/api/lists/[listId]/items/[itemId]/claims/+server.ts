@@ -199,8 +199,10 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
                     listName: list.name,
                     itemName: item.name,
                     itemImageUrl: toAbsoluteImageUrl(item.imageUrl, url),
-                    // The claimer has no account, so the owner's language is the
-                    // best guess at the language of the list they were looking at
+                    // The claimer has no account to take a language from. The
+                    // owner's preference matches the list they were looking at;
+                    // without one, getFormatter falls back to this request's
+                    // language, which is the claimer's own browser
                     locale: list.owner.preferredLanguage ?? undefined
                 });
                 if (!success) {
