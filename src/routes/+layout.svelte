@@ -28,6 +28,7 @@
         /^\/$/,
         "/forgot-password",
         "/reset-password",
+        "/claims/manage",
         "/group-error",
         /\/setup-wizard\/?.*/
     ];
