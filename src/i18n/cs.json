@@ -142,7 +142,8 @@
         "clear-sessions-confirmation": "Opravdu odhásit ze všech zařízení? Uživatl se pak musí přihlásit znovu.",
         "show-name-publicly": "Zobrazit jméno veřejně",
         "show-name-publicly-tooltip": "Zobrazí všem jméno toho, kdo si předmět rezervoval.",
-        "oidc-url-description": "URL vašeho oAuth providera a nebo URL na konkrétní realm/aplikaci nebo discovery URL."
+        "oidc-url-description": "URL vašeho oAuth providera a nebo URL na konkrétní realm/aplikaci nebo discovery URL.",
+        "clear-sessions-success": "Odhlásit uživatele. Bude se muset přihlásit znovu."
     },
     "app": {
         "home": "Domů",
