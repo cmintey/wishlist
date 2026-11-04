@@ -10,9 +10,24 @@ import { ItemEvent } from "$lib/events";
 import { logger } from "$lib/server/logger";
 import z from "zod";
 import { getActiveMembership } from "$lib/server/group-membership";
+import { getConfig } from "$lib/server/config";
+import { sendClaimConfirmation } from "$lib/server/email";
+import generateToken, { hashToken } from "$lib/server/token";
+
+// Mirrors ItemImage.svelte: an absolute URL is used as-is, anything else is an
+// upload id. Emails need absolute URLs, so relative ones are resolved here.
+const toAbsoluteImageUrl = (imageUrl: string | null, base: URL) => {
+    if (!imageUrl) return undefined;
+    try {
+        return new URL(imageUrl).href;
+    } catch {
+        if (imageUrl.startsWith("/") || imageUrl.endsWith("/")) return undefined;
+        return new URL(`/api/assets/${imageUrl}`, base).href;
+    }
+};
 
 // Claim an item on a list
-export const PUT: RequestHandler = async ({ locals, request, params }) => {
+export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
     const $t = await getFormatter();
 
     const itemId = parseInt(params.itemId);
@@ -33,11 +48,17 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const list = await client.list.findUnique({
         select: {
             id: true,
+            name: true,
             public: true,
             groupId: true,
             allowSelfClaims: true,
             notForMe: true,
-            ownerId: true
+            ownerId: true,
+            owner: {
+                select: {
+                    preferredLanguage: true
+                }
+            }
         },
         where: {
             id: params.listId
@@ -67,6 +88,8 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     const item = await client.item.findUnique({
         select: {
             id: true,
+            name: true,
+            imageUrl: true,
             quantity: true,
             claims: {
                 select: {
@@ -105,6 +128,20 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         );
     }
 
+    // Public claimers have no account, so a token is their only way back to the
+    // claim: it is returned to the browser that made the claim and, when they
+    // gave an email address, sent to them as a link
+    const publicClaimerEmail = updateData.data.publicClaimedById
+        ? (
+              await client.systemUser.findUnique({
+                  select: { username: true },
+                  where: { id: updateData.data.publicClaimedById }
+              })
+          )?.username
+        : null;
+    const claimToken = updateData.data.publicClaimedById ? await generateToken() : undefined;
+
+    let claimId: string;
     try {
         const data: Prisma.ItemClaimCreateInput = {
             item: {
@@ -133,7 +170,11 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             };
         }
 
-        await client.itemClaim.create({ data });
+        if (claimToken) {
+            data.hashedToken = hashToken(claimToken);
+        }
+
+        ({ id: claimId } = await client.itemClaim.create({ data, select: { id: true } }));
         const updatedItem = await client.item.findUnique({
             where: {
                 id: item.id
@@ -141,10 +182,45 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
             include: getItemInclusions()
         });
         if (updatedItem) itemEmitter.emit(ItemEvent.ITEM_UPDATE, updatedItem);
-
-        return new Response(null, { status: 200 });
     } catch (err) {
         logger.error({ err }, "Error claiming item");
         error(422, $t("general.oops"));
     }
+
+    // The claim is already saved at this point, so a failure to send the
+    // confirmation must not fail the request
+    if (claimToken && publicClaimerEmail) {
+        try {
+            const config = await getConfig(list.groupId);
+            if (config.smtp.enable) {
+                const manageUrl = new URL(`/claims/manage?token=${claimToken}`, url);
+                const listUrl = new URL(`/lists/${list.id}`, url);
+                const { success, message } = await sendClaimConfirmation(publicClaimerEmail, {
+                    manageUrl: manageUrl.href,
+                    listUrl: listUrl.href,
+                    listName: list.name,
+                    itemName: item.name,
+                    itemImageUrl: toAbsoluteImageUrl(item.imageUrl, url),
+                    // The claimer has no account to take a language from. The
+                    // owner's preference matches the list they were looking at;
+                    // without one, getFormatter falls back to this request's
+                    // language, which is the claimer's own browser
+                    locale: list.owner.preferredLanguage ?? undefined
+                });
+                if (!success) {
+                    logger.error({ message }, "Unable to send claim confirmation email");
+                }
+            }
+        } catch (err) {
+            logger.error({ err }, "Unable to send claim confirmation email");
+        }
+    }
+
+    if (claimToken) {
+        return new Response(JSON.stringify({ claimId, token: claimToken }), {
+            status: 200,
+            headers: { "content-type": "application/json" }
+        });
+    }
+    return new Response(null, { status: 200 });
 };

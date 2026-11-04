@@ -3,8 +3,9 @@
     import { getFormatter } from "$lib/i18n";
     import { getClaimedName, shouldShowName } from "../util";
     import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
-    import { ClaimAPI } from "$lib/api/claims";
+    import { ClaimAPI, unclaimPublic } from "$lib/api/claims";
     import { toaster } from "$lib/components/toaster";
+    import { publicClaimTokens } from "$lib/publicClaimer";
 
     interface Props extends Pick<
         InternalItemCardProps,
@@ -41,7 +42,26 @@
     let userClaim = $derived(item.claims.find((claim) => claim.claimedBy && claim.claimedBy.id === user?.id));
     let isClaimOnList = $derived(userClaim?.listId === item.list.id);
 
-    $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || false));
+    // A claim this browser made without an account. It is only remembered for
+    // the session; the emailed link is what works after that.
+    let ownPublicClaim = $derived(
+        user ? undefined : item.claims.find((claim) => claim.publicClaimedBy && $publicClaimTokens[claim.claimId])
+    );
+
+    $effect(() => isClaimableOrClaimed(item.isClaimable || (userClaim && isClaimOnList) || !!ownPublicClaim || false));
+
+    const handlePublicUnclaim = async () => {
+        const token = ownPublicClaim && $publicClaimTokens[ownPublicClaim.claimId];
+        if (!token) return;
+
+        const resp = await unclaimPublic(token);
+        if (resp.ok) {
+            toaster.info({ description: $t("wishes.claimed-item", { values: { claimed: false } }) });
+        } else {
+            const body = await resp.json().catch(() => undefined);
+            toaster.error({ description: body?.message || $t("general.oops") });
+        }
+    };
 
     const handlePurchased = async (purchased: boolean) => {
         if (userClaim && isClaimOnList) {
@@ -91,6 +111,19 @@
     {:else}
         <span class="text-subtle line-clamp-2 truncate text-wrap">{$t("wishes.claimed-by-you-on-another-list")}</span>
     {/if}
+{:else if ownPublicClaim}
+    <div class="flex flex-row items-center gap-2">
+        <button
+            class="preset-tonal-secondary inset-ring-secondary-500 btn btn-sm md:btn inset-ring"
+            onclick={(e) => {
+                e.stopPropagation();
+                handlePublicUnclaim();
+            }}
+            type="button"
+        >
+            {$t("wishes.unclaim")}
+        </button>
+    </div>
 {:else if item.isClaimable && (item.userId !== user?.id || isSelfClaimable)}
     <div class="flex flex-row items-center gap-x-2">
         <ClaimItemModal {groupId} {item} {requireClaimEmail} userId={user?.id}>
