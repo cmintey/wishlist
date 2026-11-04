@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- node v24.15.x
-- [pnpm](https://pnpm.io/installation) v11.x
+- node v26.12.1 (see `.nvmrc`)
+- [pnpm](https://pnpm.io/installation) v12.13.0 (pinned in `package.json`)
 
 ## Install dependencies
 

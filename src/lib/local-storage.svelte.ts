@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 // source: https://github.com/Rich-Harris/local-storage-test/blob/91472fa04e135a64316db42aae69bec4d6944ca7/src/lib/storage.svelte.ts
+import { browser } from "$app/environment";
 import { tick } from "svelte";
 
 export class LocalStorage<T> {
@@ -19,7 +20,7 @@ export class LocalStorage<T> {
         this.#key = key;
         this.#value = initial;
 
-        if (typeof localStorage !== "undefined") {
+        if (browser && typeof localStorage !== "undefined") {
             if (localStorage.getItem(key) === null) {
                 localStorage.setItem(key, JSON.stringify(initial));
             }
@@ -32,7 +33,9 @@ export class LocalStorage<T> {
         let root;
         try {
             root =
-                typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem(this.#key) as any) : this.#value;
+                browser && typeof localStorage !== "undefined"
+                    ? JSON.parse(localStorage.getItem(this.#key) as any)
+                    : this.#value;
         } catch {
             root = this.#value;
         }
@@ -56,7 +59,7 @@ export class LocalStorage<T> {
                         this.#version += 1;
                         Reflect.set(target, property, value);
 
-                        if (typeof localStorage !== "undefined") {
+                        if (browser && typeof localStorage !== "undefined") {
                             localStorage.setItem(this.#key, JSON.stringify(root));
                         }
 
@@ -93,7 +96,7 @@ export class LocalStorage<T> {
     }
 
     set current(value: T) {
-        if (typeof localStorage !== "undefined") {
+        if (browser && typeof localStorage !== "undefined") {
             localStorage.setItem(this.#key, JSON.stringify(value));
         }
 

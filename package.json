@@ -30,7 +30,7 @@
         "@tailwindcss/forms": "^0.5.10",
         "@tailwindcss/vite": "^4.1.18",
         "@types/eslint": "^9.6.1",
-        "@types/node": "^24.19.2",
+        "@types/node": "^26.6.5",
         "@types/nodemailer": "^8.0.0",
         "@types/pulltorefreshjs": "^0.1.7",
         "@vite-pwa/sveltekit": "^1.0.0",
@@ -92,7 +92,7 @@
         "zod": "^4.0.17"
     },
     "engines": {
-        "node": "^24.0.0",
+        "node": "^26.12.1",
         "pnpm": "12.13.0"
     },
     "packageManager": "pnpm@12.13.0+sha512.1e55719bf26e809dce5c5084fdebaa64efb3da9038ae5d68a9f8a68311f1a45841c8c3b76a37298c3b66f6bcc80409a9b7f33c78a7168a3e90fb65a5d8235ae4"
