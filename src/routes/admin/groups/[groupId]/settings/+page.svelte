@@ -1,10 +1,10 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { General } from "$lib/components/admin/Settings";
+    import { General } from "#lib/components/admin/Settings/index.js";
     import type { PageProps } from "./$types";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { page } from "$app/state";
-    import { toaster } from "$lib/components/toaster";
+    import { toaster } from "#lib/components/toaster/index.js";
 
     const { data }: PageProps = $props();
     const t = getFormatter();

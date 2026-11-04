@@ -3,9 +3,9 @@ import { client } from "./prisma";
 import { claimFilter } from "./sort-filter-util";
 import { toItemOnListDTO } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
-import type { Prisma } from "$lib/generated/prisma/client";
+import type { Prisma } from "#lib/generated/prisma/client.js";
 import { getConfig } from "./config";
-import { itemSorter } from "$lib/comparators";
+import { itemSorter } from "#lib/comparators.js";
 import { error } from "@sveltejs/kit";
 import { getFormatter } from "./i18n";
 

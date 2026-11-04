@@ -1,32 +1,32 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
-    import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
-    import ClaimFilterChip from "$lib/components/wishlists/chips/ClaimFilter.svelte";
+    import ItemCard from "#lib/components/wishlists/ItemCard/ItemCard.svelte";
+    import ClaimFilterChip from "#lib/components/wishlists/chips/ClaimFilter.svelte";
     import { goto, invalidate } from "$app/navigation";
     import { page } from "$app/state";
     import { onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { quintOut } from "svelte/easing";
     import { crossfade } from "svelte/transition";
-    import { isInstalled } from "$lib/stores/is-installed";
-    import empty from "$lib/assets/no_wishes.svg";
-    import SortBy from "$lib/components/wishlists/chips/SortBy.svelte";
-    import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
-    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
-    import { ListAPI } from "$lib/api/lists";
-    import TokenCopy from "$lib/components/TokenCopy.svelte";
+    import { isInstalled } from "#lib/stores/is-installed.js";
+    import empty from "#lib/assets/no_wishes.svg";
+    import SortBy from "#lib/components/wishlists/chips/SortBy.svelte";
+    import { hash, hashItems, viewedItems } from "#lib/stores/viewed-items.js";
+    import { getListViewPreference, initListViewPreference } from "#lib/stores/list-view-preference.svelte.js";
+    import { ListAPI } from "#lib/api/lists.js";
+    import TokenCopy from "#lib/components/TokenCopy.svelte";
     import { dragHandleZone, type DndZoneAttributes, type Item, type Options } from "svelte-dnd-action";
-    import ReorderChip from "$lib/components/wishlists/chips/ReorderChip.svelte";
-    import ManageListChip from "$lib/components/wishlists/chips/ManageListChip.svelte";
-    import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
-    import { getFormatter } from "$lib/i18n";
-    import Markdown from "$lib/components/Markdown.svelte";
-    import ListStatistics from "$lib/components/wishlists/ListStatistics.svelte";
+    import ReorderChip from "#lib/components/wishlists/chips/ReorderChip.svelte";
+    import ManageListChip from "#lib/components/wishlists/chips/ManageListChip.svelte";
+    import ListViewModeChip from "#lib/components/wishlists/chips/ListViewModeChip.svelte";
+    import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
+    import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "#lib/events.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import Markdown from "#lib/components/Markdown.svelte";
+    import ListStatistics from "#lib/components/wishlists/ListStatistics.svelte";
     import type { ActionReturn } from "svelte/action";
-    import { toaster } from "$lib/components/toaster";
-    import { itemSorter } from "$lib/comparators";
+    import { toaster } from "#lib/components/toaster/index.js";
+    import { itemSorter } from "#lib/comparators.js";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -287,7 +287,7 @@
         {/if}
         {#if data.list.owner.isMe || data.list.isManager}
             <ReorderChip onFinalize={handleReorderFinalize} bind:reordering />
-            <ManageListChip onclick={() => goto(`${new URL(page.url).pathname}/manage`)} />
+            <ManageListChip onclick={() => goto(`${page.url.pathname}/manage`)} />
         {/if}
     </div>
 </div>
@@ -428,7 +428,7 @@
             $isInstalled ? "bottom-24" : "bottom-4"
         ]}
         aria-label="add item"
-        onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
+        onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replace: true })}
     >
         <iconify-icon class="text-xl md:text-2xl" icon="ion:add"></iconify-icon>
     </button>

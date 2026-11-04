@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { InternalItemCardProps } from "./ItemCard.svelte";
-    import type { MessageFormatter } from "$lib/server/i18n";
+    import type { MessageFormatter } from "#lib/server/i18n.js";
     import ItemNameHeader from "./components/ItemNameHeader.svelte";
     import ItemAttributes from "./components/ItemAttributes.svelte";
     import ItemFooter from "./components/ItemFooter.svelte";

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import Backdrop from "$lib/components/Backdrop.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import Backdrop from "#lib/components/Backdrop.svelte";
+    import { getFormatter } from "#lib/i18n.js";
     import type { PageProps } from "./$types";
 
     const { data, form }: PageProps = $props();

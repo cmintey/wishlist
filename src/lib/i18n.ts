@@ -2,7 +2,7 @@ import { register, init, format, waitLocale } from "svelte-i18n";
 import { derived, type Readable } from "svelte/store";
 import type { MessageObject, MessageFormatter } from "./server/i18n";
 import { createContext } from "svelte";
-import { dev } from "$app/environment";
+import { dev } from "$app/env";
 
 export interface Lang {
     name: string;
@@ -26,12 +26,48 @@ export const supportedLangs: Lang[] = [
     { name: "Danish", endonym: "Dansk", code: "da", loader: () => import("../i18n/da.json") },
     { name: "Dutch", endonym: "Nederlands", code: "nl", loader: () => import("../i18n/nl.json") },
     defaultLang,
-    { name: "French", endonym: "Français", code: "fr", loader: () => import("../i18n/fr.json") },
-    { name: "German", endonym: "Deutsch", code: "de", loader: () => import("../i18n/de.json") },
-    { name: "Greek", endonym: "Νέα Ελληνικά", code: "el", loader: () => import("../i18n/el.json") },
-    { name: "Italian", endonym: "Italiano", code: "it", loader: () => import("../i18n/it.json") },
-    { name: "Japanese", endonym: "日本語", code: "ja", loader: () => import("../i18n/ja.json") },
-    { name: "Norwegian", endonym: "Norsk", code: "no", loader: () => import("../i18n/nb.json") },
+    {
+        name: "French",
+        endonym: "Français",
+        code: "fr",
+        loader: () => import("../i18n/fr.json")
+    },
+
+    {
+        name: "German",
+        endonym: "Deutsch",
+        code: "de",
+        loader: () => import("../i18n/de.json")
+    },
+
+    {
+        name: "Greek",
+        endonym: "Νέα Ελληνικά",
+        code: "el",
+        loader: () => import("../i18n/el.json")
+    },
+
+    {
+        name: "Italian",
+        endonym: "Italiano",
+        code: "it",
+        loader: () => import("../i18n/it.json")
+    },
+
+    {
+        name: "Japanese",
+        endonym: "日本語",
+        code: "ja",
+        loader: () => import("../i18n/ja.json")
+    },
+
+    {
+        name: "Norwegian",
+        endonym: "Norsk",
+        code: "no",
+        loader: () => import("../i18n/nb.json")
+    },
+
     {
         name: "Norwegian Bokmål",
         endonym: "Norsk Bokmål",
@@ -46,21 +82,78 @@ export const supportedLangs: Lang[] = [
         loader: () => import("../i18n/nb.json"),
         hidden: true
     },
-    { name: "Mongolian", endonym: "Монгол хэл", code: "mn", loader: () => import("../i18n/mn.json") },
-    { name: "Persian", endonym: "فارسی", code: "fa", loader: () => import("../i18n/fa.json"), rtl: true },
-    { name: "Polish", endonym: "Polski", code: "pl", loader: () => import("../i18n/pl.json") },
-    { name: "Portuguese", endonym: "Português", code: "pt", loader: () => import("../i18n/pt.json") },
+
+    {
+        name: "Mongolian",
+        endonym: "Монгол хэл",
+        code: "mn",
+        loader: () => import("../i18n/mn.json")
+    },
+
+    {
+        name: "Persian",
+        endonym: "فارسی",
+        code: "fa",
+        loader: () => import("../i18n/fa.json"),
+        rtl: true
+    },
+
+    {
+        name: "Polish",
+        endonym: "Polski",
+        code: "pl",
+        loader: () => import("../i18n/pl.json")
+    },
+
+    {
+        name: "Portuguese",
+        endonym: "Português",
+        code: "pt",
+        loader: () => import("../i18n/pt.json")
+    },
+
     {
         name: "Portuguese (Brazil)",
         endonym: "Português brasileiro",
         code: "pt-BR",
         loader: () => import("../i18n/pt_BR.json")
     },
-    { name: "Russian", endonym: "Русский язык", code: "ru", loader: () => import("../i18n/ru.json") },
-    { name: "Spanish", endonym: "Español", code: "es", loader: () => import("../i18n/es.json") },
-    { name: "Swedish", endonym: "Svenska", code: "sv", loader: () => import("../i18n/sv.json") },
-    { name: "Ukrainian", endonym: "Українська", code: "uk", loader: () => import("../i18n/uk.json") },
-    { name: "Vietnamese", endonym: "tiếng Việt", code: "vi", loader: () => import("../i18n/vi.json") },
+
+    {
+        name: "Russian",
+        endonym: "Русский язык",
+        code: "ru",
+        loader: () => import("../i18n/ru.json")
+    },
+
+    {
+        name: "Spanish",
+        endonym: "Español",
+        code: "es",
+        loader: () => import("../i18n/es.json")
+    },
+
+    {
+        name: "Swedish",
+        endonym: "Svenska",
+        code: "sv",
+        loader: () => import("../i18n/sv.json")
+    },
+
+    {
+        name: "Ukrainian",
+        endonym: "Українська",
+        code: "uk",
+        loader: () => import("../i18n/uk.json")
+    },
+
+    {
+        name: "Vietnamese",
+        endonym: "tiếng Việt",
+        code: "vi",
+        loader: () => import("../i18n/vi.json")
+    },
+
     {
         name: "Development (keys only)",
         endonym: "Development (keys only)",

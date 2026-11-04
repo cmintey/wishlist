@@ -24,7 +24,7 @@ RUN pnpm prisma generate
 COPY src/ ./src
 COPY templates/ ./templates
 COPY static/ ./static
-COPY vite.config.ts tsconfig.json svelte.config.js ./
+COPY vite.config.ts tsconfig.json ./
 ARG VERSION="unk"
 ARG SHA="unk"
 ENV VERSION=${VERSION}
@@ -51,7 +51,6 @@ RUN case "${TARGETPLATFORM}" in \
 # Bring everything together
 FROM base AS app
 ENV NODE_ENV=production \
-    BODY_SIZE_LIMIT=5000000 \
     PRISMA_HIDE_UPDATE_MESSAGE=1
 
 RUN apt-get update \
@@ -75,8 +74,6 @@ COPY --from=build /usr/src/app/src/lib/generated/prisma ./src/lib/generated/pris
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data
 
-ENV DEFAULT_CURRENCY=USD \
-    TOKEN_TIME=72 \
-    COREPACK_ENABLE_NETWORK=0
+ENV COREPACK_ENABLE_NETWORK=0
 
 ENTRYPOINT [ "sh", "entrypoint.sh" ]

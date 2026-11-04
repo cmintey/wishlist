@@ -1,14 +1,14 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import { goto, invalidateAll } from "$app/navigation";
-    import TokenCopy from "$lib/components/TokenCopy.svelte";
+    import { goto, refreshAll } from "$app/navigation";
+    import TokenCopy from "#lib/components/TokenCopy.svelte";
     import type { PageProps } from "./$types";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
-    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
+    import ConfirmModal from "#lib/components/modals/ConfirmModal.svelte";
     import { resolve } from "$app/paths";
-    import { UserAPI } from "$lib/api/users";
-    import EditProfile from "$lib/components/account/EditProfile.svelte";
+    import { UserAPI } from "#lib/api/users.js";
+    import EditProfile from "#lib/components/account/EditProfile.svelte";
 
     const { data, form }: PageProps = $props();
     const t = getFormatter();
@@ -24,8 +24,8 @@
         const resp = await userAPI.delete();
 
         if (resp.ok) {
-            await goto(resolve("/admin/users"));
-            invalidateAll();
+            await goto(resolve("admin/users"));
+            refreshAll();
 
             toaster.info({
                 description: $t("admin.user-was-deleted", { values: { username: data.editingUser.username } })
@@ -44,7 +44,7 @@
     };
 </script>
 
-<EditProfile autocomplete={false} disabled={profileEditDisabled} user={data.editingUser}></EditProfile>
+<EditProfile autocomplete={false} disabled={profileEditDisabled} user={data.editingUser} />
 
 <form
     bind:this={formEl}

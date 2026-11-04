@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { Dialog, Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
-    import type { Group } from "$lib/generated/prisma/client";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import Popup from "../Popup.svelte";
 
     interface Props {

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { Group } from "$lib/generated/prisma/client";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import SettingsGroup from "../SettingsGroup.svelte";
     import Setting from "../Setting.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         config: Pick<Config, "defaultGroup">;

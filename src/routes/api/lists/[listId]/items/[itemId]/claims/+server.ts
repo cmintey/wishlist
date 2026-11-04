@@ -1,15 +1,15 @@
-import { getFormatter } from "$lib/server/i18n";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { client } from "$lib/server/prisma";
+import { getFormatter } from "#lib/server/i18n.js";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { client } from "#lib/server/prisma.js";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
-import { listItemClaimSchema } from "$lib/server/validations";
-import type { Prisma } from "$lib/generated/prisma/client";
-import { getItemInclusions } from "$lib/server/items";
-import { ItemEvent } from "$lib/events";
-import { logger } from "$lib/server/logger";
+import { listItemClaimSchema } from "#lib/server/validations.js";
+import type { Prisma } from "#lib/generated/prisma/client.js";
+import { getItemInclusions } from "#lib/server/items.js";
+import { ItemEvent } from "#lib/events.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
-import { getActiveMembership } from "$lib/server/group-membership";
+import { getActiveMembership } from "#lib/server/group-membership.js";
 
 // Claim an item on a list
 export const PUT: RequestHandler = async ({ locals, request, params }) => {

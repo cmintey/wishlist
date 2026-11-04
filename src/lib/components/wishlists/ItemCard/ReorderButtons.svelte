@@ -1,7 +1,7 @@
 <script lang="ts">
     import { dragHandle } from "svelte-dnd-action";
-    import { getFormatter } from "$lib/i18n";
-    import { getListViewPreference } from "$lib/stores/list-view-preference.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import { getListViewPreference } from "#lib/stores/list-view-preference.svelte.js";
     import type { InternalItemCardProps } from "./ItemCard.svelte";
 
     type Props = Pick<InternalItemCardProps, "item" | "onIncreasePriority" | "onDecreasePriority" | "onPriorityChange">;

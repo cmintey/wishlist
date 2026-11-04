@@ -2,18 +2,19 @@
     import { fade, scale } from "svelte/transition";
     import { flip } from "svelte/animate";
     import type { PageProps } from "./$types";
-    import ItemCard from "$lib/components/wishlists/ItemCard/ItemCard.svelte";
-    import noClaims from "$lib/assets/no_claims.svg";
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
-    import { getListViewPreference, initListViewPreference } from "$lib/stores/list-view-preference.svelte";
-    import ListViewModeChip from "$lib/components/wishlists/chips/ListViewModeChip.svelte";
-    import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
-    import ClaimsGroupBy from "$lib/components/wishlists/chips/ClaimsGroupBy.svelte";
+    import ItemCard from "#lib/components/wishlists/ItemCard/ItemCard.svelte";
+    import noClaims from "#lib/assets/no_claims.svg";
+    import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import { getListViewPreference, initListViewPreference } from "#lib/stores/list-view-preference.svelte.js";
+    import ListViewModeChip from "#lib/components/wishlists/chips/ListViewModeChip.svelte";
+    import ListFilterChip from "#lib/components/wishlists/chips/ListFilterChip.svelte";
+    import ClaimsGroupBy from "#lib/components/wishlists/chips/ClaimsGroupBy.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
 
+    // svelte-ignore state_referenced_locally
     let items: ItemOnListDTO[] = $state(data.items);
 
     $effect(() => {

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import Markdown from "./Markdown.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         id: string;

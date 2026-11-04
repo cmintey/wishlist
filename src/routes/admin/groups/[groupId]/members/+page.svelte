@@ -1,16 +1,16 @@
 <script lang="ts">
-    import { invalidateAll } from "$app/navigation";
+    import { refreshAll } from "$app/navigation";
     import { page } from "$app/state";
-    import { GroupAPI } from "$lib/api/groups";
+    import { GroupAPI } from "#lib/api/groups.js";
     import type { PageData, PageProps } from "./$types";
-    import InviteUser from "$lib/components/admin/InviteUser.svelte";
-    import ClearListsButton from "$lib/components/admin/Actions/ClearListsButton.svelte";
+    import InviteUser from "#lib/components/admin/InviteUser.svelte";
+    import ClearListsButton from "#lib/components/admin/Actions/ClearListsButton.svelte";
     import { enhance } from "$app/forms";
-    import Alert from "$lib/components/Alert.svelte";
-    import { getFormatter } from "$lib/i18n";
-    import DeleteGroupModal from "$lib/components/modals/DeleteGroupModal.svelte";
-    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
-    import AddUserModal from "$lib/components/modals/AddUserModal.svelte";
+    import Alert from "#lib/components/Alert.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import DeleteGroupModal from "#lib/components/modals/DeleteGroupModal.svelte";
+    import ConfirmModal from "#lib/components/modals/ConfirmModal.svelte";
+    import AddUserModal from "#lib/components/modals/AddUserModal.svelte";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -25,12 +25,12 @@
         if (isManager) await groupAPI.makeManager(userId);
         else await groupAPI.removeManager(userId);
 
-        await invalidateAll();
+        await refreshAll();
     };
 
     const removeMember = async (userId: string) => {
         await groupAPI.removeMember(userId);
-        await invalidateAll();
+        await refreshAll();
     };
 </script>
 

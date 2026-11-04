@@ -1,7 +1,7 @@
 <script lang="ts">
-    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
-    import type { ClaimDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
+    import ClaimItemModal from "#lib/components/modals/ClaimItemModal.svelte";
+    import type { ClaimDTO } from "#lib/dtos/item-dto.js";
+    import { getFormatter } from "#lib/i18n.js";
     import { getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 

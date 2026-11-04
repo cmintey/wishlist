@@ -2,10 +2,10 @@ import nodemailer from "nodemailer";
 import Handlebars from "handlebars";
 import { readFile } from "fs";
 import type Mail from "nodemailer/lib/mailer";
-import { getConfig } from "$lib/server/config";
-import { env } from "$env/dynamic/private";
-import { getFormatter } from "$lib/server/i18n";
-import { logger } from "$lib/server/logger";
+import { getConfig } from "#lib/server/config.js";
+import { ORIGIN } from "$app/env/private";
+import { getFormatter } from "#lib/server/i18n.js";
+import { logger } from "#lib/server/logger.js";
 
 type InviteTemplateData = {
     url: string;
@@ -88,7 +88,7 @@ export const sendSignupLink = async (to: string, inviteUrl: string) => {
     const $t = await getFormatter();
     const html = inviteTempl({
         url: inviteUrl,
-        baseUrl: env.ORIGIN || "http://localhost:5173",
+        baseUrl: ORIGIN || "http://localhost:5173",
         wishlistLogoText: $t("a11y.wishlist-logo"),
         previewText: $t("email.invite-title"),
         titleText: $t("email.invite-title"),
@@ -108,7 +108,7 @@ export const sendPasswordReset = async (to: string, resetUrl: string) => {
     const $t = await getFormatter();
     const html = passResetTempl({
         url: resetUrl,
-        baseUrl: env.ORIGIN || "http://localhost:5173",
+        baseUrl: ORIGIN || "http://localhost:5173",
         wishlistLogoText: $t("a11y.wishlist-logo"),
         previewText: $t("email.pw-reset-title"),
         titleText: $t("email.pw-reset-title"),

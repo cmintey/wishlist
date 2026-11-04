@@ -5,16 +5,16 @@
     import { page } from "$app/state";
     import { pwaInfo } from "virtual:pwa-info";
 
-    import NavBar from "$lib/components/navigation/NavBar.svelte";
-    import NavigationLoadingBar from "$lib/components/navigation/NavigationLoadingBar.svelte";
+    import NavBar from "#lib/components/navigation/NavBar.svelte";
+    import NavigationLoadingBar from "#lib/components/navigation/NavigationLoadingBar.svelte";
     import type { LayoutProps } from "./$types";
     import { onMount } from "svelte";
-    import BottomTabs from "$lib/components/navigation/BottomTabs.svelte";
-    import { isInstalled } from "$lib/stores/is-installed";
+    import BottomTabs from "#lib/components/navigation/BottomTabs.svelte";
+    import { isInstalled } from "#lib/stores/is-installed.js";
     import PullToRefresh from "pulltorefreshjs";
-    import { navItems } from "$lib/components/navigation/navigation";
-    import { setFormatter, setLocale } from "$lib/i18n";
-    import Toaster from "$lib/components/toaster/Toaster.svelte";
+    import { navItems } from "#lib/components/navigation/navigation.js";
+    import { setFormatter, setLocale } from "#lib/i18n.js";
+    import Toaster from "#lib/components/toaster/Toaster.svelte";
 
     const { data, children }: LayoutProps = $props();
 
@@ -35,11 +35,15 @@
     setFormatter(data.t);
     setLocale(data.locale);
 
-    beforeNavigate(() => {
+    beforeNavigate(({ shallow, type }) => {
+        if (shallow && type === "goto") return;
+
         showNavigationLoadingBar = true;
     });
 
     afterNavigate((params) => {
+        if (params.shallow && params.type === "goto") return;
+
         showNavigationLoadingBar = false;
         documentTitle = document?.title;
         disabled = titleDisabledUrls.find((url) => page.url.pathname.match(url)) !== undefined;
@@ -110,6 +114,7 @@
         {#if showNavigationLoadingBar}
             <NavigationLoadingBar />
         {/if}
+
         <NavBar groups={data.groups} isProxyUser={data.isProxyUser} {navItems} user={data.user} />
     </header>
 

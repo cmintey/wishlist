@@ -1,4 +1,4 @@
-import { client } from "$lib/server/prisma";
+import { client } from "#lib/server/prisma.js";
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 

@@ -1,14 +1,14 @@
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
-import { handleCallback, REDIRECT_TO_COOKIE } from "$lib/server/openid";
-import { client } from "$lib/server/prisma";
+import { createSession, generateSessionToken, setSessionTokenCookie } from "#lib/server/auth.js";
+import { handleCallback, REDIRECT_TO_COOKIE } from "#lib/server/openid.js";
+import { client } from "#lib/server/prisma.js";
 import { redirect, error } from "@sveltejs/kit";
 import type { RequestEvent, RequestHandler } from "./$types";
-import { createUser } from "$lib/server/user";
-import { Role } from "$lib/schema";
-import { getConfig } from "$lib/server/config";
-import { getFormatter } from "$lib/server/i18n";
-import { oidcLogger as logger } from "$lib/server/logger";
-import { Prisma, type User } from "$lib/generated/prisma/client";
+import { createUser } from "#lib/server/user.js";
+import { Role } from "#lib/schema.js";
+import { getConfig } from "#lib/server/config.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { oidcLogger as logger } from "#lib/server/logger.js";
+import { Prisma, type User } from "#lib/generated/prisma/client.js";
 import type { UserInfoResponse } from "openid-client";
 
 export const POST: RequestHandler = async (event) => {

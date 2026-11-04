@@ -1,9 +1,9 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { client } from "$lib/server/prisma";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { getFormatter } from "$lib/server/i18n";
-import { requireLogin } from "$lib/server/auth";
+import { client } from "#lib/server/prisma.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { requireLogin } from "#lib/server/auth.js";
 
 export const load: PageServerLoad = async ({ params }) => {
     const user = requireLogin();

@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
-    import ManageListForm from "$lib/components/wishlists/ManageListForm.svelte";
+    import ManageListForm from "#lib/components/wishlists/ManageListForm.svelte";
     import { page } from "$app/state";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
 
     const { data }: PageProps = $props();
     const t = getFormatter();

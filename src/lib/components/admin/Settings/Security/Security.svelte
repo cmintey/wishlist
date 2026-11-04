@@ -1,7 +1,7 @@
 <script lang="ts">
     import Oidc from "./OIDC.svelte";
     import Credentials from "./Credentials.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         config: Pick<Config, "oidc" | "security" | "enableSignup">;

@@ -1,4 +1,4 @@
-import type { Prisma } from "$lib/generated/prisma/client";
+import type { Prisma } from "#lib/generated/prisma/client.js";
 
 export const getItemInclusions = (listId?: string) => {
     return {

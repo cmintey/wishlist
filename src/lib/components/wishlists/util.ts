@@ -1,5 +1,5 @@
-import type { ClaimDTO, ItemOnListDTO } from "$lib/dtos/item-dto";
-import { getFormatter } from "$lib/i18n";
+import type { ClaimDTO, ItemOnListDTO } from "#lib/dtos/item-dto.js";
+import { getFormatter } from "#lib/i18n.js";
 import { get } from "svelte/store";
 import type { PartialUser } from "./ItemCard/ItemCard.svelte";
 

@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { requireAdminOrManager } from "$lib/server/auth";
+import { requireAdminOrManager } from "#lib/server/auth.js";
 
 export const load: PageServerLoad = async ({ url, params }) => {
     await requireAdminOrManager(params.groupId);

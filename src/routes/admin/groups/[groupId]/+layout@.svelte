@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { goto, invalidateAll } from "$app/navigation";
+    import { goto, refreshAll } from "$app/navigation";
     import { Tabs } from "@skeletonlabs/skeleton-svelte";
     import type { LayoutProps, Snapshot } from "./$types";
-    import { GroupAPI } from "$lib/api/groups";
-    import { getFormatter } from "$lib/i18n";
+    import { GroupAPI } from "#lib/api/groups.js";
+    import { getFormatter } from "#lib/i18n.js";
     import { resolve } from "$app/paths";
     import { onMount } from "svelte";
 
@@ -17,7 +17,7 @@
         if (newGroupName) {
             await groupAPI.update({ name: newGroupName });
             editing = !editing;
-            await invalidateAll();
+            await refreshAll();
         }
     };
 
@@ -33,7 +33,7 @@
 
     async function onValueChange(value: TabOption) {
         selectedTab = value;
-        return goto(tabs[value].href(), { replaceState: true });
+        return goto(tabs[value].href(), { replace: true });
     }
 
     let dir: "ltr" | "rtl" = $state("ltr");

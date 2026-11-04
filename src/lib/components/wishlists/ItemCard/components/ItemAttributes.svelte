@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Markdown from "$lib/components/Markdown.svelte";
-    import type { ClaimDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
-    import { formatPrice } from "$lib/price-formatter";
+    import Markdown from "#lib/components/Markdown.svelte";
+    import type { ClaimDTO } from "#lib/dtos/item-dto.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import { formatPrice } from "#lib/price-formatter.js";
     import { shouldShowName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
     import ClaimDetails from "./ClaimDetails.svelte";

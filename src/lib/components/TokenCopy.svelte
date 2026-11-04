@@ -1,9 +1,9 @@
 <script lang="ts">
     import { Portal, Tooltip } from "@skeletonlabs/skeleton-svelte";
     import { fade } from "svelte/transition";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { ClassValue } from "svelte/elements";
-    import { clipboard } from "$lib/clipboard.svelte";
+    import { clipboard } from "#lib/clipboard.svelte.js";
 
     interface Props {
         url: string;

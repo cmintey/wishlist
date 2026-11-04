@@ -2,7 +2,7 @@ import * as client from "openid-client";
 import { getConfig } from "./config";
 import { error, redirect, type RequestEvent } from "@sveltejs/kit";
 import { z } from "zod";
-import { getFormatter } from "$lib/server/i18n";
+import { getFormatter } from "#lib/server/i18n.js";
 import { oidcLogger as logger } from "./logger";
 
 const SCOPE = "openid profile email";

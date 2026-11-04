@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { GroupAPI } from "$lib/api/groups";
-    import { getFormatter } from "$lib/i18n";
+    import { GroupAPI } from "#lib/api/groups.js";
+    import { getFormatter } from "#lib/i18n.js";
     import { goto } from "$app/navigation";
+    import { resolve } from "$app/paths";
     import AlertModal from "./AlertModal.svelte";
     import ConfirmModal from "./ConfirmModal.svelte";
 
@@ -19,7 +20,7 @@
     const onConfirm = async () => {
         const group = await groupAPI.delete();
         if (group) {
-            goto("/admin/groups", { invalidateAll: true });
+            goto(resolve("admin/groups"), { refreshAll: true });
         }
     };
 </script>

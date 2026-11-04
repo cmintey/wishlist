@@ -1,14 +1,14 @@
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
-import { getSignupSchema } from "$lib/server/validations";
+import { createSession, generateSessionToken, setSessionTokenCookie } from "#lib/server/auth.js";
+import { client } from "#lib/server/prisma.js";
+import { getSignupSchema } from "#lib/server/validations.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { hashToken, isTokenTimeValid } from "$lib/server/token";
-import { getConfig } from "$lib/server/config";
-import { createUser } from "$lib/server/user";
-import { Role } from "$lib/schema";
-import { getFormatter } from "$lib/server/i18n";
-import { logger } from "$lib/server/logger";
+import { hashToken, isTokenTimeValid } from "#lib/server/token.js";
+import { getConfig } from "#lib/server/config.js";
+import { createUser } from "#lib/server/user.js";
+import { Role } from "#lib/schema.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
 
 export const load: PageServerLoad = async ({ locals, url }) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { User } from "$lib/generated/prisma/client";
+    import type { User } from "#lib/generated/prisma/client.js";
     import BaseChip from "./BaseChip.svelte";
-    import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
+    import { defaultLang, getFormatter, getLocale } from "#lib/i18n.js";
     import type { ClassValue } from "svelte/elements";
 
     type PartialUser = Pick<User, "id" | "name">;

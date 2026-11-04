@@ -1,13 +1,13 @@
-import { Role } from "$lib/schema";
-import { client } from "$lib/server/prisma";
-import generateToken, { hashToken } from "$lib/server/token";
+import { Role } from "#lib/schema.js";
+import { client } from "#lib/server/prisma.js";
+import generateToken, { hashToken } from "#lib/server/token.js";
 import { redirect, error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/server/i18n";
-import { invalidateUserSessions, requireRole } from "$lib/server/auth";
-import { unlinkOauth, updatePicture, updateProfile } from "$lib/server/profile";
+import { getFormatter } from "#lib/server/i18n.js";
+import { invalidateUserSessions, requireRole } from "#lib/server/auth.js";
+import { unlinkOauth, updatePicture, updateProfile } from "#lib/server/profile.js";
 import { fail } from "@sveltejs/kit";
-import { getOIDCConfig } from "$lib/server/openid";
+import { getOIDCConfig } from "#lib/server/openid.js";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
     const user = await requireRole(Role.ADMIN);

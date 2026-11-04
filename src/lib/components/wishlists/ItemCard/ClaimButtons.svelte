@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { InternalItemCardProps } from "./ItemCard.svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { getClaimedName, shouldShowName } from "../util";
-    import ClaimItemModal from "$lib/components/modals/ClaimItemModal.svelte";
-    import { ClaimAPI } from "$lib/api/claims";
-    import { toaster } from "$lib/components/toaster";
+    import ClaimItemModal from "#lib/components/modals/ClaimItemModal.svelte";
+    import { ClaimAPI } from "#lib/api/claims.js";
+    import { toaster } from "#lib/components/toaster/index.js";
 
     interface Props extends Pick<
         InternalItemCardProps,

@@ -1,9 +1,9 @@
 <script lang="ts">
     import { ZxcvbnFactory } from "@zxcvbn-ts/core";
-    import { init, meterLabel } from "$lib/zxcvbn";
+    import { init, meterLabel } from "#lib/zxcvbn.js";
     import { Progress } from "@skeletonlabs/skeleton-svelte";
     import { onMount } from "svelte";
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import type { HTMLInputAttributes } from "svelte/elements";
     import Popup from "./Popup.svelte";
 

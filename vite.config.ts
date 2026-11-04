@@ -1,3 +1,5 @@
+import adapter from "@sveltejs/adapter-node";
+import { sveltePreprocess } from "svelte-preprocess";
 import { sveltekit } from "@sveltejs/kit/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { SvelteKitPWA } from "@vite-pwa/sveltekit";
@@ -18,7 +20,13 @@ const [version, sha] = (
 const config: UserConfig = {
     plugins: [
         tailwindcss(),
-        sveltekit(),
+        sveltekit({
+            // Consult https://github.com/sveltejs/svelte-preprocess
+            // for more information about preprocessors
+            preprocess: [sveltePreprocess()],
+            adapter: adapter()
+        }),
+
         SvelteKitPWA({
             registerType: "autoUpdate",
             manifest: {

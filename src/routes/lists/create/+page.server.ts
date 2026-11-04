@@ -1,14 +1,14 @@
-import { getConfig } from "$lib/server/config";
-import { getActiveMembership } from "$lib/server/group-membership";
+import { getConfig } from "#lib/server/config.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/server/i18n";
-import { trimToNull } from "$lib/util";
-import { getListPropertiesSchema } from "$lib/server/validations";
-import { adjustListManagers, create } from "$lib/server/list";
-import { client } from "$lib/server/prisma";
-import { requireLogin } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
+import { getFormatter } from "#lib/server/i18n.js";
+import { trimToNull } from "#lib/util.js";
+import { getListPropertiesSchema } from "#lib/server/validations.js";
+import { adjustListManagers, create } from "#lib/server/list.js";
+import { client } from "#lib/server/prisma.js";
+import { requireLogin } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
 import z from "zod";
 import { resolve } from "$app/paths";
 

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { getFormatter } from "$lib/i18n";
-    import logo from "$lib/assets/logo.png";
+    import { getFormatter } from "#lib/i18n.js";
+    import logo from "#lib/assets/logo.png";
     import { Dialog, Portal, type DialogTriggerProps } from "@skeletonlabs/skeleton-svelte";
     import ModalBackdrop from "../modals/parts/ModalBackdrop.svelte";
     import ModalContent from "../modals/parts/ModalContent.svelte";

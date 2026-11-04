@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { FileUpload, type FileUploadRootProps } from "@skeletonlabs/skeleton-svelte";
 
     const props: FileUploadRootProps = $props();

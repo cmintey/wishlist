@@ -1,5 +1,5 @@
-import { Role } from "$lib/schema";
-import type { Group, UserGroupMembership } from "$lib/generated/prisma/client";
+import { Role } from "#lib/schema.js";
+import type { Group, UserGroupMembership } from "#lib/generated/prisma/client.js";
 
 export class GroupAPI {
     groupId: string;

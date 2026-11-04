@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { invalidateAll } from "$app/navigation";
-    import { Role } from "$lib/schema";
+    import { refreshAll } from "$app/navigation";
+    import { Role } from "#lib/schema.js";
     import Avatar from "../../Avatar.svelte";
     import GroupSubMenu from "./GroupSubMenu.svelte";
-    import { getFormatter } from "$lib/i18n";
-    import GroupSelectChip from "$lib/components/wishlists/chips/GroupSelectChip.svelte";
-    import ChangeLanguageModal from "$lib/components/modals/ChangeLanguageModal.svelte";
+    import { getFormatter } from "#lib/i18n.js";
+    import GroupSelectChip from "#lib/components/wishlists/chips/GroupSelectChip.svelte";
+    import ChangeLanguageModal from "#lib/components/modals/ChangeLanguageModal.svelte";
     import LightSwitch from "./LightSwitch.svelte";
-    import Popup from "$lib/components/Popup.svelte";
+    import Popup from "#lib/components/Popup.svelte";
 
     interface Props {
         user: LocalUser | null;
@@ -69,7 +69,7 @@
                                         onclick={async () => {
                                             closeMenu();
                                             await fetch("/logout", { method: "POST" });
-                                            invalidateAll();
+                                            refreshAll();
                                         }}
                                     >
                                         <iconify-icon icon="ion:log-out"></iconify-icon>

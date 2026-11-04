@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { Steps } from "@skeletonlabs/skeleton-svelte";
     import type { HTMLButtonAttributes } from "svelte/elements";
 

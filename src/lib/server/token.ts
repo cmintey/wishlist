@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/private";
+import { TOKEN_TIME } from "$app/env/private";
 
 const { randomBytes, createHash } = await import("node:crypto");
 
@@ -20,7 +20,7 @@ export const hashToken = (token: string): string => {
 };
 
 export const isTokenTimeValid = (tokenDate: Date) => {
-    const expiresIn = (env.TOKEN_TIME ? Number.parseInt(env.TOKEN_TIME) : 72) * 3600000;
+    const expiresIn = TOKEN_TIME * 3600000;
     const expiry = tokenDate.getTime() + expiresIn;
     return Date.now() < expiry;
 };

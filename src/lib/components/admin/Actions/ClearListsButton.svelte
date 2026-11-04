@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { invalidateAll } from "$app/navigation";
-    import { ItemsAPI } from "$lib/api/items";
-    import ConfirmModal from "$lib/components/modals/ConfirmModal.svelte";
-    import { toaster } from "$lib/components/toaster";
-    import { getFormatter } from "$lib/i18n";
+    import { refreshAll } from "$app/navigation";
+    import { ItemsAPI } from "#lib/api/items.js";
+    import ConfirmModal from "#lib/components/modals/ConfirmModal.svelte";
+    import { toaster } from "#lib/components/toaster/index.js";
+    import { getFormatter } from "#lib/i18n.js";
 
     interface Props {
         groupId?: string | undefined;
@@ -25,7 +25,7 @@
         const resp = await itemsAPI.clearItemsFromLists(groupId, claimed);
 
         if (resp.ok) {
-            invalidateAll();
+            refreshAll();
 
             toaster.info({ description: $t("general.wishlists-cleared") });
         } else {

@@ -1,10 +1,10 @@
 <script lang="ts">
-    import ListCard from "$lib/components/ListCard.svelte";
-    import IconSelector from "$lib/components/IconSelector.svelte";
+    import ListCard from "#lib/components/ListCard.svelte";
+    import IconSelector from "#lib/components/IconSelector.svelte";
     import { enhance } from "$app/forms";
-    import ClearableInput from "$lib/components/ClearableInput.svelte";
-    import type { List, User } from "$lib/generated/prisma/client";
-    import { getFormatter } from "$lib/i18n";
+    import ClearableInput from "#lib/components/ClearableInput.svelte";
+    import type { List, User } from "#lib/generated/prisma/client.js";
+    import { getFormatter } from "#lib/i18n.js";
     import MarkdownEditor from "../MarkdownEditor.svelte";
     import { page } from "$app/state";
     import Tooltip from "../Tooltip.svelte";

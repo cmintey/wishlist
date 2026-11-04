@@ -1,11 +1,11 @@
-import { client } from "$lib/server/prisma";
+import { client } from "#lib/server/prisma.js";
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { Role } from "$lib/schema";
-import { getFormatter } from "$lib/server/i18n";
-import { create } from "$lib/server/list";
-import { getConfig } from "$lib/server/config";
-import { requireLoginOrError } from "$lib/server/auth";
+import { Role } from "#lib/schema.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { create } from "#lib/server/list.js";
+import { getConfig } from "#lib/server/config.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
 
 export const PUT: RequestHandler = async ({ request }) => {
     const user = await requireLoginOrError();

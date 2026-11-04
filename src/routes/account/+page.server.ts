@@ -5,16 +5,16 @@ import {
     invalidateUserSessions,
     requireLogin,
     setSessionTokenCookie
-} from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
-import { getResetPasswordSchema } from "$lib/server/validations";
+} from "#lib/server/auth.js";
+import { client } from "#lib/server/prisma.js";
+import { getResetPasswordSchema } from "#lib/server/validations.js";
 import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFormatter } from "$lib/server/i18n";
-import { hashPassword, verifyPasswordHash } from "$lib/server/password";
-import { getOIDCConfig } from "$lib/server/openid";
-import { unlinkOauth, updatePicture, updateProfile } from "$lib/server/profile";
+import { getFormatter } from "#lib/server/i18n.js";
+import { hashPassword, verifyPasswordHash } from "#lib/server/password.js";
+import { getOIDCConfig } from "#lib/server/openid.js";
+import { unlinkOauth, updatePicture, updateProfile } from "#lib/server/profile.js";
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
     const user = requireLogin();

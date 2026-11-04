@@ -1,7 +1,7 @@
-import { getConfig } from "$lib/server/config";
-import { sendPasswordReset } from "$lib/server/email";
-import { client } from "$lib/server/prisma";
-import generateToken, { hashToken } from "$lib/server/token";
+import { getConfig } from "#lib/server/config.js";
+import { sendPasswordReset } from "#lib/server/email.js";
+import { client } from "#lib/server/prisma.js";
+import generateToken, { hashToken } from "#lib/server/token.js";
 import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";

@@ -3,11 +3,11 @@
     import { page } from "$app/state";
     import { onMount } from "svelte";
     import type { Props } from "./steps";
-    import type { Group } from "$lib/generated/prisma/client";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import { goto } from "$app/navigation";
-    import { Email, General, Security, options } from "$lib/components/admin/Settings";
-    import { getFormatter } from "$lib/i18n";
-    import { toaster } from "$lib/components/toaster";
+    import { Email, General, Security, options } from "#lib/components/admin/Settings/index.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import { toaster } from "#lib/components/toaster/index.js";
     import StepButtons from "./StepButtons.svelte";
 
     const { onSuccess }: Props = $props();

@@ -1,6 +1,8 @@
 import type { LayoutLoad } from "./$types";
-import { getClosestAvailableLocale, getClosestAvailablePreferredLanguage, initFormatter, initLang } from "$lib/i18n";
-import { browser } from "$app/environment";
+
+import { getClosestAvailableLocale, getClosestAvailablePreferredLanguage, initFormatter, initLang } from "#lib/i18n.js";
+
+import { browser } from "$app/env";
 
 export const load = (async ({ data }) => {
     let locale: string;

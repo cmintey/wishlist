@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { getFormatter as getPriceFormatter, getLocaleConfig } from "$lib/price-formatter";
+    import { getFormatter as getPriceFormatter, getLocaleConfig } from "#lib/price-formatter.js";
     import type { KeyboardEventHandler } from "svelte/elements";
     import { onMount } from "svelte";
-    import { getLocale } from "$lib/i18n";
+    import { getLocale } from "#lib/i18n.js";
     import { getNumberFormatter } from "svelte-i18n";
     import { Combobox, Portal, useListCollection, type ComboboxRootProps } from "@skeletonlabs/skeleton-svelte";
 

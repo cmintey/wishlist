@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { resolve } from "$app/paths";
-    import { UserAPI } from "$lib/api/users";
-    import Popup from "$lib/components/Popup.svelte";
+    import { UserAPI } from "#lib/api/users.js";
+    import Popup from "#lib/components/Popup.svelte";
 
     interface Props {
         user: LocalUser;
@@ -18,7 +18,7 @@
         open = false;
         if (group.active) return;
         await userAPI.setActiveGroup(group.id);
-        await goto(resolve("/lists"), { invalidateAll: true });
+        await goto(resolve("lists"), { refreshAll: true });
     };
 
     const activeGroup = $derived(groups.find((group) => group.active)!);

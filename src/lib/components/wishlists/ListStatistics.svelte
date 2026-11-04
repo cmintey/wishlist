@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { ItemOnListDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
-    import { formatNumberAsPrice } from "$lib/price-formatter";
+    import type { ItemOnListDTO } from "#lib/dtos/item-dto.js";
+    import { getFormatter } from "#lib/i18n.js";
+    import { formatNumberAsPrice } from "#lib/price-formatter.js";
 
     interface Props {
         items: ItemOnListDTO[];

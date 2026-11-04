@@ -1,5 +1,5 @@
-import { dev } from "$app/environment";
-import { env } from "$env/dynamic/private";
+import { dev } from "$app/env";
+import { LOG_LEVEL } from "$app/env/private";
 import pino from "pino";
 
 async function resolveStream() {
@@ -11,7 +11,7 @@ async function resolveStream() {
 const stream = await resolveStream();
 
 const options: pino.LoggerOptions<never, boolean> = {
-    level: env.LOG_LEVEL ?? "info",
+    level: LOG_LEVEL,
     formatters: {
         level(label) {
             return { level: label.toUpperCase() };

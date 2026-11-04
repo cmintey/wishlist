@@ -1,11 +1,11 @@
-import { getFormatter } from "$lib/server/i18n";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { ItemEvent } from "$lib/events";
-import { tryDeleteImage } from "$lib/server/image-util";
-import { client } from "$lib/server/prisma";
+import { getFormatter } from "#lib/server/i18n.js";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { ItemEvent } from "#lib/events.js";
+import { tryDeleteImage } from "#lib/server/image-util.js";
+import { client } from "#lib/server/prisma.js";
 import { error, type RequestHandler } from "@sveltejs/kit";
-import { requireLoginOrError } from "$lib/server/auth";
-import type { List as PrismaList, Item as PrismaItem } from "$lib/generated/prisma/client";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import type { List as PrismaList, Item as PrismaItem } from "#lib/generated/prisma/client.js";
 
 interface List extends Pick<PrismaList, "groupId"> {
     managers: string[];

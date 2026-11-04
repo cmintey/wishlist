@@ -1,13 +1,13 @@
-import { getFormatter } from "$lib/server/i18n";
-import { itemEmitter } from "$lib/server/events/emitters";
-import { client } from "$lib/server/prisma";
+import { getFormatter } from "#lib/server/i18n.js";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { client } from "#lib/server/prisma.js";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
-import { listItemsUpdateSchema } from "$lib/server/validations";
-import { ItemEvent } from "$lib/events";
-import { requireLoginOrError } from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
-import { getById, verifyUserCanManageList } from "$lib/server/list";
+import { listItemsUpdateSchema } from "#lib/server/validations.js";
+import { ItemEvent } from "#lib/events.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
+import { getById, verifyUserCanManageList } from "#lib/server/list.js";
 
 export const PATCH: RequestHandler = async ({ request, params }) => {
     const user = await requireLoginOrError();

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getFormatter } from "$lib/i18n";
+    import { getFormatter } from "#lib/i18n.js";
     import { Dialog } from "@skeletonlabs/skeleton-svelte";
     import BaseModal from "./BaseModal.svelte";
     import type { BaseModalProps as BaseProps } from "./BaseModal.svelte";

@@ -1,12 +1,12 @@
-import { itemEmitter } from "$lib/server/events/emitters";
-import { createSSE } from "$lib/server/events/sse";
+import { itemEmitter } from "#lib/server/events/emitters.js";
+import { createSSE } from "#lib/server/events/sse.js";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
-import { getConfig } from "$lib/server/config";
-import { getFormatter } from "$lib/server/i18n";
-import { getById } from "$lib/server/list";
-import { getActiveMembership } from "$lib/server/group-membership";
-import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
+import { getConfig } from "#lib/server/config.js";
+import { getFormatter } from "#lib/server/i18n.js";
+import { getById } from "#lib/server/list.js";
+import { getActiveMembership } from "#lib/server/group-membership.js";
+import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "#lib/events.js";
 
 export const GET = (async ({ locals, params }) => {
     const $t = await getFormatter();

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { getFormatter, getLocale } from "$lib/i18n";
-    import type { Group } from "$lib/generated/prisma/client";
+    import { getFormatter, getLocale } from "#lib/i18n.js";
+    import type { Group } from "#lib/generated/prisma/client.js";
     import BaseModal, { type BaseModalProps } from "./BaseModal.svelte";
     import { Dialog, Listbox, useListCollection } from "@skeletonlabs/skeleton-svelte";
 

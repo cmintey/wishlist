@@ -1,8 +1,8 @@
-import { getFormatter } from "$lib/server/i18n";
-import { Role } from "$lib/schema";
-import { requireRole } from "$lib/server/auth";
-import { tryDeleteImage } from "$lib/server/image-util";
-import { client } from "$lib/server/prisma";
+import { getFormatter } from "#lib/server/i18n.js";
+import { Role } from "#lib/schema.js";
+import { requireRole } from "#lib/server/auth.js";
+import { tryDeleteImage } from "#lib/server/image-util.js";
+import { client } from "#lib/server/prisma.js";
 import { type RequestHandler, error } from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async ({ params }) => {

@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { ZxcvbnFactory } from "@zxcvbn-ts/core";
 import { getPrimaryLang, getLocale, defaultLang } from "./i18n";
 

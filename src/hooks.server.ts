@@ -1,15 +1,17 @@
+import type { Handle, HandleServerError } from "@sveltejs/kit/hooks";
 import type { RouteId } from "$app/types";
-import { env } from "$env/dynamic/private";
-import { getClosestAvailableLocaleFromHeader, getClosestAvailablePreferredLanguage, type Lang } from "$lib/i18n";
+import { HEADER_AUTH_ENABLED, HEADER_USERNAME } from "$app/env/private";
+
+import { getClosestAvailableLocaleFromHeader, getClosestAvailablePreferredLanguage, type Lang } from "#lib/i18n.js";
+
 import {
     deleteSessionTokenCookie,
     sessionCookieName,
     setSessionTokenCookie,
     validateSessionToken
-} from "$lib/server/auth";
-import { logger } from "$lib/server/logger";
-import { loadLocale } from "$lib/server/validations";
-import type { Handle, HandleServerError } from "@sveltejs/kit";
+} from "#lib/server/auth.js";
+import { logger } from "#lib/server/logger.js";
+import { loadLocale } from "#lib/server/validations.js";
 
 export const handle: Handle = async ({ event, resolve }) => {
     let lang = getClosestAvailableLocaleFromHeader(event.request.headers.get("accept-language"));
@@ -39,10 +41,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
     }
 
-    const isProxyUser =
-        (env.HEADER_AUTH_ENABLED ?? "false") == "true" &&
-        !!env.HEADER_USERNAME &&
-        !!event.request.headers.get(env.HEADER_USERNAME);
+    const isProxyUser = HEADER_AUTH_ENABLED && !!HEADER_USERNAME && !!event.request.headers.get(HEADER_USERNAME);
 
     event.locals.isProxyUser = isProxyUser;
     event.locals.user = user;
@@ -62,23 +61,28 @@ export const handle: Handle = async ({ event, resolve }) => {
     });
 };
 
-export const handleError: HandleServerError = async ({ error: err, event, status, message }) => {
-    logger.error(
-        {
-            status,
-            method: event.request.method,
-            uri: event.url.pathname + event.url.search + event.url.hash,
-            err
-        },
-        message
-    );
+export const handleError: HandleServerError = ({ kind, error, event }) => {
+    const shouldLog = kind === "framework" || kind === "unknown";
+    if (shouldLog) {
+        const status = kind === "framework" ? error.status : 500;
+        const message = kind === "framework" ? error.message : "Unknown error ocurred.";
+
+        logger.error(
+            {
+                status,
+                method: event.request.method,
+                uri: event.url.pathname + event.url.search + event.url.hash,
+                err: error
+            },
+            message
+        );
+    }
 };
 
 const nonPrivateRoutes: RouteId[] = [
     "/login",
     "/signup",
     "/setup-wizard",
-    "/setup-wizard/step",
     "/setup-wizard/step/[step]",
     "/reset-password",
     "/group-error",

@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { PageData, PageProps } from "./$types";
     import { fade } from "svelte/transition";
-    import { hash, hashItems, viewedItems } from "$lib/stores/viewed-items";
-    import ListCard from "$lib/components/ListCard.svelte";
+    import { hash, hashItems, viewedItems } from "#lib/stores/viewed-items.js";
+    import ListCard from "#lib/components/ListCard.svelte";
     import { goto } from "$app/navigation";
-    import ListFilterChip from "$lib/components/wishlists/chips/ListFilterChip.svelte";
-    import empty from "$lib/assets/no_wishes.svg";
-    import { getFormatter } from "$lib/i18n";
+    import ListFilterChip from "#lib/components/wishlists/chips/ListFilterChip.svelte";
+    import empty from "#lib/assets/no_wishes.svg";
+    import { getFormatter } from "#lib/i18n.js";
     import { resolve } from "$app/paths";
 
     type ListData = PageData["otherLists"][0];
@@ -27,9 +27,10 @@
 
 <div class="flex flex-wrap-reverse items-start justify-between gap-2 pb-4 print:hidden">
     <ListFilterChip {users} />
+
     <button
         class="preset-tonal-secondary inset-ring-secondary-500 btn btn-xs h-fit items-center inset-ring"
-        onclick={() => goto(resolve("/lists/create"))}
+        onclick={() => goto(resolve("lists/create"))}
     >
         <iconify-icon icon="ion:add"></iconify-icon>
         <span>{$t("wishes.create-list")}</span>

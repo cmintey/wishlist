@@ -1,6 +1,6 @@
-import { Role } from "$lib/schema";
-import { requireLoginOrError } from "$lib/server/auth";
-import { client } from "$lib/server/prisma";
+import { Role } from "#lib/schema.js";
+import { requireLoginOrError } from "#lib/server/auth.js";
+import { client } from "#lib/server/prisma.js";
 
 export const requireAccessToGroup = async (groupId: string) => {
     const authUser = await requireLoginOrError();
