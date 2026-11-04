@@ -228,7 +228,7 @@ importers:
         version: 5.58.4(@noble/hashes@2.4.0)(debug@4.4.3)
       nodemailer:
         specifier: ^10.0.0
-        version: 10.1.0
+        version: 10.1.4
       openid-client:
         specifier: ^6.6.4
         version: 6.8.8
@@ -4505,8 +4505,8 @@ packages:
     resolution: {integrity: sha512-x0InOIyzgdk+eyaWaRJFH5snEtiImgBgblZ2CyPrLmqqcuMQkEvcDPHbzqbD8eDsSeJbVOjn+crzyzHaM4D+/A==}
     engines: {node: '>=18'}
 
-  nodemailer@10.1.0:
-    resolution: {integrity: sha512-fXW8AulB25aOTuwfRYV6lqHyfz2VM4rr4SGXH03mE7x5znEUpzL5mu6anARUpZN7744Ziwkmr4AxSLPJsBQspg==}
+  nodemailer@10.1.4:
+    resolution: {integrity: sha512-EsMnOR2oRv4LGnWvHgcVYkkQ4O2j8KO4WTw6l+PHR4sOXo8SAgIraxtEnGDmotjbhv0hDsu3IuDIFZm8iXwO4A==}
     engines: {node: '>=20.0.0'}
 
   nopt@10.0.1:
@@ -9972,7 +9972,7 @@ snapshots:
 
   node-releases@2.0.56: {}
 
-  nodemailer@10.1.0: {}
+  nodemailer@10.1.4: {}
 
   nopt@10.0.1:
     dependencies:
