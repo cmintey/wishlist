@@ -3,7 +3,7 @@
     import type { Group, Item, ItemPrice, List, User } from "#lib/generated/prisma/client.js";
     import Backdrop from "#lib/components/Backdrop.svelte";
     import { getPriceValue } from "#lib/price-formatter.js";
-    import { PUBLIC_DEFAULT_CURRENCY } from "$app/env/public";
+    import { DEFAULT_CURRENCY } from "$app/env/public";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "#lib/i18n.js";
@@ -45,7 +45,7 @@
     let fetching = $state(false);
     let urlFetched = $state(false);
     let price: number | null = $state(getPriceValue(productData));
-    let userCurrency: string = $derived(productData.itemPrice?.currency || PUBLIC_DEFAULT_CURRENCY);
+    let userCurrency: string = $derived(productData.itemPrice?.currency || DEFAULT_CURRENCY);
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
     let submitSrc = $state("submit");
@@ -125,7 +125,7 @@
                 if (newProductData.price) {
                     productData.itemPrice = {
                         id: "temp-id",
-                        currency: newProductData.currency || PUBLIC_DEFAULT_CURRENCY,
+                        currency: newProductData.currency || DEFAULT_CURRENCY,
                         value: newProductData.price
                     };
                     price = newProductData.price;

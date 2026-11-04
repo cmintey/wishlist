@@ -1,4 +1,4 @@
-import { PUBLIC_DEFAULT_CURRENCY } from "$app/env/public";
+import { DEFAULT_CURRENCY } from "$app/env/public";
 import type { ItemPrice } from "#lib/generated/prisma/client.js";
 import { getNumberFormatter } from "svelte-i18n";
 import { defaultLang, getLocale } from "./i18n";
@@ -25,7 +25,7 @@ export const getFormatter = (currency: string | null, locale?: string) => {
     return getNumberFormatter({
         locale: locale ?? (browser ? getLocale() : defaultLang.code),
         style: "currency",
-        currency: currency || PUBLIC_DEFAULT_CURRENCY,
+        currency: currency || DEFAULT_CURRENCY,
         currencyDisplay: "narrowSymbol"
     });
 };

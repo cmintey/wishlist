@@ -16,7 +16,7 @@ export const variables = defineEnvVars({
     HTTP_PROXY: { schema: z.string().optional() },
     https_proxy: { schema: z.string().optional() },
     HTTPS_PROXY: { schema: z.string().optional() },
-    PUBLIC_DEFAULT_CURRENCY: {
+    DEFAULT_CURRENCY: {
         public: true,
         schema: z
             .string()
