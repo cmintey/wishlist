@@ -6,6 +6,7 @@ import { getFormatter } from "$lib/server/i18n";
 import { oidcLogger as logger } from "./logger";
 
 const SCOPE = "openid profile email";
+const GROUPS_SCOPE = "groups";
 const CODE_CHALLENGE_METHOD = "S256";
 const NONCE_COOKIE = "oidc_nonce";
 const STATE_COOKIE = "oidc_state";
@@ -59,7 +60,7 @@ async function getClientConfig(fetch: RequestEvent["fetch"], config?: Config) {
 }
 
 export async function getOIDCConfig(fetch: RequestEvent["fetch"]) {
-    const config = await getConfig();
+    const config = await getConfig(undefined, true);
     const clientConfig = await getClientConfig(fetch, config);
     return {
         ready: clientConfig !== null,
@@ -71,7 +72,8 @@ export async function getOIDCConfig(fetch: RequestEvent["fetch"]) {
 
 export async function authorizeRedirect(event: RequestEvent) {
     const $t = await getFormatter();
-    const config = await getClientConfig(event.fetch);
+    const appConfig = await getConfig(undefined, true);
+    const config = await getClientConfig(event.fetch, appConfig);
     if (!config) {
         return Response.json({ message: $t("auth.oidc-client-not-configured") }, { status: 400 });
     }
@@ -84,7 +86,7 @@ export async function authorizeRedirect(event: RequestEvent) {
 
     const parameters: Record<string, string> = {
         redirect_uri: new URL("/login", event.url.origin).toString(),
-        scope: SCOPE,
+        scope: appConfig.oidc.adminGroup ? `${SCOPE} ${GROUPS_SCOPE}` : SCOPE,
         code_challenge: codeChallenge,
         code_challenge_method: CODE_CHALLENGE_METHOD,
         nonce,
@@ -186,7 +188,8 @@ export async function handleCallback(event: RequestEvent) {
     logger.debug("Successfully authorized callback for %s", claims.sub);
     logger.debug("Fetching user info for %s", claims.sub);
 
-    return await client.fetchUserInfo(config, tokens.access_token, claims.sub);
+    const userinfo = await client.fetchUserInfo(config, tokens.access_token, claims.sub);
+    return { claims, userinfo };
 }
 
 export function errorRedirect(message: string): never {

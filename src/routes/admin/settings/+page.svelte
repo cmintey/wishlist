@@ -18,7 +18,7 @@
     });
 
     const currentHash = $derived(page.url.hash);
-    let { config, groups } = $derived(data);
+    let { config, groups, envManagedKeys } = $derived(data);
     let sending = $state(false);
     let saving = $state(false);
 </script>
@@ -78,7 +78,7 @@
         <div class="w-full">
             <General {config} {groups} hidden={currentHash !== options[0].hash} />
             <Email {config} hidden={currentHash !== options[1].hash} {sending} />
-            <Security {config} hidden={currentHash !== options[2].hash} />
+            <Security {config} {envManagedKeys} hidden={currentHash !== options[2].hash} />
 
             {#if page.form?.error}
                 <span>{page.form.error}</span>

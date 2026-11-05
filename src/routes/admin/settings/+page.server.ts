@@ -1,6 +1,6 @@
 import { Role } from "$lib/schema";
 import { client } from "$lib/server/prisma";
-import { getConfig, writeConfig } from "$lib/server/config";
+import { getConfig, getEnvManagedKeys, writeConfig } from "$lib/server/config";
 import { fail } from "@sveltejs/kit";
 import type { Action, Actions, PageServerLoad } from "./$types";
 import { sendTest } from "$lib/server/email";
@@ -22,7 +22,8 @@ export const load: PageServerLoad = async () => {
 
     return {
         config,
-        groups
+        groups,
+        envManagedKeys: getEnvManagedKeys()
     };
 };
 
@@ -91,7 +92,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               enableSync: configData.oidcEnableSync,
               disableEmailVerification: configData.oidcDisableEmailVerification,
               nameClaim: configData.oidcNameClaim,
-              usernameClaim: configData.oidcUsernameClaim
+              usernameClaim: configData.oidcUsernameClaim,
+              groupsClaim: configData.oidcGroupsClaim,
+              adminGroup: configData.oidcAdminGroup
           }
         : {
               enable: false,
@@ -104,7 +107,9 @@ const generateConfig = (configData: z.infer<typeof settingSchema>) => {
               enableSync: configData.oidcEnableSync,
               disableEmailVerification: configData.oidcDisableEmailVerification,
               nameClaim: configData.oidcNameClaim,
-              usernameClaim: configData.oidcUsernameClaim
+              usernameClaim: configData.oidcUsernameClaim,
+              groupsClaim: configData.oidcGroupsClaim,
+              adminGroup: configData.oidcAdminGroup
           };
 
     const newConfig: Config = {
