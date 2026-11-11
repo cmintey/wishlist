@@ -33,7 +33,7 @@
         "@types/node": "^24.19.2",
         "@types/nodemailer": "^8.0.0",
         "@types/pulltorefreshjs": "^0.1.7",
-        "@vite-pwa/sveltekit": "^1.0.0",
+        "@vite-pwa/sveltekit": "^2.0.0",
         "autoprefixer": "^10.4.21",
         "eslint": "^10.0.0",
         "eslint-plugin-svelte": "^3.11.0",
