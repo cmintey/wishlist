@@ -7,6 +7,7 @@
     import { toaster } from "$lib/components/toaster";
     import { goto } from "$app/navigation";
     import Alert from "$lib/components/Alert.svelte";
+    import { createItem } from "$lib/rpc/create-item.remote";
 
     const { data }: PageProps = $props();
     const t = getFormatter();
@@ -60,31 +61,7 @@
     </Alert>
 {/if}
 
-<form
-    enctype="multipart/form-data"
-    method="POST"
-    use:enhance={({ submitter }) => {
-        saving = true;
-        return async ({ result }) => {
-            saving = false;
-            if (result.type === "error") {
-                toaster.error({ description: (result.error?.message as string) || $t("general.oops") });
-                return;
-            }
-            if (result.type === "redirect") {
-                toaster.info({ description: $t("wishes.item-created") });
-
-                if (submitter?.id === "submit-stay") {
-                    clearFields();
-                    window.scrollTo({ top: 0 });
-                    return;
-                }
-                return goto(result.location, { invalidateAll: true, replaceState: true });
-            }
-            await applyAction(result);
-        };
-    }}
->
+<form {...createItem} enctype="multipart/form-data">
     <ItemForm
         buttonText={$t("wishes.add-item")}
         currentList={data.list.id}

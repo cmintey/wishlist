@@ -8,7 +8,15 @@ const config = {
     preprocess: [sveltePreprocess()],
 
     kit: {
-        adapter: adapter()
+        adapter: adapter(),
+        experimental: {
+            remoteFunctions: true
+        }
+    },
+    compilerOptions: {
+        experimental: {
+            async: true
+        }
     }
 };
 

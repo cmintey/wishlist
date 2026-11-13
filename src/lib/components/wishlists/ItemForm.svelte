@@ -2,7 +2,6 @@
     import { page } from "$app/state";
     import type { Group, Item, ItemPrice, List, User } from "$lib/generated/prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
@@ -10,6 +9,8 @@
     import MarkdownEditor from "../MarkdownEditor.svelte";
     import FileUpload from "../FileUpload.svelte";
     import { toaster } from "../toaster";
+    import ListSelector from "./ListSelector.svelte";
+    import { createItem } from "$lib/rpc/create-item.remote";
 
     interface ListProps extends Pick<List, "id" | "name" | "public"> {
         owner: Pick<User, "name">;
@@ -43,45 +44,15 @@
     let url = $derived(page.url);
     let fetching = $state(false);
     let urlFetched = $state(false);
-    let price: number | null = $state(getPriceValue(productData));
-    const defaultCurrency = getDefaultCurrency();
-    let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
+    // let price: number | undefined = $state(
+    //     getPriceValueFromMinor(
+    //         createItem.fields.price.value(),
+    //         createItem.fields.currency.value() || defaultCurrency
+    //     ) || undefined
+    // );
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
     let submitSrc = $state("submit");
-
-    const listsHavingItem = $derived.by(() => {
-        return productData.lists
-            ? productData.lists.reduce(
-                  (accum, list) => {
-                      accum[list.id] = list.canModify;
-                      return accum;
-                  },
-                  {} as Record<string, boolean>
-              )
-            : { [currentList || ""]: true };
-    });
-    const lists = $derived.by(() => {
-        function nameAndSortLists(lists: ListProps[] | undefined) {
-            if (!lists) return [];
-            return lists
-                .map((l) => ({
-                    ...l,
-                    name: l.name || $t("wishes.wishes-for", { values: { listOwner: l.owner.name } })
-                }))
-                .toSorted((a, b) =>
-                    listsHavingItem[a.id] !== undefined
-                        ? -Infinity
-                        : listsHavingItem[b.id] !== undefined
-                          ? Infinity
-                          : a.name?.localeCompare(b.name)
-                );
-        }
-        return {
-            usersLists: nameAndSortLists(otherLists?.usersLists),
-            managedLists: nameAndSortLists(otherLists?.managedLists)
-        };
-    });
 
     const extractUrl = (url: string) => {
         const urlRegex = /(https?):\/\/[^\s/$.?#].[^\s]*/;
@@ -96,25 +67,26 @@
         toaster.warning({ description: $t("errors.unable-to-find-product-information") });
     };
 
-    const getInfo = async () => {
-        if (productData.url && !urlFetched) {
+    const getInfo = async (productUrl: string | undefined | null) => {
+        if (productUrl && !urlFetched) {
             fetching = true;
-            const url = extractUrl(productData.url);
+            const url = extractUrl(productUrl) || undefined;
             const res = await fetch(`/api/product?url=${url}`);
             if (res.ok) {
                 let newProductData: ProductData = await res.json();
-                productData.url = newProductData.url ? newProductData.url : url;
-                productData.name = newProductData.name ? newProductData.name : newProductData.title || "";
+                //TODO: use function to update
+                createItem.fields.url.set(newProductData.url ?? url);
+                createItem.fields.name.set(newProductData.name ?? newProductData.title ?? undefined);
                 if (newProductData.image) {
                     try {
                         const imageUrl = new URL(newProductData.image);
-                        productData.imageUrl = imageUrl.href;
+                        createItem.fields.imageUrl.set(imageUrl.href);
                     } catch {
                         if (newProductData.url) {
                             try {
                                 const url = new URL(newProductData.url);
                                 const imageUrl = new URL(newProductData.image, url);
-                                productData.imageUrl = imageUrl.href;
+                                createItem.fields.imageUrl.set(imageUrl.href);
                             } catch {
                                 // invalid image, stop strying to make it work
                             }
@@ -123,12 +95,8 @@
                 }
 
                 if (newProductData.price) {
-                    productData.itemPrice = {
-                        id: "temp-id",
-                        currency: newProductData.currency || defaultCurrency,
-                        value: newProductData.price
-                    };
-                    price = newProductData.price;
+                    createItem.fields.currency.set(newProductData.currency || undefined);
+                    createItem.fields.price.set(newProductData.price);
                 }
             } else {
                 triggerToast();
@@ -140,8 +108,7 @@
 
     onMount(async () => {
         if (url.searchParams.has("productUrl")) {
-            productData.url = url.searchParams.get("productUrl");
-            await getInfo();
+            await getInfo(url.searchParams.get("productUrl"));
         }
     });
 
@@ -163,14 +130,10 @@
             history.back();
         }
     };
-
-    const selectAll = () => {
-        document.getElementsByName("lists").forEach((el) => ((el as HTMLInputElement).checked = true));
-    };
 </script>
 
 <div class="grid grid-cols-7 gap-4">
-    <label class="label col-span-full" for="url">
+    <label class="label col-span-full">
         <span>{$t("wishes.item-url")}</span>
         <div class="flex flex-row gap-x-4">
             <div class="input-group w-full grid-cols-[auto_1fr_auto]">
@@ -178,20 +141,17 @@
                     <iconify-icon icon="ion:link"></iconify-icon>
                 </div>
                 <input
-                    id="url"
-                    name="url"
+                    {...createItem.fields.url.as("url")}
                     class="ig-input"
-                    onfocusout={() => getInfo()}
+                    onfocusout={() => getInfo(createItem.fields.url.value())}
                     placeholder={$t("wishes.url-placeholder")}
-                    type="url"
-                    bind:value={productData.url}
                 />
-                {#if productData.url}
+                {#if createItem.fields.url.value()}
                     <button
                         id="reset-field"
                         class="ig-cell"
                         aria-label={$t("a11y.clear-url-field")}
-                        onclick={() => (productData.url = null)}
+                        onclick={() => createItem.fields.url.set(undefined)}
                         onkeypress={(e) => e.preventDefault()}
                         tabindex="-1"
                         type="button"
@@ -200,7 +160,7 @@
                     </button>
                 {/if}
             </div>
-            {#if productData.url}
+            {#if createItem.fields.url.value()}
                 <button
                     id="refresh-item"
                     class="preset-tonal-primary border-primary-500 btn btn-icon border"
@@ -208,7 +168,7 @@
                     onclick={(e) => {
                         e.preventDefault();
                         urlFetched = false;
-                        getInfo();
+                        getInfo(createItem.fields.url.value());
                     }}
                     onkeypress={(e) => e.preventDefault()}
                     tabindex="-1"
@@ -218,33 +178,32 @@
                 </button>
             {/if}
         </div>
+        {#each createItem.fields.url.issues() as issue}
+            <p class="text-invalid pt-2">{issue.message}</p>
+        {/each}
     </label>
 
-    <label class="label col-span-full xl:col-span-3" for="name">
+    <label class="label col-span-full xl:col-span-3">
         <span>{$t("wishes.item-name")}*</span>
         <div class="input-group grid-cols-[auto_1fr]">
             <div class="ig-cell preset-tonal">
                 <iconify-icon icon="ion:bag-handle"></iconify-icon>
             </div>
-            <input
-                id="name"
-                name="name"
-                class="ig-input"
-                class:input-invalid={form?.errors?.name}
-                autocomplete="off"
-                required
-                type="text"
-                bind:value={productData.name}
-            />
+            <input {...createItem.fields.name.as("text")} required class="ig-input" autocomplete="off" />
         </div>
-        {#if form?.errors?.name}
-            <p class="text-invalid pt-2">{form.errors.name[0]}</p>
-        {/if}
+        {#each createItem.fields.name.issues() as issue}
+            <p class="text-invalid pt-2">{issue.message}</p>
+        {/each}
     </label>
 
-    <label class="label col-span-full sm:col-span-4 xl:col-span-2" for="price">
+    <label class="label col-span-full sm:col-span-4 xl:col-span-2">
         <span>{$t("wishes.price")}</span>
-        <CurrencyInput id="price" name="price" currency={userCurrency} bind:value={price} />
+        <CurrencyInput
+            name={createItem.fields.price.as("number").name}
+            currencyName={createItem.fields.currency.as("text").name}
+            currency={createItem.fields.currency.value()}
+            value={createItem.fields.price.value()}
+        />
     </label>
 
     <div class="label col-span-full sm:col-span-3 xl:col-span-2">
@@ -258,8 +217,7 @@
                         <iconify-icon icon="ion:gift"></iconify-icon>
                     </div>
                     <input
-                        id="quantity"
-                        name="quantity"
+                        {...createItem.fields.quantity.as("number")}
                         class="ig-input w-0 min-w-full"
                         autocomplete="off"
                         defaultValue={1}
@@ -300,20 +258,13 @@
             <div class="ig-cell preset-tonal">
                 <iconify-icon icon="ion:image"></iconify-icon>
             </div>
-            <input
-                id="imageUrl"
-                name="imageUrl"
-                class="ig-input"
-                autocomplete="off"
-                type="text"
-                bind:value={productData.imageUrl}
-            />
+            <input {...createItem.fields.imageUrl.as("text")} class="ig-input" autocomplete="off" />
         </div>
     </label>
 
     <div class="col-span-full">
         <label class="checkbox-label w-fit" for="mostWanted">
-            <input id="mostWanted" name="mostWanted" class="checkbox" checked={item.mostWanted} type="checkbox" />
+            <input {...createItem.fields.mostWanted.as("checkbox")} class="checkbox" />
             <span>{$t("wishes.most-wanted")}</span>
         </label>
         <span class="subtext">{$t("wishes.most-wanted-description")}</span>
@@ -324,70 +275,7 @@
         <MarkdownEditor id="note" name="note" placeholder={$t("wishes.note-placeholder")} value={productData.note} />
     </label>
 
-    <fieldset
-        class={[
-            "col-span-full flex flex-col space-y-2 md:col-span-5",
-            lists.usersLists.length + lists.managedLists.length <= 1 && "hidden"
-        ]}
-        aria-labelledby="lists-label"
-    >
-        <div class="flex items-end justify-between">
-            <legend id="lists-label">{$t("wishes.lists")}</legend>
-            {#if !item.createdById || item.createdById === userId}
-                <button
-                    class="preset-tonal-primary border-primary-500 btn btn-sm border"
-                    onclick={selectAll}
-                    type="button"
-                >
-                    {$t("general.select-all")}
-                </button>
-            {/if}
-        </div>
-
-        {#if item.createdById && item.createdById !== userId}
-            <p class="text-warning-800-200 text-sm">{$t("wishes.cannot-update-lists-of-item")}</p>
-        {/if}
-
-        <div
-            class={[
-                "border-surface-500 rounded-container flex h-36 flex-col space-y-2 overflow-auto border p-2",
-                form?.errors?.lists && "input-invalid",
-                item.createdById && item.createdById !== userId && "disabled"
-            ]}
-        >
-            {#snippet displayList(list: ListProps)}
-                <label class="flex items-center gap-x-2" for={list.id}>
-                    <input
-                        id={list.id}
-                        name="lists"
-                        class="checkbox"
-                        checked={listsHavingItem[list.id] !== undefined}
-                        disabled={listsHavingItem[list.id] === false}
-                        type="checkbox"
-                        value={list.id}
-                    />
-                    <div class="mt-0! flex flex-row gap-x-2">
-                        <span>
-                            {list.name}
-                        </span>
-                        <span class="font-bold italic">({list.group.name})</span>
-                    </div>
-                </label>
-            {/snippet}
-            {#each lists.usersLists as list (list.id)}
-                {@render displayList(list)}
-            {/each}
-            {#each lists.managedLists as list, i (list.id)}
-                {#if i === 0}
-                    <span class="text-subtle">Managed lists</span>
-                {/if}
-                {@render displayList(list)}
-            {/each}
-        </div>
-        {#if form?.errors?.lists}
-            <p class="text-invalid">{form.errors.lists[0]}</p>
-        {/if}
-    </fieldset>
+    <ListSelector {currentList} item={productData} lists={otherLists} {userId} />
 
     <span class="col-span-full text-sm">*{$t("general.required-field")}</span>
 
