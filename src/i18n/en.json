@@ -383,6 +383,7 @@
         "add-a-manager": "Add manager",
         "add-item": "Create item",
         "added-by": "Added by <span class=\"{class}\">{name}</span>",
+        "added-on": "Added on <span class=\"{class}\">{date}</span>",
         "added-by-somebody-else": "Added by <span class=\"{class}\">somebody else</span>",
         "additional-items-requested": "{remainingQuantity, plural, =0 {There are no additional items available.} one {There is # additional item available.} other {There are # additional items available.}}",
         "all-lists": "All lists",

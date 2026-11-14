@@ -1,7 +1,7 @@
 <script lang="ts">
     import Markdown from "$lib/components/Markdown.svelte";
     import type { ClaimDTO } from "$lib/dtos/item-dto";
-    import { getFormatter } from "$lib/i18n";
+    import { defaultLang, getFormatter, getLocale } from "$lib/i18n";
     import { formatPrice } from "$lib/price-formatter";
     import { shouldShowName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
@@ -39,6 +39,21 @@
         showDetail = false,
         fullNotes = false
     }: Props = $props();
+
+    const locale = getLocale() || defaultLang.code;
+    const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "medium" });
+    const relativeFormatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+    // createdAt may arrive as a string when the item comes from a server-sent event (JSON)
+    let createdAt = $derived(item.createdAt ? new Date(item.createdAt) : null);
+
+    const relativeAge = (date: Date) => {
+        const days = Math.round((date.getTime() - Date.now()) / 86_400_000);
+        if (Math.abs(days) < 30) return relativeFormatter.format(days, "day");
+        const months = Math.round(days / 30.44);
+        if (Math.abs(months) < 12) return relativeFormatter.format(months, "month");
+        return relativeFormatter.format(Math.round(days / 365.25), "year");
+    };
 
     let expandClaims = $state(false);
     let shouldShowClaimName = $derived((claim?: ClaimDTO) =>
@@ -107,6 +122,19 @@
         {/if}
     </span>
 </div>
+
+<!-- Date added (unknown for items created before this field existed) -->
+{#if createdAt}
+    <div class="flex items-center gap-2">
+        <iconify-icon icon="ion:calendar"></iconify-icon>
+        <span class="text-wrap" data-testid="added-on" title={createdAt.toLocaleString(locale)}>
+            {@html $t("wishes.added-on", {
+                values: { date: dateFormatter.format(createdAt), class: "text-secondary-900-100 font-bold" }
+            })}
+            <span class="subtext">({relativeAge(createdAt)})</span>
+        </span>
+    </div>
+{/if}
 
 <!-- Notes -->
 {#if item.note}
