@@ -16,11 +16,17 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
         error(404, $t("errors.claim-was-not-found"));
     }
 
+    const itemInclusions = getItemInclusions();
     const claim = await client.itemClaim.findFirst({
         select: {
             id: true,
             quantity: true,
-            item: { include: getItemInclusions() },
+            item: {
+                include: {
+                    ...itemInclusions,
+                    claims: { ...itemInclusions.claims, where: publicClaimByToken(token) }
+                }
+            },
             list: { select: { id: true, name: true, groupId: true, public: true } }
         },
         where: publicClaimByToken(token)

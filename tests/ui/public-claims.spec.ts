@@ -30,8 +30,9 @@ async function createPublicItem(page: Page, group: GroupData, quantity = 1) {
 }
 
 async function claimAsGuest(request: APIRequestContext, listId: string, itemId: number, groupId: string) {
+    const name = randomString();
     const publicUser = await request.post("/api/users/public", {
-        data: { groupId, username: `${randomString()}@example.com` }
+        data: { groupId, username: `${randomString()}@example.com`, name }
     });
     expect(publicUser.ok()).toBeTruthy();
     const { id }: { id: string } = await publicUser.json();
@@ -40,7 +41,7 @@ async function claimAsGuest(request: APIRequestContext, listId: string, itemId: 
     });
     expect(response.ok()).toBeTruthy();
     const claim: { claimId: string; token: string } = await response.json();
-    return claim;
+    return { ...claim, name };
 }
 
 test("email claim link reuses the item controls and consumes only its token", async ({
@@ -158,6 +159,21 @@ test("a guest token releases only its own reservation", async ({ page, userData,
     const first = await claimAsGuest(anonymousPage.request, list.getId(), itemId, groupId);
     const second = await claimAsGuest(anonymousPage.request, list.getId(), itemId, groupId);
     expect(first.token).not.toBe(second.token);
+
+    await anonymousPage.goto(list.getUrl());
+    await expect(anonymousPage.getByTestId("quantity-claimed").first()).toHaveText("2 claimed");
+    const makePrivate = await page.request.post(`/lists/${list.getId()}/manage?/persist`, {
+        headers: { Origin: new URL(page.url()).origin },
+        form: { name: "Private list" }
+    });
+    expect(makePrivate.ok()).toBeTruthy();
+    const management = await anonymousPage.request.get(`/claims/manage?token=${first.token}`);
+    expect(management.status()).toBe(200);
+    const managementHtml = await management.text();
+    expect(managementHtml).toContain(first.name);
+    expect(managementHtml).not.toContain(second.name);
+    expect(managementHtml).not.toContain(second.claimId);
+
     expect((await anonymousPage.request.delete("/api/claims/public", { data: { token: first.token } })).status()).toBe(
         200
     );
