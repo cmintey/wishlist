@@ -21,6 +21,7 @@
         | "isSelfClaimable"
     > {
         isClaimableOrClaimed: (ans: boolean) => void;
+        onPublicUnclaim?: VoidFunction;
     }
 
     let {
@@ -34,7 +35,8 @@
         groupId,
         requireClaimEmail,
         isClaimableOrClaimed,
-        isSelfClaimable
+        isSelfClaimable,
+        onPublicUnclaim
     }: Props = $props();
 
     const t = getFormatter();
@@ -57,6 +59,7 @@
         const resp = await unclaimPublic(token);
         if (resp.ok) {
             toaster.info({ description: $t("wishes.claimed-item", { values: { claimed: false } }) });
+            onPublicUnclaim?.();
         } else {
             const body = await resp.json().catch(() => undefined);
             toaster.error({ description: body?.message || $t("general.oops") });

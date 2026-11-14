@@ -39,15 +39,22 @@ export const DELETE: RequestHandler = async ({ request }) => {
         error(404, $t("errors.claim-was-not-found"));
     }
 
+    let deletedCount: number;
     try {
-        await client.itemClaim.delete({
+        const { count } = await client.itemClaim.deleteMany({
             where: {
-                id: claim.id
+                id: claim.id,
+                ...publicClaimByToken(body.data.token)
             }
         });
+        deletedCount = count;
     } catch (err) {
         logger.error({ err }, "Unable to unclaim item");
         error(500, $t("errors.unable-to-unclaim-item"));
+    }
+
+    if (deletedCount === 0) {
+        error(404, $t("errors.claim-was-not-found"));
     }
 
     const item = await client.item.findUnique({
