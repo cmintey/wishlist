@@ -13,18 +13,7 @@ import { getActiveMembership } from "$lib/server/group-membership";
 import { getConfig } from "$lib/server/config";
 import { sendClaimConfirmation } from "$lib/server/email";
 import generateToken, { hashToken } from "$lib/server/token";
-
-// Mirrors ItemImage.svelte: an absolute URL is used as-is, anything else is an
-// upload id. Emails need absolute URLs, so relative ones are resolved here.
-const toAbsoluteImageUrl = (imageUrl: string | null, base: URL) => {
-    if (!imageUrl) return undefined;
-    try {
-        return new URL(imageUrl).href;
-    } catch {
-        if (imageUrl.startsWith("/") || imageUrl.endsWith("/")) return undefined;
-        return new URL(`/api/assets/${imageUrl}`, base).href;
-    }
-};
+import { getItemImageUrl } from "$lib/image-url";
 
 // Claim an item on a list
 export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
@@ -41,7 +30,9 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
     if (updateData.error) {
         error(422, JSON.stringify(z.flattenError(updateData.error).fieldErrors));
     }
-    if (!updateData.data.claimedById && !updateData.data.publicClaimedById) {
+    const isRegisteredClaim = Boolean(updateData.data.claimedById);
+    const isPublicClaim = Boolean(updateData.data.publicClaimedById);
+    if (isRegisteredClaim === isPublicClaim) {
         error(400, $t("errors.claimed-by-user-must-be-specified"));
     }
 
@@ -53,12 +44,7 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
             groupId: true,
             allowSelfClaims: true,
             notForMe: true,
-            ownerId: true,
-            owner: {
-                select: {
-                    preferredLanguage: true
-                }
-            }
+            ownerId: true
         },
         where: {
             id: params.listId
@@ -193,19 +179,15 @@ export const PUT: RequestHandler = async ({ locals, request, params, url }) => {
         try {
             const config = await getConfig(list.groupId);
             if (config.smtp.enable) {
+                const itemImageUrl = getItemImageUrl(item.imageUrl);
                 const manageUrl = new URL(`/claims/manage?token=${claimToken}`, url);
                 const listUrl = new URL(`/lists/${list.id}`, url);
                 const { success, message } = await sendClaimConfirmation(publicClaimerEmail, {
                     manageUrl: manageUrl.href,
                     listUrl: listUrl.href,
-                    listName: list.name,
+                    listName: list.name ?? $t("wishes.a-wishlist"),
                     itemName: item.name,
-                    itemImageUrl: toAbsoluteImageUrl(item.imageUrl, url),
-                    // The claimer has no account to take a language from. The
-                    // owner's preference matches the list they were looking at;
-                    // without one, getFormatter falls back to this request's
-                    // language, which is the claimer's own browser
-                    locale: list.owner.preferredLanguage ?? undefined
+                    itemImageUrl: itemImageUrl ? new URL(itemImageUrl, url).href : undefined
                 });
                 if (!success) {
                     logger.error({ message }, "Unable to send claim confirmation email");

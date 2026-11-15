@@ -1,106 +1,49 @@
-import { ItemEvent } from "$lib/events";
-import { itemEmitter } from "$lib/server/events/emitters";
+import { toItemOnListDTO } from "$lib/dtos/item-mapper";
+import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
 import { getItemInclusions } from "$lib/server/items";
-import { logger } from "$lib/server/logger";
 import { client } from "$lib/server/prisma";
 import { publicClaimByToken } from "$lib/server/public-claims";
-import { error, fail } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
+import { error } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
 
-const claimSelect = {
-    id: true,
-    quantity: true,
-    itemId: true,
-    item: {
-        select: {
-            name: true,
-            imageUrl: true
-        }
-    },
-    list: {
+export const load: PageServerLoad = async ({ url, setHeaders }) => {
+    setHeaders({ "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
+
+    const $t = await getFormatter();
+    const token = url.searchParams.get("token");
+    if (!token) {
+        error(404, $t("errors.claim-was-not-found"));
+    }
+
+    const itemInclusions = getItemInclusions();
+    const claim = await client.itemClaim.findFirst({
         select: {
             id: true,
-            name: true,
-            public: true
-        }
-    },
-    publicClaimedBy: {
-        select: {
-            name: true
-        }
-    }
-};
-
-// Mirrors ItemImage.svelte: an absolute URL is used as-is, anything else is an
-// upload id served by /api/assets
-const toImageUrl = (imageUrl: string | null) => {
-    if (!imageUrl) return undefined;
-    try {
-        return new URL(imageUrl).href;
-    } catch {
-        if (imageUrl.startsWith("/") || imageUrl.endsWith("/")) return undefined;
-        return `/api/assets/${imageUrl}`;
-    }
-};
-
-// Public claimers have no account, so the tokenized link from their confirmation
-// email is the only thing that authorizes them to manage the claim
-const findClaimByToken = async (token: string | null) => {
-    if (!token) return null;
-
-    return await client.itemClaim.findFirst({
-        select: claimSelect,
+            quantity: true,
+            item: {
+                include: {
+                    ...itemInclusions,
+                    claims: { ...itemInclusions.claims, where: publicClaimByToken(token) }
+                }
+            },
+            list: { select: { id: true, name: true, groupId: true, public: true } }
+        },
         where: publicClaimByToken(token)
     });
-};
-
-export const load: PageServerLoad = async ({ url }) => {
-    const $t = await getFormatter();
-    const claim = await findClaimByToken(url.searchParams.get("token"));
 
     if (!claim) {
         error(404, $t("errors.claim-was-not-found"));
     }
 
+    const config = await getConfig(claim.list.groupId);
     return {
-        itemName: claim.item.name,
-        itemImageUrl: toImageUrl(claim.item.imageUrl),
-        listId: claim.list.id,
-        listName: claim.list.name,
-        quantity: claim.quantity
+        claimId: claim.id,
+        quantity: claim.quantity,
+        item: toItemOnListDTO(claim.item, claim.list.id),
+        listName: claim.list.name ?? $t("wishes.a-wishlist"),
+        listPublic: claim.list.public,
+        groupId: claim.list.groupId,
+        requireClaimEmail: config.claims.requireEmail
     };
-};
-
-export const actions: Actions = {
-    unclaim: async ({ request, url }) => {
-        const $t = await getFormatter();
-        const formData = await request.formData();
-        const claim = await findClaimByToken(formData.get("token")?.toString() ?? url.searchParams.get("token"));
-
-        if (!claim) {
-            return fail(404, { error: true, message: $t("errors.claim-was-not-found") });
-        }
-
-        try {
-            await client.itemClaim.delete({
-                where: {
-                    id: claim.id
-                }
-            });
-        } catch (err) {
-            logger.error({ err }, "Unable to unclaim item using claim token");
-            return fail(500, { error: true, message: $t("errors.unable-to-unclaim-item") });
-        }
-
-        const item = await client.item.findUnique({
-            where: {
-                id: claim.itemId
-            },
-            include: getItemInclusions()
-        });
-        if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
-
-        return { success: true, itemName: claim.item.name };
-    }
 };

@@ -178,7 +178,6 @@ model ItemClaim {
     publicClaimedById String?
     purchased         Boolean     @default(false)
     quantity          Int         @default(1)
-    createdAt         DateTime    @default(now())
     hashedToken       String?
 
     @@index([itemId])

@@ -31,22 +31,25 @@ type ClaimConfirmationTemplateData = InviteTemplateData & {
 type ClaimConfirmationOptions = {
     manageUrl: string;
     listUrl: string;
-    listName: string | null;
+    listName: string;
     itemName: string;
     itemImageUrl?: string;
-    locale?: string;
 };
+
+type EmailTemplateData = InviteTemplateData | PasswordResetTemplateData | ClaimConfirmationTemplateData;
 
 // Compiled on first use and cached. Loading these at module load would race
 // with the first email sent after startup, which fails if it wins.
-const templateCache = new Map<string, HandlebarsTemplateDelegate<any>>();
+const templateCache = new Map<string, HandlebarsTemplateDelegate<EmailTemplateData>>();
 
-const getTemplate = async <T>(name: string): Promise<HandlebarsTemplateDelegate<T> | null> => {
+const getTemplate = async <T extends EmailTemplateData>(
+    name: string
+): Promise<HandlebarsTemplateDelegate<T> | null> => {
     const cached = templateCache.get(name);
     if (cached) return cached;
 
     try {
-        const template = Handlebars.compile<T>(await readFile(`templates/${name}.html`, "utf-8"));
+        const template = Handlebars.compile<EmailTemplateData>(await readFile(`templates/${name}.html`, "utf-8"));
         templateCache.set(name, template);
         return template;
     } catch (err) {
@@ -149,13 +152,10 @@ export const sendPasswordReset = async (to: string, resetUrl: string) => {
 };
 
 export const sendClaimConfirmation = async (to: string, options: ClaimConfirmationOptions) => {
-    const { manageUrl, listUrl, listName, itemName, itemImageUrl, locale } = options;
-    // The claimer has no account, so the language comes from the list rather
-    // than from the request that happened to create the claim
-    const $t = await getFormatter(locale);
+    const { manageUrl, listUrl, listName, itemName, itemImageUrl } = options;
+    const $t = await getFormatter();
     const claimConfirmationTempl = await getTemplate<ClaimConfirmationTemplateData>("claim-confirmation");
     if (!claimConfirmationTempl) return templateMissing("claim-confirmation");
-    const listDisplayName = listName ?? $t("wishes.a-wishlist");
     const html = claimConfirmationTempl({
         url: manageUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
@@ -164,9 +164,9 @@ export const sendClaimConfirmation = async (to: string, options: ClaimConfirmati
         titleText: $t("email.claim-title"),
         itemName,
         itemImageUrl,
-        listName: listDisplayName,
+        listName,
         listUrl,
-        listLinkText: $t("email.claim-view-list", { values: { listName: listDisplayName } }),
+        listLinkText: $t("email.claim-view-list", { values: { listName } }),
         bodyText: $t("email.claim-body"),
         buttonText: $t("email.claim-button"),
         footerText: $t("email.claim-footer")
@@ -176,7 +176,7 @@ export const sendClaimConfirmation = async (to: string, options: ClaimConfirmati
         subject: $t("email.claim-subject"),
         html,
         text: $t("email.claim-fallback-text", {
-            values: { url: manageUrl, itemName, listName: listDisplayName, listUrl }
+            values: { url: manageUrl, itemName, listName, listUrl }
         })
     });
 };

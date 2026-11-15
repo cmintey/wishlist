@@ -76,7 +76,10 @@ export const handleError: HandleServerError = async ({ error: err, event, status
         {
             status,
             method: event.request.method,
-            uri: event.url.pathname + event.url.search + event.url.hash,
+            uri:
+                event.route.id === "/claims/manage"
+                    ? event.url.pathname
+                    : event.url.pathname + event.url.search + event.url.hash,
             err
         },
         message
@@ -84,6 +87,7 @@ export const handleError: HandleServerError = async ({ error: err, event, status
 };
 
 const nonPrivateRoutes: RouteId[] = [
+    "/claims/manage", // This loader sets the stricter no-store cache policy.
     "/login",
     "/signup",
     "/setup-wizard",

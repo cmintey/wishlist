@@ -7,7 +7,7 @@ export class Toast {
 
     constructor(page: Page) {
         this.page = page;
-        this.toast = page.locator("[data-scope='toast'][data-part='root']");
+        this.toast = page.locator("[data-scope='toast'][data-part='root'][data-state='open']");
         this.dismissToastButton = this.toast.getByRole("button", { name: "Dismiss notification" });
     }
 

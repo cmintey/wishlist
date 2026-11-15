@@ -36,6 +36,7 @@ export class CreateItemPage extends BasePage {
     async create() {
         await this.createButton.click();
         await new Toast(this.page).waitForToastWithText("Item created");
+        await this.page.waitForURL((url) => url.pathname !== this.urlPath);
     }
 
     async createAndStay() {
