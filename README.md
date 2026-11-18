@@ -100,9 +100,13 @@ Currently, anyone can create a group. The group creator is automatically added a
 
 ## Registry Mode
 
-Wishlist has the ability to turn a group into a Registry. In this mode, only a single user can be part of the group and there is only one list. The owner of the group can add items to the list as normal and then get a public link to share out to friends and family. Users accessing this link will not need to sign in or create an account. Public users can view the items on the list and also claim items. In order to claim an item, the user just needs to enter some identifier (email for example) and can optionally add their name. Currently there is no way to un-claim items that are claimed in this manner.
+Wishlist has the ability to turn a group into a Registry. In this mode, only a single user can be part of the group and there is only one list. The owner of the group can add items to the list as normal and then get a public link to share out to friends and family. Users accessing this link will not need to sign in or create an account. Public users can view the items on the list and also claim items. In order to claim an item, the user just needs to enter some identifier (email for example) and can optionally add their name.
 
 To activate this mode, go to the admin panel of your group and change the mode from "Wishlist" to "Registry".
+
+Guests can unclaim gifts from a public list in the same browser tab for the rest of its session. When SMTP is configured and a guest provides an email address, a confirmation email also includes a link to manage and release that claim later or on another device. Opening the link does not release the claim until the guest clicks **Unclaim**. The link remains valid until the claim is released or deleted; it does not use the signup/password-reset `TOKEN_TIME` setting. Guests should keep it private because anyone with the link can release that claim. Existing guest claims created before this feature do not have cancellation tokens.
+
+Guest cancellation also works for public lists in normal Wishlist mode. Without an email confirmation, closing the tab or losing its session storage removes the guest's self-service cancellation access.
 
 ## Configuration
 

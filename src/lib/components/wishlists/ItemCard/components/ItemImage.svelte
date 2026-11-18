@@ -2,7 +2,7 @@
     import { getFormatter } from "$lib/i18n";
     import type { ClassValue } from "svelte/elements";
     import Image from "$lib/components/Image.svelte";
-    import { resolve } from "$app/paths";
+    import { getItemImageUrl } from "$lib/image-url";
     import type { MessageFormatter } from "$lib/server/i18n";
     import type { InternalItemCardProps } from "../ItemCard.svelte";
     import type { Snippet } from "svelte";
@@ -17,19 +17,7 @@
     const { item, defaultImage, shrinkBadge = false, badgeClass, ...props }: Props = $props();
     const t = getFormatter();
 
-    const imageUrl: string | undefined = $derived.by(() => {
-        if (item.imageUrl) {
-            try {
-                new URL(item.imageUrl);
-                return item.imageUrl;
-            } catch {
-                if (item.imageUrl.startsWith("/") || item.imageUrl.endsWith("/")) {
-                    return;
-                }
-                return resolve("/api/assets/[id]", { id: item.imageUrl });
-            }
-        }
-    });
+    const imageUrl = $derived(getItemImageUrl(item.imageUrl));
 </script>
 
 <div class={[props.class, "relative"]}>

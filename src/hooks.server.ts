@@ -1,6 +1,11 @@
 import type { RouteId } from "$app/types";
 import { env } from "$env/dynamic/private";
-import { getClosestAvailableLocaleFromHeader, getClosestAvailablePreferredLanguage, type Lang } from "$lib/i18n";
+import {
+    getClosestAvailableLocaleFromHeader,
+    getClosestAvailablePreferredLanguage,
+    initLang,
+    type Lang
+} from "$lib/i18n";
 import {
     deleteSessionTokenCookie,
     sessionCookieName,
@@ -20,6 +25,9 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.locals.session = null;
         event.locals.isProxyUser = false;
         event.locals.locale = lang.code;
+        // Server-side translations are needed even without a session, e.g. for public claims
+        await initLang(lang.code);
+        await loadLocale(lang.code);
         return resolve(event, {
             transformPageChunk({ html }) {
                 return transformForLang(html, lang);
@@ -32,6 +40,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         lang = getClosestAvailablePreferredLanguage(user.preferredLanguage) ?? lang;
     }
 
+    await initLang(lang.code);
     await loadLocale(lang.code);
     if (session === null) {
         deleteSessionTokenCookie(event.cookies);
@@ -67,7 +76,10 @@ export const handleError: HandleServerError = async ({ error: err, event, status
         {
             status,
             method: event.request.method,
-            uri: event.url.pathname + event.url.search + event.url.hash,
+            uri:
+                event.route.id === "/claims/manage"
+                    ? event.url.pathname
+                    : event.url.pathname + event.url.search + event.url.hash,
             err
         },
         message
@@ -75,6 +87,7 @@ export const handleError: HandleServerError = async ({ error: err, event, status
 };
 
 const nonPrivateRoutes: RouteId[] = [
+    "/claims/manage", // This loader sets the stricter no-store cache policy.
     "/login",
     "/signup",
     "/setup-wizard",

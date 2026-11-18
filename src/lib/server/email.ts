@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import Handlebars from "handlebars";
-import { readFile } from "fs";
+import { readFile } from "fs/promises";
 import type Mail from "nodemailer/lib/mailer";
 import { getConfig } from "$lib/server/config";
 import { env } from "$env/dynamic/private";
@@ -20,23 +20,47 @@ type InviteTemplateData = {
 
 type PasswordResetTemplateData = Omit<InviteTemplateData, "footerText">;
 
-let passResetTempl: HandlebarsTemplateDelegate<PasswordResetTemplateData>;
-let inviteTempl: HandlebarsTemplateDelegate<InviteTemplateData>;
+type ClaimConfirmationTemplateData = InviteTemplateData & {
+    itemName: string;
+    itemImageUrl?: string;
+    listName: string;
+    listUrl: string;
+    listLinkText: string;
+};
 
-readFile("templates/password-reset.html", "utf-8", (err, data) => {
-    if (err) {
-        logger.error({ err }, "Error reading password reset email template");
-    } else {
-        passResetTempl = Handlebars.compile(data);
-    }
-});
+type ClaimConfirmationOptions = {
+    manageUrl: string;
+    listUrl: string;
+    listName: string;
+    itemName: string;
+    itemImageUrl?: string;
+};
 
-readFile("templates/invite.html", "utf-8", (err, data) => {
-    if (err) {
-        logger.error({ err }, "Error reading invite email template");
-    } else {
-        inviteTempl = Handlebars.compile(data);
+type EmailTemplateData = InviteTemplateData | PasswordResetTemplateData | ClaimConfirmationTemplateData;
+
+// Compiled on first use and cached. Loading these at module load would race
+// with the first email sent after startup, which fails if it wins.
+const templateCache = new Map<string, HandlebarsTemplateDelegate<EmailTemplateData>>();
+
+const getTemplate = async <T extends EmailTemplateData>(
+    name: string
+): Promise<HandlebarsTemplateDelegate<T> | null> => {
+    const cached = templateCache.get(name);
+    if (cached) return cached;
+
+    try {
+        const template = Handlebars.compile<EmailTemplateData>(await readFile(`templates/${name}.html`, "utf-8"));
+        templateCache.set(name, template);
+        return template;
+    } catch (err) {
+        logger.error({ err }, `Error reading ${name} email template`);
+        return null;
     }
+};
+
+const templateMissing = (name: string) => ({
+    success: false,
+    message: `Unable to load the ${name} email template`
 });
 
 const sendEmail = async (options: Mail.Options) => {
@@ -86,6 +110,8 @@ const sendEmail = async (options: Mail.Options) => {
 
 export const sendSignupLink = async (to: string, inviteUrl: string) => {
     const $t = await getFormatter();
+    const inviteTempl = await getTemplate<InviteTemplateData>("invite");
+    if (!inviteTempl) return templateMissing("invite");
     const html = inviteTempl({
         url: inviteUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
@@ -106,6 +132,8 @@ export const sendSignupLink = async (to: string, inviteUrl: string) => {
 
 export const sendPasswordReset = async (to: string, resetUrl: string) => {
     const $t = await getFormatter();
+    const passResetTempl = await getTemplate<PasswordResetTemplateData>("password-reset");
+    if (!passResetTempl) return templateMissing("password-reset");
     const html = passResetTempl({
         url: resetUrl,
         baseUrl: env.ORIGIN || "http://localhost:5173",
@@ -120,6 +148,36 @@ export const sendPasswordReset = async (to: string, resetUrl: string) => {
         subject: "Wishlist | " + $t("email.pw-reset-title"),
         html,
         text: $t("email.pw-reset-fallback-text", { values: { url: resetUrl } })
+    });
+};
+
+export const sendClaimConfirmation = async (to: string, options: ClaimConfirmationOptions) => {
+    const { manageUrl, listUrl, listName, itemName, itemImageUrl } = options;
+    const $t = await getFormatter();
+    const claimConfirmationTempl = await getTemplate<ClaimConfirmationTemplateData>("claim-confirmation");
+    if (!claimConfirmationTempl) return templateMissing("claim-confirmation");
+    const html = claimConfirmationTempl({
+        url: manageUrl,
+        baseUrl: env.ORIGIN || "http://localhost:5173",
+        wishlistLogoText: $t("a11y.wishlist-logo"),
+        previewText: $t("email.claim-title"),
+        titleText: $t("email.claim-title"),
+        itemName,
+        itemImageUrl,
+        listName,
+        listUrl,
+        listLinkText: $t("email.claim-view-list", { values: { listName } }),
+        bodyText: $t("email.claim-body"),
+        buttonText: $t("email.claim-button"),
+        footerText: $t("email.claim-footer")
+    });
+    return await sendEmail({
+        to,
+        subject: $t("email.claim-subject"),
+        html,
+        text: $t("email.claim-fallback-text", {
+            values: { url: manageUrl, itemName, listName, listUrl }
+        })
     });
 };
 
