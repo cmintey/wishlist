@@ -87,7 +87,9 @@ export const settingSchema = z.object({
     oidcEnableSync: z.coerce.boolean().default(false),
     oidcDisableEmailVerification: z.coerce.boolean().default(false),
     oidcNameClaim: z.string().optional(),
-    oidcUsernameClaim: z.string().optional()
+    oidcUsernameClaim: z.string().optional(),
+    oidcGroupsClaim: z.string().optional(),
+    oidcAdminGroup: z.string().optional()
 });
 
 export const publicListCreateSchema = z.object({

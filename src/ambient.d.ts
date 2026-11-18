@@ -75,6 +75,8 @@ type OIDCConfig =
           disableEmailVerification?: boolean | null;
           nameClaim?: string | null;
           usernameClaim?: string | null;
+          groupsClaim?: string | null;
+          adminGroup?: string | null;
       }
     | {
           enable: true;
@@ -88,6 +90,8 @@ type OIDCConfig =
           disableEmailVerification: boolean;
           nameClaim: string | null | undefined;
           usernameClaim: string | null | undefined;
+          groupsClaim: string | null | undefined;
+          adminGroup: string | null | undefined;
       };
 
 type Config = {

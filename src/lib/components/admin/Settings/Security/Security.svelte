@@ -5,15 +5,16 @@
 
     interface Props {
         config: Pick<Config, "oidc" | "security" | "enableSignup">;
+        envManagedKeys?: string[];
         hidden?: boolean;
     }
 
-    const { config, hidden = false }: Props = $props();
+    const { config, envManagedKeys = [], hidden = false }: Props = $props();
     const t = getFormatter();
 </script>
 
 <div class={{ hidden, "flex flex-col gap-4": !hidden }}>
     <h2 class="h2">{$t("admin.security")}</h2>
-    <Credentials {config} />
-    <Oidc {config} />
+    <Credentials {config} {envManagedKeys} />
+    <Oidc {config} {envManagedKeys} />
 </div>

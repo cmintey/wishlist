@@ -147,7 +147,31 @@ To configure your provider for authentication, navigate to the Wishlist Administ
 The redirect URL to specify within your IdP will look like `https://<my_wishlist_domain>/login`
 
 > [!NOTE]
-> The first user to be created will need to be created with credentials via the setup wizard.
+> The first user to be created will need to be created with credentials via the setup wizard, unless password login is disabled, in which case the setup wizard is skipped.
+
+To give admin rights by group membership, set the admin group. The role of every OIDC user then follows the IdP: users in that group become admins, and users outside it, including the first one to sign in, are regular users and lose admin if they had it, each time they sign in. The `groups` scope is requested when an admin group is set, and the groups are read from the `groups` claim unless another claim is configured.
+
+Without an admin group, and with password login disabled, nobody could otherwise ever become an admin, so the first user to register through the IdP is made one, as with header authentication.
+
+The same settings can be provided through environment variables, for deployments that configure the IdP automatically. A setting given this way takes precedence over the database and is shown read-only on the settings page.
+
+| Variable                          | Setting                                       |
+| --------------------------------- | --------------------------------------------- |
+| `OIDC_ENABLE`                     | Enable OIDC (`true`/`false`)                  |
+| `OIDC_DISCOVERY_URL`              | Issuer URL                                    |
+| `OIDC_CLIENT_ID`                  | Client ID                                     |
+| `OIDC_CLIENT_SECRET`              | Client Secret                                 |
+| `OIDC_PROVIDER_NAME`              | Provider name shown on the sign in button     |
+| `OIDC_AUTO_REDIRECT`              | Redirect straight to the IdP (`true`/`false`) |
+| `OIDC_AUTO_REGISTER`              | Create accounts on first sign in              |
+| `OIDC_ENABLE_SYNC`                | Sync name, username and email from the IdP    |
+| `OIDC_DISABLE_EMAIL_VERIFICATION` | Accept emails the IdP has not verified        |
+| `OIDC_NAME_CLAIM`                 | Name claim                                    |
+| `OIDC_USERNAME_CLAIM`             | Username claim                                |
+| `OIDC_GROUPS_CLAIM`               | Groups claim                                  |
+| `OIDC_ADMIN_GROUP`                | Admin group                                   |
+| `SECURITY_DISABLE_PASSWORD_LOGIN` | Disable password login (`true`/`false`)       |
+| `ENABLE_SIGNUP`                   | Enable public signup (`true`/`false`)         |
 
 #### Proxy / Header
 

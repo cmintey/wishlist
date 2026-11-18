@@ -7,9 +7,10 @@
 
     interface Props {
         config: Pick<Config, "security" | "enableSignup">;
+        envManagedKeys?: string[];
     }
 
-    const { config }: Props = $props();
+    const { config, envManagedKeys = [] }: Props = $props();
     const t = getFormatter();
 </script>
 
@@ -21,6 +22,7 @@
                 name="enableSignup"
                 class="checkbox"
                 checked={config.enableSignup}
+                disabled={envManagedKeys.includes("enableSignup")}
                 type="checkbox"
             />
             <span>{$t("admin.enable-signup")}</span>
@@ -64,6 +66,7 @@
                 name="disablePasswordLogin"
                 class="checkbox"
                 checked={config.security.disablePasswordLogin}
+                disabled={envManagedKeys.includes("security.disablePasswordLogin")}
                 type="checkbox"
             />
             <span>{$t("admin.disable-password-login")}</span>

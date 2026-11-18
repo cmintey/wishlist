@@ -9,12 +9,13 @@ import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
 import { oidcLogger as logger } from "$lib/server/logger";
 import { Prisma, type User } from "$lib/generated/prisma/client";
-import type { UserInfoResponse } from "openid-client";
+import type { IDToken, UserInfoResponse } from "openid-client";
 
 export const POST: RequestHandler = async (event) => {
     const $t = await getFormatter();
-    const userinfo = await handleCallback(event);
+    const { claims, userinfo } = await handleCallback(event);
     const config = await getConfig();
+    const isAdmin = isAdminByGroup(claims, userinfo, config);
 
     logger.debug("Searching for existing user via oauthId: %s", userinfo.sub);
     // Find by oAuthId
@@ -23,7 +24,8 @@ export const POST: RequestHandler = async (event) => {
             id: true,
             name: true,
             email: true,
-            username: true
+            username: true,
+            roleId: true
         },
         where: {
             oauthId: userinfo.sub
@@ -32,6 +34,7 @@ export const POST: RequestHandler = async (event) => {
     if (user) {
         logger.debug("Found existing user: %s", user.id);
         await syncUserDetails(user, userinfo, config);
+        await syncUserRole(user, isAdmin, config);
         await authenticate(event, user.id);
     }
     logger.debug("No existing user found");
@@ -52,7 +55,8 @@ export const POST: RequestHandler = async (event) => {
             id: true,
             name: true,
             email: true,
-            username: true
+            username: true,
+            roleId: true
         },
         where: {
             email: userinfo.email
@@ -72,6 +76,7 @@ export const POST: RequestHandler = async (event) => {
         });
         logger.debug("Linked user account to OAuth via oauthId: %s", userinfo.sub);
         await syncUserDetails(user, userinfo, config);
+        await syncUserRole(user, isAdmin, config);
         await authenticate(event, user.id);
     }
 
@@ -92,7 +97,10 @@ export const POST: RequestHandler = async (event) => {
         oauthId: userinfo.sub
     };
     logger.debug(userData, "Registering a new user");
-    const newUser = await createUser(userData, Role.USER, "");
+    const isOidcOnlyFirstUser =
+        !config.oidc.adminGroup && config.security.disablePasswordLogin && (await client.user.count()) === 0;
+    const role = isAdmin || isOidcOnlyFirstUser ? Role.ADMIN : Role.USER;
+    const newUser = await createUser(userData, role, "");
 
     await authenticate(event, newUser.id);
 
@@ -113,6 +121,41 @@ async function authenticate(event: RequestEvent, userId: string): Promise<never>
     logger.debug("Authenticated user successfully");
     const redirectTo = event.cookies.get(REDIRECT_TO_COOKIE) ?? "/";
     redirect(302, redirectTo);
+}
+
+function isAdminByGroup(claims: IDToken, userinfo: UserInfoResponse, config: Config): boolean {
+    const adminGroup = config.oidc.adminGroup;
+    if (!adminGroup) {
+        return false;
+    }
+    const groupsClaim = config.oidc.groupsClaim || "groups";
+    const groups = userinfo[groupsClaim] ?? claims[groupsClaim];
+    if (Array.isArray(groups)) {
+        return groups.includes(adminGroup);
+    }
+    if (typeof groups === "string") {
+        return groups === adminGroup;
+    }
+    logger.warn(`'${groupsClaim}' claim was not found in user's claims. Available claims: ${Object.keys(userinfo)}`);
+    return false;
+}
+
+async function syncUserRole(user: Pick<User, "id" | "roleId">, isAdmin: boolean, config: Config) {
+    if (!config.oidc.adminGroup) {
+        return;
+    }
+    if (isAdmin === (user.roleId === Role.ADMIN)) {
+        return;
+    }
+    await client.user.update({
+        where: {
+            id: user.id
+        },
+        data: {
+            roleId: isAdmin ? Role.ADMIN : Role.USER
+        }
+    });
+    logger.debug("Synced user role from IdP groups, admin: %s", isAdmin);
 }
 
 function extractClaim(claim: string | null | undefined, userinfo: UserInfoResponse, fallback?: string) {
