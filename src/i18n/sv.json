@@ -143,7 +143,12 @@
         "show-name-publicly": "Visa namn publikt",
         "show-name-publicly-tooltip": "När det är aktiverat visas namnet som anges i ett offentligt anspråk för alla som tittar på den offentliga listan.",
         "oidc-url-description": "URL:en till din OAuth-leverantör eller URL:en till den specifika domänen (realm) eller applikationen hos leverantören. Detta kallas ofta även för en discovery-URL.",
-        "clear-sessions-success": "Rensade den här användarens sessioner. Användaren kommer att behöva logga in på nytt."
+        "clear-sessions-success": "Rensade den här användarens sessioner. Användaren kommer att behöva logga in på nytt.",
+        "oidc-admin-group": "Administratörsgrupp",
+        "oidc-admin-group-description": "Användare i den här gruppen tilldelas administratörsrollen, medan användare utanför gruppen förlorar den, varje gång de loggar in. Lämna tomt för att hantera administratörer i Wishlist.",
+        "oidc-env-managed": "Vissa av dessa inställningar styrs av miljövariabler och kan inte ändras här.",
+        "oidc-groups-claim": "Gruppanspråk",
+        "oidc-groups-claim-description": "Det anspråk som anger användarens grupper. Omfånget (scope) ”groups” efterfrågas när en administratörsgrupp har angetts."
     },
     "app": {
         "my-claims": "Mina reservationer",
