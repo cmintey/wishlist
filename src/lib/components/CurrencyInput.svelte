@@ -107,6 +107,7 @@
         name={`formatted-${name}`}
         class="ig-input"
         autocomplete="off"
+        data-testid="price-input"
         {disabled}
         inputmode={maximumFractionDigits > 0 ? "decimal" : "numeric"}
         onblur={handleBlur}
@@ -132,7 +133,12 @@
         <Combobox.Control>
             <Combobox.Input>
                 {#snippet element(props)}
-                    <input {...props} name="currency" class="ig-input rounded-s-none uppercase ring-0 focus:ring-1" />
+                    <input
+                        {...props}
+                        name="currency"
+                        class="ig-input rounded-s-none uppercase ring-0 focus:ring-1"
+                        data-testid="currency-input"
+                    />
                 {/snippet}
             </Combobox.Input>
             <Combobox.Trigger class="bg-transparent" />

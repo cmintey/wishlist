@@ -75,8 +75,7 @@ COPY --from=build /usr/src/app/src/lib/generated/prisma ./src/lib/generated/pris
 VOLUME /usr/src/app/uploads
 VOLUME /usr/src/app/data
 
-ENV DEFAULT_CURRENCY=USD \
-    TOKEN_TIME=72 \
+ENV TOKEN_TIME=72 \
     COREPACK_ENABLE_NETWORK=0
 
 ENTRYPOINT [ "sh", "entrypoint.sh" ]

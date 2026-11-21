@@ -2,7 +2,7 @@
     import { page } from "$app/state";
     import type { Group, Item, ItemPrice, List, User } from "$lib/generated/prisma/client";
     import Backdrop from "$lib/components/Backdrop.svelte";
-    import { getDefaultCurrency, getPriceValue } from "$lib/price-formatter";
+    import { getPriceValue } from "$lib/price-formatter";
     import CurrencyInput from "../CurrencyInput.svelte";
     import { onMount } from "svelte";
     import { getFormatter } from "$lib/i18n";
@@ -33,9 +33,18 @@
         currentList?: string;
         buttonText: string;
         saving: boolean;
+        defaultCurrency: string;
     }
 
-    let { userId, item = $bindable(), buttonText, lists: otherLists, currentList, saving = false }: Props = $props();
+    let {
+        userId,
+        item = $bindable(),
+        buttonText,
+        lists: otherLists,
+        currentList,
+        saving = false,
+        defaultCurrency
+    }: Props = $props();
     const t = getFormatter();
 
     let productData = $state(item);
@@ -44,7 +53,6 @@
     let fetching = $state(false);
     let urlFetched = $state(false);
     let price: number | null = $state(getPriceValue(productData));
-    const defaultCurrency = getDefaultCurrency();
     let userCurrency: string = $derived(productData.itemPrice?.currency || defaultCurrency);
     let quantity = $state(item.quantity || 1);
     let unlimited = $state(item.quantity === null);
@@ -232,6 +240,7 @@
                 class="ig-input"
                 class:input-invalid={form?.errors?.name}
                 autocomplete="off"
+                data-testid="item-name"
                 required
                 type="text"
                 bind:value={productData.name}
@@ -418,6 +427,7 @@
             <button
                 id="submit"
                 class="preset-filled-primary-500 btn"
+                data-testid="submit-item"
                 disabled={fetching || saving}
                 onclick={() => (submitSrc = "submit")}
                 type="submit"

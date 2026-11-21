@@ -76,7 +76,7 @@
         </aside>
         <!-- Settings -->
         <div class="w-full">
-            <General {config} {groups} hidden={currentHash !== options[0].hash} />
+            <General {config} {envManagedKeys} {groups} hidden={currentHash !== options[0].hash} />
             <Email {config} hidden={currentHash !== options[1].hash} {sending} />
             <Security {config} {envManagedKeys} hidden={currentHash !== options[2].hash} />
 
@@ -86,7 +86,12 @@
 
             <!-- Save buttons -->
             <div class="flex w-full flex-row justify-end pt-5">
-                <button class="preset-filled-primary-500 btn" disabled={saving} type="submit">
+                <button
+                    class="preset-filled-primary-500 btn"
+                    data-testid="save-settings"
+                    disabled={saving}
+                    type="submit"
+                >
                     {#if saving}
                         <span class="loading loading-spinner loading-xs"></span>
                     {/if}

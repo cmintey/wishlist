@@ -117,6 +117,7 @@ type Config = {
     enableDefaultListCreation: boolean;
     allowPublicLists: boolean;
     oidc: OIDCConfig;
+    defaultCurrency: string;
 };
 
 type Option = {

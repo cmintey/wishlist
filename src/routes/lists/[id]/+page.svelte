@@ -428,6 +428,7 @@
             $isInstalled ? "bottom-24" : "bottom-4"
         ]}
         aria-label="add item"
+        data-testid="add-item"
         onclick={() => goto(`${page.url.pathname}/create-item?redirectTo=${page.url.pathname}`, { replaceState: true })}
     >
         <iconify-icon class="text-xl md:text-2xl" icon="ion:add"></iconify-icon>
