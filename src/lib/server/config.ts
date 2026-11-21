@@ -1,5 +1,6 @@
 import { env } from "$env/dynamic/private";
 import { client } from "./prisma";
+import { isSupportedCurrency } from "$lib/price-formatter";
 
 const GLOBAL = "global";
 
@@ -39,7 +40,8 @@ enum ConfigKey {
     OIDC_NAME_CLAIM = "oidc.nameClaim",
     OIDC_USERNAME_CLAIM = "oidc.usernameClaim",
     OIDC_GROUPS_CLAIM = "oidc.groupsClaim",
-    OIDC_ADMIN_GROUP = "oidc.adminGroup"
+    OIDC_ADMIN_GROUP = "oidc.adminGroup",
+    DEFAULT_CURRENCY = "defaultCurrency"
 }
 
 const ENV_CONFIG_KEYS: ConfigKey[] = [
@@ -57,7 +59,8 @@ const ENV_CONFIG_KEYS: ConfigKey[] = [
     ConfigKey.OIDC_NAME_CLAIM,
     ConfigKey.OIDC_USERNAME_CLAIM,
     ConfigKey.OIDC_GROUPS_CLAIM,
-    ConfigKey.OIDC_ADMIN_GROUP
+    ConfigKey.OIDC_ADMIN_GROUP,
+    ConfigKey.DEFAULT_CURRENCY
 ];
 
 export const toEnvName = (key: string) =>
@@ -75,6 +78,8 @@ const stringTransformer: Transformer<string | undefined> = (val) => val ?? undef
 const maskableStringTransformer: Transformer<string | undefined> = (val, shouldMask = false) =>
     isDefined(val) ? maskable(val, shouldMask) : undefined;
 const numberTransformer: Transformer<number | undefined> = (val) => (isDefined(val) ? Number(val) : undefined);
+const currencyTransformer: Transformer<string | undefined> = (val) =>
+    isDefined(val) && isSupportedCurrency(val!.toUpperCase()) ? val!.toUpperCase() : undefined;
 
 const transformers: Record<ConfigKey, Transformer<unknown>> = {
     enableSignup: booleanTransformer,
@@ -112,7 +117,8 @@ const transformers: Record<ConfigKey, Transformer<unknown>> = {
     "oidc.nameClaim": stringTransformer,
     "oidc.usernameClaim": stringTransformer,
     "oidc.groupsClaim": stringTransformer,
-    "oidc.adminGroup": stringTransformer
+    "oidc.adminGroup": stringTransformer,
+    defaultCurrency: currencyTransformer
 };
 
 const getDefaultConfig = (): Config => ({
@@ -142,7 +148,8 @@ const getDefaultConfig = (): Config => ({
     allowPublicLists: false,
     oidc: {
         enable: false
-    }
+    },
+    defaultCurrency: "USD"
 });
 
 function buildConfig(configMap: Record<string, string | null>, includeSensitive = false): Config {

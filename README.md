@@ -74,7 +74,7 @@ You can now connect to your application at `http://<host>:3280`.
 
 `TOKEN_TIME`: The amount of time (hours) that signup and password reset tokens are valid for
 
-`DEFAULT_CURRENCY`: The global default currency (ISO-Code) to be used. Currency can still be changed on a per-item basis
+`DEFAULT_CURRENCY`: The global default currency (ISO-Code) to be used. Defaults to USD and can also be set under Admin > Settings > General when this variable is not set. Currency can still be changed on a per-item basis
 
 `MAX_IMAGE_SIZE`: Maxinum image size that can be uploaded (in bytes). Defaults to 5000000 (5MB)
 

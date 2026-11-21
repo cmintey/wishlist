@@ -61,6 +61,7 @@ export const load: PageServerLoad = async ({ params }) => {
     }
 
     const lists = await getAvailableLists(item.userId, user.id);
+    const config = await getConfig();
 
     return {
         user,
@@ -74,7 +75,8 @@ export const load: PageServerLoad = async ({ params }) => {
                     list.managers.find(({ userId }) => userId === user.id) !== undefined
             }))
         },
-        lists
+        lists,
+        defaultCurrency: config.defaultCurrency
     };
 };
 

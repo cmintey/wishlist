@@ -5,21 +5,37 @@
     import Claims from "./Claims.svelte";
     import Lists from "./Lists.svelte";
     import Groups from "./Groups.svelte";
+    import Currency from "./Currency.svelte";
     import { getFormatter } from "$lib/i18n";
 
     interface Props {
         config: Pick<
             Config,
-            "claims" | "defaultGroup" | "suggestions" | "enableDefaultListCreation" | "listMode" | "allowPublicLists"
+            | "claims"
+            | "defaultGroup"
+            | "suggestions"
+            | "enableDefaultListCreation"
+            | "listMode"
+            | "allowPublicLists"
+            | "defaultCurrency"
         >;
         groups: Group[];
         hidden?: boolean;
         forGroup?: boolean;
         groupUserCount?: number;
         listCount?: number;
+        envManagedKeys?: string[];
     }
 
-    const { config, groups, hidden = false, forGroup = false, groupUserCount = 0, listCount = 0 }: Props = $props();
+    const {
+        config,
+        groups,
+        hidden = false,
+        forGroup = false,
+        groupUserCount = 0,
+        listCount = 0,
+        envManagedKeys = []
+    }: Props = $props();
     const t = getFormatter();
 </script>
 
@@ -38,5 +54,7 @@
 
     {#if !forGroup}
         <Groups {config} {groups} />
+
+        <Currency {config} {envManagedKeys} />
     {/if}
 </div>

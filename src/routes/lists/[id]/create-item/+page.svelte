@@ -88,6 +88,7 @@
     <ItemForm
         buttonText={$t("wishes.add-item")}
         currentList={data.list.id}
+        defaultCurrency={data.defaultCurrency}
         item={itemData}
         lists={data.lists}
         {saving}

@@ -3,6 +3,7 @@ import { init, meterLabel } from "$lib/zxcvbn";
 import { getConfig } from "./config";
 import { getFormatter } from "./i18n";
 import { getLocale } from "$lib/server/i18n";
+import { isSupportedCurrency } from "$lib/price-formatter";
 
 export const loadLocale = async (locale_: string) => {
     try {
@@ -89,7 +90,8 @@ export const settingSchema = z.object({
     oidcNameClaim: z.string().optional(),
     oidcUsernameClaim: z.string().optional(),
     oidcGroupsClaim: z.string().optional(),
-    oidcAdminGroup: z.string().optional()
+    oidcAdminGroup: z.string().optional(),
+    defaultCurrency: z.string().toUpperCase().refine(isSupportedCurrency).default("USD")
 });
 
 export const publicListCreateSchema = z.object({

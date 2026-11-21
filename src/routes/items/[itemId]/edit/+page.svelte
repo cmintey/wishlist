@@ -32,7 +32,14 @@
             };
         }}
     >
-        <ItemForm buttonText={$t("general.save")} item={data.item} lists={data.lists} {saving} userId={data.user.id} />
+        <ItemForm
+            buttonText={$t("general.save")}
+            defaultCurrency={data.defaultCurrency}
+            item={data.item}
+            lists={data.lists}
+            {saving}
+            userId={data.user.id}
+        />
     </form>
 {/if}
 

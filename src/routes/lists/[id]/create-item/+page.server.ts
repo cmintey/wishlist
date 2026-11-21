@@ -53,7 +53,8 @@ export const load: PageServerLoad = async ({ params }) => {
             }
         },
         suggestion: !isOwnerOrManager,
-        suggestionMethod: config.suggestions.method
+        suggestionMethod: config.suggestions.method,
+        defaultCurrency: config.defaultCurrency
     };
 };
 
