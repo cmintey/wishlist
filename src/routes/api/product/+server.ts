@@ -79,7 +79,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
     const locales = parseAcceptLanguageHeader(acceptLanguage);
 
     if (encodedUrl) {
-        const targetUrl = await getUrlOrError(decodeURI(encodedUrl));
+        const targetUrl = await getUrlOrError(encodedUrl);
 
         let metadata = await goShopping(targetUrl, locales);
         if (isCaptchaResponse(metadata) && metadata.url) {
