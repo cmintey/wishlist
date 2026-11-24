@@ -88,3 +88,6 @@ export const toItemOnListDTO = (item: FullItem, listId: string) => {
         }
     } satisfies ItemOnListDTO;
 };
+
+/** The item as its list's owner may see it when claims are hidden from them: no claims, so nothing to infer from. */
+export const withoutClaims = <T extends { claims: unknown[] }>(item: T): T => ({ ...item, claims: [] });

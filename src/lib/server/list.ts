@@ -1,7 +1,7 @@
 import { init } from "@paralleldrive/cuid2";
 import { client } from "./prisma";
 import { claimFilter } from "./sort-filter-util";
-import { toItemOnListDTO } from "../dtos/item-mapper";
+import { toItemOnListDTO, withoutClaims } from "../dtos/item-mapper";
 import { getItemInclusions } from "./items";
 import type { Prisma } from "$lib/generated/prisma/client";
 import { getConfig } from "./config";
@@ -18,6 +18,8 @@ export interface GetItemsOptions {
     listManagers?: Set<string>;
     loggedInUserId: string | null;
     isSelfClaimable?: boolean;
+    /** The viewer is the list's owner and claims are hidden from them: send no claims at all. */
+    hideClaims?: boolean;
 }
 
 export interface ListProperties {
@@ -178,6 +180,16 @@ export const getById = async (id: string) => {
     });
 };
 
+/**
+ * Whether the viewer is the list's owner and must not see its claims. Managers still see them: they are not the
+ * person the gifts are for. A list that is "not for me" belongs to someone without an account, so its owner sees them.
+ */
+export const hidesClaimsFrom = (
+    viewerId: string | null | undefined,
+    list: { owner: { id: string }; notForMe: boolean },
+    showForOwner: boolean
+) => !!viewerId && viewerId === list.owner.id && !(showForOwner || list.notForMe);
+
 export const getItems = async (listId: string, options: GetItemsOptions) => {
     const itemListFilter: Prisma.ListItemWhereInput = {};
 
@@ -234,6 +246,7 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
     return items
         .filter((item) => item.lists.length > 0) // need to filter out items not on a list because prisma generates a stupid query
         .map((i) => toItemOnListDTO(i, list.id))
+        .map((i) => (options.hideClaims ? withoutClaims(i) : i))
         .filter(claimFilter(options.filter, options.loggedInUserId))
         .toSorted(
             itemSorter({

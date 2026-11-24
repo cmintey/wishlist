@@ -1,6 +1,6 @@
 import type { ItemOnListDTO } from "$lib/dtos/item-dto";
 import type { Item } from "$lib/generated/prisma/client";
-import { toItemOnListDTO, type FullItem } from "./dtos/item-mapper";
+import { toItemOnListDTO, withoutClaims, type FullItem } from "./dtos/item-mapper";
 
 const ITEM_UPDATE = "item_update";
 const ITEM_CREATE = "item_create";
@@ -24,8 +24,10 @@ export interface BaseEventHandler<D, T> {
 export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListDTO> {
     static event = ItemEvent.ITEM_UPDATE;
     listId: string;
-    constructor(listId: string) {
+    hideClaims: boolean;
+    constructor(listId: string, hideClaims = false) {
         this.listId = listId;
+        this.hideClaims = hideClaims;
     }
 
     getEventId() {
@@ -33,7 +35,8 @@ export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListD
     }
 
     handle(data: FullItem) {
-        return toItemOnListDTO(data, this.listId);
+        const item = toItemOnListDTO(data, this.listId);
+        return this.hideClaims ? withoutClaims(item) : item;
     }
 
     predicate(data: FullItem) {
@@ -51,8 +54,10 @@ export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListD
 export class ItemCreateHandler implements BaseEventHandler<FullItem, ItemOnListDTO> {
     static event = ItemEvent.ITEM_CREATE;
     listId: string;
-    constructor(listId: string) {
+    hideClaims: boolean;
+    constructor(listId: string, hideClaims = false) {
         this.listId = listId;
+        this.hideClaims = hideClaims;
     }
 
     getEventId() {
@@ -60,7 +65,8 @@ export class ItemCreateHandler implements BaseEventHandler<FullItem, ItemOnListD
     }
 
     handle(data: FullItem) {
-        return toItemOnListDTO(data, this.listId);
+        const item = toItemOnListDTO(data, this.listId);
+        return this.hideClaims ? withoutClaims(item) : item;
     }
 
     predicate(data: FullItem) {

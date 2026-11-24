@@ -4,7 +4,7 @@ import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
-import { getById } from "$lib/server/list";
+import { getById, hidesClaimsFrom } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
 import { ItemCreateHandler, ItemDeleteHandler, ItemsUpdateHandler, ItemUpdateHandler } from "$lib/events";
 
@@ -40,8 +40,9 @@ export const GET = (async ({ locals, params }) => {
 
     const { readable, subscribeToEvent } = createSSE();
 
-    subscribeToEvent(itemEmitter, new ItemUpdateHandler(params.id));
-    subscribeToEvent(itemEmitter, new ItemCreateHandler(params.id));
+    const hideClaims = hidesClaimsFrom(locals.user?.id, list, config.claims.showForOwner);
+    subscribeToEvent(itemEmitter, new ItemUpdateHandler(params.id, hideClaims));
+    subscribeToEvent(itemEmitter, new ItemCreateHandler(params.id, hideClaims));
     subscribeToEvent(itemEmitter, new ItemDeleteHandler(params.id));
     subscribeToEvent(itemEmitter, new ItemsUpdateHandler(params.id));
 
