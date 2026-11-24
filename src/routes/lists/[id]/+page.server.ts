@@ -2,7 +2,7 @@ import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getConfig } from "$lib/server/config";
 import { getFormatter } from "$lib/server/i18n";
-import { getById, getItems, type GetItemsOptions } from "$lib/server/list";
+import { getById, getItems, hidesClaimsFrom, type GetItemsOptions } from "$lib/server/list";
 import { getActiveMembership } from "$lib/server/group-membership";
 import type { UserGroupMembership } from "$lib/generated/prisma/client";
 
@@ -43,7 +43,8 @@ export const load = (async ({ params, url, locals, depends, cookies }) => {
         listOwnerId: list.owner.id,
         listManagers: new Set(list.managers.map(({ userId }) => userId)),
         loggedInUserId: locals.user?.id || null,
-        isSelfClaimable
+        isSelfClaimable,
+        hideClaims: hidesClaimsFrom(locals.user?.id, list, config.claims.showForOwner)
     };
 
     const items = await getItems(list.id, options);
