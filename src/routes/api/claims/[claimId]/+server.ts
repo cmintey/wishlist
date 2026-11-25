@@ -67,7 +67,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     }
 };
 
-interface ItemClaim extends Pick<ItemClaimModel, "id" | "claimedById" | "publicClaimedById"> {
+interface ItemClaim extends Pick<ItemClaimModel, "id" | "claimedById" | "publicClaimedById" | "listId"> {
     item: Pick<ItemModel, "id" | "userId">;
 }
 
@@ -79,6 +79,7 @@ async function findClaim(claimId: string, user: LocalUser): Promise<ItemClaim> {
             id: true,
             claimedById: true,
             publicClaimedById: true,
+            listId: true,
             item: {
                 select: {
                     id: true,
@@ -95,9 +96,16 @@ async function findClaim(claimId: string, user: LocalUser): Promise<ItemClaim> {
         error(404, $t("errors.claim-was-not-found"));
     }
 
-    // Item owners and claimers can update claims
+    // Item owners, claimers, and owner/managers of the list the claim is on can update claims
     if (claim.claimedById !== user.id && user.id !== claim.item.userId) {
-        error(403, $t("errors.cannot-update-a-claim-that-is-not-yours"));
+        const list = await client.list.findUnique({
+            select: { ownerId: true, managers: { select: { userId: true } } },
+            where: { id: claim.listId }
+        });
+        const canManage = !!list && (list.ownerId === user.id || list.managers.some((m) => m.userId === user.id));
+        if (!canManage) {
+            error(403, $t("errors.cannot-update-a-claim-that-is-not-yours"));
+        }
     }
 
     return claim;

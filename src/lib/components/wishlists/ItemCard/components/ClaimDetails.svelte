@@ -5,11 +5,11 @@
     import { getClaimedName } from "../../util";
     import type { ItemCardProps } from "../ItemCard.svelte";
 
-    interface Props extends Pick<ItemCardProps, "item" | "user" | "groupId" | "requireClaimEmail"> {
+    interface Props extends Pick<ItemCardProps, "item" | "user" | "groupId" | "requireClaimEmail" | "userCanManage"> {
         showName: (claim?: ClaimDTO) => boolean;
     }
 
-    let { showName, item, user, groupId, requireClaimEmail }: Props = $props();
+    let { showName, item, user, groupId, requireClaimEmail, userCanManage = false }: Props = $props();
     let t = getFormatter();
 
     let isForOwner = $derived(item.userId === user?.id);
@@ -25,7 +25,7 @@
                 <span>
                     {$t("wishes.claims", { values: { claimCount: claim.quantity } })}
                 </span>
-                {#if isForOwner}
+                {#if isForOwner || userCanManage}
                     <ClaimItemModal
                         alwaysShow
                         claimId={claim.claimId}

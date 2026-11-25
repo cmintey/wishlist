@@ -18,6 +18,7 @@
         | "showNameAcrossGroups"
         | "showPublicClaimName"
         | "showFor"
+        | "userCanManage"
         | "groupId"
     > {
         showDetail?: boolean;
@@ -36,6 +37,7 @@
         showClaimForOwner = false,
         showPublicClaimName = false,
         showFor,
+        userCanManage = false,
         showDetail = false,
         fullNotes = false
     }: Props = $props();
@@ -85,7 +87,7 @@
     </div>
 </div>
 {#if item.claimedQuantity > 0 && showDetail && expandClaims}
-    <ClaimDetails {groupId} {item} {requireClaimEmail} showName={shouldShowClaimName} {user} />
+    <ClaimDetails {groupId} {item} {requireClaimEmail} showName={shouldShowClaimName} {user} {userCanManage} />
 {/if}
 
 <!-- Added by / For (claims page) -->
