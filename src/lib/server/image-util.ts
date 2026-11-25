@@ -7,9 +7,19 @@ import { ReadableStream } from "stream/web";
 import { createWriteStream } from "node:fs";
 import { error } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
+import { gotScraping } from "got-scraping";
 import { getSafeUrl } from "./safeurl";
 
 const DEFAULT_MAX_IMAGE_SIZE = 5000000;
+const MAX_REDIRECTS = 5;
+
+const determineProxy = (url: URL) => {
+    if (url.protocol === "http:") {
+        return env.http_proxy || env.HTTP_PROXY;
+    } else if (url.protocol === "https:") {
+        return env.https_proxy || env.HTTPS_PROXY;
+    }
+};
 
 const slugify = (str: string) => {
     return str
@@ -23,25 +33,44 @@ const slugify = (str: string) => {
         .replace(/-+/g, "-"); // remove consecutive hyphens
 };
 
-const fetchImage = async (imageUrl: string, redirectNum: number = 0) => {
-    if (redirectNum === 5) {
-        logger.error("Unable to fetch image after 5 redirects");
-        return null;
-    }
+const fetchImage = async (imageUrl: string) => {
     try {
         const url = await getSafeUrl(imageUrl);
         if (!url) {
             logger.error("URL resolved to a private access - blocking the request.");
             return null;
         }
-        const resp = await fetch(url, { redirect: "manual" });
-        if (resp.type === "opaqueredirect" && resp.headers.has("Location")) {
-            fetchImage(resp.headers.get("Location")!, redirectNum + 1);
-        } else if (resp.ok && resp.body) {
-            return Readable.fromWeb(resp.body as unknown as ReadableStream<any>);
-        } else {
-            return null;
+        const resp = await gotScraping({
+            url,
+            responseType: "buffer",
+            maxRedirects: MAX_REDIRECTS,
+            proxyUrl: determineProxy(url),
+            headerGeneratorOptions: {
+                devices: ["desktop"]
+            },
+            hooks: {
+                beforeRedirect: [
+                    async (options) => {
+                        if (options.url) {
+                            const safeUrl = await getSafeUrl(options.url);
+                            if (safeUrl === null) {
+                                throw new Error("The resolved IP of the domain is reserved");
+                            }
+                            options.url = safeUrl;
+                            const redirectProxy = determineProxy(safeUrl);
+                            if (redirectProxy) {
+                                options.context.proxyUrl = redirectProxy;
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+        if (resp.ok && resp.body.length > 0) {
+            return Readable.from(resp.body);
         }
+        logger.error({ url: url.toString(), resolvedUrl: resp.url, status: resp.statusCode }, "Failed to fetch image");
+        return null;
     } catch (err) {
         logger.error({ err }, "Failed to fetch image");
         return null;
