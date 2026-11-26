@@ -18,6 +18,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
     const userIdFilter = decodeMultiValueFilter(url.searchParams.get("users"));
     const items = await client.item.findMany({
         where: {
+            archived: false,
             claims: {
                 some: {
                     claimedById: user.id,

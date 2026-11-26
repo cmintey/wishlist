@@ -40,7 +40,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
             (updateData.data.purchased !== null && updateData.data.purchased !== undefined) ||
             updateData.data.quantity
         ) {
-            await client.itemClaim.update({
+            const result = await client.itemClaim.updateMany({
                 data: {
                     purchased:
                         updateData.data.purchased !== null && updateData.data.purchased !== undefined
@@ -49,12 +49,15 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
                     quantity: updateData.data.quantity ?? undefined
                 },
                 where: {
-                    id: claim.id
+                    id: claim.id,
+                    item: { archived: false }
                 }
             });
-            const updatedItem = await client.item.findUnique({
+            if (!result.count) error(409, "Wish is unavailable");
+            const updatedItem = await client.item.findFirst({
                 where: {
-                    id: claim.item.id
+                    id: claim.item.id,
+                    archived: false
                 },
                 include: getItemInclusions()
             });
@@ -87,7 +90,8 @@ async function findClaim(claimId: string, user: LocalUser): Promise<ItemClaim> {
             }
         },
         where: {
-            id: claimId
+            id: claimId,
+            item: { archived: false }
         }
     });
 
@@ -107,15 +111,18 @@ async function deleteClaim(claim: ItemClaim) {
     const $t = await getFormatter();
 
     try {
-        await client.itemClaim.delete({
+        const deleted = await client.itemClaim.deleteMany({
             where: {
-                id: claim.id
+                id: claim.id,
+                item: { archived: false }
             }
         });
+        if (!deleted.count) error(409, "Wish is unavailable");
 
-        const item = await client.item.findUnique({
+        const item = await client.item.findFirst({
             where: {
-                id: claim.item.id
+                id: claim.item.id,
+                archived: false
             },
             include: getItemInclusions()
         });

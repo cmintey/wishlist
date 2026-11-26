@@ -24,7 +24,10 @@ export interface BaseEventHandler<D, T> {
 export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListDTO> {
     static event = ItemEvent.ITEM_UPDATE;
     listId: string;
-    constructor(listId: string) {
+    constructor(
+        listId: string,
+        private hiddenFor?: { viewerId: string; ownerId: string; managerIds: string[] }
+    ) {
         this.listId = listId;
     }
 
@@ -37,7 +40,14 @@ export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListD
     }
 
     predicate(data: FullItem) {
-        return data.lists.map((l) => l.list.id).includes(this.listId);
+        const list = data.lists.find((l) => l.list.id === this.listId);
+        if (!list || data.archived) return false;
+        if (!this.hiddenFor) return true;
+        const { viewerId, ownerId, managerIds } = this.hiddenFor;
+        return (
+            ![ownerId, ...managerIds].includes(viewerId) ||
+            data.lists.every((association) => [ownerId, ...managerIds].includes(association.addedBy.id))
+        );
     }
 
     static listen(source: EventSource, callback: (data: ItemOnListDTO) => void) {
@@ -51,7 +61,10 @@ export class ItemUpdateHandler implements BaseEventHandler<FullItem, ItemOnListD
 export class ItemCreateHandler implements BaseEventHandler<FullItem, ItemOnListDTO> {
     static event = ItemEvent.ITEM_CREATE;
     listId: string;
-    constructor(listId: string) {
+    constructor(
+        listId: string,
+        private hiddenFor?: { viewerId: string; ownerId: string; managerIds: string[] }
+    ) {
         this.listId = listId;
     }
 
@@ -64,7 +77,14 @@ export class ItemCreateHandler implements BaseEventHandler<FullItem, ItemOnListD
     }
 
     predicate(data: FullItem) {
-        return data.lists.map((l) => l.list.id).includes(this.listId);
+        const list = data.lists.find((l) => l.list.id === this.listId);
+        if (!list || data.archived) return false;
+        if (!this.hiddenFor) return true;
+        const { viewerId, ownerId, managerIds } = this.hiddenFor;
+        return (
+            ![ownerId, ...managerIds].includes(viewerId) ||
+            data.lists.every((association) => [ownerId, ...managerIds].includes(association.addedBy.id))
+        );
     }
 
     static listen(source: EventSource, callback: (data: ItemOnListDTO) => void) {
@@ -102,10 +122,15 @@ export class ItemDeleteHandler implements BaseEventHandler<ItemDeleteEvent, Pick
     }
 }
 
-export class ItemsUpdateHandler implements BaseEventHandler<void, void> {
+export type ItemsUpdateEvent = { lists: { listId: string; addedById: string }[] } | undefined;
+
+export class ItemsUpdateHandler implements BaseEventHandler<ItemsUpdateEvent, void> {
     static event = ItemEvent.ITEMS_UPDATE;
     listId: string;
-    constructor(listId: string) {
+    constructor(
+        listId: string,
+        private hiddenFor?: { viewerId: string; ownerId: string; managerIds: string[] }
+    ) {
         this.listId = listId;
     }
 
@@ -113,12 +138,20 @@ export class ItemsUpdateHandler implements BaseEventHandler<void, void> {
         return ItemsUpdateHandler.event;
     }
 
-    handle(_event: void) {
+    handle(_event: ItemsUpdateEvent) {
         return;
     }
 
-    predicate(_data: void) {
-        return true;
+    predicate(data: ItemsUpdateEvent) {
+        if (!data) return true;
+        const association = data.lists.find((list) => list.listId === this.listId);
+        if (!association) return false;
+        if (!this.hiddenFor) return true;
+        const { viewerId, ownerId, managerIds } = this.hiddenFor;
+        return (
+            ![ownerId, ...managerIds].includes(viewerId) ||
+            data.lists.every((entry) => [ownerId, ...managerIds].includes(entry.addedById))
+        );
     }
 
     static listen(source: EventSource, callback: (_data: void) => void) {

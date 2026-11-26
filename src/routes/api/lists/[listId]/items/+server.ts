@@ -29,21 +29,21 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     }
 
     try {
-        await client.$transaction(
-            updateData.data.map((d) => {
-                return client.listItem.update({
+        await client.$transaction(async (tx) => {
+            for (const d of updateData.data) {
+                const result = await tx.listItem.updateMany({
                     where: {
-                        listId_itemId: {
-                            listId: params.listId,
-                            itemId: d.itemId
-                        }
+                        listId: params.listId,
+                        itemId: d.itemId,
+                        item: { archived: false }
                     },
                     data: {
                         displayOrder: d.displayOrder
                     }
                 });
-            })
-        );
+                if (!result.count) throw new Error("Wish is unavailable");
+            }
+        });
 
         itemEmitter.emit(ItemEvent.ITEMS_UPDATE);
 

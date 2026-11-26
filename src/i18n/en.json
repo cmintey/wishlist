@@ -27,6 +27,17 @@
         "user-menu": "User Menu",
         "wishlist-logo": "Wishlist Logo"
     },
+    "archive": {
+        "title": "Archive",
+        "archive": "Archive",
+        "restore": "Restore",
+        "empty": "No archived wishes yet",
+        "archived": "Wish archived",
+        "restored": "Wish restored",
+        "failed": "Could not update the archive. Please try again.",
+        "for": "For {name}",
+        "claim": "{name}: {quantity} claimed"
+    },
     "admin": {
         "about": "About",
         "account": "Account",

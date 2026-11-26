@@ -71,6 +71,7 @@ export const load = (async ({ url }) => {
                     }
                 },
                 where: {
+                    item: { archived: false },
                     addedBy:
                         config.suggestions.enable && config.suggestions.method === "surprise"
                             ? { username: user.username }
@@ -81,7 +82,8 @@ export const load = (async ({ url }) => {
                 select: {
                     items: {
                         where: {
-                            approved: false
+                            approved: false,
+                            item: { archived: false }
                         }
                     }
                 }
@@ -121,6 +123,7 @@ export const load = (async ({ url }) => {
                 }
             },
             items: {
+                where: { item: { archived: false } },
                 select: {
                     id: true,
                     approved: true,

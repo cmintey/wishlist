@@ -221,6 +221,7 @@ export const getItems = async (listId: string, options: GetItemsOptions) => {
 
     const items = await client.item.findMany({
         where: {
+            archived: false,
             lists: {
                 some: {
                     listId: list.id
@@ -385,6 +386,7 @@ export const getNextDisplayOrderForLists = async (listIds: string[], mostWanted 
                 id: true
             },
             where: {
+                item: { archived: false },
                 listId: {
                     in: listIds
                 }

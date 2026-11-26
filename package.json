@@ -13,6 +13,7 @@
         "format": "prettier --write . --experimental-cli",
         "db:patch": "tsx prisma/patches/index.ts",
         "test": "playwright test",
+        "test:archive-card": "node --test tests/components/archive-card.node.mjs",
         "test:build": "docker compose -f tests/docker/docker-compose.yaml build",
         "test:setup": "playwright install --with-deps chromium"
     },

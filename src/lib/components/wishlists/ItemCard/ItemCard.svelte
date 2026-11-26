@@ -130,7 +130,7 @@
         if (!reorderActions) launchDrawer();
     }}
     onkeyup={(e) => {
-        if (!reorderActions && e.key === "Enter") launchDrawer();
+        if (!reorderActions && e.key === "Enter" && e.target === e.currentTarget) launchDrawer();
     }}
     role={reorderActions ? "none" : "button"}
 >

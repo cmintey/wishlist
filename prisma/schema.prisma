@@ -129,6 +129,7 @@ model Item {
     imageUrl    String?
     quantity    Int?
     mostWanted  Boolean     @default(false)
+    archived    Boolean     @default(false)
     user        User        @relation(name: "MyItems", fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     createdBy   User        @relation(name: "CreatedItems", fields: [createdById], references: [id], onDelete: Cascade)
