@@ -141,7 +141,14 @@
         "smtp-use-tls-description": "Forbind til SMTP serveren direkte ved brug af TLS i stedet for STARTTLS. Oftest brugt med port 465.",
         "ignore-cert-check": "Ignorér certifikatfejl",
         "show-name-publicly": "Vis navn offentligt",
-        "show-name-publicly-tooltip": "Vis navn for en offentlig reservation til alle der ser den offentlige liste."
+        "show-name-publicly-tooltip": "Vis navn for en offentlig reservation til alle der ser den offentlige liste.",
+        "oidc-url-description": "URL for din OAuth-udbyder eller URL på det specifikke realm/applikation hos din udbyder. Dette er også kendt som \"Discovery URL\".",
+        "clear-sessions-success": "Brugers sessioner nulstillet. Brugeren skal logge ind igen.",
+        "oidc-admin-group": "Administratorgruppe",
+        "oidc-admin-group-description": "Brugere i denne gruppe har administrator-rollen, og brugere uden for gruppen mister den hver gang de logger ind. Efterlad gruppen som, hvis du vil administrere administratorer i Wishlist.",
+        "oidc-env-managed": "Nogle af disse indstillinger er styret af miljøvariabler (environment variables) og kan ikke ændres her.",
+        "oidc-groups-claim": "Gruppe-attributter (claims)",
+        "oidc-groups-claim-description": "Attributten (claim) der lister brugerens grupper. Scopet 'groups' er nødvendigt når en administratorgrupper er indstillet."
     },
     "app": {
         "home": "Hjem",
@@ -268,7 +275,13 @@
         "valid-url-not-provided": "Gyldig url ikke angivet",
         "email-is-required-for-public-claims": "E-mail er påkrævet for offentlige reservationer",
         "oidc-error": "OAuth-godkendelse fejlede",
-        "display-order-invalid": "Rækkefølge for visning skal være mellem {min} og {max}"
+        "display-order-invalid": "Rækkefølge for visning skal være mellem {min} og {max}",
+        "invalid-asset-path": "Ugyldig sti for aktiv (asset)",
+        "no-claim-on-behalf-of": "Du kan ikke reservere et ønske på vegne af en anden bruger",
+        "self-claims-not-available": "Kan ikke tillade reservationer af egne ønsker, når reserveringer ikke er synlige for ejeren på deres egen liste",
+        "this-list-does-not-allow-self-claimed-items": "Denne liste tillader ikke reservering af egne ønsker.",
+        "this-list-is-not-part-of-your-active-group": "Denne liste er ikke i din aktive gruppe",
+        "user-is-not-allowed-to-edit-this-item": "Bruger må ikke rette dette ønske"
     },
     "general": {
         "smtp-not-enabled-implication": "Selvom opsætning af e-mail ikke er et krav, vil brugere ikke kunne nulstille deres adgangskoder via selvbetjening, og du vil selv skulle sende links til nulstilling af adgangskoder.",
@@ -468,7 +481,15 @@
         "hide-owner": "Skjul ejer",
         "items-available": "{availableCount, plural, one {# tilgængelige} other {# tilgængelig}}",
         "items-claimed": "{claimedCount} of {itemCount} Reserveret",
-        "items-requested": "{itemCount, plural, one {# efterspurgt} other {# efterspurgt}}"
+        "items-requested": "{itemCount, plural, one {# efterspurgt} other {# efterspurgt}}",
+        "cannot-update-lists-of-item": "Du kan ikke opdatere lister for et ønske du ikke selv har oprettet. Du kan stadig fjerne dette fra en liste du ejer eller håndtere ved at bruge 'slet' knappen på listen.",
+        "list-allow-self-claims": "Tillad ejer at reservere",
+        "list-allow-self-claims-description": "Tillad listens ejer at reservere ønsker på listen.",
+        "list-allow-self-claims-description-helper-text": "Kan ikke slå denne indstilling til, medmindre reserveringer er synlige for listens ejere (gruppe-indstilling).",
+        "list-hide-owner-description": "Skjul ejeren på liste-kortet.",
+        "list-not-for-me": "Denne liste er en andens",
+        "list-not-for-me-description": "Hvis du håndterer denne liste for en anden, vil denne indstilling tillade listens ejer at se reserveringer på reservere ønsker på listen.",
+        "public-list-option-description": "Tillad offentlig visning af og reservationer på denne liste."
     },
     "setup": {
         "global-settings-subtext": "Disse indstillinger vil blive anvendt til alle grupper, der er oprettet. Nogle indstillinger kan overskrives af individuelle grupper.",
