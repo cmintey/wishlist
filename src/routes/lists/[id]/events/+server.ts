@@ -40,10 +40,18 @@ export const GET = (async ({ locals, params }) => {
 
     const { readable, subscribeToEvent } = createSSE();
 
-    subscribeToEvent(itemEmitter, new ItemUpdateHandler(params.id));
-    subscribeToEvent(itemEmitter, new ItemCreateHandler(params.id));
+    const hiddenFor =
+        config.suggestions.enable && config.suggestions.method === "surprise" && locals.user
+            ? {
+                  viewerId: locals.user.id,
+                  ownerId: list.owner.id,
+                  managerIds: list.managers.map(({ userId }) => userId)
+              }
+            : undefined;
+    subscribeToEvent(itemEmitter, new ItemUpdateHandler(params.id, hiddenFor));
+    subscribeToEvent(itemEmitter, new ItemCreateHandler(params.id, hiddenFor));
     subscribeToEvent(itemEmitter, new ItemDeleteHandler(params.id));
-    subscribeToEvent(itemEmitter, new ItemsUpdateHandler(params.id));
+    subscribeToEvent(itemEmitter, new ItemsUpdateHandler(params.id, hiddenFor));
 
     return new Response(readable, {
         headers: {

@@ -25,7 +25,8 @@ export const load: PageServerLoad = async ({ params }) => {
 
     const item = await client.item.findUnique({
         where: {
-            id: parseInt(params.itemId)
+            id: parseInt(params.itemId),
+            archived: false
         },
         include: {
             itemPrice: true,
@@ -91,7 +92,7 @@ export const actions: Actions = {
         }
         const { url, imageUrl, image, name, price, currency, quantity, note, lists, mostWanted } = form.data;
 
-        const item = await client.item.findUniqueOrThrow({
+        const item = await client.item.findUnique({
             include: {
                 user: {
                     select: {
@@ -119,9 +120,11 @@ export const actions: Actions = {
                 }
             },
             where: {
-                id: parseInt(params.itemId)
+                id: parseInt(params.itemId),
+                archived: false
             }
         });
+        if (!item) error(404, $t("errors.item-not-found"));
 
         if (!userCanEditOnSomeList(item, user.id)) {
             return fail(403, $t("errors.user-is-not-allowed-to-edit-this-item"));
@@ -154,7 +157,8 @@ export const actions: Actions = {
 
         const updatedItem = await client.item.update({
             where: {
-                id: parseInt(params.itemId)
+                id: parseInt(params.itemId),
+                archived: false
             },
             data: {
                 name,

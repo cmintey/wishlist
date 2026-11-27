@@ -4,7 +4,6 @@ import { client } from "$lib/server/prisma";
 import type { RequestHandler } from "./$types";
 import { error } from "@sveltejs/kit";
 import { listItemClaimSchema } from "$lib/server/validations";
-import type { Prisma } from "$lib/generated/prisma/client";
 import { getItemInclusions } from "$lib/server/items";
 import { ItemEvent } from "$lib/events";
 import { logger } from "$lib/server/logger";
@@ -76,6 +75,7 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
         },
         where: {
             id: itemId,
+            archived: false,
             lists: {
                 some: {
                     listId: list.id
@@ -106,37 +106,21 @@ export const PUT: RequestHandler = async ({ locals, request, params }) => {
     }
 
     try {
-        const data: Prisma.ItemClaimCreateInput = {
-            item: {
-                connect: {
-                    id: item.id
-                }
-            },
-            list: {
-                connect: {
-                    id: list.id
-                }
-            },
-            quantity: updateData.data.quantity
-        };
-        if (updateData.data.claimedById) {
-            data.claimedBy = {
-                connect: {
-                    id: updateData.data.claimedById
-                }
-            };
-        } else if (updateData.data.publicClaimedById) {
-            data.publicClaimedBy = {
-                connect: {
-                    id: updateData.data.publicClaimedById
-                }
-            };
-        }
-
-        await client.itemClaim.create({ data });
-        const updatedItem = await client.item.findUnique({
+        const count = await client.$executeRaw`
+            INSERT INTO list_item_claim (id, itemId, listId, claimedById, publicClaimedById, quantity, purchased)
+            SELECT ${crypto.randomUUID()}, i.id, ${list.id}, ${updateData.data.claimedById ?? null},
+                   ${updateData.data.publicClaimedById ?? null}, ${updateData.data.quantity}, false
+            FROM items i
+            WHERE i.id = ${item.id} AND i.archived = false
+              AND EXISTS (SELECT 1 FROM list_item li WHERE li.itemId = i.id AND li.listId = ${list.id})
+              AND (i.quantity IS NULL OR i.quantity >= ${updateData.data.quantity} +
+                   COALESCE((SELECT SUM(c.quantity) FROM list_item_claim c WHERE c.itemId = i.id), 0))
+        `;
+        if (!count) error(409, "Wish is unavailable");
+        const updatedItem = await client.item.findFirst({
             where: {
-                id: item.id
+                id: item.id,
+                archived: false
             },
             include: getItemInclusions()
         });

@@ -47,23 +47,24 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
 
     try {
         if (updateData.data.approved !== null && updateData.data.approved !== undefined) {
-            await client.listItem.update({
+            const result = await client.listItem.updateMany({
                 where: {
-                    listId_itemId: {
-                        listId: params.listId,
-                        itemId: parseInt(params.itemId)
-                    }
+                    listId: params.listId,
+                    itemId: parseInt(params.itemId),
+                    item: { archived: false }
                 },
                 data: {
                     approved: updateData.data.approved
                 }
             });
+            if (!result.count) error(404, $t("errors.item-not-found"));
 
-            const item = await client.item.findUnique({
+            const item = await client.item.findFirst({
                 where: {
-                    id: parseInt(params.itemId)
+                    id: parseInt(params.itemId),
+                    archived: false
                 },
-                include: getItemInclusions(params.listId)
+                include: getItemInclusions()
             });
             if (item) itemEmitter.emit(ItemEvent.ITEM_UPDATE, item);
         }
@@ -101,6 +102,7 @@ export const DELETE: RequestHandler = async ({ params }) => {
         client.item.findUnique({
             select: {
                 id: true,
+                archived: true,
                 userId: true,
                 createdById: true,
                 imageUrl: true,
@@ -146,6 +148,7 @@ export const DELETE: RequestHandler = async ({ params }) => {
     if (!item) {
         error(404, $t("errors.item-not-found"));
     }
+    if (item.archived) error(404, $t("errors.item-not-found"));
 
     if (
         listItem.addedById !== user.id &&
@@ -157,11 +160,13 @@ export const DELETE: RequestHandler = async ({ params }) => {
 
     try {
         await client.$transaction(async (tx) => {
-            await tx.listItem.delete({
+            const deleted = await tx.listItem.deleteMany({
                 where: {
-                    id: listItem.id
+                    id: listItem.id,
+                    item: { archived: false }
                 }
             });
+            if (!deleted.count) throw new Error("Wish is unavailable");
 
             if (claims.length > 0) {
                 await tx.itemClaim.deleteMany({

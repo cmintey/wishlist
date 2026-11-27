@@ -26,7 +26,8 @@ const validateItem = async (itemId: string | undefined) => {
 
     const item = await client.item.findUnique({
         where: {
-            id: parseInt(itemId)
+            id: parseInt(itemId),
+            archived: false
         },
         select: {
             id: true,
@@ -84,7 +85,8 @@ export const DELETE: RequestHandler = async ({ params }) => {
     try {
         const deletedItem = await client.item.delete({
             where: {
-                id: item.id
+                id: item.id,
+                archived: false
             },
             select: {
                 id: true,

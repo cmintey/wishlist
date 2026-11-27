@@ -108,6 +108,7 @@ test("claim item on own list", async ({ page: ownerPage, userData: owner, additi
         await createItemPage.create();
     });
 
+    await ownerPage.waitForURL((url) => /^\/lists\/[^/]+$/.test(url.pathname));
     const listPage = new ListPage(ownerPage, { name: owner.name });
     await test.step("validate claim button is missing", async () => {
         const listPage = new ListPage(ownerPage, { name: owner.name });

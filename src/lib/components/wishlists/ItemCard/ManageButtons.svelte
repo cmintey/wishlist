@@ -6,7 +6,7 @@
     import { ListItemAPI } from "$lib/api/lists";
     import { toaster } from "$lib/components/toaster";
     import { resolve } from "$app/paths";
-    import { goto } from "$app/navigation";
+    import { goto, invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
     import { userCanEdit } from "$lib/item-util";
 
@@ -40,6 +40,22 @@
         goto(resolve("/items/[itemId]/edit", { itemId: item.id.toString() }) + `?redirectTo=${page.url.pathname}`, {
             replaceState: true
         });
+    };
+
+    const handleArchive = async () => {
+        try {
+            const response = await fetch(`/api/items/${item.id}/archive`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ archived: true })
+            });
+            if (!response.ok) throw new Error("Archive failed");
+            await invalidateAll();
+            onEdit?.();
+            toaster.info({ description: $t("archive.archived") });
+        } catch {
+            toaster.error({ description: $t("archive.failed") });
+        }
     };
 </script>
 
@@ -88,6 +104,19 @@
 {/snippet}
 
 <div class="flex flex-row gap-2">
+    {#if item.approved && user?.id === item.createdById}
+        <button
+            class="preset-tonal-primary inset-ring-primary-500 btn btn-icon btn-icon-sm md:btn-icon-base inset-ring"
+            aria-label={$t("archive.archive")}
+            onclick={(e) => {
+                e.stopPropagation();
+                handleArchive();
+            }}
+            title={$t("archive.archive")}
+        >
+            <iconify-icon icon="ion:archive"></iconify-icon>
+        </button>
+    {/if}
     {#if !item.approved}
         {@render approvalButton(true)}
         {@render approvalButton(false)}

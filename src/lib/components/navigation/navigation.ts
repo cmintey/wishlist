@@ -15,5 +15,10 @@ export const navItems = [
         labelKey: "app.my-claims",
         href: () => resolve("/claims"),
         icon: "ion:albums"
+    },
+    {
+        labelKey: "archive.title",
+        href: () => resolve("/archive"),
+        icon: "ion:archive"
     }
 ] satisfies NavItem[];

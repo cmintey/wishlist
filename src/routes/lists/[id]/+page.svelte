@@ -120,10 +120,8 @@
             updateHash();
         });
         ItemsUpdateHandler.listen(eventSource, () => {
-            if (!data.list.owner.isMe) {
-                invalidate("data:items");
-                updateHash();
-            }
+            invalidate("data:items");
+            updateHash();
         });
         return eventSource;
     };
